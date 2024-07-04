@@ -11,18 +11,18 @@ def run_cache_script_info():
 
 def read_csv(file_path):
     with open(file_path, 'r') as file:
-        reader = csv.reader(file)
+        reader = csv.DictReader(file)
         return list(reader)
 
 def format_to_markdown_table(data):
-    headers = data[0]
-    rows = data[1:]
-
+    headers = ["file", "description", "date", "type", "status", "host", "tag"]
     table = "| " + " | ".join(headers) + " |\n"
     table += "| " + " | ".join(['---'] * len(headers)) + " |\n"
 
-    for row in rows:
-        table += "| " + " | ".join(row) + " |\n"
+    sorted_data = sorted(data, key=lambda x: (x['status'], x['file']))
+
+    for row in sorted_data:
+        table += "| " + " | ".join([row[header] if row[header] else "" for header in headers]) + " |\n"
 
     return table
 

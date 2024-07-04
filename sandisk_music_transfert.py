@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@RUN@~karjala~ "Transfer music to Sandisk media player"
+#DOC#@RUN@~KJL~ "Transfer music to Sandisk media player"
 
 import subprocess
 from subprocess import PIPE
