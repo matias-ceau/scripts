@@ -1,0 +1,9 @@
+2024-07-03 12:17:01 - Conflict: /home/matias/.local/bin/volca.py is a different symlink.
+2024-07-03 12:17:01 - Conflict: /home/matias/.local/bin/quickcommand.sh is a different symlink.
+2024-07-03 12:17:01 - Conflict: /home/matias/.local/bin/whatkey.py is a different symlink.
+2024-07-03 12:17:01 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh is a different symlink.
+2024-07-03 12:17:01 - Removed broken symlink: /home/matias/.local/bin/quickcommand.sh
+2024-07-03 12:17:01 - Removed broken symlink: /home/matias/.local/bin/update_script_symlinks.sh
+2024-07-03 12:17:01 - Removed broken symlink: /home/matias/.local/bin/urxvt-font-switch.xsh
+2024-07-03 12:17:01 - Removed broken symlink: /home/matias/.local/bin/volca.py
+2024-07-03 12:17:01 - Removed broken symlink: /home/matias/.local/bin/whatkey.py
