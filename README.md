@@ -17,8 +17,8 @@
 | launch_tmux_with_music_player.sh | Script to create new tmux session called music and open cmus inside (without actually opening a terminal) | 2024-07 | CLI | active | all |  |
 | list_process.sh | list running services | 2024-07 | CLI | active | all |  |
 | m3u_creator.sh | Create an m3u file from files in current dir | 2024-07 | CLI | active | all |  |
-| mechen_music_transfert.py | Custom script to copy music to Mechen | 2024-07 | RUN | active | karjala |  |
-| midi2arch.xsh | Transform a midi controller to a keyboard/script launcher | 2024-07 | RUN | active | karjala |  |
+| mechen_music_transfert.py | Custom script to copy music to Mechen | 2024-07 | RUN | active | KJL |  |
+| midi2arch.xsh | Transform a midi controller to a keyboard/script launcher | 2024-07 | RUN | active | KJL |  |
 | next_album.xsh | Skip to next album in cmus | 2024-07 | RUN | active | all |  |
 | obsidian.xsh | Open any obsidian vault | 2024-07 | RUN | active | all |  |
 | ollama_list.py | Custom help for ollama | 2024-07 | CLI | active | all |  |

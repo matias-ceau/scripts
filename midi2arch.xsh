@@ -1,6 +1,6 @@
 #!/usr/bin/env xonsh
 
-#DOC#@RUN@~karjala~ "Transform a midi controller to a keyboard/script launcher"
+#DOC#@RUN@~KJL~ "Transform a midi controller to a keyboard/script launcher"
 
 # Author Matias Ceau (2024) (Inspired by Author Fippls, 2019)
 
