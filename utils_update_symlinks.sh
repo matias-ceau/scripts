@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#DOC#@UTL@=2024-07= "create symlinks in ~/.local/bin and remove old ones"
+
 # Directories
 SOURCE_DIRS=("$HOME/.scripts" "$HOME/.scripts/bin" "$HOME/.scripts/ext")
 TARGET_DIR="$HOME/.local/bin"
