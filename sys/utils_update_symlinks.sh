@@ -8,10 +8,6 @@ TARGET_DIR="$HOME/.local/bin"
 LOG_FILE="$HOME/.scripts/log/symlinking.log"
 DATA_FILE="$HOME/.scripts/data/symlink_data.csv"
 
-# Create necessary directories if they don't exist
-mkdir -p "$(dirname "$LOG_FILE")"
-mkdir -p "$(dirname "$DATA_FILE")"
-
 # Initialize the CSV file
 echo "Original Path,Symlink,Command Name" > "$DATA_FILE"
 
