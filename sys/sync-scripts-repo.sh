@@ -17,19 +17,16 @@ print_command() {
 run_command() {
     print_command "$1"
     eval "$1"
-    echo
 }
 
 ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR="$HOME/.scripts"
 
-echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}\nThis is the script directory." | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 cd "$SCRIPT_DIR"
-
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
 
-echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
+echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)\nRemote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 
 run_command "git pull $REMOTE $LOCAL"
 
@@ -38,24 +35,19 @@ run_command "git status -s"
 run_command "git add -Av"
 
 if [ -z "$1" ]; then
-    echo -e "No commit message provided. Choose:\n**[D]**efault or **[i]**nteractive" | bat -lmd --style="grid,snip" --theme="Solarized (dark)" --highlight-line 2
-    read -r user_input
-    user_input=${user_input:-d}
-    if [ "$user_input" == "i" ]; then
-        run_command "git commit --interactive"
-    else
-        MESSAGE="$(git status -s | wc -l) change(s) from $USER@$HOSTNAME" #small edit in case there's only one change
-        run_command "git commit -m \"$MESSAGE\""
-    fi
+    MESSAGE="$(git status -s | wc -l) change(s) from $USER@$HOSTNAME"
+    run_command "git commit -m \"$MESSAGE\""
 else
     run_command "git commit -m \"$1\""
 fi
 
 echo -e "Changes committed:" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
-run_command "git status -s"
 
 run_command "git push $REMOTE $LOCAL"
+run_command "git maintenance run"
 
-echo -e "Scripts repository has been successfully synced." | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
+echo -e "Scripts repository has been successfully synced." | bat -lmd --style="grid,snip" --theme="Solarized (dark)" --highlight-line 1
 
 cd "$ORIGINAL_DIR"
+
+# GO TO OTHER UTILS (SYMLINKS, DATABASE, etc)
