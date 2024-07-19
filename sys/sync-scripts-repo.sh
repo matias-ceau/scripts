@@ -29,24 +29,28 @@ LOCAL="$(git branch --show-current)"
 echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)\nRemote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 
 run_command "git pull $REMOTE $LOCAL"
-
 run_command "git status -s"
-
 run_command "git add -Av"
 
-if [ -z "$1" ]; then
-    MESSAGE="$(git status -s | wc -l) change(s) from $USER@$HOSTNAME"
-    run_command "git commit -m \"$MESSAGE\""
-else
-    run_command "git commit -m \"$1\""
-fi
+CHANGES=$(git status -s | wc -l)
+TITLE="$CHANGES change(s) from $USER@$HOSTNAME"
 
-echo -e "Changes committed:" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
+COMMIT_MESSAGE=$(
+    cat <<EOF
+$TITLE
+
+$COMMIT_MESSAGE
+EOF
+)
+
+# Commit with the combined message
+git commit -m "$COMMIT_MESSAGE"
+run_command "git commit -m \"$MESSAGE\""
 
 run_command "git push $REMOTE $LOCAL"
 run_command "git maintenance run"
 
-echo -e "Scripts repository has been successfully synced." | bat -lmd --style="grid,snip" --theme="Solarized (dark)" --highlight-line 1
+echo -e "# Scripts repository has been successfully synced." | glow
 
 cd "$ORIGINAL_DIR"
 
