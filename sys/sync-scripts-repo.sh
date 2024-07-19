@@ -11,14 +11,12 @@ BOLD="\e[1m"
 
 # Function to print section headers
 print_header() {
-    echo -e "${YELLOW}$(printf '%.s-' {1..50})${RESET}\n"
-    echo -e "${BOLD}${BLUE}$1${RESET}" #needs to have a subtle background color
-    echo -e "${YELLOW}$(printf '%.s-' {1..50})${RESET}" # i removed the newline, the yellow line you added is enough
+    echo -e "$1" | bat -lmd --style="grid" --highlight-line 1 --theme="Solarized (dark)"
 }
 
 # Function to print commands
 print_command() {
-    echo -e "${GREEN}$ $1${RESET}"
+    echo -e "${GREEN}$ ${BLUE}$1${RESET}" | bat -lzsh --style='rule' --highlight-line 1 --theme="gruvbox-dark"
 }
 
 # Function to run command and print its output in real-time
@@ -33,15 +31,14 @@ SCRIPT_DIR="$HOME/.scripts"
 
 print_header "SYNC SCRIPTS REPOSITORY"
 
-echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}\n"
+echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}\nThis is the script directory." | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
 cd $SCRIPT_DIR
 
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
 
 print_header "PULL"
-echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}"
-echo -e "Local branch: ${BOLD}$LOCAL${RESET}\n"
+echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}\n" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
 
 run_command "git pull $REMOTE $LOCAL"
 
@@ -55,7 +52,7 @@ run_command "git add -A"
 
 print_header "COMMIT"
 if [ -z "$1" ]; then
-    echo -e "No commit message provided. Choose:\n${BOLD}[D]${RESET}efault or ${BOLD}[i]${RESET}nteractive"
+    echo -e "No commit message provided. Choose:\n${BOLD}[D]${RESET}efault or ${BOLD}[i]${RESET}nteractive" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
     read -r user_input
     user_input=${user_input:-d}
     if [ "$user_input" == "i" ]; then
@@ -68,13 +65,13 @@ else
     run_command "git commit -m \"$1\""
 fi
 
-echo -e "Changes committed:\n"
+echo -e "Changes committed:\n" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
 run_command "git status -s"
 
 print_header "PUSH"
 run_command "git push $REMOTE $LOCAL"
 
 print_header "SYNC COMPLETE"
-echo -e "Scripts repository has been successfully synced.\n"
+echo -e "Scripts repository has been successfully synced.\n" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
 
 cd "$ORIGINAL_DIR"
