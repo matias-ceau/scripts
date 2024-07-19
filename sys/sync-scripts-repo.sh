@@ -8,11 +8,6 @@ GREEN="\e[32m"
 RESET="\e[0m"
 BOLD="\e[1m"
 
-# Function to print section headers
-print_header() {
-    echo -e "# $1" | bat -lmd --style="grid" --highlight-line 1 --theme="Solarized (dark)"
-}
-
 # Function to print commands
 print_command() {
     echo -e "${GREEN}$ ${BLUE}$1${RESET}" | bat -lzsh --style='rule' --highlight-line 1 --theme="gruvbox-dark"
@@ -34,22 +29,16 @@ cd "$SCRIPT_DIR"
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
 
-print_header "PULL"
 echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 
 run_command "git pull $REMOTE $LOCAL"
 
-print_header "PUSH"
+run_command "git status -s"
 
-print_header "Current Status"
-run_command "git status"
+run_command "git add -Av"
 
-print_header "ADD"
-run_command "git add -A"
-
-print_header "COMMIT"
 if [ -z "$1" ]; then
-    echo -e "No commit message provided. Choose:\n${BOLD}[D]${RESET}efault or ${BOLD}[i]${RESET}nteractive" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
+    echo -e "No commit message provided. Choose:\n**[D]**efault or **[i]**nteractive" | bat -lmd --style="grid,snip" --theme="Solarized (dark)" --highlight-line 2
     read -r user_input
     user_input=${user_input:-d}
     if [ "$user_input" == "i" ]; then
@@ -65,10 +54,8 @@ fi
 echo -e "Changes committed:" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 run_command "git status -s"
 
-print_header "PUSH"
 run_command "git push $REMOTE $LOCAL"
 
-print_header "SYNC COMPLETE"
 echo -e "Scripts repository has been successfully synced." | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 
 cd "$ORIGINAL_DIR"
