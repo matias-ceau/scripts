@@ -38,7 +38,7 @@ REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
 
 print_header "PULL"
-echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}\n" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
+echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
 
 run_command "git pull $REMOTE $LOCAL"
 
@@ -65,13 +65,13 @@ else
     run_command "git commit -m \"$1\""
 fi
 
-echo -e "Changes committed:\n" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
+echo -e "Changes committed:" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
 run_command "git status -s"
 
 print_header "PUSH"
 run_command "git push $REMOTE $LOCAL"
 
 print_header "SYNC COMPLETE"
-echo -e "Scripts repository has been successfully synced.\n" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
+echo -e "Scripts repository has been successfully synced." | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
 
 cd "$ORIGINAL_DIR"
