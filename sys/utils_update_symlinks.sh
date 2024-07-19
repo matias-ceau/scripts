@@ -13,7 +13,9 @@ echo "Original Path,Symlink,Command Name" > "$DATA_FILE"
 
 # Function to log errors with date
 log_error() {
-    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE"
+    ERROR="$(date +'%Y-%m-%d %H:%M:%S') - $1"
+    echo "$ERROR"
+    echo "$ERROR" >> "$LOG_FILE"
 }
 
 # Symlink function
@@ -49,8 +51,12 @@ remove_broken_symlinks() {
 }
 
 # Run functions
-create_symlinks
 remove_broken_symlinks
+echo "# Cleaning completed." | glow
 
-echo "Symlinking completed."
+
+sleep 2
+
+create_symlinks
+echo "# Symlinking completed." | glow
 
