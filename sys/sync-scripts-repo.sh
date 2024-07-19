@@ -5,7 +5,6 @@
 # Color definitions
 BLUE="\e[34m"
 GREEN="\e[32m"
-YELLOW="\e[33m"
 RESET="\e[0m"
 BOLD="\e[1m"
 
@@ -29,16 +28,14 @@ run_command() {
 ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR="$HOME/.scripts"
 
-print_header "SYNC SCRIPTS REPOSITORY"
-
-echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}\nThis is the script directory." | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
-cd $SCRIPT_DIR
+echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}\nThis is the script directory." | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
+cd "$SCRIPT_DIR"
 
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
 
 print_header "PULL"
-echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
+echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 
 run_command "git pull $REMOTE $LOCAL"
 
@@ -52,7 +49,7 @@ run_command "git add -A"
 
 print_header "COMMIT"
 if [ -z "$1" ]; then
-    echo -e "No commit message provided. Choose:\n${BOLD}[D]${RESET}efault or ${BOLD}[i]${RESET}nteractive" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
+    echo -e "No commit message provided. Choose:\n${BOLD}[D]${RESET}efault or ${BOLD}[i]${RESET}nteractive" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
     read -r user_input
     user_input=${user_input:-d}
     if [ "$user_input" == "i" ]; then
@@ -65,13 +62,13 @@ else
     run_command "git commit -m \"$1\""
 fi
 
-echo -e "Changes committed:" | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
+echo -e "Changes committed:" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 run_command "git status -s"
 
 print_header "PUSH"
 run_command "git push $REMOTE $LOCAL"
 
 print_header "SYNC COMPLETE"
-echo -e "Scripts repository has been successfully synced." | bat -lmd --style="grid,numbers" --theme="Solarized (dark)"
+echo -e "Scripts repository has been successfully synced." | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
 
 cd "$ORIGINAL_DIR"
