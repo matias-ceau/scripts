@@ -2,67 +2,78 @@
 
 #DOC#@UTILS@=2024-07= "sync scripts repository"
 
-# Check if glow is installed
-if ! command -v glow &> /dev/null; then
-    echo "glow is not installed. Please install it using: sudo pacman -S glow"
-    exit 1
-fi
+# Color definitions
+BLUE="\e[34m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+RESET="\e[0m"
+BOLD="\e[1m"
 
-# Function to render markdown
-render_markdown() {
-    echo "$1" | glow -
+# Function to print section headers
+print_header() {
+    echo -e "\n${BOLD}${BLUE}$1${RESET}"
+    echo -e "${YELLOW}$(printf '%.s-' {1..50})${RESET}\n"
 }
 
-# Initialize markdown content
-markdown_content="# SYNC SCRIPTS REPOSITORY\n\n---\n"
+# Function to print commands
+print_command() {
+    echo -e "${GREEN}$ $1${RESET}"
+}
+
+# Function to run command and print its output in real-time
+run_command() {
+    print_command "$1"
+    eval "$1"
+    echo
+}
 
 ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR="$HOME/.scripts"
 
-markdown_content+="## SETUP\n\nMoving to \`$SCRIPT_DIR\`\n"
+print_header "SYNC SCRIPTS REPOSITORY"
+
+echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}\n"
 cd $SCRIPT_DIR
 
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
-markdown_content+="Remote: \`$(git remote -v | sed -n '1p')\`\n"
-markdown_content+="Local branch: \`$LOCAL\`\n\n---\n"
 
-markdown_content+="## PULL\n\n\`\`\`\ngit pull $REMOTE $LOCAL\n\`\`\`\n"
-pull_output=$(git pull "$REMOTE" "$LOCAL" 2>&1)
-markdown_content+="$pull_output\n\n---\n"
+print_header "PULL"
+echo -e "Remote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}"
+echo -e "Local branch: ${BOLD}$LOCAL${RESET}\n"
 
-markdown_content+="## PUSH\n\n### Current Status\n\n\`\`\`\n$(git status)\n\`\`\`\n"
+run_command "git pull $REMOTE $LOCAL"
 
-markdown_content+="### ADD\n\n\`\`\`\ngit add -A\n\`\`\`\n"
-git add -A
+print_header "PUSH"
 
-markdown_content+="### COMMIT\n\n"
+print_header "Current Status"
+run_command "git status"
+
+print_header "ADD"
+run_command "git add -A"
+
+print_header "COMMIT"
 if [ -z "$1" ]; then
-    markdown_content+="No commit message provided. Choose:\n- [D]efault\n- [i]nteractive\n"
+    echo -e "No commit message provided. Choose:\n${BOLD}[D]${RESET}efault or ${BOLD}[i]${RESET}nteractive"
     read -r user_input
     user_input=${user_input:-d}
     if [ "$user_input" == "i" ]; then
-        markdown_content+="\`\`\`\ngit commit --interactive\n\`\`\`\n"
-        git commit --interactive
+        run_command "git commit --interactive"
     else
         MESSAGE="$(git status -s | wc -l) changes from $USER@$HOSTNAME"
-        markdown_content+="\`\`\`\ngit commit -m \"$MESSAGE\"\n\`\`\`\n"
-        git commit -m "$MESSAGE"
+        run_command "git commit -m \"$MESSAGE\""
     fi
 else
-    markdown_content+="\`\`\`\ngit commit -m \"$1\"\n\`\`\`\n"
-    git commit -m "$1"
+    run_command "git commit -m \"$1\""
 fi
 
-markdown_content+="Changes committed:\n\n\`\`\`\n$(git status -s)\n\`\`\`\n"
+echo -e "Changes committed:\n"
+run_command "git status -s"
 
-markdown_content+="### PUSH\n\n\`\`\`\ngit push $REMOTE $LOCAL\n\`\`\`\n"
-push_output=$(git push "$REMOTE" "$LOCAL" 2>&1)
-markdown_content+="$push_output\n\n---\n"
+print_header "PUSH"
+run_command "git push $REMOTE $LOCAL"
 
-markdown_content+="Scripts repository has been successfully synced.\n"
+print_header "SYNC COMPLETE"
+echo -e "Scripts repository has been successfully synced.\n"
 
 cd "$ORIGINAL_DIR"
-
-# Render the markdown content
-render_markdown "$markdown_content"
