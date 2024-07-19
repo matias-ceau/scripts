@@ -10,7 +10,7 @@ cd $SCRIPT_DIR
 
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
-echo "Pulling from $(git remote -v --color=always | sed -n '1p')"
+echo "Pulling from $(git remote -v | sed -n '1p')"
 echo "Local branches are $(git branch -l --color=always)" 
 
 echo -e "\e[1m$ git pull $REMOTE $LOCAL\e[0m"
