@@ -26,24 +26,14 @@ cd "$SCRIPT_DIR"
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
 
-echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)\nRemote: ${BOLD}$(git remote -v | sed -n '1p')${RESET}\n Local branch: ${BOLD}$LOCAL${RESET}" | bat -lmd --style="grid,snip" --theme="Solarized (dark)"
+echo -e "Moving to ${BOLD}$SCRIPT_DIR${RESET}" | bat -lmd --style="grid" --theme="Solarized (dark)"
 
 run_command "git pull $REMOTE $LOCAL"
 run_command "git status -s"
 run_command "git add -Av"
 
-CHANGES=$(git status -s | wc -l)
-TITLE="$CHANGES change(s) from $USER@$HOSTNAME"
-
-COMMIT_MESSAGE=$(
-    cat <<EOF
-$TITLE
-$CHANGES
-EOF
-)
-
-# Commit with the combined message
-git commit -m "$COMMIT_MESSAGE"
+NB="$(git status -s | wc -l)"
+MESSAGE="$NB change(s) from $USER@$HOSTNAME"
 run_command "git commit -m \"$MESSAGE\""
 
 run_command "git push $REMOTE $LOCAL"
