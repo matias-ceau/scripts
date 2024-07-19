@@ -11,8 +11,9 @@ BOLD="\e[1m"
 
 # Function to print section headers
 print_header() {
-    echo -e "\n${BOLD}${BLUE}$1${RESET}"
     echo -e "${YELLOW}$(printf '%.s-' {1..50})${RESET}\n"
+    echo -e "${BOLD}${BLUE}$1${RESET}" #needs to have a subtle background color
+    echo -e "${YELLOW}$(printf '%.s-' {1..50})${RESET}" # i removed the newline, the yellow line you added is enough
 }
 
 # Function to print commands
@@ -60,7 +61,7 @@ if [ -z "$1" ]; then
     if [ "$user_input" == "i" ]; then
         run_command "git commit --interactive"
     else
-        MESSAGE="$(git status -s | wc -l) changes from $USER@$HOSTNAME"
+        MESSAGE="$(git status -s | wc -l) change(s) from $USER@$HOSTNAME" #small edit in case there's only one change
         run_command "git commit -m \"$MESSAGE\""
     fi
 else
