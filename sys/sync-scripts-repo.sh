@@ -2,63 +2,67 @@
 
 #DOC#@UTILS@=2024-07= "sync scripts repository"
 
-# Color definitions
-BLUE_BG="\e[44m"
-GREEN_BG="\e[42m"
-RESET="\e[0m"
+# Check if glow is installed
+if ! command -v glow &> /dev/null; then
+    echo "glow is not installed. Please install it using: sudo pacman -S glow"
+    exit 1
+fi
 
-# Function to print messages with colored background
-print_message() {
-    echo -e "\n${BLUE_BG}$1${RESET}\n"
+# Function to render markdown
+render_markdown() {
+    echo "$1" | glow -
 }
 
-# Function to print command-like messages
-print_command() {
-    echo -e "\n${GREEN_BG}$ $1${RESET}\n"
-}
+# Initialize markdown content
+markdown_content="# SYNC SCRIPTS REPOSITORY\n\n---\n"
 
 ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR="$HOME/.scripts"
 
-print_message "Moving to $SCRIPT_DIR"
+markdown_content+="## SETUP\n\nMoving to \`$SCRIPT_DIR\`\n"
 cd $SCRIPT_DIR
 
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
-print_message "Pulling from $(git remote -v | sed -n '1p')"
-print_message "Local branches are $(git branch -l)" 
+markdown_content+="Remote: \`$(git remote -v | sed -n '1p')\`\n"
+markdown_content+="Local branch: \`$LOCAL\`\n\n---\n"
 
-print_command "git pull $REMOTE $LOCAL"
-git pull "$REMOTE" "$LOCAL"
+markdown_content+="## PULL\n\n\`\`\`\ngit pull $REMOTE $LOCAL\n\`\`\`\n"
+pull_output=$(git pull "$REMOTE" "$LOCAL" 2>&1)
+markdown_content+="$pull_output\n\n---\n"
 
-print_command "git status"
-git status
+markdown_content+="## PUSH\n\n### Current Status\n\n\`\`\`\n$(git status)\n\`\`\`\n"
 
-print_command "git add -A"
+markdown_content+="### ADD\n\n\`\`\`\ngit add -A\n\`\`\`\n"
 git add -A
 
-print_message "Changes staged for commit:"
-git status -s --color=always
-
+markdown_content+="### COMMIT\n\n"
 if [ -z "$1" ]; then
-    print_message "No commit message provided\n    [D]efault?\n    [i]nteractive?"
-
+    markdown_content+="No commit message provided. Choose:\n- [D]efault\n- [i]nteractive\n"
     read -r user_input
     user_input=${user_input:-d}
     if [ "$user_input" == "i" ]; then
-        print_command "Running 'git commit --interactive'"
+        markdown_content+="\`\`\`\ngit commit --interactive\n\`\`\`\n"
         git commit --interactive
     else
-        MESSAGE="$(git status -s | wc -l) changes from $USER@$HOSTNAME" 
-        print_command "git commit -m \"$MESSAGE\""
+        MESSAGE="$(git status -s | wc -l) changes from $USER@$HOSTNAME"
+        markdown_content+="\`\`\`\ngit commit -m \"$MESSAGE\"\n\`\`\`\n"
         git commit -m "$MESSAGE"
     fi
 else
-    print_command "git commit -m \"$1\""
+    markdown_content+="\`\`\`\ngit commit -m \"$1\"\n\`\`\`\n"
     git commit -m "$1"
 fi
 
-print_command "git push $REMOTE $LOCAL"
-git push "$REMOTE" "$LOCAL"
+markdown_content+="Changes committed:\n\n\`\`\`\n$(git status -s)\n\`\`\`\n"
+
+markdown_content+="### PUSH\n\n\`\`\`\ngit push $REMOTE $LOCAL\n\`\`\`\n"
+push_output=$(git push "$REMOTE" "$LOCAL" 2>&1)
+markdown_content+="$push_output\n\n---\n"
+
+markdown_content+="Scripts repository has been successfully synced.\n"
 
 cd "$ORIGINAL_DIR"
+
+# Render the markdown content
+render_markdown "$markdown_content"
