@@ -39,7 +39,7 @@ run_command "git commit -m \"$MESSAGE\""
 run_command "git push $REMOTE $LOCAL"
 run_command "git maintenance run"
 
-echo -e "# Scripts repository has been successfully synced." | glow
+echo -e "# \`Scripts\` repository has been successfully synced." | glow
 
 cd "$ORIGINAL_DIR"
 
