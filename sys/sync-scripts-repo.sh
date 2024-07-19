@@ -11,7 +11,7 @@ BOLD="\e[1m"
 
 # Function to print section headers
 print_header() {
-    echo -e "$1" | bat -lmd --style="grid" --highlight-line 1 --theme="Solarized (dark)"
+    echo -e "# $1" | bat -lmd --style="grid" --highlight-line 1 --theme="Solarized (dark)"
 }
 
 # Function to print commands
