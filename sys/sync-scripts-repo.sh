@@ -2,44 +2,63 @@
 
 #DOC#@UTILS@=2024-07= "sync scripts repository"
 
+# Color definitions
+BLUE_BG="\e[44m"
+GREEN_BG="\e[42m"
+RESET="\e[0m"
+
+# Function to print messages with colored background
+print_message() {
+    echo -e "\n${BLUE_BG}$1${RESET}\n"
+}
+
+# Function to print command-like messages
+print_command() {
+    echo -e "\n${GREEN_BG}$ $1${RESET}\n"
+}
+
 ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR="$HOME/.scripts"
 
-echo -e "\e[1mMoving to $SCRIPT_DIR\e[0m"
+print_message "Moving to $SCRIPT_DIR"
 cd $SCRIPT_DIR
 
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
-echo "Pulling from $(git remote -v | sed -n '1p')"
-echo "Local branches are $(git branch -l --color=always)" 
+print_message "Pulling from $(git remote -v | sed -n '1p')"
+print_message "Local branches are $(git branch -l)" 
 
-echo -e "\e[1m$ git pull $REMOTE $LOCAL\e[0m"
+print_command "git pull $REMOTE $LOCAL"
 git pull "$REMOTE" "$LOCAL"
 
-echo -e "\e[1m$ git status\e[0m"
+print_command "git status"
 git status
 
-echo -e "\e[1m$ git add -A\e[0m"
+print_command "git add -A"
 git add -A
 
+print_message "Changes staged for commit:"
+git status -s --color=always
+
 if [ -z "$1" ]; then
-    echo -e "No commit message provided\n    [D]efault?\n    [i]nteractive?"
+    print_message "No commit message provided\n    [D]efault?\n    [i]nteractive?"
 
     read -r user_input
     user_input=${user_input:-d}
     if [ "$user_input" == "i" ]; then
-        echo -e "\e[1m$ Running 'git commit --interactive'\e[0m"
+        print_command "Running 'git commit --interactive'"
         git commit --interactive
     else
         MESSAGE="$(git status -s | wc -l) changes from $USER@$HOSTNAME" 
+        print_command "git commit -m \"$MESSAGE\""
         git commit -m "$MESSAGE"
     fi
 else
-    echo -e "\e[1m$ git commit -m \"$1\"\e[0m"
+    print_command "git commit -m \"$1\""
     git commit -m "$1"
 fi
 
-echo -e "\e[1m$ git push $REMOTE $LOCAL\e[0m"
+print_command "git push $REMOTE $LOCAL"
 git push "$REMOTE" "$LOCAL"
 
 cd "$ORIGINAL_DIR"
