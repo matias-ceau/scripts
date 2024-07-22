@@ -24,3 +24,16 @@
 2024-07-17 21:42:14 - Removed broken symlink: /home/matias/.local/bin/update_script_symlinks.sh
 2024-07-17 21:42:14 - Removed broken symlink: /home/matias/.local/bin/utils_update_readme.py
 2024-07-17 21:42:14 - Removed broken symlink: /home/matias/.local/bin/utils_update_symlinks.sh
+2024-07-22 00:53:04 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
+2024-07-22 00:53:04 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
+2024-07-22 00:53:04 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-22 00:53:04 - Conflict: /home/matias/.local/bin/volca.py already exists and links to a different file.
+2024-07-22 00:56:14 - Removed broken symlink: /home/matias/.local/bin/ppm-color-reducer
+2024-07-22 00:56:17 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
+2024-07-22 00:56:17 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
+2024-07-22 00:56:17 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-22 00:56:17 - Conflict: /home/matias/.local/bin/volca.py already exists and links to a different file.
+2024-07-23 01:31:46 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
+2024-07-23 01:31:46 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
+2024-07-23 01:31:46 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-23 01:31:46 - Conflict: /home/matias/.local/bin/volca.py already exists and links to a different file.
