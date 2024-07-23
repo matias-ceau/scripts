@@ -44,3 +44,25 @@
 2024-07-23 09:00:26 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
 2024-07-23 09:00:26 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
 2024-07-23 09:00:26 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-23 11:24:03 - Removed broken symlink: /home/matias/.local/bin/sync-localdata-repo.sh
+2024-07-23 11:24:03 - Removed broken symlink: /home/matias/.local/bin/sync-scripts-repo.sh
+2024-07-23 11:24:05 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
+2024-07-23 11:24:05 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
+2024-07-23 11:24:06 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-23 11:24:06 - Conflict: /home/matias/.local/bin/volca.py already exists and links to a different file.
+2024-07-23 11:24:49 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
+2024-07-23 11:24:49 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
+2024-07-23 11:24:49 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-23 11:24:49 - Conflict: /home/matias/.local/bin/volca.py already exists and links to a different file.
+2024-07-23 11:25:35 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
+2024-07-23 11:25:35 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
+2024-07-23 11:25:35 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-23 11:25:35 - Conflict: /home/matias/.local/bin/volca.py already exists and links to a different file.
+2024-07-23 11:27:41 - Conflict: /home/matias/.local/bin/quickcommand.sh already exists and links to a different file.
+2024-07-23 11:27:41 - Conflict: /home/matias/.local/bin/whatkey.py already exists and links to a different file.
+2024-07-23 11:27:41 - Conflict: /home/matias/.local/bin/urxvt-font-switch.xsh already exists and links to a different file.
+2024-07-23 11:27:41 - Conflict: /home/matias/.local/bin/volca.py already exists and links to a different file.
+2024-07-23 11:28:19 - Removed broken symlink: /home/matias/.local/bin/quickcommand.sh
+2024-07-23 11:28:19 - Removed broken symlink: /home/matias/.local/bin/urxvt-font-switch.xsh
+2024-07-23 11:28:19 - Removed broken symlink: /home/matias/.local/bin/volca.py
+2024-07-23 11:28:19 - Removed broken symlink: /home/matias/.local/bin/whatkey.py

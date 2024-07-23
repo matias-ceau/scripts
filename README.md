@@ -34,8 +34,6 @@ test
 | songlauncher.sh | Play a song with cmus using dmenu | 2024-07 | RUN | active | all |  |
 | update_env.xsh | Update env file for storing api keys | 2024-06 | OTH | active | all | api |
 | urxvt-font-switch.xsh | Switch Xressources file with alternative one | 2024-07 | RUN | active | all |  |
-| utils_update_readme.py | Updates the README.md file with the script info (provided by bin/cache_script_info) | 2024-07 | OTH | active | all |  |
-| utils_update_symlinks.sh | create symlinks in ~/.local/bin and remove old ones | 2024-07 | OTH | active | all |  |
 | vimwiki.sh | Open a note in vim with fzf | 2024-07 | CLI | active | all |  |
 | volca.py | Script to transfer samples to Korg volca sample 2 | 2024-07 | RUN | active | all |  |
 | vox.py | List Vox amp options | 2024-07 | CLI | active | all |  |
