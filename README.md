@@ -1,5 +1,7 @@
 # Scripts Information
 
+test
+
 <!-- script_info_start -->
 | file | description | date | type | status | host | tag |
 | --- | --- | --- | --- | --- | --- | --- |
