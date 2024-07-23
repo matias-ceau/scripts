@@ -25,6 +25,11 @@ else
     USE_GLOW=true
 fi
 
+# Function to strip ANSI escape sequences
+strip_ansi() {
+    echo "$1" | sed 's/\x1b\[[0-9;]*m//g'
+}
+
 # Function to print commands
 print_command() {
     if $USE_BAT; then
@@ -64,7 +69,7 @@ print_formatted() {
 # Function to print glow message
 print_glow() {
     if $USE_GLOW; then
-        echo -e "$1" | glow
+        strip_ansi "$1" | glow
     else
         echo -e "$1"
     fi
@@ -133,6 +138,6 @@ fi
 
 run_command "git maintenance run"
 
-print_glow "# Repository in ${BOLD}$REPO_DIR${RESET} has been successfully synced."
+print_glow "# Repository in **$REPO_DIR** has been successfully synced."
 
 cd "$ORIGINAL_DIR" || handle_error "Failed to return to original directory"
