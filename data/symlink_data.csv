@@ -1,2 +1,12 @@
 Original Path,Symlink,Command Name
+/home/matias/.scripts/transform_symlink.sh,/home/matias/.local/bin/transform_symlink.sh,transform_symlink.sh
+/home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh,/home/matias/.local/bin/chezmoi_on_a_new_system.sh,chezmoi_on_a_new_system.sh
+/home/matias/.scripts/sys/sync-scripts-repo.sh,/home/matias/.local/bin/sync-scripts-repo.sh,sync-scripts-repo.sh
+/home/matias/.scripts/sys/sync-localdata-repo.sh,/home/matias/.local/bin/sync-localdata-repo.sh,sync-localdata-repo.sh
+/home/matias/.scripts/sys/utils_update_symlinks.sh,/home/matias/.local/bin/utils_update_symlinks.sh,utils_update_symlinks.sh
+/home/matias/.scripts/sys/utils_update_readme.py,/home/matias/.local/bin/utils_update_readme.py,utils_update_readme.py
+/home/matias/.scripts/colormap_from_text.sh,/home/matias/.local/bin/colormap_from_text.sh,colormap_from_text.sh
+/home/matias/.scripts/archived/color-jpg-to-svg-converter.sh,/home/matias/.local/bin/color-jpg-to-svg-converter.sh,color-jpg-to-svg-converter.sh
+/home/matias/.scripts/archived/single-jpg-to-svg-converter.sh,/home/matias/.local/bin/single-jpg-to-svg-converter.sh,single-jpg-to-svg-converter.sh
+/home/matias/.scripts/bin/ppm-color-reducer,/home/matias/.local/bin/ppm-color-reducer,ppm-color-reducer
 /home/matias/.scripts/edit_chezmoi_cfg_files.sh,/home/matias/.local/bin/edit_chezmoi_cfg_files.sh,edit_chezmoi_cfg_files.sh
