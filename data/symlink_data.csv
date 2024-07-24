@@ -1,7 +1,4 @@
 Original Path,Symlink,Command Name
-/home/matias/.scripts/sync-repo.sh,/home/matias/.local/bin/sync-repo.sh,sync-repo.sh
-/home/matias/.scripts/archived/volca.py,/home/matias/.local/bin/volca.py,volca.py
-/home/matias/.scripts/archived/sync-repo-general.sh,/home/matias/.local/bin/sync-repo-general.sh,sync-repo-general.sh
-/home/matias/.scripts/archived/quickcommand.sh,/home/matias/.local/bin/quickcommand.sh,quickcommand.sh
-/home/matias/.scripts/archived/sync-scripts-repo.sh,/home/matias/.local/bin/sync-scripts-repo.sh,sync-scripts-repo.sh
-/home/matias/.scripts/archived/sync-localdata-repo.sh,/home/matias/.local/bin/sync-localdata-repo.sh,sync-localdata-repo.sh
+/home/matias/.scripts/fd_exec_path.sh,/home/matias/.local/bin/fd_exec_path.sh,fd_exec_path.sh
+/home/matias/.scripts/fzfmenu-run-script.sh,/home/matias/.local/bin/fzfmenu-run-script.sh,fzfmenu-run-script.sh
+/home/matias/.scripts/fzf-friendly-path-processor.sh,/home/matias/.local/bin/fzf-friendly-path-processor.sh,fzf-friendly-path-processor.sh
