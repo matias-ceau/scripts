@@ -66,3 +66,7 @@
 2024-07-23 11:28:19 - Removed broken symlink: /home/matias/.local/bin/urxvt-font-switch.xsh
 2024-07-23 11:28:19 - Removed broken symlink: /home/matias/.local/bin/volca.py
 2024-07-23 11:28:19 - Removed broken symlink: /home/matias/.local/bin/whatkey.py
+2024-07-24 04:03:09 - Removed broken symlink: /home/matias/.local/bin/quickcommand.sh
+2024-07-24 04:03:09 - Removed broken symlink: /home/matias/.local/bin/sync-localdata-repo.sh
+2024-07-24 04:03:09 - Removed broken symlink: /home/matias/.local/bin/sync-scripts-repo.sh
+2024-07-24 04:03:09 - Removed broken symlink: /home/matias/.local/bin/volca.py

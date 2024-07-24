@@ -27,18 +27,15 @@ test
 | pdfopener.sh | Pick any pdf in home folder and open it with evince | 2024-07 | RUN | active | all |  |
 | playlist_player.xsh | Pick a playlist and play it | 2024-07 | RUN | active | all |  |
 | playlist_randomizer.xsh | Pick a playlist of albums and play in random order in cmus | 2024-07 | RUN | active | all |  |
-| quickcommand.sh | Run any command with dmenu | 2024-07 | RUN | active | all |  |
 | random_album.xsh | Select random album and play it with cmus | 2024-07 | RUN | active | all |  |
 | random_wallpapers.xsh | Pick random wallpaper from wallpaper list | 2024-07 | RUN | active | all |  |
 | sandisk_music_transfert.py | Transfer music to Sandisk media player | 2024-07 | RUN | active | KJL |  |
 | songlauncher.sh | Play a song with cmus using dmenu | 2024-07 | RUN | active | all |  |
+| sync-repo.sh | sync git repository | 2024-07 | OTH | active | all |  |
 | update_env.xsh | Update env file for storing api keys | 2024-06 | OTH | active | all | api |
-| urxvt-font-switch.xsh | Switch Xressources file with alternative one | 2024-07 | RUN | active | all |  |
 | vimwiki.sh | Open a note in vim with fzf | 2024-07 | CLI | active | all |  |
-| volca.py | Script to transfer samples to Korg volca sample 2 | 2024-07 | RUN | active | all |  |
 | vox.py | List Vox amp options | 2024-07 | CLI | active | all |  |
 | wallpaper.sh | Pick random wallpaper from wallpaper list | 2024-07 | RUN | active | all |  |
 | dmenu_run_scripts.py | A sort of dmenu_run?? | 2024-06 | CLI | in_progress | all |  |
 | tmux-help.py | Show useful help for tmux | 2024-07 | CLI | in_progress | all |  |
-| whatkey.py | detect most probable scale | 2024-07 | CLI | in_progress | all |  |
 <!-- script_info_end -->
