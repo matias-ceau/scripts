@@ -1,4 +1,6 @@
 Original Path,Symlink,Command Name
-/home/matias/.scripts/fd_exec_path.sh,/home/matias/.local/bin/fd_exec_path.sh,fd_exec_path.sh
-/home/matias/.scripts/fzfmenu-run-script.sh,/home/matias/.local/bin/fzfmenu-run-script.sh,fzfmenu-run-script.sh
-/home/matias/.scripts/fzf-friendly-path-processor.sh,/home/matias/.local/bin/fzf-friendly-path-processor.sh,fzf-friendly-path-processor.sh
+/home/matias/.scripts/sync-repo.sh,/home/matias/.local/bin/sync-repo.sh,sync-repo.sh
+/home/matias/.scripts/git_pull.sh,/home/matias/.local/bin/git_pull.sh,git_pull.sh
+/home/matias/.scripts/archived/fzf_path_processor.sh,/home/matias/.local/bin/fzf_path_processor.sh,fzf_path_processor.sh
+/home/matias/.scripts/archived/fzfmenu-run-script.sh,/home/matias/.local/bin/fzfmenu-run-script.sh,fzfmenu-run-script.sh
+/home/matias/.scripts/archived/fd_exec_path.sh,/home/matias/.local/bin/fd_exec_path.sh,fd_exec_path.sh
