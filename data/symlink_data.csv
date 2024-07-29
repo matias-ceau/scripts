@@ -14,7 +14,8 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/fzfmenu_run.sh,/home/matias/.local/bin/fzfmenu_run.sh,fzfmenu_run.sh
 /home/matias/.scripts/fzfmenu.sh,/home/matias/.local/bin/fzfmenu.sh,fzfmenu.sh
 /home/matias/.scripts/fzf_songlauncher.sh,/home/matias/.local/bin/fzf_songlauncher.sh,fzf_songlauncher.sh
-/home/matias/.scripts/git_pull.sh,/home/matias/.local/bin/git_pull.sh,git_pull.sh
+/home/matias/.scripts/get_repos_present_on_host.sh,/home/matias/.local/bin/get_repos_present_on_host.sh,get_repos_present_on_host.sh
+/home/matias/.scripts/git_clone_by_author-repo.sh,/home/matias/.local/bin/git_clone_by_author-repo.sh,git_clone_by_author-repo.sh
 /home/matias/.scripts/jupyter_new_notebook.xsh,/home/matias/.local/bin/jupyter_new_notebook.xsh,jupyter_new_notebook.xsh
 /home/matias/.scripts/launch_tmux_with_music_player.sh,/home/matias/.local/bin/launch_tmux_with_music_player.sh,launch_tmux_with_music_player.sh
 /home/matias/.scripts/list_process.sh,/home/matias/.local/bin/list_process.sh,list_process.sh

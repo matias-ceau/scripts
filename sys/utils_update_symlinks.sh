@@ -5,26 +5,26 @@
 # Directories
 SOURCE_DIR="$SCRIPTS"
 TARGET_DIR="$HOME/.local/bin"
-LOG_FILE="$SCRIPTS/log/$HOST-symlinking.log"
-DATA_FILE="$SCRIPTS/data/$HOST-symlink_data.csv"
+LOG_FILE="$SCRIPTS/log/symlinking.log"
+DATA_FILE="$SCRIPTS/data/symlink_data.csv"
 
 # Initialize the CSV file and backup last one
 if [ -f "$DATA_FILE" ]; then
-    tail -n +2 "$DATA_FILE" >> "$SCRIPTS/log/symlinking.log.csv"
+    tail -n +2 "$DATA_FILE" >>"$SCRIPTS/log/symlinking.log.csv"
 fi
-echo "Original Path,Symlink,Command Name" > "$DATA_FILE"
+echo "Original Path,Symlink,Command Name" >"$DATA_FILE"
 
 # Function to log errors with date
 log_info() {
     INFO="$(date +'%Y-%m-%d %H:%M:%S') - $1"
     echo -e "\033[32m$INFO\033[0m"
-    echo "$INFO" >> "$LOG_FILE"
+    echo "$INFO" >>"$LOG_FILE"
 }
 
 log_error() {
     ERROR="$(date +'%Y-%m-%d %H:%M:%S') - $1"
     echo -e "\033[31m$ERROR\033[0m"
-    echo "$ERROR" >> "$LOG_FILE"
+    echo "$ERROR" >>"$LOG_FILE"
 }
 
 # Remove broken symlinks and log
@@ -52,7 +52,7 @@ create_symlinks() {
                 log_error "Conflict: $SYMLINK is a different symlink."
             fi
         else
-            ln -s "$FILE" "$SYMLINK" 
+            ln -s "$FILE" "$SYMLINK"
             echo "Created symlink $SYMLINK --> $FILE"
         fi
     done
@@ -65,7 +65,7 @@ add_symlinks_to_csv() {
             TARGET=$(readlink "$SYMLINK")
             if [[ $TARGET == $SCRIPTS* ]]; then
                 BASENAME=$(basename "$SYMLINK")
-                echo "$TARGET,$SYMLINK,$BASENAME" >> "$DATA_FILE"
+                echo "$TARGET,$SYMLINK,$BASENAME" >>"$DATA_FILE"
             fi
         fi
     done

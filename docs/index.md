@@ -42,3 +42,8 @@
 [vimwiki.sh](vimwiki.sh.md)
 [vox.py](vox.py.md)
 [wallpaper.sh](wallpaper.sh.md)
+[album_email.py](album_email.py.md)
+[albumplayer.sh](albumplayer.sh.md)
+[albumplayer.xsh](albumplayer.xsh.md)
+[get_repos_present_on_host.sh](get_repos_present_on_host.sh.md)
+[git_clone_by_author-repo.sh](git_clone_by_author-repo.sh.md)

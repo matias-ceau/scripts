@@ -11,12 +11,11 @@ See [DOCS](docs/index.md) for llama3.1:7b generated descriptions.
 | create_cover_art.sh | Create a covert art based on file spectrogram | 2024-07 | RUN | active | all |  |
 | dmenu_run_scripts.xsh | Run user scripts with dmenu | 2024-06 | RUN | active | all |  |
 | editor.sh | Edit any file in current folder or subfolders (recursively) | 2024-07 | CLI | active | all |  |
-| fd_exec_path.sh | Replacement of dmenu_path | 2024-07 | RUN | active | all |  |
 | fzf_albumlauncher.xsh | Choose an album with fzf and play it with cmus | 2024-07 | CLI | active | all |  |
 | fzf_songlauncher.sh | Play a song with cmus (chose it with fzf) | 2024-07 | CLI | active | all |  |
 | fzfmenu.sh | Similar to dmenu but with fzf and urxvt (this is only hte helper function | 2024-06 | OTH | active | all |  |
 | fzfmenu_run.sh | Dmenu run replacement with fzf and a floating st terminal | 2024-06 | RUN | active | all |  |
-| git_pull.sh | get git repos | 2024-07 | CLI | active | all |  |
+| git_clone_by_author-repo.sh | get git repos | 2024-07 | CLI | active | all |  |
 | jupyter_new_notebook.xsh | Create jupyter notebook and open it in chromium | 2024-07 | RUN | active | all |  |
 | launch_tmux_with_music_player.sh | Script to create new tmux session called music and open cmus inside (without actually opening a terminal) | 2024-07 | CLI | active | all |  |
 | list_process.sh | list running services | 2024-07 | CLI | active | all |  |

@@ -1,20 +1,28 @@
 # albumplayer.xsh
 
-This script is written in xonsh, a Unix-like shell language that runs on top of Python. It's designed to play an album using the `cmus` music player and its remote control interface.
+This script is written in Xonsh, a Unix shell scripting language that provides a Python-like syntax. Here's an explanation of its functionality:
 
-**Functionality:**
+**Purpose:**
 
-1. The script retrieves a list of music file paths from a custom configuration file (`lib.pl`) located in the user's `.config/cmus/` directory.
-2. It filters these paths to get a list of albums, by splitting each path and taking the last two directories (i.e., `album_name/artist_name`).
-3. The script then creates a "fancy" dictionary with album names as keys and tuples containing the artist name and album title as values. This is done using a dictionary comprehension that formats each value to display only 100 characters of the artist name.
-4. The user is presented with a list of these fancy albums using `dmenu`, a lightweight window manager-independent dialog for displaying menus.
-5. Once an album is selected, the script generates a playlist by finding all music files in the `lib.pl` configuration file that belong to the same artist as the selected album.
-6. It shuffles the remaining albums (not part of the original selection) and appends their corresponding music files to the playlist.
-7. The playlist is written to a temporary file (`~/.config/cmus/.temp.m3u`) for later use by `cmus`.
-8. Finally, the script uses `cmus-remote` commands to:
-	* Update `cmus` with the new playlist
-	* Clear any existing playlist
-	* View the new playlist in a custom way (using `view 4`)
-	* Quit `cmus`
+The script plays an album using the `cmus` music player and generates a playlist with tracks from the selected album and related albums.
 
-This script appears to be designed for users who want to play music albums using `cmus`, and it uses a combination of Python, xonsh, and `dmenu` to provide an interactive interface for selecting albums and generating playlists.
+**Flow:**
+
+1. The script loads a list of file paths from the `.config/cmus/lib.pl` file, which is assumed to contain a list of song files.
+2. It extracts the album names from these file paths by splitting each path into its constituent parts (e.g., `/path/to/album/title/song.mp3`) and extracting the title part (`album/title`).
+3. The script creates a dictionary `fancy_dict` where each key is an album name, and the value is a tuple containing the artist name and the album title.
+4. It generates a list of album names with their corresponding artist and title information in a formatted string.
+5. The script presents this list to the user through `dmenu`, a lightweight menu system, allowing them to select an album.
+6. If an album is selected, the script generates a playlist by finding all files that belong to the selected album and its related albums (up to 10 related albums are considered).
+7. It writes the generated playlist to a temporary file (`~/.config/cmus/.temp.m3u`) and instructs `cmus` to play it using various remote control commands.
+
+**Assumptions:**
+
+This script assumes that:
+
+* The `.config/cmus/lib.pl` file contains a list of song files, one per line.
+* The file paths in the library file are properly formatted (e.g., `/path/to/album/title/song.mp3`).
+* The `cmus` music player is installed and configured on the system.
+* The user has dmenu installed and configured to display the menu.
+
+Overall, this script appears to be a custom solution for playing albums with related tracks using `cmus`, leveraging the power of Xonsh scripting.
