@@ -17,9 +17,11 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/fzf_songlauncher.sh,/home/matias/.local/bin/fzf_songlauncher.sh,fzf_songlauncher.sh
 /home/matias/.scripts/get_repos_present_on_host.sh,/home/matias/.local/bin/get_repos_present_on_host.sh,get_repos_present_on_host.sh
 /home/matias/.scripts/git_clone_by_author-repo.sh,/home/matias/.local/bin/git_clone_by_author-repo.sh,git_clone_by_author-repo.sh
+/home/matias/.scripts/improved-fzfmenu.sh,/home/matias/.local/bin/improved-fzfmenu.sh,improved-fzfmenu.sh
 /home/matias/.scripts/jupyter_new_notebook.xsh,/home/matias/.local/bin/jupyter_new_notebook.xsh,jupyter_new_notebook.xsh
 /home/matias/.scripts/launch_tmux_with_music_player.sh,/home/matias/.local/bin/launch_tmux_with_music_player.sh,launch_tmux_with_music_player.sh
 /home/matias/.scripts/list_process.sh,/home/matias/.local/bin/list_process.sh,list_process.sh
+/home/matias/.scripts/llama-all-scripts-describer.py,/home/matias/.local/bin/llama-all-scripts-describer.py,llama-all-scripts-describer.py
 /home/matias/.scripts/m3u_creator.sh,/home/matias/.local/bin/m3u_creator.sh,m3u_creator.sh
 /home/matias/.scripts/mechen_music_transfert.py,/home/matias/.local/bin/mechen_music_transfert.py,mechen_music_transfert.py
 /home/matias/.scripts/midi2arch.xsh,/home/matias/.local/bin/midi2arch.xsh,midi2arch.xsh
@@ -33,6 +35,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/random_album.xsh,/home/matias/.local/bin/random_album.xsh,random_album.xsh
 /home/matias/.scripts/random_wallpapers.xsh,/home/matias/.local/bin/random_wallpapers.xsh,random_wallpapers.xsh
 /home/matias/.scripts/sandisk_music_transfert.py,/home/matias/.local/bin/sandisk_music_transfert.py,sandisk_music_transfert.py
+/home/matias/.scripts/script_launcher.sh,/home/matias/.local/bin/script_launcher.sh,script_launcher.sh
 /home/matias/.scripts/bin/select_script,/home/matias/.local/bin/select_script,select_script
 /home/matias/.scripts/songlauncher.sh,/home/matias/.local/bin/songlauncher.sh,songlauncher.sh
 /home/matias/.scripts/sync-repo.sh,/home/matias/.local/bin/sync-repo.sh,sync-repo.sh

@@ -98,3 +98,8 @@
 
 [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md)
 
+[vox.py](scripts/vox.py.md)
+[improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md)
+[llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md)
+[script_launcher.sh](scripts/script_launcher.sh.md)
+[vox.py](scripts/vox.py.md)
