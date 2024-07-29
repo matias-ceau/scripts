@@ -1,6 +1,6 @@
 # Scripts Information
 
-test
+See [DOCS](docs/index.md) for llama3.1:7b generated descriptions.
 
 <!-- script_info_start -->
 | file | description | date | type | status | host | tag |
