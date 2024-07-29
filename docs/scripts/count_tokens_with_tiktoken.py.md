@@ -1,30 +1,72 @@
 # count_tokens_with_tiktoken.py
 
-**Script Description**
+# Token Counter Script
 
-This is a Python script that counts the number of tokens in a given text file. The token count is based on the `gpt-4o` model, which is a specific language model used for natural language processing.
+This script counts the number of tokens in a given text file using the GPT-4o model's tokenizer provided by the `tiktoken` library.
 
-**Functionality**
+## Requirements
 
-Here's how the script works:
+- Python 3.x
+- `tiktoken` Python library
 
-1. **Importing Libraries**: The script imports two libraries: `sys` and `tiktoken`. `sys` is used to interact with the operating system and command line arguments, while `tiktoken` is a library that provides tokenization functions.
-2. **Defining the `count_tokens` Function**: This function takes a file path as input, reads the contents of the file, encodes the text using the `gpt-4o` model's encoding scheme provided by `tiktoken`, and returns the length of the encoded tokens array.
-3. **Main Execution Block**: The script checks if it was run with exactly one command-line argument (the file path). If not, it prints an error message and exits. Otherwise, it calls the `count_tokens` function with the provided file path and prints the resulting token count.
+## Installation
 
-**Assumptions**
+First, ensure you have Python 3 installed. Then, install the `tiktoken` library using pip:
 
-To use this script, you'll need to have:
-
-1. Python installed on your system.
-2. The `tiktoken` library installed (you can install it using pip: `pip install tiktoken`).
-3. A text file containing the content for which you want to count tokens.
-
-**Example Usage**
-
-Save this script as `count_tokens.py`, navigate to the directory in your terminal, and run it with a single argument: the path to the text file:
-```bash
-$ python count_tokens.py example.txt
-Number of tokens: 1234
+```sh
+pip install tiktoken
 ```
-Replace `example.txt` with the actual path to your text file.
+
+## Usage
+
+To run the script, use the following command:
+
+```sh
+python count_tokens.py <file_path>
+```
+
+Replace `<file_path>` with the path to the text file you want to analyze.
+
+### Example
+
+```sh
+python count_tokens.py example.txt
+```
+
+## Script Walkthrough
+
+### Function: `count_tokens(file_path)`
+
+This function reads the text from the specified file and encodes it using the tokenizer of the "gpt-4o" model. It returns the length of the token list.
+
+- **Parameters**:
+  - `file_path` (str): The path to the text file to tokenize.
+
+- **Returns**:
+  - `int`: The number of tokens in the text file.
+
+### Main Code Execution
+
+1. **Argument Check**: The script expects exactly one command-line argument representing the file path.
+2. **Token Count**: It calls the `count_tokens` function with the specified file path.
+3. **Output**: Finally, it prints the number of tokens found in the file.
+
+### Error Handling
+
+- If no file path or more than one argument is provided, the script prints the usage information and exits with an error status.
+
+## Example Output
+
+```
+Number of tokens: 125
+```
+
+The above output indicates that the text file contains 125 tokens according to the "gpt-4o" model's tokenizer.
+
+## Author
+
+This script was authored by the developer community. Further modifications and contributions are welcome.
+
+## License
+
+This script is available under the MIT License. See the LICENSE file for more details.

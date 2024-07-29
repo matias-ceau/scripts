@@ -1,32 +1,110 @@
 # wallpaper.sh
 
-**Script Description**
+# Wallpaper Changer Script
 
-This is a Bash script designed to manage wallpapers on a Linux system. The script, named `set_wallpaper.sh`, allows users to pick a random wallpaper from a list, select a specific wallpaper, or recall the previously set wallpaper.
+## Description
 
-**Functionality**
+The Wallpaper Changer script is designed to randomly select and set a wallpaper from a predefined list of wallpapers. It includes several functionalities that allow users to either set a random wallpaper, select one from a list, revert to previous selections, or use a GUI for the selection process.
 
-The script has several modes of operation:
+## Features
 
-1. **Random Wallpaper**: When run with the `--random` option, it selects a random wallpaper from the specified directory (`~/.wallpapers/`) and sets it as the desktop background.
-2. **Select Wallpaper**: With the `--select` option, it allows users to select a specific wallpaper using either the built-in `fzfmenu.sh` script or a graphical interface (via `yad`).
-3. **Previous Wallpaper**: The `--previous` option recalls the previously set wallpaper and sets it as the new background.
-4. **Default Wallpaper**: If no options are provided, it sets the default wallpaper specified in the script (`$DEFAULT_WALLPAPER`).
+- **Set a Random Wallpaper:**
+  Selects and sets a random wallpaper from the wallpapers directory.
+- **Select a Wallpaper:**
+  Allows manual selection of a wallpaper using a menu.
+- **Revert to a Previous Wallpaper:**
+  Reverts to a previously used wallpaper based on a history log.
+- **GUI Selection:**
+  Provides a graphical interface for selecting and previewing wallpapers.
+- **Default Wallpaper:**
+  Sets a default wallpaper if no arguments are provided or if an error occurs.
 
-**Additional Features**
+## Usage
 
-The script also includes the following features:
+```bash
+#!/usr/bin/bash
 
-* Notifies the user when a new wallpaper is set using `notify-send`.
-* Caches recently set wallpapers in a log file (`~/.cache/wallpapers.log`) to facilitate recalling previous wallpapers.
-* Removes duplicate entries from the cache by running an `awk` command on the cached logs.
+# Default wallpaper
+DEFAULT_WALLPAPER="$HOME/.wallpapers/_toitssuze.jpg"
+CACHE="/home/matias/.cache/wallpapers.log"
 
-**Notes**
+# Function to set wallpaper
+set_wallpaper() {
+    feh --bg-scale "$1" && notify-send -t 3000 -r 1212 "Script" "Changed wallpaper!\n<b>$(basename "$1")</b>"
+    echo "$1" >> "$CACHE"
+}
 
-The script relies on external dependencies, such as:
+# Parse arguments
+case "$1" in
+    --random)
+        wallpaper=$(find ~/.wallpapers/ -type f | shuf -n 1)
+        set_wallpaper "$wallpaper"
+        ;;
+    --select)
+        wallpaper=$(find ~/.wallpapers/ -type f | fzfmenu.sh)
+# -i -l 10)
+        [ -n "$wallpaper" ] && set_wallpaper "$wallpaper"
+        ;;
+    --previous)
+        n=${2:-1}
+        n=$((n + 1))
+        wallpaper=$(tail -n "$n" ~/.cache/wallpapers.log | head -n 1)
+        sed -i "$(($(wc -l < $CACHE) - $n + 1)),\$d" "$CACHE"
+        [ -n "$wallpaper" ] && set_wallpaper "$wallpaper"
+        ;;
+    --gui)
+        wallpaper=$(find ~/.wallpapers/ -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) -printf "%f\n%p\n" | \
+            yad --list \
+                --title="Select a wallpaper" \
+                --width=400 --height=500 \
+                --column="Filename" \
+                --column="Path":HD \
+                --hide-column=2 \
+                --print-column=2 \
+                --no-headers)
+        if [ -n "$wallpaper" ]; then
+            yad --image="$wallpaper" \
+                --title="Preview" \
+                --width=800 --height=600 \
+                --button="Set as wallpaper:0" \
+                --button="Cancel:1"
+            if [ $? -eq 0 ]; then
+                set_wallpaper "$wallpaper"
+            fi
+        fi
+        ;;
+   *)
+       set_wallpaper "$DEFAULT_WALLPAPER"
+       ;;
+esac
 
-* `feh` for setting the desktop background
-* `fzfmenu.sh` for selecting wallpapers using a text-based interface (optional)
-* `yad` for creating graphical interfaces (optional)
+# Remove successive duplicate entries
+awk '!seen[$0]++' "$CACHE" > "$CACHE.tmp" && mv "$CACHE.tmp" "$CACHE"
+```
 
-Overall, this script provides an efficient way to manage wallpapers on Linux systems, making it easy to switch between different backgrounds while maintaining a history of previously set wallpapers.
+### Options
+
+- `--random`: Set a random wallpaper from the wallpapers directory.
+- `--select`: Select a wallpaper manually from a menu.
+- `--previous [n]`: Revert to the previous wallpaper. Defaults to the last wallpaper if `n` is not specified.
+- `--gui`: Use a graphical interface for selecting and previewing wallpapers.
+- No argument: Sets the default wallpaper defined as `DEFAULT_WALLPAPER`.
+
+### TODO
+
+- Make GUI work properly, probably integrate with the `fzfmenu.sh` script from `junegunn`.
+
+### Requirements
+
+- `feh` for setting wallpapers
+- `notify-send` for sending notifications
+- `yad` for graphical interface (optional for `--gui` option)
+- `fzfmenu.sh` script (optional for `--select` option)
+
+## License
+
+This script is released under the MIT License. See `LICENSE` file for more details.
+
+---
+
+**Note:** Make sure to replace the paths and filenames appropriately to match your environment.

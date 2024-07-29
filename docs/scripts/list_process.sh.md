@@ -1,33 +1,70 @@
 # list_process.sh
 
-**Script Description:**
+# List Running Services Script
 
-This is a Bash shell script that lists all running services on a Linux system.
+This script lists all the running services on a system using `systemctl` and sorts them by their status.
 
-**Functionality:**
+## Usage
 
-The script uses the `systemctl` command to retrieve a list of all services, including both started and stopped ones. The output is then piped to the `sort` command to sort the list based on the fourth column (which contains the service name).
+Execute the script in a Unix-like terminal to see a sorted list of all the systemd services, including their status.
 
-Here's a breakdown of what each part of the script does:
+### Example
 
-1. `systemctl`: This is a system service manager that manages system services.
-2. `list-units --type=service --all`: This option lists all services, including stopped ones.
-	* `--type=service` specifies that we're only interested in services.
-	* `--all` includes both started and stopped services.
-3. `--no-pager`: This option prevents systemctl from piping its output to a pager (such as less) and instead outputs it directly to the terminal.
-4. `--no-legend`: This option suppresses the display of a legend or header line at the top of the output.
-5. `sort -k4`: This pipes the output to the sort command, which sorts the list based on the fourth column (the service name).
-
-**Example Output:**
-
-The script's output will be a sorted list of all running services on the system, with each service listed in the format:
+```sh
+./list_running_services.sh
 ```
-<service_name>.service loaded active running
+
+## Description
+
+This script leverages `systemctl` to list all service units on the system. It then sorts these services by their status (running, exited, etc.) to provide an organized view. The output of the command does not include any pager or extra formatting legend, making it suitable for piping into other commands or scripts.
+
+## Script Details
+
+```sh
+#! /bin/sh
+
+#DOC#@CLI@=2024-07= "list running services"
+
+systemctl list-units --type=service --all --no-pager --no-legend | sort -k4
 ```
-For example:
-```
-dbus.service loaded active running
-NetworkManager.service loaded active running
-systemd-logind.service loaded active running
-...
-```
+
+1. **Shebang**: `#!/bin/sh`
+   - Indicates the script should be run in the POSIX shell.
+
+2. **Documentation Tag**: `#DOC#@CLI@=2024-07= "list running services"`
+   - This tag is a placeholder for documentation purposes, perhaps denoting the script's CLI usage or versioning information.
+
+3. **Command**: `systemctl list-units --type=service --all --no-pager --no-legend | sort -k4`
+   - `systemctl list-units`: Lists the systemd units currently loaded on the system.
+   - `--type=service`: Filters the list to only include service units.
+   - `--all`: List all units, even the inactive ones.
+   - `--no-pager`: Disables paging, i.e., does not pipe output into a pager.
+   - `--no-legend`: Removes the legend (the column headers and footer).
+   - `| sort -k4`: Pipes the output into the `sort` command to sort by the fourth field, which is the status of each service.
+
+## Prerequisites
+
+This script requires:
+- A Unix-like operating system with `systemd` installed.
+- User privileges that allow the execution of `systemctl` commands.
+
+## Output
+
+The script outputs a sorted list of services showing their current status (e.g., running, exited, etc.)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributions
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## Author
+
+[Your Name]
+
+## Additional Notes
+
+Feel free to modify this script to suit your needs. For more details on `systemctl`, see the [systemd documentation](https://www.freedesktop.org/wiki/Software/systemd/).
+

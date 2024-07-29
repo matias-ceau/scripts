@@ -1,26 +1,178 @@
 # select_script
 
-**Script Overview**
+# SC of C Script
 
-This is a C program that uses the Rofi (Run or Find and Execute Input Line) utility to select and execute a script from a cached list. The script reads data from a CSV file named "script_info.csv" in the user's home directory, displays the available scripts using Rofi, extracts the chosen script name, and executes it.
+_Availability: started 2024-06_
 
-**Functionality**
+This script facilitates the selection and execution of a chosen script using cached data. It leverages data from a cache file to populate a list for the user to interact with, using the `rofi` dmenu.
 
-1. **Load Cache**: The program loads the cached data from the "script_info.csv" file into memory.
-2. **Display Rofi Menu**: The loaded data is used to display a menu of available scripts in Rofi.
-3. **Extract Choice**: The user selects a script from the menu, and the chosen script name is extracted.
-4. **Free Cache**: After extracting the choice, the cached data is freed to release memory.
-5. **Execute Script**: Finally, the program executes the selected script by running its executable.
+## Dependencies
 
-**Assumptions**
+- **rofi** - A window switcher, run dialog, dmenu replacement, and more.
 
-* This script assumes that the "script_info.csv" file exists in the user's home directory and contains valid CSV data with two columns: "file" and "descr".
-* The script also assumes that the Rofi utility is installed on the system.
-* The script does not perform any error checking or validation on the input data.
+## Description
 
-**Security Considerations**
+The script performs the following functions:
+1. **Load Cache:** Reads and loads cached script information from a CSV file.
+2. **Display Options:** Uses `rofi` to present a list of available scripts with descriptions.
+3. **Extract Choice:** Captures the user-selected script.
+4. **Execute Script:** Executes the selected script.
 
-* This script executes a command based on user input, which can pose security risks if not properly sanitized. In this case, however, the script name is extracted and executed directly without further processing.
-* Additionally, the script uses `popen` to execute commands in a new shell process, which can also introduce security risks if not used carefully.
+## File Structure & Definitions
 
-Overall, this script demonstrates how to use Rofi to select and execute a script from a cached list. However, it's essential to consider security implications when using similar scripts in production environments.
+- **Cache File:** `~/.cache/script_info.csv`
+- **Script Folder:** `~/.scripts/`
+
+## Usage
+
+```bash
+./script_name
+```
+
+Ensure `HOME` environment variable is set and `rofi` is installed.
+
+## Detailed Function Descriptions
+
+1. **load_cache(ScriptInfo **infos, int *count, const char *cache_file)**
+
+   Reads the cache file and loads the script information into the provided `ScriptInfo` array.
+
+2. **free_cache(ScriptInfo *infos)**
+
+   Frees the allocated memory for the script info array.
+   
+3. **display_rofi(ScriptInfo *infos, int count)**
+
+   Displays the list of scripts along with their descriptions using `rofi`.
+
+4. **extract_choice(ScriptInfo *infos, int count, char *choice)**
+
+   Extracts the user's choice from the `rofi` menu.
+
+5. **execute_choice(const char *choice, const char *script_folder)**
+
+   Executes the selected script.
+
+## Example
+
+```sh
+# Ensure dependencies are installed and files are in proper locations
+# Then run the script
+./sc_of_c_script
+```
+
+## Code Walkthrough
+
+Here is the entirety of the script:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define CACHE_FILE_REL "/.cache/script_info.csv"
+#define SCRIPT_FOLDER_REL "/.scripts/"
+
+typedef struct {
+    char file[256];
+    char descr[256];
+} ScriptInfo;
+
+void load_cache(ScriptInfo **infos, int *count, const char *cache_file) {
+    FILE *file = fopen(cache_file, "r");
+    if (!file) {
+        perror("Error opening cache file");
+        return;
+    }
+
+    char line[512];
+    *count = 0;
+    ScriptInfo *temp_infos = NULL;
+
+    // Skip the header line
+    fgets(line, sizeof(line), file);
+
+    while (fgets(line, sizeof(line), file)) {
+        temp_infos = realloc(temp_infos, sizeof(ScriptInfo) * (*count + 1));
+        sscanf(line, "%[^,],%*[^,],%*[^,],%*[^,],%*[^,],%*[^,],\"%255[^\"]\"", 
+               temp_infos[*count].file, temp_infos[*count].descr);
+        (*count)++;
+    }
+
+    fclose(file);
+    *infos = temp_infos;
+}
+
+void free_cache(ScriptInfo *infos) {
+    free(infos);
+}
+
+void display_rofi(ScriptInfo *infos, int count) {
+    FILE *rofi = popen("rofi -dmenu -markup-rows -i -lines 30 -width 80", "w");
+    if (!rofi) {
+        perror("Error opening rofi");
+        return;
+    }
+
+    for (int i = 0; i < count; i++) {
+        fprintf(rofi, "<span color='green'>%s</span> \u27F6 %s\n", infos[i].file, infos[i].descr);
+    }
+
+    pclose(rofi);
+}
+
+void extract_choice(ScriptInfo *infos, int count, char *choice) {
+    FILE *rofi = popen("rofi -dmenu -markup-rows -i -lines 30 -width 80", "r");
+    if (!rofi) {
+        perror("Error opening rofi");
+        return;
+    }
+
+    char line[512];
+    if (fgets(line, sizeof(line), rofi)) {
+        sscanf(line, "<span color='green'>%255[^<]</span>", choice);
+    }
+
+    pclose(rofi);
+}
+
+void execute_choice(const char *choice, const char *script_folder) {
+    if (strlen(choice) > 0) {
+        char filepath[512];
+        snprintf(filepath, sizeof(filepath), "%s/%s", script_folder, choice);
+        execl(filepath, filepath, NULL);
+    }
+}
+
+int main() {
+    const char *home = getenv("HOME");
+    if (!home) {
+        fprintf(stderr, "HOME environment variable not set\n");
+        return 1;
+    }
+
+    char cache_file[512];
+    snprintf(cache_file, sizeof(cache_file), "%s%s", home, CACHE_FILE_REL);
+
+    char script_folder[512];
+    snprintf(script_folder, sizeof(script_folder), "%s%s", home, SCRIPT_FOLDER_REL);
+
+    ScriptInfo *infos;
+    int count;
+    char choice[256] = "";
+
+    load_cache(&infos, &count, cache_file);
+    display_rofi(infos, count);
+    extract_choice(infos, count, choice);
+    free_cache(infos);
+
+    execute_choice(choice, script_folder);
+
+    return 0;
+}
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

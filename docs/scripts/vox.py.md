@@ -1,68 +1,116 @@
 # vox.py
 
-Here's how you can refactor the code to improve its readability and maintainability:
+# Vox Amp Options Script Documentation
 
-```python
-import pandas as pd
-from tabulate import tabulate
-import sys
+## Overview
 
-def load_amp_models():
-    data = {
-        1: {'name': 'This amp models a classic British 50W single-channel head made in England during the early 60’s.',
-           'mode': 'Clean',
-           'amp_name': 'Classic Brit Box',
-           'color': 'r',
-           'description': 'The GAIN control should be set low to get the crunch that will forever be the sound of rock‘n’roll.'},
-        2: {'name': 'This amp models a UK-manufactured 100W single-channel head with master volume made in 1983.',
-           'mode': 'High-Gain',
-           'amp_name': '80s Brit Box',
-           'color': 'r',
-           'description': 'Turn the GAIN control all the way up to get the thick, snarling hard rock and heavy metal sound that dominated the 80’s.'},
-        # ...
-    }
+This script, written in Python, is designed to list various Vox amp options, their modes, colors, and descriptions. It processes command-line arguments to display specific selections from a predefined DataFrame and formats the output in a tabulated manner for easy readability.
 
-    df = pd.DataFrame(data).T
-    return df
+## Functionalities
 
-def print_amp_models(df):
-    if len(sys.argv) == 0:
-        print(tabulate(df))
-    else:
-        for arg in sys.argv[1:]:
-            main_arg(arg, df)
+### 1. Default Listing
+When run without arguments, the script displays the entire list of Vox amp options with descriptions truncated to 40 characters.
 
-def main_arg(arg, df):
-    if arg.isnumeric():
-        num = int(arg)
-        if num in df.index:
-            name = df.loc[num, 'name']
-            mode = df.loc[num, 'mode']
-            amp_name = df.loc[num, 'amp_name']
-            description = df.loc[num, 'description']
-            length = len(name) + len(mode) + 3
-            print('*'*length)
-            print(f"{name} - {mode}")
-            print(amp_name)
-            print('*'*length)
-            print(description)
-    elif arg in ['g', 'o', 'r']:
-        print(tabulate(df[df['color'] == arg]))
-    else:
-        names = [i for i in df['name'] if arg.upper() in i]
-        print(tabulate(df[df['name'].isin(names)]))
+### 2. Amp Selection by Index
+By passing an index number as an argument, the script prints detailed information about the specific amp option corresponding to that index.
 
-def main():
-    df = load_amp_models()
-    print_amp_models(df)
+### 3. Filter by Color
+The script can filter and display amp options based on the specified color (`'g'`, `'o'`, or `'r'`). The descriptions in the output are truncated to 40 characters.
 
-if __name__ == '__main__':
-    main()
+### 4. Filter by Amp Name
+The script can filter and display amp options based on the provided amp name. The descriptions in the output are truncated to 40 characters.
+
+## Usage
+
+### Command Line Interface
+
+The script can be executed with several command line arguments to yield different outputs:
+
+1. **No arguments**: Display the entire list with truncated descriptions.
+   ```sh
+   ./script_name.py
+   ```
+
+2. **Index number**: Display detailed information about the specific amp option at the provided index.
+   ```sh
+   ./script_name.py 3
+   ```
+
+3. **Color filter (`'g'`, `'o'`, `'r'`)**: Display amp options matching the specified color.
+   ```sh
+   ./script_name.py g
+   ```
+
+4. **Name filter**: Display amp options matching the provided amp name (case insensitive).
+   ```sh
+   ./script_name.py "VOX AC15"
+   ```
+
+### Example Outputs
+
+1. **No Arguments**:
+    ```
+    ---  ----  ----  -------------  ----------------------------------------
+    0    CLEAN STD   g             This models the clean channel of a high-qu
+    1    CLEAN SPL   o             This models the clean channel of a Japanes
+    2    CLEAN CST   r             This models is only a three-band tone cont
+    3    CALI  STD   g             The 6G5-A “Pro” amp was produced during th
+    4    CALI  SPL   o             This American-made tweed-covered 2x12" com
+    ...
+    ```
+
+2. **Index Number (detail for index 3)**:
+    ```
+    ***************
+    CALI CLEAN - STD
+    Fender Pro 6G5-A Brownface
+    ***************
+    The 6G5-A “Pro” amp was produced during the years 1960–1963, and was distinctive for its yellowish brown vinyl cover and round brown knobs. This 40W combo amp is known for its warm and clean tone.
+    ```
+
+3. **Color Filter (`'g'`)**:
+    ```
+    ---  ----  ----  -------------  ----------------------------------------
+    0    CLEAN STD   g             This models the clean channel of a high-qu
+    3    CALI  STD   g             The 6G5-A “Pro” amp was produced during th
+    6    US BL STD   g             This models a 4x10" combo amp from 1959 th
+    9    US 2x STD   g             This models a black-faced 2x12" combo amp 
+    ...
+    ```
+
+4. **Name Filter (`"VOX"`)**:
+    ```
+    ---  ----  ----  -------------  ----------------------------------------
+    12   VOX  A STD   g             This models the AC15TB, which combines th
+    13   VOX  A SPL   o             This models channel 2 of the VOX AC15 (1x
+    14   VOX  A CST   r             Designed to emulate the tones of the thic
+    15   VOX  A STD   g             This models an AC30 amp with a “top boost
+    ...
+    ```
+
+## Required Libraries
+
+- `pandas`
+- `tabulate`
+- `sys`
+
+Make sure to install the necessary Python libraries before running the script. You can install them using pip:
+
+```sh
+pip install pandas tabulate
 ```
 
-In this refactored code:
+## Execution
 
-1. We separate the data loading into a `load_amp_models` function for better organization.
-2. The `print_amp_models` function takes care of printing all amp models when no argument is provided, or when an invalid argument is given (e.g., non-numeric).
-3. The `main_arg` function handles each valid argument (numeric, 'g', 'o', or 'r') and prints the corresponding amp models.
-4. We keep the rest of the logic the same to ensure backwards compatibility.
+- Ensure the script has executable permissions:
+  ```sh
+  chmod +x script_name.py
+  ```
+- Run the script with the desired arguments:
+  ```sh
+  ./script_name.py [arguments]
+  ```
+
+## Author
+
+This script is authored to provide an easy interface to list and filter Vox amp options using a predefined dataset.

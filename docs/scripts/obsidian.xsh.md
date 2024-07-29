@@ -1,24 +1,68 @@
 # obsidian.xsh
 
-**Script Description**
+# Obsidian Vault Opener
 
-This is a shell script written in xonsh, a Unix-like shell designed for interactive use. The script's primary functionality is to open an Obsidian note-taking application with a specific vault (database) by selecting it from a list of available vaults using the `fzf` command-line interface.
+This script is an interactive utility for opening an Obsidian vault from a list of available vaults in a given directory. It uses `fzf` for a user-friendly and efficient vault selection process.
 
-**Functionality Breakdown**
+## Features
 
-1. **Vault Discovery**: The script lists all directories in the `$HOME/PKM` directory, assuming that each directory represents an Obsidian vault. It stores these paths in the `vaults` variable.
-2. **Vault Selection**: Using `fzfmenu.sh`, a custom implementation of the popular `fzf` command-line interface for file selection, the script displays a list of available vaults to the user and allows them to select one using their keyboard.
-3. **Selected Vault Handling**:
-	* If the user selects a vault (i.e., `selected_vault` is not empty), the script opens the selected vault in Obsidian using the `obsidian://open?vault=<vault_name>` URL scheme, which is specific to Obsidian.
-	* If no vault is selected (i.e., `selected_vault` is empty), the script displays a notification message indicating that no vault was chosen.
-4. **Error Handling**: The script includes basic error handling by checking if the user selection (`selected_vault`) is not empty before attempting to open the corresponding Obsidian vault.
+- **Dynamic Vault Listing**: The script dynamically lists all the vaults (directories) under the specified directory (`$HOME/PKM`).
+- **Interactive Search**: Uses `fzf` for an interactive and visually appealing vault selection with previews of the vault content.
+- **Obsidian Integration**: Opens the selected vault directly in Obsidian using the Obsidian URL scheme.
+- **Notification**: Provides feedback through a notification if no vault is selected.
 
-**Assumptions and Dependencies**
+## Usage
 
-This script assumes:
+Before running the script, make sure you have the following dependencies installed:
+- [Obsidian](https://obsidian.md/)
+- [fzf](https://github.com/junegunn/fzf)
+- [eza](https://github.com/eza-community/eza)
+- [notify-send](https://packages.ubuntu.com/bionic/libnotify-bin)
 
-* `obsidian` is installed and available on the system.
-* `$HOME/PKM` contains the directories representing Obsidian vaults.
-* `fzfmenu.sh` is a custom implementation of `fzf` for file selection, which might not be widely available or maintained.
+### Instructions
 
-To run this script, you'll need to have xonsh installed and configured on your system.
+1. **Place the script in your executable path:**
+
+    Save the script as `obsidian-vault-opener.xsh` or any preferred name in a directory that's included in your system's executable path.
+
+2. **Make the script executable:**
+    ```bash
+    chmod +x /path/to/obsidian-vault-opener.xsh
+    ```
+
+3. **Execute the script:**
+    ```bash
+    ./obsidian-vault-opener.xsh
+    ```
+
+### Customization
+
+- **Vault Directory**: By default, the script searches for vaults in the `$HOME/PKM` directory. You can change this directory by modifying the line:
+    ```python
+    vaults = [i for i in $(ls $HOME/PKM).split() if $(file -b $HOME/PKM/@(i)) == 'directory']
+    ```
+
+## Code Explanation
+
+```python
+#!/usr/bin/env xonsh
+
+# Vault names: Lists all directories under the specified path, assuming they are Obsidian vaults
+vaults = [i for i in $(ls $HOME/PKM).split() if $(file -b $HOME/PKM/@(i)) == 'directory']
+
+# Use fzf to get the selected vault name with a real-time preview of the vault's content
+selected_vault = $(echo @('\n'.join(vaults)) | fzfmenu.sh --preview='eza -T --sort=modified --color=always $HOME/PKM/{}') 
+
+# Check if a vault is selected and open it in Obsidian, otherwise notify the user
+if selected_vault:
+    obsidian @(f"obsidian://open?vault={selected_vault}")
+else:
+    notify-send "Obsidian open script" "No vaults selected"
+```
+
+## Remarks
+
+- This script provides a simple and extensible framework to interactively open an Obsidian vault.
+- The commented-out code sections using `dmenu` can be used alternatively for a graphical menu if `fzf` is not preferred.
+
+Feel free to extend and modify this script to better suit your workflow for managing and opening Obsidian vaults.

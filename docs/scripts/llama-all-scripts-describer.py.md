@@ -1,43 +1,133 @@
 # llama-all-scripts-describer.py
 
-Here is the GitHub documentation (Markdown format) for the script:
+# Script Documentation: `script_processor.py`
 
-**README.md**
+## Description
 
-# Script Description and Documentation Generator
-=============================================
+This script processes a CSV file containing script information, generates descriptive markdown files for each script using the Llama 3.1 model, updates an index, and checks for orphaned documentation files. The functionalities include colored output for readability, running utility scripts, identifying binary files, and generating markdown files.
 
-This script uses a Llama 3.1 model to generate descriptions and documentation for scripts in Markdown format.
+## Functionalities
 
-## Features
+### Functions
 
-* Reads script files from a specified directory or CSV file
-* Uses Llama 3.1 model to generate description of each script
-* Generates Markdown documentation for each script
-* Updates index file with links to generated Markdown documents
+- **`print_colored(message, color=Fore.WHITE, style=Style.NORMAL, end='\n')`**
 
-## Requirements
+  Prints a colored and styled message to the terminal.
 
-* `llama` Python library (version 3.1)
-* `colorama` Python library (for colored console output)
-* `subprocess` Python module (for running external commands)
+- **`run_update_symlinks()`**
+
+  Prompts the user to run the utility script `utils_update_symlinks.sh` and executes it upon confirmation.
+
+- **`get_script_files()`**
+
+  Retrieves all script files from the specified directory (excluding markdown files).
+
+- **`check_orphaned_docs(script_files)`**
+
+  Checks for orphaned documentation files in the scripts documentation directory and prints them.
+
+- **`is_binary(file_path)`**
+
+  Checks if the given file is binary by reading the first 1024 bytes.
+
+- **`find_source_file(binary_path)`**
+
+  Attempts to locate the source file corresponding to a binary file.
+
+- **`read_script(file_path)`**
+
+  Reads the content from the specified script file.
+
+- **`describe_script(script_content)`**
+
+  Generates a description for the script content using the Llama 3.1 model from the `ollama` package.
+
+- **`write_markdown(filename, content)`**
+
+  Writes the provided content to a markdown file.
+
+- **`update_index(index_path, filename, relative_path)`**
+
+  Updates the index file with a reference to the markdown file.
+
+- **`process_csv(csv_path)`**
+
+  Processes the CSV file containing script information and processes each script entry.
+
+- **`process_script(script_path)`**
+
+  Processes an individual script, generates a documentation file for it, and updates the index.
+
+### Main Execution Flow
+
+- **`main()`**
+
+  - Sets up argument parsing.
+  - Validates the existence of the CSV file.
+  - Runs the symlink updating utility.
+  - Retrieves the script files.
+  - Processes the CSV to generate documentation.
+  - Checks for orphaned documentation files.
+  - Prints completion message.
 
 ## Usage
 
-1. Run the script with the path to a CSV file as an argument
-2. The script will read the CSV file and process each row, generating Markdown documentation for each script
-3. The generated Markdown documents will be written to a directory specified by the `$SCRIPTS` environment variable (default: `./docs/scripts`)
-4. The index file (`index.md`) will be updated with links to the generated Markdown documents
+### Command Line
 
-## Configuration
+```bash
+python script_processor.py [path_to_csv_file]
+```
 
-* Set the `$SCRIPTS` environment variable to the path where script files and documentation are stored
-* Modify the CSV file format as needed to match your specific requirements
+- **`csv_path`**: Path to the CSV file containing script information. Defaults to `$SCRIPTS/data/symlink_data.csv`.
 
-## Example Usage
------------------
+### Requirements
 
-* Run the script from the command line: `python script_generator.py /path/to/symlink_data.csv`
-* The script will generate Markdown documentation for each script in the `/path/to/symlink_data.csv` CSV file and write it to the `./docs/scripts` directory.
+- Python 3.x
+- `colorama` package
+- `ollama` package
+- `fd` and `rg` command-line tools
 
-Note: This is a generated Markdown document, created by running the script on itself. Please modify as needed to fit your specific requirements!
+### Example
+
+```bash
+python script_processor.py /path/to/symlink_data.csv
+```
+
+## Environmental Variables
+
+- **`$SCRIPTS`**: The base directory containing scripts and related files.
+
+## Directory Structure
+
+- **Scripts Directory**: `$SCRIPTS`
+- **Documentation Directory**: `$SCRIPTS/docs/scripts`
+- **CSV File Default Path**: `$SCRIPTS/data/symlink_data.csv`
+
+## Generated Documentation
+
+The script generates markdown documentation files for each script and stores them in the `$SCRIPTS/docs/scripts` directory. It also updates an index file located at `$SCRIPTS/docs/index.md`.
+
+## Error Handling
+
+- Handles missing CSV file.
+- Catches and reports errors during symlink script execution.
+- Reports issues in retrieving script files.
+- Properly manages binary and non-binary script distinctions.
+
+## Colored Output
+
+The script uses `colorama` to provide colored terminal output, enhancing readability and user experience. Different colors and styles highlight messages such as errors, prompts, and success notifications.
+
+## External Dependencies
+
+- **`fd`**: A fast and user-friendly alternative to `find`.
+- **`rg`**: (`ripgrep`) A fast search tool for large source trees.
+- **`ollama`**: Used for generating script descriptions.
+
+## License
+
+Specify the relevant license for your script, e.g., MIT or GPL.
+
+---
+
+Make sure to test the script in your environment and update dependencies or environmental paths as necessary. The provided script presumes specific CLI tools and environmental configurations.

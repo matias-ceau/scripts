@@ -1,18 +1,69 @@
 # random_wallpapers.xsh
 
-**Script Description and Functionality**
+# Random Wallpaper Picker
 
-This is a Unix shell script written in Xonsh, a Unix shell that runs on top of Python. The script's purpose is to randomly select a wallpaper from a predefined list and set it as the background image using the `feh` command.
+This script picks a random wallpaper from a specified wallpaper directory and sets it as the desktop background.
 
-**Key Components**
+## Script Functionality
 
-1. **Importing Libraries**: The script imports the `os` (operating system) and `random` libraries, which are used for file system interactions and random number generation, respectively.
-2. **Setting up File List**: The script defines a variable `folder` pointing to the `/home/matias/./wallpapers` directory, where the wallpaper images are stored. It then uses a list comprehension to create a list of files (`wallpapers`) with `.png` or `.jpg` extensions from this directory.
-3. **Selecting Wallpaper**: The script attempts to select a random wallpaper using `random.choice(wallpapers)`. If no selection is made (i.e., the `selection` variable remains empty), it falls back to an empty default value.
-4. **Setting Background Image**: Finally, the script uses the `feh` command to set the selected wallpaper as the background image, scaling it to fit the screen.
+1. **Locate Wallpaper Directory**:
+    - The script sets the variable `folder` to the path where your wallpapers are stored, i.e., `/home/matias/./wallpapers`.
 
-**Notes**
+2. **List Wallpapers**:
+    - It scans the folder to generate a list of files (`wallpapers`) that have the extensions `.png` or `.jpg`.
 
-* The script assumes that there are only `.png` and `.jpg` files in the specified directory.
-* If no wallpapers are found in the directory, the script will not raise an error but instead, set an empty background image.
-* This script is likely intended for personal use and might not work as-is on other systems without modifications.
+3. **Select Random Wallpaper**:
+    - It selects a random wallpaper from the list using Python's `random.choice()` function.
+
+4. **Set Wallpaper**:
+    - Finally, it uses the `feh` program to set the selected wallpaper as the desktop background with the `--bg-scale` option.
+
+## Dependencies
+
+- **Xonsh**: The script is written to be run with the Xonsh shell.
+- **feh**: The script uses the `feh` utility to set the background. Ensure `feh` is installed on your system.
+
+## Usage
+
+To use the script, simply run it from the command line:
+
+```shell
+./random_wallpaper_picker.xsh
+```
+
+Ensure the script has executable permissions:
+
+```shell
+chmod +x random_wallpaper_picker.xsh
+```
+
+## Customization
+
+If you wish to change the directory of your wallpapers or include other image formats, modify these sections:
+
+- Change the folder path:
+    ```python
+    folder = '/path/to/your/wallpapers'
+    ```
+- Include other image formats by adjusting the condition in the list comprehension:
+    ```python
+    wallpapers = [i for i in os.listdir(folder) if i.endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+    ```
+
+## Example
+
+In its current form, the script randomly selects and sets a wallpaper from the `/home/matias/./wallpapers` directory.
+
+## Troubleshooting
+
+- Ensure that the folder path is correct and that it contains `.png` or `.jpg` files.
+- Verify that `feh` is installed and accessible from your command line.
+- Make sure script permissions are correctly set to be executable.
+
+## Author
+
+**Matias**
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

@@ -1,41 +1,96 @@
 # utils_update_symlinks.sh
 
-This is a Bash script designed to create symlinks in the `~/.local/bin` directory and remove old ones. Here's an overview of its functionality:
+# create-symlinks.sh
 
-**Configuration**
+This script is designed to manage and create symbolic links (symlinks) in the `~/.local/bin` directory. It removes old or broken symlinks and logs actions taken to a log file.
 
-The script uses several configuration variables at the top:
+## Table of Contents
 
-* `SOURCE_DIR`: The source directory where files will be symlinked from.
-* `TARGET_DIR`: The target directory where symlinks will be created, which is `$HOME/.local/bin`.
-* `LOG_FILE` and `DATA_FILE`: Log file and data file locations for recording events.
+- [Functionality](#functionality)
+- [Usage](#usage)
+- [Logging](#logging)
+- [Script Breakdown](#script-breakdown)
+    - [Initialization](#initialization)
+    - [Logging Functions](#logging-functions)
+    - [Removing Broken Symlinks](#removing-broken-symlinks)
+    - [Creating Symlinks](#creating-symlinks)
+    - [Updating CSV](#updating-csv)
+- [Dependencies](#dependencies)
 
-**Initialization**
+## Functionality
 
-The script checks if the `data.csv` file exists in the `SCRIPTS/data/` directory. If it does, the script appends all lines except the header to a new log file named `symlinking.log.csv`. This is likely done to keep track of previous symlink creations and updates.
+- Removes old and broken symlinks in the `~/.local/bin` directory.
+- Creates new symlinks from scripts located in the `$SCRIPTS` directory to the `~/.local/bin` directory.
+- Logs the operations performed into a log file.
+- Maintains a CSV file with details about the symlinks created.
 
-**Error Logging**
+## Usage
 
-The script defines two logging functions: `log_info()` for informational messages (green-colored) and `log_error()` for error messages (red-colored). Both functions append the message to a log file (`$LOG_FILE`) along with a timestamp.
+To execute the script, simply run:
 
-**Remove Broken Symlinks**
+```bash
+./create-symlinks.sh
+```
 
-The `remove_broken_symlinks()` function iterates through all files in the `$TARGET_DIR` directory. If a file is a symlink and its target no longer exists, it removes the broken symlink and logs an error message.
+Make sure the script has execute permissions:
 
-**Create Symlinks**
+```bash
+chmod +x create-symlinks.sh
+```
 
-The `create_symlinks()` function uses `fd` (a find and delete command) to iterate through files in the `SOURCE_DIR`. For each file, it checks if a symlink with the same name already exists in the `$TARGET_DIR` directory. If so, it checks if the existing symlink points to the correct target file. If not, it logs an error message. Otherwise, it creates a new symlink using `ln -s`.
+## Logging
 
-**Add Symlinks to CSV**
+The script maintains a log file located at `$SCRIPTS/log/symlinking.log` and a CSV file at `$SCRIPTS/data/symlink_data.csv` for tracking all the symbolic links created.
 
-The `add_symlinks_to_csv()` function iterates through files in the `$TARGET_DIR` directory and adds any symlinks pointing to files within the `SOURCE_DIR` to a CSV file (`$DATA_FILE`). It then displays the contents of the CSV file using `bat`.
+## Script Breakdown
 
-**Execution**
+### Initialization
 
-The script executes the following functions in sequence:
+1. **Source and Target Directories**: Defines the source directory (`$SCRIPTS`) where the original scripts are located and the target directory (`$HOME/.local/bin`) where symlinks will be created.
 
-1. Removes broken symlinks.
-2. Creates new symlinks.
-3. Adds new symlinks to the CSV file.
+2. **Log and Data Files**: Specifies the locations for the log file and the CSV data file.
 
-Each function is preceded by a message indicating its purpose, and the entire process is logged along with timestamps and colors for easier visibility.
+3. **CSV Initialization**: If a previous CSV file exists, appends its contents (excluding the header) to a backup file and initializes a new CSV file with headers.
+
+### Logging Functions
+
+- **log_info**: Logs informational messages with a timestamp in green color.
+- **log_error**: Logs error messages with a timestamp in red color.
+
+### Removing Broken Symlinks
+
+Removes symlinks in the target directory that do not point to any existing file. Logs the removal action as an error.
+
+### Creating Symlinks
+
+Uses the `fd` command to find executables in the source directory and attempts to create symlinks to these files in the target directory. Handles conflicts if symlinks already exist and link to different files.
+
+### Updating CSV
+
+Iterates over the symlinks in the target directory, and if they point to scripts in the `$SCRIPTS` directory, it appends their details to the CSV file. The CSV file is then displayed using the `bat` command (with CSV syntax highlighting).
+
+## Dependencies
+
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `glow`: Markdown rendering in the terminal.
+
+Ensure these tools are installed and available in the system path for the script to function correctly. You can install them via most package managers:
+
+```bash
+# Install fd
+sudo apt install fd-find  # On Debian-based systems
+brew install fd           # On macOS
+
+# Install bat
+sudo apt install bat
+brew install bat
+
+# Install glow
+sudo apt install glow
+brew install glow
+```
+
+---
+
+Feel free to modify the script and this documentation according to your specific requirements.

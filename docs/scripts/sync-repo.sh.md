@@ -1,46 +1,92 @@
 # sync-repo.sh
 
-This is a Bash script designed to synchronize a Git repository. Here's a breakdown of its functionality:
+# sync-git-repo.sh
 
-**Color Definitions**
+### Description
 
-The script starts by defining some color codes using ANSI escape sequences, which are used for formatting output.
+This script (`sync-git-repo.sh`) is used to sync a local Git repository with its remote counterpart. It automatically fetches, stashes, rebases, and pushes changes, while also handling conflicts and providing user feedback along the way.
 
-**Checks for Dependencies**
+### Features
 
-It checks if the `bat` and `glow` tools are installed on the system. If not, it provides warnings about potentially less-pretty output.
+- **Fetch Latest Changes:** Fetches the latest changes from the remote repository without merging.
+- **Rebase and Stash:** Rebases the local changes onto the latest remote changes and stashes any uncommitted local changes if needed.
+- **Conflict Management:** Provides options for handling conflicts that may arise during rebase.
+- **Commit & Push Changes:** Adds, commits, and pushes any local changes to the remote repository.
+- **Status Display:** Displays the status of the repository and a summary of changes after syncing.
+- **Pretty Output:** Utilizes tools like `bat` and `glow` to format and highlight output, if available.
 
-**Functions**
+### Usage
 
-The script defines several functions:
+```bash
+./sync-git-repo.sh <repository_path>
+```
 
-1. `strip_ansi`: removes ANSI escape sequences from a string.
-2. `print_command`: prints a command with colored formatting using either `bat` or plain text.
-3. `run_command`: runs a Git command and prints its output in real-time, using `print_command`.
-4. `handle_error`: handles errors by printing an error message and exiting the script.
-5. `print_usage`: prints usage instructions for the script.
-6. `print_formatted`: prints a formatted message using either `bat` or plain text.
-7. `print_glow`: prints a message with colored formatting using `glow`.
-8. `handle_conflicts`: handles conflicts during rebase by prompting the user to choose an option.
-9. `display_summary`: displays a sync summary, showing any changes made during the sync.
+Example:
 
-**Main Logic**
+```bash
+./sync-git-repo.sh ~/.scripts
+```
 
-The script checks if a repository path is provided as a command-line argument. If not, it prints usage instructions and exits.
+### Requirements
 
-It then:
+- A Unix-like system with Bash installed.
+- Optional: `bat` and `glow` for improved output formatting.
 
-1. Changes into the specified repository directory.
-2. Checks if the directory is a Git repository by looking for a `.git` directory. If not, it handles an error.
-3. Fetches the latest changes from the remote repository without merging.
-4. Checks if there are any changes to pull. If so, it stashes local changes, pulls with rebase, and applies stashed changes (if any).
-5. Runs `git status -s` to check for local changes.
-6. If there are changes, it adds them, commits the changes, and pushes them to the remote repository.
-7. Runs `git maintenance run`.
-8. Prints a success message using `print_glow`.
+### Functions
 
-**Cleanup**
+- **strip_ansi:** Strips ANSI escape sequences from a string.
+- **print_command:** Prints a command with optional pretty formatting.
+- **run_command:** Runs a command and prints its output in real-time.
+- **handle_error:** Handles errors by printing a message and exiting the script.
+- **print_usage:** Prints the usage instructions.
+- **print_formatted:** Prints a formatted message, optionally using `bat`.
+- **print_glow:** Prints a formatted message using `glow`, if available.
+- **handle_conflicts:** Provides options to handle conflicts during rebase.
+- **display_summary:** Displays a summary of the sync operation.
 
-Finally, the script returns to the original directory.
+### Workflow
 
-Overall, this script provides a convenient way to synchronize a Git repository, handling conflicts and local changes along the way.
+1. **Check for Required Tools:** Verifies if `bat` and `glow` are installed and sets flags to use them if available.
+2. **Argument Check:** Ensures a repository path is provided.
+3. **Directory Validation:** Checks if the provided path is a valid directory and a Git repository.
+4. **Fetching Changes:** Fetches latest changes from the remote repository.
+5. **Stashing Changes:** Stashes any local changes before attempting to rebase.
+6. **Rebasing Changes:** Rebases local changes onto the latest remote changes.
+7. **Conflict Handling:** If conflicts arise, provides options to resolve them.
+8. **Applying Stashed Changes:** Applies stashed changes if any.
+9. **Committing Changes:** Commits and pushes any local changes to the remote repository.
+10. **Status and Summary:** Displays the status and a summary of the sync operation.
+
+### Example Output
+
+```text
+Syncing repository in /path/to/repo
+$ git fetch origin main
+...
+$ git stash
+...
+$ git pull --rebase origin main
+...
+Conflicts detected during rebase. Here are your options:
+1. Open your default editor to resolve conflicts manually
+2. Abort the rebase and return to the previous state
+3. Skip this commit and continue with the next one
+Enter your choice (1/2/3):
+...
+$ git status -s
+...
+$ git add -Av
+...
+$ git commit -m "X change(s) from user@host"
+...
+$ git push origin main
+...
+```
+
+### Author
+
+*This script was automatically documented using a helpful assistant.*
+
+---
+
+Feel free to contribute, suggest improvements, or report issues on the [GitHub repository](https://github.com/yourusername/yourrepository).

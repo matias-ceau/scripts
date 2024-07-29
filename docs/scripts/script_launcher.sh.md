@@ -1,40 +1,72 @@
 # script_launcher.sh
 
-Here is the GitHub documentation (in Markdown format) for the provided script:
-```markdown
-# Run scripts with fzf
-========================
+# Run Scripts with Fzf
 
-## Table of Contents
+This script allows you to search and execute scripts using `fzf`. The script leverages `fd` to find all scripts in a specified directory, uses `basename` to list the script names, and `improved-fzfmenu.sh` to create a user-friendly interactive menu. When a script is selected, it is executed immediately.
 
-* [Overview](#overview)
-* [Functionality](#functionality)
-* [Example Use Cases](#example-use-cases)
+## Prerequisites
 
-## Overview
-------------
+Make sure you have the following tools installed and available in your `PATH`:
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `fzf`: A general-purpose command-line fuzzy finder.
+- `improved-fzfmenu.sh`: A custom script for improving the `fzf` menu.
+- `bat`: A `cat` clone with wings that supports syntax highlighting and Git integration.
 
-This shell script uses `fzf` (a command-line fuzzy finder) to run scripts from a specified directory. The script utilizes `fd` (a blazing-fast file finder) to search for files in the `$SCRIPTS` directory, and then passes them to `xargs` for execution.
+## Installation
 
-## Functionality
-------------
+1. Ensure that the dependencies mentioned above are installed.
+2. Save this script to a file, for example, `run-script.sh`.
+3. Make the script executable:
+    ```bash
+    chmod +x run-script.sh
+    ```
 
-1. **Search for Scripts**: The script uses `fd` to find all files in the specified directory (`"$SCRIPTS"`).
-2. **Filter by Name**: The found files are filtered using `basename` to extract only the file names (without paths).
-3. **Preview with fzf**: The filtered list is passed to `improved-fzfmenu.sh`, which provides a fuzzy finder interface for selecting a script.
-4. **Run Selected Script**: Once a script is selected, it is executed using `bash -c`.
+## Usage
 
-## Example Use Cases
--------------------
-
-1. Run all available scripts: Simply run the script without any arguments to see a list of all available scripts.
-2. Run a specific script: Run the script with an argument specifying the name of the script you want to execute.
-
-### Running the Script
-
-To use this script, save it as `run_scripts_with_fzf.sh` and then:
+Execute the script from the command line:
 ```bash
-chmod +x run_scripts_with_fzf.sh
-./run_scripts_with_fzf.sh
+./run-script.sh
 ```
-Note: Make sure to replace `"${SCRIPTS}"` with your actual scripts directory path.
+
+This command will:
+1. Use `fd` to find all scripts within the directory specified by the `$SCRIPTS` environment variable.
+2. List the script names without their full paths using `basename`.
+3. Pass the list to `improved-fzfmenu.sh` which allows you to select a script from an interactive `fzf` menu.
+4. Show a preview of the selected script's documentation using `bat` in the `fzf` preview window.
+5. Execute the selected script.
+
+## Environment Variables
+
+- **SCRIPTS**: This environment variable should be set to the path of the directory containing your scripts. The script will search for scripts within this directory.
+
+## Example
+
+Suppose you have the following directory structure:
+```
+/home/user/scripts/
+├── script_one.sh
+├── script_two.sh
+└── docs/
+    ├── scripts/
+        ├── script_one.sh.md
+        └── script_two.sh.md
+```
+
+Set the `$SCRIPTS` environment variable:
+```bash
+export SCRIPTS=/home/user/scripts
+```
+
+Run the script:
+```bash
+./run-script.sh
+```
+
+You will see an `fzf` menu with `script_one.sh` and `script_two.sh`. By selecting one of them, you will see a preview of the corresponding documentation file and the selected script will be executed.
+
+## Notes
+
+- The preview feature uses `bat` to display the script’s documentation markdown file located in the `$SCRIPTS/docs/scripts/` directory.
+- Ensure that each script has a corresponding `.md` file within the `docs/scripts/` directory for the preview feature to work correctly.
+
+

@@ -1,6 +1,7 @@
 # Scripts Information
 
-See [DOCS](docs/index.md) for llama3.1:7b generated descriptions.
+See [DOCS](docs/index.md) for gpt-4o generated documentation.
+See [DOCS v1](docs/index_llama.md) for llama3.1:7b generated descriptions.
 
 <!-- script_info_start -->
 | file | description | date | type | status | host | tag |

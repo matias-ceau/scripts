@@ -1,39 +1,111 @@
 # utils_update_readme.py
 
-**Script Overview**
+# Script Documentation: Update README.md with Script Info
 
-This Python script is designed to update the `README.md` file in a specific directory with information about scripts retrieved from a CSV file. The script appears to be part of a larger system for managing and tracking scripts, possibly within a development or deployment context.
+## Overview
 
-**Functionality Breakdown**
+This script updates the `README.md` file with information about available scripts. The script gathers data from a CSV file and inserts it into a specified section of the `README.md` file.
 
-1. **Initialization**
-	* The script starts by defining its interpreter environment using `#!/usr/bin/env python`.
-2. **`run_cache_script_info()` function**
-	* This function executes the `cache_script_info` command, which is not shown in this code snippet.
-3. **`read_csv()` function**
-	* Reads data from a CSV file located at `~/.scripts/data/script_info.csv`. The data is returned as a list of dictionaries.
-4. **`format_to_markdown_table()` function**
-	* Takes the CSV data and formats it into a Markdown table with specific headers (file, description, date, type, status, host, tag).
-5. **`update_readme()` function**
-	* Updates the `README.md` file located at `~/.scripts/README.md` by inserting or appending the formatted Markdown table between two custom section markers (`<!-- script_info_start -->` and `<!-- script_info_end -->`).
-6. **`main()` function**
-	* Calls the above functions in sequence: executes the `cache_script_info` command, reads CSV data, formats it into a Markdown table, and updates the `README.md` file.
+## Functionalities
 
-**Assumptions and Dependencies**
+- **Run cache_script_info**: Fetches the latest script information via a command-line tool `cache_script_info`.
+- **CSV Reading**: Reads data from a CSV file that contains script information.
+- **Markdown Table Formatting**: Formats the CSV data into a markdown table.
+- **Update README**: Inserts or updates a specific section in the `README.md` file with the generated markdown table.
 
-The script assumes that:
+## Detailed Description
 
-1. The `cache_script_info` command is available.
-2. A CSV file named `script_info.csv` exists in the directory specified by `~/.scripts/data`.
-3. The `README.md` file exists in the directory specified by `~/.scripts`.
+### Running the Cache Script Info
 
-To run this script, you would need to have Python installed on your system and ensure that the required dependencies (e.g., `subprocess`, `csv`, and `os`) are available.
+The function `run_cache_script_info()` executes the `cache_script_info` command to fetch the latest script information.
 
-**Best Practices**
+```python
+def run_cache_script_info():
+    subprocess.run(['cache_script_info'])
+```
 
-The code appears well-structured, with clear function names and a logical flow. However, it's essential to note that:
+### Reading CSV Data
 
-1. The script uses hard-coded paths for input files (`~/.scripts/data/script_info.csv` and `~/.scripts/README.md`). It would be better to use environment variables or configuration files to make these paths configurable.
-2. There is no error handling in the script, which means it might not behave correctly if any of the required steps fail.
+The function `read_csv(file_path)` reads CSV data from a specified file path and returns it as a list of dictionaries.
 
-In summary, this script seems designed to automate the process of updating a `README.md` file with script information from a CSV file. While it's well-structured and appears to be functional, it would benefit from additional error handling and configuration flexibility.
+```python
+def read_csv(file_path):
+    with open(file_path, 'r') as file:
+        reader = csv.DictReader(file)
+        return list(reader)
+```
+
+### Formatting Data to Markdown Table
+
+The function `format_to_markdown_table(data)` converts the CSV data into a markdown table format. It also sorts the data based on the `status` and `file` columns.
+
+```python
+def format_to_markdown_table(data):
+    headers = ["file", "description", "date", "type", "status", "host", "tag"]
+    table = "| " + " | ".join(headers) + " |\n"
+    table += "| " + " | ".join(['---'] * len(headers)) + " |\n"
+
+    sorted_data = sorted(data, key=lambda x: (x['status'], x['file']))
+
+    for row in sorted_data:
+        table += "| " + " | ".join([row[header] if row[header] else "" for header in headers]) + " |\n"
+
+    return table
+```
+
+### Updating the README.md File
+
+The function `update_readme(table, readme_path)` takes the formatted markdown table and updates the `README.md` file. It looks for placeholders `<!-- script_info_start -->` and `<!-- script_info_end -->` to insert the table.
+
+```python
+def update_readme(table, readme_path):
+    section_start = "<!-- script_info_start -->"
+    section_end = "<!-- script_info_end -->"
+
+    if os.path.exists(readme_path):
+        with open(readme_path, 'r') as file:
+            content = file.read()
+
+        if section_start in content and section_end in content:
+            content = content.split(section_start)[0] + section_start + "\n" + table + section_end + content.split(section_end)[1]
+        else:
+            content += f"\n{section_start}\n{table}\n{section_end}\n"
+    else:
+        content = f"# Scripts Information\n\n{section_start}\n{table}\n{section_end}\n"
+
+    with open(readme_path, 'w') as file:
+        file.write(content)
+```
+
+### Main Function
+
+The `main()` function orchestrates the entire process: it runs the cache script, reads the CSV data, formats it into a markdown table, and updates the README file.
+
+```python
+def main():
+    run_cache_script_info()
+    csv_data = read_csv(os.path.expanduser('~/.scripts/data/script_info.csv'))
+    markdown_table = format_to_markdown_table(csv_data)
+    update_readme(markdown_table, os.path.expanduser('~/.scripts/README.md'))
+
+if __name__ == "__main__":
+    main()
+```
+
+## Usage
+
+To use this script, simply run it in an environment where the `cache_script_info` tool is available and executable.
+
+```sh
+python path_to_script/update_readme.py
+```
+
+Ensure the `script_info.csv` file exists at `~/.scripts/data/script_info.csv`, and the `README.md` file is located at `~/.scripts/README.md`.
+
+## Prerequisites
+
+- Python 3.6 or later
+- Necessary permissions to run `cache_script_info` and read/write access to `~/.scripts/data/script_info.csv` and `~/.scripts/README.md`.
+- `cache_script_info` command should be available and executable.
+
+This script automates the process of keeping your `README.md` up to date with the latest script information, making it an invaluable tool for maintaining up-to-date documentation.

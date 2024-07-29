@@ -1,20 +1,83 @@
 # dmenu_run_scripts.xsh
 
-This script appears to be written in Xonsh, a Unix shell that runs on top of Python. Here's a breakdown of its functionality:
+# Run User Scripts with Dmenu
 
-**Shebang Line**
-The first line `#! /usr/bin/env xonsh` specifies the interpreter that should run this script. In this case, it's Xonsh.
+This script allows users to run their scripts by selecting them through a graphical menu powered by `dmenu`. The script leverages `dmenu` to provide an interactive and user-friendly interface for script selection.
 
-**Comments and Documentation**
-The lines starting with `#DOC` are comments in Markdown format, which provide documentation for the script.
+## Script Overview
 
-**Script Identification**
-The script uses a command called `script_identifier.xsh` to list available scripts based on certain criteria ( TYPE=RUN, HOST="", STATUS=active, OK). The output is formatted using Xonsh's templating system (`-f "<span color='green'>{FILE:<30}</span> \u27F6   {DESCR}"`) and piped into a variable called `choices`.
+- **Interpreter**: The script uses the `xonsh` shell.
+- **Primary Functionality**: It runs user scripts that are filtered based on certain criteria.
+- **User Interface**: Utilizes `dmenu` through `rofi` to display and choose scripts.
 
-**User Interaction**
-The script uses the `rofi` command (a lightweight, customizable version of dmenu) to display the list of scripts in a menu format. The `-dmenu`, `-markup-rows`, `-i`, `-lines 30`, and `-width 80` options customize the appearance and behavior of the menu.
+## Detailed Functionality
 
-**Choosing an Action**
-The script waits for user input (by selecting an item from the menu). When an item is selected, the corresponding script is executed by running `@(choice)`. The `@()` syntax in Xonsh is used to run a command as if it were a function call.
+1. **Gather Script Choices**:
+   - The script calls an external command `script_identifier.xsh` with specific parameters for filtering the list of scripts.
+   - **Filtering Criteria**:
+     - `TYPE=RUN`
+     - `HOST`
+     - `STATUS=active`
+     - `OK`
+   - The results are formatted with the following placeholder:
+     ```html
+     <span color='green'>{FILE:<30}</span> ➦ {DESCR}
+     ```
+   - The `choices` variable holds the filtered list of scripts.
 
-In summary, this script provides a way to run user scripts with dmenu-like functionality. It lists available scripts based on certain criteria, displays them in a menu, and allows the user to select an action (i.e., execute a script).
+2. **Display Script Choices**:
+   - The filtered script choices are piped to `rofi`, which acts as `dmenu`.
+   - **Rofi Options**:
+     - `-dmenu`: Turns `rofi` into dmenu mode.
+     - `-markup-rows`: Enables markup for row formatting.
+     - `-i`: Makes the search case-insensitive.
+     - `-lines 30`: Sets the number of lines to display.
+     - `-width 80`: Sets the width of the menu.
+
+3. **Parse User Selection**:
+   - The user's selection is processed to extract the script file name.
+   - The selection string splits around the `>` and `<` characters and trims any leading/trailing whitespace.
+   - The extracted script file name is stored in the `choice` variable.
+
+4. **Execute the Selected Script**:
+   - The selected script is executed using `@(choice)`.
+
+## Usage
+
+To run this script, ensure that you have the `xonsh` shell installed and `rofi` available on your system. Execute the script in your terminal to bring up the selection menu:
+
+```bash
+./run_user_scripts.xsh
+```
+
+Select a script from the menu to execute it.
+
+## Example Command
+
+The following example command demonstrates how the script identifier might be called to filter and format the script choices:
+
+```bash
+script_identifier.xsh -c TYPE=RUN HOST STATUS=active OK -f "<span color='green'>{FILE:<30}</span> ➦ {DESCR}" -s FILE
+```
+
+## Dependencies
+
+- **xonsh**: Required to run the script.
+- **rofi**: Serves as the graphical dmenu interface.
+
+## Notes
+
+- Make sure that your scripts are properly labeled and active to be listed in the choices.
+- Customize the `-lines` and `-width` options in the `rofi` command to suit your screen size and preferences.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Author
+
+[Your Name] - [Your Contact Information]
+
+---
+
+Thank you for using this script! If you encounter any issues or have suggestions, please open an issue on the project's GitHub page.

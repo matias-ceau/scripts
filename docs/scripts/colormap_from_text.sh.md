@@ -1,31 +1,87 @@
 # colormap_from_text.sh
 
-**Script Description**
+# Extract Color Palettes Script
 
-This is a Bash script designed to extract color palettes from config files. The script takes options to customize the output format, which can be either hex code, RGB values, or both.
+> **Simple script that extracts color palettes from config files**
 
-**Functionality**
+This script processes input to extract color codes and optionally formats them in various output styles. It reads hex color codes, converts them to RGB where necessary, and provides several display options.
 
-Here's a step-by-step breakdown of the script's functionality:
+## Usage
 
-1. **Option Handling**: The script uses a `while` loop to iterate through the command-line arguments. It checks for specific options:
-	* `-x|--hex-code`: Enables hex output.
-	* `-r|--rgb`: Enables RGB output.
-	* `-c|--color`: Enables color output (using ANSI escape codes).
-2. **Error Handling**: If both `-x` and `-r` options are specified, the script prints an error message and exits.
-3. **Color Extraction**: The script uses `grep` to extract hex color codes from a file (not provided in the script). It sorts the extracted colors uniquely using `sort -u`.
-4. **Color Conversion**: For each extracted color, the script converts it from hex code to RGB values using `printf`. It then outputs the color in the specified format:
-	* If `-x|--hex-code` is enabled, output the hex code.
-	* If `-r|--rgb` is enabled, output the RGB values.
-	* If neither is enabled, output a plain text representation of the RGB values (e.g., `255, 0, 0`).
-5. **Color Output**: If `-c|--color` is enabled, the script outputs the color in ANSI escape code format, along with a placeholder string (`       `) to demonstrate the color.
+```sh
+./script.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
+```
 
-**Assumptions and Limitations**
+### Options
 
-This script assumes that:
+- `-x`, `--hex-code`: Output the color codes in hex format (e.g., `#ff5733`).
+- `-r`, `--rgb`: Output the color codes in RGB format (e.g., `rgb(255, 87, 51)`).
+- `-c`, `--color`: Display the color followed by a background colored block for a visual preview.
 
-* The input file contains hex color codes.
-* The script has access to the input file (not provided).
-* The script is executed from a Unix-like environment (due to the use of `grep` and ANSI escape codes).
+### Notes
 
-The script does not handle cases where the input file is empty or does not contain any valid hex color codes.
+- The options `-x`/ `--hex-code` and `-r`/ `--rgb` are mutually exclusive and cannot be used together.
+- The script reads color codes from the input, so you need to provide the input (e.g., a config file containing hex color codes).
+
+### Examples
+
+#### Extract and Display Hex Codes
+
+```sh
+cat config.file | ./script.sh -x
+```
+
+#### Extract and Display RGB Codes
+
+```sh
+cat config.file | ./script.sh -r
+```
+
+#### Extract and Display Color Codes With a Color Block
+
+```sh
+cat config.file | ./script.sh -c
+```
+
+#### Extract and Display RGB Codes With a Color Block
+
+```sh
+cat config.file | ./script.sh -r -c
+```
+
+## Script Details
+
+### Functionality
+
+- **Hex Code Extraction:** The script uses `grep` to find and extract all unique hex color codes (`#[0-9a-fA-F]{6}`) from the input.
+- **Conversion to RGB:** If the `--rgb` option is used, the script converts hex codes to RGB values.
+- **Color Display:** If the `--color` option is used, the script outputs a visual representation of the color.
+
+### Input Flow
+
+1. The script reads input (typically from a file) which contains color codes.
+2. It processes each line to extract hex color codes using `grep`.
+3. Depending on the options provided, it:
+   - Outputs the hex codes directly.
+   - Converts the hex codes to RGB and outputs the RGB values.
+   - Optionally displays a colored block beside the color values for a visual preview.
+
+### Example Input
+
+A configuration file (`config.file`) may contain lines like:
+
+```
+background: #ff5733;
+foreground: #33ff57;
+border: #3357ff;
+```
+
+When processed with the script, the output will depend on the options chosen.
+
+## Error Handling
+
+- If incompatible options `-x` and `-r` are used together, the script outputs an error and shows the usage message.
+
+## Author
+
+Generated on 2024-07.

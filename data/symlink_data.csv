@@ -2,6 +2,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/albumplayer.xsh,/home/matias/.local/bin/albumplayer.xsh,albumplayer.xsh
 /home/matias/.scripts/ardour-open.sh,/home/matias/.local/bin/ardour-open.sh,ardour-open.sh
 /home/matias/.scripts/bin/cache_script_info,/home/matias/.local/bin/cache_script_info,cache_script_info
+/home/matias/.scripts/chatgpt-all-scripts-describer.py,/home/matias/.local/bin/chatgpt-all-scripts-describer.py,chatgpt-all-scripts-describer.py
 /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh,/home/matias/.local/bin/chezmoi_on_a_new_system.sh,chezmoi_on_a_new_system.sh
 /home/matias/.scripts/citeboard.sh,/home/matias/.local/bin/citeboard.sh,citeboard.sh
 /home/matias/.scripts/colormap_from_text.sh,/home/matias/.local/bin/colormap_from_text.sh,colormap_from_text.sh

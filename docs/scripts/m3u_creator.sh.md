@@ -1,18 +1,73 @@
 # m3u_creator.sh
 
-**Script Description:**
-This is a Bash script that generates an M3U playlist file from the list of files present in the current working directory.
+# Create an m3u File from Files in Current Directory
 
-**Functionality:**
+This script is designed to create an `.m3u` playlist file from the files in the current directory. The `.m3u` file will contain a list of filenames, one per line. The name of the playlist file will be based on the name of the current directory.
 
-Here's how it works:
+## How It Works
 
-1. The script uses the `basename` command to extract the name of the current directory (`$PWD`) and assigns it to the variable `dir_name`.
-2. It then constructs a filename for the M3U playlist file by appending `.m3u` to the directory name, resulting in e.g., "current_dir.m3u" if the script is run from a directory named "current dir".
-3. The `ls -1` command is used to list all files (option `-l` provides detailed information, but we use `-1` to suppress this and only show filenames) in the current directory.
-4. The output of the `ls` command (`stdout`) is redirected using the `>` operator to create a new file with the filename specified in step 2.
+1. The script extracts the name of the current directory.
+2. It creates a `.m3u` file using the current directory name.
+3. It lists all files in the current directory and writes the list to the `.m3u` file.
 
-**Result:**
-The script will generate an M3U playlist file containing the list of files from the current working directory, one per line. The file can be played back using media players that support M3U playlists (e.g., VLC, MPC-HC).
+## Requirements
 
-Note: Be cautious when running this script, as it will overwrite any existing file with the same name in the current directory!
+- Bash shell
+
+## Usage
+
+Run the script in the terminal while in the directory where you want to generate the `.m3u` file:
+
+```bash
+./script_name.sh
+```
+
+## Example
+
+Suppose you are in a directory named `Music` with the following files:
+
+```
+song1.mp3
+song2.mp3
+song3.mp3
+```
+
+Running the script will create a file named `Music.m3u` with the following content:
+
+```
+song1.mp3
+song2.mp3
+song3.mp3
+```
+
+## Script Content
+
+```bash
+#!/bin/bash
+
+#DOC#=2024-07=@CLI@ "Create an m3u file from files in current dir"
+
+dir_name=$(basename "$PWD")
+playlist_file="${dir_name}.m3u"
+ls -1 > "$playlist_file"
+```
+
+## Explanation
+
+- `dir_name=$(basename "$PWD")`
+  - Gets the base name of the current working directory and assigns it to the variable `dir_name`.
+
+- `playlist_file="${dir_name}.m3u"`
+  - Creates the name of the playlist file by appending `.m3u` to the directory name.
+
+- `ls -1 > "$playlist_file"`
+  - Lists all files in the current directory, one per line, and writes this list to the playlist file specified in `playlist_file`.
+
+## Notes
+
+- Ensure you have execution permissions for the script. You can set the permission using:
+  ```bash
+  chmod +x script_name.sh
+  ```
+
+- This script assumes that all files in the directory should be included in the `.m3u` file. If you wish to filter files by extension or any other criteria, you might need to modify the script accordingly.

@@ -1,16 +1,60 @@
 # edit_chezmoi_cfg_files.sh
 
-**Script Description and Functionality**
+# Script Documentation
 
-This is a Bash script that uses the `fzf` command-line fuzzy finder to select a file or directory from the output of `chezmoi managed`. The selected item can then be edited using the `nvim` editor.
+## Overview
 
-Here's how it works:
+This Bash script enhances the functionality of [fzf](https://github.com/junegunn/fzf) by providing a preview feature when managing files with [chezmoi](https://github.com/twpayne/chezmoi). It allows users to select and edit managed files using `neovim` (`nvim`).
 
-1. **`chezmoi managed`**: This command lists all managed files and directories, which are likely configuration files for your system.
-2. **`fzf`**: The script uses `fzf` with various options to create an interactive interface to select a file or directory from the output of `chezmoi managed`.
-	* **`--preview`**: This option executes a shell command that generates a preview for each item in the list. In this case, it uses `bat` (a text browser) to display the contents of files and `eza` (a file explorer) to show directory contents.
-	* **`--preview-window`**: This option sets up the window where the preview is displayed. In this case, the preview is shown in a right-aligned window with 60% width and wrap-around scrolling enabled.
-3. **`selected=$(...)`**: The output of `fzf` (i.e., the selected file or directory) is stored in the `$selected` variable.
-4. **`if [ -n "$selected" ]; then ...`**: If a selection was made, the script edits the selected item using `nvim` with the path passed to it.
+## Functionalities
 
-**In summary**, this script provides an interactive way to select a managed file or directory and edit it in `nvim`.
+1. **File Selection with Preview**:
+   - The script uses `chezmoi managed` to list all files managed by `chezmoi`.
+   - It then pipes the list to `fzf`, a command-line fuzzy finder, with an enhanced preview window.
+
+2. **Preview Configuration**:
+   - The preview displays the content of the file using [`bat`](https://github.com/sharkdp/bat), which provides syntax highlighting and line numbers if the item is a file.
+   - If the item is a directory, it uses [`eza`](https://github.com/eza-community/eza), a modern replacement for `ls`, to list the contents of the directory with icons and sorted by modification time.
+
+3. **Editing Selected File**:
+   - If a file is selected (`$selected` is non-empty), the script opens the file for editing using `nvim` with `chezmoi edit`.
+
+## Requirements
+
+- `chezmoi`
+- `fzf`
+- `bat`
+- `eza`
+- `nvim`
+
+## Usage
+
+1. **Run the Script**:
+   ```bash
+   ./script.sh
+   ```
+
+2. **Interact with `fzf`**:
+   - Use `fzf`'s fuzzy searching to find the file or directory you want to preview or edit.
+   - The preview will be shown on the right side of the terminal, occupying 60% of the width.
+   - Files will display their content with syntax highlighting and line numbers.
+   - Directories will list their contents with icons, color-coding, and sorted by modification date.
+
+3. **Edit the Selected File**:
+   - Once you have selected a file, it will be opened in `nvim` for editing.
+
+## Example
+
+```bash
+#!/bin/bash
+
+# Launch fzf with improved preview
+selected=$(chezmoi managed | fzf \
+    --preview 'if [ -f {} ]; then bat --style=numbers --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" {}; elif [ -d {} ]; then eza -1 --color="always" --icons=always --sort=modified -m {}; fi' \
+    --preview-window=right:60%:wrap\
+    --walker-root="$HOME")
+
+if [ -n "$selected" ]; then
+    EDITOR=nvim chezmoi edit "$selected"
+fi
+```

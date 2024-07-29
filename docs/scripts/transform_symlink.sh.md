@@ -1,23 +1,79 @@
 # transform_symlink.sh
 
-**Script Description:**
+# Script Documentation
 
-This is a Bash script that replaces a symbolic link (symlink) with its actual target file. The script takes one argument, which is the path to the symlink to be replaced.
+## Overview
 
-**Functionality:**
+This script is a utility for handling symbolic links in Unix-like systems. It performs the following tasks:
 
-Here's a step-by-step breakdown of what the script does:
+1. Checks if the correct number of arguments is provided.
+2. Verifies if the given argument is a symbolic link.
+3. Replaces the symbolic link with its actual target file.
 
-1. **Argument checking**: The script checks if exactly one argument was provided. If not, it displays usage instructions and exits with a non-zero status code (indicating an error).
-2. **Symlink verification**: It verifies that the provided argument is indeed a symbolic link by using the `-L` test. If it's not a symlink, the script reports an error and exits.
-3. **Target retrieval**: The script uses `readlink` to retrieve the actual target file of the symlink.
-4. **File copying**: The script copies the target file to a new file with the same name as the original symlink using `cp`.
-5. **Success message**: Finally, the script displays a success message indicating that the symlink has been replaced with its actual target file.
+## Usage
 
-**Example Usage:**
-
-To use this script, save it to a file (e.g., `replace_symlink.sh`), make it executable with `chmod +x replace_symlink.sh`, and then run it with the path to the symlink as an argument:
 ```bash
-./replace_symlink.sh /path/to/original/symlink
+./script.sh <symlink>
 ```
-This will replace the original symlink with its actual target file.
+
+- `<symlink>`: The symbolic link to be replaced by its target file.
+
+## Functionalities
+
+1. **Argument Validation:**
+   - The script checks if exactly one argument is provided.
+   - If the number of arguments is not equal to one, it prints the usage message and exits.
+   ```bash
+   if [ "$#" -ne 1 ]; then
+       echo "Usage: $0 <symlink>"
+       exit 1
+   fi
+   ```
+
+2. **Symlink Validation:**
+   - The script verifies if the provided argument is a valid symbolic link.
+   - If the argument is not a symbolic link, it prints an error message and exits.
+   ```bash
+   if [ ! -L "$symlink" ]; then
+       echo "$symlink is not a symbolic link."
+       exit 1
+   fi
+   ```
+
+3. **Target Extraction and Replacement:**
+   - The script retrieves the target of the symbolic link using the `readlink` command.
+   - It then copies the target file to a new file with the same name as the original symbolic link.
+   - Finally, it prints a message indicating that the symbolic link has been replaced by its target file.
+   ```bash
+   target=$(readlink "$symlink")
+   cp "$target" "$symlink"
+   echo "Symlink $symlink has been replaced with the actual file $target."
+   ```
+
+## Example
+
+Assuming `example_symlink` is a symbolic link to `file.txt`:
+
+```bash
+./script.sh example_symlink
+```
+
+Output:
+```
+Symlink example_symlink has been replaced with the actual file file.txt.
+```
+
+## Exit Codes
+
+- `0`: Success.
+- `1`: Incorrect number of arguments, non-existent or non-symbolic link provided.
+
+## Requirements
+
+- Bash shell
+- `readlink` command
+- `cp` command
+
+## License
+
+This script is provided "as-is" without any warranty.

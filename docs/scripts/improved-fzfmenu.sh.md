@@ -1,40 +1,91 @@
 # improved-fzfmenu.sh
 
-Here is the GitHub documentation for the script in markdown format:
+# fzfmenu Helper Script
 
-**Helper Function for FZF-URXVT Menu**
-=====================================
+## Description
 
-[![Version](https://img.shields.io/badge/DOC%23-2024--07-blue)](https://github.com/your-username/fzf-urxvt-menu-helper#v2024-07)
+This script is a lightweight helper function designed to provide functionality similar to `dmenu` using `fzf`, executed within an `alacritty` terminal emulator. It's especially useful for creating menu-like interfaces in scripts or command-line workflows.
 
-This is a bash script that serves as a helper function to launch an fzf-based menu in urxvt, similar to dmenu.
+## Usage
 
-**Functionality**
-----------------
-
-The script takes an arbitrary number of command-line arguments and escapes each one using the `%q` format specifier. It then joins these escaped arguments into a single string, which is used as input for fzf.
-
-The output of fzf is redirected to the terminal where the menu is displayed.
-
-**Usage**
------
-
-To use this script, simply run it with any desired command-line arguments:
 ```bash
-./fzf-urxvt-menu-helper arg1 arg2 ...
+./fzfmenu.sh [ARGUMENTS...]
 ```
-This will launch an fzf-based menu in urxvt, allowing you to select from a list of options.
 
-**Configuration**
----------------
+## Features
 
-No configuration is required to use this script. The behavior can be customized by modifying the `alacritty` command used to launch the fzf menu.
+- **fzf Integration**: Uses `fzf` for fuzzy finding, which is an efficient and flexible way of selecting from a list of items.
+- **alacritty Terminal**: Runs the `fzf` interface within an `alacritty` terminal session.
+- **Argument Handling**: Escapes and joins any arguments passed to the script before passing them to `fzf`.
 
-**Requirements**
---------------
+## Documentation
 
-* `fzf`
-* `urxvt`
-* `bash`
+### Script Header
 
-Note: This documentation was generated based on the provided script and may not be exhaustive or up-to-date.
+```sh
+#!/usr/bin/env bash
+```
+
+The script uses `bash` as its interpreter.
+
+### Custom Documentation String
+
+```sh
+#DOC#=2024-07= "Similar to dmenu but with fzf and urxvt (this is only the helper function)"
+```
+
+### Argument Handling
+
+The script escapes each argument to ensure that special characters are preserved and passed correctly to `fzf`.
+
+```sh
+args=()
+for arg in "$@"; do
+    args+=("$(printf %q "$arg")")
+done
+```
+
+This creates an array `args` containing the escaped arguments.
+
+### Joining Arguments
+
+```sh
+fzf_args="${args[*]}"
+```
+
+The script joins the escaped arguments into a single string `fzf_args`.
+
+### Running alacritty with fzf
+
+```sh
+alacritty -T 'fzfmenu' -o window.dimensions.columns=150 -o window.dimensions.lines=30 -e bash -c "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"
+```
+
+- **`alacritty -T 'fzfmenu'`**: Sets the terminal title to `fzfmenu`.
+- **`-o window.dimensions.columns=150 -o window.dimensions.lines=30`**: Configures the terminal window size.
+- **`-e bash -c "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"`**: Executes a `bash` command that runs `fzf` with the specified arguments. It uses file descriptors to manage input and output.
+
+## Prerequisites
+
+- **`alacritty`**: Ensure you have the `alacritty` terminal emulator installed.
+- **`fzf`**: Ensure you have `fzf` installed.
+
+## Example
+
+```bash
+./fzfmenu.sh -m --preview 'cat {}'
+```
+
+This example runs the script with `fzf` options to enable multi-select mode (`-m`) and a preview window that shows the contents of the selected file (`--preview 'cat {}'`).
+
+## License
+
+This script is open-source and available under the MIT License.
+
+### Contributions
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+---
+
+This documentation provides an overview of the script's functionality, usage, and argument handling. It aims to make it easier for users to understand and utilize the script effectively.

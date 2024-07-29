@@ -1,21 +1,86 @@
 # mechen_music_transfert.py
 
-This is a Python script that appears to be designed to copy music from one location (likely a home directory) to a specific device called "Mecken" (/home/matias/MECHEN). The script uses various tools and libraries to achieve this, including:
+# Custom Script to Copy Music to Mechen
 
-1. `beet`: A Python library for managing music collections.
-2. `subprocess`: A built-in Python module for running external commands.
-3. `pandas`: A library for data manipulation and analysis.
-4. `getpass`: A function for securely prompting the user for a password.
+This custom Python script automates the process of copying music albums to a specific directory on a music player named `Mechen`. The script handles checking available space, removing unnecessary albums, creating necessary folders, and synchronizing the music content using `rsync`.
 
-Here's an overview of the script's functionality:
+## Requirements
 
-1. **Get not listened to albums**: The script uses `beet` to list all albums that haven't been listened to (i.e., those with a status of 0). It then extracts the paths and short paths (relative to `/home/matias/music`) from this output.
-2. **Calculate sizes**: The script uses `du` (a Unix command for calculating disk usage) to determine the size of each album in kilobytes. These sizes are stored in a list, which is then converted to megabytes and summed up to get the total size of all albums.
-3. **Get artists on device**: The script lists the directories within `/home/matias/MECHEN` and extracts the names of the artists (i.e., the directory names).
-4. **Create data frame**: The script creates a Pandas DataFrame containing information about each album, including its path, short path, artist, and size.
-5. **Remove unnecessary albums**: If any albums are already present on the Mecken device that aren't in the DataFrame, they're removed using `sudo rm -rf`.
-6. **Remove empty folders**: Any empty directories within `/home/matias/MECHEN` are also deleted.
-7. **Create artist and album folders**: The script creates any necessary folders for each artist and album on the Mecken device.
-8. **Rsync music**: Finally, the script uses `rsync` to copy the music from the original location to the Mecken device.
+- Python 3
+- Required Python packages: `pandas`
+- `sudo` access for file operations
+- `beet` (used for querying music library)
 
-Overall, this script appears to be designed to maintain a synchronized music collection between two locations: `/home/matias/music` (the source) and `/home/matias/MECHEN` (the destination).
+## Script Functionality
+
+### 1. Importing Libraries
+The script begins by importing necessary libraries:
+- `subprocess`: To run shell commands.
+- `os`: To handle file and directory operations.
+- `pandas`: For handling data in a tabular format.
+- `random`: For selecting random items.
+- `getpass`: To securely input passwords.
+
+### 2. Getting User Password
+The script prompts the user for their password using `getpass` for secure input.
+
+```python
+password = getpass('Password pliz: ')
+```
+
+### 3. Defining Constants
+- `MAX_SPACE`: Maximum space the music player can hold (50 MB in this case).
+- `player_path`: Path to the music player directory.
+
+### 4. Querying Not Listened Albums
+The script uses `subprocess.run` to query albums that have not been listened to.
+
+### 5. Calculating Album Sizes
+The script calculates the sizes of the queried albums using the `du` command.
+
+### 6. Creating Pandas Dataframe
+A Pandas DataFrame is created to store album paths, short paths, artists, and sizes.
+
+### 7. Getting Albums Already on Device
+The script checks which albums are already present on the music player.
+
+### 8. Cleaning Up the Dataframe
+Algorithms are implemented to ensure that the total size of albums on the device does not exceed the maximum limit:
+- `drop_random_artist(df)`: Randomly drops an artist's albums from the dataframe.
+- `df_ttoo_big(df)`: Checks if the dataframe's total size is too big.
+
+### 9. Removing Unnecessary Albums
+The script removes albums from the device that are not in the list of albums to be copied.
+
+### 10. Removing Empty Folders
+Empty folders on the music player are deleted to keep the directory clean.
+
+### 11. Creating Necessary Folders
+Folders are generated as required to organize the new albums being copied.
+
+### 12. Synchronizing Albums
+Using `rsync`, the script synchronizes the albums from the music library to the music player, ensuring that they are copied correctly.
+
+## How to Run
+
+1. Ensure you have the `pandas` library installed:
+   ```sh
+   pip install pandas
+   ```
+
+2. Run the script with:
+   ```sh
+   python3 script_name.py
+   ```
+
+3. Enter your password when prompted.
+
+## Note
+
+- The script uses `sudo` commands; ensure you have the necessary permissions.
+- Adjust the `MAX_SPACE` and `player_path` values as per your requirements.
+- The script assumes the music library is structured and queried using `beet`.
+
+---
+
+This script automates the process of managing music content on your music player, ensuring that the device does not run out of space while keeping your albums organized and up-to-date.

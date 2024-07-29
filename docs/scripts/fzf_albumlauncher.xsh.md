@@ -1,22 +1,72 @@
 # fzf_albumlauncher.xsh
 
-**Script Description**
+# Album Player Script
 
-This script is a shell script written in Xonsh, a Unix shell designed for productivity. It appears to be a music-related script that interacts with the `cmus` and `beet` tools.
+This script allows you to choose an album using `fzf` (fuzzy finder) and play it using `cmus`, a small, fast, and powerful console music player.
 
-**Functionality**
+## Prerequisites
 
-The script performs the following steps:
+- **xonsh**: Make sure you have the xonsh shell installed. You can get it [here](https://xon.sh/).
+- **beets**: A music library manager to fetch your albums. Install it from [here](https://beets.io/).
+- **fzf**: A general-purpose command-line fuzzy finder. You can get it [here](https://github.com/junegunn/fzf).
+- **cmus**: A console-based music player. Available [here](http://cmus.github.io/).
 
-1. **List albums**: The script uses `beet ls -a` to list all available albums.
-2. **Filter albums with fzf**: The output is then piped to `fzf`, a command-line fuzzy finder, which allows the user to select an album by typing its name or part of it.
-3. **Get selected album**: The selected album's title (without any preceding text) is stored in the `selection` variable using `.strip()`.
-4. **Play selected album**:
-	* The script plays the selected album with `cmus-remote`, a command-line interface for controlling the cmus music player.
-	* It first clears the current playback queue (`clear`) and then views the queue to ensure it's empty (`view 2`).
-	* A query is constructed using the selected album's title, which is used to filter the current playlist (`filter album="{selection}"`).
-	* The script marks the filtered track for playback (`mark`) and adds it to the current playback queue (`win-add-q`), filters out any other tracks (`filter`), and then views the new playback queue again (`view 4`).
-5. **Save current playback**:
-	* Finally, the script saves the current playback information (including the selected album) to a file named `nowplaying.m3u` in the user's home directory using `cmus-remote`.
+## Usage
 
-Overall, this script allows users to quickly select an album using fzf and then play it with cmus, while also saving the current playback information.
+1. Save the script to a file, e.g., `play_album.xsh`.
+2. Make the script executable:
+    ```sh
+    chmod +x play_album.xsh
+    ```
+3. Run the script:
+    ```sh
+    ./play_album.xsh
+    ```
+
+## Functionality
+
+This script will:
+
+1. Use `beet ls -a` to list all albums in your music library.
+2. Utilize `sed` to format the list by removing everything before the album name.
+3. Use `fzf` to allow you to interactively choose an album from the list.
+4. If an album is selected, it will:
+    - Set `cmus` to library view.
+    - Clear the current playlist.
+    - Return to the playlist view.
+    - Filter the library for the selected album.
+    - Mark the filtered results (the selected album).
+    - Add the marked tracks to the queue.
+    - Clear the filter to show all library content.
+    - Return to the playlist view.
+    - Save the current playlist to a file in M3U format.
+    - Start and play the first song in the queue.
+
+## Script Details
+
+```xsh
+#! /usr/bin/env xonsh
+
+# Choose an album with fzf and play it with cmus
+
+selection=$(beet ls -a | sed 's/.* - //g' | fzf).strip()
+if selection:
+    cmus-remote -C 'view 4'  # Switch to the library view
+    cmus-remote -C clear     # Clear the current playlist
+    cmus-remote -C 'view 2'  # Switch back to the playlist view
+    query=f'filter album="{selection}"'
+    cmus-remote -C @(query)  # Filter library for the selected album
+    cmus-remote -C mark      # Mark the filtered results
+    cmus-remote -C win-add-q # Add the marked tracks to the queue
+    cmus-remote -C filter    # Clear the filter
+    cmus-remote -C 'view 4'  # Return to the library view
+    cmus-remote -C "lqueue 100" # Switch to library queue
+    cmus-remote -n           # Start playing the first track in queue
+    cmus-remote -p           # Play the track
+    cmus-remote -C "save /home/matias/.temp/nowplaying.m3u" # Save the playlist
+```
+
+## Notes
+
+- Ensure that paths and commands (e.g., cmus-remote, beet) are properly configured in your environment.
+- Modify the save path `/home/matias/.temp/nowplaying.m3u` as per your system's directory structure and preference.

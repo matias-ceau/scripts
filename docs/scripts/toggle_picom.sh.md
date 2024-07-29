@@ -1,19 +1,48 @@
 # toggle_picom.sh
 
-**Script Description:**
+# Picom Control Script
 
-This is a Bash shell script designed to check if the `picom` window manager is running on a Linux system, and then either stop it or start it with a specific option (`-b`) depending on its current state.
+This script checks if the `picom` compositor is running on your system. If it detects that `picom` is running, it will stop the `picom` process. If `picom` is not running, it will start the `picom` process in the background.
 
-**Functionality:**
+## Description
 
-The script's main functionality can be broken down into two parts:
+The script performs the following actions:
+1. Checks if the `picom` process is running using the `pgrep` command.
+2. If `picom` is running, it will output a message indicating that `picom` is running and then stop the process using the `pkill` command.
+3. If `picom` is not running, it will output a message indicating that `picom` is not running and then start the `picom` process in the background using the `picom -b` command.
 
-1. **Checking the status of picom**: The script uses `pgrep` to search for a running process named `picom`. The `-x` option tells `pgrep` to only match processes whose name exactly matches the specified string (`"picom"`). If such a process is found, its existence indicates that picom is currently running.
-2. **Conditional execution**: Based on whether picom is running or not, the script executes one of two branches:
-	* If picom is already running, the script prints a message indicating this and then uses `pkill` to stop the running process.
-	* If picom is not running, the script prints another message and starts a new instance of picom with the `-b` option using the command `picom -b`.
+The script ensures that you can easily control the running state of the `picom` compositor with a simple command.
 
-**Notes:**
+## Usage
 
-* The script's shebang line (`#!/bin/bash`) specifies that it should be executed with Bash.
-* The comment block starting with `#DOC#=2024-07=@RUN@ "Check if picom is running"` appears to be a marker for documentation purposes, but its purpose and format are not immediately clear.
+```bash
+./picom_control.sh
+```
+
+### Example
+
+To execute the script, navigate to the directory containing the script and run:
+
+```bash
+chmod +x picom_control.sh
+./picom_control.sh
+```
+
+### Output
+
+- If `picom` is running:
+  ```
+  Picom is running. Stopping picom...
+  ```
+- If `picom` is not running:
+  ```
+  Picom is not running. Starting picom...
+  ```
+
+## Notes
+
+- Ensure the script has executable permissions. You can set this using the `chmod +x` command as shown in the example usage.
+- The script uses `pgrep` to search for the `picom` process by name and `pkill` to stop it if it is running.
+- The `picom -b` command starts the `picom` process in the background.
+
+This script provides a simple and efficient way to manage the `picom` compositor without manually checking and restarting the process.

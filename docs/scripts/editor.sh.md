@@ -1,17 +1,52 @@
 # editor.sh
 
-**Script Description**
+# Edit Files with Fuzzy Finder
 
-This is a Bash shell script that uses the `find` command to search for files recursively, and then pipes the results to the `fzf` fuzzy finder. The selected file path is then passed as an argument to the `vim` text editor.
+This script allows you to edit any file in the current folder or its subfolders recursively using `vim` and `fzf`.
 
-**Functionality Breakdown**
+## Description
 
-1. **`find 2>/dev/null`**: This line searches for files in the current directory and all its subdirectories recursively, ignoring any errors that might occur (the `2>/dev/null` part redirects error messages to `/dev/null`, effectively suppressing them). The `find` command produces a list of file paths.
-2. **`| fzf`**: The output of the `find` command is piped to the `fzf` fuzzy finder, which presents an interactive interface for searching and selecting a file from the list.
-3. **`vim "$( find 2>/dev/null | fzf )"`**: Once a file is selected using `fzf`, its path is passed as an argument to the `vim` text editor via command substitution (`$(...)`). The `vim` editor will then open with the selected file.
+This script provides a convenient way to search for and edit files within the current directory and its subdirectories. It utilizes the `find` command to list all files and directories, and pipes the list to `fzf`, an interactive fuzzy finder. This allows you to quickly search through your files and, upon selection, open your chosen file in `vim` for editing.
 
-**Context and Use Cases**
+## Usage
 
-This script is likely intended for use in a Unix-like environment, such as Linux or macOS. It provides a convenient way to edit files within the current directory and its subdirectories without having to navigate through them manually using a file manager like Nautilus (on Linux) or Finder (on macOS). The `fzf` fuzzy finder helps users quickly locate files with minimal typing.
+Execute the script from the command line:
 
-Overall, this script offers a simple, yet powerful tool for editing files in a specific directory hierarchy.
+```sh
+./edit-file.sh
+```
+
+Please ensure that the script has executable permissions. You can set them with:
+
+```sh
+chmod +x edit-file.sh
+```
+
+## Dependencies
+
+The script relies on the following tools:
+
+- **`vim`**: A highly configurable text editor.
+- **`find`**: A command-line utility to search for files in a directory hierarchy.
+- **`fzf`**: A command-line fuzzy finder. You can install `fzf` using your package manager.
+
+## Example
+
+When you run the script, it will present you with an interactive fuzzy finder interface powered by `fzf`. Start typing the name of the file you wish to edit, and `fzf` will filter the list in real-time. Press `Enter` to open the selected file in `vim`.
+
+## Script Code
+
+```sh
+#! /bin/sh
+
+#DOC#@CLI@ "Edit any file in current folder or subfolders (recursively)"
+
+vim "$( find 2>/dev/null | fzf )"
+```
+
+## Disclaimer
+
+Make sure all dependencies are installed and properly configured before running the script. This script assumes that you have basic proficiency with command-line operations and the `vim` editor.
+
+
+

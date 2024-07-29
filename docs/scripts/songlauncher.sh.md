@@ -1,28 +1,45 @@
 # songlauncher.sh
 
-Let's break down this script.
+# Play Song Script
 
-**Script Type:** Shell Script (written in Bash)
+## Description
+This script allows you to play a song using `cmus` (a command-line music player) and `dmenu` (a dynamic menu for X). The songs are sourced from the `music` directory and presented in an interactive selection menu.
 
-**Purpose:** The script is designed to play a song with the cmus player using the dmenu utility as an interface.
+## Usage
+```sh
+./play_song.sh
+```
 
-**Components:**
+## Functionalities
+- **Music Selection**: The script scans the `music` directory for music files.
+- **Interactive Menu**: It uses `dmenu` to present the user with an interactive menu for song selection.
+- **Play Song**: Once a song is selected through the menu, it is played using `cmus`.
 
-1. `cmus-remote`: This command-line tool is used to control the cmus music player.
-2. `-f` option: Specifies that cmus-remote should fetch the next file (song) from its list.
-3. `$(find -L music -type f | dmenu -i -l 30)`:
-	* `find`: A utility for searching files based on various criteria.
-	* `-L music`: Searches within the directory `music` and its subdirectories (`-L` means "follow symbolic links").
-	* `-type f`: Only considers files (not directories).
-	* `dmenu`: A lightweight, customizable menu system.
-	* `-i`: Specifies that dmenu should display an input field to allow user interaction.
-	* `-l 30`: Limits the length of the list displayed by dmenu to 30 items.
+## Requirements
+- `cmus`: A command-line music player.
+- `dmenu`: A dynamic menu for X.
 
-**Functionality:**
+## Script
 
-1. The script uses `find` to search for files (songs) within the `music` directory and its subdirectories.
-2. The results are piped to `dmenu`, which displays a menu with a list of songs.
-3. When the user selects a song using dmenu, the selection is passed as an argument to `cmus-remote -f`.
-4. cmus-remote then plays the selected file.
+```sh
+#! /bin/sh
 
-In summary, this script provides a simple way to play music from the `music` directory and its subdirectories using cmus player, with a user-friendly menu interface provided by dmenu.
+#DOC#@RUN@ "Play a song with cmus using dmenu"
+
+cmus-remote -f "$(find -L music -type f | dmenu -i -l 30)"
+```
+
+## Details
+1. **Directory Scan**: The command `find -L music -type f` searches the `music` directory for files, following symbolic links (`-L`) and listing only files (`-type f`).
+2. **Menu Presentation**: The output of the `find` command is piped to `dmenu` for interactive selection. The `dmenu` options provided are:
+   - `-i`: Case-insensitive match.
+   - `-l 30`: Display up to 30 lines at once.
+3. **Playing the Song**: The selected song file path is passed to `cmus-remote -f` to play the song using `cmus`.
+
+## Author
+*This script is authored to provide a simple interface for playing music using cmus and dmenu.*
+
+## License
+This script is open-source. Feel free to use, modify, and distribute it as per your needs.
+
+Feel free to add any additional details or instructions specific to your usage of the script.
