@@ -1,8 +1,5 @@
 # Scripts
 
-<comment>: This part won't be modified by the script </comment>
-Personnal script repository
-
 ## Description
 
 <!-- llm_generated_output_start -->
