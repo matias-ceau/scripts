@@ -39,7 +39,7 @@ When you run the script, it will present you with an interactive fuzzy finder in
 ```sh
 #! /bin/sh
 
-#DOC#@CLI@ "Edit any file in current folder or subfolders (recursively)"
+#INFO:#@CLI@ "Edit any file in current folder or subfolders (recursively)"
 
 vim "$( find 2>/dev/null | fzf )"
 ```

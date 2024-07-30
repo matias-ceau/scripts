@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@ "Pick a playlist of albums and play in random order in cmus"
+#INFO:#@RUN@ "Pick a playlist of albums and play in random order in cmus"
 
 import pandas as pd
 import random

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-#DOC#@CLI@$in_progress$ "Show useful help for tmux"
+#INFO:#@CLI@$in_progress$ "Show useful help for tmux"
 
 import argparse
 import configparser

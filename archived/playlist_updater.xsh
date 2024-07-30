@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@$deprecated$ "playlist updated, note in use"
+#INFO:#@RUN@$deprecated$ "playlist updated, note in use"
 
 beet update -F genre
 genres = [i for i in set($(beet ls -f $genre).splitlines()) if i]

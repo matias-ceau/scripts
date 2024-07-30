@@ -13,7 +13,7 @@ The script runs `fzf` inside an xterm window, allowing the user to interactively
 ```bash
 #!/usr/bin/env bash
 
-#DOC#=2024-06= "Similar to dmenu but with fzf and urxvt (this is only the helper function"
+#INFO:#=2024-06= "Similar to dmenu but with fzf and urxvt (this is only the helper function"
 
 xterm -T 'fzfmenu' -e bash -c "fzf $* < /proc/$$/fd/0 > /proc/$$/fd/1"
 ```

@@ -13,7 +13,7 @@ The script scans through a directory containing script files, extracts specific 
 The script looks for metadata in the following format:
 
 ```
-#DOC#=YYYY-MM=@TYPE@ "Description"
+#INFO:#=YYYY-MM=@TYPE@ "Description"
 ```
 
 ### Supported Metadata Fields:

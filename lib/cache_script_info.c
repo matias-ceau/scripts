@@ -1,4 +1,4 @@
-//#DOC#=2024-06=@OTH@ "SC of C script that extracts the metadata of non-binary scripts and outputs a CSV"
+//#INFO:#=2024-06=@OTH@ "SC of C script that extracts the metadata of non-binary scripts and outputs a CSV"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +43,7 @@ void extract_info(const char *path, ScriptInfo *info) {
     }
     fclose(file);
 
-    if (strncmp(line, "#DOC#", 5) != 0) {
+    if (strncmp(line, "#INFO:#", 5) != 0) {
         return;
     }
 

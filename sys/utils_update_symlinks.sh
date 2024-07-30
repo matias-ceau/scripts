@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#DOC#@UTL@=2024-07= "create symlinks in ~/.local/bin and remove old ones"
+#INFO:#@UTL@=2024-07= "create symlinks in ~/.local/bin and remove old ones"
 
 # Directories
 SOURCE_DIR="$SCRIPTS"

@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-#DOC#@UTILS@=2024-07= "sync scripts repository"
+#INFO:#@UTILS@=2024-07= "sync scripts repository"
 
 # Color definitions
 BLUE="\e[34m"

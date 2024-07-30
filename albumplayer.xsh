@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@=2024-06= "Play an album using cmus"
+#INFO:#@RUN@=2024-06= "Play an album using cmus"
 #+required+ cmus dmenu
 
 import os

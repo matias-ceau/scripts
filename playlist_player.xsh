@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@ "Pick a playlist and play it"
+#INFO:#@RUN@ "Pick a playlist and play it"
 
 import os
 PLAYLIST_PATH = os.path.expanduser('~/.playlists') 

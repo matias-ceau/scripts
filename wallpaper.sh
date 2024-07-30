@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-#DOC#@RUN@=2024-07= "Pick random wallpaper from wallpaper list"
+#INFO:#@RUN@=2024-07= "Pick random wallpaper from wallpaper list"
 
 #TODO : make GUI work, probably with fzfmenu.sh script (from junegunn)
 

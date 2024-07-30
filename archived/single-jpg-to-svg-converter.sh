@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#DOC#$deprecated$=2024-07=@CLI@ "first trial of jpg to svg"
+#INFO:#$deprecated$=2024-07=@CLI@ "first trial of jpg to svg"
 
 WALLPAPER_DIR="$HOME/.wallpapers/"
 

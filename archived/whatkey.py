@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@CLI@$deprecated$ "detect most probable scale"
+#INFO:#@CLI@$deprecated$ "detect most probable scale"
 
 import operator
 

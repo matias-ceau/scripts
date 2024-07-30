@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#DOC#@RUN@$deprecated$ "Used to move volca samples to sampler"
+#INFO:#@RUN@$deprecated$ "Used to move volca samples to sampler"
 
 folder="$(ls /home/matias/audio/SAMPLES/volca/ | grep -v wav | dmenu -l 30)"
 echo "$folder" >> /home/matias/audio/SAMPLES/volca/log.txt

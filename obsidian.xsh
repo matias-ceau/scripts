@@ -1,6 +1,6 @@
 #!/usr/bin/env xonsh
 
-#DOC#@RUN@ "Open any obsidian vault"
+#INFO:#@RUN@ "Open any obsidian vault"
 
 #TODO# vault search
 

@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@RUN@~KJL~ "Custom script to copy music to Mechen"
+#INFO:#@RUN@~KJL~ "Custom script to copy music to Mechen"
 
 import subprocess
 from subprocess import PIPE

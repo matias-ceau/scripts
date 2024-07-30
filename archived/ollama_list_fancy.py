@@ -1,6 +1,6 @@
 #/usr/bin/python
 
-#DOC#@CLI@$deprecated$ "Custom help for ollama"
+#INFO:#@CLI@$deprecated$ "Custom help for ollama"
 
 import requests
 from bs4 import BeautifulSoup

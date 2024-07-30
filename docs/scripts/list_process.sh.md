@@ -23,7 +23,7 @@ This script leverages `systemctl` to list all service units on the system. It th
 ```sh
 #! /bin/sh
 
-#DOC#@CLI@=2024-07= "list running services"
+#INFO:#@CLI@=2024-07= "list running services"
 
 systemctl list-units --type=service --all --no-pager --no-legend | sort -k4
 ```
@@ -31,7 +31,7 @@ systemctl list-units --type=service --all --no-pager --no-legend | sort -k4
 1. **Shebang**: `#!/bin/sh`
    - Indicates the script should be run in the POSIX shell.
 
-2. **Documentation Tag**: `#DOC#@CLI@=2024-07= "list running services"`
+2. **Documentation Tag**: `#INFO:#@CLI@=2024-07= "list running services"`
    - This tag is a placeholder for documentation purposes, perhaps denoting the script's CLI usage or versioning information.
 
 3. **Command**: `systemctl list-units --type=service --all --no-pager --no-legend | sort -k4`

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#DOC#@RUN@$deprecated$ "Open any obsidian vault (replaced with xonsh script, kept for interoperability)"
+#INFO:#@RUN@$deprecated$ "Open any obsidian vault (replaced with xonsh script, kept for interoperability)"
 
 # Vault names
 vaults=("notes" "work" "psyris")  # Replace with your actual vault names

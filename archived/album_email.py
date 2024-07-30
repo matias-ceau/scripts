@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@CLI@$deprecated$ "Old script that sent me emails every morning"
+#INFO:#@CLI@$deprecated$ "Old script that sent me emails every morning"
 
 import smtplib
 import ssl

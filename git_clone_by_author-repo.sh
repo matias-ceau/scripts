@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#DOC#@CLI@=2024-07= "get git repos"
+#INFO:#@CLI@=2024-07= "get git repos"
 
 usage() {
     echo "Usage: $0 [-s | -l <path>] developer/package"

@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@ "Create jupyter notebook and open it in chromium"
+#INFO:#@RUN@ "Create jupyter notebook and open it in chromium"
 
 PROJECT_PATH = $HOME+"/projects"
 empty_nb = """{\n  "cells": [],\n  "metadata": {},\n  "nbformat": 4,\n  "nbformat_minor": 2\n}"""

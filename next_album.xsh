@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@ "Skip to next album in cmus"
+#INFO:#@RUN@ "Skip to next album in cmus"
 
 cmus-remote -C 'view 4'
 cmus-remote -C 'save /home/matias/.temp/now_playing.m3u'

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#DOC#@RUN@ "Create a covert art based on file spectrogram"
+#INFO:#@RUN@ "Create a covert art based on file spectrogram"
 #+needed+sox dmenu imagemagick
 
 file="$(find /home/matias/audio/PROJECTS | grep .wav | dmenu -l 30)" 

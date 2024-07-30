@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#=2024-06=$deprecated$ "Scripts that find the information of other scripts / better C version"
+#INFO:#=2024-06=$deprecated$ "Scripts that find the information of other scripts / better C version"
 
 import pandas as pd
 import argparse
@@ -38,7 +38,7 @@ def extract_info(path):
             info['MSG'] = 'Problem with file extension.\n'
 
         line3 = $(sed -n '3p' @(path))
-        if line3.startswith("#DOC#"):
+        if line3.startswith("#INFO:#"):
             info["DOC"] = True
             try:
                 info['DESCR'] = ' '.join(line3.split(' ')[1:]).strip()[1:-1]

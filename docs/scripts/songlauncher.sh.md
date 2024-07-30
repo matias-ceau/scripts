@@ -24,7 +24,7 @@ This script allows you to play a song using `cmus` (a command-line music player)
 ```sh
 #! /bin/sh
 
-#DOC#@RUN@ "Play a song with cmus using dmenu"
+#INFO:#@RUN@ "Play a song with cmus using dmenu"
 
 cmus-remote -f "$(find -L music -type f | dmenu -i -l 30)"
 ```

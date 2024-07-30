@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#DOC#@RUN@ "Find a paper and either open the paper or copy the paper citation"
+#INFO:#@RUN@ "Find a paper and either open the paper or copy the paper citation"
 #+needed+ findutils xsel dmenu
 
 ref=$(grep -h "^@" data/bib/* | grep ,$ | sed 's/@.*{//g ; s/,$//g' | dmenu -l 30 | sed 's/\n$//g')

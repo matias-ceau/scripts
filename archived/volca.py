@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@RUN@$deprecated$ "Script to transfer samples to Korg volca sample 2" 
+#INFO:#@RUN@$deprecated$ "Script to transfer samples to Korg volca sample 2" 
 
 import os
 import sys

@@ -39,7 +39,7 @@ Here's the detailed explanation of the script:
 ```xonsh
 #! /usr/bin/xonsh
 
-#DOC#+api+=2024-06= "Update env file for storing api keys"
+#INFO:#+api+=2024-06= "Update env file for storing api keys"
 
 def update_env():
     # Extract API keys from the environment variables

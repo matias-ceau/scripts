@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@CLI@ "List Vox amp options"
+#INFO:#@CLI@ "List Vox amp options"
 
 import pandas as pd
 from tabulate import tabulate

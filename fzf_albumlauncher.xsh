@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@CLI@ "Choose an album with fzf and play it with cmus"
+#INFO:#@CLI@ "Choose an album with fzf and play it with cmus"
 
 selection=$(beet ls -a | sed 's/.* - //g' | fzf).strip()
 if selection:

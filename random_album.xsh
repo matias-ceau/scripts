@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@ "Select random album and play it with cmus"
+#INFO:#@RUN@ "Select random album and play it with cmus"
 
 import random
 import os

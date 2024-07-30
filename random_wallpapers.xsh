@@ -1,6 +1,6 @@
 #! /usr/bin/env xonsh
 
-#DOC#@RUN@ "Pick random wallpaper from wallpaper list"
+#INFO:#@RUN@ "Pick random wallpaper from wallpaper list"
 
 import os
 import random

@@ -1,6 +1,6 @@
 #! /usr/bin/xonsh
 
-#DOC#@RUN@$deprecated$ "Switch Xressources file with alternative one"
+#INFO:#@RUN@$deprecated$ "Switch Xressources file with alternative one"
 
 mv ~/.Xresources ~/.XresourcesTEMP
 mv ~/.Xresources-alternative ~/.Xresources

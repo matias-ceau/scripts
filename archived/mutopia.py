@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@CLI@$deprecated$ "custom script to query mutopia"
+#INFO:#@CLI@$deprecated$ "custom script to query mutopia"
 
 import os
 import pandas as pd

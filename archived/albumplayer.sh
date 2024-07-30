@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#DOC#@RUN@$deprecated$ "Old script to play album with cmus"
+#INFO:#@RUN@$deprecated$ "Old script to play album with cmus"
 #+required+ cmus beet
 
 selection=$(beet ls -a | sed 's/.*\s-\s//g' | dmenu -i -l 30)

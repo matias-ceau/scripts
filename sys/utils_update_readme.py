@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#DOC#=2024-07=@UTL@ "Updates the README.md file with the script info (provided by bin/cache_script_info)"
+#INFO:#=2024-07=@UTL@ "Updates the README.md file with the script info (provided by bin/cache_script_info)"
 
 import csv
 import os

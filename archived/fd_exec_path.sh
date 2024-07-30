@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-#DOC#=2024-07=@RUN@ "Replacement of dmenu_path"
+#INFO:#=2024-07=@RUN@ "Replacement of dmenu_path"
 
 # Define cache file path
 CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/fzfmenu_path"

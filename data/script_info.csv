@@ -1,6 +1,7 @@
 file,type,status,host,date,tag,description
 dmenu_run_scripts.xsh,RUN,active,all,2024-06,,"Run user scripts with dmenu"
 tmux-help.py,CLI,in_progress,all,2024-07,,"Show useful help for tmux"
+improved-fzfmenu.sh,OTH,active,all,2024-07,,"Fzfmenu with alacritty, requires a --bind argument to exit fzf"
 update_env.xsh,OTH,active,all,2024-06,api,"Update env file for storing api keys"
 fzfmenu_run.sh,RUN,active,all,2024-06,,"Dmenu run replacement with fzf and a floating st terminal"
 random_wallpapers.xsh,RUN,active,all,2024-07,,"Pick random wallpaper from wallpaper list"
@@ -28,6 +29,7 @@ mechen_music_transfert.py,RUN,active,KJL,2024-07,,"Custom script to copy music t
 obsidian.xsh,RUN,active,all,2024-07,,"Open any obsidian vault"
 m3u_creator.sh,CLI,active,all,2024-07,,"Create an m3u file from files in current dir"
 citeboard.sh,RUN,active,all,2024-07,,"Find a paper and either open the paper or copy the paper citation"
+script_launcher.sh,OTH,active,all,2024-07,,"Run scripts with fzf"
 fzf_songlauncher.sh,CLI,active,all,2024-07,,"Play a song with cmus (chose it with fzf)"
 next_album.xsh,RUN,active,all,2024-07,,"Skip to next album in cmus"
 vimwiki.sh,CLI,active,all,2024-07,,"Open a note in vim with fzf"

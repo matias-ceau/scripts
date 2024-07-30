@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-#DOC#@CLI@$deprecated$ "Old script that changes album metadata"
+#INFO:#@CLI@$deprecated$ "Old script that changes album metadata"
 
 import pandas as pd
 import os

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#DOC#@RUN@$deprecated$ "used to open everything but actually useless"
+#INFO:#@RUN@$deprecated$ "used to open everything but actually useless"
 
 search="$( find * | dmenu -l 30 )"
 

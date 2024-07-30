@@ -31,7 +31,7 @@ The script uses `bash` as its interpreter.
 ### Custom Documentation String
 
 ```sh
-#DOC#=2024-07= "Similar to dmenu but with fzf and urxvt (this is only the helper function)"
+#INFO:#=2024-07= "Similar to dmenu but with fzf and urxvt (this is only the helper function)"
 ```
 
 ### Argument Handling

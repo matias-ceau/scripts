@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-#DOC#@CLI@ "Custom help for ollama"
+#INFO:#@CLI@ "Custom help for ollama"
 
 import requests
 from bs4 import BeautifulSoup
