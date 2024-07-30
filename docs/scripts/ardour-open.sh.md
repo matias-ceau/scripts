@@ -1,62 +1,78 @@
-# ardour-open.sh
 
-# Open Ardour Session Script
+---
 
-This script offers a simple way to open an Ardour session from a predefined directory using a dmenu interface. The script allows the user to select from a list of Ardour session files (.ardour) located within the specified directory.
+Open an ardour session using dmenu to select from available projects.
 
-## Prerequisites
+---
 
-- **Ardour**: Make sure Ardour is installed on your system and is accessible from the command line.
-- **dmenu**: Install dmenu (`sudo apt-get install dmenu` on Debian-based systems).
+### Table of contents
 
-## Installation
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-1. Copy the script into a file, e.g., `open_ardour_session.sh`.
-2. Make the script executable:
+---
 
-    ```sh
-    chmod +x open_ardour_session.sh
-    ```
+<a name="dependencies" />
 
-## Usage
+### Dependencies
 
-Run the script from the command line:
+- `dmenu`: A dynamic menu for X11, used for selecting a session.
+- `ardour`: The audio workstation application used for opening project files.
+- `find`, `grep`, `sed`: Standard Unix utilities for file searching and text processing, typically included in most Linux distributions.
 
-```sh
-./open_ardour_session.sh
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+This script automates the process of opening an Ardour session from the user's designated project directory. It scans for `.ardour` files within the specified directory (`/home/matias/audio/PROJECTS`), presents them in a list format using `dmenu`, and opens the selected project with Ardour.
+
+The core of the script:
+1. It uses the `find` command to list all `.ardour` files in the projects directory.
+2. The output is filtered through `grep` and processed with `sed` to format the path.
+3. The results are displayed in a `dmenu` prompt, allowing user selection.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the script, simply run it from the terminal:
+
+```bash
+bash /home/matias/.scripts/ardour-open.sh
 ```
 
-This will display a dmenu interface presenting a list of available Ardour session files to choose from.
+You can assign this script to a key binding in your window manager (qtile) or include it in your custom launcher for quick access.
 
-## Script Overview
+<a name="examples" />
 
-```sh
-#! /bin/sh
+#### Examples
 
-# DOC@RUN@ "Open an ardour session"
-
-session="$(find /home/matias/audio/PROJECTS | grep "\.ardour$" | sed 's/\/home\/matias\/audio\/PROJECTS//' | dmenu -i -l 30)"
-ardour "/home/matias/audio/PROJECTS/$session"
+- Launch the script to open an Ardour project:
+```bash
+bash /home/matias/.scripts/ardour-open.sh
 ```
 
-### Script Breakdown
+- If integrated with a key binding, just press the assigned key combination to launch the dmenu prompt, select your session, and open Ardour.
 
-1. **Shebang**: The script starts with `#!/bin/sh`, which tells the system to execute the script using the Bourne shell.
+---
 
-2. **Documentation Line**: The line `#DOC#@RUN@ "Open an ardour session"` is a documentation comment.
+<a name="notes" />
 
-3. **Find Session Files**:
-    - `find /home/matias/audio/PROJECTS | grep "\.ardour$"`: This command searches for all files ending with `.ardour` within the `/home/matias/audio/PROJECTS` directory.
-    - `sed 's/\/home\/matias\/audio\/PROJECTS//'`: This strips the directory path from the found files, leaving only the filenames.
+### Notes
 
-4. **dmenu Interface**: The filtered list of session files is passed to `dmenu`:
-    - `dmenu -i -l 30`: This displays an interactive dmenu interface with a vertical list of 30 items from which the user can select the desired session file.
+- Ensure your project files are stored under the specified path; otherwise, the dmenu will not display any options.
+- The script currently assumes only one user (`matias`). For multi-user setups, consider modifying the script for broader accessibility.
 
-5. **Open Selected Session**:
-    - The selected file is stored in the `session` variable.
-    - `ardour "/home/matias/audio/PROJECTS/$session"`: This command opens the selected Ardour session using Ardour.
-
-## Note
-
-- Make sure the `PROJECTS` directory path and user name (`matias`) in the script match your actual directory structure.
-- If necessary, update the script to reflect your specific environment.
+> **Critique**: 
+> - The script does not handle scenarios where no `.ardour` files are found, which could cause Ardour to attempt to open a non-existent project. Implementing a check to notify the user if no sessions are available would enhance usability.
+> - Additionally, it can be optimized for use with an array of custom filters to only show sessions of interest, improving selection relevance.

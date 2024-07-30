@@ -1,68 +1,80 @@
-# obsidian.xsh
+# Obsidian Launcher Script (obsidian.xsh)
 
-# Obsidian Vault Opener
+---
 
-This script is an interactive utility for opening an Obsidian vault from a list of available vaults in a given directory. It uses `fzf` for a user-friendly and efficient vault selection process.
+Open any obsidian vault with a user-friendly selection interface.
 
-## Features
+---
 
-- **Dynamic Vault Listing**: The script dynamically lists all the vaults (directories) under the specified directory (`$HOME/PKM`).
-- **Interactive Search**: Uses `fzf` for an interactive and visually appealing vault selection with previews of the vault content.
-- **Obsidian Integration**: Opens the selected vault directly in Obsidian using the Obsidian URL scheme.
-- **Notification**: Provides feedback through a notification if no vault is selected.
+### Table of contents
 
-## Usage
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-Before running the script, make sure you have the following dependencies installed:
-- [Obsidian](https://obsidian.md/)
-- [fzf](https://github.com/junegunn/fzf)
-- [eza](https://github.com/eza-community/eza)
-- [notify-send](https://packages.ubuntu.com/bionic/libnotify-bin)
+---
 
-### Instructions
+<a name="dependencies" />
 
-1. **Place the script in your executable path:**
+### Dependencies
 
-    Save the script as `obsidian-vault-opener.xsh` or any preferred name in a directory that's included in your system's executable path.
+- `xonsh` - A Python-powered shell language and command prompt.
+- `fzfmenu.sh` - A utility for fuzzy finding items from a list.
+- `eza` - A modern replacement for `ls` that supports coloring and file previews.
+- `notify-send` - A tool for sending desktop notifications.
 
-2. **Make the script executable:**
-    ```bash
-    chmod +x /path/to/obsidian-vault-opener.xsh
-    ```
+<a name="description" />
 
-3. **Execute the script:**
-    ```bash
-    ./obsidian-vault-opener.xsh
-    ```
+### Description
 
-### Customization
+<a name="overview" />
 
-- **Vault Directory**: By default, the script searches for vaults in the `$HOME/PKM` directory. You can change this directory by modifying the line:
-    ```python
-    vaults = [i for i in $(ls $HOME/PKM).split() if $(file -b $HOME/PKM/@(i)) == 'directory']
-    ```
+#### Overview
 
-## Code Explanation
+This script allows users to easily open any Obsidian vault located in the `$HOME/PKM` directory using a graphical interface for selecting the vault. It starts by gathering the names of existing vaults (directories) and presents them in a list for the user to choose from.
+
+The initial list of vaults is generated using a xonsh list comprehension that filters directories only:
 
 ```python
-#!/usr/bin/env xonsh
-
-# Vault names: Lists all directories under the specified path, assuming they are Obsidian vaults
 vaults = [i for i in $(ls $HOME/PKM).split() if $(file -b $HOME/PKM/@(i)) == 'directory']
-
-# Use fzf to get the selected vault name with a real-time preview of the vault's content
-selected_vault = $(echo @('\n'.join(vaults)) | fzfmenu.sh --preview='eza -T --sort=modified --color=always $HOME/PKM/{}') 
-
-# Check if a vault is selected and open it in Obsidian, otherwise notify the user
-if selected_vault:
-    obsidian @(f"obsidian://open?vault={selected_vault}")
-else:
-    notify-send "Obsidian open script" "No vaults selected"
 ```
 
-## Remarks
+Once the list is created, it utilizes `fzfmenu.sh` to allow the user to select one of the vaults interactively. If the selection is successful, the script constructs the corresponding Obsidian URI and launches the application. If no vault is selected, it provides a notification to inform the user.
 
-- This script provides a simple and extensible framework to interactively open an Obsidian vault.
-- The commented-out code sections using `dmenu` can be used alternatively for a graphical menu if `fzf` is not preferred.
+---
 
-Feel free to extend and modify this script to better suit your workflow for managing and opening Obsidian vaults.
+<a name="usage" />
+
+#### Usage
+
+1. Ensure you have the necessary dependencies installed on your Arch Linux system.
+2. Make the script executable by running the command:
+   ```bash
+   chmod +x /home/matias/.scripts/obsidian.xsh
+   ```
+3. Execute the script from the terminal:
+   ```bash
+   /home/matias/.scripts/obsidian.xsh
+   ```
+4. Select your desired vault from the list presented in the fuzzy finder interface.
+
+<a name="examples" />
+
+#### Examples
+
+- **Open a Vault**: Running the script will bring up a fuzzy search interface listing all available vaults. Just type part of the vault name to filter quickly.
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- The script currently uses `fzfmenu.sh`. Ensure you have it in your PATH.
+- If you want to change the path for your vaults, modify the `$HOME/PKM` variable in the script to point to your desired directory.
+
+> **Critique**: 
+> The script could be further improved by adding functionality to quickly search by typing while in the `fzfmenu.sh` interface. Additionally, implementing error handling for the case where there are no vaults in the directory would help improve the user experience. The commented `dmenu` approach is another choice; consider including it as an optional method based on user preference.

@@ -1,96 +1,93 @@
 # utils_update_symlinks.sh
 
-# create-symlinks.sh
+---
 
-This script is designed to manage and create symbolic links (symlinks) in the `~/.local/bin` directory. It removes old or broken symlinks and logs actions taken to a log file.
-
-## Table of Contents
-
-- [Functionality](#functionality)
-- [Usage](#usage)
-- [Logging](#logging)
-- [Script Breakdown](#script-breakdown)
-    - [Initialization](#initialization)
-    - [Logging Functions](#logging-functions)
-    - [Removing Broken Symlinks](#removing-broken-symlinks)
-    - [Creating Symlinks](#creating-symlinks)
-    - [Updating CSV](#updating-csv)
-- [Dependencies](#dependencies)
-
-## Functionality
-
-- Removes old and broken symlinks in the `~/.local/bin` directory.
-- Creates new symlinks from scripts located in the `$SCRIPTS` directory to the `~/.local/bin` directory.
-- Logs the operations performed into a log file.
-- Maintains a CSV file with details about the symlinks created.
-
-## Usage
-
-To execute the script, simply run:
-
-```bash
-./create-symlinks.sh
-```
-
-Make sure the script has execute permissions:
-
-```bash
-chmod +x create-symlinks.sh
-```
-
-## Logging
-
-The script maintains a log file located at `$SCRIPTS/log/symlinking.log` and a CSV file at `$SCRIPTS/data/symlink_data.csv` for tracking all the symbolic links created.
-
-## Script Breakdown
-
-### Initialization
-
-1. **Source and Target Directories**: Defines the source directory (`$SCRIPTS`) where the original scripts are located and the target directory (`$HOME/.local/bin`) where symlinks will be created.
-
-2. **Log and Data Files**: Specifies the locations for the log file and the CSV data file.
-
-3. **CSV Initialization**: If a previous CSV file exists, appends its contents (excluding the header) to a backup file and initializes a new CSV file with headers.
-
-### Logging Functions
-
-- **log_info**: Logs informational messages with a timestamp in green color.
-- **log_error**: Logs error messages with a timestamp in red color.
-
-### Removing Broken Symlinks
-
-Removes symlinks in the target directory that do not point to any existing file. Logs the removal action as an error.
-
-### Creating Symlinks
-
-Uses the `fd` command to find executables in the source directory and attempts to create symlinks to these files in the target directory. Handles conflicts if symlinks already exist and link to different files.
-
-### Updating CSV
-
-Iterates over the symlinks in the target directory, and if they point to scripts in the `$SCRIPTS` directory, it appends their details to the CSV file. The CSV file is then displayed using the `bat` command (with CSV syntax highlighting).
-
-## Dependencies
-
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `glow`: Markdown rendering in the terminal.
-
-Ensure these tools are installed and available in the system path for the script to function correctly. You can install them via most package managers:
-
-```bash
-# Install fd
-sudo apt install fd-find  # On Debian-based systems
-brew install fd           # On macOS
-
-# Install bat
-sudo apt install bat
-brew install bat
-
-# Install glow
-sudo apt install glow
-brew install glow
-```
+A script to create symlinks in ~/.local/bin and remove old ones.
 
 ---
 
-Feel free to modify the script and this documentation according to your specific requirements.
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- bash
+- fd (a simple file finder)
+- bat (a cat clone with syntax highlighting and Git integration)
+- glow (a terminal-based Markdown renderer)
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `utils_update_symlinks.sh` script facilitates the management of symlinks in the `~/.local/bin` directory. It ensures that all executable scripts located in a specified source directory (defined by the `$SCRIPTS` environment variable) are symlinked properly. The script also removes any broken symlinks, avoiding clutter and potential execution errors. 
+
+Key functionalities include:
+- Logging successful operations and errors to a specified log file.
+- Automatic creation of symlinks for new scripts while checking for conflicts.
+- Maintenance of a CSV file that lists all active symlinks and their original paths, providing an easy reference for users.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+1. Set the environment variable `SCRIPTS` to the directory containing the scripts you want to symlink.
+2. Run the script in the terminal:
+
+   ```bash
+   bash /home/matias/.scripts/sys/utils_update_symlinks.sh
+   ```
+
+3. Optionally, you may add this script to your qtile configuration as a keybinding, allowing for convenient executions.
+
+<a name="examples" />
+
+#### Examples
+
+- To create symlinks for all executable files located in `$SCRIPTS`:
+
+   ```bash
+   SCRIPTS=/path/to/your/scripts bash /home/matias/.scripts/sys/utils_update_symlinks.sh
+   ```
+
+- Upon successful execution, the output may show:
+
+   ```
+   # Cleaning...
+   Cleaning complete!
+   # Symlinking...
+   Symlinking complete!
+   # Adding symlinks to CSV...
+   CSV update complete!
+   ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Ensure that the target directory `$HOME/.local/bin` is included in your PATH variable for the symlinks to be executable from anywhere in the terminal.
+
+- Check the log file located at `$SCRIPTS/log/symlinking.log` for details on operations performed by the script.
+
+> **Critique:** While the script effectively handles symlink creation and cleanup, it could benefit from:
+> - Adding command-line arguments for flexibility, such as specifying the source or target directories.
+> - Improving error handling by checking for missing dependencies at the start.
+> - Consider using an array for logging messages to concatenate multiple entries before output, reducing IO operations.

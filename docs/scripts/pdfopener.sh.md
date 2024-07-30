@@ -1,53 +1,79 @@
-# pdfopener.sh
 
-# Pick and Open PDF Script
+---
 
-This script allows users to pick any PDF file within their home folder and open it using the document viewer `evince`. The script uses `dmenu` for selecting the file interactively.
+Open PDF files from the home directory using Evince.
 
-## Script Details
+---
 
-```sh
-#! /bin/sh
+### Table of contents
 
-# Pick any pdf in home folder and open it with evince
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-file=$(find ~ 2>/dev/null | grep "\.pdf$" | dmenu -i -l 30)
-evince "$file"
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- `dmenu`: A dynamic menu for X, required to select the PDF file.
+- `evince`: The document viewer used to open PDF files.
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `pdfopener.sh` script provides a simple way to open PDF files located in the user's home directory. It utilizes `find` to search for files with the `.pdf` extension, and presents those files in a menu using `dmenu`. Once a user selects a file, it opens in Evince, the GNOME document viewer. This allows for quick access to PDF documents without needing to navigate through a file manager.
+
+The script functions as follows:
+1. It executes a `find` command to search for PDF files in the home directory.
+2. The output of the `find` command is filtered by `grep` to include only files with the `.pdf` extension.
+3. `dmenu` displays the list of found files, allowing the user to choose one.
+4. Finally, Evince is called with the selected file as an argument to open it for viewing.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the script, you can run it directly from the terminal:
+
+```bash
+sh /home/matias/.scripts/pdfopener.sh
 ```
 
-### Functionalities
+Alternatively, it can be bound to a key combination in a window manager like Qtile for quicker access.
 
-- **Find PDF Files**: 
-  The script uses `find` command to search for all files in the user's home directory (`~`), filtering out errors (`2>/dev/null`).
-  
-- **Filter PDF Files**:
-  The `grep "\.pdf$"` command filters the results of the `find` command to include only files with a `.pdf` extension.
+<a name="examples" />
 
-- **Interactive Selection**:
-  It then pipes the list of PDF files to `dmenu`, a dynamic menu for X, which enables the user to interactively select a file. The `-i` option enables case-insensitive matching, and the `-l 30` option sets the list to display up to 30 lines.
+#### Examples
 
-- **Open PDF with Evince**:
-  The selected file from `dmenu` is stored in the variable `file`, and then opened with the `evince` document viewer.
+1. Run the script directly to open a PDF:
+   ```bash
+   sh /home/matias/.scripts/pdfopener.sh
+   ```
+2. Bind the script to a key in your Qtile configuration:
+   ```python
+   Key([mod], "p", lazy.spawn("sh /home/matias/.scripts/pdfopener.sh")),
+   ```
 
-## Requirements
+---
 
-- `find`: This command-line utility should be available to search for files.
-- `grep`: Used to filter the list of files to include only PDFs.
-- `dmenu`: A dynamic menu for X, which allows for interactive selection of files.
-- `evince`: A document viewer for PDF and other document formats.
+<a name="notes" />
 
-## Usage
+### Notes
 
-Make sure the script is executable. You can make the script executable by running:
+- Ensure that both `dmenu` and `evince` are installed on your system.
+- If there are many PDFs, consider adjusting the `-l` option in `dmenu` to show more items in the menu.
+- The script currently does not handle cases where there are no PDF files or if the user cancels the selection in `dmenu`, which may result in Evince being called without a file.
 
-```sh
-chmod +x script.sh
-```
-
-Then, you can run the script as follows:
-
-```sh
-./script.sh
-```
-
-You will be presented with a list of PDF files within your home directory in `dmenu`. Use the arrow keys or type to search for your desired PDF, press `Enter`, and the selected file will open in `evince`.
+> **Critique:** The script lacks error handling for cases where no PDF files are found. To improve it, consider adding a check before calling Evince. For instance, you can test if `file` is empty and provide feedback to the user before attempting to open it, enhancing the user experience.

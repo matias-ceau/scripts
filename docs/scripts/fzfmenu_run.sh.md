@@ -1,71 +1,76 @@
-# fzfmenu_run.sh
 
-# Dmenu Run Replacement Script
+---
 
-This repository contains a script that acts as a replacement for `dmenu_run`, utilizing `fzf` for selecting commands and launching them in a floating st terminal.
+Dmenu run replacement with fzf and a floating st terminal
 
-## Script Overview
+---
 
-The provided Bash script performs the following function:
+### Table of contents
 
-- It uses the `dmenu_path` utility to list executable commands available in the user's `$PATH`.
-- This list is then passed to `fzfmenu.sh` for interactive selection using `fzf`.
-- After a command is selected, it is executed using `xargs` and `bash -c "{}"`, running the selected command in a new process.
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-## Usage
+---
 
-To run the script, use the following command in your terminal:
+<a name="dependencies" />
 
-```bash
-./<script_name>.sh
+### Dependencies
+
+- `fzf` - A command-line fuzzy finder
+- `st` - Simple terminal for X
+- `dmenu` - Dynamic menu for X
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+`fzfmenu_run.sh` is a Bash script that replaces the traditional `dmenu` application launcher by utilizing `fzf`, a powerful fuzzy finder. This script takes advantage of the `dmenu_path` command to generate a list of executable files available in the user's PATH environment variable. The output is then piped to `fzf` via the `fzfmenu.sh` script, allowing users to interactively filter through the list to find their desired command. Upon selecting an option, the chosen command is executed in a floating `st` terminal.
+
+The script allows users to maintain a seamless experience in launching applications directly from their terminal while leveraging the intuitive fuzzy matching capabilities of `fzf`.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the script, simply execute it from your terminal. Make sure you have it marked as executable (`chmod +x /home/matias/.scripts/fzfmenu_run.sh`) and run:
+
+```
+/home/matias/.scripts/fzfmenu_run.sh
 ```
 
-Replace `<script_name>` with the actual filename of the script.
+You can also bind this script to a key combination in your window manager (Qtile) for quick access. 
 
-### Prerequisites
+<a name="examples" />
 
-- **dmenu_path**: This utility lists all executable commands in the user's PATH.
-- **fzf**: This is a command-line fuzzy finder used to interactively select an item from the list of commands.
-- **xargs**: This utility constructs argument lists and executes utility commands.
-- **bash**: The script uses Bash to execute the selected command.
-- **st**: The script expects `st` (suckless terminal) to be installed for floating terminal functionality.
+#### Examples
 
-### Example Usage
+1. Launch the script directly from the terminal:
+   ```
+   ./fzfmenu_run.sh
+   ```
+   
+2. Bind it to a key in Qtile by adding this line to your configuration file:
+   ```python
+   Key([mod], "r", lazy.spawn("/home/matias/.scripts/fzfmenu_run.sh")),
+   ```
 
-```bash
-./dmenu_run_replacement.sh
-```
+---
 
-When you run the script, it will open a fuzzy search menu using `fzf`. As you type, `fzf` will filter the list of commands. Press `Enter` to select a command and execute it.
+<a name="notes" />
 
-### Execution Flow
+### Notes
 
-1. **Command Listing**: `dmenu_path` generates a list of all executable commands in the user's path.
-2. **Fuzzy Finder**: The list is piped into `fzfmenu.sh` which uses `fzf` for selecting a command.
-3. **Command Execution**: The selected command is executed using `xargs -I {} bash -c "{}"` to run the command.
+- Ensure that `fzf`, `dmenu`, and `st` are installed on your Arch Linux system for the script to function correctly.
+- The script runs in the background, allowing you to continue using the terminal or other applications without interruption.
 
-## Installation
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/yourusername/dmenu-run-replacement.git
-    ```
-2. Navigate to the script directory:
-    ```bash
-    cd dmenu-run-replacement
-    ```
-3. Make the script executable:
-    ```bash
-    chmod +x <script_name>.sh
-    ```
-
-4. Run the script:
-    ```bash
-    ./<script_name>.sh
-    ```
-
-## Additional Information
-
-- The script is designed to run with the `st` terminal emulator in mind. If `st` is not installed, you might need to adjust the script to work with your preferred terminal emulator.
-- Ensure all dependencies (`dmenu_path`, `fzf`, `xargs`, and `bash`) are installed and correctly configured in your environment.
-
+> **Critique:** One potential improvement for this script would be to incorporate error handling mechanisms. For example, if `dmenu_path` or `fzfmenu.sh` fails or produces no output, the script may hang or terminate unexpectedly. Adding checks to ensure that commands produce expected results could enhance user experience significantly. Additionally, consider allowing custom commands or scripts to be run in the terminal other than the ones returned by `dmenu_path`, which could extend the script's usability.

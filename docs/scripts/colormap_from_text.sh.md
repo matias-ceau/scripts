@@ -1,87 +1,89 @@
 # colormap_from_text.sh
 
-# Extract Color Palettes Script
+---
 
-> **Simple script that extracts color palettes from config files**
+Simple script that extracts color palettes from config files.
 
-This script processes input to extract color codes and optionally formats them in various output styles. It reads hex color codes, converts them to RGB where necessary, and provides several display options.
+---
 
-## Usage
+### Table of contents
 
-```sh
-./script.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- Bash shell
+- `grep` utility
+- `sort` utility
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `colormap_from_text.sh` script is a Bash utility designed to extract color palettes specified in hexadecimal format from input files. It allows users to convert these hex colors into multiple formats, including RGB tuples and ANSI-style color outputs for terminal display. The script employs `grep` to find color codes and `sort` to ensure unique entries, enhancing usability for developers and designers who frequently work with color configurations.
+
+Key functionalities include:
+- Accepting command-line arguments to determine output format.
+- Validating input to prevent incompatible options from being set.
+- Generating output in hexadecimal, RGB, or a color block display as specified by the user.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To run the script, simply call it from the terminal, optionally providing command-line arguments for the desired output format:
+
+```bash
+./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
 ```
 
-### Options
+- `-x` or `--hex-code`: Output color in hexadecimal format.
+- `-r` or `--rgb`: Output color in RGB format (e.g., `rgb(255, 255, 255)`).
+- `-c` or `--color`: Display the color as a colored block in the terminal.
 
-- `-x`, `--hex-code`: Output the color codes in hex format (e.g., `#ff5733`).
-- `-r`, `--rgb`: Output the color codes in RGB format (e.g., `rgb(255, 87, 51)`).
-- `-c`, `--color`: Display the color followed by a background colored block for a visual preview.
+**Note:** Only one of `-x` or `-r` can be specified, as they are mutually exclusive.
+
+<a name="examples" />
+
+#### Examples
+
+1. Extract and display colors in hex format:
+   ```bash
+   cat config_file.txt | ./colormap_from_text.sh -x
+   ```
+
+2. Extract colors as RGB tuples:
+   ```bash
+   cat config_file.txt | ./colormap_from_text.sh -r
+   ```
+
+3. Display colors as blocks in the terminal:
+   ```bash
+   cat config_file.txt | ./colormap_from_text.sh -c
+   ```
+
+---
+
+<a name="notes" />
 
 ### Notes
 
-- The options `-x`/ `--hex-code` and `-r`/ `--rgb` are mutually exclusive and cannot be used together.
-- The script reads color codes from the input, so you need to provide the input (e.g., a config file containing hex color codes).
+Ensure that the input file (e.g., config_file.txt) contains valid hexadecimal color codes for the script to function correctly. The script reads from standard input, making it versatile for use in pipelines or direct file output.
 
-### Examples
-
-#### Extract and Display Hex Codes
-
-```sh
-cat config.file | ./script.sh -x
-```
-
-#### Extract and Display RGB Codes
-
-```sh
-cat config.file | ./script.sh -r
-```
-
-#### Extract and Display Color Codes With a Color Block
-
-```sh
-cat config.file | ./script.sh -c
-```
-
-#### Extract and Display RGB Codes With a Color Block
-
-```sh
-cat config.file | ./script.sh -r -c
-```
-
-## Script Details
-
-### Functionality
-
-- **Hex Code Extraction:** The script uses `grep` to find and extract all unique hex color codes (`#[0-9a-fA-F]{6}`) from the input.
-- **Conversion to RGB:** If the `--rgb` option is used, the script converts hex codes to RGB values.
-- **Color Display:** If the `--color` option is used, the script outputs a visual representation of the color.
-
-### Input Flow
-
-1. The script reads input (typically from a file) which contains color codes.
-2. It processes each line to extract hex color codes using `grep`.
-3. Depending on the options provided, it:
-   - Outputs the hex codes directly.
-   - Converts the hex codes to RGB and outputs the RGB values.
-   - Optionally displays a colored block beside the color values for a visual preview.
-
-### Example Input
-
-A configuration file (`config.file`) may contain lines like:
-
-```
-background: #ff5733;
-foreground: #33ff57;
-border: #3357ff;
-```
-
-When processed with the script, the output will depend on the options chosen.
-
-## Error Handling
-
-- If incompatible options `-x` and `-r` are used together, the script outputs an error and shows the usage message.
-
-## Author
-
-Generated on 2024-07.
+> **Critique:**  
+> While the script is functional and provides essential error handling, it could benefit from additional features like accepting custom input files directly as arguments or providing a help option (`-h` or `--help`) that outputs usage instructions. Additionally, more robust error handling for input validation (checking if input is provided) could enhance user experience.

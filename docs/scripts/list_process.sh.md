@@ -1,70 +1,88 @@
-# list_process.sh
 
-# List Running Services Script
+---
 
-This script lists all the running services on a system using `systemctl` and sorts them by their status.
+Lists running services on the system.
 
-## Usage
+---
 
-Execute the script in a Unix-like terminal to see a sorted list of all the systemd services, including their status.
+### Table of contents
 
-### Example
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-```sh
-./list_running_services.sh
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- `systemctl`: This script requires systemd, which is usually available on modern Arch Linux installations.
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+This shell script provides a straightforward way to list all running services on an Arch Linux system using `systemctl`. The command utilized is `systemctl list-units` with specific flags for better readability:
+
+- `--type=service`: Limits the output to service units.
+- `--all`: Displays all units, including inactive ones.
+- `--no-pager`: Outputs the results directly to the terminal without using a pager.
+- `--no-legend`: Suppresses the header information, making the output easier to read.
+
+The output is then sorted based on the fourth column, which typically contains the state of the service.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To execute the script, simply run it from a terminal:
+
+```bash
+bash /home/matias/.scripts/list_process.sh
 ```
 
-## Description
+Alternatively, you can make the script executable and run it directly:
 
-This script leverages `systemctl` to list all service units on the system. It then sorts these services by their status (running, exited, etc.) to provide an organized view. The output of the command does not include any pager or extra formatting legend, making it suitable for piping into other commands or scripts.
-
-## Script Details
-
-```sh
-#! /bin/sh
-
-#INFO:#@CLI@=2024-07= "list running services"
-
-systemctl list-units --type=service --all --no-pager --no-legend | sort -k4
+```bash
+chmod +x /home/matias/.scripts/list_process.sh
+/home/matias/.scripts/list_process.sh
 ```
 
-1. **Shebang**: `#!/bin/sh`
-   - Indicates the script should be run in the POSIX shell.
+This script can also be bound to a key combination in your window manager (qtile) to quickly access the list of running services.
 
-2. **Documentation Tag**: `#INFO:#@CLI@=2024-07= "list running services"`
-   - This tag is a placeholder for documentation purposes, perhaps denoting the script's CLI usage or versioning information.
+<a name="examples" />
 
-3. **Command**: `systemctl list-units --type=service --all --no-pager --no-legend | sort -k4`
-   - `systemctl list-units`: Lists the systemd units currently loaded on the system.
-   - `--type=service`: Filters the list to only include service units.
-   - `--all`: List all units, even the inactive ones.
-   - `--no-pager`: Disables paging, i.e., does not pipe output into a pager.
-   - `--no-legend`: Removes the legend (the column headers and footer).
-   - `| sort -k4`: Pipes the output into the `sort` command to sort by the fourth field, which is the status of each service.
+#### Examples
 
-## Prerequisites
+```bash
+# Run the script
+/home/matias/.scripts/list_process.sh
+```
 
-This script requires:
-- A Unix-like operating system with `systemd` installed.
-- User privileges that allow the execution of `systemctl` commands.
+Output (formatted for clarity):
 
-## Output
+```
+ ● sshd.service         loaded active running   OpenSSH Daemon
+ ● NetworkManager.service loaded active running   Network Manager
+ ● apache2.service      loaded active running   Apache Web Server
+```
 
-The script outputs a sorted list of services showing their current status (e.g., running, exited, etc.)
+---
 
-## License
+<a name="notes" />
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+### Notes
 
-## Contributions
+- This script will display all services, whether they're running or not, but the sort will primarily change the active services appearance.
 
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## Author
-
-[Your Name]
-
-## Additional Notes
-
-Feel free to modify this script to suit your needs. For more details on `systemctl`, see the [systemd documentation](https://www.freedesktop.org/wiki/Software/systemd/).
-
+> **Critique:** The script is straightforward and functional; however, consider implementing options to filter services based on their state (active, inactive, failed) for more tailored outputs. Additionally, adding comments for each command might enhance readability for users unfamiliar with `systemctl`.

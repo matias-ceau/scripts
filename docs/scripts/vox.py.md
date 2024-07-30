@@ -1,116 +1,105 @@
-# vox.py
+# Vox Amp Options (vox.py)
 
-# Vox Amp Options Script Documentation
+---
 
-## Overview
+List available Vox amp options with descriptions.
 
-This script, written in Python, is designed to list various Vox amp options, their modes, colors, and descriptions. It processes command-line arguments to display specific selections from a predefined DataFrame and formats the output in a tabulated manner for easy readability.
+---
 
-## Functionalities
+### Table of contents
 
-### 1. Default Listing
-When run without arguments, the script displays the entire list of Vox amp options with descriptions truncated to 40 characters.
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-### 2. Amp Selection by Index
-By passing an index number as an argument, the script prints detailed information about the specific amp option corresponding to that index.
+---
 
-### 3. Filter by Color
-The script can filter and display amp options based on the specified color (`'g'`, `'o'`, or `'r'`). The descriptions in the output are truncated to 40 characters.
+<a name="dependencies" />
 
-### 4. Filter by Amp Name
-The script can filter and display amp options based on the provided amp name. The descriptions in the output are truncated to 40 characters.
+### Dependencies
 
-## Usage
+- Python 3
+- pandas
+- tabulate
 
-### Command Line Interface
+<a name="description" />
 
-The script can be executed with several command line arguments to yield different outputs:
+### Description
 
-1. **No arguments**: Display the entire list with truncated descriptions.
-   ```sh
-   ./script_name.py
-   ```
+<a name="overview" />
 
-2. **Index number**: Display detailed information about the specific amp option at the provided index.
-   ```sh
-   ./script_name.py 3
-   ```
+#### Overview
 
-3. **Color filter (`'g'`, `'o'`, `'r'`)**: Display amp options matching the specified color.
-   ```sh
-   ./script_name.py g
-   ```
+This script lists various Vox amplifier settings and their descriptions using data stored in a pandas DataFrame. It allows users to view amp names, modes, associated amp names, and short descriptions. The script can filter options based on color, numeric index, or name similarity, providing a versatile way to access information on different Vox settings.
 
-4. **Name filter**: Display amp options matching the provided amp name (case insensitive).
-   ```sh
-   ./script_name.py "VOX AC15"
-   ```
+The data is structured into four main columns:
 
-### Example Outputs
+- `name`: The name of the amp setting.
+- `mode`: The mode of the amp (e.g., STD, SPL, CST).
+- `color`: A single character representing the color of the amp setting (e.g., 'g' for green).
+- `amp_name`: The name of the physical amp model associated with the setting.
+- `description`: A brief explanation of the amp's characteristics and sound.
 
-1. **No Arguments**:
-    ```
-    ---  ----  ----  -------------  ----------------------------------------
-    0    CLEAN STD   g             This models the clean channel of a high-qu
-    1    CLEAN SPL   o             This models the clean channel of a Japanes
-    2    CLEAN CST   r             This models is only a three-band tone cont
-    3    CALI  STD   g             The 6G5-A “Pro” amp was produced during th
-    4    CALI  SPL   o             This American-made tweed-covered 2x12" com
-    ...
-    ```
+The script formats the output using the `tabulate` library for better readability.
 
-2. **Index Number (detail for index 3)**:
-    ```
-    ***************
-    CALI CLEAN - STD
-    Fender Pro 6G5-A Brownface
-    ***************
-    The 6G5-A “Pro” amp was produced during the years 1960–1963, and was distinctive for its yellowish brown vinyl cover and round brown knobs. This 40W combo amp is known for its warm and clean tone.
-    ```
+---
 
-3. **Color Filter (`'g'`)**:
-    ```
-    ---  ----  ----  -------------  ----------------------------------------
-    0    CLEAN STD   g             This models the clean channel of a high-qu
-    3    CALI  STD   g             The 6G5-A “Pro” amp was produced during th
-    6    US BL STD   g             This models a 4x10" combo amp from 1959 th
-    9    US 2x STD   g             This models a black-faced 2x12" combo amp 
-    ...
-    ```
+<a name="usage" />
 
-4. **Name Filter (`"VOX"`)**:
-    ```
-    ---  ----  ----  -------------  ----------------------------------------
-    12   VOX  A STD   g             This models the AC15TB, which combines th
-    13   VOX  A SPL   o             This models channel 2 of the VOX AC15 (1x
-    14   VOX  A CST   r             Designed to emulate the tones of the thic
-    15   VOX  A STD   g             This models an AC30 amp with a “top boost
-    ...
-    ```
+#### Usage
 
-## Required Libraries
+To use this script, run it from the command line. You can optionally pass arguments:
 
-- `pandas`
-- `tabulate`
-- `sys`
+1. **No arguments**: Lists all Vox amp options in a formatted table.
+2. **Numeric index**: Provides detailed information about a specific amp setting based on its index (0-32).
+3. **Color filters**: Use one of the following colors ('g', 'o', 'r') to filter results.
+4. **Partial name match**: Input part of an amp's name to filter amp settings by name.
 
-Make sure to install the necessary Python libraries before running the script. You can install them using pip:
+Example command usages:
 
-```sh
-pip install pandas tabulate
+```bash
+python3 /home/matias/.scripts/vox.py          # List all options
+python3 /home/matias/.scripts/vox.py 1       # Get details for the setting at index 1
+python3 /home/matias/.scripts/vox.py g       # List all green options
+python3 /home/matias/.scripts/vox.py Vox     # Find all options with 'Vox' in the name
 ```
 
-## Execution
+<a name="examples" />
 
-- Ensure the script has executable permissions:
-  ```sh
-  chmod +x script_name.py
-  ```
-- Run the script with the desired arguments:
-  ```sh
-  ./script_name.py [arguments]
-  ```
+#### Examples
 
-## Author
+1. List all Vox amp options:
+   ```bash
+   python3 /home/matias/.scripts/vox.py
+   ```
 
-This script is authored to provide an easy interface to list and filter Vox amp options using a predefined dataset.
+2. Details of the amp setting at index 2:
+   ```bash
+   python3 /home/matias/.scripts/vox.py 2
+   ```
+
+3. Show entries for a specific color (green):
+   ```bash
+   python3 /home/matias/.scripts/vox.py g
+   ```
+
+4. Find amp options with 'CLEAN' in the name:
+   ```bash
+   python3 /home/matias/.scripts/vox.py CLEAN
+   ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Ensure that the script file is executable (`chmod +x /home/matias/.scripts/vox.py`).
+- This script requires `pandas` and `tabulate`, so ensure they are installed in your Python environment (`pip install pandas tabulate`).
+- The script is structured for readability and maintainability but could benefit from additional comments for complex logic sections.
+
+> **Critique:** 
+> The script has a reasonable structure, but the use of magic numbers (like `32` for the index range) should be avoided in favor of dynamic checks. Additionally, error handling can be improved for cases where the user inputs invalid options. You may want to consider implementing logging or exception handling for robustness.

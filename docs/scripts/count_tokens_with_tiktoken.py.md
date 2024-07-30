@@ -1,72 +1,85 @@
-# count_tokens_with_tiktoken.py
+# Count Tokens with Tiktoken (count_tokens_with_tiktoken.py)
 
-# Token Counter Script
+---
 
-This script counts the number of tokens in a given text file using the GPT-4o model's tokenizer provided by the `tiktoken` library.
+A script to count the number of tokens in a text file using the Tiktoken library.
 
-## Requirements
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
 
 - Python 3.x
-- `tiktoken` Python library
+- Tiktoken library (install via `pip install tiktoken`)
 
-## Installation
+<a name="description" />
 
-First, ensure you have Python 3 installed. Then, install the `tiktoken` library using pip:
+### Description
 
-```sh
+<a name="overview" />
+
+#### Overview
+
+This script is designed to count the number of tokens in a given text file using the Tiktoken library, which is tailored for working with OpenAI's GPT models. It reads the content of the specified file, encodes the text into tokens according to the GPT-4 model's tokenization scheme, and then returns the total number of tokens. This can be particularly useful for developers working with language models, as token limits often dictate API usage and model responses.
+
+The key function in the script is `count_tokens`, which performs the following:
+1. Opens the specified file and reads its content.
+2. Utilizes the `tiktoken` library to retrieve the appropriate encoding for the "gpt-4o" model.
+3. Encodes the text and returns the number of tokens generated.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To execute the script, run it from a terminal with Python, passing the file path of the text you wish to analyze as an argument:
+
+```bash
+python count_tokens_with_tiktoken.py <file_path>
+```
+
+Make sure to replace `<file_path>` with the actual path to your text file. For example:
+
+```bash
+python count_tokens_with_tiktoken.py /home/matias/my_text_file.txt
+```
+
+The script will output the number of tokens in the specified file.
+
+<a name="examples" />
+
+#### Examples
+
+```bash
+# Count tokens in a file named "example.txt"
+python count_tokens_with_tiktoken.py /home/matias/example.txt
+# Output: Number of tokens: 150
+```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Ensure that the file you are analyzing contains text and is encoded in UTF-8.
+- It is essential to have the Tiktoken library installed; you can do this using pip:
+
+```bash
 pip install tiktoken
 ```
 
-## Usage
-
-To run the script, use the following command:
-
-```sh
-python count_tokens.py <file_path>
-```
-
-Replace `<file_path>` with the path to the text file you want to analyze.
-
-### Example
-
-```sh
-python count_tokens.py example.txt
-```
-
-## Script Walkthrough
-
-### Function: `count_tokens(file_path)`
-
-This function reads the text from the specified file and encodes it using the tokenizer of the "gpt-4o" model. It returns the length of the token list.
-
-- **Parameters**:
-  - `file_path` (str): The path to the text file to tokenize.
-
-- **Returns**:
-  - `int`: The number of tokens in the text file.
-
-### Main Code Execution
-
-1. **Argument Check**: The script expects exactly one command-line argument representing the file path.
-2. **Token Count**: It calls the `count_tokens` function with the specified file path.
-3. **Output**: Finally, it prints the number of tokens found in the file.
-
-### Error Handling
-
-- If no file path or more than one argument is provided, the script prints the usage information and exits with an error status.
-
-## Example Output
-
-```
-Number of tokens: 125
-```
-
-The above output indicates that the text file contains 125 tokens according to the "gpt-4o" model's tokenizer.
-
-## Author
-
-This script was authored by the developer community. Further modifications and contributions are welcome.
-
-## License
-
-This script is available under the MIT License. See the LICENSE file for more details.
+> **Critique:** The script effectively counts tokens but lacks error handling for common file issues such as missing files or read permission errors. Adding error handling would improve user feedback and robustness. Consider implementing try-except blocks around file operations to handle exceptions gracefully. Additionally, the script assumes the presence of exactly one command-line argument; enhancing it to provide guidance on other invalid input scenarios could enhance usability.

@@ -73,3 +73,7 @@
 2024-07-25 00:11:42 - Removed broken symlink: /home/matias/.local/bin/sync-repo.sh
 2024-07-25 12:36:58 - Removed broken symlink: /home/matias/.local/bin/idontexist
 2024-07-29 14:23:21 - Cleaning: Removed broken symlink: /home/matias/.local/bin/git_pull.sh
+2024-07-30 19:57:22 - Cleaning: Removed broken symlink: /home/matias/.local/bin/cache_script_info
+2024-07-30 19:57:22 - Cleaning: Removed broken symlink: /home/matias/.local/bin/ollama_list.py
+2024-07-30 19:57:22 - Cleaning: Removed broken symlink: /home/matias/.local/bin/tmux-help.py
+2024-07-30 19:57:22 - Cleaning: Removed broken symlink: /home/matias/.local/bin/utils_update_readme.py

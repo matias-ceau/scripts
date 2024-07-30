@@ -1,110 +1,101 @@
-# wallpaper.sh
-
-# Wallpaper Changer Script
-
-## Description
-
-The Wallpaper Changer script is designed to randomly select and set a wallpaper from a predefined list of wallpapers. It includes several functionalities that allow users to either set a random wallpaper, select one from a list, revert to previous selections, or use a GUI for the selection process.
-
-## Features
-
-- **Set a Random Wallpaper:**
-  Selects and sets a random wallpaper from the wallpapers directory.
-- **Select a Wallpaper:**
-  Allows manual selection of a wallpaper using a menu.
-- **Revert to a Previous Wallpaper:**
-  Reverts to a previously used wallpaper based on a history log.
-- **GUI Selection:**
-  Provides a graphical interface for selecting and previewing wallpapers.
-- **Default Wallpaper:**
-  Sets a default wallpaper if no arguments are provided or if an error occurs.
-
-## Usage
-
-```bash
-#!/usr/bin/bash
-
-# Default wallpaper
-DEFAULT_WALLPAPER="$HOME/.wallpapers/_toitssuze.jpg"
-CACHE="/home/matias/.cache/wallpapers.log"
-
-# Function to set wallpaper
-set_wallpaper() {
-    feh --bg-scale "$1" && notify-send -t 3000 -r 1212 "Script" "Changed wallpaper!\n<b>$(basename "$1")</b>"
-    echo "$1" >> "$CACHE"
-}
-
-# Parse arguments
-case "$1" in
-    --random)
-        wallpaper=$(find ~/.wallpapers/ -type f | shuf -n 1)
-        set_wallpaper "$wallpaper"
-        ;;
-    --select)
-        wallpaper=$(find ~/.wallpapers/ -type f | fzfmenu.sh)
-# -i -l 10)
-        [ -n "$wallpaper" ] && set_wallpaper "$wallpaper"
-        ;;
-    --previous)
-        n=${2:-1}
-        n=$((n + 1))
-        wallpaper=$(tail -n "$n" ~/.cache/wallpapers.log | head -n 1)
-        sed -i "$(($(wc -l < $CACHE) - $n + 1)),\$d" "$CACHE"
-        [ -n "$wallpaper" ] && set_wallpaper "$wallpaper"
-        ;;
-    --gui)
-        wallpaper=$(find ~/.wallpapers/ -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) -printf "%f\n%p\n" | \
-            yad --list \
-                --title="Select a wallpaper" \
-                --width=400 --height=500 \
-                --column="Filename" \
-                --column="Path":HD \
-                --hide-column=2 \
-                --print-column=2 \
-                --no-headers)
-        if [ -n "$wallpaper" ]; then
-            yad --image="$wallpaper" \
-                --title="Preview" \
-                --width=800 --height=600 \
-                --button="Set as wallpaper:0" \
-                --button="Cancel:1"
-            if [ $? -eq 0 ]; then
-                set_wallpaper "$wallpaper"
-            fi
-        fi
-        ;;
-   *)
-       set_wallpaper "$DEFAULT_WALLPAPER"
-       ;;
-esac
-
-# Remove successive duplicate entries
-awk '!seen[$0]++' "$CACHE" > "$CACHE.tmp" && mv "$CACHE.tmp" "$CACHE"
-```
-
-### Options
-
-- `--random`: Set a random wallpaper from the wallpapers directory.
-- `--select`: Select a wallpaper manually from a menu.
-- `--previous [n]`: Revert to the previous wallpaper. Defaults to the last wallpaper if `n` is not specified.
-- `--gui`: Use a graphical interface for selecting and previewing wallpapers.
-- No argument: Sets the default wallpaper defined as `DEFAULT_WALLPAPER`.
-
-### TODO
-
-- Make GUI work properly, probably integrate with the `fzfmenu.sh` script from `junegunn`.
-
-### Requirements
-
-- `feh` for setting wallpapers
-- `notify-send` for sending notifications
-- `yad` for graphical interface (optional for `--gui` option)
-- `fzfmenu.sh` script (optional for `--select` option)
-
-## License
-
-This script is released under the MIT License. See `LICENSE` file for more details.
+# Wallpaper Script (wallpaper.sh)
 
 ---
 
-**Note:** Make sure to replace the paths and filenames appropriately to match your environment.
+Pick random wallpaper from wallpaper list or select manually.
+
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- feh: for setting the wallpaper.
+- notify-send: for desktop notifications.
+- fzfmenu.sh: for interactive menu selection (optional, to be implemented).
+- yad: for graphical interface selection.
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `wallpaper.sh` script allows users to change their desktop wallpaper easily on Arch Linux using the Qtile window manager. It offers four primary functionalities:
+- Set a random wallpaper from a specified directory.
+- Select a wallpaper from a list using the fzfmenu or the yad GUI.
+- Use a previously set wallpaper from a cache log.
+- Set a default wallpaper if no valid options are provided.
+
+The script maintains a cache of previously used wallpapers stored in `~/.cache/wallpapers.log`. This log helps in retrieving and setting wallpapers that have recently been used. 
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To run the script, use the following command format in the terminal:
+
+```bash
+bash wallpaper.sh [option]
+```
+
+**Options:**
+- `--random`: Picks and sets a random wallpaper from the wallpapers directory.
+- `--select`: Prompts the user to select a wallpaper from the list using `fzfmenu.sh`.
+- `--previous [n]`: Sets the previously used wallpaper, with an optional `n` to indicate how many entries back to go (default is 1).
+- `--gui`: Opens a graphical dialog to select a wallpaper using `yad`.
+- No argument: Sets the default wallpaper.
+
+<a name="examples" />
+
+#### Examples
+
+- To set a random wallpaper:
+  ```bash
+  bash wallpaper.sh --random
+  ```
+
+- To select a wallpaper using `fzfmenu`:
+  ```bash
+  bash wallpaper.sh --select
+  ```
+
+- To revert to the previous wallpaper:
+  ```bash
+  bash wallpaper.sh --previous
+  ```
+
+- To use the GUI wallpaper selector:
+  ```bash
+  bash wallpaper.sh --gui
+  ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+1. Ensure that `~/.wallpapers/` contains your wallpaper files.
+2. The script requires read-write permissions to the cache file located at `$CACHE`.
+3. The script currently uses `awk` to remove successive duplicate entries from the cache log to keep it clean.
+
+> **Critique**: 
+> - The script could benefit from better error handling, especially when working with external commands like `feh`, `notify-send`, and `yad`.
+> - If `fzfmenu.sh` is not available, this should be gracefully handled so the user receives an informative message rather than encountering a silent failure.
+> - Consider adding a help option, like `-h` or `--help`, to provide users with usage instructions directly from the command line.

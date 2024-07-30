@@ -1,72 +1,83 @@
-# fzf_albumlauncher.xsh
+# Album Launcher (fzf_albumlauncher.xsh)
 
-# Album Player Script
+---
 
-This script allows you to choose an album using `fzf` (fuzzy finder) and play it using `cmus`, a small, fast, and powerful console music player.
+Launches and plays music albums using fzf to select from Beet's album list.
 
-## Prerequisites
+---
 
-- **xonsh**: Make sure you have the xonsh shell installed. You can get it [here](https://xon.sh/).
-- **beets**: A music library manager to fetch your albums. Install it from [here](https://beets.io/).
-- **fzf**: A general-purpose command-line fuzzy finder. You can get it [here](https://github.com/junegunn/fzf).
-- **cmus**: A console-based music player. Available [here](http://cmus.github.io/).
+### Table of contents
 
-## Usage
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-1. Save the script to a file, e.g., `play_album.xsh`.
-2. Make the script executable:
-    ```sh
-    chmod +x play_album.xsh
-    ```
-3. Run the script:
-    ```sh
-    ./play_album.xsh
-    ```
+---
 
-## Functionality
+<a name="dependencies" />
 
-This script will:
+### Dependencies
 
-1. Use `beet ls -a` to list all albums in your music library.
-2. Utilize `sed` to format the list by removing everything before the album name.
-3. Use `fzf` to allow you to interactively choose an album from the list.
-4. If an album is selected, it will:
-    - Set `cmus` to library view.
-    - Clear the current playlist.
-    - Return to the playlist view.
-    - Filter the library for the selected album.
-    - Mark the filtered results (the selected album).
-    - Add the marked tracks to the queue.
-    - Clear the filter to show all library content.
-    - Return to the playlist view.
-    - Save the current playlist to a file in M3U format.
-    - Start and play the first song in the queue.
+- Xonsh shell
+- Beet (music management software)
+- fzf (fuzzy finder)
+- cmus (curses music player)
 
-## Script Details
+<a name="description" />
 
-```xsh
-#! /usr/bin/env xonsh
+### Description
 
-# Choose an album with fzf and play it with cmus
+<a name="overview" />
 
-selection=$(beet ls -a | sed 's/.* - //g' | fzf).strip()
-if selection:
-    cmus-remote -C 'view 4'  # Switch to the library view
-    cmus-remote -C clear     # Clear the current playlist
-    cmus-remote -C 'view 2'  # Switch back to the playlist view
-    query=f'filter album="{selection}"'
-    cmus-remote -C @(query)  # Filter library for the selected album
-    cmus-remote -C mark      # Mark the filtered results
-    cmus-remote -C win-add-q # Add the marked tracks to the queue
-    cmus-remote -C filter    # Clear the filter
-    cmus-remote -C 'view 4'  # Return to the library view
-    cmus-remote -C "lqueue 100" # Switch to library queue
-    cmus-remote -n           # Start playing the first track in queue
-    cmus-remote -p           # Play the track
-    cmus-remote -C "save /home/matias/.temp/nowplaying.m3u" # Save the playlist
+#### Overview
+
+This script allows users to interactively select an album from their music library managed by Beet using the `fzf` fuzzy finder. It leverages the `cmus` music player to play the selected album, providing a seamless command-line experience.
+
+1. The script begins by calling `beet ls -a` to list albums. It uses `sed` to format the output, extracting the album names for selection.
+2. The generated list is passed to `fzf`, enabling the user to choose an album interactively.
+3. Once an album is selected, the script initiates commands to `cmus` to set the current view, clear current selections, filter the album, mark selected tracks, and queue them for playback.
+4. Finally, it saves the current playing list to a temporary `.m3u` file.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the script, execute it in a terminal. After launching, it will provide an interactive interface via `fzf` where you can choose an album from your music collection. Ensure you have `cmus` running to control playback. 
+
+Run the script using:
+```bash
+~/.scripts/fzf_albumlauncher.xsh
 ```
 
-## Notes
+You can bind this script to a keyboard shortcut in your window manager (qtile) for quicker access.
 
-- Ensure that paths and commands (e.g., cmus-remote, beet) are properly configured in your environment.
-- Modify the save path `/home/matias/.temp/nowplaying.m3u` as per your system's directory structure and preference.
+<a name="examples" />
+
+#### Examples
+
+1. Launch the script:
+   ```bash
+   ~/.scripts/fzf_albumlauncher.xsh
+   ```
+   - This opens a fzf selection prompt to choose an album.
+   
+2. Select an album from the list, and it will automatically play in `cmus`.
+
+---
+
+<a name="notes" />
+
+### Notes
+
+Ensure that all dependencies are installed before running the script. The paths and environment might need adjustment based on your specific setup.
+
+> **Critique**
+> 
+> - The script assumes that `beet ls -a` always returns valid album data; consider adding checks for empty selections.
+> - Adding error handling when executing `cmus-remote` commands could make the script more robust, providing feedback when commands fail.
+> - Consider implementing an option to clear the playlist before queuing a new selection to prevent overlaps.

@@ -1,63 +1,99 @@
 # git_clone_by_author-repo.sh
 
-# get git repos
+---
 
-This script clones a specified GitHub repository into a local directory. Users can choose to clone the repository using either HTTPS or SSH. Additionally, it supports cloning from a local path.
+Clone Git repositories based on developer/package format with options for SSH or local paths.
 
-## Usage
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- Git must be installed on the system.
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `git_clone_by_author-repo.sh` script provides a convenient way to clone Git repositories from GitHub based on the `developer/package` format. Users can choose to clone using either SSH or HTTP(S) protocols, or specify a local repository. The script employs Bash and utilizes git's cloning capabilities, organizing the repositories into a predefined directory structure.
+
+The script parses command-line arguments to identify whether the user prefers SSH cloning, local cloning, or the default HTTPS method. The default directory for cloning repositories can be set via the `GIT_REPOS` environment variable; if not set, it defaults to `$HOME/git`.
+
+Key Features:
+- Supports cloning via SSH or HTTPS.
+- Allows specifying a local git repository for cloning.
+- Organizes cloned repositories by developer name.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the script, execute it from the command line with the following syntax:
 
 ```bash
-./get_git_repos.sh [-s | -l <path>] developer/package
+./git_clone_by_author-repo.sh [-s | -l <path>] developer/package
 ```
 
-### Options
+- `-s`, `--ssh`: Clones the repository using SSH (format: `git@github.com:developer/package.git`).
+- `-l`, `--local <path>`: Clones from a local repository specified by `<path>`.
+- `developer/package`: Specify the GitHub repository in the format of `developer/package`.
 
-- `-s`, `--ssh`: Use SSH for cloning the repository (e.g., `git@github.com:developer/package.git`).
-- `-l <path>`, `--local <path>`: Use a local repository with the specified path for cloning.
-
-### Parameters
-
-- `developer/package`: Specifies the GitHub repository to clone, where `developer` is the username/organization and `package` is the repository name.
-
-### Examples
-
-1. Clone a repository using HTTPS:
-
+**Example Command**:
 ```bash
-./get_git_repos.sh developer/package
+./git_clone_by_author-repo.sh -s johnDoe/myRepo
 ```
 
-2. Clone a repository using SSH:
+---
 
-```bash
-./get_git_repos.sh -s developer/package
-```
+<a name="examples" />
 
-3. Clone from a local repository path:
+#### Examples
 
-```bash
-./get_git_repos.sh -l /path/to/local/repo developer/package
-```
+1. Cloning a repository using SSH:
+   ```bash
+   ./git_clone_by_author-repo.sh -s johnDoe/myRepo
+   ```
 
-## Script Behavior
+2. Cloning from a local path:
+   ```bash
+   ./git_clone_by_author-repo.sh -l /path/to/local/repo johnDoe/myRepo
+   ```
 
-1. **Verify Arguments**: The script checks if the necessary arguments are provided.
-2. **Set Default Directory**: The script sets the default directory for storing cloned repositories to `$HOME/git` unless overridden.
-3. **Process Options**: The script processes options for using SSH or local repository path.
-4. **Validate Conflicts**: Ensures that both SSH and local path options are not used simultaneously.
-5. **Extract Developer and Package**: Extracts the developer and package name from the provided repository string.
-6. **Create Target Directory**: Creates the target directory if it doesn't exist.
-7. **Clone Repository**: Clones the repository using the chosen method (HTTPS, SSH, or local path).
+3. Default HTTPS cloning:
+   ```bash
+   ./git_clone_by_author-repo.sh johnDoe/myRepo
+   ```
 
-## Exit Codes
+---
 
-- `0`: Success
-- `1`: Invalid usage or conflicting options provided
+<a name="notes" />
 
-## Author
+### Notes
 
-Generated automatically
+- Ensure to have SSH keys set up and added to the GitHub account when using the SSH option.
+- The script will create a directory for each developer under the specified cloning directory if it does not already exist.
+- It is advisable not to mix the use of the `-s` and `-l` options simultaneously as the script restricts this.
 
-## License
-
-This script is provided as is, without any warranty. Use at your own risk.
+> **Critique**: 
+> While the script is functional, a few improvements could enhance usability:
+> - Add error handling for the `git clone` command to manage cases where the cloning fails.
+> - Implement validation to check if the provided developer/package format is correct before attempting to clone.
+> - Consider providing more verbose output during the cloning process to inform the user of the steps being executed.

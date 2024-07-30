@@ -1,111 +1,93 @@
-# get_repos_present_on_host.sh
+# Get Repos Present on Host (get_repos_present_on_host.sh)
 
-# Git Repository Collector Script Documentation
+---
 
-This script is designed to collect a list of Git repositories within a specified directory and save the results into text files. The script ensures that the necessary environment variables are set, formats the output to include only the desired repositories, and maintains an aggregated list of all found repositories.
+This script retrieves locally stored Git repositories and organizes them into a structured file.
 
-## Prerequisites
+---
 
-Before running the script, ensure that the following environment variables are defined:
+### Table of contents
 
-- `GIT_REPOS`: The root directory where your Git repositories are located.
-- `LOCALDATA`: The base directory where the output data will be stored.
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-## Script Overview
+---
 
-```bash
-#!/bin/bash
+<a name="dependencies" />
 
-# Ensure the required environment variables are set
-if [ -z "$GIT_REPOS" ] || [ -z "$LOCALDATA" ]; then
-  echo "GIT_REPOS and LOCALDATA environment variables must be set."
-  exit 1
-fi
+### Dependencies
 
-# Get the hostname
-HOSTNAME=$(hostname)
+- Bash shell
+- Environment variables: `GIT_REPOS`, `LOCALDATA`
 
-# Define the output file paths
-OUTPUT_FILE="$LOCALDATA/docs/git_repos/${HOSTNAME}-repos.txt"
-ALL_REPOS_FILE="$LOCALDATA/docs/git_repos/all-repos.txt"
+<a name="description" />
 
-# Create the output directory if it doesn't exist
-mkdir -p "$(dirname "$OUTPUT_FILE")"
+### Description
 
-# Find all git repositories and format the output
-find "$GIT_REPOS" -type d -name ".git" | sed "s|$GIT_REPOS/||;s|/.git||" | awk -F/ 'NF==2' >"$OUTPUT_FILE"
+<a name="overview" />
 
-# Sort and remove duplicates
-sort -u -o "$OUTPUT_FILE" "$OUTPUT_FILE"
+#### Overview
 
-# Append to the all-repos file
-cat "$OUTPUT_FILE" >>"$ALL_REPOS_FILE"
+This script scans a specified directory for Git repositories. It requires two environment variables to be set:
 
-# Sort and remove duplicates in the all-repos file
-sort -u -o "$ALL_REPOS_FILE" "$ALL_REPOS_FILE"
+- `GIT_REPOS`: The path where Git repositories are stored.
+- `LOCALDATA`: The base path to store generated output files.
 
-echo "Repository list updated successfully."
-```
+Upon execution, the script:
+1. Validates the necessary environment variables.
+2. Fetches the hostname to dynamically generate repository output filenames.
+3. Identifies Git repositories located in the `GIT_REPOS` directory and extracts their paths.
+4. Outputs the list of repositories found into a file structured according to the hostname.
+5. Compiles a comprehensive list across all hosts into a shared file.
 
-## Functionalities
+The output for each host is stored in `"$LOCALDATA/docs/git_repos/<hostname>-repos.txt"`, and all repositories are gathered in `"$LOCALDATA/docs/git_repos/all-repos.txt"`.
 
-1. **Environment Variable Check**: The script begins by verifying that the `GIT_REPOS` and `LOCALDATA` environment variables are set. This is crucial for the script to know where to look for Git repositories and where to store the output.
+---
 
-2. **Hostname Retrieval**: It retrieves the hostname of the machine and assigns it to a variable, which is used for naming the output files.
+<a name="usage" />
 
-3. **Define Output Paths**: The script defines paths for two output files:
-   - `OUTPUT_FILE`: Stores the list of repositories found in the current execution, named with the hostname.
-   - `ALL_REPOS_FILE`: Aggregates lists from all executions.
+#### Usage
 
-4. **Directory Creation**: If the target output directory does not exist, it is created.
+1. Ensure you have set the required environment variables:
+   ```bash
+   export GIT_REPOS="/path/to/your/git/repositories"
+   export LOCALDATA="/path/to/store/output"
+   ```
+   
+2. Run the script from the terminal:
+   ```bash
+   bash /home/matias/.scripts/get_repos_present_on_host.sh
+   ```
 
-5. **Repository Finding and Formatting**: The script searches for directories named `.git` within the specified `GIT_REPOS` directory. It formats the results to include only the sub-path (i.e., it removes the base path and `.git` suffix).
+This script can also be automated with a cron job or bound to a key combination in your window manager (Qtile) for quick execution.
 
-6. **Sorting and Deduplication**:
-   - The list is sorted, and duplicates are removed in the output file for the current execution.
-   - The current list is appended to the aggregate `ALL_REPOS_FILE`, which is then also sorted and deduplicated.
+<a name="examples" />
 
-7. **Completion Message**: A message is printed to indicate that the repository list has been successfully updated.
+#### Examples
 
-## Usage
+- To run the script:
+  ```bash
+  export GIT_REPOS="$HOME/my_git_repos"
+  export LOCALDATA="$HOME/data"
+  bash /home/matias/.scripts/get_repos_present_on_host.sh
+  ```
 
-1. Ensure the required environment variables are set:
-    ```bash
-    export GIT_REPOS="/path/to/git/repos"
-    export LOCALDATA="/path/to/local/data"
-    ```
+- Check the output files:
+  - Individual hostname-specific repositories: `$LOCALDATA/docs/git_repos/<hostname>-repos.txt`
+  - All repositories across hosts: `$LOCALDATA/docs/git_repos/all-repos.txt`
 
-2. Run the script:
-    ```bash
-    ./script.sh
-    ```
+---
 
-## Notes
+<a name="notes" />
 
-- Ensure that you have appropriate permissions to read the Git repositories and write to the output directories.
-- The script processes repositories that are exactly two levels deep.
+### Notes
 
-## Example
+- Ensure the `$GIT_REPOS` directory contains subdirectories with `.git` folders, as the script specifically looks for those.
+- Review output files regularly to manage repository listings effectively.
 
-Assuming the environment variables are set as follows:
-```bash
-export GIT_REPOS="/home/user/projects"
-export LOCALDATA="/home/user/data"
-```
-
-Running the script on a machine with hostname `machine123` will:
-- Search for repositories within `/home/user/projects`.
-- Output the list to `/home/user/data/docs/git_repos/machine123-repos.txt`.
-- Append and maintain a deduplicated list of all repositories in `/home/user/data/docs/git_repos/all-repos.txt`. 
-
-## Output Structure
-
-```
-/home/user/data/
-└── docs/
-    └── git_repos/
-        ├── all-repos.txt
-        └── machine123-repos.txt
-```
-
-Each file will contain a sorted list of repository paths relative to the `GIT_REPOS` directory, without duplicates.
+> **Critique:** 
+> The script lacks flexibility in handling special cases, such as an empty `GIT_REPOS` directory. It could benefit from more granular error handling, particularly during file operations. Additionally, including options for more specific filtering of repository paths could enhance functionality, such as filtering by specific project names or dates.

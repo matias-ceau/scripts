@@ -1,95 +1,84 @@
 # random_album.xsh
 
-# Random Album Player for CMUS
+---
 
-## Description
+Select random album and play it with cmus.
 
-This script randomly selects an album from your CMUS library and plays it. The script performs the following tasks:
+---
 
-1. Clears the current playlist.
-2. Creates a temporary playlist containing tracks from a randomly selected album.
-3. Loads and plays the album in CMUS.
+### Table of contents
 
-## Prerequisites
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-- **CMUS**: Make sure CMUS is installed on your system.
-- **Xonsh**: This script uses Xonsh shell for execution.
+---
 
-## Installation
+<a name="dependencies" />
 
-Save the script to a file, for example, `play_random_album.xsh`, and make it executable:
+### Dependencies
 
-```bash
-chmod +x play_random_album.xsh
+- cmus (C* Music Player)
+- xonsh (a Python-powered shell)
+- A music library configured in cmus
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+This script is designed to randomly select an album from the user's cmus music library and play it. It leverages the `cmus-remote` command to interact with the cmus player, allowing for playback control from within the script. The script works by constructing a temporary playlist based on the directory structure of albums in the given music library, then instructs cmus to play the selected album.
+
+The script performs the following steps:
+1. It clears any current playlist in cmus.
+2. It retrieves the paths of music files from cmus' library configuration.
+3. It constructs a list of unique albums by processing these paths.
+4. It randomly shuffles the album list, selects the first ten paths per the shuffled album, and populates a temporary playlist file.
+5. Finally, the script instructs cmus to load the new playlist and begins playback.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To run the script, simply execute it with xonsh in the terminal:
+
+```
+xonsh /home/matias/.scripts/random_album.xsh
 ```
 
-## Usage
+The script does not require any command-line arguments, and it is designed to be run interactively. You can also bind this script to a key combination in your window manager (qtile) for quick access.
 
-Run the script:
+<a name="examples" />
 
-```bash
-./play_random_album.xsh
-```
+#### Examples
 
-## Script Details
+1. Open a terminal and run the script directly:
+   ```bash
+   xonsh /home/matias/.scripts/random_album.xsh
+   ```
 
-```python
-#! /usr/bin/env xonsh
+2. Bind the script to a key in your qtile configuration:
+   ```python
+   Key([mod], "r", lazy.spawn('/home/matias/.scripts/random_album.xsh')),
+   ```
 
-#INFO:#@RUN@ "Select random album and play it with cmus"
+---
 
-import random
-import os
+<a name="notes" />
 
-temp_path = os.path.expanduser('~/.config/cmus/.temp.m3u') 
+### Notes
 
-# Clear the current CMUS playlist
-cmus-remote -U
-cmus-remote -C "view 4"
-cmus-remote -C clear
+- Ensure that cmus is installed and configured properly to recognize your music library.
+- The script will only work if there are at least ten unique albums in the music library; otherwise, it may raise an error while trying to index the album list.
+- Consider checking the contents of your `lib.pl` to ensure it is structured as expected.
 
-# Read the library file and parse album paths
-paths = $(cat .config/cmus/lib.pl).splitlines()
-albums = list(set(['/'.join(i.split('/')[-3:-1]) for i in paths]))
-random.shuffle(albums)
-playlist_paths = []
-
-# Select tracks from 10 random albums
-for n in range(10):
-    playlist_paths += [i+'\n' for i in paths if (albums[n]+'/') in i]
-
-# Write the selected tracks to the temporary playlist
-with open(temp_path, 'w') as f:
-    f.writelines(playlist_paths)
-#albums = $(beet ls -a).splitlines()
-#albums = [x.split(' - ')[-1] for x in albums]
-#selection = random.choice(albums)
-
-# Load the temporary playlist in CMUS and start playback
-cmus-remote -q @(temp_path)
-cmus-remote -p
-cmus-remote -n
-```
-
-## Detailed Functionality
-
-1. **Initialize**:
-   - Creates a path for the temporary playlist file in `~/.config/cmus/.temp.m3u`.
-
-2. **Clear Current Playlist**:
-   - Executes `cmus-remote -U` to update the CMUS library.
-   - Switches to the playlist view using `cmus-remote -C "view 4"`.
-   - Clears the current playlist using `cmus-remote -C clear`.
-
-3. **Load Library and Select Albums**:
-   - Reads the CMUS library file (`~/.config/cmus/lib.pl`).
-   - Processes the paths to extract unique albums.
-   - Randomly shuffles the list of albums.
-   - Selects tracks from 10 random albums to create a temporary playlist.
-
-4. **Write Playlist and Play**:
-   - Writes the selected album tracks to the temporary playlist file.
-   - Loads the temporary playlist into CMUS using `cmus-remote -q`.
-   - Starts playing the loaded playlist using `cmus-remote -p` and skips to the next track with `cmus-remote -n`.
-
-Now, you can enjoy randomly selected albums from your CMUS library with a simple script!
+> **Critique:**  
+> This script assumes that there are always at least ten unique albums, which may not be the case. It might be beneficial to add a check for the number of unique albums and adjust the playlist selection logic accordingly. Additionally, the way paths are handled could be made more robust to account for potential errors accessing the `lib.pl` file. Integrating error handling mechanisms would improve the user experience and prevent the script from crashing unexpectedly.

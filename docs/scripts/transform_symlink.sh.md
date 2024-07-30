@@ -1,79 +1,88 @@
-# transform_symlink.sh
 
-# Script Documentation
+---
 
-## Overview
+A script to replace a symlink with its target file.
 
-This script is a utility for handling symbolic links in Unix-like systems. It performs the following tasks:
+---
 
-1. Checks if the correct number of arguments is provided.
-2. Verifies if the given argument is a symbolic link.
-3. Replaces the symbolic link with its actual target file.
+### Table of contents
 
-## Usage
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-```bash
-./script.sh <symlink>
-```
+---
 
-- `<symlink>`: The symbolic link to be replaced by its target file.
+<a name="dependencies" />
 
-## Functionalities
+### Dependencies
 
-1. **Argument Validation:**
-   - The script checks if exactly one argument is provided.
-   - If the number of arguments is not equal to one, it prints the usage message and exits.
-   ```bash
-   if [ "$#" -ne 1 ]; then
-       echo "Usage: $0 <symlink>"
-       exit 1
-   fi
-   ```
+This script is a standalone shell script and does not have any external dependencies.
 
-2. **Symlink Validation:**
-   - The script verifies if the provided argument is a valid symbolic link.
-   - If the argument is not a symbolic link, it prints an error message and exits.
-   ```bash
-   if [ ! -L "$symlink" ]; then
-       echo "$symlink is not a symbolic link."
-       exit 1
-   fi
-   ```
+<a name="description" />
 
-3. **Target Extraction and Replacement:**
-   - The script retrieves the target of the symbolic link using the `readlink` command.
-   - It then copies the target file to a new file with the same name as the original symbolic link.
-   - Finally, it prints a message indicating that the symbolic link has been replaced by its target file.
-   ```bash
-   target=$(readlink "$symlink")
-   cp "$target" "$symlink"
-   echo "Symlink $symlink has been replaced with the actual file $target."
-   ```
+### Description
 
-## Example
+<a name="overview" />
 
-Assuming `example_symlink` is a symbolic link to `file.txt`:
+#### Overview
+
+This script is designed to transform a symbolic link into a regular file by replacing the symlink with the actual file it points to. 
+
+When executed, the script performs the following operations:
+- It checks if exactly one argument is provided.
+- It verifies that the provided argument is a symlink.
+- It retrieves the actual file that the symlink points to using the `readlink` command.
+- The target file is then copied to the location of the symlink, effectively replacing the symlink with the file itself.
+
+This can be especially helpful in scenarios where maintaining a symlink is no longer necessary, and you need the actual content at that location.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the script, you need to run it from your terminal providing a symlink as an argument. For example:
 
 ```bash
-./script.sh example_symlink
+./transform_symlink.sh /path/to/your/symlink
 ```
 
-Output:
+Ensure that you have execute permissions on the script. You can grant execute permissions using:
+
+```bash
+chmod +x transform_symlink.sh
 ```
-Symlink example_symlink has been replaced with the actual file file.txt.
-```
 
-## Exit Codes
+You may also consider binding this script to a key combination in your window manager if you need quick access.
 
-- `0`: Success.
-- `1`: Incorrect number of arguments, non-existent or non-symbolic link provided.
+<a name="examples" />
 
-## Requirements
+#### Examples
 
-- Bash shell
-- `readlink` command
-- `cp` command
+1. Transform a symlink named `example_link` to its target file:
+    ```bash
+    ./transform_symlink.sh ~/example_link
+    ```
+    
+2. Attempt to transform a non-symlink will yield an error:
+    ```bash
+    ./transform_symlink.sh ~/actual_file
+    ```
 
-## License
+---
 
-This script is provided "as-is" without any warranty.
+<a name="notes" />
+
+### Notes
+
+- Ensure you have backup copies of important files before using this script as it will overwrite the symlink with the target file.
+
+> **Critique:** The script performs its function well, but there are several potential improvements:
+> - Add error handling for cases where the target file might not exist or is inaccessible.
+> - Consider allowing users to specify an alternative filename for the copied file to prevent accidental overwrites.
+> - Providing more informative error messages can enhance the user experience, particularly when working in diverse environments.

@@ -1,45 +1,93 @@
-# songlauncher.sh
 
-# Play Song Script
+---
 
-## Description
-This script allows you to play a song using `cmus` (a command-line music player) and `dmenu` (a dynamic menu for X). The songs are sourced from the `music` directory and presented in an interactive selection menu.
+Play a song with cmus using dmenu
 
-## Usage
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- `cmus` - A small and fast console audio player.
+- `dmenu` - A dynamic menu for X.
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `songlauncher.sh` script is a simple shell script designed for Arch Linux users utilizing the Qtile window manager. It leverages `cmus`, a lightweight audio player, and `dmenu`, a dynamic menu, to facilitate the selection and playback of songs from a specified directory (in this case, a `music` folder). The script uses the `find` command to retrieve a list of all music files and then pipes this list into `dmenu` for user selection.
+
+The command used to find music files is:
+
 ```sh
-./play_song.sh
+find -L music -type f
 ```
 
-## Functionalities
-- **Music Selection**: The script scans the `music` directory for music files.
-- **Interactive Menu**: It uses `dmenu` to present the user with an interactive menu for song selection.
-- **Play Song**: Once a song is selected through the menu, it is played using `cmus`.
+This finds all files in the `music` directory and its subdirectories and `-L` ensures that symbolic links are followed.
 
-## Requirements
-- `cmus`: A command-line music player.
-- `dmenu`: A dynamic menu for X.
+Once a user selects a song from the dmenu interface, the script uses `cmus-remote` to play the selected file through cmus.
 
-## Script
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use this script, ensure it is executable and run it from the terminal or bind it to a key within your Qtile configuration. You can make the script executable with:
 
 ```sh
-#! /bin/sh
-
-#INFO:#@RUN@ "Play a song with cmus using dmenu"
-
-cmus-remote -f "$(find -L music -type f | dmenu -i -l 30)"
+chmod +x /home/matias/.scripts/songlauncher.sh
 ```
 
-## Details
-1. **Directory Scan**: The command `find -L music -type f` searches the `music` directory for files, following symbolic links (`-L`) and listing only files (`-type f`).
-2. **Menu Presentation**: The output of the `find` command is piped to `dmenu` for interactive selection. The `dmenu` options provided are:
-   - `-i`: Case-insensitive match.
-   - `-l 30`: Display up to 30 lines at once.
-3. **Playing the Song**: The selected song file path is passed to `cmus-remote -f` to play the song using `cmus`.
+Then execute it by running:
 
-## Author
-*This script is authored to provide a simple interface for playing music using cmus and dmenu.*
+```sh
+/home/matias/.scripts/songlauncher.sh
+```
 
-## License
-This script is open-source. Feel free to use, modify, and distribute it as per your needs.
+Alternatively, you can bind it to a key in your Qtile configuration, allowing for quick access to play your favorite songs.
 
-Feel free to add any additional details or instructions specific to your usage of the script.
+<a name="examples" />
+
+#### Examples
+
+1. **Run the script directly:**
+   ```sh
+   ~/path/to/script/songlauncher.sh
+   ```
+
+2. **Keybinding in Qtile (example for mod + p):**
+
+   In your `~/.config/qtile/config.py`, you can add:
+
+   ```python
+   Key([mod], "p", lazy.spawn("bash /home/matias/.scripts/songlauncher.sh")),
+   ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Ensure that your music directory (`music`) is properly structured, otherwise the script may not find any files to play.
+- The script does not handle cases where no music files are found. If the `find` command returns no results, cmus will not be able to play anything.
+
+> **Critique:** 
+> While the script is effective for its purpose, it could benefit from error handling. For example, a check could be added to notify the user if no music files were found in the specified directory. Additionally, adding options for the user to specify different directories or filtering types (like file extensions) would enhance usability.

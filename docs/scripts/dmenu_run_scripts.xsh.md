@@ -1,83 +1,82 @@
-# dmenu_run_scripts.xsh
-
-# Run User Scripts with Dmenu
-
-This script allows users to run their scripts by selecting them through a graphical menu powered by `dmenu`. The script leverages `dmenu` to provide an interactive and user-friendly interface for script selection.
-
-## Script Overview
-
-- **Interpreter**: The script uses the `xonsh` shell.
-- **Primary Functionality**: It runs user scripts that are filtered based on certain criteria.
-- **User Interface**: Utilizes `dmenu` through `rofi` to display and choose scripts.
-
-## Detailed Functionality
-
-1. **Gather Script Choices**:
-   - The script calls an external command `script_identifier.xsh` with specific parameters for filtering the list of scripts.
-   - **Filtering Criteria**:
-     - `TYPE=RUN`
-     - `HOST`
-     - `STATUS=active`
-     - `OK`
-   - The results are formatted with the following placeholder:
-     ```html
-     <span color='green'>{FILE:<30}</span> ➦ {DESCR}
-     ```
-   - The `choices` variable holds the filtered list of scripts.
-
-2. **Display Script Choices**:
-   - The filtered script choices are piped to `rofi`, which acts as `dmenu`.
-   - **Rofi Options**:
-     - `-dmenu`: Turns `rofi` into dmenu mode.
-     - `-markup-rows`: Enables markup for row formatting.
-     - `-i`: Makes the search case-insensitive.
-     - `-lines 30`: Sets the number of lines to display.
-     - `-width 80`: Sets the width of the menu.
-
-3. **Parse User Selection**:
-   - The user's selection is processed to extract the script file name.
-   - The selection string splits around the `>` and `<` characters and trims any leading/trailing whitespace.
-   - The extracted script file name is stored in the `choice` variable.
-
-4. **Execute the Selected Script**:
-   - The selected script is executed using `@(choice)`.
-
-## Usage
-
-To run this script, ensure that you have the `xonsh` shell installed and `rofi` available on your system. Execute the script in your terminal to bring up the selection menu:
-
-```bash
-./run_user_scripts.xsh
-```
-
-Select a script from the menu to execute it.
-
-## Example Command
-
-The following example command demonstrates how the script identifier might be called to filter and format the script choices:
-
-```bash
-script_identifier.xsh -c TYPE=RUN HOST STATUS=active OK -f "<span color='green'>{FILE:<30}</span> ➦ {DESCR}" -s FILE
-```
-
-## Dependencies
-
-- **xonsh**: Required to run the script.
-- **rofi**: Serves as the graphical dmenu interface.
-
-## Notes
-
-- Make sure that your scripts are properly labeled and active to be listed in the choices.
-- Customize the `-lines` and `-width` options in the `rofi` command to suit your screen size and preferences.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Author
-
-[Your Name] - [Your Contact Information]
 
 ---
 
-Thank you for using this script! If you encounter any issues or have suggestions, please open an issue on the project's GitHub page.
+Run user scripts with dmenu.
+
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- xonsh
+- dmenu (or rofi)
+- script_identifier.xsh (user script for listing scripts)
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `dmenu_run_scripts.xsh` is a script designed to facilitate the execution of user scripts using dmenu, a popular application launcher that displays a list of options for the user to choose from. In this implementation, it utilizes `rofi` for a more feature-rich interface, allowing users to run scripts that are actively marked as `RUN`.
+
+The key components of this script include:
+
+- **script_identifier.xsh**: This is a user-created script that generates a list of scripts. The `-c` flag specifies a filter that returns only those scripts which are active and have the `RUN` type.
+- **Rofi Dmenu**: This enhanced launcher allows for more customization and improved usability when selecting scripts to run.
+
+The output of `script_identifier.xsh` is formatted in a way that it shows both the script filename and a brief description, making it easy for the user to select an appropriate script.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the `dmenu_run_scripts.xsh` script, follow these steps:
+
+1. Ensure all dependencies are installed.
+2. Open a terminal emulator.
+3. Execute the script by running:
+   ```bash
+   xonsh /home/matias/.scripts/dmenu_run_scripts.xsh
+   ```
+4. A dmenu or rofi window will open, displaying the available scripts. Choose one from the list to execute it.
+
+You can also bind this script to a keyboard shortcut for quick access.
+
+<a name="examples" />
+
+#### Examples
+
+To run a specific script named `example_script.xsh`, execute the following:
+```bash
+xonsh /home/matias/.scripts/dmenu_run_scripts.xsh
+```
+Then, select `example_script.xsh` from the list presented by rofi.
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- The script currently relies on the output from `script_identifier.xsh`. If that script encounters issues or does not return active scripts, this script will not function correctly.
+- Check for any completion or syntax errors in the scripts listed, as rofi may not show them if they can't be executed.
+
+> **Critique**: 
+> The script assumes that there are always active scripts available to execute. It could benefit from added error handling to alert the user if no scripts are found or if `script_identifier.xsh` fails to run. Additionally, providing a fallback option or a better message in such scenarios would improve the user experience. Further, ensuring compatibility with both `dmenu` and `rofi` could be explored, and perhaps allowing users to choose their preferred launcher could enhance versatility.

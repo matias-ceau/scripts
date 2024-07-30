@@ -1,86 +1,90 @@
-# mechen_music_transfert.py
-
-# Custom Script to Copy Music to Mechen
-
-This custom Python script automates the process of copying music albums to a specific directory on a music player named `Mechen`. The script handles checking available space, removing unnecessary albums, creating necessary folders, and synchronizing the music content using `rsync`.
-
-## Requirements
-
-- Python 3
-- Required Python packages: `pandas`
-- `sudo` access for file operations
-- `beet` (used for querying music library)
-
-## Script Functionality
-
-### 1. Importing Libraries
-The script begins by importing necessary libraries:
-- `subprocess`: To run shell commands.
-- `os`: To handle file and directory operations.
-- `pandas`: For handling data in a tabular format.
-- `random`: For selecting random items.
-- `getpass`: To securely input passwords.
-
-### 2. Getting User Password
-The script prompts the user for their password using `getpass` for secure input.
-
-```python
-password = getpass('Password pliz: ')
-```
-
-### 3. Defining Constants
-- `MAX_SPACE`: Maximum space the music player can hold (50 MB in this case).
-- `player_path`: Path to the music player directory.
-
-### 4. Querying Not Listened Albums
-The script uses `subprocess.run` to query albums that have not been listened to.
-
-### 5. Calculating Album Sizes
-The script calculates the sizes of the queried albums using the `du` command.
-
-### 6. Creating Pandas Dataframe
-A Pandas DataFrame is created to store album paths, short paths, artists, and sizes.
-
-### 7. Getting Albums Already on Device
-The script checks which albums are already present on the music player.
-
-### 8. Cleaning Up the Dataframe
-Algorithms are implemented to ensure that the total size of albums on the device does not exceed the maximum limit:
-- `drop_random_artist(df)`: Randomly drops an artist's albums from the dataframe.
-- `df_ttoo_big(df)`: Checks if the dataframe's total size is too big.
-
-### 9. Removing Unnecessary Albums
-The script removes albums from the device that are not in the list of albums to be copied.
-
-### 10. Removing Empty Folders
-Empty folders on the music player are deleted to keep the directory clean.
-
-### 11. Creating Necessary Folders
-Folders are generated as required to organize the new albums being copied.
-
-### 12. Synchronizing Albums
-Using `rsync`, the script synchronizes the albums from the music library to the music player, ensuring that they are copied correctly.
-
-## How to Run
-
-1. Ensure you have the `pandas` library installed:
-   ```sh
-   pip install pandas
-   ```
-
-2. Run the script with:
-   ```sh
-   python3 script_name.py
-   ```
-
-3. Enter your password when prompted.
-
-## Note
-
-- The script uses `sudo` commands; ensure you have the necessary permissions.
-- Adjust the `MAX_SPACE` and `player_path` values as per your requirements.
-- The script assumes the music library is structured and queried using `beet`.
+# Mechen Music Transfer (mechen_music_transfert.py)
 
 ---
 
-This script automates the process of managing music content on your music player, ensuring that the device does not run out of space while keeping your albums organized and up-to-date.
+Custom script to copy music to Mechen
+
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- Python 3
+- Pandas library (`pip install pandas`)
+- Beet (for managing music libraries)
+- Rsync (for efficient file copying)
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `mechen_music_transfert.py` script automates the process of transferring music albums that have not yet been listened to from a local music directory to a specified music player (named 'Mechen'). It checks available disk space, identifies the unchecked albums, and manages the transfer accordingly. The script utilizes several utilities such as `subprocess` to run system commands and `pandas` for efficient data handling. 
+
+Key functionalities include:
+- Gathering not listened to albums using Beet.
+- Calculating total sizes of these albums to ensure they fit within the device’s constraints (50 MB).
+- Randomly dropping albums if the total size exceeds the limit.
+- Creating necessary directories on the Mechen device.
+- Using `rsync` to perform the actual file transfer securely.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use this script, run it in a terminal:
+
+```bash
+python3 /home/matias/.scripts/mechen_music_transfert.py
+```
+
+You will be prompted for a password to grant necessary permissions for file operations. Make sure that the correct paths are set for your music directories and player.
+
+You can also automate this script by binding it to a key in your window manager, allowing you to initiate music transfers quickly.
+
+<a name="examples" />
+
+#### Examples
+
+1. **Run the script**:
+   ```bash
+   python3 /home/matias/.scripts/mechen_music_transfert.py
+   ```
+
+2. **Check output**:
+   ```text
+   3 not listened to
+   Total size equal to 0.5 GB
+   Creating folders...
+   Rsyncing Artist/Album (1/3)
+   ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Ensure that the output paths in the script correctly reflect your music library structure to avoid errors.
+- The script will permanently remove albums from the device if they are no longer present in the source directory, so use with caution.
+- This script requires `sudo` permissions because it performs file operations that typically require elevated privileges.
+
+> **Critique**: 
+> The script currently uses a synchronous approach that relies on subprocess calls for every command. This can make the script slow, especially with a large number of albums. Consider utilizing multi-threading to handle the file transfers and deletions more efficiently. Additionally, the use of plain text passwords poses security risks; you might look into more secure methods of handling passwords.

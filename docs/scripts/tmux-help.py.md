@@ -1,114 +1,108 @@
-# tmux-help.py
-
-# tmux-help
-
-A script to assist with tmux commands by providing easy access, searching, and organizing tmux manpage content.
-
-## Description
-
-`tmux-help` is a Python script designed to improve your tmux experience by organizing and facilitating the search for tmux commands and keybindings. This script can list tmux commands, search for specific commands using either exact or fuzzy search, and categorize commands based on their functionalities. It also allows for updating and displaying distinct sections of the tmux manpage.
-
-## Features
-
-- **List tmux commands**: Display tmux commands in their original order or sorted by functionality.
-- **Search commands**: Perform fuzzy or exact searches for specific tmux commands or keywords.
-- **Section display**: List all sections of the tmux manpage or display a specific section.
-- **Update manpage**: Automatically update the tmux manpage and its sections.
-- **Logging**: Errors and actions are logged for future reference.
-
-## Installation
-
-Ensure you have the required dependencies:
-
-```bash
-pip install fuzzywuzzy
-pip install python-levenshtein
-```
-
-Clone the repository to your local machine:
-
-```bash
-git clone https://github.com/yourusername/tmux-help.git
-cd tmux-help
-```
-
-## Usage
-
-Run the `tmux-help` script with appropriate arguments:
-
-```bash
-./tmux-help.py [options]
-```
-
-### Options
-
-- `-L, --list-tmux`: List tmux commands in the original order.
-- `-f ARG, --find ARG`: Fuzzy search the keyword descriptions.
-- `-F ARG, --find-exact ARG`: Search for exact match (case insensitive).
-- `-s KEY, --search KEY`: Search for the key and return the result.
-- `-u, --update`: Update tmux manpage and sections.
-- `-S [SECTION], --section [SECTION]`: List all sections or display a specific section by number or name.
-
-### Examples
-
-1. **List all tmux commands in original order**:
-
-    ```bash
-    ./tmux-help.py -L
-    ```
-
-2. **Fuzzy search for a keyword**:
-
-    ```bash
-    ./tmux-help.py -f "split"
-    ```
-
-3. **Exact search for a keyword**:
-
-    ```bash
-    ./tmux-help.py -F "new-window"
-    ```
-
-4. **Search for a specific key**:
-
-    ```bash
-    ./tmux-help.py -s "C-b"
-    ```
-
-5. **Update the tmux manpage and sections**:
-
-    ```bash
-    ./tmux-help.py -u
-    ```
-
-6. **List all sections**:
-
-    ```bash
-    ./tmux-help.py -S
-    ```
-
-7. **Display a specific section**:
-
-    ```bash
-    ./tmux-help.py -S 1
-    ```
-
-## Configuration
-
-The script uses a data directory located at `~/.scripts/config/tmux-help/data` to store the full tmux manpage, sections, and logs. Ensure the necessary directories and files are created and populated correctly by running the script once.
-
-## Logging
-
-Logs are stored in `~/.scripts/config/tmux-help/data/tmux-help.log` and can be used to track errors and important actions taken by the script.
-
-## Contributing
-
-Feel free to submit issues or pull requests to contribute to this project. All contributions are welcome!
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+# Tmux Help (tmux-help.py)
 
 ---
 
-*Made with ❤️ by [yourname](https://github.com/yourusername)*
+A script to assist with tmux commands and manpage management.
+
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- Python 3
+- `fuzzywuzzy` library (for fuzzy string matching)
+- `tmux` (as the target command utility)
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+`tmux-help.py` is designed to help users easily access and manage tmux commands through searching and categorization. It loads the tmux manpage and section details, allowing users to quickly search for commands by keywords, list available commands, or display specific sections from the manpage. The script performs regular updates to keep the command list and sections current.
+
+Key functionalities include:
+- Ensuring necessary directories and files exist.
+- Loading tmux commands from local files.
+- Logging errors and information for debugging.
+- Searching commands using fuzzy and exact matching techniques.
+- Categorization of commands into themes for better organization.
+- Easier access to sections of the tmux manpage.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+Run the script from the terminal. The script accepts the following command-line arguments:
+
+- `-L`, `--list-tmux`: List all tmux commands in the original order.
+- `-f`, `--find ARG`: Fuzzy search for commands containing the provided ARG.
+- `-F`, `--find-exact ARG`: Search for an exact match of ARG (case insensitive).
+- `-s`, `--search KEY`: Search commands with the specified key and return results.
+- `-u`, `--update`: Update the tmux manpage and sections.
+- `-S`, `--section [SECTION]`: List all sections or display a specific section by number or name.
+
+To run, make sure the necessary data files are populated and execute as follows:
+```bash
+python3 /home/matias/.scripts/dev/tmux-help.py [options]
+```
+
+<a name="examples" />
+
+#### Examples
+
+- List all available tmux commands in original order:
+    ```bash
+    python3 /home/matias/.scripts/dev/tmux-help.py -L
+    ```
+
+- Fuzzy search for commands containing 'split':
+    ```bash
+    python3 /home/matias/.scripts/dev/tmux-help.py -f split
+    ```
+
+- Exact search for a specific command:
+    ```bash
+    python3 /home/matias/.scripts/dev/tmux-help.py -F 'new-window'
+    ```
+
+- Update the tmux manpage and sections if outdated:
+    ```bash
+    python3 /home/matias/.scripts/dev/tmux-help.py -u
+    ```
+
+- List all sections of the tmux manpage:
+    ```bash
+    python3 /home/matias/.scripts/dev/tmux-help.py -S
+    ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- The script requires populated files for tmux commands and sections. Ensure to run the update command if these files are missing.
+- The `fuzzywuzzy` library needs to be installed. You can do this via pip:
+  ```bash
+  pip install fuzzywuzzy
+  ```
+
+> **Critique**: 
+> While the script is quite comprehensive, the exception handling around file operations could be improved for clarity, and adding more detailed logging could assist in debugging. Additionally, it would benefit from a more modular design, separating concerns into different functions or classes for better readability and maintainability.

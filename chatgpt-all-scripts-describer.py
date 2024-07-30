@@ -114,7 +114,7 @@ def write_markdown(filename, content):
 def update_index(index_path, filename, relative_path):
     print_colored(f"Updating index file: {index_path}", Fore.GREEN)
     with open(index_path, 'a') as file:
-        file.write(f"[{filename}]({relative_path})\n")
+        file.write(f"- [{filename}]({relative_path})\n\n")
 
 def process_csv(csv_path):
     print_colored(f"Processing CSV file: {csv_path}", Fore.BLUE, Style.BRIGHT)

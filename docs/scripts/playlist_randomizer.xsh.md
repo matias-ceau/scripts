@@ -1,127 +1,83 @@
-# playlist_randomizer.xsh
+# Playlist Randomizer (playlist_randomizer.xsh)
 
-# Random Playlist Generator and Player
+---
 
-This script allows the user to pick a playlist of albums and play it in a random order using `cmus`, a small, fast and powerful console music player. The script is written in the `xonsh` shell language and uses `pandas` to manage and shuffle the playlist.
+Pick a playlist of albums and play in random order in cmus.
 
-## Features
+---
 
-- Displays a list of available playlists to the user using `dmenu`.
-- Randomizes the order of albums in the selected playlist.
-- Generates a new playlist with the randomized album order.
-- Plays the randomized playlist in `cmus`.
+### Table of contents
 
-## Prerequisites
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-- Install `cmus`:
-  
-  ```sh
-  sudo apt-get install cmus
-  ```
+---
 
-- Install `xonsh`:
-  
-  ```sh
-  sudo pip install xonsh
-  ```
+<a name="dependencies" />
 
-- Install `dmenu`:
-  
-  ```sh
-  sudo apt-get install dmenu
-  ```
+### Dependencies
 
-- Install `pandas`:
-  
-  ```sh
-  sudo pip install pandas
-  ```
+- xonsh: A Python-powered shell 
+- pandas: For handling datasets
+- cmus: A music player (command line)
+- dmenu: For interactive menu selection
 
-## Usage
+<a name="description" />
 
-Save the script in a file, for example `randomize_playlist.xsh`, and make it executable:
+### Description
 
-```sh
-chmod +x randomize_playlist.xsh
+<a name="overview" />
+
+#### Overview
+
+The `playlist_randomizer.xsh` script is designed to facilitate the random playback of playlists in the cmus music player on an Arch Linux system. The script operates as follows:
+
+1. It reads a directory of playlists stored in `~/.playlists`, specifically looking for `.m3u` files.
+2. The user is presented with a dmenu interface to select one of the playlists.
+3. The selected playlist file is parsed to retrieve the albums and songs.
+4. The script shuffles the album order and prepares a new randomized playlist.
+5. Finally, it sends commands to cmus to clear existing songs, add the newly randomized playlist, and start playback.
+
+This effectively allows a user to enjoy a refreshing and random music experience from their selected playlist.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use this script, ensure you have all the required dependencies installed and execute it in a terminal with the following command:
+
+```bash
+./playlist_randomizer.xsh
 ```
 
-Run the script:
+You can also bind this script to a key combination in your window manager, allowing for quick access to re-randomize and play playlists without switching windows.
 
-```sh
-./randomize_playlist.xsh
-```
+<a name="examples" />
 
-## Script Breakdown
+#### Examples
 
-```python
-#! /usr/bin/env xonsh
+1. Execute the script to bring up your playlist selection:
 
-# Pick a playlist of albums and play in random order in cmus
+   ```bash
+   ./playlist_randomizer.xsh
+   ```
 
-import pandas as pd
-import random
-import os
+2. Choose a playlist when prompted by dmenu. The songs will play in a random order.
 
-# Path to the playlists folder
-PLAYLIST_PATH = os.path.expanduser('~/.playlists') 
+---
 
-# Get list of available playlists
-options = '\n'.join([i.split('.')[0] for i in $(ls @PLAYLIST_PATH).split('\n') if 'm3u' in i])
+<a name="notes" />
 
-# Open dmenu to select a playlist
-selected = $(echo @(options) | dmenu -i -l 30).replace('\n','')
-print(selected)
+### Notes
 
-# Read the selected playlist
-content = $(cat @(f'/home/matias/notes/playlists/{selected}.m3u')).splitlines()
-content = [i for i in content if i]
+- Ensure that your playlists are properly formatted `m3u` files located in `~/.playlists`.
+- The script requires access and proper permissions for cmus to interact with its remote commands.
+- The temporary randomized playlist is saved in `/home/matias/.temp/randomized.m3u`, make sure this directory exists.
 
-# Extract album and song information
-albums = [i.split('/')[-2] for i in content]
-songs = [i.split('/')[-1] for i in content]
-
-# Create a DataFrame with the playlist information
-df = pd.DataFrame({'albums'  : albums,
-                   'songs'   : songs,
-                   'content' : content})
-
-# Get a list of unique albums and randomize the order
-indiv_albums = df.albums.unique().tolist()
-random.shuffle(indiv_albums)
-
-# Create a mapping of albums to their new order
-mapping = {k:v for v,k in enumerate(indiv_albums)}
-df['order'] = [mapping[i] for i in df.albums]
-
-# Sort the DataFrame based on the new order and songs
-df = df.sort_values(['order', 'songs'])
-
-# Create a new randomized playlist content
-random_pl = '\n'.join(df.content.tolist())
-echo @(random_pl) > /home/matias/.temp/randomized.m3u
-
-# Commands to control cmus and play the new playlist
-cmus-remote -C 'view 4'
-cmus-remote -C clear
-cmus-remote -C 'add /home/matias/.temp/randomized.m3u'
-cmus-remote -n
-cmus-remote -p
-```
-
-## How It Works
-
-1. The script defines the path to the `.playlists` directory and retrieves all `.m3u` files.
-2. It uses `dmenu` to display the list of playlists and lets the user select one.
-3. The selected playlist is read, and its contents are parsed to extract the album and song information.
-4. The script creates a `pandas` DataFrame to manipulate the playlist.
-5. The albums are randomized, and a new order is assigned to each song's album.
-6. The DataFrame is sorted based on this new order and the songs, and a new randomized playlist is generated.
-7. The new randomized playlist is saved to a temporary file.
-8. Finally, various `cmus-remote` commands are issued to clear the current playlist, add the new one, and start playing it.
-
-## Notes
-
-- Ensure that the `PLAYLIST_PATH` and other paths used in the script match your environment.
-- This script assumes that the playlist files are in M3U format.
-
-Feel free to customize the script according to your needs.
+> **Critique:** The script effectively randomizes albums within a playlist and communicates with cmus efficiently. However, error handling can be improved, especially around the selection and parsing of the playlist files. Adding checks for empty selections and handling potential exceptions, such as file access issues, would enhance its robustness. Additionally, a cleanup procedure for the temporary playlist could be included to ensure no unnecessary files clutter the temp directory.

@@ -1,48 +1,82 @@
-# toggle_picom.sh
+# Toggle Picom (toggle_picom.sh)
 
-# Picom Control Script
+---
 
-This script checks if the `picom` compositor is running on your system. If it detects that `picom` is running, it will stop the `picom` process. If `picom` is not running, it will start the `picom` process in the background.
+A simple script to toggle the Picom compositor on and off.
 
-## Description
+---
 
-The script performs the following actions:
-1. Checks if the `picom` process is running using the `pgrep` command.
-2. If `picom` is running, it will output a message indicating that `picom` is running and then stop the process using the `pkill` command.
-3. If `picom` is not running, it will output a message indicating that `picom` is not running and then start the `picom` process in the background using the `picom -b` command.
+### Table of contents
 
-The script ensures that you can easily control the running state of the `picom` compositor with a simple command.
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
 
-## Usage
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- `picom`: A compositor for X11, to handle window effects.
+- `pgrep`: To check if Picom is running.
+- `pkill`: To stop Picom if it is running.
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `toggle_picom.sh` script is designed to conveniently start or stop Picom, a popular compositor for various window managers like Qtile. This script checks if Picom is currently running by utilizing `pgrep`, which searches for the Picom process. Based on the result, it either terminates the Picom process with `pkill` or initiates it in the background with the `-b` flag to allow the terminal to be free for further commands.
+
+The script provides visual feedback in the terminal, letting the user know whether Picom is currently running or was just started. Because window compositors can greatly affect the visual experience in a desktop environment, this script serves as a handy tool for users who frequently switch their compositor on and off.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use this script, simply execute it from the terminal with the following command:
 
 ```bash
-./picom_control.sh
+bash /home/matias/.scripts/toggle_picom.sh
 ```
 
-### Example
+Alternatively, this script can be bound to a key combination in your Qtile configuration for ease of access, allowing you to quickly toggle Picom without needing to open a terminal.
 
-To execute the script, navigate to the directory containing the script and run:
+<a name="examples" />
 
-```bash
-chmod +x picom_control.sh
-./picom_control.sh
-```
+#### Examples
 
-### Output
+1. **Toggle Picom from Terminal**:
+   ```bash
+   bash /home/matias/.scripts/toggle_picom.sh
+   ```
 
-- If `picom` is running:
+2. **Bind to a key in Qtile**:
+   ```python
+   Key([mod], "p", lazy.spawn("/home/matias/.scripts/toggle_picom.sh")),
+   ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Ensure the script has execute permissions. You can set this using:
+  ```bash
+  chmod +x /home/matias/.scripts/toggle_picom.sh
   ```
-  Picom is running. Stopping picom...
-  ```
-- If `picom` is not running:
-  ```
-  Picom is not running. Starting picom...
-  ```
+- The script relies on the assumption that Picom is installed and accessible in the command path.
 
-## Notes
-
-- Ensure the script has executable permissions. You can set this using the `chmod +x` command as shown in the example usage.
-- The script uses `pgrep` to search for the `picom` process by name and `pkill` to stop it if it is running.
-- The `picom -b` command starts the `picom` process in the background.
-
-This script provides a simple and efficient way to manage the `picom` compositor without manually checking and restarting the process.
+> **Critique**: 
+> - The script could benefit from error handling to catch cases where Picom fails to start or stop. Implementing conditions to check the exit status of `pkill` and `picom` commands would enhance its robustness.
+> - Consider adding additional options for Picom's startup parameters to allow users to customize their experience further.

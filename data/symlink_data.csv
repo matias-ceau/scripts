@@ -1,7 +1,6 @@
 Original Path,Symlink,Command Name
 /home/matias/.scripts/albumplayer.xsh,/home/matias/.local/bin/albumplayer.xsh,albumplayer.xsh
 /home/matias/.scripts/ardour-open.sh,/home/matias/.local/bin/ardour-open.sh,ardour-open.sh
-/home/matias/.scripts/bin/cache_script_info,/home/matias/.local/bin/cache_script_info,cache_script_info
 /home/matias/.scripts/chatgpt-all-scripts-describer.py,/home/matias/.local/bin/chatgpt-all-scripts-describer.py,chatgpt-all-scripts-describer.py
 /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh,/home/matias/.local/bin/chezmoi_on_a_new_system.sh,chezmoi_on_a_new_system.sh
 /home/matias/.scripts/citeboard.sh,/home/matias/.local/bin/citeboard.sh,citeboard.sh
@@ -23,12 +22,12 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/launch_tmux_with_music_player.sh,/home/matias/.local/bin/launch_tmux_with_music_player.sh,launch_tmux_with_music_player.sh
 /home/matias/.scripts/list_process.sh,/home/matias/.local/bin/list_process.sh,list_process.sh
 /home/matias/.scripts/llama-all-scripts-describer.py,/home/matias/.local/bin/llama-all-scripts-describer.py,llama-all-scripts-describer.py
+/home/matias/.scripts/llm-script-describer.py,/home/matias/.local/bin/llm-script-describer.py,llm-script-describer.py
 /home/matias/.scripts/m3u_creator.sh,/home/matias/.local/bin/m3u_creator.sh,m3u_creator.sh
 /home/matias/.scripts/mechen_music_transfert.py,/home/matias/.local/bin/mechen_music_transfert.py,mechen_music_transfert.py
 /home/matias/.scripts/midi2arch.xsh,/home/matias/.local/bin/midi2arch.xsh,midi2arch.xsh
 /home/matias/.scripts/next_album.xsh,/home/matias/.local/bin/next_album.xsh,next_album.xsh
 /home/matias/.scripts/obsidian.xsh,/home/matias/.local/bin/obsidian.xsh,obsidian.xsh
-/home/matias/.scripts/ollama_list.py,/home/matias/.local/bin/ollama_list.py,ollama_list.py
 /home/matias/.scripts/pdfopener.sh,/home/matias/.local/bin/pdfopener.sh,pdfopener.sh
 /home/matias/.scripts/playlist_player.xsh,/home/matias/.local/bin/playlist_player.xsh,playlist_player.xsh
 /home/matias/.scripts/playlist_randomizer.xsh,/home/matias/.local/bin/playlist_randomizer.xsh,playlist_randomizer.xsh
@@ -40,12 +39,12 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/select_script,/home/matias/.local/bin/select_script,select_script
 /home/matias/.scripts/songlauncher.sh,/home/matias/.local/bin/songlauncher.sh,songlauncher.sh
 /home/matias/.scripts/sync-repo.sh,/home/matias/.local/bin/sync-repo.sh,sync-repo.sh
-/home/matias/.scripts/tmux-help.py,/home/matias/.local/bin/tmux-help.py,tmux-help.py
+/home/matias/.scripts/dev/tmux-help.py,/home/matias/.local/bin/tmux-help.py,tmux-help.py
 /home/matias/.scripts/toggle_picom.sh,/home/matias/.local/bin/toggle_picom.sh,toggle_picom.sh
 /home/matias/.scripts/transform_symlink.sh,/home/matias/.local/bin/transform_symlink.sh,transform_symlink.sh
 /home/matias/.scripts/update_env.xsh,/home/matias/.local/bin/update_env.xsh,update_env.xsh
-/home/matias/.scripts/sys/utils_update_readme.py,/home/matias/.local/bin/utils_update_readme.py,utils_update_readme.py
 /home/matias/.scripts/sys/utils_update_symlinks.sh,/home/matias/.local/bin/utils_update_symlinks.sh,utils_update_symlinks.sh
 /home/matias/.scripts/vimwiki.sh,/home/matias/.local/bin/vimwiki.sh,vimwiki.sh
 /home/matias/.scripts/vox.py,/home/matias/.local/bin/vox.py,vox.py
 /home/matias/.scripts/wallpaper.sh,/home/matias/.local/bin/wallpaper.sh,wallpaper.sh
+/home/matias/.scripts/you_are_not_documented.sh,/home/matias/.local/bin/you_are_not_documented.sh,you_are_not_documented.sh

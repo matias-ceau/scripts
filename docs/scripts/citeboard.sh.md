@@ -1,74 +1,80 @@
-# citeboard.sh
-
-# Paper Finder Script
-
-This script provides a convenient way to find a paper from a bibliography and either open the paper or copy its citation to the clipboard. It utilizes `findutils`, `xsel`, and `dmenu` to accomplish this task.
-
-## Dependencies
-
-- `findutils`
-- `xsel`
-- `dmenu`
-
-Ensure these dependencies are installed on your system before running the script.
-
-## Usage
-
-To run the script, use the following command in your terminal:
-
-```sh
-./scriptname.sh
-```
-
-Replace `scriptname.sh` with the actual name of your script file.
-
-## Functionality
-
-1. **Fetch Paper References**: The script searches through files in the `data/bib/` directory for lines that start with `@` and end with a comma. It then extracts the references, which are displayed in `dmenu` for selection.
-   
-2. **Select Action**: The user can choose from two options displayed in `dmenu`:
-   - `open`: Opens the selected paper in `evince`.
-   - `clipboard`: Copies the selected citation to the clipboard using `xsel`.
-
-3. **Perform Action**: Based on the user's choice:
-   - If `clipboard` is selected, the citation is copied to the clipboard.
-   - If `open` is selected, the script searches for the file associated with the reference in the `data/zotero/storage/` directory and opens it using `evince`.
-
-## Script Details
-
-```sh
-#! /bin/sh
-
-# Find a paper and either open the paper or copy the paper citation
-# Dependencies: findutils, xsel, dmenu
-
-# Fetch the paper references from the bibliography files
-ref=$(grep -h "^@" data/bib/* | grep ,$ | sed 's/@.*{//g ; s/,$//g' | dmenu -l 30 | sed 's/\n$//g')
-
-# Prompt the user to select an action (open or copy to clipboard)
-sel=$(echo -e "open\nclipboard" | dmenu)
-
-# Exit if no reference is selected
-[ "$ref" = "" ] && exit 
-
-# Copy the reference to the clipboard if 'clipboard' is selected
-[ "$sel" = "clipboard" ] && echo "$ref" | xsel -b
-
-# Open the paper in evince if 'open' is selected
-[ "$sel" = "open" ] && 
-    find data/zotero/storage | grep "$ref" | xargs evince
-```
-
-## Notes
-
-- The script uses `dmenu` to display a list of paper references and actions. Ensure `dmenu` is properly configured and installed on your system.
-- This script assumes that your bibliography files are located in the `data/bib/` directory and your papers are stored in the `data/zotero/storage/` directory.
-- The script uses `evince` for opening PDF files. Adjust the script if you prefer using a different PDF viewer.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+# Citeboard (citeboard.sh)
 
 ---
 
-Feel free to customize this documentation to better fit your GitHub repository structure and any additional requirements you might have.
+A script to find a paper and open it or copy its citation.
+
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- findutils
+- xsel
+- dmenu
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `citeboard.sh` script is designed for users who need to quickly access paper citations. It searches for references in BibTeX files and offers the user a simple interface to either copy the citation to the clipboard or open the corresponding PDF file using Evince. The script uses several utilities:
+
+- **grep**: To filter and extract references from `.bib` files.
+- **sed**: For text manipulation to format the references properly.
+- **dmenu**: Provides a graphical interface for selecting options.
+- **xsel**: Enables copying selected text to the clipboard.
+
+The references are extracted by searching for lines that begin with `@` in all BibTeX files located in the specified `data/bib` directory, while eliminating unnecessary characters to maintain a clean citation format. A subsequent menu allows the user to decide whether to open the selected paper or copy its citation.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To run the script, simply execute it from the terminal. You may bind it to a key combination in your window manager, such as Qtile, for faster access. 
+
+```bash
+sh /home/matias/.scripts/citeboard.sh
+```
+
+Upon execution, a dmenu prompt will appear showing a list of citation references. Once a selection is made, a second prompt will appear to choose between "open" or "clipboard."
+
+<a name="examples" />
+
+#### Examples
+
+1. Run the script:
+   ```bash
+   sh /home/matias/.scripts/citeboard.sh
+   ```
+2. Select a reference from the list presented by dmenu.
+3. Choose "open" to view the document or "clipboard" to copy the citation.
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Ensure that the path to your BibTeX files and the storage directory are correctly specified in the script.
+- Verify that you have Evince installed for opening files.
+- You might want to adjust the `dmenu` options for better visual preferences.
+
+> **Critique:** The script currently relies on hardcoded paths, which might not adapt well if the directory structure changes. A potential improvement could involve accepting the path as a command-line argument or allowing the user to set it in a configuration file. Additionally, error handling is minimal; if no reference or selection is made, the script exits without feedback. Adding messages or logs would enhance user experience and troubleshooting.

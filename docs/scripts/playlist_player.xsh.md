@@ -1,79 +1,80 @@
-# playlist_player.xsh
-
-# Play Playlist Script
-
-This script allows you to select a playlist and play it using `cmus`, a small, fast, and powerful console music player. The playlist files must be in `.m3u` format and located in the `~/.playlists` directory.
-
-## Functionality
-
-- It lists all `.m3u` playlist files located in the `~/.playlists` directory.
-- Displays a menu to select a playlist using `dmenu`.
-- Clears the current playlist in `cmus`.
-- Adds the selected playlist to `cmus`.
-- Starts playing the selected playlist.
-
-## Usage
-
-Simply run the script. Ensure you have `cmus`, `dmenu`, and `xonsh` shell installed and properly configured on your system.
-
-## Requirements
-
-- `cmus`
-- `dmenu`
-- `xonsh` shell
-
-## Script Breakdown
-
-1. **Set Playlist Path**
-    ```python
-    import os
-    PLAYLIST_PATH = os.path.expanduser('~/.playlists')
-    ```
-
-   This sets the path to the directory that contains your `.m3u` playlist files.
-
-2. **Configure `cmus`**
-    ```python
-    cmus-remote -C 'view 4'
-    cmus-remote -C clear
-    ```
-
-   Switch `cmus` to the playlist view and clear the current playlist.
-
-3. **List Available Playlists**
-    ```python
-    options = '\n'.join(sorted([i.split('.')[0] for i in os.listdir(PLAYLIST_PATH) if 'm3u' in i]))
-    ```
-
-   Generate a sorted list of available playlists by stripping the `.m3u` extension.
-
-4. **Select Playlist**
-    ```python
-    choice = $(echo @(options) | dmenu -i -l 30).strip()
-    ```
-
-   Use `dmenu` to display the list of playlists and let the user pick one.
-
-5. **Add and Play Playlist**
-    ```python
-    cmus-remote -C @(f'add {PLAYLIST_PATH}/{choice}.m3u')
-    cmus-remote -n
-    cmus-remote -p
-    ```
-
-   Adds the selected playlist to `cmus`, skips to the next item, and starts playback.
-
-## Running the Script
-
-To run the script, save it with a `.xsh` extension and execute it in your terminal using the `xonsh` shell.
-
-Example:
-```sh
-xonsh your_script.xsh
-```
-
-Ensure that `cmus` and `dmenu` are installed and available in your `PATH`.
 
 ---
 
-This simple yet powerful script enables you to quickly switch between different music playlists in `cmus` with ease using a graphical menu.
+Play a selected playlist using cmus and dmenu.
+
+---
+
+### Table of contents
+
+- [Dependencies](#dependencies)
+- [Description](#description)
+    - [Overview](#overview)
+    - [Usage](#usage)
+    - [Examples](#examples)
+- [Notes](#notes)
+
+---
+
+<a name="dependencies" />
+
+### Dependencies
+
+- `cmus`: A music player for Unix-like systems.
+- `dmenu`: A dynamic menu for X, used for selecting the playlist.
+- `xonsh`: A Python-powered shell that combines command prompt features with the Python programming language.
+
+<a name="description" />
+
+### Description
+
+<a name="overview" />
+
+#### Overview
+
+The `playlist_player.xsh` script is designed to streamline the process of playing music playlists through the `cmus` music player on an Arch Linux environment using the `qtile` window manager. It provides a user-friendly interface by leveraging `dmenu` to allow users to select from all available `.m3u` playlists stored in a specified directory.
+
+The script begins by importing the necessary `os` module and setting a predefined path for the playlists (`~/.playlists`). It first clears any existing queue in `cmus`, then retrieves and sorts all `.m3u` files in the playlist directory. The user is presented with a list using `dmenu`, from which they can choose a playlist. Once a selection is made, the script adds the playlist to the `cmus` queue and starts playback.
+
+---
+
+<a name="usage" />
+
+#### Usage
+
+To use the script, simply execute it in a terminal. You can also bind it to a key in your window manager or run it from a launcher. Ensure that your playlists are located in the `~/.playlists` directory and are in the `.m3u` format.
+
+To run the script, use the following command in the terminal:
+
+```bash
+chmod +x /home/matias/.scripts/playlist_player.xsh
+/home/matias/.scripts/playlist_player.xsh
+```
+
+<a name="examples" />
+
+#### Examples
+
+1. **Run the Script**:
+   Simply invoke the script from a terminal:
+   ```bash
+   /home/matias/.scripts/playlist_player.xsh
+   ```
+
+2. **Keybinding Example** (for `qtile`):
+   Add to your configuration:
+   ```python
+   Key([mod], "p", lazy.spawn("/home/matias/.scripts/playlist_player.xsh")),
+   ```
+
+---
+
+<a name="notes" />
+
+### Notes
+
+- Make sure that `cmus` is running for the script to function properly; otherwise, the script will fail to control it.
+- `dmenu` can be customized in various ways, so feel free to modify its appearance or behavior to suit your preferences.
+- Ensure that the playlist files have the correct format and that they contain valid paths to music files.
+
+> **Critique**: The script assumes that `cmus` and `dmenu` are installed and configured correctly. If these dependencies are missing, the script will not function as intended. It could be improved by adding checks for these commands and providing user feedback if they are not present. Additionally, error handling could be enhanced in case there are no playlists or if an invalid selection is made.
