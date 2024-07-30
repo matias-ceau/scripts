@@ -1,8 +1,8 @@
-<template># llm-script-describer.py
+# llm-script-describer.py
 
 ---
 
-A Python script to generate GitHub documentation for user scripts using OpenAI.
+Generates markdown documentation for scripts with LLM assistance.
 
 ---
 
@@ -21,10 +21,10 @@ A Python script to generate GitHub documentation for user scripts using OpenAI.
 
 ### Dependencies
 
-- Python 3.x
-- OpenAI Python client
-- Colorama
-- Other standard library modules
+- `openai` Python package
+- `colorama` for colored terminal outputs
+- System utilities like `fd`, `rg`
+- Shell script: `utils_update_symlinks.sh`
 
 <a name="description" />
 
@@ -34,13 +34,13 @@ A Python script to generate GitHub documentation for user scripts using OpenAI.
 
 #### Overview
 
-The `llm-script-describer.py` script automates the process of generating Markdown documentation for user-defined scripts based on a provided CSV file. The script utilizes OpenAI's GPT-4o-mini model to create descriptions and aids in maintaining a clean documentation structure for scripts stored on an Arch Linux environment with the qtile window manager. 
+The `llm-script-describer.py` script is designed to help users generate markdown documentation for their scripts. The script utilizes a Language Model, specifically OpenAI's GPT-4o-mini, to provide descriptions based on the content of the scripts. This process helps ensure that the documentation is consistent and informative according to the context of Arch Linux and the Qtile window manager.
 
-Key functions include:
-- Reading script files and determining if they are binary or text.
-- Generating documentation from script content using OpenAI’s API.
-- Maintaining an index of files and checking for orphaned documentation.
-- Updating the README file with a summary and a table of scripts.
+The script follows several key steps:
+1. **Collecting Script Files**: It identifies all script files in the specified directory, excluding Markdown files.
+2. **Checking for Orphaned Documentation**: It checks for documentation files that do not correspond to any existing scripts.
+3. **Reading and Describing Scripts**: For each script, it reads its content, checks if it is binary, finds the source if necessary, and generates a description.
+4. **Markdown Generation**: Writes the generated description into a Markdown file and updates an index for easy access.
 
 ---
 
@@ -48,28 +48,29 @@ Key functions include:
 
 #### Usage
 
-To use the script, you need to run it from the terminal, supplying the path to a CSV file as an argument. If no path is provided, it defaults to `$SCRIPTS/data/symlink_data.csv`. Before running, ensure the required OpenAI API key is set in the environment.
+To use this script, follow these steps:
 
-Example command:
-```bash
-./llm-script-describer.py /path/to/symlink_data.csv
-```
+1. Ensure that you have the required dependencies installed and the environment variables set, specifically `SCRIPTS` and `OPENAI_API_KEY`.
+2. Execute the script from the terminal:
+   ```bash
+   python llm-script-describer.py [path/to/csv_file.csv]
+   ```
+   If no CSV path is specified, it defaults to `$SCRIPTS/data/symlink_data.csv`.
 
-Make sure you have the permissions to execute the script.
+The script prompts whether to run another utility script (`utils_update_symlinks.sh`) and processes the provided CSV for script paths, generating documentation as needed.
 
 <a name="examples" />
 
 #### Examples
 
-1. Default usage with pre-defined CSV path:
-```bash
-./llm-script-describer.py
-```
-
-2. Specify a custom CSV file:
-```bash
-./llm-script-describer.py /home/matias/scripts/my_scripts.csv
-```
+- Run the script with default CSV file:
+  ```bash
+  python llm-script-describer.py
+  ```
+- Process documentation with a custom CSV file:
+  ```bash
+  python llm-script-describer.py /home/matias/scripts/data/custom_symlink_data.csv
+  ```
 
 ---
 
@@ -77,9 +78,10 @@ Make sure you have the permissions to execute the script.
 
 ### Notes
 
-- Ensure that all required dependencies are installed before executing the script.
-- Orphaned documentation files are automatically checked and reported.
-- The script maintains a persistent list of script metadata in a JSON format for further processing or updates.
-  
-> **Critique:** 
-> While the script is functional, there are areas for improvement. For instance, the handling of errors during API calls could be more robust, potentially implementing retries. Moreover, the reliance on external file paths assumes a specific folder structure which might not be universally applicable. Adding configurations through command-line options could enhance its adaptability.
+- Ensure to update the OpenAI library as needed to maintain compatibility.
+- The generated documentation is placed in the `$SCRIPTS/docs/scripts` directory, with the Markdown files named after the scripts.
+- The script's exit status reflects various outcomes; refer to console messages for detailed information during execution.
+
+> **Critique**: 
+> - The use of shell commands like `fd` and `rg` assumes availability on the system, which may not be present in all configurations. More graceful handling of such dependencies could improve usability.
+> - Error handling could be enhanced in functions like `describe_script` to provide more informative feedback on specific failures related to the OpenAI API or file reading issues. This could also include retries or more detailed logging for debugging purposes.

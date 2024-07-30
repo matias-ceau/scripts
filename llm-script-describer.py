@@ -314,9 +314,12 @@ def cleanup_after_the_llm():
     patterns = ["^<template>", "</template>"]
     for pattern in patterns:
         try:
+            print(DOCS)
+            print(pattern)
+            print(f"\'{pattern}\'")
             subprocess.run([
-                'rg', pattern, DOCS, '-l',
-                '|', 'xargs', 'sed', '-i', f'/{pattern}/d'
+                'rg', f"\'{pattern}\'", DOCS, '-l',
+                '|', 'xargs', 'sed', '-i', f"\'/{pattern}/d\'"
             ], shell=True, check=True)
         except subprocess.CalledProcessError:
             print(f"No files found with '{pattern}'")

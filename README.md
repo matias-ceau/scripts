@@ -39,7 +39,7 @@ This repository contains a collection of personal scripts for various tasks. The
 | [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) | A script to create a new tmux session for the cmus music player. |
 | [list_process.sh](docs/scripts/list_process.sh.md) | Lists running services on the system. |
 | [llama-all-scripts-describer.py](docs/scripts/llama-all-scripts-describer.py.md) | Generates GitHub documentation for user scripts using Llama 3.1 model. |
-| [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) | A Python script to generate GitHub documentation for user scripts using OpenAI. |
+| [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) | Generates markdown documentation for scripts with LLM assistance. |
 | [m3u_creator.sh](docs/scripts/m3u_creator.sh.md) | Create an m3u file from all files in the current directory. |
 | [mechen_music_transfert.py](docs/scripts/mechen_music_transfert.py.md) | Custom script to copy music to Mechen |
 | [midi2arch.xsh](docs/scripts/midi2arch.xsh.md) | Transform a midi controller to a keyboard/script launcher |

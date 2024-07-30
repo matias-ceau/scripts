@@ -338,8 +338,8 @@
   "llm-script-describer.py": {
     "file": "llm-script-describer.py",
     "path": "llm-script-describer.py",
-    "description": "A Python script to generate GitHub documentation for user scripts using OpenAI.",
+    "description": "Generates markdown documentation for scripts with LLM assistance.",
     "doc_path": "docs/scripts/llm-script-describer.py.md",
-    "hash": "76a47b097fc445bda6d8d7f7eda566ba380c74e3d77543fbb596f6adef25e421"
+    "hash": "247c6e7706ffdb99df169ee962f7f786473cf9e919939a2cd23e946316c6f296"
   }
 }
