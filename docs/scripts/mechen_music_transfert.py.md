@@ -2,7 +2,7 @@
 
 ---
 
-**[mechen_music_transfert.py](mechen_music_transfert.py)**: Custom script to copy music to Mechen
+**[mechen_music_transfert.py](/mechen_music_transfert.py)**: Custom script to copy music to Mechen
 
 ---
 

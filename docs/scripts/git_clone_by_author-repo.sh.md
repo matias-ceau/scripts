@@ -2,7 +2,7 @@
 
 ---
 
-**[git_clone_by_author.sh](git_clone_by_author.sh)**: A script to clone git repositories based on developer/package name using various options.
+**[git_clone_by_author.sh](/git_clone_by_author.sh)**: A script to clone git repositories based on developer/package name using various options.
 
 ---
 

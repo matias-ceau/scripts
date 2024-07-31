@@ -2,7 +2,7 @@
 
 ---
 
-**[citeboard.sh](citeboard.sh)**: A script to find and handle paper citations easily.
+**[citeboard.sh](/citeboard.sh)**: A script to find and handle paper citations easily.
 
 ---
 

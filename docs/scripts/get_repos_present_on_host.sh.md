@@ -2,7 +2,7 @@
 
 ---
 
-**[get_repos_present_on_host.sh](get_repos_present_on_host.sh)**: Script to list git repositories on the local host and save to files.
+**[get_repos_present_on_host.sh](/get_repos_present_on_host.sh)**: Script to list git repositories on the local host and save to files.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[fzfmenu_run.sh](fzfmenu_run.sh)**: A script to replace dmenu with fzf for running commands in a floating terminal.
+**[fzfmenu_run.sh](/fzfmenu_run.sh)**: A script to replace dmenu with fzf for running commands in a floating terminal.
 
 ---
 

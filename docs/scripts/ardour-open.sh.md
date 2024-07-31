@@ -2,7 +2,7 @@
 
 ---
 
-**[ardour-open.sh](ardour-open.sh)**: A script to open Ardour sessions quickly using dmenu.
+**[ardour-open.sh](/ardour-open.sh)**: A script to open Ardour sessions quickly using dmenu.
 
 ---
 

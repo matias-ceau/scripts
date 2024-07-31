@@ -2,7 +2,7 @@
 
 ---
 
-**[random_wallpapers.xsh](random_wallpapers.xsh)**: Pick a random wallpaper from a specified directory
+**[random_wallpapers.xsh](/random_wallpapers.xsh)**: Pick a random wallpaper from a specified directory
 
 ---
 

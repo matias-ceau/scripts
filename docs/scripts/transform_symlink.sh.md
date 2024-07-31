@@ -2,7 +2,7 @@
 
 ---
 
-**[transform_symlink.sh](transform_symlink.sh)**: Convert symlinks to copies of their target files or directories.
+**[transform_symlink.sh](/transform_symlink.sh)**: Convert symlinks to copies of their target files or directories.
 
 ---
 

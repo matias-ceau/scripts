@@ -2,7 +2,7 @@
 
 ---
 
-**[playlist_player.xsh](playlist_player.xsh)**: A script for selecting and playing playlists in cmus with dmenu.
+**[playlist_player.xsh](/playlist_player.xsh)**: A script for selecting and playing playlists in cmus with dmenu.
 
 ---
 

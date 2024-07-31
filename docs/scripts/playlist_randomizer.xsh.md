@@ -2,7 +2,7 @@
 
 ---
 
-**[playlist_randomizer.xsh](playlist_randomizer.xsh)**: Randomly selects and plays a playlist of albums in cmus.
+**[playlist_randomizer.xsh](/playlist_randomizer.xsh)**: Randomly selects and plays a playlist of albums in cmus.
 
 ---
 

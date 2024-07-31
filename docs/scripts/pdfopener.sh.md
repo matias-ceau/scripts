@@ -2,7 +2,7 @@
 
 ---
 
-**[pdfopener.sh](pdfopener.sh)**: A script to pick and open a PDF file using Evince
+**[pdfopener.sh](/pdfopener.sh)**: A script to pick and open a PDF file using Evince
 
 ---
 

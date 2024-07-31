@@ -2,7 +2,7 @@
 
 ---
 
-**[toggle_picom.sh](toggle_picom.sh)**: Script to toggle the Picom compositor on and off.
+**[toggle_picom.sh](/toggle_picom.sh)**: Script to toggle the Picom compositor on and off.
 
 ---
 

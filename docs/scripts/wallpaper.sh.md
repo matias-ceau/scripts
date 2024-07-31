@@ -2,7 +2,7 @@
 
 ---
 
-**[wallpaper.sh](wallpaper.sh)**: Automatically change wallpapers from a specified collection.
+**[wallpaper.sh](/wallpaper.sh)**: Automatically change wallpapers from a specified collection.
 
 ---
 

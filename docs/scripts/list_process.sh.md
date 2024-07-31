@@ -2,7 +2,7 @@
 
 ---
 
-**[list_process.sh](list_process.sh)**: Script to list all running services on the system in sorted order.
+**[list_process.sh](/list_process.sh)**: Script to list all running services on the system in sorted order.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[colormap_from_text.sh](colormap_from_text.sh)**: Extracts color palettes from config files.
+**[colormap_from_text.sh](/colormap_from_text.sh)**: Extracts color palettes from config files.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[edit_chezmoi_cfg_files.sh](edit_chezmoi_cfg_files.sh)**: A script to edit Chezmoi managed configuration files using fzf.
+**[edit_chezmoi_cfg_files.sh](/edit_chezmoi_cfg_files.sh)**: A script to edit Chezmoi managed configuration files using fzf.
 
 ---
 

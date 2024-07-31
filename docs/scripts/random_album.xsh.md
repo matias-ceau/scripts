@@ -2,7 +2,7 @@
 
 ---
 
-**[random_album.xsh](random_album.xsh)**: Select random album and play it with cmus
+**[random_album.xsh](/random_album.xsh)**: Select random album and play it with cmus
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[vimwiki.sh](vimwiki.sh)**: Open a note in vim using fzf for quick selection.
+**[vimwiki.sh](/vimwiki.sh)**: Open a note in vim using fzf for quick selection.
 
 ---
 

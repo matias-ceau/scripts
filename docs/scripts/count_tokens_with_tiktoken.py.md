@@ -2,7 +2,7 @@
 
 ---
 
-**[count_tokens_with_tiktoken.py](count_tokens_with_tiktoken.py)**: A Python script to count the number of tokens in a text file using tiktoken
+**[count_tokens_with_tiktoken.py](/count_tokens_with_tiktoken.py)**: A Python script to count the number of tokens in a text file using tiktoken
 
 ---
 

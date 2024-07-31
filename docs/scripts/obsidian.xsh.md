@@ -2,7 +2,7 @@
 
 ---
 
-**[obsidian.xsh](obsidian.xsh)**: A script to open Obsidian vaults using a selection menu.
+**[obsidian.xsh](/obsidian.xsh)**: A script to open Obsidian vaults using a selection menu.
 
 ---
 

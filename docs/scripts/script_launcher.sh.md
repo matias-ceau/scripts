@@ -1,51 +1,53 @@
-# Script Launcher - Run Scripts with FZF
+# Script Launcher
 
 ---
 
-**[script_launcher.sh](script_launcher.sh)**: Launches user scripts using fzf with a preview pane.
+**script_launcher.sh**: Launch scripts using fzf with customizable previews and commands.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`. It's used to efficiently search your scripts directory.
-- `xargs`: A command that builds and executes command lines from standard input.
-- `improved-fzfmenu.sh`: A custom fzf menu script designed to enhance script selection with features like previews.
-- `bat`: A `cat` clone with syntax highlighting and Git integration. It is utilized for previewing script documentation.
+- `fzf`: A command-line fuzzy finder, essential for script selection.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `bat`: A cat clone with syntax highlighting and Git integration, used for previewing script documentation.
+- `improved-fzfmenu.sh`: A custom script that enhances the functionality of `fzf`.
 
 ### Description
 
-This script utilizes `fd` to search for executable scripts within the specified `$SCRIPTS` directory. It then pipes the results into an improved fzf menu, allowing users to interactively select and run their scripts. 
+This script provides an interactive menu for running other scripts stored in a specified directory. Utilizing `fzf`, it enables users to quickly find and execute scripts with enhanced functionality, such as previews of documentation and source files. 
 
-The script's flow works as follows:
-1. `fd` is executed with an empty search string to list all scripts in the `$SCRIPTS` directory.
-2. The output is formatted by `xargs`, which extracts just the filenames using `basename`.
-3. The filenames are passed to `improved-fzfmenu.sh`, which presents them in a fzf interface.
-4. A preview feature is integrated, powered by `bat`, allowing users to preview documentation of each script.
-5. Upon selecting a script and pressing `enter`, the script will execute in a new bash shell.
+The essential logic flows as follows:
 
-The script also includes a commented-out line that, when activated, runs selected scripts in the background.
+1. **Preview Commands**:
+   - The script builds two preview commands using `bat`:
+     - `preview_cmd_docs`: Displays the documentation for the script.
+     - `preview_cmd_source`: Shows the source code of the selected script.
+
+2. **Script Selection**:
+   - It utilizes `fd` to find scripts in the `$SCRIPTS` directory, presenting them through `improved-fzfmenu.sh` with interactive behavior:
+     - Pressing **Enter** executes the selected script.
+     - Alt + E opens the selected script in `nvim`.
+     - Alt + S switches the preview to the source code.
+     - Alt + D reverts the preview to the documentation.
 
 ### Usage
 
-To use the script, place it in your desired location, ensure it's executable, and run it via terminal as follows:
+To use the `script_launcher.sh`, simply execute it in your terminal:
 
 ```bash
 bash /home/matias/.scripts/script_launcher.sh
 ```
 
-Alternatively, you can bind it to a keyboard shortcut in your window manager (Qtile) configuration:
+You can navigate through the presented list of scripts by typing or using the arrow keys, and then select them using **Enter**.  
 
-```python
-Key([mod], 's', lazy.spawn('/home/matias/.scripts/script_launcher.sh')),
-```
-
-In this setup, pressing `mod+s` would trigger the script launcher.
+Here are some example keybindings:
+- **Enter**: Run the script.
+- **Alt + E**: Edit the script using `nvim`.
+- **Alt + S**: Preview the source code of the script.
+- **Alt + D**: Preview the documentation of the script.
 
 ---
 
 > [!TIP]
-> Some enhancements could be made:
-> - Consider adding error handling to inform users if no scripts are found.
-> - The `$SCRIPTS` variable should be defined or accessible in the script to avoid errors.
-> - If the script is not intended to run in the background often, the commented line could be removed to declutter the script.
+> Consider adding error handling for scenarios where `fd` doesn't find any scripts or where external commands (like `bat` or `nvim`) fail to execute. This will make the script more robust and user-friendly. Additionally, clarifying the `$SCRIPTS` variable definition in the documentation would enhance user comprehension.

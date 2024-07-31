@@ -2,7 +2,7 @@
 
 ---
 
-**[fzf_albumlauncher.xsh](fzf_albumlauncher.xsh)**: Choose and play an album using fzf and cmus
+**[fzf_albumlauncher.xsh](/fzf_albumlauncher.xsh)**: Choose and play an album using fzf and cmus
 
 ---
 

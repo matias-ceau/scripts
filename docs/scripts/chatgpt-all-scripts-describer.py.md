@@ -2,7 +2,7 @@
 
 ---
 
-**[chatgpt-all-scripts-describer.py](chatgpt-all-scripts-describer.py)**: Automatic documentation generator for user scripts using OpenAI API.
+**[chatgpt-all-scripts-describer.py](/chatgpt-all-scripts-describer.py)**: Automatic documentation generator for user scripts using OpenAI API.
 
 ---
 

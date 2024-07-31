@@ -2,7 +2,7 @@
 
 ---
 
-**[songlauncher.sh](songlauncher.sh)**: Play a song with cmus using dmenu
+**[songlauncher.sh](/songlauncher.sh)**: Play a song with cmus using dmenu
 
 ---
 

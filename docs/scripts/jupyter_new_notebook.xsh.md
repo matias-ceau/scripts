@@ -2,7 +2,7 @@
 
 ---
 
-**[jupyter_new_notebook.xsh](jupyter_new_notebook.xsh)**: A script to create and open a new Jupyter notebook in Chromium
+**[jupyter_new_notebook.xsh](/jupyter_new_notebook.xsh)**: A script to create and open a new Jupyter notebook in Chromium
 
 ---
 

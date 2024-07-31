@@ -2,7 +2,7 @@
 
 ---
 
-**[editor.sh](editor.sh)**: Edit any file in current folder or subfolders (recursively)
+**[editor.sh](/editor.sh)**: Edit any file in current folder or subfolders (recursively)
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[utils_update_symlinks](utils_update_symlinks)**: Automates the creation and management of symlinks in ~/.local/bin
+**[utils_update_symlinks](/utils_update_symlinks)**: Automates the creation and management of symlinks in ~/.local/bin
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[dmenu_run_scripts.xsh](dmenu_run_scripts.xsh)**: A script to run user scripts via dmenu or rofi.
+**[dmenu_run_scripts.xsh](/dmenu_run_scripts.xsh)**: A script to run user scripts via dmenu or rofi.
 
 ---
 

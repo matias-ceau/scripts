@@ -2,7 +2,7 @@
 
 ---
 
-**[vox.py](vox.py)**: A script for listing and displaying options for Vox amplifiers.
+**[vox.py](/vox.py)**: A script for listing and displaying options for Vox amplifiers.
 
 ---
 

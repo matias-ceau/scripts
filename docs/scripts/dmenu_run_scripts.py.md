@@ -2,7 +2,7 @@
 
 ---
 
-**[dmenu_run_scripts.py](dmenu_run_scripts.py)**: A Python script to dynamically run scripts using rofi as a dmenu alternative.
+**[dmenu_run_scripts.py](/dmenu_run_scripts.py)**: A Python script to dynamically run scripts using rofi as a dmenu alternative.
 
 ---
 

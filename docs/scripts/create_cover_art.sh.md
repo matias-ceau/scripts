@@ -2,7 +2,7 @@
 
 ---
 
-**[create_cover_art.sh](create_cover_art.sh)**: A script to generate cover art from WAV file spectrograms
+**[create_cover_art.sh](/create_cover_art.sh)**: A script to generate cover art from WAV file spectrograms
 
 ---
 

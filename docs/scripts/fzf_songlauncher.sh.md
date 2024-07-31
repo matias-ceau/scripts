@@ -2,7 +2,7 @@
 
 ---
 
-**[fzf_songlauncher.sh](fzf_songlauncher.sh)**: Play a song with cmus using fzf to choose the file.
+**[fzf_songlauncher.sh](/fzf_songlauncher.sh)**: Play a song with cmus using fzf to choose the file.
 
 ---
 

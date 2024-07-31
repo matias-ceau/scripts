@@ -2,7 +2,7 @@
 
 ---
 
-**[update_env.xsh](update_env.xsh)**: update_env.xsh - Update .env file with API keys from xonsh environment
+**[update_env.xsh](/update_env.xsh)**: update_env.xsh - Update .env file with API keys from xonsh environment
 
 ---
 

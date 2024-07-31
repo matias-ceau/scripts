@@ -2,7 +2,7 @@
 
 ---
 
-**[m3u_creator.sh](m3u_creator.sh)**: Generate an M3U playlist file from the current directory files.
+**[m3u_creator.sh](/m3u_creator.sh)**: Generate an M3U playlist file from the current directory files.
 
 ---
 

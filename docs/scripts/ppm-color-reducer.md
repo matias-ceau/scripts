@@ -2,7 +2,7 @@
 
 ---
 
-**[ppm-color-reducer](ppm-color-reducer.c)**: A tool to reduce color depth in PPM images based on a given palette.
+**[ppm-color-reducer](/ppm-color-reducer.c)**: A tool to reduce color depth in PPM images based on a given palette.
 
 ---
 

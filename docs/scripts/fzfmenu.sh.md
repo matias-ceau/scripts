@@ -2,7 +2,7 @@
 
 ---
 
-**[fzf.sh](fzf.sh)**: A wrapper script to launch fzf in a terminal for menu selection.
+**[fzf.sh](/fzf.sh)**: A wrapper script to launch fzf in a terminal for menu selection.
 
 ---
 

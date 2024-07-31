@@ -2,7 +2,7 @@
 
 ---
 
-**[sync-repo.sh](sync-repo.sh)**: Bash script for synchronizing a Git repository with practical features
+**[sync-repo.sh](/sync-repo.sh)**: Bash script for synchronizing a Git repository with practical features
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[you_are_not_documented.sh](you_are_not_documented.sh)**: A script that finds scripts without inline documentation
+**[you_are_not_documented.sh](/you_are_not_documented.sh)**: A script that finds scripts without inline documentation
 
 ---
 

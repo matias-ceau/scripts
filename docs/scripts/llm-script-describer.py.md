@@ -2,53 +2,50 @@
 
 ---
 
-**[llm-script-describer.py](llm-script-describer.py)**: Auto-generates Markdown documentation for user scripts.
+**llm-script-describer.py**: Generates markdown documentation for user scripts using GPT-4.
 
 ---
 
 ### Dependencies
 
-- `openai`: Python wrapper for the OpenAI API, required for generating descriptions.
-- `colorama`: Library to enable colored terminal text for better readability.
-- `csv`: Built-in Python library for handling CSV file operations.
-- `subprocess`: Built-in Python library for executing system commands.
-- `json`: Built-in Python library for JSON file operations.
-- `hashlib`: Built-in library for secure hash functions.
+- `python`: The base programming language.
+- `openai`: Needed to interact with the OpenAI API for generating script descriptions.
+- `colorama`: A library for colored terminal text output.
+- `csv`: Standard library for handling CSV files.
+- `subprocess`: Standard library for executing shell commands.
+- `argparse`: Standard library for command-line argument parsing.
+- `json`: Standard library for JSON file handling.
 
 ### Description
 
-The **LLM Script Describer** is a Python script designed to automate the creation of Markdown documentation for user scripts stored in a specified directory. It does this by using the OpenAI API to generate descriptions based on the content and metadata of each script. This facilitates efficient documentation management for users on systems running Arch Linux with the Qtile window manager.
+The `llm-script-describer.py` script automates the process of generating Markdown documentation for user scripts based on GPT-4 model responses. Key functionalities include:
 
-The script performs several key functions:
+- **Dependency Management**: Ensures necessary libraries are loaded and environment variables are set.
+- **Script Processing**: Reads and analyzes scripts, leveraging a conversational AI model to create detailed Markdown descriptions.
+- **File Management**: Identifies orphaned documentation, manages symlinks, and creates or updates documentation files.
+- **Indexing and README Updates**: Updates a central index of scripts and integrates summaries into a project README file.
 
-- **Reading Scripts**: It can read scripts from standard formats (e.g., `.py`, `.sh`) and even find source files for binary scripts.
-- **Documentation Generation**: It utilizes the OpenAI API (with the `gpt-4o-mini` model) to create descriptive Markdown files based on individual script content.
-- **GitHub Integration**: The generated Markdown files are organized and indexed, allowing for seamless integration with GitHub's documentation structure.
-- **Automatic Updates**: It can update README files and remove orphaned documentation files automatically, keeping the documentation up-to-date and relevant based on the user's script repository.
+The script processes each script listed in a specified CSV file, handling both binary and source files, ensuring that documentation is accurate and up-to-date.
 
 ### Usage
 
-To run the script, you must provide the path to a CSV file that lists script metadata, including original paths and desired symlinks. The default path points to `$SCRIPTS/data/symlink_data.csv`. You may also run it directly from your terminal.
+To use the script, run it from the terminal with an optional CSV file path argument. The default path is set to `$SCRIPTS/data/symlink_data.csv`. Here’s how to do this:
 
 ```bash
-python /home/matias/.scripts/llm-script-describer.py /path/to/your/symlink_data.csv
+python3 /home/matias/.scripts/llm-script-describer.py /path/to/your.csv
 ```
 
-#### Key Options
+#### Command-Line Arguments
 
-- `--help`: Displays a help message.
-  
-#### Example
+- `csv_path`: (optional) Path to the CSV file containing the script data. If not provided, defaults to `$SCRIPTS/data/symlink_data.csv`.
 
-1. Place your scripts in the designated `$SCRIPTS` directory.
-2. Create a CSV file with entries such as:
-   ```
-   original_script_path, symlink_path, command_name
-   /path/to/script1.py, script1, description of script1
-   ```
-3. Execute the script as shown above.
-4. The script will generate Markdown documentation files for each listed script and update the README accordingly.
+**Interactive Prompt**: The script may prompt you to run an optional symlink update script (`utils_update_symlinks.sh`). You can decide whether to proceed with this update.
+
+```bash
+Do you want to run utils_update_symlinks.sh? (y/N):
+```
 
 ---
 
-> [!TIP] Consider handling exceptions more gracefully, especially for external command executions with `subprocess`. Implementing retries or logging can provide better insight into failures. Additionally, ensure that your API key environment variable is set and valid before execution.
+> [!TIP]  
+> The script assumes the OpenAI API key is set in the environment variable `OPENAI_API_KEY`. Ensure this is configured before running to avoid errors. Additionally, the script could benefit from more robust error handling, especially for network-related operations and while reading files.

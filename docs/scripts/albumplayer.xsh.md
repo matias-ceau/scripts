@@ -2,7 +2,7 @@
 
 ---
 
-**[albumplayer.xsh](albumplayer.xsh)**: Play a random album selection with cmus using dmenu
+**[albumplayer.xsh](/albumplayer.xsh)**: Play a random album selection with cmus using dmenu
 
 ---
 

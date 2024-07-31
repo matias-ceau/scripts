@@ -2,7 +2,7 @@
 
 ---
 
-**[midi2arch.xsh](midi2arch.xsh)**: A script to transform a MIDI controller into a keyboard/script launcher 
+**[midi2arch.xsh](/midi2arch.xsh)**: A script to transform a MIDI controller into a keyboard/script launcher 
 
 ---
 

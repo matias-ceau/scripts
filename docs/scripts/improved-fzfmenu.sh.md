@@ -2,7 +2,7 @@
 
 ---
 
-**[improved-fzfmenu.sh](improved-fzfmenu.sh)**: A Bash script that launches `fzf` in an Alacritty terminal with custom settings.
+**[improved-fzfmenu.sh](/improved-fzfmenu.sh)**: A Bash script that launches `fzf` in an Alacritty terminal with custom settings.
 
 ---
 

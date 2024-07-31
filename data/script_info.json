@@ -163,9 +163,9 @@
   "llm-script-describer.py": {
     "file": "llm-script-describer.py",
     "path": "llm-script-describer.py",
-    "description": "Auto-generates Markdown documentation for user scripts.",
+    "description": "Generates markdown documentation for user scripts using GPT-4.",
     "doc_path": "docs/scripts/llm-script-describer.py.md",
-    "hash": "4b2c79f457d9008a129ad3c8f88b3bc77aeb868322047433e3caaa94ae21ff87"
+    "hash": "254035c07b5275f691acf2f315a6efc9df8b9263a62cdee7fad3dded4e3a23be"
   },
   "m3u_creator.sh": {
     "file": "m3u_creator.sh",
@@ -254,9 +254,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "Launches user scripts using fzf with a preview pane.",
+    "description": "Launch scripts using fzf with customizable previews and commands.",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "01d8b7389523fae46d73614c45403ca45b830f9abfff09bd02483ad577728add"
+    "hash": "b06b3b4e9191dbdeeb8154f4a65ad97e26967b7dfc68c0c115c6093e54366f13"
   },
   "select_script": {
     "file": "select_script",
@@ -341,5 +341,12 @@
     "description": "A script that finds scripts without inline documentation",
     "doc_path": "docs/scripts/you_are_not_documented.sh.md",
     "hash": "86e083c3282edc4e34b1a0e876575f39583c7ce34cde832ea57e54b9c429cd56"
+  },
+  "fix-markdown-links.sh": {
+    "file": "fix-markdown-links.sh",
+    "path": "fix-markdown-links.sh",
+    "description": "A script to fix relative links in Markdown files.",
+    "doc_path": "docs/scripts/fix-markdown-links.sh.md",
+    "hash": "6aa54826672ca92d456ee5376357afe67ff284471e51785c1e5f94c9174db8b5"
   }
 }

@@ -2,7 +2,7 @@
 
 ---
 
-**[chezmoi_on_a_new_system.sh](chezmoi_on_a_new_system.sh)**: Script to initialize Chezmoi on a new system for a specific user
+**[chezmoi_on_a_new_system.sh](/chezmoi_on_a_new_system.sh)**: Script to initialize Chezmoi on a new system for a specific user
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-**[sandisk_music_transfert.py](sandisk_music_transfert.py)**: Python script to transfer music to a Sandisk media player from a local library.
+**[sandisk_music_transfert.py](/sandisk_music_transfert.py)**: Python script to transfer music to a Sandisk media player from a local library.
 
 ---
 

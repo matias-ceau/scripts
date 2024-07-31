@@ -2,7 +2,7 @@
 
 ---
 
-**[select_script](select_script.c)**: A C script for selecting and executing a script from a cached list.
+**[select_script](/select_script.c)**: A C script for selecting and executing a script from a cached list.
 
 ---
 

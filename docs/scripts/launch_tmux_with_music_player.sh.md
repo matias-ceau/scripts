@@ -2,7 +2,7 @@
 
 ---
 
-**[launch_tmux_with_music_player.sh](launch_tmux_with_music_player.sh)**: Script to create a tmux session for running cmus
+**[launch_tmux_with_music_player.sh](/launch_tmux_with_music_player.sh)**: Script to create a tmux session for running cmus
 
 ---
 

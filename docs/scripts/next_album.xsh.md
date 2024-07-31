@@ -2,7 +2,7 @@
 
 ---
 
-**[next_album.xsh](next_album.xsh)**: Skip to the next album in CMUS audio player
+**[next_album.xsh](/next_album.xsh)**: Skip to the next album in CMUS audio player
 
 ---
 
