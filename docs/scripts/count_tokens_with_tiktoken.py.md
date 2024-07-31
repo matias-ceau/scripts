@@ -1,93 +1,53 @@
-# Count Tokens with Tiktoken (count_tokens_with_tiktoken.py)
+# Token Counter with tiktoken
 
 ---
 
-A script to count the number of tokens in a text file using tiktoken.
+**[count_tokens_with_tiktoken.py](count_tokens_with_tiktoken.py)**: A Python script to count the number of tokens in a text file using tiktoken
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Python 3.x
-- tiktoken library (installable via pip)
-
-<a name="description" />
+- `tiktoken`: A tokenizer for OpenAI models, providing functions for encoding and decoding text into tokens. Install via pip (`pip install tiktoken`).
 
 ### Description
 
-<a name="overview" />
+The `count_tokens_with_tiktoken.py` script is designed to count the number of tokens in a given text file using the `tiktoken` library, which is specifically tailored for OpenAI's language models. Tokens are the basic units that these models use to process and generate text, making this script a valuable tool for understanding text length in a format that models comprehend.
 
-#### Overview
+The script includes the function `count_tokens(file_path)` that:
+1. Reads the contents of the specified text file.
+2. Encodes the text into tokens using the model "gpt-4o".
+3. Returns the total number of tokens.
 
-This Python script counts the number of tokens in a specified text file using the `tiktoken` library, which is designed for tokenization in models such as OpenAI's GPT. It utilizes the encoding for the "gpt-4o" model to ensure accurate token counts.
+The script also handles command-line interaction, ensuring that the user provides the necessary file path.
 
-The main functionalities of the script include:
-- Reading the content of a file.
-- Tokenizing the entire text based on the specified model encoding.
-- Returning the total number of tokens counted.
+### Usage
 
-The script is structured to provide a command-line interface where users can easily input the path of the target text file. 
+To use the script, follow these steps:
 
----
+1. Make sure you have Python 3 and the necessary library installed:
+   ```bash
+   pip install tiktoken
+   ```
 
-<a name="usage" />
+2. Execute the script from the terminal by providing the path to the text file you want to analyze:
+   ```bash
+   python count_tokens_with_tiktoken.py <file_path>
+   ```
 
-#### Usage
+   Replace `<file_path>` with the actual path to your text file.
 
-To use the script, it must be run from the terminal with the following syntax:
+   For example:
+   ```bash
+   python count_tokens_with_tiktoken.py /path/to/your/textfile.txt
+   ```
 
-```
-python count_tokens_with_tiktoken.py <file_path>
-```
-
-- Replace `<file_path>` with the absolute or relative path to the text file you wish to analyze.
-- The script will output the number of tokens in the specified file.
-
-Note that the script expects exactly one argument; if none or more are provided, it will display a usage message and exit.
-
-<a name="examples" />
-
-#### Examples
-
-- Counting tokens in a file named `example.txt`:
-
-```
-python count_tokens_with_tiktoken.py example.txt
-```
-
-Output:
-```
-Number of tokens: 123
-```
+   You will receive an output with the number of tokens used in the provided file:
+   ```
+   Number of tokens: 256
+   ```
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that the `tiktoken` library is installed in your Python environment. You can install it using pip:
-
-```
-pip install tiktoken
-```
-
-- The script currently only supports UTF-8 encoded text files.
-
-> **Critique**  
-> The script efficiently counts tokens, but it could be improved by adding error handling for file not found exceptions. Additionally, providing more detailed output, such as the input file name in the output message, could enhance user experience. 
-
-Consider expanding the functionality to include options for different tokenization models if necessary, allowing users to specify the model as a command-line argument.
+> [!TIP]  
+> Consider adding input validation for the file path to handle cases where the provided file does not exist or is not readable. Additionally, expanding the script to accept multiple file paths as arguments would enhance its usability for batch processing.

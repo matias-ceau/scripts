@@ -1,84 +1,50 @@
-# Transform Symlink (transform_symlink.sh)
+# Transform Symlinks
 
 ---
 
-Replace a symbolic link with its target file.
+**[transform_symlink.sh](transform_symlink.sh)**: Convert symlinks to copies of their target files or directories.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Bash
-- `readlink` command (available by default on most Linux distributions)
-
-<a name="description" />
+- `fd`: A simple, fast and user-friendly alternative to `find`. Used for finding symlinks.
+- `fzf`: A command-line fuzzy finder. Provides an interactive interface for selecting items.
+- `bat`: A cat clone with syntax highlighting. Used to preview the contents of files in `fzf`.
 
 ### Description
 
-<a name="overview" />
+The `transform_symlink.sh` script is a utility designed to convert symbolic links (symlinks) into regular files or directories. It simplifies the process of dealing with symlinks in the file system by providing an interactive selection menu, allowing users to choose which symlinks to transform.
 
-#### Overview
+The script includes two operational modes:
+1. **Interactive Mode**: If no arguments are provided, the script searches the current directory recursively for symlinks using `fd` and presents them in an `fzf` menu for selection.
+2. **Direct Mode**: If one or more symlink paths are provided as arguments, the script attempts to transform each specified symlink without interactive assistance.
 
-This script is designed for users who want to replace a symbolic link with the actual file it points to. It performs several checks to ensure that the operation is safe:
+In either mode, the script checks if the selected item is indeed a symlink. If valid, it retrieves the target path using `readlink`. It also checks if the target exists before proceeding to remove the original symlink and copy the target files/directories in its place.
 
-1. It checks if exactly one argument (the symlink) is provided.
-2. It verifies that the provided argument is indeed a symbolic link.
-3. It uses the `readlink` command to find the target file of the symlink.
-4. It copies the target file to a new file with the same name as the original symlink, effectively replacing the symlink with the actual file.
+### Usage
 
-This utility can be particularly useful for cleaning up symbolic links after usage, ensuring that the original file is retained without cluttering your file system with unnecessary links.
+To run the script, ensure it has execution permissions and then execute it as follows:
+
+#### Interactive Mode
+```bash
+./transform_symlink.sh
+```
+This will initiate an interactive mode using `fzf` to select one or more symlinks to transform.
+
+#### Direct Mode
+```bash
+./transform_symlink.sh /path/to/symlink1 /path/to/symlink2
+```
+You can specify one or multiple symlink paths directly. The script will attempt to transform each one in turn.
+
+#### Help Option
+To view usage information and options:
+```bash
+./transform_symlink.sh --help
+```
 
 ---
 
-<a name="usage" />
-
-#### Usage
-
-To use the script, execute it from a terminal with the path of the symbolic link you wish to transform as the argument. For example:
-
-```bash
-./transform_symlink.sh /path/to/symlink
-```
-
-Make sure to give the script executable permissions if you haven't done so yet:
-
-```bash
-chmod +x /home/matias/.scripts/transform_symlink.sh
-```
-
-<a name="examples" />
-
-#### Examples
-
-1. To transform a symlink named `my_link` into the target it points to:
-
-```bash
-/home/matias/.scripts/transform_symlink.sh my_link
-```
-
-If `my_link` points to `/home/matias/file.txt`, this command replaces `my_link` with `file.txt`.
-
----
-
-<a name="notes" />
-
-### Notes
-
-- This script does not handle scenarios where the target file is missing or not accessible. If the target of the symlink cannot be found, the script will fail.
-- Ensure that replacing the symlink is the desired action, as this operation cannot be undone once executed.
-
-> **Critique:** 
-> The script currently lacks error handling for situations where the target file may not exist or is not readable. It could be improved by adding checks to ensure that the target file is present and accessible before attempting to copy it. Additionally, it could offer an option to back up the existing symlink before replacing it for better safety.
+> [!TIP]  
+> The script currently assumes that the target of the symlink exists and does not check for overwrite conditions where a file already exists at the symlink's location. Future enhancements could include a prompt for overwriting, as well as additional error handling for edge cases like circular symlinks.

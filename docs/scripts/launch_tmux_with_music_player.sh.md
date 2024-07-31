@@ -1,95 +1,46 @@
-# Launch Tmux with Music Player (launch_tmux_with_music_player.sh)
+# Launch Tmux with Music Player
 
 ---
 
-A script to start a new tmux session for cmus music player.
+**[launch_tmux_with_music_player.sh](launch_tmux_with_music_player.sh)**: Script to create a tmux session for running cmus
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer.
-- `cmus`: Console-based music player.
-
-<a name="description" />
+- `tmux`: A terminal multiplexer that allows multiple terminal sessions to be accessed and controlled from a single screen.
+- `cmus`: A lightweight and powerful console music player.
 
 ### Description
 
-<a name="overview" />
+This shell script is designed for users who want to quickly launch a new `tmux` session specifically for playing music with `cmus`. By executing this script, a detached `tmux` session named `MUSIC` will be created, and `cmus` will start automatically within that session.
 
-#### Overview
+**Key Features:**
+- **Detached Session**: The script uses the `-d` flag with `tmux new-session`, which allows the session to run in the background without attaching to it automatically.
+- **Named Session**: The `MUSIC` name makes it easy to identify the session, especially for users who may have multiple sessions running.
 
-This script creates a new detached `tmux` session specifically for the `cmus` music player. It allows users to manage music playback in a dedicated terminal session without needing to interactively open a terminal window. By using `tmux`, multiple terminal sessions can run simultaneously, making it efficient for users who multitask.
+### Usage
 
-The script utilizes the command:
-
-```bash
-tmux new-session -d -s MUSIC -n cmus 'cmus'
-```
-
-Here's a breakdown of the command:
-
-- `tmux new-session`: Initiates a new tmux session.
-- `-d`: Starts the session in detached mode (it runs in the background).
-- `-s MUSIC`: Names the session "MUSIC".
-- `-n cmus`: Names the window within the session "cmus".
-- `'cmus'`: Executes the cmus player within this session.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-To use this script, ensure that it has executable permissions and is located in your desired path:
+To use the script, ensure it is executable and run it from your terminal. If you want it to run from any location, consider placing it in a directory that is included in your `PATH`.
 
 1. Make the script executable:
    ```bash
    chmod +x /home/matias/.scripts/launch_tmux_with_music_player.sh
    ```
 
-2. Run the script from the terminal:
+2. Run the script:
    ```bash
    /home/matias/.scripts/launch_tmux_with_music_player.sh
    ```
 
-You can also bind the script to a keyboard shortcut in your window manager (qtile) for quick access.
+3. To attach to the `tmux` session after executing the script, use:
+   ```bash
+   tmux attach -t MUSIC
+   ```
 
-<a name="examples" />
-
-#### Examples
-
-- Start a new tmux session for cmus:
-  ```bash
-  /home/matias/.scripts/launch_tmux_with_music_player.sh
-  ```
-
-After executing, you can attach to the session by running:
-```bash
-tmux attach-session -t MUSIC
-```
+You can also assign this script to a keybinding in your window manager or desktop environment for quick access while using `qtile` or other window managers.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure you have `tmux` and `cmus` installed on your Arch Linux system for the script to function correctly.
-- This script is ideal for users who want to keep their music player running in a separate, manageable session.
-
-> **Critique:** 
-> The script is straightforward and effectively achieves its purpose; however, it lacks error handling. Consider adding checks to ensure `tmux` and `cmus` are both installed before attempting to run them, which can enhance user experience by providing meaningful feedback if dependencies are missing. Additionally, you might want to include a feature that can check if the session already exists to avoid creating multiple sessions with similar names.
+> [!TIP]  
+> Consider enhancing the script by allowing command-line arguments that let the user specify the session name or the music player to be opened. For example, a more flexible script could accept additional parameters for customized experience.

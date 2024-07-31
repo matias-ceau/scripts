@@ -1,83 +1,51 @@
-# Script Launcher (script_launcher.sh)
+# Script Launcher - Run Scripts with FZF
 
 ---
 
-Run scripts with fzf in a user-friendly interface.
+**[script_launcher.sh](script_launcher.sh)**: Launches user scripts using fzf with a preview pane.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`
-- `fzf`: A fuzzy finder for the command line
-- `bat`: A cat(1) clone with wings, providing syntax highlighting and Git integration
-- `improved-fzfmenu.sh`: A custom fzf script that enhances menu functionalities
-
-<a name="description" />
+- `fd`: A simple, fast and user-friendly alternative to `find`. It's used to efficiently search your scripts directory.
+- `xargs`: A command that builds and executes command lines from standard input.
+- `improved-fzfmenu.sh`: A custom fzf menu script designed to enhance script selection with features like previews.
+- `bat`: A `cat` clone with syntax highlighting and Git integration. It is utilized for previewing script documentation.
 
 ### Description
 
-<a name="overview" />
+This script utilizes `fd` to search for executable scripts within the specified `$SCRIPTS` directory. It then pipes the results into an improved fzf menu, allowing users to interactively select and run their scripts. 
 
-#### Overview
+The script's flow works as follows:
+1. `fd` is executed with an empty search string to list all scripts in the `$SCRIPTS` directory.
+2. The output is formatted by `xargs`, which extracts just the filenames using `basename`.
+3. The filenames are passed to `improved-fzfmenu.sh`, which presents them in a fzf interface.
+4. A preview feature is integrated, powered by `bat`, allowing users to preview documentation of each script.
+5. Upon selecting a script and pressing `enter`, the script will execute in a new bash shell.
 
-The `script_launcher.sh` script is designed to provide a convenient way to run various user scripts stored in a specified directory. It utilizes `fd` to search for scripts in the `$SCRIPTS` directory, then uses `xargs` to prepare the results for fzf, which presents an interactive fuzzy search interface. Selected scripts can be previewed using `bat`, and upon selecting a script and pressing Enter, it executes in a new Bash shell.
+The script also includes a commented-out line that, when activated, runs selected scripts in the background.
 
-This approach streamlines the process of locating and running scripts, especially for users who manage multiple script files and prefer a visual, interactive method. The use of `bat` for previewing adds an extra layer of clarity, as it highlights the scripts' contents.
+### Usage
 
----
-
-<a name="usage" />
-
-#### Usage
-
-To run the script, ensure that you have all necessary dependencies installed. Simply execute the script from a terminal:
+To use the script, place it in your desired location, ensure it's executable, and run it via terminal as follows:
 
 ```bash
 bash /home/matias/.scripts/script_launcher.sh
 ```
 
-This will trigger `fzf`, allowing you to search and select scripts. 
+Alternatively, you can bind it to a keyboard shortcut in your window manager (Qtile) configuration:
 
-### Key Features:
-- Type to search for the desired script.
-- View a preview of the script's contents before execution.
-- Press Enter to run the script in a new Bash session.
+```python
+Key([mod], 's', lazy.spawn('/home/matias/.scripts/script_launcher.sh')),
+```
 
-<a name="examples" />
-
-#### Examples
-
-1. Open terminal and run:
-    ```bash
-    bash /home/matias/.scripts/script_launcher.sh
-    ```
-2. Start typing the name of the script you want to execute to filter results.
-3. Use the arrow keys to navigate and press Enter to run the selected script.
+In this setup, pressing `mod+s` would trigger the script launcher.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that the `$SCRIPTS` environment variable is correctly set to point to the directory containing your scripts.
-- The script's execution context will inherit environment variables from the terminal where it was launched.
-
-> **Critique**: 
-> - The script could benefit from error handling to manage cases where no scripts are found. 
-> - Additionally, further enhancements could include customizable search parameters or filtering options.
-> - It may also be beneficial to allow for multi-selection in `fzf` for running several scripts at once.
+> [!TIP]
+> Some enhancements could be made:
+> - Consider adding error handling to inform users if no scripts are found.
+> - The `$SCRIPTS` variable should be defined or accessible in the script to avoid errors.
+> - If the script is not intended to run in the background often, the commented line could be removed to declutter the script.

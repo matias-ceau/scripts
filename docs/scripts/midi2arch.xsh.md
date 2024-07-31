@@ -1,86 +1,55 @@
-# MIDI to Arch Control (midi2arch.xsh)
+# MIDI to Arch Keyboard Controller Transformation
 
 ---
 
-Transform a midi controller to a keyboard/script launcher
+**[midi2arch.xsh](midi2arch.xsh)**: A script to transform a MIDI controller into a keyboard/script launcher 
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `xonsh` - A shell language that combines Python with shell features.
-- `aseqdump` - A command-line utility for MIDI event monitoring.
-- `yaml` - Python package for parsing YAML files.
-- `xdotool` - A tool that simulates keyboard input and mouse activity.
-
-<a name="description" />
-
+- `xonsh`: A Python-powered shell that makes shell scripting easy and features extensive enhancements for interactive use.
+- `subprocess`: A module in Python that allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.
+- `yaml`: A Python library for working with YAML, a human-readable data serialization format, used here to read configuration files.
+- `aseqdump`: A command-line utility to dump MIDI events, which is necessary for reading input from MIDI controllers.
+  
 ### Description
 
-<a name="overview" />
+This script allows you to utilize a MIDI controller (specifically the nanoKONTROL2) as an input device to trigger keyboard commands and launch scripts in an Arch Linux environment. Inspired by previous work from Fippls, it utilizes `aseqdump` to gather MIDI input, processes this input, and can translate certain MIDI commands to keyboard shortcuts.
 
-#### Overview
+The script expects a YAML configuration file located at `~/.scripts/config/midi2arch/nanoKONTROL2.yaml`. This configuration file should define the mappings for MIDI controls to corresponding keyboard commands.
 
-The `midi2arch.xsh` script allows you to transform MIDI controller inputs into keyboard events or script execution triggers within your Arch Linux environment using the Xonsh shell. It is particularly designed to handle the "nanoKONTROL2" MIDI controller, but can be adapted for other devices by changing the configuration file. MIDI controller actions are captured, translated, and can invoke corresponding keyboard inputs or shell commands.
+The core functions of the script include:
 
-The script reads a configuration file (`nanoKONTROL2.yaml`) located in the `~/.scripts/config/midi2arch/` directory, which defines mappings between MIDI control change messages and the actions to execute. The script supervises MIDI events and responds accordingly via `aseqdump`.
+- **Device Detection**: Checks for the availability of the specified MIDI device.
+- **Event Listening**: Listens for MIDI input and triggers corresponding keyboard commands.
+- **Configuration Loading**: Loads configuration mappings to determine which keyboard commands correspond with which MIDI signals.
+
+### Usage
+
+To use the script, make sure your MIDI device is connected and the corresponding configuration file is properly set up.
+
+You can run the script directly via terminal:
+
+```bash
+chmod +x /home/matias/.scripts/midi2arch.xsh
+/home/matias/.scripts/midi2arch.xsh
+```
+
+The script supports the following command-line arguments:
+
+- `-h`: Show help information.
+- `-l`: List MIDI events only, with no keyboard trigger output.
+
+Example command to list MIDI events:
+
+```bash
+/home/matias/.scripts/midi2arch.xsh -l
+```
+
+The script will output messages when certain MIDI controls are triggered, and it can terminate upon receiving a specific MIDI command (`cc == 39`).
 
 ---
 
-<a name="usage" />
-
-#### Usage
-
-To run the script, execute it from the terminal using the Xonsh shell:
-
-```bash
-./midi2arch.xsh
-```
-
-You can also use the `-l` flag to list MIDI events without triggering any actions:
-
-```bash
-./midi2arch.xsh -l
-```
-
-If you need to see help, the `-h` option outputs the usage instructions.
-
-<a name="examples" />
-
-#### Examples
-
-- To start the script and capture MIDI events:
-  ```bash
-  ./midi2arch.xsh
-  ```
-
-- To list MIDI events only:
-  ```bash
-  ./midi2arch.xsh -l
-  ```
-
----
-
-<a name="notes" />
-
-### Notes
-
-- Ensure your MIDI device is connected and recognized by the system.
-- The configuration file must specify the MIDI control mappings; otherwise, the script will exit with an error.
-- If you modify the configuration file, make sure its structure aligns with the script's expected format.
-
-> **Critique:** 
-> The script is well-structured but contains commented-out sections that may confuse users. It is advisable to either eliminate these or provide clear explanations on their purpose. Additionally, increasing error handling surrounding device detection and subprocess management could enhance robustness and provide clearer diagnostics when issues arise.
+> [!TIP]  
+The current implementation includes commented-out sections that might suggest future extensions or alternative functionality. Consider cleaning up the codebase by either integrating these features or removing them to enhance readability and maintainability. Additionally, error handling could be improved for robustness, ensuring that specific exceptions are caught and logged correctly while maintaining the script's operation.

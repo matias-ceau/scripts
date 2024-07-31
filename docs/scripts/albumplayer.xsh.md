@@ -1,82 +1,48 @@
-# Album Player (albumplayer.xsh)
+# Album Player for CMUS
 
 ---
 
-Play an album using cmus, with album selection via dmenu.
+**[albumplayer.xsh](albumplayer.xsh)**: Play a random album selection with cmus using dmenu
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- cmus
-- dmenu
-- xonsh
-
-<a name="description" />
+- `cmus`: A console music player that runs in a terminal.
+- `dmenu`: A dynamic menu for X, allowing for easy selection of items.
 
 ### Description
 
-<a name="overview" />
+This script provides a utility for playing a selected album through the `cmus` music player. It generates a list of albums based on a library file defined in the user's cmus configuration and allows for selection via `dmenu`. The following steps outline the script's functionality:
 
-#### Overview
+1. **Initialization**: It sets the temporary playlist file path in the user's cmus configuration directory.
+2. **Album Listing**: It retrieves paths of music files from `lib.pl` and constructs a unique list of albums by parsing the directory paths.
+3. **Display Albums**: Utilizing `dmenu`, it presents a list of formatted album names to the user. Each album can be a combination of the artist and the album title, truncated to ensure readability.
+4. **Selection Process**: After an album is selected, the script creates a playlist that includes the chosen album and shuffles a set of additional albums.
+5. **Playlist Creation**: It writes the playlist paths to a temporary M3U file, which is subsequently fed into `cmus`, allowing for smooth playback.
 
-The `albumplayer.xsh` script is designed to facilitate the playback of music albums using the cmus music player from a selected list. The process leverages `dmenu` for user interaction and `xonsh` for scripting, which is a Python-powered shell that allows for a more comfortable way to run shell commands.
+### Usage
 
-The script begins by defining the path to a temporary `.m3u` playlist file used by cmus. It retrieves a list of available music paths from `lib.pl`, then creates a distinct list of albums by slicing the path strings. 
+Run the script in your terminal as follows:
 
-A dictionary (`fancy_dict`) is constructed to pair each album's extracted name with its path for a clearer output in `dmenu`. Upon selection of an album from the `dmenu` interface, the script generates a playlist that includes tracks from the chosen album and a random selection from other albums.
-
-The final step involves writing the generated playlist to the temporary file, followed by commands to control cmus, including updating the view, clearing the current playlist, and loading the new playlist.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-To use the script, simply run it in your terminal:
-
-```shell
-xonsh /home/matias/.scripts/albumplayer.xsh
+```bash
+/home/matias/.scripts/albumplayer.xsh 
 ```
 
-You may want to bind this script to a key combination in your window manager for easier access.
+#### Interactive Steps
 
-<a name="examples" />
+1. **Select an Album**: Upon execution, a dmenu popup will show the available albums. Use keyboard navigation to select your preferred album.
+2. **Playback**: After selection, the temporary playlist is populated, and `cmus` is instructed to play the new track sequence.
 
-#### Examples
+### Example 
 
-1. Run the script directly:
-   ```shell
-   xonsh /home/matias/.scripts/albumplayer.xsh
-   ```
-   This will prompt you to select an album through the `dmenu`.
+```bash
+$ /home/matias/.scripts/albumplayer.xsh
+```
 
-2. After selecting an album, cmus will automatically start playing the album along with tracks from other random albums.
+This will execute the script and allow you to pick an album for playback.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- The script expects your music library to be set up correctly in the `cmus` configuration.
-- Ensure that `dmenu` is properly installed and configured on your system for seamless operation.
-
-> **Critique:** 
-> - The script could benefit from error handling to manage cases where `lib.pl` might not exist or where no albums are found. 
-> - There is no feedback for the user if the selection process fails (e.g. when no album is chosen), which may cause confusion. Adding checks and informative messages would enhance usability.
-> - The hard-coded limit of `10` for random albums could be parameterized or set to a configurable option to increase flexibility.
+> [!TIP]  
+> The script currently uses a fixed limit of 10 albums fetched randomly. Consider adding a customizable option for the user to define how many albums to display or to exclude certain albums based on user preference. Error handling can also be improved, especially for cases where there are no albums available or if cmus is not installed.

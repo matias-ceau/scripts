@@ -1,74 +1,42 @@
-# You Are Not Documented (you_are_not_documented.sh)
+# Script Name: Script Documentation Checker
 
 ---
 
-A script that finds scripts without inline documentation.
+**[you_are_not_documented.sh](you_are_not_documented.sh)**: A script that finds scripts without inline documentation
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- **Ripgrep (rg)**: A fast command-line search tool used for searching text within files.
-- **Bash**: The script is written in Bash and requires a Bash environment to execute.
-
-<a name="description" />
+- `rg`: Also known as Ripgrep, a command-line search tool that recursively searches your current directory for a regex pattern. It is used here to locate files that lack documentation comments.
 
 ### Description
 
-<a name="overview" />
+This script is designed to simplify the identification of shell scripts that lack proper inline documentation. Using `rg` (Ripgrep), it performs a search for files that do not contain the administrative comment `#INFO:#`. This allows developers to efficiently locate scripts that may need further documentation efforts.
 
-#### Overview
+The script specifically targets files in a directory specified by the `$SCRIPTS` environment variable. Additionally, the results are filtered to exclude files in the `/docs/` and `/config/` directories, as well as common file types like `.csv` and `.md`, which typically do not need inline documentation.
 
-The `you_are_not_documented.sh` script is a utility for developers to identify scripts within a specified directory that lack inline documentation. Specifically, it searches through the files in the `$SCRIPTS` directory for any that do not contain the `#INFO:#` comment tag, which indicates that the file lacks documentation. This can be particularly useful for maintaining code quality and ensuring that scripts are adequately documented.
+Here's a breakdown of the main command:
 
-The script utilizes `ripgrep`, a highly efficient text search tool, to quickly find files that match or don’t match a certain pattern. The search is further refined to exclude certain directories (like `/docs/` and `/config/`) and file types (`.csv` and `.md`).
+- `rg '#INFO:#' --files-without-match "$SCRIPTS"`: This command searches for files in the `$SCRIPTS` directory that do not contain the pattern `#INFO:#`.
+- `| rg -v '/docs/|/config/|\.csv|\.md'`: The output is then piped to another `rg` command that filters out paths containing `/docs/`, `/config/`, or files with extensions `.csv` or `.md`.
 
----
+### Usage
 
-<a name="usage" />
-
-#### Usage
-
-To use this script, you need to have the `SCRIPTS` environment variable defined, pointing to the directory where your scripts are located. Once the environment variable is set, run the script directly from the terminal:
+To run this script, it should be executed in the terminal. Ensure that the `$SCRIPTS` environment variable is set to the directory you want to search through. You can execute the script by navigating to its directory and running:
 
 ```bash
-bash /home/matias/.scripts/you_are_not_documented.sh
+./you_are_not_documented.sh
 ```
 
-Alternatively, you can create a keybinding in your window manager (qtile) to trigger this script for quick access.
-
-<a name="examples" />
-
-#### Examples
-
-Assuming `$SCRIPTS` is set to `/home/matias/.scripts`, running the command will display the paths of all scripts without the `#INFO:#` comment:
+If you want to set the `$SCRIPTS` variable inline, you can do so as follows:
 
 ```bash
-bash /home/matias/.scripts/you_are_not_documented.sh
+export SCRIPTS=/path/to/your/scripts
+./you_are_not_documented.sh
 ```
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that the `SCRIPTS` variable is correctly set to avoid unexpected results.
-- The effectiveness of this script depends on consistent use of the `#INFO:#` documentation tag in other scripts.
-
-> **Critique**: 
-> 
-> While the script is a useful tool for identifying undocumented scripts, it lacks error handling for scenarios where the `$SCRIPTS` variable is not set. Adding checks to ensure valid input and providing user-friendly error messages could enhance its robustness. Additionally, it might be beneficial to allow the user to customize the search term (currently hard-coded as `#INFO:#`) through an optional command-line argument for increased flexibility.
+> [!TIP]  
+A potential improvement for this script could be the inclusion of an option to directly display which functions or scripts need documentation, not just the file names. Additionally, considering whether other file extensions should be included in the filter depending on the user's workflow might benefit its usability.

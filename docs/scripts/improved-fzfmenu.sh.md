@@ -1,85 +1,44 @@
-# Improved FZF Menu (improved-fzfmenu.sh)
+# Improved FZF Menu Launcher
 
 ---
 
-A script to launch an FZF menu in Alacritty terminal.
+**[improved-fzfmenu.sh](improved-fzfmenu.sh)**: A Bash script that launches `fzf` in an Alacritty terminal with custom settings.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Alacritty terminal
-- FZF (Fuzzy Finder)
-- Bash
-
-<a name="description" />
+- `fzf`: A general-purpose command-line fuzzy finder.
+- `alacritty`: A terminal emulator that is optimized for performance.
 
 ### Description
 
-<a name="overview" />
+This script provides a streamlined way to launch a fuzzy finder in an Alacritty terminal window using `fzf`. It is particularly useful for users of Arch Linux and the QTile window manager who want to enhance their workflow by efficiently searching through various lists or options within a terminal.
 
-#### Overview
+The script begins by escaping each argument passed to it to prevent issues with special characters or spaces. This is achieved through a simple loop that utilizes `printf %q` for correct handling. After escaping the arguments, it joins them into one string for `fzf` to interpret.
 
-The `improved-fzfmenu.sh` script is designed to enhance user interaction with FZF (Fuzzy Finder) by launching it within the Alacritty terminal. This script handles user inputs and safely escapes each argument, ensuring that they are passed correctly to the FZF command. By using Alacritty’s window dimensions as part of the command execution, the user can customize the look of the FZF interface.
+The `alacritty` command is invoked with specific options:
+- It sets the terminal title to `fzfmenu`.
+- It configures the terminal window dimensions to a width of 150 columns and a height of 30 lines.
+- It executes a Bash command to run `fzf` with the joined arguments and input redirected from the current process’s standard input.
 
-The script starts by accepting any number of command-line arguments, escaping them for safe inclusion in the FZF command. It then combines these arguments into a single string, which is fed into FZF when executed in a new Alacritty terminal instance. The specified terminal window dimensions are set for better visibility and usability.
+### Usage
 
----
-
-<a name="usage" />
-
-#### Usage
-
-To use the script, execute it via the terminal by providing any necessary arguments required by the FZF command. For example:
+To use this script, you should provide the necessary arguments that will be forwarded to `fzf`. You can run it directly from the terminal as follows:
 
 ```bash
-./improved-fzfmenu.sh --bind 'ctrl-c:abort'
+/home/matias/.scripts/improved-fzfmenu.sh --bind 'ctrl-c:abort'
 ```
 
-Here, `--bind 'ctrl-c:abort'` is passed as an argument to customize the FZF keybinding behavior.
+This example runs the script, passing it the `--bind` option, which may configure how to exit `fzf`. Ensure that you adjust the provided command to meet your specific needs, such as adding more `fzf` flags or options.
 
-The script can be assigned to a keybinding within your window manager or executed from a launcher as needed.
-
-<a name="examples" />
-
-#### Examples
-
-1. Launch FZF with specific key bindings:
-   ```bash
-   ./improved-fzfmenu.sh --bind 'ctrl-j:down,ctrl-k:up'
-   ```
-
-2. Launch FZF to search through a list of files:
-   ```bash
-   find . -type f | ./improved-fzfmenu.sh
-   ```
-
-3. Use FZF to list running processes:
-   ```bash
-   ps aux | ./improved-fzfmenu.sh
-   ```
+You can also set this script to a keybinding in your window manager for quick access:
+```bash
+# Example for keybinding in QTile
+Key([mod], "f", lazy.spawn("/home/matias/.scripts/improved-fzfmenu.sh"))
+```
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that both Alacritty and FZF are properly installed and configured on your Arch Linux system.
-- The script uses `/proc/$$/fd/0` to handle input effectively, which may not work as expected in certain contexts.
-
-> **Critique:** 
-> The script could improve error handling for cases where Alacritty or FZF might not be available. Additionally, adding a usage message that describes the script's purpose when no arguments are provided could enhance usability for new users.
+> [!TIP]  
+> The script directly opens Alacritty shown with fixed dimensions, which may not be ideal for all screen resolutions. Consider adding functionality to detect screen size or allowing the user to customize these parameters through input arguments for better user flexibility.

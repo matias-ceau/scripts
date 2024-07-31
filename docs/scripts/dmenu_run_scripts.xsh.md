@@ -1,90 +1,53 @@
-# Run User Scripts with Dmenu (dmenu_run_scripts.xsh)
+# Dmenu Run User Scripts
 
 ---
 
-Run user scripts in an interactive menu powered by dmenu/rofi.
+**[dmenu_run_scripts.xsh](dmenu_run_scripts.xsh)**: A script to run user scripts via dmenu or rofi.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell
-- `dmenu` or `rofi`: For providing the interactive script menu
-- `script_identifier.xsh`: A user script to identify scripts to run
-
-<a name="description" />
+- `xonsh`: A Python-powered shell that can be used as a flexible command-line interface.
+- `rofi`: A window switcher, application launcher, and dmenu replacement that helps to display options for user interaction.
+- `script_identifier.xsh`: A custom script (not provided) likely used to identify user scripts based on context and status.
 
 ### Description
 
-<a name="overview" />
+This script is intended to facilitate the execution of predefined user scripts by integrating them with `dmenu` or `rofi`, allowing for a straightforward and efficient user interface. 
 
-#### Overview
+When the script is executed, it uses the `script_identifier.xsh` to gather script options characterized by their **status** and **type** (specifically focused on active scripts). The gathered options are presented in a visually formatted list using `rofi`. Each line is formatted to have the file name displayed in green followed by its description. When a user selects an option, the chosen script is executed.
 
-This script leverages `xonsh` to present an interactive menu for executing user scripts. The core functionality involves calling the `script_identifier.xsh`, which filters scripts marked for running, and utilizes `rofi` to provide a user-friendly interface. 
+The overall workflow involves:
+1. Invoking `script_identifier.xsh` to fetch the scripts.
+2. Presenting the list of available scripts using `rofi`.
+3. Executing the selected script.
 
-The choices are formatted with color for better visibility, using markup to enhance the appearance in the `rofi` interface. Users can select a script from the list, and upon selection, the corresponding script is run dynamically.
+In more detail, the choice of script is extracted from the output of `rofi`, stripping unnecessary characters to retrieve the actual script filename, which is subsequently executed.
 
-The script operates as follows:
-1. It runs `script_identifier.xsh` with specific parameters to get a list of active scripts.
-2. The output is processed using `rofi` to allow the user to choose from the list.
-3. The selected script is then executed.
+### Usage
 
----
+To use this script, follow these steps:
 
-<a name="usage" />
+1. Make sure that `xonsh` and `rofi` are installed on your system.
+2. Ensure that `script_identifier.xsh` is accessible and functioning properly in your environment.
+3. Execute the script directly from your terminal or bind it to a key combination in your `qtile` configuration.
 
-#### Usage
-
-To execute the script, simply run it in your terminal:
-
-```shell
-bash /home/matias/.scripts/dmenu_run_scripts.xsh
+Example command to execute the script:
 ```
+chmod +x /home/matias/.scripts/dmenu_run_scripts.xsh
+/home/matias/.scripts/dmenu_run_scripts.xsh
+```
+You can then select a script from the list that appears.
 
-You can also bind it to a key in your window manager (`qtile`) to allow quick access. 
-
-For example, you can add the following line to your `~/.config/qtile/config.py` to bind it to a key combination (e.g., `Mod4 + R`):
-
+If you want to bind it to a key combination in Qtile, add the following to your configuration file:
 ```python
-Key([mod], "r", lazy.spawn("/home/matias/.scripts/dmenu_run_scripts.xsh")),
+keys = [
+    Key([mod], "r", lazy.spawn("/home/matias/.scripts/dmenu_run_scripts.xsh")),
+]
 ```
-
-<a name="examples" />
-
-#### Examples
-
-1. **Run the Script**: 
-   - Execute from terminal:
-   ```shell
-   /home/matias/.scripts/dmenu_run_scripts.xsh
-   ```
-
-2. **Keybinding in Qtile**:
-   - Add the line mentioned above in your Qtile configuration.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that your `script_identifier.xsh` script is functional and returns the expected output.
-- The script currently relies on the `rofi` utility for dmenu-like behavior; ensure `rofi` is installed on your system.
-- The current implementation may require you to customize the script_identifier file path or its behavior based on your user scripts setup.
-
-> **Critique**:
-> - Consider adding error handling for situations where no scripts are returned from `script_identifier.xsh`.
-> - You might also enhance the user experience with additional options, such as previewing scripts or filtering options within the menu.
+> [!TIP] 
+The script could benefit from error handling to ensure that it gracefully handles situations where no scripts are found or `script_identifier.xsh` encounters issues. Additionally, consider implementing logging for debugging purposes and user feedback, such as indicating the selected script was successfully started.

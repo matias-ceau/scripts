@@ -1,94 +1,42 @@
-# Script to Select and Execute a Script (select_script)
+# Script Selection Utility
 
 ---
 
-A script that selects a chosen script using cached data and executes it.
+**[select_script](select_script.c)**: A C script for selecting and executing a script from a cached list.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `rofi`: This script requires Rofi as a graphical dmenu to select scripts.
-- C standard library functions for file handling and process execution.
-
-<a name="description" />
+- `rofi`: A popular application launcher and dmenu replacement. This script uses `rofi` to display a selectable list of scripts, leveraging its markup capabilities for better presentation.
 
 ### Description
 
-<a name="overview" />
+This script provides a command-line utility for selecting and executing scripts from a predefined list stored in a CSV cache file. It is developed in C and relies on standard I/O and string manipulation functions, as well as system calls to execute chosen scripts. The script performs the following tasks:
 
-#### Overview
+1. **Load Cached Scripts**: Reads a cache file located in the user's home directory, specifically in the `.cache` folder. It extracts the filename and description of each script.
+2. **Display Options**: Utilizes `rofi` to present the list of scripts in a visually appealing way. Each entry is formatted with green text, indicating the script’s filename and its description.
+3. **Extract User Choice**: Captures the user's selection from `rofi` and prepares to execute the corresponding script.
+4. **Execute Selected Script**: Uses `execl` to run the selected script, passing the necessary parameters.
 
-The `select_script` is a C program designed to help users select and execute their scripts efficiently. It reads script metadata from a cache file, uses Rofi for selection, and then executes the chosen script.
+### Usage
 
-The key components of the script include:
-- **Loading Cached Data**: Reads a CSV cache file that contains the names and descriptions of scripts.
-- **Displaying Options**: Uses Rofi to display the list of scripts for selection, with enhanced markup for aesthetics.
-- **Handling User Choice**: Captures the selected script and executes it directly.
+To use the script, simply run it in a terminal. Ensure you have a populated cache file (`script_info.csv`) in your `.cache` directory containing the script details. The basic command is as follows:
 
-The cache file is expected to be located at `~/.cache/script_info.csv`, and it lists scripts in the defined format:
-
-```
-filename,other_field1,other_field2,...,"description"
+```bash
+/home/matias/.scripts/bin/select_script
 ```
 
-This structure allows easy expansion or customization.
+The cache file should have entries formatted as follows:
+
+```
+filename,other_info,...
+script_name,"description"
+```
+
+Upon execution, the script will present a `rofi` menu, allowing you to select a script. Once chosen, the respective script will be executed.
 
 ---
 
-<a name="usage" />
-
-#### Usage
-
-To use `select_script`, simply compile the C file and execute it from the terminal. It does not require any command-line arguments and can be launched directly with:
-
-```sh
-./select_script
-```
-
-Make sure that the necessary cache file exists and is formatted correctly before running the script.
-
-<a name="examples" />
-
-#### Examples
-
-1. Compile the script:
-
-    ```sh
-    gcc -o select_script select_script.c
-    ```
-
-2. Run the script:
-
-    ```sh
-    ./select_script
-    ```
-
-3. Select a script from the Rofi menu and it will execute.
-
----
-
-<a name="notes" />
-
-### Notes
-
-- Ensure the `HOME` environment variable is set correctly. The script checks this at runtime.
-- The cache file should format the script names and descriptions correctly to be parsed without issues.
-
-> **Critique:**
-> - The script does not handle memory allocation failures, which could lead to potential crashes. Consider adding error checks after each `realloc` call.
-> - Direct execution of scripts without validation can be risky. Implement checks to confirm the script exists and has the necessary permissions.
-> - The Rofi commands are hard-coded and assume specific options. It would be beneficial to allow users to customize these settings through command-line arguments or configuration files.
+> [!TIP] 
+> The script does not handle the situation where the user cancels the `rofi` selection, which may lead to an attempt to execute an empty script name. Adding a check after extracting the choice to ensure it is not empty would improve user experience. Additionally, consider implementing error handling for `execl`, as failure to start the script should be appropriately reported.

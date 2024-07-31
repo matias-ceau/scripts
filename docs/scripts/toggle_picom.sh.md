@@ -1,88 +1,49 @@
-# Toggle Picom (toggle_picom.sh)
+# Toggle Picom
 
 ---
 
-A script to toggle the Picom compositor on and off.
+**[toggle_picom.sh](toggle_picom.sh)**: Script to toggle the Picom compositor on and off.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Bash
-- Picom
-
-<a name="description" />
+- `picom`: A lightweight compositor for X11, used to add effects like transparency and shadows to windows.
 
 ### Description
 
-<a name="overview" />
+This script is designed to quickly toggle the Picom compositor on an Arch Linux environment using the Qtile window manager. When executed, it will check if the Picom process is currently running.
 
-#### Overview
+- If Picom is active, the script will terminate it using the `pkill` command.
+- If Picom is not running, it will start the compositor in the background (`-b` flag) ensuring the graphical effects are applied to the open windows.
 
-This script is designed to check whether the Picom compositor is currently running on your system. If it is running, the script stops it by using the `pkill` command; if it is not running, the script starts Picom in the background with the `-b` flag. 
+The script utilizes `pgrep` to check for the running instance of Picom without any direct user input, making it efficient and user-friendly.
 
-Picom is an open-source compositor for X, providing features such as transparency and shadowing, enhancing the appearance and performance of graphical interfaces. By toggling Picom, you can easily manage your system's resource usage and visual effects according to your preference and needs.
+### Usage
 
-The script utilizes the `pgrep` utility to search for processes by name, and its logic relies on the exit status of this command to determine whether to start or stop Picom.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-To use the script, simply run it from the command line:
+To use this script, save it to an appropriate location, for example `/home/matias/.scripts/toggle_picom.sh`, and make sure to give it executable permissions:
 
 ```bash
-bash toggle_picom.sh
+chmod +x /home/matias/.scripts/toggle_picom.sh
 ```
 
-You can also bind this script to a key combination in your window manager configuration (Qtile) for easier access. 
+You can then run the script directly from your terminal:
+
+```bash
+/home/matias/.scripts/toggle_picom.sh
+```
+
+For a smoother user experience, consider binding this script to a key combination in your Qtile configuration. Here’s a sample keybinding you could add to your `~/.config/qtile/config.py`:
+
+```python
+from libqtile import key
+
+keys = [
+    key.Key(["mod4"], "p", lazy.spawn("/home/matias/.scripts/toggle_picom.sh")),
+]
+```
 
 ---
 
-<a name="examples" />
-
-#### Examples
-
-1. Execute the script in terminal:
-
-   ```bash
-   bash /home/matias/.scripts/toggle_picom.sh
-   ```
-
-2. Assign the script to a keybinding in Qtile:
-
-   ```python
-   from libqtile import key
-   from libqtile.command import lazy
-
-   keys = [
-       key.Key([mod], "p", lazy.spawn("/home/matias/.scripts/toggle_picom.sh")),
-   ]
-   ```
-
----
-
-<a name="notes" />
-
-### Notes
-
-- Running `picom -b` starts it in the background, so it will not block your terminal while running.
-- Ensure you have permissions to execute the script by running `chmod +x /home/matias/.scripts/toggle_picom.sh`.
-
-> **Critique:**
-> The script effectively achieves its intended purpose, but it could be enhanced with additional options. For instance, you might consider allowing users to specify flags for Picom directly through command-line arguments. Additionally, more descriptive output or logging could be useful for debugging and information purposes. Lastly, adding error handling for the `pkill` or `picom` commands would improve its robustness.
+> [!TIP]  
+> The script currently uses `pkill picom`, which can be imprecise if other processes have similar names. Consider specifying a more unique identifier if you encounter issues. Additionally, adding flags to `picom` when starting (like `--config`) can allow you to customize its behavior.

@@ -1,84 +1,43 @@
-# Playlist Randomizer (playlist_randomizer.xsh)
+# Playlist Randomizer
 
 ---
 
-Randomly selects and plays albums from a specified playlist in cmus.
+**[playlist_randomizer.xsh](playlist_randomizer.xsh)**: Randomly selects and plays a playlist of albums in cmus.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- xonsh
-- pandas
-- cmus
-- dmenu
-
-<a name="description" />
+- `pandas`: A powerful data manipulation library in Python. This script uses it to handle playlist data efficiently.
+- `xonsh`: An extensible shell language and command prompt that allows for the use of Python in scripting.
+- `cmus`: A modern and efficient console music player. This script interacts with cmus to manage and play music.
 
 ### Description
 
-<a name="overview" />
+This script is designed for users who wish to randomize and play their music albums stored in M3U playlists using the cmus music player. It facilitates selecting a playlist from a predefined directory and shuffles the order of albums within that playlist, creating a new randomized playlist. 
 
-#### Overview
+The core functionalities of the script include:
+- Accessing the playlists stored in `~/.playlists`.
+- Displaying available playlists using `dmenu` for user selection.
+- Reading the selected M3U playlist and extracting album and song names.
+- Using `pandas` to create a DataFrame that manages the album and song data, allowing for easy shuffling of albums.
+- Outputting the new randomized playlist to a temporary file and adding it to cmus for playback.
 
-The `playlist_randomizer.xsh` script provides a convenient way to select a playlist of albums and play them in a random order using the cmus music player. This is achieved through the use of the `xonsh` shell, which allows for easy integration of Python code alongside shell commands.
+### Usage
 
-**Procedure:**
-1. It lists available `.m3u` playlists located in the `~/.playlists` directory.
-2. A playlist is selected using `dmenu`, which displays a list of options in a user-friendly interface.
-3. The contents of the selected playlist are read, filtering out any empty lines.
-4. Albums and songs are extracted for shuffling.
-5. The individual albums are shuffled randomly, while maintaining the order of songs within each album.
-6. The shuffled playlist is saved temporarily, and then loaded into cmus for playback.
+To run the script, simply execute it in a terminal. You can set it up with a keybinding in the window manager or a launcher for quick access.
 
----
-
-<a name="usage" />
-
-#### Usage
-
-To use the script, simply execute it within your terminal session. Ensure you have `xonsh`, `pandas`, `cmus`, and `dmenu` installed on your Arch Linux setup. You can link this script to a keyboard shortcut in your window manager to make it more accessible. 
-
-Run the script with:
-```
+```bash
 ./playlist_randomizer.xsh
 ```
 
-Make sure the `PLAYLIST_PATH` variable points to the correct directory where your `.m3u` playlists are stored.
+Upon execution, a `dmenu` prompt will pop up, displaying a list of available playlists (derived from files ending in `.m3u`). Once a selection is made, the script processes the playlist and randomizes the order. The new playlist will be played in cmus.
 
-<a name="examples" />
-
-#### Examples
-
-- To randomly play songs from a specific playlist, run:
-```
-./playlist_randomizer.xsh
-```
-A dmenu will appear listing all available playlists.
+Key parts of the execution:
+- The script clears the current cmus playlist and replaces it with the newly randomized playlist.
+- It will view the updated playlist interface in cmus and start playing the randomized tracks.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Make sure the `~/.playlists` directory contains `.m3u` files properly formatted.
-- This script requires cmus to be running to properly enqueue the songs.
-
-> **Critique:** 
-> - Consider adding error handling to manage cases where no playlists exist or if the cmus player is not running. 
-> - The script structure could be improved by separating the logic of reading playlists and randomizing orders into different functions for better readability and reusability.
-> - Instead of echoing to a temporary file, consider using cmus's built-in capabilities for handling dynamic playlists directly if available.
+> [!TIP]  
+> Consider adding error handling for cases where the playlist directory might be empty or if the selected playlist does not exist. Additionally, ensure that the script checks if `cmus` is running before sending any commands to avoid potential errors.

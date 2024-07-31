@@ -1,90 +1,40 @@
-# Sandisk Music Transfer Script (sandisk_music_transfert.py)
+# Sandisk Music Transfer Script
 
 ---
 
-Transfer music from the local library to a Sandisk media player.
+**[sandisk_music_transfert.py](sandisk_music_transfert.py)**: Python script to transfer music to a Sandisk media player from a local library.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Python 3
-- `subprocess` module (built-in)
-- `pandas` library
-- Beet (for music library management)
-- Rsync (for file transfer)
-- Access to a Sandisk media player mounted on `/run/media/matias/EC95-4FBB`
-
-<a name="description" />
-
+- `pandas`: A powerful data manipulation library in Python, used for creating and handling data frames.
+- `beet`: A command-line tool for managing music collections, here it retrieves albums' data.
+- `rsync`: Utility for efficiently transferring and synchronizing files across computer systems.
+  
 ### Description
 
-<a name="overview" />
+This Python script automates the process of transferring music files from a local directory to a Sandisk media player, ensuring that the total size of the transferred albums does not exceed the player's maximum storage capacity. It integrates with `beet` to retrieve albums that have not been listened to, and employs `pandas` to manage and filter these albums based on their formats and sizes.
 
-#### Overview
+The script starts by defining constants like the maximum storage space for the Sandisk player and the target path where music will be transferred. It fetches a list of albums not listened to and their respective sizes using the `beet` tool.
 
-This Python script automates the transfer of music albums to a Sandisk media player, ensuring that only those albums which have not been listened to are included. It leverages the Beet music library management system to identify unlistened music albums and checks both album size and supported formats before transferring files. The script also handles album removal on the device depending on availability.
+The logic includes several crucial steps:
+1. **Filtering and Data Preparation**: It constructs a data frame containing album paths, artists, formats, and sizes. Unsupported formats are filtered out.
+2. **Size Management**: A function checks if the total size exceeds the defined limit. If it does, albums from random artists are dropped until the total size is permissible.
+3. **Transfer Logic**: Before transferring, the script checks for existing albums on the Sandisk device, removes unnecessary ones, and cleans up empty directories.
+4. **Final Transfer**: It creates the necessary folder structure on the device and uses `rsync` to perform the transfer, providing feedback on progress.
 
-Key functionalities include:
-- Querying not listened to albums using Beet
-- Checking available space on the Sandisk player (limited to 30MB)
-- Handling file formats (supports 'aac', 'm4a', 'flac', 'mp3', 'wav', 'wma')
-- Removing albums from the device that are not in the local library
-- Creating required directory structures on the Sandisk player
-- Utilizing `rsync` to copy over the files.
+### Usage
 
----
+Run the script from the terminal. Here’s a sample command:
 
-<a name="usage" />
+```bash
+python3 /home/matias/.scripts/sandisk_music_transfert.py
+```
 
-#### Usage
-
-1. Ensure that your Sandisk media player is connected and recognized at `/run/media/matias/EC95-4FBB`.
-2. Have your music collection organized and accessible under `/home/matias/music`.
-3. Run the script in a terminal:
-
-   ```bash
-   python3 /home/matias/.scripts/sandisk_music_transfert.py
-   ```
-
-4. Input your sudo password when prompted for the script to delete unused albums on the Sandisk media player.
-
-<a name="examples" />
-
-#### Examples
-
-- Run the script to initiate music transfer:
-
-   ```bash
-   python3 /home/matias/.scripts/sandisk_music_transfert.py
-   ```
+Ensure you have the required dependencies installed (use `pip install pandas` for pandas and make sure `beet` and `rsync` are available in your system). The script will prompt for a password if it needs to run commands requiring elevated privileges.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that your local music directory and the Sandisk device path are correctly set before execution.
-- The script currently requires sudo access to remove files on the Sandisk device, which might entail security implications if used carelessly.
-
-> **Critique:** 
-> 1. The script assumes that all commands will succeed without error handling, which could lead to issues if, for example, insufficient permissions, non-existent directories, or connectivity problems arise.
-> 2. The hardcoded maximum space (30MB) may need to be adjusted based on user requirements.
-> 3. The random removal of an artist to fit within space constraints could result in unexpected losses of music; a more systematic or user-controlled approach might be warranted.
-> 4. Consider modularizing the code by breaking it into functions to enhance readability and maintainability. 
-
-These improvements can help create a more robust and user-friendly experience.
+> [!TIP] 
+> Consider adding error handling for subprocess calls to improve robustness. For example, checks can be implemented to ensure that the `rsync` command was successful, and feedback can be given to the user in case of failure. Additionally, you might want to clear up the commented part where a password is fetched; it can be useful to implement secure password handling practices to enhance security.

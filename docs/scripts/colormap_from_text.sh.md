@@ -1,94 +1,49 @@
-# Color Palette Extractor (colormap_from_text.sh)
+# Colormap Extractor from Text Configs
 
 ---
 
-Extracts unique color palettes from text files based on specified output formats.
+**[colormap_from_text.sh](colormap_from_text.sh)**: Extracts color palettes from config files.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `grep`
-- `sort`
-
-<a name="description" />
+- `grep`: A command-line utility for searching plain-text data.
+- `printf`: A utility to format and print data, required for RGB conversion.
 
 ### Description
 
-<a name="overview" />
+The `colormap_from_text.sh` script is a straightforward Bash utility designed to extract and format color codes from text files, like configuration files. The script primarily focuses on hexadecimal color codes, which it identifies and processes in one of three output formats: Hexadecimal, RGB, or a plain RGB list.
 
-#### Overview
+Key functionalities include:
 
-This script is designed to extract unique hexadecimal color codes from text files and format them according to user specifications. It allows output in three formats: hexadecimal, RGB, or RGB with a colored background. The extraction process utilizes `grep` to find color codes in the format `#RRGGBB`, ensuring that only valid hex codes are processed.
+- **Argument Parsing**: The script accepts command-line arguments which specify the desired output format.
+  - `-x` or `--hex-code` outputs the colors in hexadecimal format.
+  - `-r` or `--rgb` provides the colors in an RGB format.
+  - `-c` or `--color` outputs colors along with their visual representation in the terminal.
+  
+- **Error Handling**: It prevents incompatible options being selected together (e.g., Hex and RGB at once) and provides user-friendly usage instructions.
 
-The script begins by defining a usage function which indicates the proper syntax for executing the script. It accepts multiple command-line arguments to control the output format:
+- **Color Extraction**: Utilizes `grep` to find hex codes, sorts them uniquely, and converts hex to RGB when needed.
 
-- `-x` or `--hex-code`: Outputs only the hex code.
-- `-r` or `--rgb`: Outputs the RGB format.
-- `-c` or `--color`: Outputs the RGB format along with a colored terminal background.
+### Usage
 
-The script employs a loop to parse and validate input arguments and ensures that only one of the color output options can be selected at a time.
+To run the script, execute it in your terminal, passing in any of the flags according to your desired output format:
+
+```bash
+# Output colors in hexadecimal format
+./colormap_from_text.sh -x
+
+# Output colors in RGB format
+./colormap_from_text.sh -r
+
+# Output RGB values and display colors in terminal
+./colormap_from_text.sh -c
+```
+
+You can also combine options, but remember that `-x` and `-r` are incompatible.
 
 ---
 
-<a name="usage" />
-
-#### Usage
-
-To run the script, use the following command format:
-
-```bash
-./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
-```
-
-You can pipe a text file into the script like so:
-
-```bash
-cat myfile.txt | ./colormap_from_text.sh [options]
-```
-
-Replace `[options]` with one or more of the flags `-x`, `-r`, or `-c` to customize the output format as needed.
-
-<a name="examples" />
-
-#### Examples
-
-1. To extract colors in hexadecimal format:
-   ```bash
-   cat myfile.txt | ./colormap_from_text.sh -x
-   ```
-
-2. To extract colors in RGB format:
-   ```bash
-   cat myfile.txt | ./colormap_from_text.sh -r
-   ```
-
-3. To output colors with both RGB values and colored background:
-   ```bash
-   cat myfile.txt | ./colormap_from_text.sh -c
-   ```
-
----
-
-<a name="notes" />
-
-### Notes
-
-- Ensure that the input file contains valid hexadecimal color codes for effective extraction.
-- The script outputs the RGB values in the format `rgb(r, g, b)` for the `-r` option.
-
-> **Critique**: 
-> The script does not handle cases where input may not be piped directly into it; it could be improved by adding a mechanism to read from a specified file as an argument instead of requiring a pipe. Additionally, incorporating error handling for empty inputs or invalid formats would enhance the user experience and reliability.
+> [!TIP]  
+> The script could benefit from adding more comments for clarity, especially within the main loop. Further, consider implementing argument validation to ensure the script functions correctly with varying input types, such as reading from specific configuration files or directories. This would enhance its versatility.

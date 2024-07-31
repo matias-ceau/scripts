@@ -1,90 +1,46 @@
-# Wallpaper Setter (wallpaper.sh)
+# Random Wallpaper Selector
 
 ---
 
-Pick random wallpaper or select from a list and set it as the desktop wallpaper.
+**[wallpaper.sh](wallpaper.sh)**: Automatically change wallpapers from a specified collection.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `feh` - For setting the wallpaper.
-- `notify-send` - For displaying notifications.
-- `fzfmenu.sh` - For fuzzy searching wallpapers (optional).
-- `yad` - For a graphical selection and preview of wallpapers.
-
-<a name="description" />
+- `feh`: A lightweight image viewer used for setting the desktop wallpaper.
+- `notify-send`: A command-line tool to send desktop notifications.
+- `fzfmenu.sh`: (optional) An interactive command-line fuzzy finder for selecting wallpapers.
+- `yad`: A GTK+ dialog for shell scripts which provides a GUI interface.
 
 ### Description
 
-<a name="overview" />
+This script allows users to customize their desktop experience on Arch Linux by selecting and setting wallpapers from a designated folder. By utilizing the `feh` image viewer, it can set wallpaper images in various styles. Users have the option to choose a random wallpaper, select one interactively using a terminal-based fuzzy finder (`fzfmenu.sh`), or use a GUI dialog with `yad` to preview and confirm the wallpaper selection.
 
-#### Overview
+The script maintains a log of wallpapers that have been set, stored in `~/.cache/wallpapers.log`, allowing users to return to previously selected wallpapers. It also offers functionality to remove redundant entries in the log.
 
-The `wallpaper.sh` script allows users to set their desktop wallpaper from a predefined directory of images. It features multiple methods for selecting the wallpaper: randomly, by selection through a fuzzy finder, previous wallpapers from a log, or using a graphical interface with `yad`. 
+### Usage
 
-The default wallpaper is set to a specific image defined in `DEFAULT_WALLPAPER`. Successful changes are logged in a cache file located at the path specified by `CACHE`. 
+Run the script via command line with the following options:
 
-The script defines a main function `set_wallpaper` that uses `feh` to scale the chosen wallpaper to fill the screen and sends a notification confirming the selection.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-This script can be used directly in the terminal or can be bound to a shortcut key in your window manager (qtile). You can pass the following command line arguments:
-
-- `--random`: Selects a random wallpaper from the `~/.wallpapers/` directory.
-- `--select`: Prompts the user to select a wallpaper using `fzfmenu.sh` (if available).
-- `--previous [N]`: Sets the previous N-th wallpaper from the log. Defaults to 1.
-- `--gui`: Opens a graphical dialog to select and preview wallpapers using `yad`.
-- No arguments: Sets the wallpaper to the default specified in the script.
-
-Example command:
 ```bash
-bash ~/scripts/wallpaper.sh --random
+# Set a random wallpaper
+bash /home/matias/.scripts/wallpaper.sh --random
+
+# Select a wallpaper interactively
+bash /home/matias/.scripts/wallpaper.sh --select
+
+# Set the previous wallpaper (optional: specify how many entries back)
+bash /home/matias/.scripts/wallpaper.sh --previous [number]
+
+# Open GUI to select wallpaper
+bash /home/matias/.scripts/wallpaper.sh --gui
+
+# Set the default wallpaper if no options are provided
+bash /home/matias/.scripts/wallpaper.sh
 ```
 
-<a name="examples" />
-
-#### Examples
-
-- Set a random wallpaper:  
-  `bash ~/scripts/wallpaper.sh --random`
-  
-- Select a wallpaper interactively:  
-  `bash ~/scripts/wallpaper.sh --select`
-  
-- Set the previous wallpaper:  
-  `bash ~/scripts/wallpaper.sh --previous`
-  
-- Open a graphical interface to select a wallpaper:  
-  `bash ~/scripts/wallpaper.sh --gui`
-
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Make sure you have the necessary dependencies installed for the script to function correctly.
-- Ensure that your wallpaper directory (`~/.wallpapers`) contains image files (JPG, PNG, etc.).
-
-> **Critique:** 
-> - The script lacks error handling for cases where the wallpaper directory might be empty or the required dependencies may not be installed.
-> - The `fzfmenu.sh` script dependency is mentioned but not included or clearly documented, which could lead to confusion for users unfamiliar with it.
-> - Implementing a dedicated function to verify that the image set as wallpaper is valid could prevent errors when using `feh`.
+> [!TIP]  
+> The script could benefit from enhanced error handling. As it stands, if any command fails (such as `find` or `yad`), it may cause unexpected behavior. It would be wise to add error checks after critical commands. Moreover, consider implementing a dedicated function for cleaning up the cache to enhance readability and maintainability. This way, the logic for removing duplicates could be isolated, simplifying the flow of the main script.

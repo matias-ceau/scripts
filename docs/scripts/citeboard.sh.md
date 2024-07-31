@@ -1,86 +1,44 @@
-# Citeboard (citeboard.sh)
+# CiteBoard: Quick Access to Paper Citations
 
 ---
 
-A script to copy citations or open papers from a bibliography.
+**[citeboard.sh](citeboard.sh)**: A script to find and handle paper citations easily.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `findutils`
-- `xsel`
-- `dmenu`
-
-<a name="description" />
+- `findutils`: A set of utilities for searching files and directories in the filesystem.
+- `xsel`: A command-line tool to manipulate the X selection, useful for clipboard operations.
+- `dmenu`: A dynamic menu for X, used to create interactive interfaces for user selection.
 
 ### Description
 
-<a name="overview" />
+The `citeboard.sh` script is designed to streamline the process of finding and managing paper citations within your workflow. It allows users to search through BibTeX files to locate paper references, presenting them in an interactive selection menu powered by `dmenu`. 
 
-#### Overview
+The script does the following:
 
-Citeboard is a shell script designed to facilitate the management of academic references. It searches a specified directory for BibTeX files, prompting the user to select a citation. After selection, it provides an option to either copy the citation to the clipboard or open the associated paper directly using `evince`, a PDF viewer.
+1. **Searches for Citations**: It uses `grep` to collect citations from all BibTeX files in the `data/bib/` directory and cleans up the formatting to present a list of references.
+2. **User Selection with dmenu**: After retrieving the citations, it presents them in a vertical list for easy access.
+3. **Choice of Action**: Users can then choose to either copy the citation to the clipboard or open the paper directly using `evince` (a PDF viewer) by searching for the citation in the Zotero storage directory.
 
-The script operates by utilizing a combination of Unix utilities:
-- **grep**: To search for specific patterns in the BibTeX files.
-- **sed**: To format and clean the output.
-- **dmenu**: To create a user-friendly selection interface.
-- **xargs**: To execute commands with the reference file paths.
+### Usage
 
-The script internally relies on the path `data/bib/` for BibTeX files and `data/zotero/storage` to find the associated papers.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-To execute the script, run it directly from the terminal:
+To run the script, simply execute it from your terminal. Make sure it's executable (`chmod +x /home/matias/.scripts/citeboard.sh`) and you can run it with:
 
 ```bash
-sh /home/matias/.scripts/citeboard.sh
+/home/matias/.scripts/citeboard.sh
 ```
 
-Upon execution, the script will present a list of available citations (extracted from the BibTeX files) using `dmenu`. After selecting a citation, another prompt allows you to choose between copying the citation to the clipboard or opening the corresponding paper.
+#### Workflow Example:
 
-The user should ensure that the paths to the bibliography and storage directories are correctly set in the script according to their local configuration.
+1. Run the script with the above command.
+2. Use the `dmenu` interface to select a paper from the list.
+3. Choose either the **open** option to view the paper or the **clipboard** option to copy the citation.
 
-<a name="examples" />
-
-#### Examples
-
-1. **Run the script**: 
-   ```bash
-   sh /home/matias/.scripts/citeboard.sh
-   ```
-
-2. **Select a citation** from the dmenu list that appears.
-
-3. **Choose your action**:
-   - Select "clipboard" to copy the citation.
-   - Select "open" to view the paper in Evince.
+*Note*: Ensure that the `data/bib/` folder contains your BibTeX files and that your Zotero storage path is correctly set to where your PDFs are located.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-Ensure that the directories for the BibTeX files (`data/bib/`) and the Zotero storage files (`data/zotero/storage`) are correctly set up. The script currently utilizes hardcoded paths; these should be adjusted according to your file organization.
-
-> **Critique**: 
-> The script has a clean approach but could benefit from additional error handling. For example, if no paper is found for a selected citation, the user should receive a notification. Also, depending on the user's preference, it might be useful to allow configuration of directories through command-line arguments or a configuration file instead of hardcoded values. Adding comments or more verbose prompts in `dmenu` could also enhance usability.
+> [!TIP]  
+> The script could benefit from error handling when invoking `xargs` to open files or copying to clipboard when no file is found. Additionally, consider using a more robust method for handling the case when no citation is selected to improve user experience. Adding comments within the code itself would also enhance maintainability.

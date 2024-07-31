@@ -1,76 +1,50 @@
-# PDF Opener (pdfopener.sh)
+# PDF Opener
 
 ---
 
-A simple script to find and open PDF files using Evince.
+**[pdfopener.sh](pdfopener.sh)**: A script to pick and open a PDF file using Evince
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `dmenu` - A dynamic menu for X.
-- `evince` - Document viewer for PDF and other formats.
-- `find` - Command-line utility for searching files in a directory hierarchy.
-
-<a name="description" />
+- `dmenu`: A dynamic menu for X, used here for file selection.
+- `evince`: A document viewer capable of opening PDF files.
 
 ### Description
 
-<a name="overview" />
+This script simplifies the task of opening PDF files located in the user's home directory by utilizing `dmenu` for interactive file selection and `evince` for displaying the chosen PDF. The script performs the following steps:
 
-#### Overview
+1. It uses the `find` command to search for files ending with `.pdf` in the user's home directory.
+2. Any errors from the `find` command are redirected to `/dev/null` to keep the output clean.
+3. The list of found PDF files is piped into `dmenu`, where the user can interactively select any file from the list.
+4. Finally, the selected file is opened with `evince`, creating a streamlined workflow for accessing PDF documents.
 
-The `pdfopener.sh` script is a shell script designed for quick access to PDF files stored in the user's home directory. Upon execution, it searches for PDF files and presents them in a menu using `dmenu`, allowing the user to select a file. Once the user makes a selection, the script opens the chosen PDF file using `Evince`, a popular document viewer. 
+### Usage
 
-Internally, the script utilizes the `find` command to search for all PDF files, redirects any error output to `/dev/null` to avoid cluttering the terminal with error messages, and filters the results through `grep` to match files ending with `.pdf`. It then limits the displayed list to a manageable number of entries (30) to enhance usability.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-To use this script, simply execute it in your terminal or bind it to a keyboard shortcut in your window manager (Qtile). Running the command:
+To run the script, execute it in a terminal. Ensure it has executable permissions. You can do this by running:
 
 ```bash
-sh /home/matias/.scripts/pdfopener.sh
+chmod +x /home/matias/.scripts/pdfopener.sh
 ```
 
-will prompt you with a dmenu interface showing available PDF files. Select the desired file to open it with Evince.
+Then you can run the script with the following command:
 
-<a name="examples" />
+```bash
+/home/matias/.scripts/pdfopener.sh
+```
 
-#### Examples
+After running, a `dmenu` prompt will appear displaying all PDF files in your home folder. Select a file and press Enter to open it with `evince`.
 
-- Open a terminal and execute:
-  ```bash
-  sh /home/matias/.scripts/pdfopener.sh
-  ```
-  This will display a list of all PDF files in your home directory for selection.
+To assign this script to a keybinding in `qtile`, you can add it to your configuration as follows:
+
+```python
+Key([mod], "p", lazy.spawn("/home/matias/.scripts/pdfopener.sh")),
+```
+
+This binding allows you to quickly open the PDF opener using your specified key combination.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- It is recommended to ensure that your home directory (or the directory you want to search) contains the PDFs you want to open. The script may take some time to execute if there are many files.
-- The script will not find PDFs in hidden directories unless they are explicitly included in the search.
-
-> **Critique:** While the script is functional, there are a few potential improvements:
-> - Consider adding error handling for cases where no PDF files are found, to provide user feedback.
-> - To enhance performance, the script could limit the search to a specific directory rather than searching the entire home directory.
-> - Adding an option for filtering PDFs by a specific keyword or date could improve usability for users with a large number of PDF files.
+> [!TIP]  
+> The script currently searches for PDF files in the entire home directory, which may take time if there are many files. Consider limiting the search scope or adding a configuration option to set the search directory. Also, handling cases where no PDF file is selected (e.g., if the user cancels the `dmenu`) could improve user experience.

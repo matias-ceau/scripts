@@ -1,90 +1,50 @@
-# Llama All Scripts Describer (llama-all-scripts-describer.py)
+# Llama Script Describer
 
 ---
 
-Generates GitHub documentation for scripts using Llama 3.1 model.
+**[llama-all-scripts-describer.py](llama-all-scripts-describer.py)**: Automates script documentation generation using Llama 3.1
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Python 3.x
-- Llama 3.1 API (via `ollama` package)
-- Colorama for colored terminal output
-- External utilities: `fd`, `rg`
-
-<a name="description" />
+- `ollama`: A library to interface with the Llama language model for generating documentation.
+- `colorama`: A package for cross-platform colored terminal text.
+- `fd`: A fast and simple file finder.
+- `rg`: A command-line search tool (ripgrep) for filtering files.
 
 ### Description
 
-<a name="overview" />
+This Python script is designed to facilitate the automatic generation of documentation for user scripts found in a specified directory. By leveraging the Llama 3.1 model, the script reads the content of each script file, analyzes it, and produces a structured markdown documentation file.
 
-#### Overview
+Key functionalities:
 
-This script is designed to automate the generation of GitHub markdown documentation for user scripts located in a defined directory. It uses the Llama 3.1 model to describe the functionalities of the scripts and handles various tasks including:
+1. **Script Detection**: It identifies script files in the directory specified by the `SCRIPTS` environment variable, excluding markdown files.
+2. **Orphaned Documentation Checking**: It checks for existing markdown documentation files and alerts the user if they do not have corresponding script files.
+3. **Binary File Handling**: If a script is binary, it attempts to find its source file.
+4. **Llama Interaction**: It communicates with the Llama model to generate documentation based on script content.
+5. **Markdown Generation**: It creates and writes markdown files with generated documentation and updates an index.
 
-- Running a shell script for updating symlinks.
-- Collecting all script file names.
-- Checking for orphaned documentation files.
-- Detecting binary files and locating their source code.
-- Reading script content and passing it to Llama for description.
-- Writing the generated description into markdown files and updating an index file for documentation.
+### Usage
 
-The script uses several helper functions to handle specific tasks, providing a modular approach to the documentation process.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-To use this script, run it from the command line. You can pass an optional path to a CSV file that contains script information. If this path is not provided, it defaults to `$SCRIPTS/data/symlink_data.csv`.
+To execute the script, navigate to the terminal and run:
 
 ```bash
-./llama-all-scripts-describer.py [path_to_csv]
+python /home/matias/.scripts/llama-all-scripts-describer.py [path_to_csv]
 ```
 
-The user will be prompted whether to run a specific shell script (`utils_update_symlinks.sh`). The script will then process the provided CSV file and generate documentation for the scripts listed therein.
+If `path_to_csv` is not supplied, the script defaults to `$SCRIPTS/data/symlink_data.csv`.
 
-<a name="examples" />
+#### Example:
 
-#### Examples
+```bash
+# Running the script with the default CSV file
+python /home/matias/.scripts/llama-all-scripts-describer.py
+```
 
-1. Run the script with default CSV file:
-   ```bash
-   ./llama-all-scripts-describer.py
-   ```
-
-2. Run the script with a specific CSV file:
-   ```bash
-   ./llama-all-scripts-describer.py /path/to/your_csv_file.csv
-   ```
+**Interactive Element**: The script will prompt whether to execute `utils_update_symlinks.sh`. Respond with 'y' or 'yes' to run it or 'n' to skip.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that the `SCRIPTS` environment variable is correctly set to point to the directory containing your scripts.
-- The script assumes that the documentation files are stored in `$SCRIPTS/docs/scripts/`.
-
-> **Critique:** 
-> 
-> While the script is quite comprehensive, there are areas for potential improvement:
-> - The script doesn't validate the content of the CSV beyond checking for existence; it might be beneficial to validate the format and contents.
-> - Hardcoded strings and file paths may benefit from being defined as constants or environment variables to enhance maintainability.
-> - Error handling can be extended for more specific scenarios, especially while checking for file types and reading files to provide better feedback to users.
+> [!TIP]  
+> The script could benefit from additional error handling for file I/O operations to ensure robustness, especially during the reading of binary files. Additionally, logging can be implemented for better tracking of operations and errors across larger projects. Consider compressing redundant functionalities into reusable functions to improve code readability and maintenance.

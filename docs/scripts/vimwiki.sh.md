@@ -1,89 +1,47 @@
-# VimWiki Script (vimwiki.sh)
+# VimWiki Note Opener
 
 ---
 
-Launch Vim with a selected note from the notes directory.
+**[vimwiki.sh](vimwiki.sh)**: Open a note in vim using fzf for quick selection.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder
-- `vim`: A text editor available on Arch Linux
-
-<a name="description" />
+- `vim`: A highly configurable text editor. Make sure it's installed to edit notes.
+- `fzf`: A command-line fuzzy finder. This is used for selecting notes interactively.
 
 ### Description
 
-<a name="overview" />
+The `vimwiki.sh` script is a simple shell script designed to facilitate quick access to notes stored in the `~/notes` directory. By utilizing `fzf`, a fuzzy finder, it allows the user to rapidly browse through available notes and select one to open in Vim.
 
-#### Overview
+When executed, the script performs the following actions:
 
-The `vimwiki.sh` script provides a quick way to open notes stored in a specified directory in Vim. It uses `fzf`, a powerful command-line fuzzy finder, to allow the user to select a file interactively. This simplifies the navigation of notes, especially when the number of files is large.
+1. **Fetches Notes**: It lists all files in the `~/notes` directory using the `ls` command.
+2. **Fuzzy Selection**: It pipes the output of the `ls` command into `fzf`, allowing the user to easily search for and select a note using an interactive interface.
+3. **Open in Vim**: After a note is chosen, it opens the selected file in Vim for editing.
 
-Upon execution, the script lists the contents of the `~/notes` directory and presents them in a fuzzy search interface. Once a file is selected, it utilizes Vim to open that specific note for editing.
+This method offers a swift and efficient way of managing notes without needing to remember the exact names or paths of the files.
 
-The script is simple yet effective for users who manage their notes in plain text files and prefer a minimalist setup.
+### Usage
+
+To use this script, simply run it from your terminal:
+
+```sh
+~/path/to/vimwiki.sh
+```
+
+Replace `~/path/to/vimwiki.sh` with the actual path if different. Upon execution, an interactive list of your notes will appear.
+
+Alternatively, you can bind this script to a keyboard shortcut in your window manager (Qtile) or add it as a launcher in your application menu for easier access.
+
+For example, you can add the following command to your Qtile configuration to bind it to a key:
+
+```python
+Key([mod], "n", lazy.spawn("sh ~/scripts/vimwiki.sh")),
+```
 
 ---
 
-<a name="usage" />
-
-#### Usage
-
-To use this script, simply run it in the terminal:
-
-```bash
-sh /home/matias/.scripts/vimwiki.sh
-```
-
-Alternatively, you can assign it to a keybinding in your window manager or create an alias in your shell configuration file (e.g., `.bashrc`, `.zshrc`) for quicker access. 
-
-Example alias:
-
-```bash
-alias vimwiki='sh /home/matias/.scripts/vimwiki.sh'
-```
-
-After adding the alias, you can run `vimwiki` from any terminal to activate the script.
-
-<a name="examples" />
-
-#### Examples
-
-1. **Run the script directly:**
-   ```bash
-   sh /home/matias/.scripts/vimwiki.sh
-   ```
-   - This opens the fuzzy finder and lets you choose a note to edit.
-
-2. **Using an alias:**
-   ```bash
-   vimwiki
-   ```
-   - Executes the script quickly if you have set up an alias.
-
----
-
-<a name="notes" />
-
-### Notes
-
-- Ensure that the `~/notes` directory exists and contains text files to be able to utilize the script effectively.
-- The script will not handle cases where there are no files in the specified directory, leading to potential errors or an empty `fzf` menu.
-
-> **Critique:** 
-> Consider implementing error handling in this script to manage situations where the `~/notes` directory may be empty or unavailable. Additionally, allowing for the specification of a different directory through a command-line argument could further enhance usability, making this script more flexible for various workflows.
+> [!TIP] 
+> The current script lacks error handling. It may fail if the `~/notes` directory is empty or does not exist. To improve user experience, consider adding checks that display a message if no files are found or if the directory does not exist. Additionally, if you add more file types in the `~/notes` directory, you might want to filter the `ls` output to include only specific extensions.

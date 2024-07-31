@@ -1,86 +1,45 @@
-# Mechen Music Transfer Script (mechen_music_transfert.py)
+# Mechen Music Transfer Script
 
 ---
 
-Custom script to copy music to the Mechen device.
+**[mechen_music_transfert.py](mechen_music_transfert.py)**: Custom script to copy music to Mechen
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Python 3
-- `beet` (beets music library manager)
-- `pandas` (Python data analysis library)
-- `rsync` (file transfer tool)
-- `du` (disk usage utility)
-
-<a name="description" />
+- `pandas`: A powerful data manipulation and analysis library for Python.
+- `beet`: The MusicBrainz Picard application that manages music libraries.
+- `du` command: Used to estimate file space usage (installed by default on Linux).
+- Python environment: This script requires Python 3.
 
 ### Description
 
-<a name="overview" />
+The `mechen_music_transfert.py` script is designed for music enthusiasts using the Mechen MP3 player. Its primary function is to efficiently transfer music files to the device while managing storage constraints. 
 
-#### Overview
+The script starts by prompting the user for their password to allow for necessary file operations that require superuser privileges. It defines a maximum space limit (`MAX_SPACE`) of 50MB. Using the `subprocess` module, it retrieves a list of albums that have not been listened to from the local music directory using `beet`.
 
-This script serves as a custom utility for transferring unlistened music albums from a local directory to a device referred to as "Mechen." The script identifies unlistened albums, checks their total size against a predefined maximum space limit, and manages file transfers accordingly.
+The script calculates the sizes of these albums and constructs a DataFrame with pertinent information, including the path, artist name, and album size. It ensures that the total size of the selected albums does not exceed the defined limit by utilizing functions that randomly drop albums by artist.
 
-Key functionalities include:
-- Retrieving a list of unlistened albums using the `beet` command.
-- Calculating and filtering albums based on their size.
-- Performing cleanup of existing albums on the Mechen device as needed.
-- Creating necessary folders and synchronizing files using `rsync`.
+The script also identifies albums that already exist on the Mechen device, removes albums that are no longer needed, and cleans empty folders. After creating the necessary artist and album directories on the device, it uses `rsync` to transfer the new files, preserving the file structure.
 
-<a name="usage" />
+### Usage
 
-#### Usage
-
-To run this script, execute it from terminal:
+To use the script, execute the following command in the terminal:
 
 ```bash
 python3 /home/matias/.scripts/mechen_music_transfert.py
 ```
 
-You will be prompted to enter a password for sudo access. The script will automatically handle the copying and cleanup processes based on the defined logic.
+- During execution, you will be prompted to enter your password.
+- The script will output the number of albums identified and their total sizes.
+- It will report on which albums are being synced and provide feedback throughout the process.
 
-The music directory is assumed to be `/home/matias/music`, while the destination is set to `/home/matias/MECHEN`. Ensure these paths are correctly set in your environment.
-
-<a name="examples" />
-
-#### Examples
-
-1. **Basic Execution:**
-   To start transferring music to the Mechen, simply run:
-   ```bash
-   python3 /home/matias/.scripts/mechen_music_transfert.py
-   ```
-
-2. **Result:**
-   You should see output indicating the number of unlistened albums found and the progress of the rsync operation.
+For best results, ensure that:
+- You have sufficient permissions for file operations.
+- The `pandas` library and the `beet` music client are installed on your Arch Linux system.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Ensure that `sudo` privileges are available since the script requires permission to delete files and create directories.
-- If the total album size exceeds the defined `MAX_SPACE` (50 MB in this case), the script will randomly drop albums by artist until the size fits within the limit.
-
-> **Critique:** 
-> 
-> - The script uses `sudo` for the `mkdir` and `rsync` commands, which may create security concerns. Consider implementing user-level operations or confirming necessary permissions beforehand.
-> - Error handling for subprocess calls is minimal; it might be beneficial to add checks for the success of each operation and provide more informative error messages where applicable.
-> - Consider allowing configuration options for the music directory and destination path rather than hardcoding them. This would increase flexibility for different user environments.
+> [!TIP] 
+> This script assumes a specific directory layout for the music files. It may not handle cases where the directory structure differs. Consider adding error handling to manage unexpected scenarios, like missing directories or files. Moreover, using `os.path` methods for path manipulations may improve cross-platform compatibility (if needed in the future).

@@ -1,91 +1,50 @@
-# dmenu_run_scripts.py
+# dmenu_run_scripts - A dynamic script launcher using rofi
 
 ---
 
-A script to select and run scripts using rofi, inspired by dmenu_run.
+**[dmenu_run_scripts.py](dmenu_run_scripts.py)**: A Python script to dynamically run scripts using rofi as a dmenu alternative.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- Python 3
-- xonsh
-- rofi
-- Shell scripts required by `script_identifier.xsh`
-
-<a name="description" />
+- `python`: Needed to run the script as it is written in Python.
+- `xonsh`: A shell that can execute the `script_identifier.xsh` script.
+- `rofi`: A window switcher, application launcher, and dmenu replacement.
 
 ### Description
 
-<a name="overview" />
+The `dmenu_run_scripts.py` script allows users to dynamically launch executable scripts using `rofi` for a graphical selection interface. This script leverages `subprocess` to interact with both `xonsh` and `rofi`. 
 
-#### Overview
+Here’s a breakdown of the script's functionality:
 
-This script leverages Python's subprocess module to interact with shell commands for a streamlined script-launching experience. It retrieves a list of available scripts by executing `script_identifier.xsh` configured to provide specific output formatted to be parsed. After acquiring these choices, it uses the `rofi` program to present a user interface for selection.
+1. **Choice Retrieval**:
+   - The script first retrieves executable choices from `script_identifier.xsh` using `xonsh`. It runs a command that filters the available scripts based on criteria such as `HOST` and `STATUS=active`. The results are formatted in a way that highlights the script name in green with additional descriptions.
 
-1. **Subprocess Management**: It utilizes `subprocess.run()` to execute shell commands and capture outputs efficiently.
-2. **Choice Formatting**: The choices fetched contain markup (using span tags and colors) that `rofi` interprets. The script uses these features to enhance the visualization of options available to the user.
-3. **Execution**: Once the user makes a selection from the `rofi` interface, the corresponding script is executed directly.
+2. **User Selection**:
+   - The choices are then passed into `rofi`, allowing the user to select one from a list presented in a styled format. The `rofi` commands set parameters like the number of lines displayed, case-insensitivity, and markup support to enhance the user experience.
 
----
+3. **Executing the Choice**:
+   - After selection, the script extracts the chosen item from `rofi` output and executes the corresponding script utilizing `subprocess.run`.
 
-<a name="usage" />
+### Usage
 
-#### Usage
-
-To run this script:
-
-1. Ensure that the dependencies listed above are installed.
-2. Execute the script from the terminal:
+To use this script, simply run it from your terminal. Make sure all prerequisites are installed and that `script_identifier.xsh` is set up correctly.
 
 ```bash
 python /home/matias/.scripts/dmenu_run_scripts.py
 ```
 
-If you want to bind this script to a key combination in your window manager (qtile), you could add a configuration similar to the following in your `config.py`:
+This will launch `rofi`, displaying all available scripts. Select one and press Enter to execute it.
+
+Alternatively, you can bind this script to a key in your window manager (Qtile) for quick access:
 
 ```python
-keys = [
-    Key([mod], 'r', lazy.spawn('python /home/matias/.scripts/dmenu_run_scripts.py')),
-]
+# Example of a key binding in Qtile config.py
+Key([mod], "d", lazy.spawn("/home/matias/.scripts/dmenu_run_scripts.py")),
 ```
-
-<a name="examples" />
-
-#### Examples
-
-1. Run the script via terminal:
-
-   ```bash
-   python /home/matias/.scripts/dmenu_run_scripts.py
-   ```
-
-   This will present a list of active scripts.
-
-2. Select a script from the graphical interface provided by `rofi`, and the selected script will run.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Make sure that `script_identifier.xsh` is executable and returns properly formatted output so that the subsequent processing step runs without errors.
-- The script strips the selection of leading/trailing whitespace, so ensure your options are cleanly defined to avoid execution errors.
-
-> **Critique**:
-> 
-> The script could benefit from error handling, particularly in areas where subprocess calls might fail. For instance, handling cases where `script_identifier.xsh` returns no valid choices or where the user's selection fails to execute should be considered. Additionally, providing more context to the user when no options are available or when an error occurs could enhance user experience.
+> [!TIP]  
+> Consider adding error handling for subprocess calls to manage cases where scripts may not execute as expected or if `rofi` fails to display choices. Additionally, it may be beneficial to cache results from `script_identifier.xsh` to reduce execution time for frequently used scripts.

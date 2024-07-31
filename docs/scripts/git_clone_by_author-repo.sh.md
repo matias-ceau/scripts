@@ -1,89 +1,58 @@
-# Git Clone by Author/Repo (git_clone_by_author-repo.sh)
+# Git Clone by Author/Repo
 
 ---
 
-A script to clone GitHub repositories via SSH or HTTPS based on user preferences.
+**[git_clone_by_author.sh](git_clone_by_author.sh)**: A script to clone git repositories based on developer/package name using various options.
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `git`: Ensure Git is installed on your Arch Linux system.
-
-<a name="description" />
+- `git`: A version control system required to clone repositories from GitHub.
 
 ### Description
 
-<a name="overview" />
+This script simplifies the process of cloning GitHub repositories by allowing users to specify options for SSH cloning, local repository cloning, or HTTPS cloning. The script defines a usage function that displays the correct command-line usage if the user inputs incorrect arguments or fails to provide sufficient input. 
 
-#### Overview
+Here’s how the script works:
 
-The `git_clone_by_author-repo.sh` script facilitates the cloning of GitHub repositories, allowing the user to choose the method of cloning (SSH, local, or HTTPS). It creates a directory structure based on the GitHub developer's name and the repository name. The script defaults to using the HTTPS method unless specified otherwise.
+- It sets a default directory for cloning repositories, with the option to customize it via the `GIT_REPOS` environment variable.
+- It assesses command-line flags:
+  - `-s` or `--ssh`: This flag enables SSH cloning.
+  - `-l` or `--local`: This flag allows specifying a local path from which to clone.
+- It ensures that only one of these options can be selected at a time.
+- The main parameters expected from the user are `developer/package`, which the script extracts to determine the appropriate subdirectory.
 
-The script starts by checking for command-line arguments and validating them against expected input. Depending on the flags provided (-s for SSH and -l for local), it constructs the appropriate clone command which it then executes.
+The target directory structure is organized as:
 
-Key functions:
-- `usage`: Outputs the usage instructions.
-- Constructs the target directory based on environment variables and user inputs.
-
----
-
-<a name="usage" />
-
-#### Usage
-
-The script is run from the terminal, and requires at least one argument: the repository in the format `developer/package`. It accepts the following options:
-
-```bash
-git_clone_by_author-repo.sh [-s | -l <path>] developer/package
+```plaintext
+$GIT_REPOS/
+└── developer/
+    └── package/
 ```
 
-- `-s`, `--ssh`: Clone using SSH (e.g., `git@github.com:developer/package.git`).
-- `-l`, `--local <path>`: Clone from a local repository at the specified `<path>`.
+### Usage
 
-If neither flag is provided, the script clones using HTTPS by default. The environment variable `GIT_REPOS` is used to define the parent directory for cloning repositories, defaulting to `~/git`.
+To utilize this script, you can run it in your terminal. Below are the command examples:
 
-<a name="examples" />
+```bash
+# Clone using HTTPS
+./git_clone_by_author-repo.sh user/repo
 
-#### Examples
+# Clone using SSH
+./git_clone_by_author-repo.sh -s user/repo
 
-- Clone a repository via HTTPS:
-  ```bash
-  ./git_clone_by_author-repo.sh user/repo
-  ```
+# Clone a local repository
+./git_clone_by_author-repo.sh -l /path/to/local/repo user/repo
+```
 
-- Clone a repository using SSH:
-  ```bash
-  ./git_clone_by_author-repo.sh -s user/repo
-  ```
+**Command-line arguments:**
+- `-s`, `--ssh`: Use SSH for cloning the repository.
+- `-l`, `--local <path>`: Clone a repository from a local path.
 
-- Clone a local repository:
-  ```bash
-  ./git_clone_by_author-repo.sh -l /path/to/local/repo user/repo
-  ```
+If the command is executed without valid options or with incomplete input, the script will display the correct usage format to guide the user.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-- Make sure to have SSH keys set up if using the SSH option to avoid authentication issues.
-- The script will create necessary directories if they don’t exist, based on the developer's name.
-
-> **Critique:** 
-> 
-> The script handles basic scenarios effectively but could benefit from enhanced error handling, particularly while cloning. For instance, it does not check if the repository already exists or if there are any issues during the clone process. Additionally, using a more structured method for argument parsing might enhance readability and maintainability. Consider implementing verbose mode to inform users of the cloning process in detail.
+> [!TIP]  
+> The script could be improved by implementing error handling for the `git clone` command to provide clear feedback in case of failures (e.g., incorrect SSH key, invalid repository name). Additionally, consider allowing the user to specify a custom directory for repos as a command-line option for further flexibility.

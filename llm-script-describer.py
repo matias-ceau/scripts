@@ -21,7 +21,6 @@ INFO_JSON_PATH = os.path.join(SCRIPTS_PATH, 'data', 'script_info.json')
 README_PATH = os.path.join(SCRIPTS_PATH, 'README.md')
 
 
-
 client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 llm_model = "gpt-4o-mini"
 
@@ -40,76 +39,43 @@ content:
 NB: `<script_path>` is the path of the file and `<script_content>` is the content of the file.
 
 3) Please provide the documentation directly in markdown format, without using markdown code blocks.
-The documentation's length should be between 200 and 500 words, depending on the complexity of the script.
-You can use any github flavored markdown formatting to make the description clear (including code blocks, lists, tables, footnote, lines, etc), except when explicitly told otherwise.
-For sections, always use the template provided below (nb: lines between double accolades ({{}}) are comments to give you guidance):
+The documentation's length should be between 200 and 400 words, depending on the complexity of the script.
+You can use any github flavored markdown formatting to make the description clear (including code blocks, bloquotes, lists, tables, footnote, lines, etc), except when explicitly told otherwise.
 
-# Script Name {{ choose an appropriate title and add the filename in parenthesis}}
+4)For sections, always use the template provided below (NB: lines between double accolades ({{}}) are comments to give you guidance, words between double brackets ([[]]) are to be substituted with the relevant value (ie '[[filename]]' becomes 'ardour-open.sh' when documenting this files). Finally other words and lines should remain as is.):
 
----
 
-[Brief description of the script (maximum 100 characters), no special formating, be concise]
+# [[Script Name]] {{ choose an appropriate title}}
 
 ---
 
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
+**[[filename]]**: [Brief description of the script (maximum 100 characters), no special formating, be concise]
 
 ---
-
-<a name="dependencies" />
 
 ### Dependencies
 
-{{List any dependencies required by the script, including user scripts}}
-
-
-<a name="description" />
+{{A list of any dependencies required by the script (including user scripts) ; NB: dependancies are always displayed with backquotes. You can add a brief description of the dependency.}}
 
 ### Description
 
-<a name="overview" />
-
-#### Overview
-
 {{Provide a more in depth description of the script, feel free to format this section as you find fits the best, including explaining functions or utilities used}}
 
----
+### Usage
 
-<a name="usage" />
-
-#### Usage
-
-{{Explain how to use the script, including any command-line arguments, if it needs to be run interactively in a terminal or can be assigned to a keybinding, executed automatically, etc}}
-
-<a name="examples" />
-
-#### Examples
-
-{{Provide examples of how to use the script in a "tldr" style}}
+{{Explain how to use the script, including any command-line arguments, if it needs to be run interactively in a terminal or can be assigned to a keybinding, executed automatically, etc. Make heavy use of code blocks and provide examples of how to use the script in a "tldr" style}}
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-{{Add any additional notes or considerations}}
-
-{{include a "critique" section, inside a mardown blockquote, where you, as the assistant, point out problems in the scripts or potential improvements}}
+{{include a "critique" section, inside a mardown blockquote, where you, as the assistant, point out problems in the scripts or potential improvements. The first line should be '> [!TIP]' (you can switch TIP with NOTE, IMPORTANT, WARNING or even CAUTION}}
 """
 
 system_prompt_2 = """\
 1) You are a helpful assistant that generates a summary of the content of a GitHub script repository.Your audience is mainly the creator of the scripts themselves so provide information adapted to his context (OS : Arch linux, WM : qtile).
-2) Your goal is to create a summary of the script repository based on the documentation for all of the scripts that you will receive. This will be integrated in the README.md file, so it shouldn't be too specific (DON'T DESCRIBE EACH SCRIPT INDIVIDUALLY). You should write a 200-300 word description of the kind of script it contains (You are free to format it using markdown features available on github, with the exception of headers).
-To help you, the user will send you messages in the format below.
-
+2) Your goal is to create a summary of the script repository based on the documentation for all of the scripts that you will receive. This will be integrated in the README.md file, so it shouldn't be too specific (DON'T DESCRIBE EACH SCRIPT INDIVIDUALLY). 
+3) You should write a 300-400 word description of the kind of script it contains (You are free to format it using markdown features available on github, such as blockquotes, code blocks, lists, etc. WITH THE EXCEPTION OF HEADERS).
+4) If you want to reference a script called "<script.sh>" in the summary, you can reference it like this : "[script.sh](docs/scripts/<scripts.sh>.md)" so that it can point to the actual doc file in github.
+5) The user will only send you the full content of the script documentation in a message formatted like this:
 
 
 [FILE]: script_filename1
@@ -273,16 +239,18 @@ def write_markdown(filename, content):
     with open(filename, 'w') as file:
         file.write(content)
 
-def update_index(filename, relative_path):
+def update_index(filename, relative_path, short_description):
     print_colored(f"Updating index file: {INDEX_PATH}", kind='info')
     with open(INDEX_PATH, 'a') as file:
         pass
     with open(INDEX_PATH, 'r') as file:
         lines = file.readlines()
     
-    new_line = f"- [{filename}]({relative_path})\n"
-    if new_line not in lines:
-        lines.append(new_line)
+    new_line = f"- [{filename}]({relative_path}) -- *{short_description}*\n"
+    for n,l in enumerate(lines):
+        if filename in l.split('](')[0]:
+            lines.pop(n)
+    lines.append(new_line)
     
     lines.sort(key=lambda x: x.lower())
     
@@ -331,9 +299,8 @@ def process_script(script_path):
     write_markdown(markdown_path, description)
     
     relative_path = os.path.relpath(markdown_path, DOCS_PATH)
-    update_index(filename, relative_path)
-    
-    short_description = description.split('---')[1].strip()
+    short_description = description.split('---')[1].split(':')[-1].strip()
+    update_index(filename, relative_path, short_description)
     
     INFO_JSON[filename] = {
         'file': filename,

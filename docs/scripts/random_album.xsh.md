@@ -1,82 +1,49 @@
-# Random Album Selector (random_album.xsh)
+# Random Album Selector
 
 ---
 
-Select a random album and play it with cmus.
+**[random_album.xsh](random_album.xsh)**: Select random album and play it with cmus
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- cmus - A lightweight music player for the terminal.
-- xonsh - A Python-powered shell.
-- Basic shell utilities (such as `cat`).
-
-<a name="description" />
+- `cmus`: A small and fast music player for Unix-like operating systems.
+- `xonsh`: A Python-powered shell that is useful for scripting.
+- `beet`: An open-source music library manager that allows organization of music collections (optional based on commented lines).
 
 ### Description
 
-<a name="overview" />
+The `random_album.xsh` script is designed for Arch Linux users who utilize the `cmus` music player and want to enhance their listening experience by automatically selecting and playing random albums from their music library. This script utilizes the xonsh shell to execute commands and manage files.
 
-#### Overview
+Key functionalities:
+- The script first unsets the current view in `cmus` and prepares the environment for a new playlist.
+- It retrieves the current music library paths from `cmus` and constructs a list of unique album names.
+- It randomly shuffles these album names and then selects from them to build a temporary playlist.
+- Finally, the constructed playlist is saved to a temporary `.m3u` file which is loaded by `cmus` for playback.
 
-The `random_album.xsh` script facilitates the random selection of an album within the cmus music player. When executed, it first clears the current cmus playlist and fetches the album paths from the cmus library. The script randomly selects one album from these paths and composes a temporary playlist containing ten tracks from the selected album. This temporary playlist is then loaded into cmus for immediate playback.
+This automation is efficient for those who wish to enjoy listening without manual album selection.
 
-Key components of the script include:
-- Utilization of `cmus-remote` for communication with the cmus player.
-- Use of Python's built-in `random` module to shuffle and select albums.
-- File I/O for creating a temporary playlist.
+### Usage
+
+To execute the script, simply run it from a terminal or link it to a keyboard shortcut in your window manager. The use of `xonsh` means you can directly run this script as follows:
+
+```bash
+/home/matias/.scripts/random_album.xsh
+```
+
+When executed:
+- The script clears any existing playlist in `cmus`.
+- It generates a new playlist based on randomly selected albums.
+- It plays the newly selected albums immediately.
+
+You can adjust the number of albums played by changing the range in the for loop:
+
+```python
+for n in range(10):   # Change 10 to any number to adjust how many albums are selected
+```
 
 ---
 
-<a name="usage" />
-
-#### Usage
-
-To use this script, ensure it is executable and run it in a terminal where you have xonsh installed. Simply execute:
-
-```bash
-./random_album.xsh
-```
-
-This will select a random album from the cmus library and initiate playback.
-
-<a name="examples" />
-
-#### Examples
-
-Simply run the script:
-
-```bash
-./random_album.xsh
-```
-
-This command plays a random album's tracks through cmus.
-
----
-
-<a name="notes" />
-
-### Notes
-
-- Ensure that your cmus library is correctly set up and populated with albums to maximize the effectiveness of this script.
-- The script selects a random album from the list of albums available in `~/.config/cmus/lib.pl` and plays the first 10 tracks found. 
-- The temporary playlist is stored in `~/.config/cmus/.temp.m3u`.
-
-> **Critique**: 
-> - The script currently assumes there are at least 10 albums available to choose from, which could lead to an error if there aren't enough albums or tracks in the library. Adding error handling to check the count of albums would improve robustness.
-> - The commented-out code regarding `beet` suggests there may be an alternative method for selecting albums that is not being utilized. If `beet` access is possible, integrating that logic could add more flexibility in album selection.
-> - Consider enhancing user feedback (e.g., print statements to indicate which album is being played) for a better user experience.
+> [!TIP]  
+> The script assumes there are at least 10 unique albums available. If there are fewer, this will result in an index error. Consider adding a check to handle cases where there are not enough unique albums. Additionally, the commented-out part regarding `beet` indicates a potential for enhancing album retrieval, which could be a useful feature to include in future iterations.

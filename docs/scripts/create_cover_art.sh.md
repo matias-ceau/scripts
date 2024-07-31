@@ -1,76 +1,48 @@
-# Create Cover Art (create_cover_art.sh)
+# Create Cover Art from WAV Files
 
 ---
 
-Generate cover art from an audio file's spectrogram in PNG format.
+**[create_cover_art.sh](create_cover_art.sh)**: A script to generate cover art from WAV file spectrograms
 
 ---
-
-### Table of contents
-
-- [Dependencies](#dependencies)
-- [Description](#description)
-    - [Overview](#overview)
-    - [Usage](#usage)
-    - [Examples](#examples)
-- [Notes](#notes)
-
----
-
-<a name="dependencies" />
 
 ### Dependencies
 
-- `sox` - Sound file processing tool.
-- `dmenu` - Dynamic menu for X.
-- `imagemagick` - Image manipulation software.
-
-<a name="description" />
+- `sox`: A command-line utility that handles audio processing, required here to create the spectrogram.
+- `dmenu`: A dynamic menu for X, used for file selection in this script.
+- `imagemagick`: A software suite to create, edit, compose, or convert bitmap images, necessary for image processing in the script.
 
 ### Description
 
-<a name="overview" />
+This script is designed to generate cover art from the spectrogram of WAV audio files located in the user's `PROJECTS` directory. It uses a combination of `sox` to create the spectrogram and `imagemagick` to resize the resulting image. 
 
-#### Overview
+The process is straightforward:
+1. The script initiates by searching for all `.wav` files in `/home/matias/audio/PROJECTS` using the `find` command.
+2. It lets the user select a file through `dmenu`, which presents a list of found WAV files.
+3. Once a file is selected, `sox` generates a spectrogram image of the selected audio file, saving it as a PNG.
+4. The PNG image is then resized to 1600x900 pixels using `convert` from ImageMagick.
+5. After resizing, the original PNG file is deleted, leaving only the resized version.
 
-This script allows users to create aesthetically pleasing cover art by generating a spectrogram image from a selected `.wav` audio file. The use of `sox` facilitates the extraction of the audio visual representation, while `dmenu` provides an interactive way to select files from a predefined directory. The script also utilizes `imagemagick` to resize the generated image for better usability. The extracted spectrogram image is stored as a PNG file, with an additional resized version created for standard display requirements.
+### Usage
 
----
+To use the script:
 
-<a name="usage" />
+1. Make sure all dependencies (`sox`, `dmenu`, `imagemagick`) are installed.
+2. Save the script as `create_cover_art.sh` and make it executable:
 
-#### Usage
+   ```bash
+   chmod +x /home/matias/.scripts/create_cover_art.sh
+   ```
 
-1. Execute the script in a terminal:
-   ```sh
+3. Run the script from a terminal:
+
+   ```bash
    /home/matias/.scripts/create_cover_art.sh
    ```
-   
-2. A `dmenu` prompt will appear, listing `.wav` files found in the `/home/matias/audio/PROJECTS` directory. Use arrow keys to navigate and select a file.
 
-3. Upon selection, the spectrogram for the chosen file will be generated and saved in the same location, with the filename corresponding to the original audio file name.
-
-4. The script also creates a resized version of the spectrogram, removing the original once the resized version is complete.
-
-<a name="examples" />
-
-#### Examples
-
-- To create cover art for an audio file:
-   1. Run the script.
-   2. Select a `.wav` file from the list.
-   3. Cover art will automatically generate.
+Once executed, a menu will appear listing all the available `.wav` files in your projects folder. Select one to generate its cover art.
 
 ---
 
-<a name="notes" />
-
-### Notes
-
-Ensure that `sox`, `dmenu`, and `imagemagick` are installed on your Arch Linux system prior to running this script to avoid any execution errors.
-
-> **Critique:** 
-> 
-> - The script only searches for `.wav` files with a hardcoded path, making it less flexible for other audio formats or directories.
-> - Error handling for cases where no `.wav` files are found or when `sox`/`convert` commands fail is missing.
-> - The script can be enhanced with options for adjusting spectrogram parameters (like dimensions and colors) through command-line arguments.
+> [!TIP]  
+> Consider adding error handling to the script. For example, check if the `find` command returns any files or handle cases where `sox` might fail. This will make the script more robust and user-friendly. Additionally, you could allow for different output sizes or file formats as user inputs to enhance functionality.
