@@ -2,7 +2,7 @@
 
 ---
 
-**[llama-all-scripts-describer.py](llama-all-scripts-describer.py)**: Automates script documentation generation using Llama 3.1
+**[llama-all-scripts-describer.py](/llama-all-scripts-describer.py)**: Automates script documentation generation using Llama 3.1
 
 ---
 
