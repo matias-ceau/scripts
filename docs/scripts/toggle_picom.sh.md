@@ -2,7 +2,7 @@
 
 ---
 
-A simple script to toggle the Picom compositor on and off.
+A script to toggle the Picom compositor on and off.
 
 ---
 
@@ -21,9 +21,8 @@ A simple script to toggle the Picom compositor on and off.
 
 ### Dependencies
 
-- `picom`: A compositor for X11, to handle window effects.
-- `pgrep`: To check if Picom is running.
-- `pkill`: To stop Picom if it is running.
+- Bash
+- Picom
 
 <a name="description" />
 
@@ -33,9 +32,11 @@ A simple script to toggle the Picom compositor on and off.
 
 #### Overview
 
-The `toggle_picom.sh` script is designed to conveniently start or stop Picom, a popular compositor for various window managers like Qtile. This script checks if Picom is currently running by utilizing `pgrep`, which searches for the Picom process. Based on the result, it either terminates the Picom process with `pkill` or initiates it in the background with the `-b` flag to allow the terminal to be free for further commands.
+This script is designed to check whether the Picom compositor is currently running on your system. If it is running, the script stops it by using the `pkill` command; if it is not running, the script starts Picom in the background with the `-b` flag. 
 
-The script provides visual feedback in the terminal, letting the user know whether Picom is currently running or was just started. Because window compositors can greatly affect the visual experience in a desktop environment, this script serves as a handy tool for users who frequently switch their compositor on and off.
+Picom is an open-source compositor for X, providing features such as transparency and shadowing, enhancing the appearance and performance of graphical interfaces. By toggling Picom, you can easily manage your system's resource usage and visual effects according to your preference and needs.
+
+The script utilizes the `pgrep` utility to search for processes by name, and its logic relies on the exit status of this command to determine whether to start or stop Picom.
 
 ---
 
@@ -43,26 +44,35 @@ The script provides visual feedback in the terminal, letting the user know wheth
 
 #### Usage
 
-To use this script, simply execute it from the terminal with the following command:
+To use the script, simply run it from the command line:
 
 ```bash
-bash /home/matias/.scripts/toggle_picom.sh
+bash toggle_picom.sh
 ```
 
-Alternatively, this script can be bound to a key combination in your Qtile configuration for ease of access, allowing you to quickly toggle Picom without needing to open a terminal.
+You can also bind this script to a key combination in your window manager configuration (Qtile) for easier access. 
+
+---
 
 <a name="examples" />
 
 #### Examples
 
-1. **Toggle Picom from Terminal**:
+1. Execute the script in terminal:
+
    ```bash
    bash /home/matias/.scripts/toggle_picom.sh
    ```
 
-2. **Bind to a key in Qtile**:
+2. Assign the script to a keybinding in Qtile:
+
    ```python
-   Key([mod], "p", lazy.spawn("/home/matias/.scripts/toggle_picom.sh")),
+   from libqtile import key
+   from libqtile.command import lazy
+
+   keys = [
+       key.Key([mod], "p", lazy.spawn("/home/matias/.scripts/toggle_picom.sh")),
+   ]
    ```
 
 ---
@@ -71,12 +81,8 @@ Alternatively, this script can be bound to a key combination in your Qtile confi
 
 ### Notes
 
-- Ensure the script has execute permissions. You can set this using:
-  ```bash
-  chmod +x /home/matias/.scripts/toggle_picom.sh
-  ```
-- The script relies on the assumption that Picom is installed and accessible in the command path.
+- Running `picom -b` starts it in the background, so it will not block your terminal while running.
+- Ensure you have permissions to execute the script by running `chmod +x /home/matias/.scripts/toggle_picom.sh`.
 
-> **Critique**: 
-> - The script could benefit from error handling to catch cases where Picom fails to start or stop. Implementing conditions to check the exit status of `pkill` and `picom` commands would enhance its robustness.
-> - Consider adding additional options for Picom's startup parameters to allow users to customize their experience further.
+> **Critique:**
+> The script effectively achieves its intended purpose, but it could be enhanced with additional options. For instance, you might consider allowing users to specify flags for Picom directly through command-line arguments. Additionally, more descriptive output or logging could be useful for debugging and information purposes. Lastly, adding error handling for the `pkill` or `picom` commands would improve its robustness.

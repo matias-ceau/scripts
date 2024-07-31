@@ -1,8 +1,8 @@
-# Next Album (next_album.xsh)
+# Skip to Next Album in cmus (next_album.xsh)
 
 ---
 
-Skip to next album in cmus player.
+Skip to the next album in cmus player and handle playlist management.
 
 ---
 
@@ -21,8 +21,9 @@ Skip to next album in cmus player.
 
 ### Dependencies
 
-- `cmus`: The Cmus audio player.
-- `xonsh`: A shell language that is a Python-based alternative to traditional shells.
+- cmus (music player)
+- xonsh (shell language)
+- Access to a terminal to run the script
 
 <a name="description" />
 
@@ -32,11 +33,15 @@ Skip to next album in cmus player.
 
 #### Overview
 
-The `next_album.xsh` script is designed for users of the `cmus` music player to easily skip to the next album in their queue. It automates the process of identifying the currently playing album, storing the list of all playing tracks, and then skipping to the next album in line.
+This script is designed for use with the cmus music player. It automates the process of skipping to the next album in your playlist. The script performs the following sequence of actions:
 
-The script first executes a command to view the currently playing track's index and saves the playlist of currently playing music to a temporary file. It processes this file to extract a list of album names, identifies the album currently playing, and then uses a loop to skip the necessary number of times to reach the next album.
+1. It sends a command to cmus to view the current playlist.
+2. It saves the currently playing tracks to a temporary m3u file.
+3. It reads the saved m3u file to extract the album names.
+4. It determines the currently playing album and how many tracks belong to it.
+5. Finally, it skips to the next album based on the extracted album names.
 
-The use of `cmus-remote` allows the script to send commands to the `cmus` player from the terminal, providing an efficient way to control playback without needing to manually navigate through tracks.
+The use of the xonsh shell allows for a more powerful scripting environment, facilitating string manipulation and process handling.
 
 ---
 
@@ -44,33 +49,27 @@ The use of `cmus-remote` allows the script to send commands to the `cmus` player
 
 #### Usage
 
-To use the script, ensure that it is executable by running:
+To run this script, execute it from a terminal where you have access to xonsh and cmus:
 
 ```bash
-chmod +x /home/matias/.scripts/next_album.xsh
+xonsh /home/matias/.scripts/next_album.xsh
 ```
 
-Then, you can run the script directly from your terminal or bind it to a keybinding in your window manager (qtile) for quick access:
-
-```bash
-/home/matias/.scripts/next_album.xsh
-```
-
-When executed, the script will automatically handle the logic of skipping to the next album.
+This script is ideal for integration into a keybinding within qtile or launchers for easy access.
 
 <a name="examples" />
 
 #### Examples
 
-- **Running the script manually**:
-```bash
-/home/matias/.scripts/next_album.xsh
-```
+1. Run the script directly in the terminal:
+   ```bash
+   xonsh /home/matias/.scripts/next_album.xsh
+   ```
 
-- **Keybinding in Qtile**:
-```python
-Key([mod], "n", lazy.spawn("/home/matias/.scripts/next_album.xsh")),
-```
+2. Set up a keybinding in qtile:
+   ```python
+   Key([mod], "n", lazy.spawn("xonsh /home/matias/.scripts/next_album.xsh")),
+   ```
 
 ---
 
@@ -78,11 +77,8 @@ Key([mod], "n", lazy.spawn("/home/matias/.scripts/next_album.xsh")),
 
 ### Notes
 
-- The script assumes that you have a working setup of `cmus` and that your music library is organized in a way that the album folder names are meaningful.
-- Ensure that the temporary file path (`/home/matias/.temp/now_playing.m3u`) is writable by the script.
+- Ensure that cmus is running and that you have a sufficient number of albums in your playlist.
+- The script relies on a temporary file (`now_playing.m3u`) for communication, ensure you have write access to `/home/matias/.temp/`.
 
-> **Critique**: 
-> 
-> - The script could be improved by adding error handling for cases where `cmus` might be inactive, or the playlist file cannot be created/read. 
-> - Another enhancement could involve checking if the user's music library follows a specific directory structure, and if not, informing the user with a message. 
-> - Furthermore, incorporating user-defined configurations for the temporary file location could make the script more flexible.
+> **Critique:** 
+> The script could benefit from error handling in cases where cmus may not be running or the temporary file cannot be created. Additionally, there is an assumption that the path to albums is structured consistently, which might lead to issues if the structure changes. Implementing more robust checks or logging would improve reliability.

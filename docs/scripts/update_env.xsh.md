@@ -1,7 +1,8 @@
+# Update Env Script (update_env.xsh)
 
 ---
 
-A script to update the .env file with API keys.
+Updates the `.env` file with API keys stored in the current environment.
 
 ---
 
@@ -20,8 +21,7 @@ A script to update the .env file with API keys.
 
 ### Dependencies
 
-- `xonsh`: A shell language and command prompt that builds on Python.
-- Access to environment variables containing API keys.
+- Xonsh shell must be installed and in use.
 
 <a name="description" />
 
@@ -31,15 +31,14 @@ A script to update the .env file with API keys.
 
 #### Overview
 
-This script, written in `xonsh`, is designed to extract all environment variables that end with `API_KEY` and write them to a `.env` file in the user's home directory. It uses a dictionary comprehension to filter the current environment variables and collect only those that match the specified suffix. The resulting key-value pairs are formatted and saved into a `.env` file, which is commonly used for storing sensitive information such as API keys in a structured format.
+The `update_env.xsh` script is designed to extract API keys from the current environment variables and write them to a `.env` file located in the user's home directory. This is particularly useful for managing sensitive data separately from your codebase, making it easier to handle environment-specific configurations.
 
-The script operates by performing the following actions:
+The script works by defining a function, `update_env()`, which:
+1. Uses dictionary comprehension to filter out environment variables that end with `API_KEY`.
+2. Constructs a string containing key-value pairs formatted as `KEY=VALUE`.
+3. Opens (or creates if it doesn't exist) the `.env` file in write mode and writes the formatted string into this file.
 
-1. **Dictionary Comprehension**: It creates a dictionary that includes only those environment variable entries where the key satisfies the condition of ending with `API_KEY`.
-  
-2. **String Formatting**: It then formats each key-value pair as `key=value` and combines them into a single string, separated by newlines.
-  
-3. **File Writing**: Finally, it writes this string to a `.env` file located in the home directory, overwriting any existing content.
+This approach ensures that only relevant API keys are recorded, keeping the `.env` file clean and concise.
 
 ---
 
@@ -47,24 +46,36 @@ The script operates by performing the following actions:
 
 #### Usage
 
-To use this script, run it directly in the terminal. Ensure that your environment contains the relevant API keys as environment variables. The script processes those variables and updates or creates the `.env` file. You can also bind this script to a keyboard shortcut in the qtile Window Manager for easy access.
+To use this script:
+1. Save it as `update_env.xsh` in your scripts directory.
+2. Execute the script in a terminal using the Xonsh shell:
+   ```bash
+   xonsh /home/matias/.scripts/update_env.xsh
+   ```
 
-You may execute the script as follows:
-
-```bash
-xonsh /home/matias/.scripts/update_env.xsh
-```
+Alternatively, you can set a keybinding in your window manager to trigger this script for quick access, or automate it by including a call to it in your shell initialization files.
 
 <a name="examples" />
 
 #### Examples
 
-1. To update the `.env` file with your current API keys, simply run:
-    ```bash
-    xonsh /home/matias/.scripts/update_env.xsh
-    ```
+- **Run the script directly:**
 
-2. If you have bound this script to a keyboard shortcut in qtile, just press that shortcut to execute the script.
+```bash
+xonsh /home/matias/.scripts/update_env.xsh
+```
+
+- **Output in `.env`:**
+  If your environment has:
+  ```
+  DATABASE_API_KEY='12345abcdef'
+  ANOTHER_API_KEY='67890ghijkl'
+  ```
+  The resulting `.env` file will contain:
+  ```
+  DATABASE_API_KEY=12345abcdef
+  ANOTHER_API_KEY=67890ghijkl
+  ```
 
 ---
 
@@ -72,9 +83,8 @@ xonsh /home/matias/.scripts/update_env.xsh
 
 ### Notes
 
-- Ensure that your API keys are set in the environment prior to running this script for it to work effectively.
-- The script will overwrite the `.env` file, so ensure backup if previous content is needed.
+- Ensure that your environment variable names are consistently suffixed with `API_KEY` for them to be captured by the script.
+- The script will overwrite the existing `.env` file, so use caution to avoid losing important data.
 
-> **Critique**: 
-> - The script lacks error handling; if the `.env` file cannot be opened (e.g., due to permissions), it will throw an unhandled exception. Consider adding a try-except block around the file operations to gracefully handle such cases.
-> - It could include logging to indicate success or failure of the operation, which would be beneficial for debugging and usage confirmation.
+> **Critique:** 
+> The script lacks error handling, which can lead to issues if the file cannot be opened for writing or if there are no API keys found in the environment. It could also be improved by allowing for user-specified output filenames for cases where a standard `.env` file is not desired. Implementing logging to provide feedback during execution would also enhance its usability.

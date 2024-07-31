@@ -1,8 +1,8 @@
-# Obsidian Launcher Script (obsidian.xsh)
+# Open Obsidian Vault (obsidian.xsh)
 
 ---
 
-Open any obsidian vault with a user-friendly selection interface.
+Open a selected Obsidian vault using fzfmenu.
 
 ---
 
@@ -21,10 +21,10 @@ Open any obsidian vault with a user-friendly selection interface.
 
 ### Dependencies
 
-- `xonsh` - A Python-powered shell language and command prompt.
-- `fzfmenu.sh` - A utility for fuzzy finding items from a list.
-- `eza` - A modern replacement for `ls` that supports coloring and file previews.
-- `notify-send` - A tool for sending desktop notifications.
+- [xonsh](https://xon.sh)
+- [fzfmenu.sh](https://github.com/junegunn/fzf/wiki/Useful-tips#fzfmenu)
+- Obsidian application
+- Notify-send utility for notifications
 
 <a name="description" />
 
@@ -34,15 +34,12 @@ Open any obsidian vault with a user-friendly selection interface.
 
 #### Overview
 
-This script allows users to easily open any Obsidian vault located in the `$HOME/PKM` directory using a graphical interface for selecting the vault. It starts by gathering the names of existing vaults (directories) and presents them in a list for the user to choose from.
+This script allows users to open an Obsidian vault with a simple menu selection using `fzfmenu`. It dynamically lists directories located in a specified folder (`$HOME/PKM`), which should contain the user's Obsidian vaults. The script leverages Xonsh for execution and interactivity, and the selected vault is opened in the Obsidian application.
 
-The initial list of vaults is generated using a xonsh list comprehension that filters directories only:
-
-```python
-vaults = [i for i in $(ls $HOME/PKM).split() if $(file -b $HOME/PKM/@(i)) == 'directory']
-```
-
-Once the list is created, it utilizes `fzfmenu.sh` to allow the user to select one of the vaults interactively. If the selection is successful, the script constructs the corresponding Obsidian URI and launches the application. If no vault is selected, it provides a notification to inform the user.
+The main steps within this script include:
+1. **Vault Listing**: The script computes a list of directories in the specified vault directory using shell commands.
+2. **User Selection**: It utilizes `fzfmenu.sh` to present the available vaults to the user with a preview of their contents.
+3. **Vault Opening**: On selection, it constructs an Obsidian URL to open the chosen vault or notifies the user if no vault was selected.
 
 ---
 
@@ -50,22 +47,31 @@ Once the list is created, it utilizes `fzfmenu.sh` to allow the user to select o
 
 #### Usage
 
-1. Ensure you have the necessary dependencies installed on your Arch Linux system.
-2. Make the script executable by running the command:
-   ```bash
-   chmod +x /home/matias/.scripts/obsidian.xsh
-   ```
-3. Execute the script from the terminal:
-   ```bash
-   /home/matias/.scripts/obsidian.xsh
-   ```
-4. Select your desired vault from the list presented in the fuzzy finder interface.
+To use the script, simply run it in your terminal:
+
+```shell
+./obsidian.xsh
+```
+
+Make sure the script is executable:
+
+```shell
+chmod +x /home/matias/.scripts/obsidian.xsh
+```
+
+You can also bind this script to a key within your window manager or desktop environment for quicker access.
 
 <a name="examples" />
 
 #### Examples
 
-- **Open a Vault**: Running the script will bring up a fuzzy search interface listing all available vaults. Just type part of the vault name to filter quickly.
+1. Launch the script:
+
+```shell
+/home/matias/.scripts/obsidian.xsh
+```
+
+2. Select a vault using the `fzf` interface displayed in your terminal.
 
 ---
 
@@ -73,8 +79,10 @@ Once the list is created, it utilizes `fzfmenu.sh` to allow the user to select o
 
 ### Notes
 
-- The script currently uses `fzfmenu.sh`. Ensure you have it in your PATH.
-- If you want to change the path for your vaults, modify the `$HOME/PKM` variable in the script to point to your desired directory.
+- Ensure that `fzfmenu.sh` is properly installed and available in your `PATH` to utilize this script effectively.
+- Adjust the `$HOME/PKM` path if your vaults are stored in a different location.
+- The `${home}` variable should correctly resolve to your home directory; ensure no environment conflicts.
 
 > **Critique**: 
-> The script could be further improved by adding functionality to quickly search by typing while in the `fzfmenu.sh` interface. Additionally, implementing error handling for the case where there are no vaults in the directory would help improve the user experience. The commented `dmenu` approach is another choice; consider including it as an optional method based on user preference.
+> - The script relies on direct shell command substitutions which may not handle errors gracefully under certain circumstances. Implementing error checks for directory permissions or content might improve resilience.
+> - The commented code snippet using `subprocess.Popen` suggests a possible alternative for user interface handling; optimizing or providing a fallback to `dmenu` could be beneficial for users not familiar with `fzfmenu.sh`.

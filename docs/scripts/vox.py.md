@@ -1,8 +1,8 @@
-# Vox Amp Options (vox.py)
+# Vox Amp Options List (vox.py)
 
 ---
 
-List available Vox amp options with descriptions.
+List various Vox amp options and their descriptions.
 
 ---
 
@@ -33,17 +33,15 @@ List available Vox amp options with descriptions.
 
 #### Overview
 
-This script lists various Vox amplifier settings and their descriptions using data stored in a pandas DataFrame. It allows users to view amp names, modes, associated amp names, and short descriptions. The script can filter options based on color, numeric index, or name similarity, providing a versatile way to access information on different Vox settings.
+This script provides a concise list of Vox amplifier options, utilizing a pandas DataFrame to hold information on various amp models. Each amp is characterized by its name, mode, color, model name, and a brief description. The tabulated information can be filtered based on user input, allowing users to find amplifiers by categories such as name, color, or an index number. The script employs the `tabulate` library to format its output in a human-readable table format.
 
-The data is structured into four main columns:
+- **Data Structure**: The amp options are encapsulated in a pandas DataFrame with the following columns:
+  - `name`: The name of the amp model.
+  - `mode`: The operational mode of the amp.
+  - `color`: A color code associated with the amp.
+  - `amp_name`: The specific model name of the amplifier (if applicable).
+  - `description`: A summary introduction of the amplifier's sound and characteristics.
 
-- `name`: The name of the amp setting.
-- `mode`: The mode of the amp (e.g., STD, SPL, CST).
-- `color`: A single character representing the color of the amp setting (e.g., 'g' for green).
-- `amp_name`: The name of the physical amp model associated with the setting.
-- `description`: A brief explanation of the amp's characteristics and sound.
-
-The script formats the output using the `tabulate` library for better readability.
 
 ---
 
@@ -51,45 +49,42 @@ The script formats the output using the `tabulate` library for better readabilit
 
 #### Usage
 
-To use this script, run it from the command line. You can optionally pass arguments:
+To utilize the script, run it from the command line interface. The main usage pattern is as follows:
 
-1. **No arguments**: Lists all Vox amp options in a formatted table.
-2. **Numeric index**: Provides detailed information about a specific amp setting based on its index (0-32).
-3. **Color filters**: Use one of the following colors ('g', 'o', 'r') to filter results.
-4. **Partial name match**: Input part of an amp's name to filter amp settings by name.
+1. Without arguments: Display a list of all Vox amp options with short descriptions.
+2. By index number: Provide an index number to retrieve specific details of that amp option.
+3. By color: Use color codes (g, o, r) to filter amps by their associated color.
+4. By name search: Type in part of the amp name for a filtered search.
 
-Example command usages:
-
+Example command:
 ```bash
-python3 /home/matias/.scripts/vox.py          # List all options
-python3 /home/matias/.scripts/vox.py 1       # Get details for the setting at index 1
-python3 /home/matias/.scripts/vox.py g       # List all green options
-python3 /home/matias/.scripts/vox.py Vox     # Find all options with 'Vox' in the name
+python3 vox.py
+python3 vox.py 5
+python3 vox.py g
+python3 vox.py "CLEAN"
 ```
+This allows flexibility for users to get specific information or explore the wide array of attributes related to Vox amplifiers.
 
 <a name="examples" />
 
 #### Examples
 
-1. List all Vox amp options:
-   ```bash
-   python3 /home/matias/.scripts/vox.py
-   ```
-
-2. Details of the amp setting at index 2:
-   ```bash
-   python3 /home/matias/.scripts/vox.py 2
-   ```
-
-3. Show entries for a specific color (green):
-   ```bash
-   python3 /home/matias/.scripts/vox.py g
-   ```
-
-4. Find amp options with 'CLEAN' in the name:
-   ```bash
-   python3 /home/matias/.scripts/vox.py CLEAN
-   ```
+- Display all Vox amps:
+  ```bash
+  python3 vox.py
+  ```
+- Get details of a specific amp by index (e.g., index 3):
+  ```bash
+  python3 vox.py 3
+  ```
+- List amps of a specific color (green):
+  ```bash
+  python3 vox.py g
+  ```
+- Search for amps by name:
+  ```bash
+  python3 vox.py "CLEAN"
+  ```
 
 ---
 
@@ -97,9 +92,12 @@ python3 /home/matias/.scripts/vox.py Vox     # Find all options with 'Vox' in th
 
 ### Notes
 
-- Ensure that the script file is executable (`chmod +x /home/matias/.scripts/vox.py`).
-- This script requires `pandas` and `tabulate`, so ensure they are installed in your Python environment (`pip install pandas tabulate`).
-- The script is structured for readability and maintainability but could benefit from additional comments for complex logic sections.
+- Make sure the `pandas` and `tabulate` libraries are installed. You can install them using `pip`:
+  ```bash
+  pip install pandas tabulate
+  ```
 
-> **Critique:** 
-> The script has a reasonable structure, but the use of magic numbers (like `32` for the index range) should be avoided in favor of dynamic checks. Additionally, error handling can be improved for cases where the user inputs invalid options. You may want to consider implementing logging or exception handling for robustness.
+> **Critique**: 
+> - The script could benefit from error handling for inputs that do not correspond to valid indexes or colors to prevent crashes.
+> - Adding more flexible search options, such as case-insensitive searches, could enhance user experience.
+> - Incorporating a help command to guide users on how to correctly use the script would improve usability significantly.

@@ -1,8 +1,8 @@
-# Sync Repository (sync-repo.sh)
+# Sync Git Repository (sync-repo.sh)
 
 ---
 
-A script to synchronize a git repository with its remote counterpart.
+A script to sync a Git repository with fetch, rebase, and handle conflicts.
 
 ---
 
@@ -21,9 +21,10 @@ A script to synchronize a git repository with its remote counterpart.
 
 ### Dependencies
 
-- `git` - The version control system used.
-- `bat` (optional, for pretty output) - A cat clone with wings.
-- `glow` (optional, for Markdown rendering) - Render Markdown on the CLI.
+- `git`: Required for version control operations.
+- `bat`: Optional, for enhanced command output formatting.
+- `glow`: Optional, for displaying markdown in the terminal.
+- `bash`: The shell used to run the script.
 
 <a name="description" />
 
@@ -33,34 +34,40 @@ A script to synchronize a git repository with its remote counterpart.
 
 #### Overview
 
-The `sync-repo.sh` script is designed to automate the synchronization of a local git repository with its remote counterpart. It fetches changes from the remote repository, stashes any local changes, and attempts to pull the latest updates with a rebase. If there are conflicts during the rebase, the user is prompted to decide how to resolve them. The script also prepares a summary of changes and manages committing and pushing any local modifications automatically.
+This script allows users to synchronize a specified Git repository by fetching the latest changes and rebasing any local commits. It is designed to handle various scenarios including conflicts that may arise during the rebase process. The script provides a user-friendly interface, colorful outputs for better readability, and utilizes external commands like `bat` and `glow` to improve the presentation of outputs.
 
-The script utilizes colored output for better readability and alerts the user if the optional utilities `bat` and `glow` are not installed, which would result in less formatted output. 
+The script performs the following key functions:
+- Checks for the presence of `bat` and `glow` for enhanced output formatting.
+- Strips ANSI escape sequences from text for compatibility with plain text.
+- Runs Git commands and displays their outputs in real-time.
+- Handles any merge conflicts that arise during the rebase process interactively.
+- Provides usage instructions and summary reports at the end of execution.
 
-### Usage
+---
 
-To use the script, follow these steps:
-1. Save the script in a directory accessible from your terminal.
-2. Make it executable with `chmod +x /home/matias/.scripts/sync-repo.sh`.
-3. Run it using the command:
-   ```
-   ./sync-repo.sh <repository_path>
-   ```
-   For example:
-   ```
-   ./sync-repo.sh ~/.scripts
-   ```
+<a name="usage" />
 
-### Examples
+#### Usage
+
+To use the script, navigate to your terminal and execute the script while providing the path to the target Git repository as an argument. For example:
+```bash
+bash sync-repo.sh /path/to/your/repo
+```
+
+If no repository path is supplied, the script will print usage instructions.
+
+<a name="examples" />
+
+#### Examples
 
 - Syncing a repository located in `~/.scripts`:
-    ```bash
-    ./sync-repo.sh ~/.scripts
-    ```
-- Displaying the usage information:
-    ```bash
-    ./sync-repo.sh
-    ```
+```bash
+bash sync-repo.sh ~/.scripts
+```
+- Syncing a different repository:
+```bash
+bash sync-repo.sh ~/projects/my-repo
+```
 
 ---
 
@@ -68,9 +75,10 @@ To use the script, follow these steps:
 
 ### Notes
 
-- Ensure that you have `git` installed and configured on your machine as the script relies heavily on it.
-- The script assumes that the local git repository has a set remote. If no remote is configured, it will fail.
-- It attempts to manage conflicts interactively, offering options to resolve them.
+- Ensure that the repository is a valid Git repository with a `.git` directory.
+- If `bat` or `glow` is not installed, the script will still function but with less visually appealing output.
+- Users can customize the editor used during conflict resolution via the `EDITOR` environment variable.
 
-> **Critique:** 
-> The script does well in providing an interactive way to handle merges and conflicts, but it could be improved by allowing command-line flags to enable automatic merging in certain cases. Error handling could be further refined to provide more detailed feedback for each command's failure, especially regarding network issues when fetching from remotes. Also, consider providing more detailed logging of actions taken for easier debugging and tracking of the sync process.
+> **Critique:**
+> 
+> The script effectively manages Git operations and handles conflicts interactively. However, it could structure error messages and prompts with more clarity, especially for users unfamiliar with Git commands. Additionally, incorporating logging functionality could help users track operations over time or diagnose issues if they arise.

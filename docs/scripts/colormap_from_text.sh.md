@@ -1,8 +1,8 @@
-# colormap_from_text.sh
+# Color Palette Extractor (colormap_from_text.sh)
 
 ---
 
-Simple script that extracts color palettes from config files.
+Extracts unique color palettes from text files based on specified output formats.
 
 ---
 
@@ -21,9 +21,8 @@ Simple script that extracts color palettes from config files.
 
 ### Dependencies
 
-- Bash shell
-- `grep` utility
-- `sort` utility
+- `grep`
+- `sort`
 
 <a name="description" />
 
@@ -33,12 +32,15 @@ Simple script that extracts color palettes from config files.
 
 #### Overview
 
-The `colormap_from_text.sh` script is a Bash utility designed to extract color palettes specified in hexadecimal format from input files. It allows users to convert these hex colors into multiple formats, including RGB tuples and ANSI-style color outputs for terminal display. The script employs `grep` to find color codes and `sort` to ensure unique entries, enhancing usability for developers and designers who frequently work with color configurations.
+This script is designed to extract unique hexadecimal color codes from text files and format them according to user specifications. It allows output in three formats: hexadecimal, RGB, or RGB with a colored background. The extraction process utilizes `grep` to find color codes in the format `#RRGGBB`, ensuring that only valid hex codes are processed.
 
-Key functionalities include:
-- Accepting command-line arguments to determine output format.
-- Validating input to prevent incompatible options from being set.
-- Generating output in hexadecimal, RGB, or a color block display as specified by the user.
+The script begins by defining a usage function which indicates the proper syntax for executing the script. It accepts multiple command-line arguments to control the output format:
+
+- `-x` or `--hex-code`: Outputs only the hex code.
+- `-r` or `--rgb`: Outputs the RGB format.
+- `-c` or `--color`: Outputs the RGB format along with a colored terminal background.
+
+The script employs a loop to parse and validate input arguments and ensures that only one of the color output options can be selected at a time.
 
 ---
 
@@ -46,35 +48,37 @@ Key functionalities include:
 
 #### Usage
 
-To run the script, simply call it from the terminal, optionally providing command-line arguments for the desired output format:
+To run the script, use the following command format:
 
 ```bash
 ./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
 ```
 
-- `-x` or `--hex-code`: Output color in hexadecimal format.
-- `-r` or `--rgb`: Output color in RGB format (e.g., `rgb(255, 255, 255)`).
-- `-c` or `--color`: Display the color as a colored block in the terminal.
+You can pipe a text file into the script like so:
 
-**Note:** Only one of `-x` or `-r` can be specified, as they are mutually exclusive.
+```bash
+cat myfile.txt | ./colormap_from_text.sh [options]
+```
+
+Replace `[options]` with one or more of the flags `-x`, `-r`, or `-c` to customize the output format as needed.
 
 <a name="examples" />
 
 #### Examples
 
-1. Extract and display colors in hex format:
+1. To extract colors in hexadecimal format:
    ```bash
-   cat config_file.txt | ./colormap_from_text.sh -x
+   cat myfile.txt | ./colormap_from_text.sh -x
    ```
 
-2. Extract colors as RGB tuples:
+2. To extract colors in RGB format:
    ```bash
-   cat config_file.txt | ./colormap_from_text.sh -r
+   cat myfile.txt | ./colormap_from_text.sh -r
    ```
 
-3. Display colors as blocks in the terminal:
+3. To output colors with both RGB values and colored background:
    ```bash
-   cat config_file.txt | ./colormap_from_text.sh -c
+   cat myfile.txt | ./colormap_from_text.sh -c
    ```
 
 ---
@@ -83,7 +87,8 @@ To run the script, simply call it from the terminal, optionally providing comman
 
 ### Notes
 
-Ensure that the input file (e.g., config_file.txt) contains valid hexadecimal color codes for the script to function correctly. The script reads from standard input, making it versatile for use in pipelines or direct file output.
+- Ensure that the input file contains valid hexadecimal color codes for effective extraction.
+- The script outputs the RGB values in the format `rgb(r, g, b)` for the `-r` option.
 
-> **Critique:**  
-> While the script is functional and provides essential error handling, it could benefit from additional features like accepting custom input files directly as arguments or providing a help option (`-h` or `--help`) that outputs usage instructions. Additionally, more robust error handling for input validation (checking if input is provided) could enhance user experience.
+> **Critique**: 
+> The script does not handle cases where input may not be piped directly into it; it could be improved by adding a mechanism to read from a specified file as an argument instead of requiring a pipe. Additionally, incorporating error handling for empty inputs or invalid formats would enhance the user experience and reliability.

@@ -1,7 +1,8 @@
+# fzfmenu (fzfmenu.sh)
 
 ---
 
-A script that integrates fzf with xterm for quick menu selections.
+Launches an interactive fzf menu in an xterm window.
 
 ---
 
@@ -21,8 +22,8 @@ A script that integrates fzf with xterm for quick menu selections.
 ### Dependencies
 
 - `fzf` - A command-line fuzzy finder.
-- `xterm` - A terminal emulator for the X Window System.
-- Bash (the script is written in Bash and requires it to be executed).
+- `xterm` - Terminal emulator required to run the script.
+- `bash` - The shell interpreter.
 
 <a name="description" />
 
@@ -32,9 +33,9 @@ A script that integrates fzf with xterm for quick menu selections.
 
 #### Overview
 
-The `fzfmenu` script provides a simple way to combine the power of `fzf` with the convenience of an xterm-based interface. When executed, it opens a new xterm window titled 'fzfmenu' and runs the `fzf` command, allowing users to make selections from the terminal input. The output of the selection is directed back to the terminal. 
+The `fzfmenu` script serves as a helper function that opens a new `xterm` window to display an interactive menu using `fzf`. The script reads input from the terminal, allowing users to filter and select items from a list presented in the `fzf` interface. The output of the selection is then sent to the terminal where the script was invoked. 
 
-This is particularly useful for managing lists or quick selections directly from the command line in a user-friendly way. The implementation uses file descriptors to manage input and output seamlessly.
+This script is particularly useful in a qtile window manager environment on Arch Linux, as it allows seamless integration with other shell commands and workflows. The use of `/proc/$$/fd/0` and `/proc/$$/fd/1` ensures that the script correctly manages input and output between the term and the `fzf` process.
 
 ---
 
@@ -42,26 +43,31 @@ This is particularly useful for managing lists or quick selections directly from
 
 #### Usage
 
-To use the script, simply run it from your terminal. You can also pass additional arguments to `fzf` directly through the script.
+To use the `fzfmenu` script, simply execute it in your terminal. You can pass any arguments to `fzf` as follows:
 
 ```bash
-/home/matias/.scripts/fzfmenu.sh [OPTIONS]
+/home/matias/.scripts/fzfmenu.sh [fzf-options]
 ```
 
-You might want to assign this script to a keybinding in your window manager (qtile) to invoke it quickly when needed.
+This script can also be bound to a key combination in qtile, enabling quick access to the `fzf` menu from anywhere within the desktop environment.
 
 <a name="examples" />
 
 #### Examples
 
-1. Launch the fzf menu with no extra options:
+1. **Basic usage:**
    ```bash
    /home/matias/.scripts/fzfmenu.sh
    ```
 
-2. Pass options to customize the fzf experience (e.g., `--height`):
+2. **Using with a list of files:**
    ```bash
-   /home/matias/.scripts/fzfmenu.sh --height 50%
+   ls | /home/matias/.scripts/fzfmenu.sh
+   ```
+
+3. **Providing selections from a script's output:**
+   ```bash
+   ps aux | /home/matias/.scripts/fzfmenu.sh
    ```
 
 ---
@@ -70,7 +76,11 @@ You might want to assign this script to a keybinding in your window manager (qti
 
 ### Notes
 
-This script is designed to work specifically with xterm. If you are using a different terminal emulator, you may need to adjust the script for compatibility.
+- The script opens an `xterm` window. If you prefer a different terminal emulator, you can replace `xterm` with your preferred choice (e.g., `urxvt`, `gnome-terminal`, etc.)
+- The script is designed for interactive use; it will not work as expected when run in a non-interactive shell environment.
 
-> **Critique:**  
-> The script could benefit from additional error handling, such as checking whether `fzf` or `xterm` is installed before trying to execute them. Also, consider allowing more customizable options for the terminal appearance or behavior, enhancing user experience and flexibility.
+> **Critique:** 
+> This script effectively launches `fzf` within an `xterm` window; however, there are a couple of improvements that could be made:
+> - Error handling could be implemented to avoid failures if `fzf` or `xterm` is not installed.
+> - Allowing users to specify the terminal type through an argument could improve flexibility. 
+> - Adding options to customize the appearance or behavior of `fzf` could provide a better user experience.

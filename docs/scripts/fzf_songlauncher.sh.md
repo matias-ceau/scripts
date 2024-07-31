@@ -1,8 +1,8 @@
-# fzf_songlauncher.sh
+# FZF Song Launcher (fzf_songlauncher.sh)
 
 ---
 
-Play a song with cmus, chosen interactively using fzf.
+Play a song with cmus (choose it with fzf)
 
 ---
 
@@ -21,9 +21,8 @@ Play a song with cmus, chosen interactively using fzf.
 
 ### Dependencies
 
-- cmus: A console music player
-- fzf: A general-purpose command-line fuzzy finder
-- A music directory named "music" in the current working directory
+- cmus (C Music Player)
+- fzf (Fuzzy Finder)
 
 <a name="description" />
 
@@ -33,17 +32,13 @@ Play a song with cmus, chosen interactively using fzf.
 
 #### Overview
 
-The `fzf_songlauncher.sh` script allows you to easily select and play a song using the cmus music player. It employs `fzf`, a powerful command-line fuzzy finder, to provide a list of files located in a predefined music directory. The script utilizes the following command:
+The `fzf_songlauncher.sh` script is a simple yet effective tool that integrates the powerful command line music player **cmus** with **fzf**, a fuzzy file finder. This script allows users to navigate through their music files located in the `music` directory with an interactive fuzzy search. By executing this script, users can quickly select a song, which will then be played in **cmus**. 
 
-```sh
-cmus-remote -f "$(find -L music -type f | fzf)"
-```
+The script utilizes `find` to iterate through the music files and `fzf` to present a list to the user. Here’s a breakdown of the command used:
 
-Here's a breakdown of the command:
-
-- `find -L music -type f`: This part searches for all files within the "music" directory and its subdirectories, resolving symbolic links if they exist (`-L` flag).
-- `| fzf`: The output of the `find` command is piped into `fzf`, allowing for an interactive selection of the files.
-- `cmus-remote -f "$( ... )"`: Finally, the selected file is passed to `cmus-remote`, which uses the `-f` option to play the chosen song in the cmus music player.
+- `find -L music -type f`: This command locates all files in the `music` directory, with the `-L` option allowing it to follow symbolic links.
+- `fzf`: This command provides an interactive fuzzy search interface, enabling users to filter and select their desired music file easily.
+- `cmus-remote -f`: This command interacts with cmus, instructing it to play the selected file by passing it to `-f`.
 
 ---
 
@@ -51,29 +46,29 @@ Here's a breakdown of the command:
 
 #### Usage
 
-To use the script, simply execute it from the terminal:
+To use the script, simply run it in the terminal:
 
-```sh
-sh fzf_songlauncher.sh
+```bash
+/home/matias/.scripts/fzf_songlauncher.sh
 ```
 
-This script can also be assigned to a keybinding in a window manager like qtile for quick access. Just ensure the script has execute permissions:
-
-```sh
-chmod +x /home/matias/.scripts/fzf_songlauncher.sh
-```
+Make sure that your terminal has access to the `music` directory and both **cmus** and **fzf** are installed. You can also create keybindings in your window manager, like `qtile`, to execute this script more efficiently. 
 
 <a name="examples" />
 
 #### Examples
 
-1. Run the script by navigating to the directory containing it and executing:
+1. **Run the script**: 
+   ```bash
+   /home/matias/.scripts/fzf_songlauncher.sh
+   ```
+   This will open a fuzzy finder interface where you can start typing to filter the songs.
 
-```sh
-./fzf_songlauncher.sh
-```
-
-2. When prompted, use the search interface to type and select your desired song from the list.
+2. **Keybinding Example** (in qtile):
+   ```python
+   Key([mod], "m", lazy.spawn("/home/matias/.scripts/fzf_songlauncher.sh")),
+   ```
+   This binds the `mod + m` key combination to invoke the script.
 
 ---
 
@@ -81,10 +76,9 @@ chmod +x /home/matias/.scripts/fzf_songlauncher.sh
 
 ### Notes
 
-- Ensure your music files are organized within a directory named "music" located in the current working directory; otherwise, modify the path in the script accordingly.
-- You may need to install `fzf` and `cmus` if you haven't done so already.
+- Make sure that your `music` directory contains song files and is accessible by the script.
+- Ensure that **cmus** is running in the background before executing this script, as it relies on `cmus-remote`.
 
-> **Critique:** 
-> The script is straightforward and performs its task effectively, but here are a couple of improvements:
-> - Add error handling to manage scenarios where no music files are found, which could lead to an empty selection in `fzf`.
-> - Allow for customization of the music directory via an optional argument to make it more flexible.
+> **Critique**: 
+> - The script assumes that the `music` directory is always present and accessible, which might not be the case for all users. An improvement could be adding error handling to check if the directory exists before proceeding.
+> - Consider adding the ability to specify the directory as an argument, allowing for more flexibility in where the music files are located.

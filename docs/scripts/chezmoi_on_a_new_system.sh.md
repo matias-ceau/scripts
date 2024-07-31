@@ -1,7 +1,8 @@
+# Chezmoi Setup Script (chezmoi_on_a_new_system.sh)
 
 ---
 
-Initial setup script for chezmoi on a new system.
+This script sets up the Chezmoi configuration management tool on a new system.
 
 ---
 
@@ -20,9 +21,8 @@ Initial setup script for chezmoi on a new system.
 
 ### Dependencies
 
-- Bash
-- curl
-- chezmoi
+- `bash` (Bash shell)
+- `curl` (for downloading Chezmoi installer)
 
 <a name="description" />
 
@@ -32,9 +32,11 @@ Initial setup script for chezmoi on a new system.
 
 #### Overview
 
-This script automates the initialization and application of the chezmoi configuration management tool on a new Arch Linux system. It leverages `curl` to fetch the installation script for chezmoi and directly execute it. The command used is `curl -fsLS get.chezmoi.io`, which retrieves the latest chezmoi installation script. The `-- init --apply matias-ceau` options set up the configuration for a user named "matias-ceau". 
+This script is designed to quickly initialize and apply a Chezmoi configuration for a user named `matias-ceau`. Chezmoi is a dotfile manager that allows you to manage your configuration files across multiple systems. 
 
-Using chezmoi, users can manage their dotfiles and configuration files effortlessly across different machines, which is particularly helpful for maintaining consistency on new setups. 
+The script uses `curl` to fetch the installation script for Chezmoi from the official source and then runs it with the `init` and `apply` commands. The `init` command creates an initial Chezmoi configuration, and `apply` applies that configuration to the current system, ensuring that all managed dotfiles are correctly placed.
+
+This script is particularly useful for users who want to set up their dotfiles quickly on a fresh installation of Arch Linux with qtile as their window manager. 
 
 ---
 
@@ -42,23 +44,25 @@ Using chezmoi, users can manage their dotfiles and configuration files effortles
 
 #### Usage
 
-To use this script, simply run it from the terminal:
+To use this script, simply execute it in a terminal. Make sure that you have `bash` and `curl` installed. You can run it with the following command:
 
 ```bash
-bash /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh
+bash ~/scripts/sys/setup/chezmoi_on_a_new_system.sh
 ```
 
-Make sure you have the necessary permissions, and that you have installed `curl` on your system. The script does not require any additional command-line arguments.
+This will initiate the Chezmoi setup with the specified user configuration.
 
 <a name="examples" />
 
 #### Examples
 
-- To initialize chezmoi on a new Arch Linux system:
+1. **Basic Setup**: Run the script after a fresh installation.
 
-```bash
-bash /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh
-```
+   ```bash
+   bash ~/scripts/sys/setup/chezmoi_on_a_new_system.sh
+   ```
+
+2. **Verifying Installation**: After running the script, check your home directory for the `.local/share/chezmoi` directory to ensure the configuration has been applied.
 
 ---
 
@@ -66,7 +70,10 @@ bash /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh
 
 ### Notes
 
-Ensure that your system has `curl` and that you have an internet connection as the script fetches the installation script from the web. Review your chezmoi configuration before running the script to confirm it meets your needs.
+- Ensure that you replace `matias-ceau` in the script with your actual username if it's different. 
+- This script assumes that there is an internet connection to download Chezmoi.
+- The script only configures Chezmoi; additional configuration steps for your dotfiles may be necessary after running this script.
 
-> **Critique:** 
-> The script executes a command fetched via `curl` without any checksum verification or validation of the downloaded content. This approach may expose the system to security vulnerabilities, as it could execute malicious code if the endpoint is compromised. Consider verifying the integrity of the script or prompting users to review it before executing. Additionally, the script currently lacks error handling; implementing checks for successful command execution will enhance its robustness.
+> **Critique:**
+> 
+> The script lacks error handling, which could be crucial if the `curl` command fails (e.g., due to network issues). Consider checking the exit status of `curl` before proceeding with the initialization and application of the Chezmoi configuration. Additionally, it would be more user-friendly to include instructions or output that indicates the progress of the script.

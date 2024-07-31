@@ -1,8 +1,8 @@
-# ppm-color-reducer (ppm-color-reducer)
+# PPM Color Reducer (ppm-color-reducer)
 
 ---
 
-A program to reduce the color depth of PPM images using a specified color palette.
+This script reduces the colors in a PPM image using a specified color palette.
 
 ---
 
@@ -21,8 +21,9 @@ A program to reduce the color depth of PPM images using a specified color palett
 
 ### Dependencies
 
-- A C compiler (such as `gcc`)
-- Basic libraries for `stdio.h`, `stdlib.h`, `math.h`, `string.h`, and `limits.h`
+- C compiler (gcc or clang)
+- PPM images in P6 format
+- Color palette file in a comma-separated format (RGB)
 
 <a name="description" />
 
@@ -32,11 +33,11 @@ A program to reduce the color depth of PPM images using a specified color palett
 
 #### Overview
 
-The `ppm-color-reducer` program is designed to process PPM images and reduce their color depth according to a given color palette stored in a text file. The program reads an input PPM file, finds the closest color from the provided palette for each pixel, and writes a new PPM file with the reduced color depth.
+The PPM Color Reducer reads an input PPM image and converts its colors to the closest match from a specified color palette. The script is designed to function with images in PPM format (specifically P6) and requires a palette to map the original colors to reduced set colors.
 
-The core idea is to minimize color variations by mapping each pixel in the input image to the nearest color in the specified palette. This is done using the squared Euclidean distance, ensuring that the algorithm efficiently determines the closest color.
+The core functionality is driven by comparing the color distances between the pixels in the input image and the colors defined in the palette, utilizing the Euclidean distance squared to determine proximity. If a color is not within the palette, it will be replaced by the nearest available option. 
 
-The script defines a `Color` struct to represent colors in RGB format and uses an array to store the palette. The program also implements functions for reading the palette, computing color distances, and finding the closest color.
+The script starts by reading a palette file, processes the PPM image, and outputs a new reduced-color PPM file.
 
 ---
 
@@ -44,39 +45,45 @@ The script defines a `Color` struct to represent colors in RGB format and uses a
 
 #### Usage
 
-To compile and run the program, use the following commands in your terminal:
+Compile the script with a C compiler, for instance:
 
-```sh
-gcc -o ppm-color-reducer ppm-color-reducer.c
+```bash
+gcc -o ppm-color-reducer ppm-color-reducer.c -lm
+```
+
+To run the script, use the following command structure:
+
+```bash
 ./ppm-color-reducer <input_file.ppm> <output_file.ppm> <palette_file.txt>
 ```
 
-- `<input_file.ppm>`: The path to the input PPM file you want to process.
-- `<output_file.ppm>`: The path where the new PPM file with reduced colors will be saved.
-- `<palette_file.txt>`: The path to a text file containing the color palette in `r,g,b` format.
-
-The program expects the input arguments to be exactly three. If this is not the case, it will output a usage message.
+Where:
+- `<input_file.ppm>` is the path to the input PPM image.
+- `<output_file.ppm>` is the path where you want to save the output image with reduced colors.
+- `<palette_file.txt>` is a text file containing the color palette in the format `R,G,B` on separate lines.
 
 <a name="examples" />
 
 #### Examples
 
-Here's how to use the script in practice:
+Here are a few example usages of the script:
 
-1. First, create a palette file, e.g., `palette.txt`, with the following RGB values:
-   ```
-   255,0,0
-   0,255,0
-   0,0,255
-   255,255,0
-   ```
+1. To convert an image `photo.ppm` to `photo_reduced.ppm` using a defined palette:
 
-2. Run the program to reduce the color depth of an image:
-   ```sh
-   ./ppm-color-reducer input.ppm output.ppm palette.txt
-   ```
+```bash
+./ppm-color-reducer photo.ppm photo_reduced.ppm palette.txt
+```
 
-In this example, `input.ppm` is your source image and `output.ppm` will be the new file with reduced colors.
+2. If the palette file contains the following colors:
+
+```
+255,0,0
+0,255,0
+0,0,255
+255,255,0
+```
+
+The colors in `photo.ppm` will be reduced and converted based on the nearest match found in the palette.
 
 ---
 
@@ -84,9 +91,8 @@ In this example, `input.ppm` is your source image and `output.ppm` will be the n
 
 ### Notes
 
-- Ensure that the palette file follows the specified format and does not contain non-numeric entries.
-- The input file must be in the P6 format; other PPM formats (such as P3) will not be processed correctly.
-- The program currently supports a maximum palette size of 256 colors.
+- The input PPM file must be in P6 format; other formats such as P3 will not be processed correctly.
+- The palette file should not contain comments or empty lines for correct parsing.
+- Make sure the script has the appropriate permissions to read input files and write output files.
 
-> **Critique**: 
-> While the script is functional, it could benefit from error handling improvements, especially when reading input files or parsing input arguments. Additionally, a more user-friendly way to specify palette files could be implemented, such as allowing different formats or providing default palettes. Furthermore, including performance optimizations for larger images or palettes might enhance execution speed.
+> **Critique**: The script lacks error handling for memory allocation and could be made more robust by checking for potential file read errors. The inclusion of support for different PPM formats (like P3) could also enhance its usability. Furthermore, consider expanding the palette loading to support hex color formats, which are more common in many design applications.

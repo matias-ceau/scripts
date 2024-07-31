@@ -1,7 +1,8 @@
+# PDF Opener (pdfopener.sh)
 
 ---
 
-Open PDF files from the home directory using Evince.
+A simple script to find and open PDF files using Evince.
 
 ---
 
@@ -20,8 +21,9 @@ Open PDF files from the home directory using Evince.
 
 ### Dependencies
 
-- `dmenu`: A dynamic menu for X, required to select the PDF file.
-- `evince`: The document viewer used to open PDF files.
+- `dmenu` - A dynamic menu for X.
+- `evince` - Document viewer for PDF and other formats.
+- `find` - Command-line utility for searching files in a directory hierarchy.
 
 <a name="description" />
 
@@ -31,13 +33,9 @@ Open PDF files from the home directory using Evince.
 
 #### Overview
 
-The `pdfopener.sh` script provides a simple way to open PDF files located in the user's home directory. It utilizes `find` to search for files with the `.pdf` extension, and presents those files in a menu using `dmenu`. Once a user selects a file, it opens in Evince, the GNOME document viewer. This allows for quick access to PDF documents without needing to navigate through a file manager.
+The `pdfopener.sh` script is a shell script designed for quick access to PDF files stored in the user's home directory. Upon execution, it searches for PDF files and presents them in a menu using `dmenu`, allowing the user to select a file. Once the user makes a selection, the script opens the chosen PDF file using `Evince`, a popular document viewer. 
 
-The script functions as follows:
-1. It executes a `find` command to search for PDF files in the home directory.
-2. The output of the `find` command is filtered by `grep` to include only files with the `.pdf` extension.
-3. `dmenu` displays the list of found files, allowing the user to choose one.
-4. Finally, Evince is called with the selected file as an argument to open it for viewing.
+Internally, the script utilizes the `find` command to search for all PDF files, redirects any error output to `/dev/null` to avoid cluttering the terminal with error messages, and filters the results through `grep` to match files ending with `.pdf`. It then limits the displayed list to a manageable number of entries (30) to enhance usability.
 
 ---
 
@@ -45,26 +43,23 @@ The script functions as follows:
 
 #### Usage
 
-To use the script, you can run it directly from the terminal:
+To use this script, simply execute it in your terminal or bind it to a keyboard shortcut in your window manager (Qtile). Running the command:
 
 ```bash
 sh /home/matias/.scripts/pdfopener.sh
 ```
 
-Alternatively, it can be bound to a key combination in a window manager like Qtile for quicker access.
+will prompt you with a dmenu interface showing available PDF files. Select the desired file to open it with Evince.
 
 <a name="examples" />
 
 #### Examples
 
-1. Run the script directly to open a PDF:
-   ```bash
-   sh /home/matias/.scripts/pdfopener.sh
-   ```
-2. Bind the script to a key in your Qtile configuration:
-   ```python
-   Key([mod], "p", lazy.spawn("sh /home/matias/.scripts/pdfopener.sh")),
-   ```
+- Open a terminal and execute:
+  ```bash
+  sh /home/matias/.scripts/pdfopener.sh
+  ```
+  This will display a list of all PDF files in your home directory for selection.
 
 ---
 
@@ -72,8 +67,10 @@ Alternatively, it can be bound to a key combination in a window manager like Qti
 
 ### Notes
 
-- Ensure that both `dmenu` and `evince` are installed on your system.
-- If there are many PDFs, consider adjusting the `-l` option in `dmenu` to show more items in the menu.
-- The script currently does not handle cases where there are no PDF files or if the user cancels the selection in `dmenu`, which may result in Evince being called without a file.
+- It is recommended to ensure that your home directory (or the directory you want to search) contains the PDFs you want to open. The script may take some time to execute if there are many files.
+- The script will not find PDFs in hidden directories unless they are explicitly included in the search.
 
-> **Critique:** The script lacks error handling for cases where no PDF files are found. To improve it, consider adding a check before calling Evince. For instance, you can test if `file` is empty and provide feedback to the user before attempting to open it, enhancing the user experience.
+> **Critique:** While the script is functional, there are a few potential improvements:
+> - Consider adding error handling for cases where no PDF files are found, to provide user feedback.
+> - To enhance performance, the script could limit the search to a specific directory rather than searching the entire home directory.
+> - Adding an option for filtering PDFs by a specific keyword or date could improve usability for users with a large number of PDF files.

@@ -1,7 +1,8 @@
+# Launch Tmux with Music Player (launch_tmux_with_music_player.sh)
 
 ---
 
-A script to create a new tmux session for the cmus music player.
+A script to start a new tmux session for cmus music player.
 
 ---
 
@@ -20,8 +21,8 @@ A script to create a new tmux session for the cmus music player.
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer required for session management.
-- `cmus`: Console music player that will run within the tmux session.
+- `tmux`: Terminal multiplexer.
+- `cmus`: Console-based music player.
 
 <a name="description" />
 
@@ -31,9 +32,21 @@ A script to create a new tmux session for the cmus music player.
 
 #### Overview
 
-This script automates the process of starting a new `tmux` session dedicated to the cmus music player. By running this script, users can have a tmux session named "MUSIC" with a window running cmus, allowing them to listen to music without needing to launch a separate terminal.
+This script creates a new detached `tmux` session specifically for the `cmus` music player. It allows users to manage music playback in a dedicated terminal session without needing to interactively open a terminal window. By using `tmux`, multiple terminal sessions can run simultaneously, making it efficient for users who multitask.
 
-The script utilizes `tmux`'s ability to create a new session in the background (`-d`) and immediately starts cmus within that session. This setup is particularly useful for users who prefer working in a terminal environment and want easy access to music playback controls without cluttering their workspace with multiple terminal windows.
+The script utilizes the command:
+
+```bash
+tmux new-session -d -s MUSIC -n cmus 'cmus'
+```
+
+Here's a breakdown of the command:
+
+- `tmux new-session`: Initiates a new tmux session.
+- `-d`: Starts the session in detached mode (it runs in the background).
+- `-s MUSIC`: Names the session "MUSIC".
+- `-n cmus`: Names the window within the session "cmus".
+- `'cmus'`: Executes the cmus player within this session.
 
 ---
 
@@ -41,28 +54,32 @@ The script utilizes `tmux`'s ability to create a new session in the background (
 
 #### Usage
 
-To use this script, simply run it from your terminal. You can execute it as follows:
+To use this script, ensure that it has executable permissions and is located in your desired path:
 
-```bash
-bash /home/matias/.scripts/launch_tmux_with_music_player.sh
-```
+1. Make the script executable:
+   ```bash
+   chmod +x /home/matias/.scripts/launch_tmux_with_music_player.sh
+   ```
 
-Alternatively, you can assign it to a keybinding in your window manager (Qtile) for quicker access.
+2. Run the script from the terminal:
+   ```bash
+   /home/matias/.scripts/launch_tmux_with_music_player.sh
+   ```
+
+You can also bind the script to a keyboard shortcut in your window manager (qtile) for quick access.
 
 <a name="examples" />
 
 #### Examples
 
-To launch cmus in a tmux session named "MUSIC", use the command:
+- Start a new tmux session for cmus:
+  ```bash
+  /home/matias/.scripts/launch_tmux_with_music_player.sh
+  ```
 
+After executing, you can attach to the session by running:
 ```bash
-bash /home/matias/.scripts/launch_tmux_with_music_player.sh
-```
-
-You can then attach to the tmux session using:
-
-```bash
-tmux attach -t MUSIC
+tmux attach-session -t MUSIC
 ```
 
 ---
@@ -71,11 +88,8 @@ tmux attach -t MUSIC
 
 ### Notes
 
-- Ensure that both `tmux` and `cmus` are installed on your system before running the script.
-- To detach from the tmux session, you can use the shortcut `Ctrl + b`, followed by `d`.
-- To close the session when done, simply exit cmus or type `exit` in the tmux command line.
+- Ensure you have `tmux` and `cmus` installed on your Arch Linux system for the script to function correctly.
+- This script is ideal for users who want to keep their music player running in a separate, manageable session.
 
 > **Critique:** 
-> - Consider adding checks to ensure `tmux` and `cmus` are installed before attempting to start them, improving the script's robustness. 
-> - Implementing a mechanism to notify the user if the session already exists could prevent confusion.
-> - The script could be extended to allow for command-line arguments, enabling users to specify the session name or player options dynamically. 
+> The script is straightforward and effectively achieves its purpose; however, it lacks error handling. Consider adding checks to ensure `tmux` and `cmus` are both installed before attempting to run them, which can enhance user experience by providing meaningful feedback if dependencies are missing. Additionally, you might want to include a feature that can check if the session already exists to avoid creating multiple sessions with similar names.

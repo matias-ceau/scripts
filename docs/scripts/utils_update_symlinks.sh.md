@@ -1,8 +1,8 @@
-# utils_update_symlinks.sh
+# Symlink Utility Script (utils_update_symlinks.sh)
 
 ---
 
-A script to create symlinks in ~/.local/bin and remove old ones.
+Creates and manages symlinks in ~/.local/bin, logging activity.
 
 ---
 
@@ -21,10 +21,10 @@ A script to create symlinks in ~/.local/bin and remove old ones.
 
 ### Dependencies
 
-- bash
-- fd (a simple file finder)
-- bat (a cat clone with syntax highlighting and Git integration)
-- glow (a terminal-based Markdown renderer)
+- Bash
+- `fd` (a fast and user-friendly alternative to `find`)
+- `bat` (a cat alternative with syntax highlighting)
+- Access to the environment variable `$SCRIPTS` (needs to be set to the source directory)
 
 <a name="description" />
 
@@ -34,12 +34,14 @@ A script to create symlinks in ~/.local/bin and remove old ones.
 
 #### Overview
 
-The `utils_update_symlinks.sh` script facilitates the management of symlinks in the `~/.local/bin` directory. It ensures that all executable scripts located in a specified source directory (defined by the `$SCRIPTS` environment variable) are symlinked properly. The script also removes any broken symlinks, avoiding clutter and potential execution errors. 
+This script automates the management of symbolic links in the user's `~/.local/bin` directory. It performs the following functions:
 
-Key functionalities include:
-- Logging successful operations and errors to a specified log file.
-- Automatic creation of symlinks for new scripts while checking for conflicts.
-- Maintenance of a CSV file that lists all active symlinks and their original paths, providing an easy reference for users.
+1. Initializes a CSV log for symlink creation and maintenance, backing up any previous logs.
+2. Cleans up broken symlinks in the target directory.
+3. Creates symlinks for scripts located in the specified source directory (`$SCRIPTS`), avoiding conflicts with existing symlinks.
+4. Logs created symlinks to a CSV file and outputs the contents in a user-friendly format.
+
+Logging is done through color-coded messages in the terminal as well as by appending logs into a specified log file.
 
 ---
 
@@ -47,35 +49,27 @@ Key functionalities include:
 
 #### Usage
 
-1. Set the environment variable `SCRIPTS` to the directory containing the scripts you want to symlink.
-2. Run the script in the terminal:
+To run the script, execute it from the terminal. Ensure that the `$SCRIPTS` environment variable is set to the directory containing the scripts you want to link. The script does not require user input during execution:
 
-   ```bash
-   bash /home/matias/.scripts/sys/utils_update_symlinks.sh
-   ```
+```bash
+bash /home/matias/.scripts/sys/utils_update_symlinks.sh
+```
 
-3. Optionally, you may add this script to your qtile configuration as a keybinding, allowing for convenient executions.
+Additionally, it can be assigned to a keybinding in Qtile for quicker access.
 
 <a name="examples" />
 
 #### Examples
 
-- To create symlinks for all executable files located in `$SCRIPTS`:
+- Run the script to create or update symlinks:
+  ```bash
+  bash /home/matias/.scripts/sys/utils_update_symlinks.sh
+  ```
 
-   ```bash
-   SCRIPTS=/path/to/your/scripts bash /home/matias/.scripts/sys/utils_update_symlinks.sh
-   ```
-
-- Upon successful execution, the output may show:
-
-   ```
-   # Cleaning...
-   Cleaning complete!
-   # Symlinking...
-   Symlinking complete!
-   # Adding symlinks to CSV...
-   CSV update complete!
-   ```
+- After running, view the CSV log:
+  ```bash
+  cat ~/.local/bin/log/symlinking.log
+  ```
 
 ---
 
@@ -83,11 +77,11 @@ Key functionalities include:
 
 ### Notes
 
-- Ensure that the target directory `$HOME/.local/bin` is included in your PATH variable for the symlinks to be executable from anywhere in the terminal.
+- It is advisable to run the script periodically to keep the symlinks updated and remove any broken ones.
+- Ensure that all scripts in the `$SCRIPTS` directory are intended for symlinking to avoid unwanted overwrites.
+- The script outputs messages using colors for better readability.
 
-- Check the log file located at `$SCRIPTS/log/symlinking.log` for details on operations performed by the script.
-
-> **Critique:** While the script effectively handles symlink creation and cleanup, it could benefit from:
-> - Adding command-line arguments for flexibility, such as specifying the source or target directories.
-> - Improving error handling by checking for missing dependencies at the start.
-> - Consider using an array for logging messages to concatenate multiple entries before output, reducing IO operations.
+> **Critique**: 
+> - The script currently assumes the directory structure without verifying their existence. Adding checks at the start could enhance robustness.
+> - The `sleep` commands might not be necessary; consider removing them unless intended for pacing the logging output.
+> - Error handling could be improved by checking if the necessary commands (`fd`, `bat`, `echo`) exist before running the script.

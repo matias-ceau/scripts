@@ -1,8 +1,8 @@
-# llm-script-describer.py
+# LLM Script Describer (llm-script-describer.py)
 
 ---
 
-Generates markdown documentation for scripts with LLM assistance.
+Generate markdown documentation for user scripts with AI assistance.
 
 ---
 
@@ -21,10 +21,11 @@ Generates markdown documentation for scripts with LLM assistance.
 
 ### Dependencies
 
-- `openai` Python package
-- `colorama` for colored terminal outputs
-- System utilities like `fd`, `rg`
-- Shell script: `utils_update_symlinks.sh`
+- Python 3.x
+- OpenAI Python library
+- colorama
+- Bash scripting environment (for symlink updates)
+- Other Python dependencies managed via pip
 
 <a name="description" />
 
@@ -34,13 +35,14 @@ Generates markdown documentation for scripts with LLM assistance.
 
 #### Overview
 
-The `llm-script-describer.py` script is designed to help users generate markdown documentation for their scripts. The script utilizes a Language Model, specifically OpenAI's GPT-4o-mini, to provide descriptions based on the content of the scripts. This process helps ensure that the documentation is consistent and informative according to the context of Arch Linux and the Qtile window manager.
+The `llm-script-describer.py` script automates the creation of markdown documentation for user scripts located within a specified directory. Utilizing the OpenAI GPT model, it facilitates the generation of detailed markdown files from raw script content. This is particularly useful for developers looking to maintain comprehensive documentation for their scripts in a streamlined manner. 
 
-The script follows several key steps:
-1. **Collecting Script Files**: It identifies all script files in the specified directory, excluding Markdown files.
-2. **Checking for Orphaned Documentation**: It checks for documentation files that do not correspond to any existing scripts.
-3. **Reading and Describing Scripts**: For each script, it reads its content, checks if it is binary, finds the source if necessary, and generates a description.
-4. **Markdown Generation**: Writes the generated description into a Markdown file and updates an index for easy access.
+### Key functionalities include:
+
+- Reading scripts from a CSV file to process their content.
+- Utilizing a language model to generate descriptions of scripts based on their content.
+- Updating the main README file with a summary and a documentation index.
+- Cleaning up orphaned documentation files, ensuring only relevant documents are retained.
 
 ---
 
@@ -48,28 +50,31 @@ The script follows several key steps:
 
 #### Usage
 
-To use this script, follow these steps:
+To run the script, execute the following command in the terminal:
 
-1. Ensure that you have the required dependencies installed and the environment variables set, specifically `SCRIPTS` and `OPENAI_API_KEY`.
-2. Execute the script from the terminal:
-   ```bash
-   python llm-script-describer.py [path/to/csv_file.csv]
-   ```
-   If no CSV path is specified, it defaults to `$SCRIPTS/data/symlink_data.csv`.
+```bash
+python llm-script-describer.py path/to/symlink_data.csv
+```
+If no path is provided, it defaults to `$SCRIPTS/data/symlink_data.csv`.
 
-The script prompts whether to run another utility script (`utils_update_symlinks.sh`) and processes the provided CSV for script paths, generating documentation as needed.
+### The script performs several tasks:
+
+- **Interactive Symlink Update**: After prompting the user, it can run a script to update symlinks.
+- **Script Processing**: It processes each script listed in the provided CSV, generating accompanying markdown documentation.
+- **README Update**: Finally, it updates the documentation index in the main README file with links to generated markdown files.
 
 <a name="examples" />
 
 #### Examples
 
-- Run the script with default CSV file:
+- Generate documentation from the default CSV:
   ```bash
   python llm-script-describer.py
   ```
-- Process documentation with a custom CSV file:
+
+- Generate documentation from a custom CSV:
   ```bash
-  python llm-script-describer.py /home/matias/scripts/data/custom_symlink_data.csv
+  python llm-script-describer.py /path/to/custom.csv
   ```
 
 ---
@@ -78,10 +83,8 @@ The script prompts whether to run another utility script (`utils_update_symlinks
 
 ### Notes
 
-- Ensure to update the OpenAI library as needed to maintain compatibility.
-- The generated documentation is placed in the `$SCRIPTS/docs/scripts` directory, with the Markdown files named after the scripts.
-- The script's exit status reflects various outcomes; refer to console messages for detailed information during execution.
+- Ensure that the OpenAI API key is correctly set in the environment variable `OPENAI_API_KEY`.
+- The script expects a specific structure for the CSV input file, which should list original script paths along with their symlink names.
 
 > **Critique**: 
-> - The use of shell commands like `fd` and `rg` assumes availability on the system, which may not be present in all configurations. More graceful handling of such dependencies could improve usability.
-> - Error handling could be enhanced in functions like `describe_script` to provide more informative feedback on specific failures related to the OpenAI API or file reading issues. This could also include retries or more detailed logging for debugging purposes.
+> While the script is highly functional, there are scenarios where error handling could be improved, particularly around subprocess calls which may not handle all potential edge cases. Moreover, decoupling the script's concerns (for example, separating LLM interaction from file I/O) could lead to enhanced maintainability and testability. Consider refactoring the subprocess handling to allow for better logging and recovery in case of failures.

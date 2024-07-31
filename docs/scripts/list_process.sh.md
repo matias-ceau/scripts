@@ -1,7 +1,8 @@
+# List Running Services (list_process.sh)
 
 ---
 
-Lists running services on the system.
+List and sort running services on a Linux system using systemctl.
 
 ---
 
@@ -20,7 +21,8 @@ Lists running services on the system.
 
 ### Dependencies
 
-- `systemctl`: This script requires systemd, which is usually available on modern Arch Linux installations.
+- `systemctl`: comes pre-installed with systemd, required to manage services.
+- A shell environment capable of executing shell scripts.
 
 <a name="description" />
 
@@ -30,14 +32,11 @@ Lists running services on the system.
 
 #### Overview
 
-This shell script provides a straightforward way to list all running services on an Arch Linux system using `systemctl`. The command utilized is `systemctl list-units` with specific flags for better readability:
+The `list_process.sh` script provides a simple way to list all running services on a system that uses `systemd`. It does this by utilizing the `systemctl list-units` command, which displays the status of units (in this case, services). The output is then sorted by the fourth column, which typically contains the name of the service and is formatted for easier reading. The script excludes pagination and unnecessary legends to allow for a concise output.
 
-- `--type=service`: Limits the output to service units.
-- `--all`: Displays all units, including inactive ones.
-- `--no-pager`: Outputs the results directly to the terminal without using a pager.
-- `--no-legend`: Suppresses the header information, making the output easier to read.
-
-The output is then sorted based on the fourth column, which typically contains the state of the service.
+The command breakdown:
+- `systemctl list-units --type=service --all --no-pager --no-legend`: This command lists all service units regardless of their state. The `--no-pager` option prevents the output from being sent through a pager (like `less`), and `--no-legend` removes the headers from the output.
+- `sort -k4`: This sorts the output based on the fourth column.
 
 ---
 
@@ -45,37 +44,25 @@ The output is then sorted based on the fourth column, which typically contains t
 
 #### Usage
 
-To execute the script, simply run it from a terminal:
-
+To use this script, simply invoke it from the terminal as follows:
 ```bash
-bash /home/matias/.scripts/list_process.sh
+./list_process.sh
 ```
-
-Alternatively, you can make the script executable and run it directly:
-
+Make sure that the script has executable permissions. You can set this using the command:
 ```bash
 chmod +x /home/matias/.scripts/list_process.sh
-/home/matias/.scripts/list_process.sh
 ```
-
-This script can also be bound to a key combination in your window manager (qtile) to quickly access the list of running services.
+You can also assign this script to a keybinding in qtile for quick access.
 
 <a name="examples" />
 
 #### Examples
 
-```bash
-# Run the script
-/home/matias/.scripts/list_process.sh
-```
-
-Output (formatted for clarity):
-
-```
- ● sshd.service         loaded active running   OpenSSH Daemon
- ● NetworkManager.service loaded active running   Network Manager
- ● apache2.service      loaded active running   Apache Web Server
-```
+1. To list the running services, run:
+   ```bash
+   ./home/matias/.scripts/list_process.sh
+   ```
+   This will provide a quick overview of all running services sorted for ease of review.
 
 ---
 
@@ -83,6 +70,8 @@ Output (formatted for clarity):
 
 ### Notes
 
-- This script will display all services, whether they're running or not, but the sort will primarily change the active services appearance.
+Ensure that your user has permissions to run `systemctl` commands. If you encounter issues, you may need to execute the script with `sudo`.
 
-> **Critique:** The script is straightforward and functional; however, consider implementing options to filter services based on their state (active, inactive, failed) for more tailored outputs. Additionally, adding comments for each command might enhance readability for users unfamiliar with `systemctl`.
+> **Critique:**  
+> - The script could benefit from some error handling. For instance, if `systemctl` is not available, the user should receive a clear error message rather than failing silently. 
+> - Additional filtering options could be introduced to allow users to focus on specific types of services, increasing the script's utility.

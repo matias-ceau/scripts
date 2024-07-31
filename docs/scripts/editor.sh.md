@@ -1,8 +1,8 @@
-# Editor Script (editor.sh)
+# File Editor Script (editor.sh)
 
 ---
 
-A script to edit any file recursively in the current folder or subfolders.
+Edit any file in current folder or subfolders (recursively)
 
 ---
 
@@ -21,10 +21,11 @@ A script to edit any file recursively in the current folder or subfolders.
 
 ### Dependencies
 
-- `nvim` (Neovim)
+- `nvim` (Neovim text editor)
 - `fzf` (Fuzzy Finder)
-- `fd` (Simple, fast and user-friendly alternative to find)
-- `bat` (cat command with syntax highlighting)
+- `bat` (cat clone with syntax highlighting)
+- `fd` (simple, fast and user-friendly alternative to `find`)
+- `chezmoi` (optional, for config management)
 
 <a name="description" />
 
@@ -34,7 +35,7 @@ A script to edit any file recursively in the current folder or subfolders.
 
 #### Overview
 
-This script provides a convenient interface to edit files within the current directory or its subdirectories. Using `fzf` for fuzzy searching and `nvim` for text editing, it enables users to find files interactively. The script accepts various flags to modify its behavior, such as viewing hidden files, working in specific directories, or editing with `sudo` permissions. Additionally, it utilizes `fd` to filter out undesired file types consistently, promoting a cleaner search experience.
+This script allows users to interactively open files located in the current directory or its subdirectories using the `fzf` fuzzy finding interface. It provides additional options such as editing with `sudo`, restricting the search to the current directory, or selecting a specific config file. The script relies on `fd` for efficient file searching, excluding common file types that are typically irrelevant for editing (e.g., images, archives).
 
 ---
 
@@ -42,46 +43,41 @@ This script provides a convenient interface to edit files within the current dir
 
 #### Usage
 
-To utilize the script, make sure it is executable by running `chmod +x /home/matias/.scripts/editor.sh`. You can then invoke it from the terminal with various options:
+Run the script from the command line. It accepts several options:
 
-```bash
+```
 ./editor.sh [-S|--sudo] [-c|--cwd] [-C|--config] [-h|--help]
 ```
 
 - `-S, --sudo`: Edit files with sudo permissions.
-- `-c, --cwd`: Limit search to the current directory only.
-- `-C, --config`: Edit configuration files.
-- `-h, --help`: Display a help message with usage instructions.
+- `-c, --cwd`: Restrict search to the current directory only.
+- `-C, --config`: Edit a specific config file.
+- `-h, --help`: Display the help message.
 
-The script will use `fd` to find files and `fzf` to assist in interactive selection.
+You can bind this script to a key in your window manager (Qtile) for quick access.
 
 <a name="examples" />
 
 #### Examples
 
-1. To search and edit a file in the current directory and its subdirectories:
-   ```bash
+1. **Open a file normally**:
+   ```
    ./editor.sh
    ```
 
-2. To edit a file with elevated permissions:
-   ```bash
+2. **Open a file with sudo permissions**:
+   ```
    ./editor.sh --sudo
    ```
 
-3. To restrict file search to the current directory:
-   ```bash
+3. **Open a file only within the current directory**:
+   ```
    ./editor.sh --cwd
    ```
 
-4. To edit a configuration file:
-   ```bash
-   ./editor.sh --config
+4. **Open a specific config file**:
    ```
-
-5. For help on using the script:
-   ```bash
-   ./editor.sh --help
+   ./editor.sh --config
    ```
 
 ---
@@ -90,10 +86,9 @@ The script will use `fd` to find files and `fzf` to assist in interactive select
 
 ### Notes
 
-This script employs a variety of file exclusion patterns to prevent the selection of non-text file types like images, binaries, and others. The list of excluded file extensions is substantial, ensuring users can focus on relevant files.
+- Ensure that all dependencies are installed and available in your PATH.
+- Use the `CTRL-H` and `CTRL-S` keybindings within `fzf` to toggle visibility of hidden files.
 
 > **Critique:** 
-> The script is generally well-structured, but there are a few potential improvements:
-> - The `get_fd_cmd` function could accept parameters for file exclusions rather than hardcoding them. This would increase flexibility.
-> - The `fd` command could be further optimized to handle a broader range of scenarios, like incorporating user-defined paths or conditions.
-> - Consider adding error handling after invoking `nvim` to manage scenarios such as a failure in opening the file due to permissions or file existence.
+> - The script could benefit from error handling in case no files match the search criteria when `fd` is executed. Implementing checks for exit statuses would enhance its robustness.
+> - The multiple boolean flags (`SUDO_MODE`, `CWD_MODE`, and `CFG_MODE`) could be encapsulated within a more structured configuration method or a dictionary to simplify the code readability.

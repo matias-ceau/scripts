@@ -1,8 +1,8 @@
-# Wallpaper Script (wallpaper.sh)
+# Wallpaper Setter (wallpaper.sh)
 
 ---
 
-Pick random wallpaper from wallpaper list or select manually.
+Pick random wallpaper or select from a list and set it as the desktop wallpaper.
 
 ---
 
@@ -21,10 +21,10 @@ Pick random wallpaper from wallpaper list or select manually.
 
 ### Dependencies
 
-- feh: for setting the wallpaper.
-- notify-send: for desktop notifications.
-- fzfmenu.sh: for interactive menu selection (optional, to be implemented).
-- yad: for graphical interface selection.
+- `feh` - For setting the wallpaper.
+- `notify-send` - For displaying notifications.
+- `fzfmenu.sh` - For fuzzy searching wallpapers (optional).
+- `yad` - For a graphical selection and preview of wallpapers.
 
 <a name="description" />
 
@@ -34,13 +34,11 @@ Pick random wallpaper from wallpaper list or select manually.
 
 #### Overview
 
-The `wallpaper.sh` script allows users to change their desktop wallpaper easily on Arch Linux using the Qtile window manager. It offers four primary functionalities:
-- Set a random wallpaper from a specified directory.
-- Select a wallpaper from a list using the fzfmenu or the yad GUI.
-- Use a previously set wallpaper from a cache log.
-- Set a default wallpaper if no valid options are provided.
+The `wallpaper.sh` script allows users to set their desktop wallpaper from a predefined directory of images. It features multiple methods for selecting the wallpaper: randomly, by selection through a fuzzy finder, previous wallpapers from a log, or using a graphical interface with `yad`. 
 
-The script maintains a cache of previously used wallpapers stored in `~/.cache/wallpapers.log`. This log helps in retrieving and setting wallpapers that have recently been used. 
+The default wallpaper is set to a specific image defined in `DEFAULT_WALLPAPER`. Successful changes are logged in a cache file located at the path specified by `CACHE`. 
+
+The script defines a main function `set_wallpaper` that uses `feh` to scale the chosen wallpaper to fill the screen and sends a notification confirming the selection.
 
 ---
 
@@ -48,42 +46,34 @@ The script maintains a cache of previously used wallpapers stored in `~/.cache/w
 
 #### Usage
 
-To run the script, use the following command format in the terminal:
+This script can be used directly in the terminal or can be bound to a shortcut key in your window manager (qtile). You can pass the following command line arguments:
 
+- `--random`: Selects a random wallpaper from the `~/.wallpapers/` directory.
+- `--select`: Prompts the user to select a wallpaper using `fzfmenu.sh` (if available).
+- `--previous [N]`: Sets the previous N-th wallpaper from the log. Defaults to 1.
+- `--gui`: Opens a graphical dialog to select and preview wallpapers using `yad`.
+- No arguments: Sets the wallpaper to the default specified in the script.
+
+Example command:
 ```bash
-bash wallpaper.sh [option]
+bash ~/scripts/wallpaper.sh --random
 ```
-
-**Options:**
-- `--random`: Picks and sets a random wallpaper from the wallpapers directory.
-- `--select`: Prompts the user to select a wallpaper from the list using `fzfmenu.sh`.
-- `--previous [n]`: Sets the previously used wallpaper, with an optional `n` to indicate how many entries back to go (default is 1).
-- `--gui`: Opens a graphical dialog to select a wallpaper using `yad`.
-- No argument: Sets the default wallpaper.
 
 <a name="examples" />
 
 #### Examples
 
-- To set a random wallpaper:
-  ```bash
-  bash wallpaper.sh --random
-  ```
-
-- To select a wallpaper using `fzfmenu`:
-  ```bash
-  bash wallpaper.sh --select
-  ```
-
-- To revert to the previous wallpaper:
-  ```bash
-  bash wallpaper.sh --previous
-  ```
-
-- To use the GUI wallpaper selector:
-  ```bash
-  bash wallpaper.sh --gui
-  ```
+- Set a random wallpaper:  
+  `bash ~/scripts/wallpaper.sh --random`
+  
+- Select a wallpaper interactively:  
+  `bash ~/scripts/wallpaper.sh --select`
+  
+- Set the previous wallpaper:  
+  `bash ~/scripts/wallpaper.sh --previous`
+  
+- Open a graphical interface to select a wallpaper:  
+  `bash ~/scripts/wallpaper.sh --gui`
 
 ---
 
@@ -91,11 +81,10 @@ bash wallpaper.sh [option]
 
 ### Notes
 
-1. Ensure that `~/.wallpapers/` contains your wallpaper files.
-2. The script requires read-write permissions to the cache file located at `$CACHE`.
-3. The script currently uses `awk` to remove successive duplicate entries from the cache log to keep it clean.
+- Make sure you have the necessary dependencies installed for the script to function correctly.
+- Ensure that your wallpaper directory (`~/.wallpapers`) contains image files (JPG, PNG, etc.).
 
-> **Critique**: 
-> - The script could benefit from better error handling, especially when working with external commands like `feh`, `notify-send`, and `yad`.
-> - If `fzfmenu.sh` is not available, this should be gracefully handled so the user receives an informative message rather than encountering a silent failure.
-> - Consider adding a help option, like `-h` or `--help`, to provide users with usage instructions directly from the command line.
+> **Critique:** 
+> - The script lacks error handling for cases where the wallpaper directory might be empty or the required dependencies may not be installed.
+> - The `fzfmenu.sh` script dependency is mentioned but not included or clearly documented, which could lead to confusion for users unfamiliar with it.
+> - Implementing a dedicated function to verify that the image set as wallpaper is valid could prevent errors when using `feh`.

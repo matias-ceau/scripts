@@ -1,8 +1,8 @@
-# Album Launcher (fzf_albumlauncher.xsh)
+# Album Launcher Script (fzf_albumlauncher.xsh)
 
 ---
 
-Launches and plays music albums using fzf to select from Beet's album list.
+Launches an album from Beet using fzf to interactively select and play it with cmus.
 
 ---
 
@@ -21,10 +21,10 @@ Launches and plays music albums using fzf to select from Beet's album list.
 
 ### Dependencies
 
-- Xonsh shell
-- Beet (music management software)
-- fzf (fuzzy finder)
-- cmus (curses music player)
+- **fzf**: A command-line fuzzy finder.
+- **cmus**: A small, fast, and powerful console music player.
+- **beet**: Beets is a music library manager and notational database.
+- **xonsh**: A Python-powered shell that makes scripting easy.
 
 <a name="description" />
 
@@ -34,12 +34,15 @@ Launches and plays music albums using fzf to select from Beet's album list.
 
 #### Overview
 
-This script allows users to interactively select an album from their music library managed by Beet using the `fzf` fuzzy finder. It leverages the `cmus` music player to play the selected album, providing a seamless command-line experience.
+This script allows users to select a music album via an interactive interface using `fzf`. Once an album is selected, it utilizes `cmus` commands to:
 
-1. The script begins by calling `beet ls -a` to list albums. It uses `sed` to format the output, extracting the album names for selection.
-2. The generated list is passed to `fzf`, enabling the user to choose an album interactively.
-3. Once an album is selected, the script initiates commands to `cmus` to set the current view, clear current selections, filter the album, mark selected tracks, and queue them for playback.
-4. Finally, it saves the current playing list to a temporary `.m3u` file.
+1. View the current music queue.
+2. Clear the queue.
+3. Filter the album based on the selection.
+4. Add the album's tracks to the current queue.
+5. Save the current queue to a playlist.
+
+The album selection is sourced from `beet`, which manages the music library, ensuring that users can quickly find and play their desired album.
 
 ---
 
@@ -47,26 +50,27 @@ This script allows users to interactively select an album from their music libra
 
 #### Usage
 
-To use the script, execute it in a terminal. After launching, it will provide an interactive interface via `fzf` where you can choose an album from your music collection. Ensure you have `cmus` running to control playback. 
+To execute the script, simply run it in a terminal where xonsh is available:
 
-Run the script using:
-```bash
-~/.scripts/fzf_albumlauncher.xsh
+```sh
+./fzf_albumlauncher.xsh
 ```
 
-You can bind this script to a keyboard shortcut in your window manager (qtile) for quicker access.
+This will prompt an album selection window powered by `fzf`. After selecting an album, the script automatically handles the rest of the operations with `cmus`.
+
+You can also set this script to a keybinding in your window manager (qtile) for quicker access.
 
 <a name="examples" />
 
 #### Examples
 
-1. Launch the script:
-   ```bash
-   ~/.scripts/fzf_albumlauncher.xsh
-   ```
-   - This opens a fzf selection prompt to choose an album.
-   
-2. Select an album from the list, and it will automatically play in `cmus`.
+- Running the script:
+
+```sh
+./fzf_albumlauncher.xsh
+```
+
+- The user is then prompted to select an album, which will play automatically in `cmus`.
 
 ---
 
@@ -74,10 +78,11 @@ You can bind this script to a keyboard shortcut in your window manager (qtile) f
 
 ### Notes
 
-Ensure that all dependencies are installed before running the script. The paths and environment might need adjustment based on your specific setup.
+- Ensure all dependencies are installed and configured for seamless operation.
+- The script saves the current queue in a temporary playlist file located at `/home/matias/.temp/nowplaying.m3u`. Ensure that this directory exists to prevent errors.
 
-> **Critique**
+> **Critique:**
 > 
-> - The script assumes that `beet ls -a` always returns valid album data; consider adding checks for empty selections.
-> - Adding error handling when executing `cmus-remote` commands could make the script more robust, providing feedback when commands fail.
-> - Consider implementing an option to clear the playlist before queuing a new selection to prevent overlaps.
+> - The script does not handle cases where no album is selected. If `fzf` returns nothing, `cmus-remote` could execute with an empty query leading to potential errors.
+> - Consider adding error handling for each command to improve the robustness of the script.
+> - The use of hard-coded file paths (like for the playlist) might limit portability. It could benefit from using environment variables or user-defined paths.

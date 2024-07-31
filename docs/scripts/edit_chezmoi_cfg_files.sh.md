@@ -1,7 +1,8 @@
+# Edit Chezmoi Configuration Files (edit_chezmoi_cfg_files.sh)
 
 ---
 
-Launches fzf to edit Chezmoi managed configuration files.
+Launches an interactive file selector to edit Chezmoi-managed configuration.
 
 ---
 
@@ -20,11 +21,10 @@ Launches fzf to edit Chezmoi managed configuration files.
 
 ### Dependencies
 
-- `chezmoi` - to manage dotfiles.
-- `fzf` - fuzzy finder for command-line.
-- `bat` - enhanced cat command for syntax highlighting.
-- `eza` - modern replacement for `ls`.
-- `neovim` - text editor for file editing.
+- `chezmoi` - for managing dotfiles.
+- `fzf` - for fuzzy file selection.
+- `bat` - for syntax highlighting and file viewing in the preview.
+- `eza` - a modern replacement for `ls`, providing improved listing with icons.
 
 <a name="description" />
 
@@ -34,14 +34,16 @@ Launches fzf to edit Chezmoi managed configuration files.
 
 #### Overview
 
-This script facilitates the editing of configuration files managed by Chezmoi. It utilizes `fzf` to provide a fuzzy finding capability for selecting files. The script enhances user experience by showing a preview of the selected file's contents if it is a regular file, or a listing of its contents if it is a directory.
+This script is designed to facilitate the editing of files managed by Chezmoi, a popular dotfile management tool. It utilizes `fzf`, a command-line fuzzy finder, to allow users to select configuration files or directories interactively. The script provides a preview of the selected item using:
 
-The line that launches `fzf` is particularly useful as it includes a preview window that adapts based on the type of file selected:
+- `bat` for files, with line numbers and syntax highlighting,
+- `eza` for directories, giving a well-formatted overview including icons.
 
-- **File Preview:** Uses `bat`, a powerful replacements for `cat`, to display file content with syntax highlighting and line numbers.
-- **Directory Listing:** Uses `eza` to list the contents of directories in a visually appealing manner with icons.
+When a selection is made, the script utilizes the Neovim (`nvim`) text editor to open the chosen file for editing.
 
-The search begins in the Chezmoi-managed files located in the user's home directory, enabling quick navigation through configuration items.
+Here's how the main components of the script work:
+- `chezmoi managed` lists files managed by Chezmoi.
+- `fzf` enhances user experience with a preview of the selected items and the ability to navigate through a structured file tree.
 
 ---
 
@@ -49,30 +51,28 @@ The search begins in the Chezmoi-managed files located in the user's home direct
 
 #### Usage
 
-To use the script, simply execute it from the terminal:
+1. Make sure the script is executable:
+    ```bash
+    chmod +x /home/matias/.scripts/edit_chezmoi_cfg_files.sh
+    ```
 
-```bash
-/home/matias/.scripts/edit_chezmoi_cfg_files.sh
-```
+2. Run the script in your terminal:
+    ```bash
+    /home/matias/.scripts/edit_chezmoi_cfg_files.sh
+    ```
 
-Depending on the output of `chezmoi managed`, it will display a list of files and directories. Upon selecting a file or directory with `fzf`, Neovim (`nvim`) will be launched to edit the chosen configuration file.
-
-Additionally, you can bind this script to a key in your Qtile configuration for quicker access.
+3. Use the fuzzy search interface to locate and select a file or directory.
+4. Once selected, the file will be opened in Neovim.
 
 <a name="examples" />
 
 #### Examples
 
-1. **Run the Script:**
-   ```bash
-   /home/matias/.scripts/edit_chezmoi_cfg_files.sh
-   ```
-
-2. **Select a File:**
-   - Navigate to the desired file in the `fzf` list and press **Enter** to open it in Neovim.
-
-3. **Select a Directory:**
-   - Navigate into a directory to view its contents, then select a file within it to edit.
+- Open a terminal and type:
+    ```bash
+    /home/matias/.scripts/edit_chezmoi_cfg_files.sh
+    ```
+- Start typing the name of the configuration file, navigate with arrow keys, and press `Enter` to open it.
 
 ---
 
@@ -80,9 +80,9 @@ Additionally, you can bind this script to a key in your Qtile configuration for 
 
 ### Notes
 
-- Ensure that all dependencies are installed and properly configured to prevent errors during execution.
-- The `EDITOR` variable is set to `nvim`, which may be changed if you prefer a different editor.
+- Ensure that all required dependencies are installed and properly configured on your system to avoid runtime errors.
+- The preview window size can be adjusted by modifying the values for `--preview-window`.
 
-> **Critique:**  
-> The script could benefit from additional error handling, particularly in the context where `chezmoi` is not found or returns an empty list. A simple check before invoking `fzf` would improve robustness. Additionally, considering the possibility of enhancements like a configurable preview command would allow for more customization based on user preferences.
-</template>
+> **Critique:**
+> 
+> The script effectively integrates `fzf` with `chezmoi`, providing a user-friendly way to edit configuration files. However, it assumes all dependencies are installed, which might lead to confusion for users unfamiliar with the required tools. Consider adding a dependency check at the beginning of the script to alert the user if any are missing. Additionally, a brief message could inform the user on how to exit the fzf interface, enhancing usability for newcomers.

@@ -8,14 +8,19 @@ import subprocess
 import json
 import hashlib
 from openai import OpenAI
-from colorama import init, Fore, Style
+from colorama import init, Fore, Style, Back
 
 # Initialize colorama for cross-platform colored output
 init()
 
-SCRIPTS = os.environ.get('SCRIPTS', '')
-DOCS = os.path.join(SCRIPTS, 'docs')
-DOCS_scripts = os.path.join(DOCS, 'scripts')
+SCRIPTS_PATH = os.environ.get('SCRIPTS', '')
+DOCS_PATH = os.path.join(SCRIPTS_PATH, 'docs')
+INDEX_PATH = os.path.join(DOCS_PATH, "index.md")
+DOCS_SCRIPTS_PATH = os.path.join(DOCS_PATH, 'scripts')
+INFO_JSON_PATH = os.path.join(SCRIPTS_PATH, 'data', 'script_info.json')
+README_PATH = os.path.join(SCRIPTS_PATH, 'README.md')
+
+
 
 client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 llm_model = "gpt-4o-mini"
@@ -37,10 +42,9 @@ NB: `<script_path>` is the path of the file and `<script_content>` is the conten
 3) Please provide the documentation directly in markdown format, without using markdown code blocks.
 The documentation's length should be between 200 and 500 words, depending on the complexity of the script.
 You can use any github flavored markdown formatting to make the description clear (including code blocks, lists, tables, footnote, lines, etc), except when explicitly told otherwise.
-For sections, always use the template provided below, between `<template>` and `</template>` (nb: lines between double accolades ({{}}) are comments to give you guidance):
+For sections, always use the template provided below (nb: lines between double accolades ({{}}) are comments to give you guidance):
 
-<template>\
-# {{Script Name (filename in parenthesis)}}
+# Script Name {{ choose an appropriate title and add the filename in parenthesis}}
 
 ---
 
@@ -99,39 +103,90 @@ For sections, always use the template provided below, between `<template>` and `
 {{Add any additional notes or considerations}}
 
 {{include a "critique" section, inside a mardown blockquote, where you, as the assistant, point out problems in the scripts or potential improvements}}
-</template>\
 """
-def print_colored(message, color=Fore.WHITE, style=Style.NORMAL, end='\n'):
+
+system_prompt_2 = """\
+1) You are a helpful assistant that generates a summary of the content of a GitHub script repository.Your audience is mainly the creator of the scripts themselves so provide information adapted to his context (OS : Arch linux, WM : qtile).
+2) Your goal is to create a summary of the script repository based on the documentation for all of the scripts that you will receive. This will be integrated in the README.md file, so it shouldn't be too specific (DON'T DESCRIBE EACH SCRIPT INDIVIDUALLY). You should write a 200-300 word description of the kind of script it contains (You are free to format it using markdown features available on github, with the exception of headers).
+To help you, the user will send you messages in the format below.
+
+
+
+[FILE]: script_filename1
+
+<content of documentation of script 1>
+
+---
+
+[FILE]: script_filename2
+
+<content of documentation of script 2>
+
+---
+...
+""" 
+
+def print_colored(message, kind='normal', style=Style.NORMAL, end='\n'):
+    if kind == 'main_section':
+        color = Back.BLUE ; style = Style.BRIGHT
+    elif kind == 'main_function':
+        color = Fore.CYAN ; style = Style.BRIGHT
+    elif kind == 'function_call':
+        color = Fore.BLUE
+    elif kind == 'llm':
+        color = Fore.MAGENTA ; style = Style.BRIGHT
+    elif kind == 'success':
+        color = Fore.GREEN
+    elif kind == 'victory':
+        color = Back.GREEN ; style = Style.BRIGHT
+    elif kind == 'error':
+        color = Back.RED ; style = Style.BRIGHT
+    elif kind == 'warn':
+        color = Fore.RED
+    elif kind == 'info':
+        color = Fore.YELLOW
+    else:
+        color=Fore.WHITE ; style=Style.NORMAL
     print(f"{style}{color}{message}{Style.RESET_ALL}", end=end)
 
+#INFO_JSON -> file content of INFO_JSON_PATH
+if os.path.exists(INFO_JSON_PATH):
+    with open(INFO_JSON_PATH, 'r') as f:
+        INFO_JSON = json.load(f)
+        print_colored(f'Found existing {INFO_JSON_PATH} !', kind="success")
+else:
+    INFO_JSON = {}
+    print_colored(f'Creating {INFO_JSON_PATH} !', kind="info")
 def run_update_symlinks():
-    print_colored("Do you want to run utils_update_symlinks.sh? (y/N): ", Fore.YELLOW, Style.BRIGHT, end='')
+    print_colored("Do you want to run utils_update_symlinks.sh? (y/N): ", kind='info', end='')
     response = input().lower()
     if response in ['y', 'yes']:
-        print_colored("Running utils_update_symlinks.sh...", Fore.CYAN)
+        print_colored("Running utils_update_symlinks.sh...", kind='info')
         try:
             subprocess.run(['utils_update_symlinks.sh'], check=True)
-            print_colored("utils_update_symlinks.sh completed successfully.", Fore.GREEN)
+            print_colored("utils_update_symlinks.sh completed successfully.", kind='success')
         except subprocess.CalledProcessError:
-            print_colored("Error: Failed to run utils_update_symlinks.sh", Fore.RED)
+            print_colored("Error: Failed to run utils_update_symlinks.sh", kind='error')
             sys.exit(1)
     else:
-        print_colored("Skipping utils_update_symlinks.sh", Fore.YELLOW)
+        print_colored("Skipping utils_update_symlinks.sh", kind='info')
 
 def get_script_files():
     try:
         result = subprocess.run(
-            f"fd '' -tf {SCRIPTS} | rg -v 'md$' | xargs -I {{}} basename {{}}",
+            f"fd '' -tf {SCRIPTS_PATH} | rg -v 'md$' | xargs -I {{}} basename {{}}",
             shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True
         )
+
         return set(result.stdout.splitlines())
     except subprocess.CalledProcessError:
-        print_colored("Error: Failed to get script files", Fore.RED)
+        print_colored("Error: Failed to get script files", kind='error')
         return set()
 
 def check_orphaned_docs(script_files):
+    print_colored("Checking for orphaned doc files...", kind='function_call')
     orphaned_docs = []
-    for doc_file in os.listdir(DOCS_scripts):
+    for doc_file in os.listdir(DOCS_SCRIPTS_PATH):
         if doc_file.endswith('.md'):
             script_name = doc_file[:-3]  # Remove .md extension
             if script_name not in script_files:
@@ -139,15 +194,15 @@ def check_orphaned_docs(script_files):
     
     if orphaned_docs:
         print('')
-        print_colored("The following documentation files are orphaned:", Fore.CYAN)
+        print_colored("Orphaned doc files found!", kind='warn')
         for doc in orphaned_docs:
-            print_colored(f"  - {doc}", Fore.RED)
-        print_colored("Consider removing these files or updating the documentation.", Fore.YELLOW)
+            print_colored(f"    - Removing {doc}", kind='info')
+            subprocess.run(f"rm {DOCS_SCRIPTS_PATH}/{doc}", shell=True, check=True)
     else:
-        print_colored("No orphaned documentation files found.", Fore.GREEN)
+        print_colored("No orphaned documentation files found.", kind='success')
 
 def is_binary(file_path):
-    print_colored(f"Checking if file is binary: {file_path}", Fore.CYAN)
+    print_colored(f"Checking if file is binary: {file_path}", kind='function_call')
     try:
         with open(file_path, 'rb') as file:
             chunk = file.read(1024)
@@ -156,29 +211,29 @@ def is_binary(file_path):
         return False
 
 def find_source_file(binary_path):
-    print_colored(f"Attempting to find source file for: {binary_path}", Fore.CYAN)
+    print_colored(f"Attempting to find source file for: {binary_path}", kind='function_call')
     filename = os.path.basename(binary_path)
     name_without_ext = os.path.splitext(filename)[0]
-    scripts_lib = os.path.join(SCRIPTS, 'lib')
+    scripts_lib = os.path.join(SCRIPTS_PATH, 'lib')
     
     extensions = ['.c', '.cpp', '.py', '.sh', '.rs', '.go', '.js', '.ts', '.rb', '.java', '.cs']
     
     for ext in extensions:
         source_path = os.path.join(scripts_lib, f"{name_without_ext}{ext}")
         if os.path.exists(source_path):
-            print_colored(f"Found source file: {source_path}", Fore.GREEN)
+            print_colored(f"Found source file: {source_path}", kind='success')
             return source_path
     
-    print_colored(f"No source file found for: {binary_path}", Fore.YELLOW)
+    print_colored(f"No source file found for: {binary_path}", kind='error')
     return None
 
 def read_script(file_path):
-    print_colored(f"Reading script: {file_path}", Fore.CYAN)
+    print_colored(f"Reading script: {file_path}", kind='function_call')
     with open(file_path, 'r') as file:
         return file.read()
 
 def describe_script(script_path, script_content):
-    print_colored("Generating description using gpt-4o-mini model...", Fore.MAGENTA)
+    print_colored("Generating description using gpt-4o-mini model...", kind='llm')
     try:
         response = client.chat.completions.create(
             model=llm_model,
@@ -189,17 +244,40 @@ def describe_script(script_path, script_content):
         )
         return response.choices[0].message.content
     except Exception as e:
-        print_colored(f"Error generating description: {str(e)}", Fore.RED)
+        print_colored(f"Error generating description: {str(e)}", kind='error')
         return "Error: Unable to generate description."
 
+def llm_summarize():
+    print_colored("Generating doc summary using gpt-4o-mini model...", kind='llm')
+    dic = {}
+    for d in os.listdir(DOCS_SCRIPTS_PATH):
+        with open(os.path.join(DOCS_SCRIPTS_PATH, d)) as f:
+            data = f.read()
+        dic[d] = data
+    content = ''.join([f"[SCRIPT]: {k[:-3]}\n\n{v}\n\n---\n\n" for k,v in dic.items()])
+    try:
+        response = client.chat.completions.create(
+            model=llm_model,
+            messages=[
+                {"role": "system", "content": system_prompt_2},
+                {"role": "user", "content": content}
+            ]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print_colored(f"Error generating summary: {str(e)}", kind='error')
+        return "Error: Unable to generate summary."
+
 def write_markdown(filename, content):
-    print_colored(f"Writing markdown file: {filename}", Fore.GREEN)
+    print_colored(f"Writing markdown file: {filename}", kind='success')
     with open(filename, 'w') as file:
         file.write(content)
 
-def update_index(index_path, filename, relative_path):
-    print_colored(f"Updating index file: {index_path}", Fore.GREEN)
-    with open(index_path, 'r') as file:
+def update_index(filename, relative_path):
+    print_colored(f"Updating index file: {INDEX_PATH}", kind='info')
+    with open(INDEX_PATH, 'a') as file:
+        pass
+    with open(INDEX_PATH, 'r') as file:
         lines = file.readlines()
     
     new_line = f"- [{filename}]({relative_path})\n"
@@ -208,7 +286,7 @@ def update_index(index_path, filename, relative_path):
     
     lines.sort(key=lambda x: x.lower())
     
-    with open(index_path, 'w') as file:
+    with open(INDEX_PATH, 'w') as file:
         file.writelines(lines)
 
 def get_file_hash(file_path):
@@ -218,24 +296,28 @@ def get_file_hash(file_path):
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest()
 
-def process_script(script_path, script_info):
-    print_colored(f"\nProcessing script: {script_path}", Fore.BLUE, Style.BRIGHT)
+def process_script(script_path):
+    print_colored(f"\nProcessing script: {script_path}", kind='function_call')
     
     filename = os.path.basename(script_path)
-    markdown_path = os.path.join(DOCS_scripts, f"{filename}.md")
-    
+    markdown_path = os.path.join(DOCS_SCRIPTS_PATH, f"{filename}.md")
+   
+    print_colored(f'Getting hash for {filename}...')
     current_hash = get_file_hash(script_path)
     
-    if filename in script_info and script_info[filename]['hash'] == current_hash:
-        print_colored(f"Skipping unchanged script: {script_path}", Fore.YELLOW)
+    if filename in INFO_JSON and INFO_JSON[filename]['hash'] == current_hash:
+        print_colored(f"Skipping unchanged script: {script_path}", kind='info')
         return
     
     if is_binary(script_path):
+        print_colored(f'{script_path} is a binary file, trying to find the source file...')
         source_path = find_source_file(script_path)
         if source_path:
+            print_colored(f'Found source {source_path}',kind='success')
             script_content = read_script(source_path)
         else:
             script_content = None
+            print_colored('No Found source {source_path}', kind='success', style='Style.dim')
     else:
         script_content = read_script(script_path)
     
@@ -244,34 +326,32 @@ def process_script(script_path, script_info):
     else:
         description = "No information could be generated for this binary file."
     
-    os.makedirs(DOCS, exist_ok=True)
+    os.makedirs(DOCS_PATH, exist_ok=True)
     
     write_markdown(markdown_path, description)
     
-    index_path = os.path.join(DOCS, "index.md")
-    relative_path = os.path.relpath(markdown_path, DOCS)
-    update_index(index_path, filename, relative_path)
+    relative_path = os.path.relpath(markdown_path, DOCS_PATH)
+    update_index(filename, relative_path)
     
     short_description = description.split('---')[1].strip()
     
-    script_info[filename] = {
+    INFO_JSON[filename] = {
         'file': filename,
-        'path': os.path.relpath(script_path, SCRIPTS),
+        'path': os.path.relpath(script_path, SCRIPTS_PATH),
         'description': short_description,
-        'doc_path': os.path.relpath(markdown_path, SCRIPTS),
-        'hash': current_hash
+        'doc_path': os.path.relpath(markdown_path, SCRIPTS_PATH),
+        'hash': current_hash,
     }
 
-def update_readme(script_info):
-    readme_path = os.path.join(SCRIPTS, 'README.md')
-    with open(readme_path, 'r') as file:
+def update_readme():
+    with open(README_PATH, 'r') as file:
         content = file.read()
 
     # Update the first section
     start_index = content.index('<!-- llm_generated_output_start -->')
     end_index = content.index('<!-- llm_generated_output_end -->')
     
-    summary = "This repository contains a collection of personal scripts for various tasks. These scripts include common tools and utilities to streamline workflows and automate repetitive tasks."
+    summary = llm_summarize()
     
     new_content = f"{content[:start_index]}<!-- llm_generated_output_start -->\n\n{summary}\n\n<!-- llm_generated_output_end -->{content[end_index + len('<!-- llm_generated_output_end -->'):]}"
 
@@ -280,72 +360,53 @@ def update_readme(script_info):
     table_end_index = new_content.index('<!-- table_end -->')
     
     table_content = "| File | Description |\n| --- | --- |\n"
-    for filename, info in sorted(script_info.items()):
+    for filename, info in sorted(INFO_JSON.items()):
         table_content += f"| [{filename}]({info['doc_path']}) | {info['description']} |\n"
     
     new_content = f"{new_content[:table_start_index]}<!-- table_start -->\n\n{table_content}\n<!-- table_end -->{new_content[table_end_index + len('<!-- table_end -->'):]}"
 
-    with open(readme_path, 'w') as file:
+    with open(README_PATH, 'w') as file:
         file.write(new_content)
 
 def process_csv(csv_path):
-    print_colored(f"Processing CSV file: {csv_path}", Fore.BLUE, Style.BRIGHT)
-    script_info_path = os.path.join(SCRIPTS, 'data', 'script_info.json')
     
-    if os.path.exists(script_info_path):
-        with open(script_info_path, 'r') as f:
-            script_info = json.load(f)
-    else:
-        script_info = {}
-    
+    # uses the csv file as script source
     with open(csv_path, 'r') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)  # Skip header
         for row in reader:
             original_path, symlink, command_name = row
-            process_script(original_path, script_info)
+            process_script(original_path)
     
-    with open(script_info_path, 'w') as f:
-        json.dump(script_info, f, indent=2)
+    with open(INFO_JSON_PATH, 'w') as f:
+        json.dump(INFO_JSON, f, indent=2)
     
-    update_readme(script_info)
-
-def cleanup_after_the_llm():
-    patterns = ["^<template>", "</template>"]
-    for pattern in patterns:
-        try:
-            print(DOCS)
-            print(pattern)
-            print(f"\'{pattern}\'")
-            subprocess.run([
-                'rg', f"\'{pattern}\'", DOCS, '-l',
-                '|', 'xargs', 'sed', '-i', f"\'/{pattern}/d\'"
-            ], shell=True, check=True)
-        except subprocess.CalledProcessError:
-            print(f"No files found with '{pattern}'")
 
 def main():
     parser = argparse.ArgumentParser(description="Describe scripts from a CSV file using gpt-4o-mini model.")
-    parser.add_argument("csv_path", nargs='?', default=os.path.join(SCRIPTS, 'data', 'symlink_data.csv'),
+    parser.add_argument("csv_path", nargs='?', default=os.path.join(SCRIPTS_PATH, 'data', 'symlink_data.csv'),
                         help="Path to the CSV file (default: $SCRIPTS/data/symlink_data.csv)")
     args = parser.parse_args()
 
     csv_path = os.path.abspath(args.csv_path)
     
     if not os.path.exists(csv_path):
-        print_colored(f"Error: The CSV file '{csv_path}' does not exist.", Fore.RED, Style.BRIGHT)
-        sys.exit(1)
+        print_colored(f"Error: The CSV file '{csv_path}' does not exist.", kind='error')
 
+    print_colored('Updating symlinks (optionnal)', kind='main_section')
     run_update_symlinks()
 
+    print_colored(f"Reading scripts from CSV file and creating docs and json datafile: {csv_path}", kind='main_section')
+    process_csv(csv_path)
     script_files = get_script_files()
     
-    process_csv(csv_path)
-    
+    print_colored('Updating README.md', kind='main_section')
+    update_readme()
+
+    print_colored('Doing some cleanup', kind='main_section')
     check_orphaned_docs(script_files)
-    
-    print_colored("Script processing completed successfully.", Fore.GREEN, Style.BRIGHT)
-    cleanup_after_the_llm()
+
+    print_colored("Script processing completed successfully.", kind='victory')
 
 if __name__ == "__main__":
     main()

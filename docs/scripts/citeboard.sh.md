@@ -2,7 +2,7 @@
 
 ---
 
-A script to find a paper and open it or copy its citation.
+A script to copy citations or open papers from a bibliography.
 
 ---
 
@@ -21,9 +21,9 @@ A script to find a paper and open it or copy its citation.
 
 ### Dependencies
 
-- findutils
-- xsel
-- dmenu
+- `findutils`
+- `xsel`
+- `dmenu`
 
 <a name="description" />
 
@@ -33,14 +33,15 @@ A script to find a paper and open it or copy its citation.
 
 #### Overview
 
-The `citeboard.sh` script is designed for users who need to quickly access paper citations. It searches for references in BibTeX files and offers the user a simple interface to either copy the citation to the clipboard or open the corresponding PDF file using Evince. The script uses several utilities:
+Citeboard is a shell script designed to facilitate the management of academic references. It searches a specified directory for BibTeX files, prompting the user to select a citation. After selection, it provides an option to either copy the citation to the clipboard or open the associated paper directly using `evince`, a PDF viewer.
 
-- **grep**: To filter and extract references from `.bib` files.
-- **sed**: For text manipulation to format the references properly.
-- **dmenu**: Provides a graphical interface for selecting options.
-- **xsel**: Enables copying selected text to the clipboard.
+The script operates by utilizing a combination of Unix utilities:
+- **grep**: To search for specific patterns in the BibTeX files.
+- **sed**: To format and clean the output.
+- **dmenu**: To create a user-friendly selection interface.
+- **xargs**: To execute commands with the reference file paths.
 
-The references are extracted by searching for lines that begin with `@` in all BibTeX files located in the specified `data/bib` directory, while eliminating unnecessary characters to maintain a clean citation format. A subsequent menu allows the user to decide whether to open the selected paper or copy its citation.
+The script internally relies on the path `data/bib/` for BibTeX files and `data/zotero/storage` to find the associated papers.
 
 ---
 
@@ -48,24 +49,30 @@ The references are extracted by searching for lines that begin with `@` in all B
 
 #### Usage
 
-To run the script, simply execute it from the terminal. You may bind it to a key combination in your window manager, such as Qtile, for faster access. 
+To execute the script, run it directly from the terminal:
 
 ```bash
 sh /home/matias/.scripts/citeboard.sh
 ```
 
-Upon execution, a dmenu prompt will appear showing a list of citation references. Once a selection is made, a second prompt will appear to choose between "open" or "clipboard."
+Upon execution, the script will present a list of available citations (extracted from the BibTeX files) using `dmenu`. After selecting a citation, another prompt allows you to choose between copying the citation to the clipboard or opening the corresponding paper.
+
+The user should ensure that the paths to the bibliography and storage directories are correctly set in the script according to their local configuration.
 
 <a name="examples" />
 
 #### Examples
 
-1. Run the script:
+1. **Run the script**: 
    ```bash
    sh /home/matias/.scripts/citeboard.sh
    ```
-2. Select a reference from the list presented by dmenu.
-3. Choose "open" to view the document or "clipboard" to copy the citation.
+
+2. **Select a citation** from the dmenu list that appears.
+
+3. **Choose your action**:
+   - Select "clipboard" to copy the citation.
+   - Select "open" to view the paper in Evince.
 
 ---
 
@@ -73,8 +80,7 @@ Upon execution, a dmenu prompt will appear showing a list of citation references
 
 ### Notes
 
-- Ensure that the path to your BibTeX files and the storage directory are correctly specified in the script.
-- Verify that you have Evince installed for opening files.
-- You might want to adjust the `dmenu` options for better visual preferences.
+Ensure that the directories for the BibTeX files (`data/bib/`) and the Zotero storage files (`data/zotero/storage`) are correctly set up. The script currently utilizes hardcoded paths; these should be adjusted according to your file organization.
 
-> **Critique:** The script currently relies on hardcoded paths, which might not adapt well if the directory structure changes. A potential improvement could involve accepting the path as a command-line argument or allowing the user to set it in a configuration file. Additionally, error handling is minimal; if no reference or selection is made, the script exits without feedback. Adding messages or logs would enhance user experience and troubleshooting.
+> **Critique**: 
+> The script has a clean approach but could benefit from additional error handling. For example, if no paper is found for a selected citation, the user should receive a notification. Also, depending on the user's preference, it might be useful to allow configuration of directories through command-line arguments or a configuration file instead of hardcoded values. Adding comments or more verbose prompts in `dmenu` could also enhance usability.

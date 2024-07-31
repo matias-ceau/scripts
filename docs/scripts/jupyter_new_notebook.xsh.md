@@ -1,8 +1,8 @@
-# jupyter_new_notebook.xsh
+# Create Jupyter Notebook (jupyter_new_notebook.xsh)
 
 ---
 
-Create a Jupyter notebook and open it in Chromium.
+This script creates a new Jupyter notebook and opens it in Chromium.
 
 ---
 
@@ -21,10 +21,11 @@ Create a Jupyter notebook and open it in Chromium.
 
 ### Dependencies
 
-- `xonsh`: For running the script in the xonsh shell.
-- `dmenu`: For interactive selection of the notebook name.
-- `jupyter-notebook`: Required to run the notebook server.
-- `notify-send`: For notifications on the desktop.
+- Xonsh shell
+- dmenu
+- Jupyter Notebook
+- Chromium browser
+- notify-send (part of the libnotify package)
 
 <a name="description" />
 
@@ -34,9 +35,13 @@ Create a Jupyter notebook and open it in Chromium.
 
 #### Overview
 
-The `jupyter_new_notebook.xsh` script facilitates creating a new Jupyter Notebook in a specified project directory and opens it in the Chromium web browser. By using `dmenu`, users are prompted to enter a name for their new notebook. If the name is valid and doesn't already exist in the project path, a new .ipynb file is created with default empty notebook content.
+The script `jupyter_new_notebook.xsh` automates the process of creating a new Jupyter notebook within a specified project directory. When executed, it prompts the user to enter a name for the new notebook using `dmenu`, a dynamic menu for X. The notebook is initiated with a basic structure defined in the `empty_nb` variable, ensuring it is compatible with Jupyter's expected JSON format (version 4, minor version 2).
 
-The script implements error handling that notifies users if the entered name is empty or conflicts with existing notebooks. This is particularly useful for streamlining the process of starting new projects or experiments in Jupyter without manual file creation.
+Key functionalities include:
+- Checking if the notebook name already exists in the specified project directory.
+- Creating the new notebook file if it doesn't already exist.
+- Opening the created notebook in Chromium browser.
+- Sending notifications via `notify-send` for errors such as a duplicate name or if no name was specified.
 
 ---
 
@@ -44,25 +49,29 @@ The script implements error handling that notifies users if the entered name is 
 
 #### Usage
 
-To use this script, simply execute it from a terminal running xonsh:
+To use the script, run it from the terminal:
 
 ```bash
-./jupyter_new_notebook.xsh
+/home/matias/.scripts/jupyter_new_notebook.xsh
 ```
 
-You will be prompted with a `dmenu` interface to input the notebook name. This can be assigned to a keybinding in your window manager (Qtile) for quick access.
+After invoking the script, a prompt will appear, allowing you to input the desired notebook name. The input should not include the ".ipynb" extension as the script adds it automatically. 
 
-1. Run the script.
-2. Enter a name for your notebook when prompted.
-3. If valid, the notebook will be created and opened in your Chromium browser.
+If the notebook name is acceptable and doesn't already exist, the script will create and open the notebook. In case of conflicts or empty input, appropriate notifications will inform you of the issue.
 
 <a name="examples" />
 
 #### Examples
 
-- Execute: `./jupyter_new_notebook.xsh`
-- Prompt: A `dmenu` window appears to enter the name, for example, `my_first_notebook`.
-- Result: Creates `my_first_notebook.ipynb` in the `~/projects` directory and opens it in Chromium.
+1. **Creating a new notebook:**
+   - Run the script, type "my_first_notebook" in the dmenu prompt.
+   - The script will create `my_first_notebook.ipynb` in the `~/projects` directory and open it in Chromium.
+
+2. **Handling existing notebooks:**
+   - If `my_first_notebook.ipynb` already exists, a notification will appear saying "Named already exists!".
+
+3. **No name specified:**
+   - Pressing Enter without input will trigger a notification stating "No name specified for the notebook!".
 
 ---
 
@@ -70,7 +79,11 @@ You will be prompted with a `dmenu` interface to input the notebook name. This c
 
 ### Notes
 
-- Ensure that the `PROJECT_PATH` is correctly set to your preferred Jupyter notebook directory.
-- The script requires Jupyter to be installed and accessible in your shell environment.
+- Ensure that the `PROJECT_PATH` is set correctly in the script; it defaults to `~/projects`.
+- The script requires the dependencies to be installed and configured.
+- The script utilizes `notify-send` for notification purposes. Ensure it is available on your system for notifications to work.
 
-> **Critique:** The script currently utilizes `ls` to check for existing notebooks, which may not be efficient for large directories. It could be improved by checking the existence of the file using a more direct method, such as using Python's `os.path.exists`. Further, consider implementing user feedback for successful creation or more detailed error handling for various edge cases. Additionally, using a more library-driven approach (like `json` for generating the notebook content) could improve maintainability.
+> **Critique**: 
+> - The script could benefit from error handling regarding the opening of the Jupyter notebook, in case Chromium fails to open the link or if Jupyter encounters issues.
+> - The user input could be further refined by adding validation to restrict certain characters that could be invalid for filenames.
+> - Consider adding a feature to select the project directory dynamically rather than hardcoding the path.

@@ -1,8 +1,8 @@
-# random_album.xsh
+# Random Album Selector (random_album.xsh)
 
 ---
 
-Select random album and play it with cmus.
+Select a random album and play it with cmus.
 
 ---
 
@@ -21,9 +21,9 @@ Select random album and play it with cmus.
 
 ### Dependencies
 
-- cmus (C* Music Player)
-- xonsh (a Python-powered shell)
-- A music library configured in cmus
+- cmus - A lightweight music player for the terminal.
+- xonsh - A Python-powered shell.
+- Basic shell utilities (such as `cat`).
 
 <a name="description" />
 
@@ -33,14 +33,12 @@ Select random album and play it with cmus.
 
 #### Overview
 
-This script is designed to randomly select an album from the user's cmus music library and play it. It leverages the `cmus-remote` command to interact with the cmus player, allowing for playback control from within the script. The script works by constructing a temporary playlist based on the directory structure of albums in the given music library, then instructs cmus to play the selected album.
+The `random_album.xsh` script facilitates the random selection of an album within the cmus music player. When executed, it first clears the current cmus playlist and fetches the album paths from the cmus library. The script randomly selects one album from these paths and composes a temporary playlist containing ten tracks from the selected album. This temporary playlist is then loaded into cmus for immediate playback.
 
-The script performs the following steps:
-1. It clears any current playlist in cmus.
-2. It retrieves the paths of music files from cmus' library configuration.
-3. It constructs a list of unique albums by processing these paths.
-4. It randomly shuffles the album list, selects the first ten paths per the shuffled album, and populates a temporary playlist file.
-5. Finally, the script instructs cmus to load the new playlist and begins playback.
+Key components of the script include:
+- Utilization of `cmus-remote` for communication with the cmus player.
+- Use of Python's built-in `random` module to shuffle and select albums.
+- File I/O for creating a temporary playlist.
 
 ---
 
@@ -48,27 +46,25 @@ The script performs the following steps:
 
 #### Usage
 
-To run the script, simply execute it with xonsh in the terminal:
+To use this script, ensure it is executable and run it in a terminal where you have xonsh installed. Simply execute:
 
-```
-xonsh /home/matias/.scripts/random_album.xsh
+```bash
+./random_album.xsh
 ```
 
-The script does not require any command-line arguments, and it is designed to be run interactively. You can also bind this script to a key combination in your window manager (qtile) for quick access.
+This will select a random album from the cmus library and initiate playback.
 
 <a name="examples" />
 
 #### Examples
 
-1. Open a terminal and run the script directly:
-   ```bash
-   xonsh /home/matias/.scripts/random_album.xsh
-   ```
+Simply run the script:
 
-2. Bind the script to a key in your qtile configuration:
-   ```python
-   Key([mod], "r", lazy.spawn('/home/matias/.scripts/random_album.xsh')),
-   ```
+```bash
+./random_album.xsh
+```
+
+This command plays a random album's tracks through cmus.
 
 ---
 
@@ -76,9 +72,11 @@ The script does not require any command-line arguments, and it is designed to be
 
 ### Notes
 
-- Ensure that cmus is installed and configured properly to recognize your music library.
-- The script will only work if there are at least ten unique albums in the music library; otherwise, it may raise an error while trying to index the album list.
-- Consider checking the contents of your `lib.pl` to ensure it is structured as expected.
+- Ensure that your cmus library is correctly set up and populated with albums to maximize the effectiveness of this script.
+- The script selects a random album from the list of albums available in `~/.config/cmus/lib.pl` and plays the first 10 tracks found. 
+- The temporary playlist is stored in `~/.config/cmus/.temp.m3u`.
 
-> **Critique:**  
-> This script assumes that there are always at least ten unique albums, which may not be the case. It might be beneficial to add a check for the number of unique albums and adjust the playlist selection logic accordingly. Additionally, the way paths are handled could be made more robust to account for potential errors accessing the `lib.pl` file. Integrating error handling mechanisms would improve the user experience and prevent the script from crashing unexpectedly.
+> **Critique**: 
+> - The script currently assumes there are at least 10 albums available to choose from, which could lead to an error if there aren't enough albums or tracks in the library. Adding error handling to check the count of albums would improve robustness.
+> - The commented-out code regarding `beet` suggests there may be an alternative method for selecting albums that is not being utilized. If `beet` access is possible, integrating that logic could add more flexibility in album selection.
+> - Consider enhancing user feedback (e.g., print statements to indicate which album is being played) for a better user experience.

@@ -1,7 +1,8 @@
+# Open Ardour Session (ardour-open.sh)
 
 ---
 
-Open an ardour session using dmenu to select from available projects.
+A script to open an Ardour session selected from a list.
 
 ---
 
@@ -20,9 +21,8 @@ Open an ardour session using dmenu to select from available projects.
 
 ### Dependencies
 
-- `dmenu`: A dynamic menu for X11, used for selecting a session.
-- `ardour`: The audio workstation application used for opening project files.
-- `find`, `grep`, `sed`: Standard Unix utilities for file searching and text processing, typically included in most Linux distributions.
+- `dmenu`: Required for the graphical selection of Ardour projects.
+- `ardour`: The main digital audio workstation being invoked.
 
 <a name="description" />
 
@@ -32,12 +32,14 @@ Open an ardour session using dmenu to select from available projects.
 
 #### Overview
 
-This script automates the process of opening an Ardour session from the user's designated project directory. It scans for `.ardour` files within the specified directory (`/home/matias/audio/PROJECTS`), presents them in a list format using `dmenu`, and opens the selected project with Ardour.
+The `ardour-open.sh` script is a simple shell script designed for users of Ardour, a popular digital audio workstation. This script helps streamline the workflow by allowing users to quickly browse through their existing Ardour projects and open a selected session. It utilizes the `find` command to search for `.ardour` files within the specified project directory, and employs `dmenu` for a user-friendly selection interface. Once a session is chosen, Ardour is launched with the selected project.
 
-The core of the script:
-1. It uses the `find` command to list all `.ardour` files in the projects directory.
-2. The output is filtered through `grep` and processed with `sed` to format the path.
-3. The results are displayed in a `dmenu` prompt, allowing user selection.
+The script does the following:
+
+1. **Finds Projects**: It searches the directory `/home/matias/audio/PROJECTS` for files with the `.ardour` extension.
+2. **Filters Results**: Uses `grep` and `sed` to format the output, stripping away the full path and preparing it for display.
+3. **User Interface**: Invokes `dmenu` to present the user with a list of available sessions in a scrollable format.
+4. **Session Launch**: Opens the selected session with the Ardour application.
 
 ---
 
@@ -45,24 +47,23 @@ The core of the script:
 
 #### Usage
 
-To use the script, simply run it from the terminal:
-
+To execute the script, you can run the following command in your terminal:
 ```bash
 bash /home/matias/.scripts/ardour-open.sh
 ```
 
-You can assign this script to a key binding in your window manager (qtile) or include it in your custom launcher for quick access.
+Alternatively, you could bind this script to a key combination in your Window Manager (qtile) for quick access. 
 
 <a name="examples" />
 
 #### Examples
 
-- Launch the script to open an Ardour project:
-```bash
-bash /home/matias/.scripts/ardour-open.sh
-```
-
-- If integrated with a key binding, just press the assigned key combination to launch the dmenu prompt, select your session, and open Ardour.
+- Run the script directly from the terminal:
+  ```bash
+  bash /home/matias/.scripts/ardour-open.sh
+  ```
+  
+- Assign to a keybinding in `qtile` for easy access.
 
 ---
 
@@ -70,9 +71,9 @@ bash /home/matias/.scripts/ardour-open.sh
 
 ### Notes
 
-- Ensure your project files are stored under the specified path; otherwise, the dmenu will not display any options.
-- The script currently assumes only one user (`matias`). For multi-user setups, consider modifying the script for broader accessibility.
+- Make sure that the directory `/home/matias/audio/PROJECTS` is correctly populated with Ardour project files before running the script.
+- Consider modifying the script to handle cases when no projects are found, to enhance user experience.
 
 > **Critique**: 
-> - The script does not handle scenarios where no `.ardour` files are found, which could cause Ardour to attempt to open a non-existent project. Implementing a check to notify the user if no sessions are available would enhance usability.
-> - Additionally, it can be optimized for use with an array of custom filters to only show sessions of interest, improving selection relevance.
+> 
+> The script relies on the user having Ardour installed and the audio project directory correctly set up. It might benefit from added error handling: for example, what happens if the `find` command returns no matching sessions? A message to inform the user would improve usability. Furthermore, adding options for specifying different directories or multiple sessions could enhance the script's functionality.
