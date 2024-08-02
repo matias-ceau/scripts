@@ -1,64 +1,58 @@
-# File Editor Script
+# File Editor Script for Easy Access
 
 ---
 
-**[editor.sh](/editor.sh)**: Edit any file in current folder or subfolders (recursively)
+**editor.sh**: Edit files in the current directory or subdirectories with additional options.
 
 ---
 
 ### Dependencies
 
-- `nvim`: Neovim text editor for file editing.
-- `fzf`: Command-line fuzzy finder.
-- `fd`: Simple, fast and user-friendly alternative to `find`.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `chezmoi`: Manage your dotfiles with this tool.
-- `rg`: Ripgrep, a line-oriented search tool.
+- `nvim`: A modern text editor that allows for powerful editing features.
+- `fzf`: A command-line fuzzy finder for quick file selection.
+- `bat`: A command-line tool to view files with syntax highlighting and paging.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
 
 ### Description
 
-This script provides a straightforward way to edit files using the Neovim text editor from the command line. It allows users to select files interactively through `fzf`, supporting both sudo permissions and customizable search options. 
+This script, `editor.sh`, provides a convenient interface to edit files within the current directory or its subdirectories using the `nvim` editor. The script allows you to invoke additional options for refining the search and operation modes, such as editing with sudo permissions or specifying a narrower search scope.
 
-The script includes various command-line options:
-
-- **`-S` or `--sudo`**: Edit files with elevated permissions.
-- **`-c` or `--cwd`**: Restrict search to the current directory only.
-- **`-C` or `--config`**: Edit configuration files using `chezmoi` to manage dotfiles.
-- **`-h` or `--help`**: Display the help message.
-
-The script constructs a command that uses `fd` to find files while excluding common binaries and large files to streamline the search. The selected file is opened in Neovim, and if the `sudo` option is activated, users can edit system files requiring elevated permissions.
+- The script uses the `fd` command to search for files, excluding certain patterns (like hidden files and common binaries).
+- Users can select files through a fuzzy search powered by `fzf`, with visual previews provided by `bat`.
+- The script supports various flags:
+  - `-S` or `--sudo`: Edit files with elevated permissions.
+  - `-c` or `--cwd`: Search only in the current directory.
+  - `-C` or `--config`: Edit configuration files.
 
 ### Usage
 
-To run the script, execute the following command in the terminal:
+To use the `editor.sh` script, simply run it in your terminal. Here are a few examples:
 
-```bash
-./editor.sh [options]
-```
-
-Here are some examples of how to use the script:
-
-- **Edit a file in the current directory**:
+- To edit any file in the current directory or subdirectories:
+  
   ```bash
   ./editor.sh
   ```
 
-- **Edit a file with sudo permissions**:
+- To edit a file with sudo permissions:
+
   ```bash
   ./editor.sh --sudo
   ```
 
-- **Find files only in the current directory**:
+- To search only within the current directory:
+
   ```bash
   ./editor.sh --cwd
   ```
 
-- **Edit configuration files**:
+- To edit a specific config file:
+
   ```bash
   ./editor.sh --config
   ```
 
-You can also view the help dialog at any time by running:
+You can access help information using:
 
 ```bash
 ./editor.sh --help
@@ -66,5 +60,5 @@ You can also view the help dialog at any time by running:
 
 ---
 
-> [!TIP]  
-> To improve this script, think about adding checks for the dependencies to ensure they are installed before execution. Additionally, consider improving the user experience by providing file previews in the selection interface, enhancing usability significantly.
+> [!TIP]
+> Consider improving the suggestions or autocorrect functionality in case the user inputs an invalid option. Additionally, you might want to streamline the `fd` command; excessive ignored file types can make it less efficient.

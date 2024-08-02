@@ -8,8 +8,8 @@
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *A script to generate cover art from WAV file spectrograms*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to dynamically run scripts using rofi as a dmenu alternative.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to edit Chezmoi managed configuration files using fzf.*
-- [editor.sh](scripts/editor.sh.md) -- *Edit any file in current folder or subfolders (recursively)*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to visually select and edit Chezmoi-managed configuration files.*
+- [editor.sh](scripts/editor.sh.md) -- *Edit files in the current directory or subdirectories with additional options.*
 - [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose and play an album using fzf and cmus*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A wrapper script to launch fzf in a terminal for menu selection.*
@@ -25,6 +25,7 @@
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Generate an M3U playlist file from the current directory files.*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
+- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to automate the creation of new executable scripts.*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *A script to open Obsidian vaults using a selection menu.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
@@ -34,7 +35,7 @@
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Select random album and play it with cmus*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified directory*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](cripts/script_launcher.sh.md) -- *Launch scripts using fzf with customizable previews and commands.*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script to run other scripts with fzf.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *Bash script for synchronizing a Git repository with practical features*
@@ -44,6 +45,6 @@
 - [update_env.xsh](scripts/update_env.xsh.md) -- *update_env.xsh - Update .env file with API keys from xonsh environment*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Automates the creation and management of symlinks in ~/.local/bin*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in vim using fzf for quick selection.*
-- [vox.py](scripts/vox.py.md) -- *A script for listing and displaying options for Vox amplifiers.*
+- [vox.py](scripts/vox.py.md) -- *A Python script to list and describe Vox amp options in a formatted manner.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Automatically change wallpapers from a specified collection.*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *A script that finds scripts without inline documentation*

@@ -72,16 +72,16 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to edit Chezmoi managed configuration files using fzf.",
+    "description": "A script to visually select and edit Chezmoi-managed configuration files.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "429652253f71a6154e59e1315dc8b151e6ea08bcc9b7d4562c586db996af5e84"
+    "hash": "514b83a90cc54604e1c6f4623e70ef72826ec8da00948899329df89fce5d6431"
   },
   "editor.sh": {
     "file": "editor.sh",
     "path": "editor.sh",
-    "description": "Edit any file in current folder or subfolders (recursively)",
+    "description": "Edit files in the current directory or subdirectories with additional options.",
     "doc_path": "docs/scripts/editor.sh.md",
-    "hash": "835bf990f665a894a09b299f5212580e042275c5bdd821474ac50846c51480ff"
+    "hash": "3b7aa6f3f188b4e03b7946a082b6cf07889031a4993bbf530b27872002846a05"
   },
   "fzf_albumlauncher.xsh": {
     "file": "fzf_albumlauncher.xsh",
@@ -254,9 +254,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "Launch scripts using fzf with customizable previews and commands.",
+    "description": "A script to run other scripts with fzf.",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "b06b3b4e9191dbdeeb8154f4a65ad97e26967b7dfc68c0c115c6093e54366f13"
+    "hash": "b6d577b2410db1e4eb4fb1ea59671cc48376f6cba4cd8f964b3cff51250c73e5"
   },
   "select_script": {
     "file": "select_script",
@@ -324,9 +324,9 @@
   "vox.py": {
     "file": "vox.py",
     "path": "vox.py",
-    "description": "A script for listing and displaying options for Vox amplifiers.",
+    "description": "A Python script to list and describe Vox amp options in a formatted manner.",
     "doc_path": "docs/scripts/vox.py.md",
-    "hash": "c2017c893a0765372b578b0e05b680d33910b86aec54082b06a349b899f5c9d7"
+    "hash": "c11a48deacf487b191b891ab5e71c3c86cf713e0de96542c77741c2ef846fe24"
   },
   "wallpaper.sh": {
     "file": "wallpaper.sh",
@@ -348,5 +348,12 @@
     "description": "A script to fix relative links in Markdown files.",
     "doc_path": "docs/scripts/fix-markdown-links.sh.md",
     "hash": "6aa54826672ca92d456ee5376357afe67ff284471e51785c1e5f94c9174db8b5"
+  },
+  "new_script_creator.sh": {
+    "file": "new_script_creator.sh",
+    "path": "new_script_creator.sh",
+    "description": "A simple script to automate the creation of new executable scripts.",
+    "doc_path": "docs/scripts/new_script_creator.sh.md",
+    "hash": "7f439951969e7e43d3f3417113a301f701ea9bdbb8694cda2a60f336b6164aac"
   }
 }

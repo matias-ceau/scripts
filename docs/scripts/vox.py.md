@@ -2,57 +2,59 @@
 
 ---
 
-**[vox.py](/vox.py)**: A script for listing and displaying options for Vox amplifiers.
+**vox.py**: A Python script to list and describe Vox amp options in a formatted manner.
 
 ---
 
 ### Dependencies
 
-- `pandas`: A data manipulation and analysis library for Python. Required for creating and handling tabular data.
-- `tabulate`: A library for pretty-printing tabular data in a visually appealing format. Used for outputting the amplifier options in a table.
+- `pandas`: A powerful data manipulation library for Python. It is used to create and manage a DataFrame for the amp options.
+- `tabulate`: A library to display data in a tabular format for better readability in the console.
 
 ### Description
 
-This Python script provides a user-friendly interface to view specifications and descriptions of various Vox amplifier options. It uses the `pandas` library to manage data in a structured DataFrame, which includes fields such as amplifier name, mode, color, and a detailed description of each amp's characteristics.
+The `vox.py` script provides an interactive command-line interface to list and describe various Vox amplifier models. Featuring an internal DataFrame constructed with the names, modes, colors, and descriptions of different amp models, the script allows users to query information quickly and effectively.
 
-The `tabulate` library is utilized to format the output into a readable table, enhancing the user experience when browsing through the options.
+The main functionalities include:
 
-Key features of the script:
-- Users can list all Vox amp options succinctly.
-- It allows filtering options by numerical index, color codes (g, o, r), or name search.
-- Displays detailed information about a specific amplifier when a valid index is given.
+- Displaying a brief description of each amp model when no arguments are provided.
+- Extracting detailed information about a specific amplifier when the corresponding index is provided.
+- Filtering amplifier models based on their color (represented as a single character).
+- Searching amp names by partial strings input by the user.
+
+The program achieves this by leveraging pandas for data management and tabulate for rendering neat tables in the terminal.
 
 ### Usage
 
-To use the script, it can be run in the terminal. Here are some usage examples:
+To run the script, execute it from the command line. The following examples illustrate its usage:
 
-- To list all amplifier options:
-  
-  ```bash
-  python3 /home/matias/.scripts/vox.py
-  ```
-  
-- To display a specific amplifier's details by its index (for example, index `0`):
-  
-  ```bash
-  python3 /home/matias/.scripts/vox.py 0
-  ```
+1. **List All Amplifier Options:**
 
-- To filter amplifiers by color (for example, 'g' for green amps):
-  
-  ```bash
-  python3 /home/matias/.scripts/vox.py g
-  ```
+```bash
+python vox.py
+```
 
-- To search for amplifiers containing a specific name (for example, 'VOX'):
-  
-  ```bash
-  python3 /home/matias/.scripts/vox.py VOX
-  ```
+2. **Get Details for a Specific Amp by Index (e.g., index 5):**
 
-Outputs are neatly formatted for easy reading, displaying only the most relevant information.
+```bash
+python vox.py 5
+```
+
+3. **Filter by Color (e.g., green 'g'):**
+
+```bash
+python vox.py g
+```
+
+4. **Search Amp Names by Partial Match:**
+
+```bash
+python vox.py CLEAN
+```
+
+For any of these commands, the output will be formatted in an easy-to-read table, making it simple to compare and choose amp options.
 
 ---
 
-> [!TIP] 
-> Consider adding command-line argument validation to ensure input is handled gracefully. Additionally, expanding the dataset to include more amplifiers or adding a more interactive user interface (such as a simple CLI menu) could enhance usability.
+> [!TIP]  
+> The script could benefit from improved input validation and error handling. Specifically, it would be helpful to notify users when an out-of-range index is supplied or when no amps match the search query. Additionally, consider allowing the script to support more flexible color options for the filtering feature. This way, user experience will be enhanced significantly.

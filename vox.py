@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#!/usr/bin/env python
 
 #INFO:#@CLI@ "List Vox amp options"
 

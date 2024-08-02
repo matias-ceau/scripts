@@ -4,23 +4,36 @@
 
 <!-- llm_generated_output_start -->
 
-This repository contains a diverse set of shell scripts, Python scripts, and utilities designed to streamline various tasks for users on Arch Linux, particularly with a focus on interaction through the Qtile window manager. These scripts cover a wide range of functionalities, from managing audio playback to handling file directories, offering a convenient command-line interface for everyday tasks.
+This repository contains a diverse collection of scripts tailored for an optimized workflow within an Arch Linux environment, especially for users employing the Qtile window manager. From music management to utility scripts for automation, each script is designed to enhance productivity and streamline tasks.
 
-Here's what you can find in this repository:
+### Overview of the Scripts
 
-- **Audio Management**: Several scripts are dedicated to enhancing the audio experience, such as launching the `cmus` music player with custom playlists, playing songs using fuzzy finders like `fzf` or `dmenu`, and manipulating audio libraries. For instance, `albumplayer.xsh` allows users to select and play albums, while `random_album.xsh` or `playlist_randomizer.xsh` automatically randomize and queue music playbacks.
+- **Audio Management**: Several scripts facilitate audio playback and management, such as the **[`albumplayer.xsh`](docs/scripts/albumplayer.xsh.md)** and **[`fzf_albumlauncher.xsh`](docs/scripts/fzf_albumlauncher.xsh.md)**, which allow users to choose and play music albums efficiently within the `cmus` console music player. The **[`create_cover_art.sh`](docs/scripts/create_cover_art.sh.md)** script generates album cover art from WAV files, integrating audio processing utilities such as `sox` and `imagemagick`.
 
-- **Document and Code Management**: There are utilities for handling notes and documents easily, like `vimwiki.sh`, which uses `fzf` for quick note access, and `pdfopener.sh`, a script that uses `dmenu` for selecting and opening PDF files. Furthermore, the scripts designed to manage and edit configuration files with `chezmoi` assist in keeping user settings organized across different systems.
+- **File and Directory Utilities**: Scripts like **[`launch_tmux_with_music_player.sh`](docs/scripts/launch_tmux_with_music_player.sh.md)** open dedicated `tmux` sessions for music playback, while **[`vimwiki.sh`](docs/scripts/vimwiki.sh.md)** leverages `fzf` for swift note management in Vim. The **[`get_repos_present_on_host.sh`](docs/scripts/get_repos_present_on_host.sh.md)** offers functionality to list local git repositories, aiding in source control management.
 
-- **File Handling and Utilities**: Scripts such as `m3u_creator.sh` and `sync-repo.sh` simplify file management tasks, allowing users to create playlists from directories or synchronize git repositories with enhanced feedback and easy conflict resolution. The repository also features `fix-markdown-links.sh`, helping users maintain consistency in Markdown files.
+- **Dynamic Command Selection**: Scripts such as **[`dmenu_run_scripts.xsh`](docs/scripts/dmenu_run_scripts.xsh.md)** and **[`script_launcher.sh`](docs/scripts/script_launcher.sh.md)** utilize `dmenu` and `fzf` for a user-friendly interface to execute various scripts, enhancing navigability and access to frequently used tools.
 
-- **Environment Setup**: Scripts for setting up user environments, such as `chezmoi_on_a_new_system.sh` and `update_env.xsh`, streamline configuration management, making setting up new systems or updating environments less burdensome.
+- **Markdown and Documentation Tools**: The **[`fix-markdown-links.sh`](docs/scripts/fix-markdown-links.sh.md)** and **[`you_are_not_documented.sh`](docs/scripts/you_are_not_documented.sh.md)** scripts focus on maintaining and improving documentation quality in your projects, with functionalities for fixing links in Markdown files and detecting undocumented scripts.
 
-- **Dynamic Menus and Selectors**: By leveraging `rofi` and `fzf`, several scripts like `dmenu_run_scripts.py` offer interactive interfaces for script execution, enhancing usability and making it easy for users to find and run scripts quickly.
+- **Wallpaper Management**: The **[`random_wallpapers.xsh`](docs/scripts/random_wallpapers.xsh.md)** script selects wallpapers randomly from a specified directory, enhancing desktop customization.
 
-Overall, this project is designed to elevate the user experience on Arch Linux by providing efficient solutions tailored for developers and power users who appreciate automation and quick access to functionalities. The scripts thrive on flexibility, allowing users to customize paths and settings according to their personal preferences while benefiting from robust error handling and user-friendly interactions wherever possible.
+- **Token and File Management**: With **[`count_tokens_with_tiktoken.py`](docs/scripts/count_tokens_with_tiktoken.py.md)**, users can analyze text files and count tokens, which is beneficial for text processing workflows in AI-related tasks.
 
-For detailed information and usage instructions, refer to the accompanying markdown documentation for each specific script listed in this repository.
+### Dependencies
+To use these scripts, ensure that the following dependencies are installed on your system:
+- **Core utilities**: `bash`, `python3`, `git`, `tmux`, `fzf`, `dmenu`, `rofi`, and `cmus`.
+- **Libraries**: `tiktoken`, `pandas`, `beet`, `imagemagick`, `sox`, and others depending on specific scripts.
+
+### Setup
+1. Clone the repository to your local machine.
+2. Ensure all scripts have the appropriate execution permissions.
+3. Review and install any required dependencies that are mentioned in the specific script documentation.
+
+### Usage
+For detailed instructions on using each script, refer to the specific documentation linked above. Each script typically includes usage examples, allowing users to quickly adapt the scripts to their workflows.
+
+By carefully utilizing these scripts, you can significantly enhance your productivity while managing media files, navigating directories, and automating various system tasks within your Arch Linux environment.
 
 <!-- llm_generated_output_end -->
 
@@ -42,8 +55,8 @@ For detailed information and usage instructions, refer to the accompanying markd
 | [create_cover_art.sh](docs/scripts/create_cover_art.sh.md) | A script to generate cover art from WAV file spectrograms |
 | [dmenu_run_scripts.py](docs/scripts/dmenu_run_scripts.py.md) | A Python script to dynamically run scripts using rofi as a dmenu alternative. |
 | [dmenu_run_scripts.xsh](docs/scripts/dmenu_run_scripts.xsh.md) | A script to run user scripts via dmenu or rofi. |
-| [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) | A script to edit Chezmoi managed configuration files using fzf. |
-| [editor.sh](docs/scripts/editor.sh.md) | Edit any file in current folder or subfolders (recursively) |
+| [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) | A script to visually select and edit Chezmoi-managed configuration files. |
+| [editor.sh](docs/scripts/editor.sh.md) | Edit files in the current directory or subdirectories with additional options. |
 | [fix-markdown-links.sh](docs/scripts/fix-markdown-links.sh.md) | A script to fix relative links in Markdown files. |
 | [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) | Choose and play an album using fzf and cmus |
 | [fzf_songlauncher.sh](docs/scripts/fzf_songlauncher.sh.md) | Play a song with cmus using fzf to choose the file. |
@@ -60,6 +73,7 @@ For detailed information and usage instructions, refer to the accompanying markd
 | [m3u_creator.sh](docs/scripts/m3u_creator.sh.md) | Generate an M3U playlist file from the current directory files. |
 | [mechen_music_transfert.py](docs/scripts/mechen_music_transfert.py.md) | Custom script to copy music to Mechen |
 | [midi2arch.xsh](docs/scripts/midi2arch.xsh.md) | A script to transform a MIDI controller into a keyboard/script launcher |
+| [new_script_creator.sh](docs/scripts/new_script_creator.sh.md) | A simple script to automate the creation of new executable scripts. |
 | [next_album.xsh](docs/scripts/next_album.xsh.md) | Skip to the next album in CMUS audio player |
 | [obsidian.xsh](docs/scripts/obsidian.xsh.md) | A script to open Obsidian vaults using a selection menu. |
 | [pdfopener.sh](docs/scripts/pdfopener.sh.md) | A script to pick and open a PDF file using Evince |
@@ -69,7 +83,7 @@ For detailed information and usage instructions, refer to the accompanying markd
 | [random_album.xsh](docs/scripts/random_album.xsh.md) | Select random album and play it with cmus |
 | [random_wallpapers.xsh](docs/scripts/random_wallpapers.xsh.md) | Pick a random wallpaper from a specified directory |
 | [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md) | Python script to transfer music to a Sandisk media player from a local library. |
-| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | Launch scripts using fzf with customizable previews and commands. |
+| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | A script to run other scripts with fzf. |
 | [select_script](docs/scripts/select_script.md) | A C script for selecting and executing a script from a cached list. |
 | [songlauncher.sh](docs/scripts/songlauncher.sh.md) | Play a song with cmus using dmenu |
 | [sync-repo.sh](docs/scripts/sync-repo.sh.md) | Bash script for synchronizing a Git repository with practical features |
@@ -79,7 +93,7 @@ For detailed information and usage instructions, refer to the accompanying markd
 | [update_env.xsh](docs/scripts/update_env.xsh.md) | update_env.xsh - Update .env file with API keys from xonsh environment |
 | [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md) | Automates the creation and management of symlinks in ~/.local/bin |
 | [vimwiki.sh](docs/scripts/vimwiki.sh.md) | Open a note in vim using fzf for quick selection. |
-| [vox.py](docs/scripts/vox.py.md) | A script for listing and displaying options for Vox amplifiers. |
+| [vox.py](docs/scripts/vox.py.md) | A Python script to list and describe Vox amp options in a formatted manner. |
 | [wallpaper.sh](docs/scripts/wallpaper.sh.md) | Automatically change wallpapers from a specified collection. |
 | [you_are_not_documented.sh](docs/scripts/you_are_not_documented.sh.md) | A script that finds scripts without inline documentation |
 

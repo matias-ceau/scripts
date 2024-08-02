@@ -3,7 +3,7 @@
 #INFO:# "Run scripts with fzf"
 
 preview_cmd_docs='bat -lmd $SCRIPTS/docs/scripts/{}.md --color=always --style=grid'
-preview_cmd_source='bat --style=numbers --color=always $(fd {} -tx $SCRIPTS | rg '{}$')'
+preview_cmd_source='bat --style=numbers --color=always $(fd {} -tx $SCRIPTS | rg '{}')'
 
 fd '' -tx --format '{/}' "$SCRIPTS" |
 	improved-fzfmenu.sh \

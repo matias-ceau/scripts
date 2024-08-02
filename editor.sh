@@ -13,6 +13,8 @@ usage() {
 }
 
 SUDO_MODE=0
+CFG_MODE=0
+CWD_MODE=0
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -35,7 +37,7 @@ done
 # Function to generate fd command
 get_fd_cmd() {
     local hidden=$1
-    local cmd="fd '' -tf"
+    local cmd="fd '' -tf --color=always"
     [ "$hidden" = "true" ] && cmd+=" --hidden"
     cmd+=" --size '-2g'"
     cmd+=" -E .git -E node_modules"
@@ -90,6 +92,7 @@ FD_CMD=$(get_fd_cmd false)
 
 # Use fzf with preview and custom bindings
 SELECTED=$(eval "$FD_CMD" | fzf \
+    --ansi \
     --preview 'bat --style=numbers --color=always --line-range :500 {}' \
     --preview-window 'right:60%' \
     --bind "ctrl-h:reload($(get_fd_cmd true))+change-prompt(Hidden> )" \

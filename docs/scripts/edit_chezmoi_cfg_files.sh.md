@@ -2,48 +2,48 @@
 
 ---
 
-**[edit_chezmoi_cfg_files.sh](/edit_chezmoi_cfg_files.sh)**: A script to edit Chezmoi managed configuration files using fzf.
+**edit_chezmoi_cfg_files.sh**: A script to visually select and edit Chezmoi-managed configuration files.
 
 ---
 
 ### Dependencies
 
-- `chezmoi`: A tool for managing dotfiles across multiple machines.
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `bat`: A cat(1) clone with syntax highlighting and Git integration, used for previewing files.
-- `eza`: A modern replacement for `ls`, used here to preview directory contents.
+- `fzf`: A command-line fuzzy finder used for efficient selection.
+- `bat`: A syntax highlighting file viewer that enhances the preview.
+- `eza`: An alternative to `ls`, providing an improved listing experience.
 
 ### Description
 
-This script is designed to facilitate the editing of configuration files managed by `chezmoi` using a fuzzy finder interface provided by `fzf`. It allows users to quickly navigate through their configuration files and edit them using their preferred text editor, in this case, `nvim` (Neovim). The script utilizes various command-line tools to enhance usability and functionality.
+This script is designed for Arch Linux users who utilize `chezmoi` for managing their dotfiles. It integrates with `fzf` to provide an interactive command-line interface for selecting configuration files to edit.
 
-- The `chezmoi managed` command retrieves the list of files managed by Chezmoi.
-- `fzf` is invoked to present a user-friendly interface for selecting files. The preview feature is enhanced by checking the type of the selected item:
-  - If it's a file, it uses `bat` to display the file contents with line numbers and syntax highlighting.
-  - If it's a directory, it uses `eza` to list the directory contents in a visually appealing format.
+The script defines two main functions:
+- `preview_command()`: It checks if the selected item is a file or directory. If it is a file, it uses `bat` to display a preview with line numbers and syntax highlighting. If it's a directory, it calls `eza` to list its contents.
+- `colorize_file_list()`: This function outputs a colorized list of the managed files from Chezmoi, applying different styles based on whether the entries are files or directories.
 
-The selected file or directory will then be opened in `nvim` if a selection is made.
+The core functionality launches `fzf` with an improved preview feature, allowing users to navigate their Chezmoi-managed files efficiently. 
 
 ### Usage
 
-Run the script in your terminal by executing:
+To run this script, simply execute it in your terminal:
 
 ```bash
 bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-This will open `fzf` listing all files managed by Chezmoi. Once you select a file, it will be opened in Neovim for editing.
+The script will:
+1. Generate a list of managed files using `chezmoi`.
+2. Allow you to preview the file/directory contents using `fzf`.
+3. Upon selection, it will open the chosen file in `nvim` (Neovim) for editing.
 
-- To invoke a specific configuration file editing process, simply run the script and navigate to your desired file within the `fzf` interface.
+You can also assign this script to a keybinding in your window manager, `qtile`, to streamline your workflow. 
 
-Example of interaction:
+Example of a keybinding in `config.py` for `qtile`:
 
-1. Run the script.
-2. Use the arrow keys or type to filter results.
-3. Select a configuration file using Enter.
-4. The selected file will open in Neovim.
+```python
+Key([mod], "e", lazy.spawn("bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh")),
+```
 
 ---
 
 > [!TIP]  
-> The script could be enhanced by adding options for different text editors or supporting the editing of multiple files at once. Additionally, error handling could be improved to manage cases where commands like `nvim` or `fzf` are not installed, providing feedback to the user about missing dependencies.
+One potential improvement for this script is to add error handling for scenarios where `chezmoi` isn't installed or the file list is empty, enhancing the user experience in case something goes wrong. كذلك، consider allowing the user to specify the editor instead of hardcoding `nvim` to increase flexibility.

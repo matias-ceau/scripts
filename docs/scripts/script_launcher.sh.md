@@ -2,52 +2,47 @@
 
 ---
 
-**script_launcher.sh**: Launch scripts using fzf with customizable previews and commands.
+**script_launcher.sh**: A script to run other scripts with fzf.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder, essential for script selection.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `bat`: A cat clone with syntax highlighting and Git integration, used for previewing script documentation.
-- `improved-fzfmenu.sh`: A custom script that enhances the functionality of `fzf`.
+- `fzf`: A command-line fuzzy finder that allows for efficient searching and filtering.
+- `bat`: A clone of `cat` with syntax highlighting and Git integration, used for viewing files.
+- `fd`: A simple, fast, and user-friendly alternative to `find` for searching files.
 
 ### Description
 
-This script provides an interactive menu for running other scripts stored in a specified directory. Utilizing `fzf`, it enables users to quickly find and execute scripts with enhanced functionality, such as previews of documentation and source files. 
+The `script_launcher.sh` script allows you to quickly launch scripts from a defined directory (`$SCRIPTS`) using the `fzf` interface, enriched with previews of the scripts or their documentation. This enhances productivity by providing users with the ability to see script documentation or source code before executing them, providing better context.
 
-The essential logic flows as follows:
-
-1. **Preview Commands**:
-   - The script builds two preview commands using `bat`:
-     - `preview_cmd_docs`: Displays the documentation for the script.
-     - `preview_cmd_source`: Shows the source code of the selected script.
-
-2. **Script Selection**:
-   - It utilizes `fd` to find scripts in the `$SCRIPTS` directory, presenting them through `improved-fzfmenu.sh` with interactive behavior:
-     - Pressing **Enter** executes the selected script.
-     - Alt + E opens the selected script in `nvim`.
-     - Alt + S switches the preview to the source code.
-     - Alt + D reverts the preview to the documentation.
+The script employs the following key components:
+- **Preview commands**: It uses `bat` to show the documentation or source code for scripts via `fzf`:
+  - `preview_cmd_docs`: Displays the documentation in markdown format.
+  - `preview_cmd_source`: Shows the source code with line numbers.
+  
+- **fzf menu binding**:
+  - Pressing **Enter** runs the selected script in the terminal.
+  - Pressing **Alt + E** opens the selected script in `nvim`.
+  - Pressing **Alt + S** switches the preview to show the source code.
+  - Pressing **Alt + D** changes the preview back to the documentation.
 
 ### Usage
 
-To use the `script_launcher.sh`, simply execute it in your terminal:
+To use the script, simply execute it in your terminal:
 
 ```bash
 bash /home/matias/.scripts/script_launcher.sh
 ```
 
-You can navigate through the presented list of scripts by typing or using the arrow keys, and then select them using **Enter**.  
+This command will launch the `fzf` menu, displaying all scripts available in the `$SCRIPTS` directory. You can start typing to narrow down the selection, and navigate through the options. 
 
-Here are some example keybindings:
-- **Enter**: Run the script.
-- **Alt + E**: Edit the script using `nvim`.
-- **Alt + S**: Preview the source code of the script.
-- **Alt + D**: Preview the documentation of the script.
+For example:
+- To run a script named `example_script.sh`, simply select it and hit **Enter**.
+- To examine its documentation, highlight the script and note the preview window on the screen.
+- Press **Alt + E** to edit the script directly in `nvim`.
 
 ---
 
-> [!TIP]
-> Consider adding error handling for scenarios where `fd` doesn't find any scripts or where external commands (like `bat` or `nvim`) fail to execute. This will make the script more robust and user-friendly. Additionally, clarifying the `$SCRIPTS` variable definition in the documentation would enhance user comprehension.
+> [!TIP]  
+This script could benefit from better error handling. For instance, if `$SCRIPTS` is undefined or empty, it should gracefully notify the user instead of failing silently. In addition, consider adding a help option to explain these keybindings directly in the `fzf` interface for new users.
