@@ -1,11 +1,11 @@
-#!/usr/bin/env xonsh
+#!/usr/bin/env -S xonsh --no-rc
 
 #INFO:#@RUN@ "Open any obsidian vault"
 
 #TODO# vault search
 
 # Vault names
-vaults = [i for i in $(ls $HOME/PKM).split() if $(file -b $HOME/PKM/@(i)) == 'directory']  # Replace with your actual vault names
+vaults = [i for i in $(ls $HOME/PKM).split() if $(file -b $HOME/PKM/@(i)) == 'directory']  
 
 # Use dmenu to get the selected vault name
 #import subprocess

@@ -5,7 +5,7 @@ SHELL=$(which bash)
 preview_command() {
     if [ -f "$1" ]; then
         bat --style=numbers --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" "$HOME/$1" \
-            -m '*autosave:INI' -m '*.conf:INI' \
+            -m '*autosave:INI' -m '*.conf:INI'
     elif [ -d "$1" ]; then
         eza -1 --color=always --icons=always --sort=modified -m "$HOME/$1"
     fi
