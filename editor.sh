@@ -5,11 +5,16 @@
 #nvim "$( find 2>/dev/null | fzf )"
 
 usage() {
-    echo "Usage: $0 [-S|--sudo] [-c|--cwd] [-c|--config] [-h|--help]"
-    echo "  -S, --sudo    Edit files with sudo permissions"
-    echo "  -c, --cwd     Find only in current directory"
-    echo "  -C, --config  Edit config file"
-    echo "  -h, --help    Show this help message"
+    echo "USAGE:"
+    echo "    $(basename $0) [-S|--sudo] [-c|--cwd] [-c|--config] [-h|--help]"
+    echo
+    echo "By default, searches in relevant locations only, behaviour can be changed with a few options"
+    echo
+    echo "OPTIONS:"
+    echo "    -S, --sudo        Edit files with sudo permissions"
+    echo "    -c, --cwd         Find only in current directory"
+    echo "    -C, --config      Edit config file"
+    echo "    -h, --help        Show this help message"
 }
 
 SUDO_MODE=0
@@ -22,12 +27,12 @@ while [[ "$#" -gt 0 ]]; do
     -c | --cwd) CWD_MODE=1 ;;
     -C | --config) CFG_MODE=1 ;;
     -h | --help)
-        usage
+        usage | bat -plhelp
         exit 0
         ;;
     *)
         echo "Unknown parameter: $1"
-        usage
+        usage | bat -plhelp
         exit 1
         ;;
     esac
@@ -65,12 +70,12 @@ get_fd_cmd() {
     cmd+=" -E '*.vscdb' -E '*.wasm' -E '*.woff' -E '*.woff2'"
 
     if [ $SUDO_MODE -eq 1 ]; then
+        cmd+=" --owner root"
         cmd+=" --search-path /var/log"
         cmd+=" --search-path /usr/local/etc"
         cmd+=" --search-path /root"
         cmd+=" --search-path /etc"
     elif [ $CWD_MODE -eq 1 ]; then
-        cmd+="--owner root"
         cmd+=" ."
     elif [ $CFG_MODE -eq 1 ]; then
         cmd="chezmoi unmanaged -p absolute | rg '/\.'"

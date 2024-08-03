@@ -80,3 +80,8 @@
 2024-08-02 18:00:52 - Cleaning: Removed broken symlink: /home/matias/.local/bin/chatgpt-all-scripts-describer.py
 2024-08-02 18:00:52 - Cleaning: Removed broken symlink: /home/matias/.local/bin/fix-markdown-links.sh
 2024-08-02 18:00:52 - Cleaning: Removed broken symlink: /home/matias/.local/bin/test.sh
+2024-08-03 18:17:27 - Cleaning: Removed broken symlink: /home/matias/.local/bin/cache_script_info
+2024-08-03 18:17:27 - Cleaning: Removed broken symlink: /home/matias/.local/bin/git_pull.sh
+2024-08-03 18:17:27 - Cleaning: Removed broken symlink: /home/matias/.local/bin/ollama_list.py
+2024-08-03 18:17:27 - Cleaning: Removed broken symlink: /home/matias/.local/bin/tmux-help.py
+2024-08-03 18:17:27 - Cleaning: Removed broken symlink: /home/matias/.local/bin/utils_update_readme.py
