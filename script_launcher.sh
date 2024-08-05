@@ -11,8 +11,11 @@ fd '' -tx --format '{/}' "$SCRIPTS" | \
 		--preview-window='70%' \
 		--bind "enter:become(bash -c {})" \
 		--bind "alt-e:become(nvim \$(which {}))" \
-		--bind alt-s:change-preview@"$preview_cmd_source"@ \
-		--bind alt-d:change-preview@"$preview_cmd_docs"@
+		--header '<A-E> -> edit' \
+		--header-first \
+		--preview-label 'DOC (<A-s>: source)' \
+		--bind "alt-s:change-preview@$preview_cmd_source@+change-preview-label('SOURCE (<A-d>: doc)')" \
+		--bind "alt-d:change-preview@$preview_cmd_docs@+change-preview-label('DOC (<A-s>: source)')"
 
 #fd '' -tx --format '{/}' "$SCRIPTS" |
 #	improved-fzfmenu.sh \
