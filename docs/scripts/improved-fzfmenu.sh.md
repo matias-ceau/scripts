@@ -1,44 +1,40 @@
-# Improved FZF Menu Launcher
+# Improved FZF Menu with Alacritty
 
 ---
 
-**[improved-fzfmenu.sh](/improved-fzfmenu.sh)**: A Bash script that launches `fzf` in an Alacritty terminal with custom settings.
+**improved-fzfmenu.sh**: A script to launch FZF in Alacritty with command-line arguments.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `alacritty`: A terminal emulator that is optimized for performance.
+- `fzf`: A command-line fuzzy finder that can be used with various input sources.
+- `alacritty`: A GPU-accelerated terminal emulator that provides a fast environment to run terminal applications.
 
 ### Description
 
-This script provides a streamlined way to launch a fuzzy finder in an Alacritty terminal window using `fzf`. It is particularly useful for users of Arch Linux and the QTile window manager who want to enhance their workflow by efficiently searching through various lists or options within a terminal.
+The `improved-fzfmenu.sh` script enhances the usability of the `fzf` fuzzy finder by launching it in a new Alacritty terminal window. This approach is useful for situations where you want to easily navigate or select entries within the fuzzy finder interface, leveraging the visual capabilities of Alacritty.
 
-The script begins by escaping each argument passed to it to prevent issues with special characters or spaces. This is achieved through a simple loop that utilizes `printf %q` for correct handling. After escaping the arguments, it joins them into one string for `fzf` to interpret.
-
-The `alacritty` command is invoked with specific options:
-- It sets the terminal title to `fzfmenu`.
-- It configures the terminal window dimensions to a width of 150 columns and a height of 30 lines.
-- It executes a Bash command to run `fzf` with the joined arguments and input redirected from the current process’s standard input.
+When run, the script takes any command-line arguments provided and prepends them with escape characters to ensure proper handling. These arguments, intended for FZF, are then passed to the FZF command within a new Alacritty terminal context. The FZF tool reads input from the standard input, which in this case is piped from the current process's file descriptor.
 
 ### Usage
 
-To use this script, you should provide the necessary arguments that will be forwarded to `fzf`. You can run it directly from the terminal as follows:
+To use the script, invoke it with any arguments that you want to pass to FZF. The typical usage pattern is as follows:
 
 ```bash
-/home/matias/.scripts/improved-fzfmenu.sh --bind 'ctrl-c:abort'
+./improved-fzfmenu.sh --bind 'enter:accept' --no-info < your_input_source
 ```
 
-This example runs the script, passing it the `--bind` option, which may configure how to exit `fzf`. Ensure that you adjust the provided command to meet your specific needs, such as adding more `fzf` flags or options.
+Where `your_input_source` might be a list of files, commands, or any data stream that FZF can process.
 
-You can also set this script to a keybinding in your window manager for quick access:
+#### Example
 ```bash
-# Example for keybinding in QTile
-Key([mod], "f", lazy.spawn("/home/matias/.scripts/improved-fzfmenu.sh"))
+cat file_list.txt | ./improved-fzfmenu.sh --bind 'ctrl-c:abort'
 ```
+
+This command will take the contents of `file_list.txt`, pass them to the `fzf` interface launched in Alacritty, and allow the user to select entries with the configured key bindings.
 
 ---
 
 > [!TIP]  
-> The script directly opens Alacritty shown with fixed dimensions, which may not be ideal for all screen resolutions. Consider adding functionality to detect screen size or allowing the user to customize these parameters through input arguments for better user flexibility.
+> One potential improvement for this script would be to include an option to customize the terminal title or color scheme via command-line arguments, making it more versatile for different workflows. Additionally, ensuring proper error handling for the FZF execution would enhance user experience.

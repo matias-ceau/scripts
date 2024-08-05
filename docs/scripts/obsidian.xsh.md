@@ -1,52 +1,45 @@
-# Obsidian Vault Selector Script
+# Obsidian Vault Opener Script
 
 ---
 
-**[obsidian.xsh](/obsidian.xsh)**: A script to open Obsidian vaults using a selection menu.
+**obsidian.xsh**: Open any Obsidian vault from a user-defined directory
 
 ---
 
 ### Dependencies
 
-- `xonsh`: The shell that powers this script.
-- `fzfmenu.sh`: A command-line fuzzy finder that allows for selecting vaults easily.
-- `notify-send`: A utility for sending desktop notifications.
-- `eza`: A modern reimplementation of `ls` with Git integration and more.
+- `fzfmenu.sh`: A script used for displaying a user-friendly menu to select the vault.
+- `obsidian`: The application that is being triggered to open the selected vault.
+- `notify-send`: Utility to send desktop notifications.
 
 ### Description
 
-This script automates the process of selecting and opening Obsidian vaults from a specified directory (`$HOME/PKM`). It first collects the names of directories inside this path, which are considered as vaults. The script leverages the `fzfmenu.sh` utility for a user-friendly selection interface, allowing users to preview the contents of the vaults based on their modification time.
+This script is designed to help users quickly open any vault in the Obsidian knowledge management tool from a pre-defined directory (`$HOME/PKM`). 
 
-The main components of the script are:
-
-1. **Vault Collection**: 
-   The script generates a list of potential vaults from the `$HOME/PKM` directory, filtering only directories.
-   
-2. **Vault Selection**:
-   Using `fzfmenu.sh`, users can browse and select from the directories available, with a preview feature showing the files (sorted by modification time).
-   
-3. **Opening Vaults**: 
-   Upon selecting a vault, the script constructs a specific URI to open the vault with Obsidian. If no vault is selected, a notification is sent to inform the user.
+- **Directory Scanning**: The script scans the specified directory for folders which represent different obsidian vaults. It generates a list of these vaults for the user's selection using `fzfmenu.sh`.
+- **User Selection**: The user is prompted to select a vault from the generated list using a menu interface. The script uses `fzfmenu.sh` to facilitate this selection.
+- **Launching Vaults**: Once a vault is selected, it launches Obsidian using a specific URI format to open the desired vault. If no vault is selected, a notification is displayed to inform the user.
 
 ### Usage
 
-To use the script, ensure it is executable and run it in your terminal:
+To utilize this script, you can run it directly in your terminal. Ensure that you have the dependent utilities installed. The script can be executed simply by invoking:
 
 ```bash
-chmod +x /home/matias/.scripts/obsidian.xsh
+~/path/to/obsidian.xsh
+```
+
+### Key Features:
+- Automatically lists available vaults from your personal knowledge management directory.
+- Allows for seamless selection of vaults using a graphical interface.
+- Provides user feedback when no vaults are selected.
+
+Example command to run the script:
+
+```bash
 /home/matias/.scripts/obsidian.xsh
 ```
-
-You can also bind this script to a key combination in your window manager (Qtile). Here's a sample key binding definition:
-
-```python
-Key([mod], "o", lazy.spawn("/home/matias/.scripts/obsidian.xsh")),
-```
-
-The script will display a selection menu with available vaults. Simply navigate using the keyboard to choose a desired vault.
 
 ---
 
 > [!TIP]
-> The script currently lacks error handling for cases where the `$HOME/PKM` directory does not exist or is empty. Adding checks for these conditions can improve robustness.
-> Furthermore, consider adding a feature for vault search to enhance usability, allowing users to quickly filter vaults by name.
+> The script currently lacks error handling when the `fzfmenu.sh` command fails or returns unexpected results. It may be useful to implement checks or fallbacks if the `fzfmenu.sh` command does not succeed in retrieving vault names. Additionally, consider adding an interactive prompt feature that allows users to input a path to the vault directory dynamically, enhancing script usability.

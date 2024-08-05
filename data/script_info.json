@@ -37,9 +37,9 @@
   "colormap_from_text.sh": {
     "file": "colormap_from_text.sh",
     "path": "colormap_from_text.sh",
-    "description": "Extracts color palettes from config files.",
+    "description": "Script to extract color palettes from text files",
     "doc_path": "docs/scripts/colormap_from_text.sh.md",
-    "hash": "2154ff2a54793fd68220d0f38b8a5ac56fc911ff88cd964e1969983276eb937e"
+    "hash": "be58184ba693c4d0be5421c3d270d0d5a60f36a49e0433243a2cad639ee803b3"
   },
   "count_tokens_with_tiktoken.py": {
     "file": "count_tokens_with_tiktoken.py",
@@ -72,16 +72,16 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to visually select and edit Chezmoi-managed configuration files.",
+    "description": "Launches fzf to edit Chezmoi managed config files with previews.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "514b83a90cc54604e1c6f4623e70ef72826ec8da00948899329df89fce5d6431"
+    "hash": "cded8717413cb144a2b43afce77b4fceea7021ab93daf6473456de0b83f9124e"
   },
   "editor.sh": {
     "file": "editor.sh",
     "path": "editor.sh",
-    "description": "Edit files in the current directory or subdirectories with additional options.",
+    "description": "A script to edit files in the current folder or its subfolders using fzf.",
     "doc_path": "docs/scripts/editor.sh.md",
-    "hash": "3b7aa6f3f188b4e03b7946a082b6cf07889031a4993bbf530b27872002846a05"
+    "hash": "bc74696e1a98192be399ef2478d4d7491322fde8f63bf19b0a0b137670f7b295"
   },
   "fzf_albumlauncher.xsh": {
     "file": "fzf_albumlauncher.xsh",
@@ -128,9 +128,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "improved-fzfmenu.sh",
-    "description": "A Bash script that launches `fzf` in an Alacritty terminal with custom settings.",
+    "description": "A script to launch FZF in Alacritty with command-line arguments.",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "216635053ef10b19bd306169e99fb616f9a97ec754610ed57f4831aeae3f03af"
+    "hash": "a88edbdb2de0c20f98fdfd7c1b1027d3c489806f110f4c826fd604aa48b25ff5"
   },
   "jupyter_new_notebook.xsh": {
     "file": "jupyter_new_notebook.xsh",
@@ -198,9 +198,9 @@
   "obsidian.xsh": {
     "file": "obsidian.xsh",
     "path": "obsidian.xsh",
-    "description": "A script to open Obsidian vaults using a selection menu.",
+    "description": "Open any Obsidian vault from a user-defined directory",
     "doc_path": "docs/scripts/obsidian.xsh.md",
-    "hash": "d6b43e9d35ee09e47cabb220a64decc1e02a9f98ad0bf71397d22e0e4e7b637d"
+    "hash": "1878546c18f9aa0d3d9b15bff8c9804192665ac6288e06e7479d56e05e58f1da"
   },
   "pdfopener.sh": {
     "file": "pdfopener.sh",
@@ -254,9 +254,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "A script to run other scripts with fzf.",
+    "description": "A utility to run scripts with fzf and preview documentation.",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "b6d577b2410db1e4eb4fb1ea59671cc48376f6cba4cd8f964b3cff51250c73e5"
+    "hash": "41db98dcbfabacc4a1ef842a1fac948656292c867bc767f39985887188500734"
   },
   "select_script": {
     "file": "select_script",

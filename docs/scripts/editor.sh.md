@@ -1,64 +1,67 @@
-# File Editor Script for Easy Access
+# Editor Script for File Editing
 
 ---
 
-**editor.sh**: Edit files in the current directory or subdirectories with additional options.
+**editor.sh**: A script to edit files in the current folder or its subfolders using fzf.
 
 ---
 
 ### Dependencies
 
-- `nvim`: A modern text editor that allows for powerful editing features.
-- `fzf`: A command-line fuzzy finder for quick file selection.
-- `bat`: A command-line tool to view files with syntax highlighting and paging.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `nvim`: The Neovim text editor for file editing.
+- `fzf`: A command-line fuzzy finder used for selecting files.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
 
 ### Description
 
-This script, `editor.sh`, provides a convenient interface to edit files within the current directory or its subdirectories using the `nvim` editor. The script allows you to invoke additional options for refining the search and operation modes, such as editing with sudo permissions or specifying a narrower search scope.
+This script simplifies the process of editing files in the current directory or its subdirectories by integrating **fzf** and **nvim**. When executed, it displays a list of files that can be searched and filtered through fuzzy matching provided by **fzf**.
 
-- The script uses the `fd` command to search for files, excluding certain patterns (like hidden files and common binaries).
-- Users can select files through a fuzzy search powered by `fzf`, with visual previews provided by `bat`.
-- The script supports various flags:
-  - `-S` or `--sudo`: Edit files with elevated permissions.
-  - `-c` or `--cwd`: Search only in the current directory.
-  - `-C` or `--config`: Edit configuration files.
+The script provides flexibility through different modes:
+
+- **sudo mode** for editing files with root privileges.
+- **current working directory mode** to limit the search to the current directory.
+- **config mode** designed for modifying specific configuration files.
+
+Files irrelevant to text editing are excluded from the search, such as images, archives, and certain data formats.
+
+The command used to find files is built by the `get_fd_cmd` function based on the selected mode. It generates an appropriate `fd` command, applying various filters to exclude unnecessary files while still allowing the retrieval of hidden files when required. 
 
 ### Usage
 
-To use the `editor.sh` script, simply run it in your terminal. Here are a few examples:
-
-- To edit any file in the current directory or subdirectories:
-  
-  ```bash
-  ./editor.sh
-  ```
-
-- To edit a file with sudo permissions:
-
-  ```bash
-  ./editor.sh --sudo
-  ```
-
-- To search only within the current directory:
-
-  ```bash
-  ./editor.sh --cwd
-  ```
-
-- To edit a specific config file:
-
-  ```bash
-  ./editor.sh --config
-  ```
-
-You can access help information using:
+To run the script, navigate to the desired directory in a terminal and execute:
 
 ```bash
-./editor.sh --help
+./editor.sh [OPTIONS]
+```
+
+#### Options:
+
+- `-S, --sudo`: Opens files with sudo.
+- `-c, --cwd`: Limits the file search to the current directory only.
+- `-C, --config`: Enables editing of configuration files.
+- `-h, --help`: Displays the help message.
+
+#### Example Commands:
+
+1. Edit a file normally:
+
+```bash
+./editor.sh
+```
+
+2. Edit a file with sudo permissions:
+
+```bash
+./editor.sh --sudo
+```
+
+3. Edit files only in the current directory:
+
+```bash
+./editor.sh --cwd
 ```
 
 ---
 
 > [!TIP]
-> Consider improving the suggestions or autocorrect functionality in case the user inputs an invalid option. Additionally, you might want to streamline the `fd` command; excessive ignored file types can make it less efficient.
+> This script could benefit from additional error handling, particularly when invoking external commands like `nvim` and `fzf`. Including checks to verify the presence of required dependencies before executing the script would enhance usability. Additionally, it is advisable to avoid using `sudo` arbitrarily, as it could potentially open sensitive files or folders inadvertently. Consider incorporating a confirmation mechanism when using `sudo`.

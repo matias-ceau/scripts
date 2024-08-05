@@ -1,49 +1,47 @@
-# Edit Chezmoi Configuration Files
+# Edit Chezmoi Config Files
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: A script to visually select and edit Chezmoi-managed configuration files.
+**edit_chezmoi_cfg_files.sh**: Launches fzf to edit Chezmoi managed config files with previews.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder used for efficient selection.
-- `bat`: A syntax highlighting file viewer that enhances the preview.
-- `eza`: An alternative to `ls`, providing an improved listing experience.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `eza`: A modern replacement for `ls` with extra features and color support.
+- `fzf`: A general-purpose command-line fuzzy finder.
+- `chezmoi`: A tool for managing your dotfiles across multiple machines.
+- `nvim`: A highly configurable text editor for writing and editing code.
 
 ### Description
 
-This script is designed for Arch Linux users who utilize `chezmoi` for managing their dotfiles. It integrates with `fzf` to provide an interactive command-line interface for selecting configuration files to edit.
+This script facilitates the editing of configuration files managed through Chezmoi. By using `fzf`, it allows users to visually select files or directories, with instant previews of their contents. 
 
-The script defines two main functions:
-- `preview_command()`: It checks if the selected item is a file or directory. If it is a file, it uses `bat` to display a preview with line numbers and syntax highlighting. If it's a directory, it calls `eza` to list its contents.
-- `colorize_file_list()`: This function outputs a colorized list of the managed files from Chezmoi, applying different styles based on whether the entries are files or directories.
+The `preview_command` function determines whether the selected item is a file or a directory:
 
-The core functionality launches `fzf` with an improved preview feature, allowing users to navigate their Chezmoi-managed files efficiently. 
+- For files, it uses `bat` to display a colored view with line numbers and highlights based on the file type (e.g., INI, CONF).
+- For directories, it utilizes `eza` to list the contents with colors and icons.
+
+The script also includes a function called `colorize_file_list`, which enhances the display of the file paths by applying ANSI color codes to differentiate between directories and files effectively.
 
 ### Usage
 
-To run this script, simply execute it in your terminal:
+To run the script, execute it in the terminal:
 
 ```bash
 bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-The script will:
-1. Generate a list of managed files using `chezmoi`.
-2. Allow you to preview the file/directory contents using `fzf`.
-3. Upon selection, it will open the chosen file in `nvim` (Neovim) for editing.
-
-You can also assign this script to a keybinding in your window manager, `qtile`, to streamline your workflow. 
-
-Example of a keybinding in `config.py` for `qtile`:
+It will present an interface where you can freely navigate and select the managed config files. Once you select a file, it will open in `nvim` for you to edit. If you wish to bind this to a keyboard shortcut in qtile, you can use:
 
 ```python
-Key([mod], "e", lazy.spawn("bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh")),
+@hook.subscribe.startup
+def autostart():
+    run_cmd("bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh")
 ```
 
 ---
 
 > [!TIP]  
-One potential improvement for this script is to add error handling for scenarios where `chezmoi` isn't installed or the file list is empty, enhancing the user experience in case something goes wrong. كذلك، consider allowing the user to specify the editor instead of hardcoding `nvim` to increase flexibility.
+> Consider adding error handling for cases when `chezmoi` or the dependencies like `fzf` fail to execute. Additionally, specifying fallback options for viewers in case `bat` or `nvim` are not installed could improve user experience. Furthermore, implementing a function to navigate back to the original directory after editing may enhance the workflow.

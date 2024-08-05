@@ -1,49 +1,61 @@
-# Colormap Extractor from Text Configs
+# Color Map Extractor
 
 ---
 
-**[colormap_from_text.sh](/colormap_from_text.sh)**: Extracts color palettes from config files.
+**colormap_from_text.sh**: Script to extract color palettes from text files
 
 ---
 
 ### Dependencies
 
-- `grep`: A command-line utility for searching plain-text data.
-- `printf`: A utility to format and print data, required for RGB conversion.
+- `bat`: A command-line tool that provides syntax highlighting and file viewing. This script uses it to display usage information in a styled format.
 
 ### Description
 
-The `colormap_from_text.sh` script is a straightforward Bash utility designed to extract and format color codes from text files, like configuration files. The script primarily focuses on hexadecimal color codes, which it identifies and processes in one of three output formats: Hexadecimal, RGB, or a plain RGB list.
+The `colormap_from_text.sh` script is designed to extract color palettes from text files, particularly those containing HEX color codes. The script reads from standard input (stdin) or from specified files and is capable of outputting colors in various formats:
 
-Key functionalities include:
+- HEX format (e.g., `#ffffff`)
+- RGB format (e.g., `rgb(255, 255, 255)`)
+- RGB values as separate integers (e.g., `255, 255, 255`)
 
-- **Argument Parsing**: The script accepts command-line arguments which specify the desired output format.
-  - `-x` or `--hex-code` outputs the colors in hexadecimal format.
-  - `-r` or `--rgb` provides the colors in an RGB format.
-  - `-c` or `--color` outputs colors along with their visual representation in the terminal.
-  
-- **Error Handling**: It prevents incompatible options being selected together (e.g., Hex and RGB at once) and provides user-friendly usage instructions.
+The script employs the following key features:
 
-- **Color Extraction**: Utilizes `grep` to find hex codes, sorts them uniquely, and converts hex to RGB when needed.
+- Argument parsing: The script allows users to specify options for desired output formats and validations to prevent conflicting options.
+- Color extraction: It utilizes `grep` to find HEX codes and then converts them into RGB using `printf`.
+- Color visualization: When the `--color` option is enabled, the script visually displays the color in the terminal with the corresponding RGB or HEX code.
 
 ### Usage
 
-To run the script, execute it in your terminal, passing in any of the flags according to your desired output format:
+To use the script effectively, you can either pipe data into it or provide it with file names as arguments. Usage syntax is as follows:
 
 ```bash
-# Output colors in hexadecimal format
-./colormap_from_text.sh -x
-
-# Output colors in RGB format
-./colormap_from_text.sh -r
-
-# Output RGB values and display colors in terminal
-./colormap_from_text.sh -c
+<stdout> | ./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
+./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color] <file(s)>
 ```
 
-You can also combine options, but remember that `-x` and `-r` are incompatible.
+**Examples**:
+
+1. Extract and display colors in HEX format from a file:
+   ```bash
+   ./colormap_from_text.sh -x example.txt
+   ```
+
+2. Output colors in RGB format:
+   ```bash
+   echo "Here is a color: #ff5733" | ./colormap_from_text.sh -r
+   ```
+
+3. Display colors visually in the terminal:
+   ```bash
+   cat colors.txt | ./colormap_from_text.sh -c
+   ```
+
+4. Check for errors: If attempting to use conflicting options:
+   ```bash
+   ./colormap_from_text.sh -x -r example.txt
+   ```
 
 ---
 
 > [!TIP]  
-> The script could benefit from adding more comments for clarity, especially within the main loop. Further, consider implementing argument validation to ensure the script functions correctly with varying input types, such as reading from specific configuration files or directories. This would enhance its versatility.
+> Consider adding error handling for invalid file inputs and implementing a help flag (e.g., `-h` or `--help`) that shows the usage instructions directly without needing to invoke the script. This will improve user experience.

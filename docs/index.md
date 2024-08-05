@@ -3,20 +3,20 @@
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *Automatic documentation generator for user scripts using OpenAI API.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Script to initialize Chezmoi on a new system for a specific user*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and handle paper citations easily.*
-- [colormap_from_text.sh](scripts/colormap_from_text.sh.md) -- *Extracts color palettes from config files.*
+- [colormap_from_text.sh](scripts/colormap_from_text.sh.md) -- *Script to extract color palettes from text files*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *A Python script to count the number of tokens in a text file using tiktoken*
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *A script to generate cover art from WAV file spectrograms*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to dynamically run scripts using rofi as a dmenu alternative.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to visually select and edit Chezmoi-managed configuration files.*
-- [editor.sh](scripts/editor.sh.md) -- *Edit files in the current directory or subdirectories with additional options.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Launches fzf to edit Chezmoi managed config files with previews.*
+- [editor.sh](scripts/editor.sh.md) -- *A script to edit files in the current folder or its subfolders using fzf.*
 - [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose and play an album using fzf and cmus*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A wrapper script to launch fzf in a terminal for menu selection.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A script to replace dmenu with fzf for running commands in a floating terminal.*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list git repositories on the local host and save to files.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script to clone git repositories based on developer/package name using various options.*
-- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A Bash script that launches `fzf` in an Alacritty terminal with custom settings.*
+- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to launch FZF in Alacritty with command-line arguments.*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *A script to create and open a new Jupyter notebook in Chromium*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a tmux session for running cmus*
 - [list_process.sh](scripts/list_process.sh.md) -- *Script to list all running services on the system in sorted order.*
@@ -27,7 +27,7 @@
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to automate the creation of new executable scripts.*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
-- [obsidian.xsh](scripts/obsidian.xsh.md) -- *A script to open Obsidian vaults using a selection menu.*
+- [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
@@ -35,7 +35,7 @@
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Select random album and play it with cmus*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified directory*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script to run other scripts with fzf.*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *A utility to run scripts with fzf and preview documentation.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *Bash script for synchronizing a Git repository with practical features*
