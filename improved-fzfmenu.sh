@@ -13,8 +13,6 @@ fzf_args="${args[*]}"
 
 alacritty \
     -T 'fzfmenu' \
-    -o window.dimensions.columns=150 \
-    -o window.dimensions.lines=30 \
     -e bash -c "fzf $fzf_args < /proc/$$/fd/0"
 
 # > /proc/$$/fd/1"

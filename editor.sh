@@ -85,7 +85,6 @@ get_fd_cmd() {
         cmd+=" --search-path $LOCALDATA"
         cmd+=" --search-path $SCRIPTS"
         cmd+=" --search-path $HOME"
-        #cmd+=" --search-path $XDG_CONFIG_HOME"
         cmd+=" --search-path $HOME/docs"
     fi
 
@@ -102,7 +101,8 @@ SELECTED=$(eval "$FD_CMD" | fzf \
     --preview-window 'right:60%' \
     --bind "ctrl-h:reload($(get_fd_cmd true))+change-prompt(Hidden> )" \
     --bind "ctrl-s:reload($FD_CMD)+change-prompt(> )" \
-    --header 'CTRL-H: Show hidden files / CTRL-S: Hide hidden files' \
+    --header '<C-H>: hidden files / <CTRL-S>: non-hidden files' \
+    --header-first \
     --prompt '> ')
 
 # If a file is selected, open it (with sudo if necessary)
