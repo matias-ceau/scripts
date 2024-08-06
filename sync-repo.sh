@@ -11,14 +11,14 @@ RESET="\e[0m"
 BOLD="\e[1m"
 
 # Check for bat and glow
-if ! command -v bat &> /dev/null; then
+if ! command -v bat &>/dev/null; then
     echo -e "${YELLOW}Warning: 'bat' is not installed. Output might look less pretty.${RESET}"
     USE_BAT=false
 else
     USE_BAT=true
 fi
 
-if ! command -v glow &> /dev/null; then
+if ! command -v glow &>/dev/null; then
     echo -e "${YELLOW}Warning: 'glow' is not installed. Output might look less pretty.${RESET}"
     USE_GLOW=false
 else
@@ -84,25 +84,25 @@ handle_conflicts() {
     read -p "Enter your choice (1/2/3): " choice
 
     case $choice in
-        1)
-            git status
-            echo "Opening editor to resolve conflicts..."
-            ${EDITOR:-vim} $(git diff --name-only --diff-filter=U)
-            git add .
-            git rebase --continue
-            ;;
-        2)
-            git rebase --abort
-            echo "Rebase aborted. Repository is back to its previous state."
-            ;;
-        3)
-            git rebase --skip
-            echo "Skipped conflicting commit. Continuing rebase..."
-            ;;
-        *)
-            echo "Invalid choice. Aborting rebase."
-            git rebase --abort
-            ;;
+    1)
+        git status
+        echo "Opening editor to resolve conflicts..."
+        ${EDITOR:-vim} $(git diff --name-only --diff-filter=U)
+        git add .
+        git rebase --continue
+        ;;
+    2)
+        git rebase --abort
+        echo "Rebase aborted. Repository is back to its previous state."
+        ;;
+    3)
+        git rebase --skip
+        echo "Skipped conflicting commit. Continuing rebase..."
+        ;;
+    *)
+        echo "Invalid choice. Aborting rebase."
+        git rebase --abort
+        ;;
     esac
 }
 
@@ -125,7 +125,7 @@ if [ $# -eq 0 ]; then
 fi
 
 REPO_DIR="$1"
-ORIGINAL_DIR=$(pwd)
+ORIGINAL_DIR="$(pwd)"
 
 # Check if the provided path is a directory
 if [ ! -d "$REPO_DIR" ]; then
