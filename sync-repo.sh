@@ -124,7 +124,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-REPO_DIR="$1"
+REPO_DIR="$(realpath "$1")"
 ORIGINAL_DIR="$(pwd)"
 
 # Check if the provided path is a directory
@@ -142,14 +142,15 @@ fi
 
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
+REPO_NAME="$(git remote -v | grep fetch | awk '{print $2}' | sed 's/.*\/\(.*\)\.git/\1/')"
 
-print_formatted "Syncing repository in ${BOLD}$REPO_DIR${RESET}"
+print_formatted "Syncing repository in ${BOLD}$REPO_NAME${RESET}"
 
 # Fetch the latest changes without merging
 run_command "git fetch $REMOTE $LOCAL" || handle_error "Failed to fetch latest changes"
 
 # Check if there are any changes to pull
-if git diff --quiet $LOCAL $REMOTE/$LOCAL; then
+if git diff --quiet "$LOCAL" "$REMOTE/$LOCAL"; then
     echo "No changes to pull. Local repository is up to date."
 else
     # Stash any local changes
