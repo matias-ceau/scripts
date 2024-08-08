@@ -12,6 +12,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/edit_chezmoi_cfg_files.sh,/home/matias/.local/bin/edit_chezmoi_cfg_files.sh,edit_chezmoi_cfg_files.sh
 /home/matias/.scripts/editor.sh,/home/matias/.local/bin/editor.sh,editor.sh
 /home/matias/.scripts/dev/fix-markdown-links.sh,/home/matias/.local/bin/fix-markdown-links.sh,fix-markdown-links.sh
+/home/matias/.scripts/flexoki_show.sh,/home/matias/.local/bin/flexoki_show.sh,flexoki_show.sh
 /home/matias/.scripts/fzf_albumlauncher.xsh,/home/matias/.local/bin/fzf_albumlauncher.xsh,fzf_albumlauncher.xsh
 /home/matias/.scripts/fzfmenu_run.sh,/home/matias/.local/bin/fzfmenu_run.sh,fzfmenu_run.sh
 /home/matias/.scripts/fzfmenu.sh,/home/matias/.local/bin/fzfmenu.sh,fzfmenu.sh

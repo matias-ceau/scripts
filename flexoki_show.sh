@@ -1,29 +1,5 @@
 #!/bin/bash
 
-## Define the CSV data
-#csv_data=$(cat "$1")
-#
-## Function to colorize the HEX column
-#colorize_hex() {
-#    while IFS= read -r line; do
-#        if [[ $line == HEX* ]]; then
-#            echo "$line" | sed 's/;/\t/g'
-#        else
-#            hex="$(echo "$line" | sed 's/;/\t/g' | cut -f1)"
-#            rgb="$(echo "$line" | sed 's/;/\t/g' | cut -f2)"
-#            val_rgb="$(echo "$rgb" | sed -e 's/rgb( *//' -e 's/ *)//' -e 's/, */\t/g')"
-#            r="$(echo "$val_rgb" | cut -f1 | sed 's/ *//g')"
-#            g="$(echo "$val_rgb" | cut -f2 | sed 's/ *//g')"
-#            b="$(echo "$val_rgb" | cut -f3 | sed 's/ *//g')"
-#            rest=$(echo "$line" | sed 's/;/\t/g' | cut  -f3-)
-#            echo -e "$hex\e[38;2;${r};${g};${b}m\u2588\u2588\u2588\u2588\e[0m$rgb\t$rest"
-#        fi
-#    done <<< "$csv_data"
-#}
-
-# Display the colorized CSV data with fzf
-#fzf --ansi --header-lines=1
-
 line_generator() {
     block="\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588"
     X="\e[0m"
@@ -52,18 +28,18 @@ line_generator() {
     echo -e "#a02f6f - \e[38;2;160;47;111m${block}${X} - 160,47,111   - magenta-600 -  ma-2    [5]  -\e[38;2;160;47;111m                  Language features${X}"
     echo -e "#100f0f - \e[38;2;16;15;15m${block}${X} - 16,15,15     - black       -  bg      [0]  -\e[38;2;16;15;15m Background 1${X}"
     echo -e "#1c1b1a - \e[38;2;28;27;26m${block}${X} - 28,27,26     - base-950    -  bg-2    [8]  -\e[38;2;28;27;26m Background 2${X}"
-    echo -e "#fffcf0 - \e[38;2;255;252;240m${block}${X}${I} - 255,252,240  - paper       -  (bg)         -${X}"
-    echo -e "#e6e4d9 - \e[38;2;230;228;217m${block}${X}${I} - 230,228,217  - base-50     -  (bg-2)       -${X}"
-    echo -e "#dad8ce - \e[38;2;218;216;206m${block}${X}${I} - 218,216,206  - base-100    -  (ui)         -${X}"
-    echo -e "#cecdc3 - \e[38;2;206;205;195m${block}${X}${I} - 206,205,195  - base-150    -  (ui-2)       -${X}"
-    echo -e "#b7b5ac - \e[38;2;183;181;172m${block}${X} - 183,181,172  - base-200    -  tx      [7]  -\e[38;2;183;181;172m Primary text${X}"
-    echo -e "#979592 - \e[38;2;151;149;146m${block}${X}${I} - 151,149,146  - base-300    -  (tx-3)       - ${X}"
-    echo -e "#878580 - \e[38;2;135;133;128m${block}${X} - 135,133,128  - base-500    -  tx-2    [15] -\e[38;2;135;133;128m Muted text      Punctuation, operators${X}"
-    echo -e "#6f6e69 - \e[38;2;111;110;105m${block}${X}${I} - 111,110,105  - base-600    -  (tx-2)       -${X}"
-    echo -e "#575653 - \e[38;2;87;86;83m${block}${X} - 87,86,83     - base-700    -  tx-3         -\e[38;2;87;86;83m Faint text      Comments${X}"
-    echo -e "#403e3c - \e[38;2;64;62;60m${block}${X} - 64,62,60     - base-800    -  ui-3         -\e[38;2;64;62;60m Active borders${X}"
-    echo -e "#343331 - \e[38;2;52;51;49m${block}${X} - 52,51,49     - base-850    -  ui-2         -\e[38;2;52;51;49m Hovered borders${X}"
     echo -e "#282726 - \e[38;2;40;39;38m${block}${X} - 40,39,38     - base-900    -  ui           -\e[38;2;40;39;38m Borders${X}"
+    echo -e "#343331 - \e[38;2;52;51;49m${block}${X} - 52,51,49     - base-850    -  ui-2         -\e[38;2;52;51;49m Hovered borders${X}"
+    echo -e "#403e3c - \e[38;2;64;62;60m${block}${X} - 64,62,60     - base-800    -  ui-3         -\e[38;2;64;62;60m Active borders${X}"
+    echo -e "#575653 - \e[38;2;87;86;83m${block}${X} - 87,86,83     - base-700    -  tx-3         -\e[38;2;87;86;83m Faint text      Comments${X}"
+    echo -e "#6f6e69 - \e[38;2;111;110;105m${block}${X}${I} - 111,110,105  - base-600    -  (tx-2)       -${X}"
+    echo -e "#878580 - \e[38;2;135;133;128m${block}${X} - 135,133,128  - base-500    -  tx-2    [15] -\e[38;2;135;133;128m Muted text      Punctuation, operators${X}"
+    echo -e "#979592 - \e[38;2;151;149;146m${block}${X}${I} - 151,149,146  - base-300    -  (tx-3)       - ${X}"
+    echo -e "#b7b5ac - \e[38;2;183;181;172m${block}${X} - 183,181,172  - base-200    -  tx      [7]  -\e[38;2;183;181;172m Primary text${X}"
+    echo -e "#cecdc3 - \e[38;2;206;205;195m${block}${X}${I} - 206,205,195  - base-150    -  (ui-2)       -${X}"
+    echo -e "#dad8ce - \e[38;2;218;216;206m${block}${X}${I} - 218,216,206  - base-100    -  (ui)         -${X}"
+    echo -e "#e6e4d9 - \e[38;2;230;228;217m${block}${X}${I} - 230,228,217  - base-50     -  (bg-2)       -${X}"
+    echo -e "#fffcf0 - \e[38;2;255;252;240m${block}${X}${I} - 255,252,240  - paper       -  (bg)         -${X}"
 }
 
 line_generator
