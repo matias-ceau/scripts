@@ -275,9 +275,9 @@
   "sync-repo.sh": {
     "file": "sync-repo.sh",
     "path": "sync-repo.sh",
-    "description": "Bash script for synchronizing a Git repository with practical features",
+    "description": "A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates.",
     "doc_path": "docs/scripts/sync-repo.sh.md",
-    "hash": "ac2ee8d4d9a579c92ed22560b899a5be226ecc4bd20c74d143f2292c59b31fd4"
+    "hash": "2ce6964438f1664679547c1619f57cdb14124fbfd1a802e20b379b0a396cf956"
   },
   "tmux-help.py": {
     "file": "tmux-help.py",
@@ -289,9 +289,9 @@
   "toggle_picom.sh": {
     "file": "toggle_picom.sh",
     "path": "toggle_picom.sh",
-    "description": "Script to toggle the Picom compositor on and off.",
+    "description": "A script to toggle the picom compositor on and off.",
     "doc_path": "docs/scripts/toggle_picom.sh.md",
-    "hash": "1df2f8675755ebe0ed906b24fe86732f02237da1deef800df4bcb763e5e46713"
+    "hash": "f7662380954d62ccdf4455c7ae968aed42d4c1e54ca9ee13606ae24b86747e67"
   },
   "transform_symlink.sh": {
     "file": "transform_symlink.sh",
@@ -352,8 +352,22 @@
   "new_script_creator.sh": {
     "file": "new_script_creator.sh",
     "path": "new_script_creator.sh",
-    "description": "A simple script to automate the creation of new executable scripts.",
+    "description": "A simple script to create new scripts with directory linking",
     "doc_path": "docs/scripts/new_script_creator.sh.md",
-    "hash": "7f439951969e7e43d3f3417113a301f701ea9bdbb8694cda2a60f336b6164aac"
+    "hash": "265db232ae9d951ff9371fce47f70316bcde46a5d0250c8fdec8a38ba4c88394"
+  },
+  "flexoki_show.sh": {
+    "file": "flexoki_show.sh",
+    "path": "flexoki_show.sh",
+    "description": "Generate a color palette with hex, RGB values, and names for quick reference.",
+    "doc_path": "docs/scripts/flexoki_show.sh.md",
+    "hash": "af13df7cb3217f006e2a36b2d8fdc7131e8313b0711c1f4cea6c54f04f27eddc"
+  },
+  "quick-pass.sh": {
+    "file": "quick-pass.sh",
+    "path": "quick-pass.sh",
+    "description": "Quickly select a password from your password store using fzf.",
+    "doc_path": "docs/scripts/quick-pass.sh.md",
+    "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
   }
 }

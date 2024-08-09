@@ -11,6 +11,7 @@
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Launches fzf to edit Chezmoi managed config files with previews.*
 - [editor.sh](scripts/editor.sh.md) -- *A script to edit files in the current folder or its subfolders using fzf.*
 - [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
+- [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Generate a color palette with hex, RGB values, and names for quick reference.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose and play an album using fzf and cmus*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A wrapper script to launch fzf in a terminal for menu selection.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A script to replace dmenu with fzf for running commands in a floating terminal.*
@@ -25,22 +26,23 @@
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Generate an M3U playlist file from the current directory files.*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
-- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to automate the creation of new executable scripts.*
+- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A tool to reduce color depth in PPM images based on a given palette.*
+- [quick-pass.sh](scripts/quick-pass.sh.md) -- *Quickly select a password from your password store using fzf.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Select random album and play it with cmus*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified directory*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *A utility to run scripts with fzf and preview documentation.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
-- [sync-repo.sh](scripts/sync-repo.sh.md) -- *Bash script for synchronizing a Git repository with practical features*
+- [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.*
-- [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Script to toggle the Picom compositor on and off.*
+- [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *A script to toggle the picom compositor on and off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *Convert symlinks to copies of their target files or directories.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *update_env.xsh - Update .env file with API keys from xonsh environment*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Automates the creation and management of symlinks in ~/.local/bin*

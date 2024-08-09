@@ -1,53 +1,48 @@
-# Sync Git Repository Script
+# Sync Git Repository
 
 ---
 
-**[sync-repo.sh](/sync-repo.sh)**: Bash script for synchronizing a Git repository with practical features
+**sync-repo.sh**: A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates.
 
 ---
 
 ### Dependencies
 
-- `bat`: A command-line tool that provides syntax highlighting and styled output for terminal commands.
-- `glow`: A tool for rendering Markdown content in the terminal with styled output.
+- `git`: Essential for version control operations.
+- `bat`: A cat clone with syntax highlighting and Git integration, used for displaying commands and outputs prettily.
+- `glow`: A terminal-rendered Markdown viewer for prettier output.
 
 ### Description
 
-This script is designed to streamline the process of syncing a Git repository, providing colorful output and user-friendly features. It incorporates error handling, conflict resolution, and accessibility options for users who prefer to visualize their command outputs.
+This script automates the process of syncing a Git repository. It performs various tasks including fetching updates from a remote repository, checking for conflicts, stashing local changes, and applying those changes after a successful pull. 
 
 Key functionalities include:
 
-- **Colorful output**: Uses ANSI escape codes to provide visually appealing feedback during execution.
-- **Command execution and logging**: Each Git command is preceded by a printed message indicating which command is being executed, using the `bat` command for enhanced readability if it's installed.
-- **Conflict resolution**: If conflicts arise during the rebase process, the script offers interactive options for the user to resolve these issues.
-- **Summary display**: After syncing, it provides a summary of changes made during the synchronization process.
+- **Command Handling**: The script checks for the presence of dependencies (`bat` and `glow`) to enhance output formatting. If any are missing, it warns the user.
+- **Conflict Resolution**: Provides a user interface to resolve merge conflicts, allowing the user to either manually resolve, skip the commit, or abort the rebase.
+- **Visual Output**: Enhanced visual output is presented based on the availability of `bat` and `glow`, providing a user-friendly experience.
 
 ### Usage
 
-To use the script, you can run it directly from the terminal, passing the path of the git repository you wish to sync as an argument:
+Run the script from the terminal with the following syntax:
 
 ```bash
 ./sync-repo.sh <repository_path>
 ```
-**Example**:
+
+**Example Usage**:
 
 ```bash
 ./sync-repo.sh ~/.scripts
 ```
 
-The script will:
-1. Check if the provided path is a valid Git repository.
-2. Fetch the latest changes and, if necessary, perform a rebase operation.
-3. Handle any conflicts that may occur during rebasing.
-4. Commit any local changes and push them to the remote repository.
-5. Provide a summary of changes made.
+This command will sync the repository located at `~/.scripts`. If no repository path is provided, the script will show usage instructions.
 
-### Important Notes
+After fetching the latest changes and managing local modifications, it commits and pushes changes if there are any. 
 
-- Ensure that `bat` and `glow` are installed to make the most of the colorful outputs.
-- You must have adequate permissions to perform Git operations in the specified repository.
+Finally, it displays a summary of the sync and returns to the original directory where the script was executed.
 
 ---
 
-> [!TIP]  
-> The script could be improved by adding more detailed error handling for specific Git commands. Consider implementing logging to a file for audit purposes, especially in collaborative environments where tracking script execution is beneficial.
+> [!TIP]
+> This script is well-structured, but there is room for improvement. Implementing a logging mechanism for actions taken during execution could be beneficial for debugging. Additionally, enhancing error handling could provide clearer feedback to the user. Consider using more modular functions for better maintainability, especially for conflict management and summary reporting.
