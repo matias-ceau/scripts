@@ -369,5 +369,19 @@
     "description": "Quickly select a password from your password store using fzf.",
     "doc_path": "docs/scripts/quick-pass.sh.md",
     "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
+  },
+  "megaignore_editor.sh": {
+    "file": "megaignore_editor.sh",
+    "path": "megaignore_editor.sh",
+    "description": "A bash script for editing and managing .megaignore files interactively",
+    "doc_path": "docs/scripts/megaignore_editor.sh.md",
+    "hash": "685075c0aa2bfec0b4e2d290543b8e92e5a028ddc6746e23ce6762eaef1c6c33"
+  },
+  "setting-up-syncs.sh": {
+    "file": "setting-up-syncs.sh",
+    "path": "setting-up-syncs.sh",
+    "description": "Automates syncing of user directories to a backup location.",
+    "doc_path": "docs/scripts/setting-up-syncs.sh.md",
+    "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
   }
 }

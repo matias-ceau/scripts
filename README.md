@@ -4,37 +4,21 @@
 
 <!-- llm_generated_output_start -->
 
-This repository contains a rich collection of scripts designed to enhance the user experience on Arch Linux, specifically optimized for use with the Qtile window manager. These scripts cover a wide range of functionalities, catering to audio management, multimedia handling, file manipulation, and environment configuration. 
+This script repository is tailored to facilitate a variety of tasks primarily centered around audio processing, file management, and document editing in an Arch Linux environment using the Qtile window manager. Here’s an overview of the types of scripts available:
 
-### General Overview
+- **Audio Management**: A collection of tools is provided for managing audio playback and processing. For instance, scripts like [albumplayer.xsh](docs/scripts/albumplayer.xsh.md) and [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) allow users to play albums directly or select songs interactively using tools like `fzf`, enhancing music navigation. Additionally, scripts such as [create_cover_art.sh](docs/scripts/create_cover_art.sh.md) transform WAV files into spectrogram cover art, integrating utilities like `sox` and `imagemagick` for audio visualization.
 
-- **Audio Management**: Several scripts including [albumplayer.xsh](docs/scripts/albumplayer.xsh.md), [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md), and [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh) focus on facilitating music playback via console applications like `cmus`. Users can easily select albums or songs, randomize playlists, and handle audio settings in a streamlined manner.
+- **File and Directory Management**: Scripts such as [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) and [megaignore_editor.sh](docs/scripts/megaignore_editor.sh.md) streamline the management of sessions in terminal multiplexers and the editing of ignore files. Similarly, [list_process.sh](docs/scripts/list_process.sh.md) provides a streamlined way to view services managed by systemd, helping users monitor their system efficiently.
 
-- **File and Script Handling**: The repository features numerous utility scripts such as [select_script](docs/scripts/select_script.c.md) and [zipper.sh](docs/scripts/zipper.sh.md), that allow users to efficiently select and run scripts or create new ones. The script [new_script_creator.sh](docs/scripts/new_script_creator.sh.md) sets up new scripts with ease while integrating into the system’s path.
+- **Document and Note Handling**: The repository offers tools for managing documents, such as [vimwiki.sh](docs/scripts/vimwiki.sh.md) for quick access to notes via fuzzy finding. This is complemented by [obsidian.xsh](docs/scripts/obsidian.xsh.md), making it easy to open notes within the popular note-taking app.
 
-- **Personal Knowledge Management**: Scripts like [obsidian.xsh](docs/scripts/obsidian.xsh.md) help users manage their knowledge databases within the Obsidian tool, providing quick access to vaults, while [vimwiki.sh](docs/scripts/vimwiki.sh.md) facilitates easy note management with Vim.
+- **Script Creation and Management**: Users can leverage [new_script_creator.sh](docs/scripts/new_script_creator.sh.md) to quickly generate new scripts, ensuring that they are correctly configured for execution without cluttering local directories. Similarly, tools like [script_launcher.sh](docs/scripts/script_launcher.sh.md) enhance script execution by providing documentation and source previews through fzf and bat.
 
-- **Wallpaper and Display Management**: The [wallpaper.sh](docs/scripts/wallpaper.sh.md) and [random_wallpapers.xsh](docs/scripts/random_wallpapers.xsh.md) scripts simplify the process of managing and changing wallpapers from a specified directory. Users can set random wallpapers with ease or select from a list interactively.
+- **Specialized Utilities**: The collection extends to specialized scripts such as those for managing MIDI controls ([midi2arch.xsh](docs/scripts/midi2arch.xsh.md)), transferring music to devices ([sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md)), and generating documentation for user scripts using models like OpenAI’s ([chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md)). 
 
-- **Quote Document Management**: The [citeboard.sh](docs/scripts/citeboard.sh.md) script serves as a tool for managing paper citations, allowing seamless access to BibTeX files for users engaged in academic work.
+This comprehensive script library provides users a rich toolkit for enhancing their workflow, from music management to automated documentation generation, making it valuable for Arch Linux users who wish to tailor their environments efficiently. Each script typically comes with essential dependencies and detailed usage instructions, ensuring an accessible learning curve regardless of expertise. 
 
-- **Documentation Generation**: Scripts like [chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md) and [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) utilize AI to generate and maintain script documentation automatically, ensuring that all scripts are well-documented.
-
-### Features & Usage
-
-Here's a brief overview of key functionalities:
-
-- **Interactive Selection**: Scripts often leverage `dmenu` or `fzf` for interactive menus that enhance selection processes, whether for audio files, notes, or scripts.
-
-- **Versatile File Management**: Several scripts can create playlists or manipulate files, such as [m3u_creator.sh](docs/scripts/m3u_creator.sh.md), which generates playlists dynamically from the current directory.
-
-- **Efficient Personalization**: Users can personalize their environment with scripts dedicated to launching and managing tasks efficiently (like `toggle_picom.sh` for managing compositing).
-
-### Setup and Requirements
-
-Before using the scripts, ensure you have the necessary dependencies installed according to each script's requirements, which often include common tools like `bash`, `fzf`, `cmus`, and language-specific libraries like `pandas` for Python scripts. Most of the scripts can be made executable and run directly from the terminal, and users are encouraged to configure keybindings in Qtile for quick access.
-
-This repository is targeted towards users who seek efficient ways to manage multimedia, documents, and scripts on their Arch Linux systems while using Qtile, with an emphasis on interactivity and ease of customization.
+For a complete list of scripts and their specific functions, please refer to the script documentation within the repository's `docs/scripts` directory.
 
 <!-- llm_generated_output_end -->
 
@@ -74,6 +58,7 @@ This repository is targeted towards users who seek efficient ways to manage mult
 | [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) | Generates markdown documentation for user scripts using GPT-4. |
 | [m3u_creator.sh](docs/scripts/m3u_creator.sh.md) | Generate an M3U playlist file from the current directory files. |
 | [mechen_music_transfert.py](docs/scripts/mechen_music_transfert.py.md) | Custom script to copy music to Mechen |
+| [megaignore_editor.sh](docs/scripts/megaignore_editor.sh.md) | A bash script for editing and managing .megaignore files interactively |
 | [midi2arch.xsh](docs/scripts/midi2arch.xsh.md) | A script to transform a MIDI controller into a keyboard/script launcher |
 | [new_script_creator.sh](docs/scripts/new_script_creator.sh.md) | A simple script to create new scripts with directory linking |
 | [next_album.xsh](docs/scripts/next_album.xsh.md) | Skip to the next album in CMUS audio player |
@@ -88,6 +73,7 @@ This repository is targeted towards users who seek efficient ways to manage mult
 | [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md) | Python script to transfer music to a Sandisk media player from a local library. |
 | [script_launcher.sh](docs/scripts/script_launcher.sh.md) | A utility to run scripts with fzf and preview documentation. |
 | [select_script](docs/scripts/select_script.md) | A C script for selecting and executing a script from a cached list. |
+| [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) | Automates syncing of user directories to a backup location. |
 | [songlauncher.sh](docs/scripts/songlauncher.sh.md) | Play a song with cmus using dmenu |
 | [sync-repo.sh](docs/scripts/sync-repo.sh.md) | A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates. |
 | [tmux-help.py](docs/scripts/tmux-help.py.md) | tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands. |

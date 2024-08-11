@@ -25,6 +25,7 @@
 - [llm-script-describer.py](cripts/llm-script-describer.py.md) -- *Generates markdown documentation for user scripts using GPT-4.*
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Generate an M3U playlist file from the current directory files.*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
+- [megaignore_editor.sh](scripts/megaignore_editor.sh.md) -- *A bash script for editing and managing .megaignore files interactively*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
@@ -39,6 +40,7 @@
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *A utility to run scripts with fzf and preview documentation.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
+- [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.*

@@ -27,6 +27,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/llm-script-describer.py,/home/matias/.local/bin/llm-script-describer.py,llm-script-describer.py
 /home/matias/.scripts/m3u_creator.sh,/home/matias/.local/bin/m3u_creator.sh,m3u_creator.sh
 /home/matias/.scripts/mechen_music_transfert.py,/home/matias/.local/bin/mechen_music_transfert.py,mechen_music_transfert.py
+/home/matias/.scripts/megaignore_editor.sh,/home/matias/.local/bin/megaignore_editor.sh,megaignore_editor.sh
 /home/matias/.scripts/midi2arch.xsh,/home/matias/.local/bin/midi2arch.xsh,midi2arch.xsh
 /home/matias/.scripts/new_script_creator.sh,/home/matias/.local/bin/new_script_creator.sh,new_script_creator.sh
 /home/matias/.scripts/next_album.xsh,/home/matias/.local/bin/next_album.xsh,next_album.xsh
