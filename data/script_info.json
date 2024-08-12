@@ -275,9 +275,9 @@
   "sync-repo.sh": {
     "file": "sync-repo.sh",
     "path": "sync-repo.sh",
-    "description": "A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates.",
+    "description": "A script to sync a local git repository with its remote counterpart.",
     "doc_path": "docs/scripts/sync-repo.sh.md",
-    "hash": "2ce6964438f1664679547c1619f57cdb14124fbfd1a802e20b379b0a396cf956"
+    "hash": "6c4d8c63aaeefbcfddea7b6497e65dd9df7a34688adb1cc7e80804be5e44445b"
   },
   "tmux-help.py": {
     "file": "tmux-help.py",

@@ -2,47 +2,49 @@
 
 ---
 
-**sync-repo.sh**: A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates.
+**sync-repo.sh**: A script to sync a local git repository with its remote counterpart.
 
 ---
 
 ### Dependencies
 
-- `git`: Essential for version control operations.
-- `bat`: A cat clone with syntax highlighting and Git integration, used for displaying commands and outputs prettily.
-- `glow`: A terminal-rendered Markdown viewer for prettier output.
+- `git`: Essential for version control; ensures manipulation of repositories.
+- `bat`: A tool for catting files with syntax highlighting; enhances output readability.
+- `glow`: A terminal-based Markdown viewer; improves display of formatted messages.
 
 ### Description
 
-This script automates the process of syncing a Git repository. It performs various tasks including fetching updates from a remote repository, checking for conflicts, stashing local changes, and applying those changes after a successful pull. 
+This script automates the process of syncing a local Git repository with its remote version. It includes functionality to handle conflicts that arise during the rebase process, providing an interactive method for resolving such issues. The script leverages two external tools—`bat` for enhanced output and `glow` for rendering Markdown-based messages—making the interaction terminal-friendly.
 
-Key functionalities include:
-
-- **Command Handling**: The script checks for the presence of dependencies (`bat` and `glow`) to enhance output formatting. If any are missing, it warns the user.
-- **Conflict Resolution**: Provides a user interface to resolve merge conflicts, allowing the user to either manually resolve, skip the commit, or abort the rebase.
-- **Visual Output**: Enhanced visual output is presented based on the availability of `bat` and `glow`, providing a user-friendly experience.
+The script performs the following key functions:
+- Checks if the necessary dependencies (`bat`, `glow`) are installed and sets corresponding flags.
+- Strips ANSI escape sequences for cleaner output when necessary.
+- Handles commands dynamically, providing formatted output using color coding and third-party tools.
+- Manages conflicts during rebase, allowing the user to choose different resolution strategies.
+- Displays a summary of changes made during the sync process.
 
 ### Usage
 
-Run the script from the terminal with the following syntax:
+To run this script, provide the path of the repository you want to sync as an argument. The script can be executed from any terminal instance:
 
 ```bash
 ./sync-repo.sh <repository_path>
 ```
 
-**Example Usage**:
-
+**Examples:**
 ```bash
-./sync-repo.sh ~/.scripts
+./sync-repo.sh ~/.scripts  # Syncs the repository located in ~/.scripts
+./sync-repo.sh $SCRIPTS    # Uses an environment variable to specify the path
 ```
 
-This command will sync the repository located at `~/.scripts`. If no repository path is provided, the script will show usage instructions.
-
-After fetching the latest changes and managing local modifications, it commits and pushes changes if there are any. 
-
-Finally, it displays a summary of the sync and returns to the original directory where the script was executed.
+The script also gracefully handles cases where there are:
+- No changes to pull from the remote repository.
+- Local uncommitted changes, prompting the user to manage them appropriately.
 
 ---
 
-> [!TIP]
-> This script is well-structured, but there is room for improvement. Implementing a logging mechanism for actions taken during execution could be beneficial for debugging. Additionally, enhancing error handling could provide clearer feedback to the user. Consider using more modular functions for better maintainability, especially for conflict management and summary reporting.
+> [!TIP]  
+> **Potential Improvements:** 
+> - Consider adding support for displaying commit messages in a more user-friendly format.
+> - Implement a notification system for successful syncs or errors that can integrate with desktop notifications.
+> - Logging the output of each command to a log file could help in debugging issues more efficiently in the future.

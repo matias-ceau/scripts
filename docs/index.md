@@ -42,7 +42,7 @@
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
-- [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a git repository, fetching changes, stashing local modifications, and pushing updates.*
+- [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a local git repository with its remote counterpart.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.*
 - [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *A script to toggle the picom compositor on and off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *Convert symlinks to copies of their target files or directories.*
