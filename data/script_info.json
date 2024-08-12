@@ -383,5 +383,19 @@
     "description": "Automates syncing of user directories to a backup location.",
     "doc_path": "docs/scripts/setting-up-syncs.sh.md",
     "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
+  },
+  "grub-tune-to-audio-python.py": {
+    "file": "grub-tune-to-audio-python.py",
+    "path": "grub-tune-to-audio-python.py",
+    "description": "Converts GRUB_INIT_TUNE strings into audio files.",
+    "doc_path": "docs/scripts/grub-tune-to-audio-python.py.md",
+    "hash": "373c4b6b30054ef2c6c703bef4facf5cbb42c5b029320253941e5fbaeaa2dcf1"
+  },
+  "install_dependencies.sh": {
+    "file": "install_dependencies.sh",
+    "path": "install_dependencies.sh",
+    "description": "Installs essential development and productivity tools on Arch Linux",
+    "doc_path": "docs/scripts/install_dependencies.sh.md",
+    "hash": "358eedb7ddfc5782dd201261f16edc27dbf82ac129124b8462870da83d1ba6cf"
   }
 }

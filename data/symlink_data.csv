@@ -19,7 +19,9 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/fzf_songlauncher.sh,/home/matias/.local/bin/fzf_songlauncher.sh,fzf_songlauncher.sh
 /home/matias/.scripts/get_repos_present_on_host.sh,/home/matias/.local/bin/get_repos_present_on_host.sh,get_repos_present_on_host.sh
 /home/matias/.scripts/git_clone_by_author-repo.sh,/home/matias/.local/bin/git_clone_by_author-repo.sh,git_clone_by_author-repo.sh
+/home/matias/.scripts/grub-tune-to-audio-python.py,/home/matias/.local/bin/grub-tune-to-audio-python.py,grub-tune-to-audio-python.py
 /home/matias/.scripts/improved-fzfmenu.sh,/home/matias/.local/bin/improved-fzfmenu.sh,improved-fzfmenu.sh
+/home/matias/.scripts/install_dependencies.sh,/home/matias/.local/bin/install_dependencies.sh,install_dependencies.sh
 /home/matias/.scripts/jupyter_new_notebook.xsh,/home/matias/.local/bin/jupyter_new_notebook.xsh,jupyter_new_notebook.xsh
 /home/matias/.scripts/launch_tmux_with_music_player.sh,/home/matias/.local/bin/launch_tmux_with_music_player.sh,launch_tmux_with_music_player.sh
 /home/matias/.scripts/list_process.sh,/home/matias/.local/bin/list_process.sh,list_process.sh

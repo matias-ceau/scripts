@@ -4,19 +4,24 @@
 
 <!-- llm_generated_output_start -->
 
-This repository contains a collection of various scripts aimed at enhancing productivity and managing files on an Arch Linux setup using the Qtile window manager. Each script is designed to cater to specific tasks, from music management to document handling, all while utilizing handy command-line tools and packages that align well with the Arch Linux philosophy.
+This repository contains a diverse set of Bash and Python scripts tailored for enhancing productivity, managing multimedia, and automating various tasks in an Arch Linux environment using a Qtile window manager. Each script is designed with simplicity and utility in mind, making them suitable for both seasoned users and those new to scripting.
 
-Firstly, the **music scripts** offer utilities to manage and play audio files efficiently. For instance, scripts such as [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh) and [albumplayer.xsh](docs/scripts/albumplayer.xsh) allow users to launch music players like `cmus` in a `tmux` session or randomly select albums for playback. The **midi and music-transfer utilities**, such as [midi2arch.xsh](docs/scripts/midi2arch.xsh) and [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py), enable users to transform MIDI input into keyboard shortcuts and manage music file transfers efficiently, showcasing versatility in handling audio workflows.
+Many scripts focus on **media management** and playback, such as [songlauncher.sh](docs/scripts/songlauncher.sh.md) and [albumplayer.xsh](docs/scripts/albumplayer.xsh.md), integrating with the console-based music player cmus. They leverage tools like `dmenu` or `fzf` to provide an interactive experience for selecting songs and albums from the user's library, enhancing ease of use. For users who enjoy aesthetic customization, scripts like [random_wallpapers.xsh](docs/scripts/random_wallpapers.xsh.md) and [wallpaper.sh](docs/scripts/wallpaper.sh.md) allow for the automatic setting of wallpapers from a predefined directory with easy selection options.
 
-The repository also features **document-related scripts** such as [vimwiki.sh](docs/scripts/vimwiki.sh) and [pdfopener.sh](docs/scripts/pdfopener.sh), which facilitate fast access and editing of text files and PDF documents. Moreover, tools like [create_cover_art.sh](docs/scripts/create_cover_art.sh) demonstrate how to derive visual elements from audio files, resulting in creative cover art generation derived from sound spectrograms.
+To streamline **workflow management**, scripts such as [update_env.xsh](docs/scripts/update_env.xsh.md) and [install_dependencies.sh](docs/scripts/install_dependencies.sh.md) simplify the tasks of managing environment variables and installing necessary packages respectively. These scripts are particularly useful for establishing a consistent development environment.
 
-Moreover, the repository contains **system management scripts**, including [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh), which helps maintain symbolic links for application scripts, and [toggle_picom.sh](docs/scripts/toggle_picom.sh), which efficiently manages compositing effects based on user needs. This is paired with scripts like [list_process.sh](docs/scripts/list_process.sh) to quickly check running services on the system.
+For **documentation generation**, tools like [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) and [chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md) utilize AI models to automate the tedious process of generating Markdown documentation for scripts. This is especially valuable in a development setup where keeping track of scripts and their functionalities is crucial.
 
-In terms of customization and environment handling, scripts such as [update_env.xsh](docs/scripts/update_env.xsh) assist in managing configuration files and environmental variables. Additionally, [chezmoi_on_a_new_system.sh](docs/scripts/chezmoi_on_a_new_system.sh) provides an automated solution for setting up dotfiles across machines, emphasizing the repository’s focus on improving user experience through automation.
+The repository also includes various utility scripts like [fix-markdown-links.sh](docs/scripts/fix-markdown-links.sh.md) which corrects link formatting in Markdown files, and [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) that assists in managing local Git repositories. 
 
-Furthermore, the repository integrates **fuzzy search capabilities** via scripts like [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh) and [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh), allowing users to seamlessly launch applications or select songs from a list of files, thus enhancing the interactivity of command-line operations.
+### Key Features:
+- **Interactive Interfaces**: Many scripts utilize `dmenu` and `fzf` for interactive selection, enhancing user experience.
+- **Task Automation**: Several scripts automate repetitive tasks like wallpaper management, music playback, and environment setup.
+- **Multimedia Handling**: Scripts are tailored for media management, allowing users to play songs, manage playlists, and adjust audio settings seamlessly.
+- **Documentation**: Tools are provided for generating and maintaining documentation for scripts, ensuring clarity and ease of use.
+- **Customization**: Users can easily bind scripts to key combinations within Qtile for quick access and greater efficiency in their workflows.
 
-Each script not only offers functional commands but also promotes efficient management of tasks while leveraging the flexibility of terminal operations. Overall, this collection serves as a valuable toolkit for users devoted to maintaining a streamlined and powerful Arch Linux environment alongside the Qtile window manager.
+Overall, this repository is a valuable asset for anyone looking to enhance their productivity and streamline their interaction with an Arch Linux setup using scripts that are easy to customize and integrate into their day-to-day tasks.
 
 <!-- llm_generated_output_end -->
 
@@ -48,7 +53,9 @@ Each script not only offers functional commands but also promotes efficient mana
 | [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) | A script to replace dmenu with fzf for running commands in a floating terminal. |
 | [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) | Script to list git repositories on the local host and save to files. |
 | [git_clone_by_author-repo.sh](docs/scripts/git_clone_by_author-repo.sh.md) | A script to clone git repositories based on developer/package name using various options. |
+| [grub-tune-to-audio-python.py](docs/scripts/grub-tune-to-audio-python.py.md) | Converts GRUB_INIT_TUNE strings into audio files. |
 | [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md) | A script to launch FZF in Alacritty with command-line arguments. |
+| [install_dependencies.sh](docs/scripts/install_dependencies.sh.md) | Installs essential development and productivity tools on Arch Linux |
 | [jupyter_new_notebook.xsh](docs/scripts/jupyter_new_notebook.xsh.md) | A script to create and open a new Jupyter notebook in Chromium |
 | [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) | Script to create a tmux session for running cmus |
 | [list_process.sh](docs/scripts/list_process.sh.md) | Script to list all running services on the system in sorted order. |

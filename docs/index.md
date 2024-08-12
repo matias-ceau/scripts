@@ -17,7 +17,9 @@
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A script to replace dmenu with fzf for running commands in a floating terminal.*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list git repositories on the local host and save to files.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script to clone git repositories based on developer/package name using various options.*
+- [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Converts GRUB_INIT_TUNE strings into audio files.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to launch FZF in Alacritty with command-line arguments.*
+- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs essential development and productivity tools on Arch Linux*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *A script to create and open a new Jupyter notebook in Chromium*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a tmux session for running cmus*
 - [list_process.sh](scripts/list_process.sh.md) -- *Script to list all running services on the system in sorted order.*
