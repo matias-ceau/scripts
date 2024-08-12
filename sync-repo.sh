@@ -53,8 +53,13 @@ handle_error() {
 
 # Function to print usage
 print_usage() {
-    echo -e "${YELLOW}Usage: $0 <repository_path>${RESET}"
-    echo -e "Example: $0 ~/.scripts"
+    cmd_name="$(basename "$0")"
+    echo -e "\n${YELLOW}USAGE:${RESET}"
+    echo -e "    ${RED}./$cmd_name${RESET}  ${BOLD}<repository_path>${RESET}\n"
+    echo -e "${YELLOW}EXAMPLES:${RESET}"
+    echo -e "    ${RED}$cmd_name${RESET}  ~/.scripts  ---  (if in path)"
+    echo -e "    ${RED}$cmd_name${RESET}  ${GREEN}\$SCRIPTS${RESET}    ---  (if var is set)"
+    echo -e "    ${BLUE}git_sync      ${GREEN}\$SCRIPTS${RESET}    ---  (if alias is set)"
 }
 
 # Function to print formatted message
@@ -108,11 +113,12 @@ handle_conflicts() {
 
 # Function to display sync summary
 display_summary() {
+    echo
+    print_glow '## Sync summary'
     local changes=$(git diff --stat @{1} 2>/dev/null)
     if [ -n "$changes" ]; then
-        echo -e "\n${BOLD}Sync Summary:${RESET}"
-        echo -e "${changes}"
-        echo -e "\nTotal: $(echo "$changes" | tail -n 1)"
+        echo "Current commit: $(git show -s --format=%ci HEAD) (Previous: $(git show -s --format=%ci HEAD^)"
+        git diff --stat HEAD^
     else
         echo -e "\n${BOLD}No changes were made during this sync.${RESET}"
     fi
