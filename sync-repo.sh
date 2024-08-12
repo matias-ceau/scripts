@@ -116,8 +116,10 @@ display_summary() {
     print_glow '# Git log'
     local changes=$(git diff --stat @{1} 2>/dev/null)
     if [ -n "$changes" ]; then
+        echo "                $(date +"%Y-%m-%d %H:%M:%S %z")"
         echo "Current commit: $(git show -s --format=%ci HEAD)"
         echo "  Previous one: $(git show -s --format=%ci HEAD^)"
+        echo "Last changes"
         git diff --stat HEAD^
     else
         echo -e "\n${BOLD}No changes were made during this sync.${RESET}"
