@@ -113,11 +113,11 @@ handle_conflicts() {
 
 # Function to display sync summary
 display_summary() {
-    echo
-    print_glow '## Sync summary'
+    print_glow '# Git log'
     local changes=$(git diff --stat @{1} 2>/dev/null)
     if [ -n "$changes" ]; then
-        echo "Current commit: $(git show -s --format=%ci HEAD) (Previous: $(git show -s --format=%ci HEAD^)"
+        echo "Current commit: $(git show -s --format=%ci HEAD)"
+        echo "  Previous one: $(git show -s --format=%ci HEAD^)"
         git diff --stat HEAD^
     else
         echo -e "\n${BOLD}No changes were made during this sync.${RESET}"
