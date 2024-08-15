@@ -1,4 +1,4 @@
-# Floating Terminal with Command 
+# Terminal with Command
 
 ---
 
@@ -8,33 +8,35 @@
 
 ### Dependencies
 
-- `alacritty`: A terminal emulator that supports floating windows; ensure it is installed and configured.
-
+- `alacritty`: A GPU-accelerated terminal emulator that must be installed for this script to run.
+  
 ### Description
 
-This script is designed to launch a floating terminal window using `alacritty`, allowing the user to run a specified command while also keeping the shell open for further interaction. When passed a command as an argument, the script first resolves the command's path using `which`, and then opens `alacritty` with that command. The shell will remain open after the command is executed, enabling users to inspect the output and run additional commands as needed.
+This script allows users to open a floating terminal window that executes a specified command, displaying its output interactively. The terminal window is created using `alacritty`, which provides a lightweight and performant interface.
 
-The key components of the script are:
-- **Command Retrieval**: It utilizes the `which` command to retrieve the full path of the input command, ensuring the terminal can execute it correctly.
-- **Floating Window**: The `-T 'floating'` option designates the terminal as a floating window, which is particularly useful in window managers like `qtile` for better workspace management.
+The script leverages the `setsid` command to start a new session for the terminal window, ensuring that it runs independently of any terminal that might have launched it. The command to be executed is fetched using the `which` command to resolve the full path of the executable.
+
+The terminal is titled "floating" and executes the provided command in a new bash instance. After the command finishes executing, the shell remains open, allowing users to interact further within that terminal session.
 
 ### Usage
 
-To use this script, you must provide the command you wish to run as an argument. The script is executed from a terminal or can be bound to a key in `qtile`.
-
-Here’s a simple example of how to use the script:
+To use the script, simply run it from the terminal and provide the desired command as an argument. 
 
 ```bash
-./terminal_with_command.sh your_command
+./terminal_with_command.sh <command>
 ```
 
-Replace `your_command` with the command you want to run in a floating terminal. For instance, to open a floating terminal running `htop`, you would execute:
+Example:
 
 ```bash
-./terminal_with_command.sh htop
+./terminal_with_command.sh nano /path/to/file.txt
 ```
+
+In this example, a floating terminal will open running `nano` to edit `file.txt`. After exiting `nano`, the terminal will remain open.
+
+You can also bind this script to a key in your window manager (e.g., qtile) for quicker access to commonly used commands.
 
 ---
 
-> [!TIP]
-> The script does not handle errors that could arise if the specified command does not exist or is not executable. You might consider adding checks to provide user feedback in such cases, enhancing the user experience. For instance, implementing a conditional to verify if `cmd` is empty before attempting to open `alacritty` would prevent accidental runtime errors.
+> [!TIP]  
+> The script currently does not handle cases where the command provided does not exist or is not executable. Adding error handling to inform the user if the command cannot be found or executed would greatly enhance user experience. Additionally, consider making the terminal's title dynamic, reflecting the command being executed.

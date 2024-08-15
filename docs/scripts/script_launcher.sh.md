@@ -1,47 +1,56 @@
-# Script Launcher for FZF
+# Script Launcher
 
 ---
 
-**script_launcher.sh**: Launch scripts interactively with fzf, featuring live previews.
+**script_launcher.sh**: A script to launch other scripts with fzf and documentation previews.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder.
-- `bat`: A command-line tool for viewing files with syntax highlighting and Git integration.
-- `improved-fzfmenu.sh`: A custom script that enhances fzf functionality.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `fzf`: A command-line fuzzy finder to help select scripts visually.
+- `bat`: A modern alternative to `cat` for displaying files with syntax highlighting.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `improved-fzfmenu.sh`: A custom script to enhance fzf functionality.
 
 ### Description
 
-The `script_launcher.sh` script is designed to facilitate the interactive execution of scripts in a user-friendly manner using **fzf** (fuzzy finder). By leveraging `fd` to find scripts in the specified directory, this script allows users to search, preview, and execute scripts with several convenient keybindings.
+The `script_launcher.sh` script allows users to run various scripts stored in a designated directory using a fuzzy finder interface provided by `fzf`. This script enhances the user experience by providing previews of either documentation or source code.
 
-Here is how the script operates:
-- It defines two preview commands using `bat`: one for displaying documentation in Markdown (`preview_cmd_docs`), and another for presenting the source code (`preview_cmd_source`). 
-- Using `fd`, it lists all executable scripts within the `$SCRIPTS` directory and pipes the result to the custom script `improved-fzfmenu.sh`.
+Key features include:
 
-Key functionalities are controlled through several keybindings:
-- **Enter**: Executes the selected script directly in the current terminal session.
-- **Alt + Enter**: Runs the selected script in a new terminal using a custom script.
-- **Alt + E**: Opens the script in `nvim` (Neovim) for editing.
-- **Insert**: Launches the script in a new terminal with Neovim.
-- **Alt + S / Alt + D**: Switches between documentation and source-preview modes.
+- **Previewing**: The script uses `bat` for displaying the contents of script files in a user-friendly format. Depending on the user's selection, the documentation (`*.md` files) or source code can be previewed.
+  
+- **Dynamic Keybindings**: Users can utilize various keybindings to perform different actions:
+  - **Enter**: Run the selected script.
+  - **Alt + Enter**: Execute the script in a new terminal.
+  - **Alt + E**: Open the source of the script in `nvim`.
+  - **Alt + S**: Change the preview to the script's source.
+  - **Alt + D**: Switch back to the documentation preview.
+  
+By leveraging `fd`, the script dynamically builds a list of scripts from a specified `$SCRIPTS` directory. 
 
 ### Usage
 
-To use the `script_launcher.sh`, simply run the script from your terminal. Ensure that your environment variable `$SCRIPTS` is set to your scripts directory containing the executables.
+To use this script:
+
+1. Ensure your scripts are located in the directory specified by the `$SCRIPTS` environment variable.
+2. Run the script from your terminal:
 
 ```bash
 bash /home/matias/.scripts/script_launcher.sh
 ```
 
-Once the fzf interface appears, type to filter the list of scripts. Use the defined keybindings for specific actions:
-- Press **Enter** to run the script.
-- Press **Alt + E** to edit it in Neovim.
-- Use **Alt + S** and **Alt + D** to toggle between source and documentation previews.
+3. Navigate through the list of scripts using arrow keys.
+4. Use the defined keybindings for actions:
+   - Press `Enter` to run the selected script.
+   - Press `Alt + Enter` to open it in a new terminal.
+   - Press `Alt + E` to edit the script.
+   - Use `Alt + S` and `Alt + D` to toggle between documentation and source previews.
+
+Make sure to have the required dependencies installed for optimal functionality.
 
 ---
 
-> [!TIP]  
-> Consider adding more user-friendly error handling (e.g., checking if the dependencies are installed) along with more detailed documentation about the `improved-fzfmenu.sh` functionalities. Implementing the TODO of rendering a PDF/HTML of documentation could significantly enhance the script's utility.
+> [!TIP] 
+> The script currently lacks a feature to render documentation in PDF or HTML format, which could enhance usability for users who prefer reading documentation in those formats. Implementing such a feature could greatly improve the value of the script. Additionally, handle cases where the `$SCRIPTS` directory is empty or contains no valid script files for better user feedback.

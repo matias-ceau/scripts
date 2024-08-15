@@ -32,7 +32,7 @@
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
-- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim.*
+- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim*
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to select and open an Obsidian vault from a specified directory.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
@@ -42,8 +42,9 @@
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Quickly select a password from your password store using fzf.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Select random album and play it with cmus*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified folder.*
+- [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to display the most researched manual entries based on history.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Launch scripts interactively with fzf, featuring live previews.*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script to launch other scripts with fzf and documentation previews.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
