@@ -44,6 +44,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/quick-pass.sh,/home/matias/.local/bin/quick-pass.sh,quick-pass.sh
 /home/matias/.scripts/random_album.xsh,/home/matias/.local/bin/random_album.xsh,random_album.xsh
 /home/matias/.scripts/random_wallpapers.xsh,/home/matias/.local/bin/random_wallpapers.xsh,random_wallpapers.xsh
+/home/matias/.scripts/read_the_fucking_manual.sh,/home/matias/.local/bin/read_the_fucking_manual.sh,read_the_fucking_manual.sh
 /home/matias/.scripts/sandisk_music_transfert.py,/home/matias/.local/bin/sandisk_music_transfert.py,sandisk_music_transfert.py
 /home/matias/.scripts/script_launcher.sh,/home/matias/.local/bin/script_launcher.sh,script_launcher.sh
 /home/matias/.scripts/bin/select_script,/home/matias/.local/bin/select_script,select_script

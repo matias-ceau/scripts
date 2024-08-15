@@ -21,8 +21,8 @@ fd . -tx --format '{/}' "$SCRIPTS" |
 		--bind "enter:become(bash -c {})" \
 		--bind "alt-enter:execute($SCRIPTS/terminal_with_command.sh {})" \
 		--bind "alt-e:become(nvim \$(which {}))" \
-		--bind "insert:execute($SCRIPTS/nvim_in_new_terminal.sh \$(which {}))" \
-		--header '<A-E> →- edit' \
+		--bind "alt-E:execute($SCRIPTS/nvim_in_new_terminal.sh \$(which {}))" \
+		--header "\033[31m<A-E>\033[0m →- edit" \
 		--header-first \
 		--preview-label 'DOC (<A-s>: source)' \
 		--bind "alt-s:change-preview@$preview_cmd_source@+change-preview-label('SOURCE (<A-d>: doc)')" \
