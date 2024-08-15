@@ -13,12 +13,12 @@
 - [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Generate a color palette with hex, RGB values, and names for quick reference.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose and play an album using fzf and cmus*
-- [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A wrapper script to launch fzf in a terminal for menu selection.*
-- [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A script to replace dmenu with fzf for running commands in a floating terminal.*
+- [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *Launches fzf in an xterm window using provided arguments.*
+- [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A script to replace Dmenu with fzf for enhanced run functionality.*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list git repositories on the local host and save to files.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script to clone git repositories based on developer/package name using various options.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Converts GRUB_INIT_TUNE strings into audio files.*
-- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to launch FZF in Alacritty with command-line arguments.*
+- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to invoke fzf in Alacritty terminal with argument handling*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs essential development and productivity tools on Arch Linux*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *A script to create and open a new Jupyter notebook in Chromium*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a tmux session for running cmus*
@@ -27,10 +27,13 @@
 - [llm-script-describer.py](cripts/llm-script-describer.py.md) -- *Generates markdown documentation for user scripts using GPT-4.*
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Generate an M3U playlist file from the current directory files.*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
+- [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches the MEGA command line interface in a new tmux session.*
 - [megaignore_editor.sh](scripts/megaignore_editor.sh.md) -- *A bash script for editing and managing .megaignore files interactively*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
+- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim.*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to select and open an Obsidian vault from a specified directory.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
@@ -38,18 +41,19 @@
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A tool to reduce color depth in PPM images based on a given palette.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Quickly select a password from your password store using fzf.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Select random album and play it with cmus*
-- [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified directory*
+- [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified folder.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *A utility to run scripts with fzf and preview documentation.*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Launch scripts interactively with fzf, featuring live previews.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a local git repository with its remote counterpart.*
+- [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a command and see the output.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.*
-- [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *A script to toggle the picom compositor on and off.*
+- [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Script to toggle the Picom compositor on and off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *Convert symlinks to copies of their target files or directories.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *update_env.xsh - Update .env file with API keys from xonsh environment*
-- [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Automates the creation and management of symlinks in ~/.local/bin*
+- [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Create and maintain symbolic links in ~/.local/bin.*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in vim using fzf for quick selection.*
 - [vox.py](scripts/vox.py.md) -- *A Python script to list and describe Vox amp options in a formatted manner.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Automatically change wallpapers from a specified collection.*

@@ -69,7 +69,7 @@ add_symlinks_to_csv() {
             fi
         fi
     done
-    bat -lcsv "$DATA_FILE"
+    bat --no-pager -lcsv "$DATA_FILE"
 }
 
 # Run functions

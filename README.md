@@ -24,6 +24,20 @@ The repository is structured to allow the user to easily navigate through utilit
 
 Overall, this collection reflects a thoughtful approach to script organization and utility integration, tailored for maximum efficiency in a highly customizable Arch Linux environment equipped with the Qtile window manager. Check out the documentation for individual scripts to explore their specific capabilities and usage guidelines.
 
+### Key Features
+
+- **Dependencies**: Each script typically has a defined set of dependencies such as `fzf`, `bat`, or `dmenu`, which enhances their usability and performance. Users must ensure these utilities are installed for the scripts to function properly.
+
+- **Interactive Modes**: Many scripts utilize interactive utilities like `fzf` or `dmenu`, allowing a more user-friendly experience when selecting options or files.
+
+- **Error Handling and Notifications**: Some scripts include error handling mechanisms and desktop notifications leveraging `notify-send`, improving user engagement by providing feedback on operations.
+
+- **Convenient Keybindings**: The repository encourages users to bind scripts to key combinations in their Qtile configuration, streamlining workflow processes and making commands accessible with a simple press of a key.
+
+### Conclusion
+
+In summary, this repository is a comprehensive collection of scripts tailored for enhancing productivity on Arch Linux with Qtile as the window manager. Users can automate mundane tasks, efficiently manage their multimedia library, and ensure their system is well-maintained through this robust suite of tools. Expanding upon existing features, integrating user feedback for error handling, and enhancing interface options are some ongoing threads to consider for future improvements.
+
 <!-- llm_generated_output_end -->
 
 *Note: This section was entirely generated with gpt-4o-mini*
@@ -50,12 +64,12 @@ Overall, this collection reflects a thoughtful approach to script organization a
 | [flexoki_show.sh](docs/scripts/flexoki_show.sh.md) | Generate a color palette with hex, RGB values, and names for quick reference. |
 | [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) | Choose and play an album using fzf and cmus |
 | [fzf_songlauncher.sh](docs/scripts/fzf_songlauncher.sh.md) | Play a song with cmus using fzf to choose the file. |
-| [fzfmenu.sh](docs/scripts/fzfmenu.sh.md) | A wrapper script to launch fzf in a terminal for menu selection. |
-| [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) | A script to replace dmenu with fzf for running commands in a floating terminal. |
+| [fzfmenu.sh](docs/scripts/fzfmenu.sh.md) | Launches fzf in an xterm window using provided arguments. |
+| [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) | A script to replace Dmenu with fzf for enhanced run functionality. |
 | [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) | Script to list git repositories on the local host and save to files. |
 | [git_clone_by_author-repo.sh](docs/scripts/git_clone_by_author-repo.sh.md) | A script to clone git repositories based on developer/package name using various options. |
 | [grub-tune-to-audio-python.py](docs/scripts/grub-tune-to-audio-python.py.md) | Converts GRUB_INIT_TUNE strings into audio files. |
-| [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md) | A script to launch FZF in Alacritty with command-line arguments. |
+| [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md) | A script to invoke fzf in Alacritty terminal with argument handling |
 | [install_dependencies.sh](docs/scripts/install_dependencies.sh.md) | Installs essential development and productivity tools on Arch Linux |
 | [jupyter_new_notebook.xsh](docs/scripts/jupyter_new_notebook.xsh.md) | A script to create and open a new Jupyter notebook in Chromium |
 | [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) | Script to create a tmux session for running cmus |
@@ -64,10 +78,13 @@ Overall, this collection reflects a thoughtful approach to script organization a
 | [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) | Generates markdown documentation for user scripts using GPT-4. |
 | [m3u_creator.sh](docs/scripts/m3u_creator.sh.md) | Generate an M3U playlist file from the current directory files. |
 | [mechen_music_transfert.py](docs/scripts/mechen_music_transfert.py.md) | Custom script to copy music to Mechen |
+| [megacmd_launch_tmux.sh](docs/scripts/megacmd_launch_tmux.sh.md) | Launches the MEGA command line interface in a new tmux session. |
 | [megaignore_editor.sh](docs/scripts/megaignore_editor.sh.md) | A bash script for editing and managing .megaignore files interactively |
 | [midi2arch.xsh](docs/scripts/midi2arch.xsh.md) | A script to transform a MIDI controller into a keyboard/script launcher |
 | [new_script_creator.sh](docs/scripts/new_script_creator.sh.md) | A simple script to create new scripts with directory linking |
 | [next_album.xsh](docs/scripts/next_album.xsh.md) | Skip to the next album in CMUS audio player |
+| [nvim_in_new_terminal.sh](docs/scripts/nvim_in_new_terminal.sh.md) | Opens a floating terminal to edit a file with nvim. |
+| [obsidian-vault-selector.sh](docs/scripts/obsidian-vault-selector.sh.md) | A script to select and open an Obsidian vault from a specified directory. |
 | [obsidian.xsh](docs/scripts/obsidian.xsh.md) | Open any Obsidian vault from a user-defined directory |
 | [pdfopener.sh](docs/scripts/pdfopener.sh.md) | A script to pick and open a PDF file using Evince |
 | [playlist_player.xsh](docs/scripts/playlist_player.xsh.md) | A script for selecting and playing playlists in cmus with dmenu. |
@@ -75,18 +92,19 @@ Overall, this collection reflects a thoughtful approach to script organization a
 | [ppm-color-reducer](docs/scripts/ppm-color-reducer.md) | A tool to reduce color depth in PPM images based on a given palette. |
 | [quick-pass.sh](docs/scripts/quick-pass.sh.md) | Quickly select a password from your password store using fzf. |
 | [random_album.xsh](docs/scripts/random_album.xsh.md) | Select random album and play it with cmus |
-| [random_wallpapers.xsh](docs/scripts/random_wallpapers.xsh.md) | Pick a random wallpaper from a specified directory |
+| [random_wallpapers.xsh](docs/scripts/random_wallpapers.xsh.md) | Pick a random wallpaper from a specified folder. |
 | [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md) | Python script to transfer music to a Sandisk media player from a local library. |
-| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | A utility to run scripts with fzf and preview documentation. |
+| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | Launch scripts interactively with fzf, featuring live previews. |
 | [select_script](docs/scripts/select_script.md) | A C script for selecting and executing a script from a cached list. |
 | [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) | Automates syncing of user directories to a backup location. |
 | [songlauncher.sh](docs/scripts/songlauncher.sh.md) | Play a song with cmus using dmenu |
 | [sync-repo.sh](docs/scripts/sync-repo.sh.md) | A script to sync a local git repository with its remote counterpart. |
+| [terminal_with_command.sh](docs/scripts/terminal_with_command.sh.md) | Opens a floating terminal to run a command and see the output. |
 | [tmux-help.py](docs/scripts/tmux-help.py.md) | tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands. |
-| [toggle_picom.sh](docs/scripts/toggle_picom.sh.md) | A script to toggle the picom compositor on and off. |
+| [toggle_picom.sh](docs/scripts/toggle_picom.sh.md) | Script to toggle the Picom compositor on and off. |
 | [transform_symlink.sh](docs/scripts/transform_symlink.sh.md) | Convert symlinks to copies of their target files or directories. |
 | [update_env.xsh](docs/scripts/update_env.xsh.md) | update_env.xsh - Update .env file with API keys from xonsh environment |
-| [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md) | Automates the creation and management of symlinks in ~/.local/bin |
+| [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md) | Create and maintain symbolic links in ~/.local/bin. |
 | [vimwiki.sh](docs/scripts/vimwiki.sh.md) | Open a note in vim using fzf for quick selection. |
 | [vox.py](docs/scripts/vox.py.md) | A Python script to list and describe Vox amp options in a formatted manner. |
 | [wallpaper.sh](docs/scripts/wallpaper.sh.md) | Automatically change wallpapers from a specified collection. |

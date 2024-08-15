@@ -1,47 +1,44 @@
-# FZF Menu Run
+# FZF Menu Run Replacement
 
 ---
 
-**[fzfmenu_run.sh](/fzfmenu_run.sh)**: A script to replace dmenu with fzf for running commands in a floating terminal.
+**fzfmenu_run.sh**: A script to replace Dmenu with fzf for enhanced run functionality.
 
 ---
 
 ### Dependencies
 
-- `dmenu`: A dynamic menu for X11, often used for launching applications.
-- `fzf`: A command-line fuzzy finder that allows you to search and select from a list.
-- `st`: Simple Terminal, a simple terminal emulator.
+- `dmenu`: A dynamic menu for X, used to present options to the user.
+- `fzf`: A command-line fuzzy finder which allows you to search through a list interactively.
+- `xargs`: A command that builds and executes command lines from standard input.
 
 ### Description
 
-This script provides a replacement for `dmenu` by leveraging `fzf` for a more interactive and visually appealing command execution experience. When executed, the script constructs a list of available commands using `dmenu_path`, which outputs the standard commands available in the user's environment.
+This script serves as a run dialog replacement using `fzf` instead of `dmenu`. It presents a list of available commands and applications in your system, allowing users to interactively filter, select, and execute them in a floating `xterm` terminal.
 
-The output is then piped into `fzfmenu.sh`, a helper script (presumably your custom fzf interface), allowing users to interactively select their desired command. Once a command is selected, it is executed in a new instance of the `st` terminal, enhancing user convenience by creating a floating terminal window where the command runs.
+Here's how the script operates:
 
-This approach not only makes executing commands easier but also provides a more aesthetically pleasing experience than traditional menus.
+1. It retrieves a list of commands from `dmenu_path`, which provides a list of installed applications.
+2. The list is piped into `fzfmenu.sh`, which utilizes `fzf` to allow for interactive search and selection.
+3. Once an item is selected, `xargs` is used to pass the selected command to `bash -c`, executing it in the background.
+
+This combination enhances user experience by offering a powerful and flexible way to run commands directly from a terminal interface.
 
 ### Usage
 
-To use this script, you can execute it from your terminal or assign it to a keybinding within your window manager (Qtile) configuration. Here’s how you might run this script directly from the terminal:
+To use the script, simply execute it from your terminal. 
 
 ```bash
 /home/matias/.scripts/fzfmenu_run.sh
 ```
 
-For setting it to a keybinding in Qtile, you can modify your `config.py` file like so:
+Alternatively, you may want to bind this script to a key in your window manager for quick access. For example, in `qtile`, you could add the following to your configuration:
 
 ```python
-from libqtile.config import Key
-from libqtile.command import lazy
-
-keys = [
-    Key([mod], "r", lazy.spawn("/home/matias/.scripts/fzfmenu_run.sh")),  # Replace mod with your modifier key
-]
+Key([mod], "r", lazy.spawn("/home/matias/.scripts/fzfmenu_run.sh")),
 ```
-
-Upon running the script, a floating terminal will appear containing the fzf interface. Type to filter through the commands, select one, and hit enter to execute it.
 
 ---
 
-> [!TIP] 
-> While this script effectively enhances the command execution experience, consider adding error handling to check whether the required dependencies (`dmenu`, `fzf`, and `st`) are installed. This can make the script more robust and user-friendly by providing meaningful error messages to the user. Additionally, including a preview of the command before execution could increase usability.
+> [!TIP]  
+> The script currently runs in the background and does not display any error messages if a command fails. Consider adding error handling to alert the user of any issues. Additionally, `fzfmenu.sh` might require its own documentation to clarify its role and setup.

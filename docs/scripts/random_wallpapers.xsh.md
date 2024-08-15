@@ -2,48 +2,53 @@
 
 ---
 
-**[random_wallpapers.xsh](/random_wallpapers.xsh)**: Pick a random wallpaper from a specified directory
+**random_wallpapers.xsh**: Pick a random wallpaper from a specified folder.
 
 ---
 
 ### Dependencies
 
-- `feh`: A lightweight image viewer that can set desktop wallpapers. Ensure it is installed to apply the selected wallpaper.
-- `xonsh`: A Python-powered shell that combines the capabilities of Python with a shell interface.
+- `feh`: A lightweight image viewer that is used to set the desktop background. Ensure it's installed to use this script.
+- `xonsh`: An enhanced shell that allows for Python-like syntax. This is required to run the script.
 
 ### Description
 
-This script is designed to randomly select a wallpaper from a specified directory containing images (either .png or .jpg formats) and set it as the desktop background using the `feh` image viewer. 
+This script is designed to select a random wallpaper from a predefined folder containing image files (PNG or JPG). It utilizes the `os` and `random` modules from Python to facilitate file handling and selection.
 
-The script begins by importing necessary libraries (`os` and `random`). It specifies the wallpaper directory:
-```python
-folder = '/home/matias/./wallpapers'
-```
-It then generates a list of all image files in that directory, filtering only for files that end in `.png` or `.jpg`. 
+Here's how it works:
+1. **Folder Definition**: The path to the wallpaper directory is defined (`/home/matias/.wallpapers`).
+2. **Wallpaper List Creation**: The script lists all files in the specified folder, filtering for those that end with `.png` or `.jpg`.
+3. **Random Selection**: It then randomly selects one of the available wallpapers.
+4. **Background Setting**: Finally, the script uses `feh` to set the selected wallpaper as the desktop background with a scale fit.
 
-```python
-wallpapers = [i for i in os.listdir(folder) if i[-3:]=='png' or i[-3:]=='jpg']
-```
-The script currently includes commented-out code for using `dmenu` to allow user selection, but defaults to a random selection from the filtered list:
-```python
-selection = random.choice(wallpapers)
-```
-Finally, it applies the chosen wallpaper using `feh` with the `--bg-scale` option, which scales the image to fit the screen.
+Notably, there's a commented-out section that suggests an alternative method for selecting a wallpaper using `dmenu`. This could be used for interactive selection if desired.
 
 ### Usage
 
-To run this script, simply execute it within the terminal or bind it to a key in your window manager, qtile, for quicker access. Here’s how to execute it:
+To use the script, ensure all dependencies are installed and execute it in a terminal or assign it to a keybinding in your window manager. An example command to run the script is:
+
 ```bash
-chmod +x /home/matias/.scripts/random_wallpapers.xsh  # Make the script executable
-/home/matias/.scripts/random_wallpapers.xsh           # Run the script to change the wallpaper
+~/path/to/random_wallpapers.xsh
 ```
 
-To bind it in qtile, you can add the following line to your config:
+#### Keybinding Example for Qtile
+
+You can easily add a keybinding in your `qtile` config to run this script. For example:
+
 ```python
-Key([mod], "w", lazy.spawn("/home/matias/.scripts/random_wallpapers.xsh")),
+from libqtile.config import Key
+from libqtile.lazy import lazy
+
+keys = [
+    Key([mod], "r", lazy.spawn("~/path/to/random_wallpapers.xsh")),
+]
 ```
 
 ---
 
-> [!TIP]  
-> Consider implementing error handling in case the wallpaper directory is empty or if `feh` fails to set the wallpaper. You could also include options to allow for different image formats without hardcoding the file extensions, and potentially include a feature to exclude currently set wallpapers from the selection. This would enhance usability and robustness.
+> [!TIP]
+> This script works well but could benefit from a few improvements:
+> - The ability to support a broader range of image formats (e.g., `.jpeg`, `.gif`).
+> - Implement error handling in case the specified directory contains no images or if `feh` fails to execute.
+> - Consider enabling user selection through `dmenu` or another utility to improve interactivity.
+> - Make the wallpaper folder configurable through a command-line argument to enhance usability across different setups.

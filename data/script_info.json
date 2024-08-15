@@ -93,16 +93,16 @@
   "fzfmenu_run.sh": {
     "file": "fzfmenu_run.sh",
     "path": "fzfmenu_run.sh",
-    "description": "A script to replace dmenu with fzf for running commands in a floating terminal.",
+    "description": "A script to replace Dmenu with fzf for enhanced run functionality.",
     "doc_path": "docs/scripts/fzfmenu_run.sh.md",
-    "hash": "ee19e238a7b83fc3fa072b03ef67945611e6f48997b87fa751d3e35af2e98dc7"
+    "hash": "cef5b8615ff29142c2fcab588cbeea3d6c632dd437860936a84c377df8f410a4"
   },
   "fzfmenu.sh": {
     "file": "fzfmenu.sh",
     "path": "fzfmenu.sh",
-    "description": "A wrapper script to launch fzf in a terminal for menu selection.",
+    "description": "Launches fzf in an xterm window using provided arguments.",
     "doc_path": "docs/scripts/fzfmenu.sh.md",
-    "hash": "7b4ce71cfff6670c83619f2ab93ae7d1b4fe26f2e12588a672a429fd17bae1bc"
+    "hash": "183e791947e3e39cf2f564708652a76628507e1a9f940836252bd04d45bdea40"
   },
   "fzf_songlauncher.sh": {
     "file": "fzf_songlauncher.sh",
@@ -128,9 +128,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "improved-fzfmenu.sh",
-    "description": "A script to launch FZF in Alacritty with command-line arguments.",
+    "description": "A script to invoke fzf in Alacritty terminal with argument handling",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "a88edbdb2de0c20f98fdfd7c1b1027d3c489806f110f4c826fd604aa48b25ff5"
+    "hash": "6ce66601743ab835c951e995ba88656c8843f07fb48c2a1728175363099e7e58"
   },
   "jupyter_new_notebook.xsh": {
     "file": "jupyter_new_notebook.xsh",
@@ -240,9 +240,9 @@
   "random_wallpapers.xsh": {
     "file": "random_wallpapers.xsh",
     "path": "random_wallpapers.xsh",
-    "description": "Pick a random wallpaper from a specified directory",
+    "description": "Pick a random wallpaper from a specified folder.",
     "doc_path": "docs/scripts/random_wallpapers.xsh.md",
-    "hash": "9f6a91d4b76b51fffb3b1654b3c781eb54cd104161c737d98362012b3392e965"
+    "hash": "5181e4ee38c910c498c2e8d3bf0ad624b7dafe125dfd6c10586cece88486f227"
   },
   "sandisk_music_transfert.py": {
     "file": "sandisk_music_transfert.py",
@@ -254,9 +254,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "A utility to run scripts with fzf and preview documentation.",
+    "description": "Launch scripts interactively with fzf, featuring live previews.",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "41db98dcbfabacc4a1ef842a1fac948656292c867bc767f39985887188500734"
+    "hash": "122a2d5b42070f576574ba7c3444228f5df7c0c123665e90c0ccf744f2c9379f"
   },
   "select_script": {
     "file": "select_script",
@@ -289,9 +289,9 @@
   "toggle_picom.sh": {
     "file": "toggle_picom.sh",
     "path": "toggle_picom.sh",
-    "description": "A script to toggle the picom compositor on and off.",
+    "description": "Script to toggle the Picom compositor on and off.",
     "doc_path": "docs/scripts/toggle_picom.sh.md",
-    "hash": "f7662380954d62ccdf4455c7ae968aed42d4c1e54ca9ee13606ae24b86747e67"
+    "hash": "79a36619b1e24601df35b6ce4931f142b29855efb7ece055acb83f089d4b1700"
   },
   "transform_symlink.sh": {
     "file": "transform_symlink.sh",
@@ -310,9 +310,9 @@
   "utils_update_symlinks.sh": {
     "file": "utils_update_symlinks.sh",
     "path": "sys/utils_update_symlinks.sh",
-    "description": "Automates the creation and management of symlinks in ~/.local/bin",
+    "description": "Create and maintain symbolic links in ~/.local/bin.",
     "doc_path": "docs/scripts/utils_update_symlinks.sh.md",
-    "hash": "c003ed12fd3b9ad79449788aadb2831a4a237b972f4ebe2ebf55067a4579260c"
+    "hash": "b5066c456d311593adac63cc5e3bd47cbb372ee21f290c76f402b0962b367113"
   },
   "vimwiki.sh": {
     "file": "vimwiki.sh",
@@ -397,5 +397,33 @@
     "description": "Installs essential development and productivity tools on Arch Linux",
     "doc_path": "docs/scripts/install_dependencies.sh.md",
     "hash": "358eedb7ddfc5782dd201261f16edc27dbf82ac129124b8462870da83d1ba6cf"
+  },
+  "megacmd_launch_tmux.sh": {
+    "file": "megacmd_launch_tmux.sh",
+    "path": "megacmd_launch_tmux.sh",
+    "description": "Launches the MEGA command line interface in a new tmux session.",
+    "doc_path": "docs/scripts/megacmd_launch_tmux.sh.md",
+    "hash": "ce8895fffb7a381655495efa1415e582a452c5a8b6ec1a1224ed8ab78f6cb9c0"
+  },
+  "nvim_in_new_terminal.sh": {
+    "file": "nvim_in_new_terminal.sh",
+    "path": "nvim_in_new_terminal.sh",
+    "description": "Opens a floating terminal to edit a file with nvim.",
+    "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
+    "hash": "4f3976d40925c3f90382d854586476c587145f5c5f78de4ba9d64d480548541b"
+  },
+  "obsidian-vault-selector.sh": {
+    "file": "obsidian-vault-selector.sh",
+    "path": "obsidian-vault-selector.sh",
+    "description": "A script to select and open an Obsidian vault from a specified directory.",
+    "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
+    "hash": "26b8678a0fc6c99e284d031745de7210c5e39ea1db29f9f532b2f68ed88b2bab"
+  },
+  "terminal_with_command.sh": {
+    "file": "terminal_with_command.sh",
+    "path": "terminal_with_command.sh",
+    "description": "Opens a floating terminal to run a command and see the output.",
+    "doc_path": "docs/scripts/terminal_with_command.sh.md",
+    "hash": "294c548af97adf7222448cc6d6014e86777328c4e2a4a69adbc1f21ba4d5317a"
   }
 }

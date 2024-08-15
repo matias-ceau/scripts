@@ -16,3 +16,7 @@ alacritty \
     -e bash -c "fzf $fzf_args < /proc/$$/fd/0"
 
 # > /proc/$$/fd/1"
+#
+#TODO:
+# + add option to change the terminal (kitty for graphics)
+# + add sizing modification options ?
