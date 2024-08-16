@@ -2,55 +2,52 @@
 
 ---
 
-**script_launcher.sh**: A script to launch other scripts with fzf and documentation previews.
+**script_launcher.sh**: Run scripts with fzf for enhanced usability
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder to help select scripts visually.
-- `bat`: A modern alternative to `cat` for displaying files with syntax highlighting.
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
-- `improved-fzfmenu.sh`: A custom script to enhance fzf functionality.
+- `fzf`: A command-line fuzzy finder used to navigate and filter scripts.
+- `bat`: A cat clone with syntax highlighting and Git integration, used to preview files.
+- `fd`: A simple, fast and user-friendly alternative to `find`, utilized to locate scripts.
+- `improved-fzfmenu.sh`: A custom script for enhanced fzf integration, required for the menu.
 
 ### Description
 
-The `script_launcher.sh` script allows users to run various scripts stored in a designated directory using a fuzzy finder interface provided by `fzf`. This script enhances the user experience by providing previews of either documentation or source code.
+The `script_launcher.sh` is a versatile Bash script designed to streamline the execution of other scripts using `fzf`, a command-line fuzzy finder. This script enhances user interaction by presenting a visually pleasing selection interface, allowing users to preview documentation or source files associated with each script.
 
-Key features include:
+The script employs the following key components:
 
-- **Previewing**: The script uses `bat` for displaying the contents of script files in a user-friendly format. Depending on the user's selection, the documentation (`*.md` files) or source code can be previewed.
+- **Preview Commands**: It utilizes `bat` to preview both documentation and source code. This gives users immediate context about what each script does.
   
-- **Dynamic Keybindings**: Users can utilize various keybindings to perform different actions:
-  - **Enter**: Run the selected script.
-  - **Alt + Enter**: Execute the script in a new terminal.
-  - **Alt + E**: Open the source of the script in `nvim`.
-  - **Alt + S**: Change the preview to the script's source.
-  - **Alt + D**: Switch back to the documentation preview.
-  
-By leveraging `fd`, the script dynamically builds a list of scripts from a specified `$SCRIPTS` directory. 
+- **Custom Color Scheme**: ANSI escape codes are used to set the colors for the headers, improving readability and aesthetics.
+
+- **Key Bindings**: Various key bindings are configured for different actions:
+  - **Enter**: Execute the selected script in the current terminal.
+  - **Alt+Enter**: Execute the script in a separate terminal.
+  - **Ctrl+E**: Open the script in `nvim` for editing.
+  - **Alt+E**: Open `nvim` in a new terminal for editing.
+
+The script also includes elements for user customization, aiming for an interactive experience with features such as changing previews and toggling between documentation and source views.
 
 ### Usage
 
-To use this script:
-
-1. Ensure your scripts are located in the directory specified by the `$SCRIPTS` environment variable.
-2. Run the script from your terminal:
+To use the script, simply execute it in your terminal:
 
 ```bash
 bash /home/matias/.scripts/script_launcher.sh
 ```
 
-3. Navigate through the list of scripts using arrow keys.
-4. Use the defined keybindings for actions:
-   - Press `Enter` to run the selected script.
-   - Press `Alt + Enter` to open it in a new terminal.
-   - Press `Alt + E` to edit the script.
-   - Use `Alt + S` and `Alt + D` to toggle between documentation and source previews.
-
-Make sure to have the required dependencies installed for optimal functionality.
+### Key Bindings Available:
+- **Enter**: Execute the selected script.
+- **Alt+Enter**: Run the script in a new terminal.
+- **Ctrl+E**: Edit the selected script with `nvim`.
+- **Alt+E**: Edit in a new terminal window.
+- **Alt+S**: View the source of the selected script.
+- **Alt+D**: View the documentation of the selected script.
 
 ---
 
-> [!TIP] 
-> The script currently lacks a feature to render documentation in PDF or HTML format, which could enhance usability for users who prefer reading documentation in those formats. Implementing such a feature could greatly improve the value of the script. Additionally, handle cases where the `$SCRIPTS` directory is empty or contains no valid script files for better user feedback.
+> [!TIP]  
+> Consider implementing missing features such as rendering documentation as PDF or HTML, enabling page up and down for preview navigation, and allowing multiple script selections. Additionally, refining the header customization could enhance the script’s adaptability and user experience. Implementing a logger function for better tracking of user interactions could also be beneficial.

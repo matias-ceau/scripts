@@ -254,9 +254,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "A script to launch other scripts with fzf and documentation previews.",
+    "description": "Run scripts with fzf for enhanced usability",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "df38adccdd8983e09247bc6583b27b6914000cdcb7a3a751e957a944b87ea160"
+    "hash": "dc1e4222ec0bddf5dd3d868cbb7d9d59e4280f280bf2cef4e7853eb69fafc3b7"
   },
   "select_script": {
     "file": "select_script",

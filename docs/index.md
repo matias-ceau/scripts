@@ -44,7 +44,7 @@
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified folder.*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to display the most researched manual entries based on history.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script to launch other scripts with fzf and documentation previews.*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for enhanced usability*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
