@@ -41,7 +41,7 @@ fd . -tx --format '{/}' "$SCRIPTS" |
 
 #TODO: option to render a pdf/html of the documentation
 # page up and down for preview
-# add arguments to functions
+# add arguments to functions (print query?)
 # toggle header
 # customize preview label
 # multiple selection

@@ -1,21 +1,34 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-#INFO:#=2024-07= "Fzfmenu with alacritty, requires a --bind argument to exit fzf"
+#INFO:#=2024-07= "Fzfmenu with alacritty, can pipe the output"
 
 # Escape each argument
-args=()
+#args=()
+pipe=0
+fzf_args=""
+
 for arg in "$@"; do
-    args+=("$(printf %q "$arg")")
+    if [[ "$arg" == "--pipe" ]]; then
+            pipe=1
+        else
+            fzf_args+=$(printf "%q " "$arg")
+            #args+=("$(printf %q "$arg")")
+    fi
 done
 
 # Join the escaped arguments
-fzf_args="${args[*]}"
+#fzf_args="${args[*]}"
 
-alacritty \
-    -T 'fzfmenu' \
-    -e bash -c "fzf $fzf_args < /proc/$$/fd/0"
+if [ "$pipe" -eq 0 ]; then
+    alacritty \
+        -T 'fzfmenu' \
+        -e bash -c "fzf $fzf_args < /proc/$$/fd/0" 
+else
+    alacritty \
+        -T 'fzfmenu' \
+        -e bash -c "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"
+fi
 
-# > /proc/$$/fd/1"
 #
 #TODO:
 # + add option to change the terminal (kitty for graphics)

@@ -49,6 +49,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/script_launcher.sh,/home/matias/.local/bin/script_launcher.sh,script_launcher.sh
 /home/matias/.scripts/bin/select_script,/home/matias/.local/bin/select_script,select_script
 /home/matias/.scripts/setting-up-syncs.sh,/home/matias/.local/bin/setting-up-syncs.sh,setting-up-syncs.sh
+/home/matias/.scripts/shell_history_info.sh,/home/matias/.local/bin/shell_history_info.sh,shell_history_info.sh
 /home/matias/.scripts/songlauncher.sh,/home/matias/.local/bin/songlauncher.sh,songlauncher.sh
 /home/matias/.scripts/sync-repo.sh,/home/matias/.local/bin/sync-repo.sh,sync-repo.sh
 /home/matias/.scripts/terminal_with_command.sh,/home/matias/.local/bin/terminal_with_command.sh,terminal_with_command.sh
