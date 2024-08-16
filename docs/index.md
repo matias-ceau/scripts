@@ -4,12 +4,13 @@
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Script to initialize Chezmoi on a new system for a specific user*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and handle paper citations easily.*
 - [colormap_from_text.sh](scripts/colormap_from_text.sh.md) -- *Script to extract color palettes from text files*
+- [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions using fzf.*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *A Python script to count the number of tokens in a text file using tiktoken*
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *A script to generate cover art from WAV file spectrograms*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to dynamically run scripts using rofi as a dmenu alternative.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Launches fzf to edit Chezmoi managed config files with previews.*
-- [editor.sh](scripts/editor.sh.md) -- *A script to edit files in the current folder or its subfolders using fzf.*
+- [editor.sh](scripts/editor.sh.md) -- *Quickly edit files using `fzf` to find them across specified directories.*
 - [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Generate a color palette with hex, RGB values, and names for quick reference.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose and play an album using fzf and cmus*
@@ -28,7 +29,6 @@
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Generate an M3U playlist file from the current directory files.*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches the MEGA command line interface in a new tmux session.*
-- [megaignore_editor.sh](scripts/megaignore_editor.sh.md) -- *A bash script for editing and managing .megaignore files interactively*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*

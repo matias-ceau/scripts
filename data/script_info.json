@@ -79,9 +79,9 @@
   "editor.sh": {
     "file": "editor.sh",
     "path": "editor.sh",
-    "description": "A script to edit files in the current folder or its subfolders using fzf.",
+    "description": "Quickly edit files using `fzf` to find them across specified directories.",
     "doc_path": "docs/scripts/editor.sh.md",
-    "hash": "bc74696e1a98192be399ef2478d4d7491322fde8f63bf19b0a0b137670f7b295"
+    "hash": "f8cdbf64cdf3e0404794fd2992645ee587fd1609590c0ef16c56c07e748443b4"
   },
   "fzf_albumlauncher.xsh": {
     "file": "fzf_albumlauncher.xsh",
@@ -439,5 +439,12 @@
     "description": "Analyze and retrieve the most frequent entries in shell history",
     "doc_path": "docs/scripts/shell_history_info.sh.md",
     "hash": "b1e6d5c21f3ad3060a3e746200ce447f13f03eae37567a965d6002b9c051d0b0"
+  },
+  "command_prompt.sh": {
+    "file": "command_prompt.sh",
+    "path": "command_prompt.sh",
+    "description": "Launch a command with history suggestions using fzf.",
+    "doc_path": "docs/scripts/command_prompt.sh.md",
+    "hash": "4b125af1f02adf7f58cba839b43dff80bd2b5d99175432b062aeaa77d5c4caca"
   }
 }
