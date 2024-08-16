@@ -1,37 +1,44 @@
-# Improved FZF Menu 
+# Improved FZF Menu
 
 ---
 
-**improved-fzfmenu.sh**: A script to invoke fzf in Alacritty terminal with argument handling
+**improved-fzfmenu.sh**: FZF menu integration with Alacritty, supporting output piping.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder used to filter and select items.
-- `alacritty`: A fast and GPU-accelerated terminal emulator. The script requires Alacritty to run `fzf`.
+- `fzf`: A command-line fuzzy finder that provides an interactive searching interface.
+- `alacritty`: A terminal emulator designed for performance, written in Rust.
 
 ### Description
 
-The `improved-fzfmenu.sh` script is designed to enhance the experience of using `fzf` (fuzzy finder) by launching it within the Alacritty terminal emulator. The script effectively handles command-line arguments and passes them to `fzf`, allowing for flexible usage without manually escaping special characters.
+`improved-fzfmenu.sh` is a Bash script that enhances user interaction with the fuzzy finder `fzf` by running it inside an Alacritty terminal. This script allows users to pass arguments to `fzf` and optionally pipe its output. The main features of the script include:
 
-The script starts by escaping each argument supplied to it, ensuring they are properly formatted for the shell. This is achieved via a loop that utilizes `printf %q`, which outputs the argument in a way suitable for the shell. The escaped arguments are then combined into a single string, `fzf_args`, which can be used when invoking `fzf`.
+- **Argument Handling**: The script processes command-line arguments, allowing users to specify options for `fzf` easily. The `--pipe` option enables output piping from `fzf` to the standard output (stdout).
+- **Terminal Support**: The script is designed to launch `fzf` within the Alacritty terminal, providing a visually appealing interface. 
 
-Finally, the script opens a new Alacritty terminal window with the title 'fzfmenu' and executes `fzf` with the provided arguments. It also includes a `TODO` section for future improvements, such as supporting other terminal emulators like `kitty` and adding options for modifying the terminal window's size.
+The main functionalities are achieved using conditional checks to determine whether to pipe the output or not based on the presence of the `--pipe` flag.
 
 ### Usage
 
-To use the `improved-fzfmenu.sh` script, execute it in the terminal with desired `fzf` options as arguments. Here’s a basic usage example:
+To execute the script, run it from your terminal with any desired `fzf` options. Here are two examples:
 
+**Without Piping:**
 ```bash
-./improved-fzfmenu.sh --bind 'ctrl-o:execute(xdg-open {})'
+~/scripts/improved-fzfmenu.sh --height 50% --reverse --preview "cat {}"
 ```
 
-This example opens `fzf` in Alacritty and executes the `xdg-open` command on the selected item when `ctrl-o` is pressed.
+**With Piping:**
+```bash
+~/scripts/improved-fzfmenu.sh --pipe --height 50% --reverse --preview "cat {}"
+```
 
-The script can also be integrated into keybindings in your window manager for quick access, enhancing workflow efficiency. 
+In the examples above:
+- The first command launches `fzf` in Alacritty without output piping, allowing for interactive selection.
+- The second command pipes the output from `fzf`, which can then be used for further processing in the terminal.
 
 ---
 
-> [!TIP]
-> The script currently lacks flexibility in changing the terminal emulator. As mentioned in the TODOs, consider extending it to allow users to specify their terminal of choice (e.g., `kitty`) through an additional argument. Additionally, implementing options for window sizing could enhance usability, enabling users to customize the appearance of `fzf` to their liking.
+> [!TIP]  
+> The script currently limits terminal options to Alacritty. Consider adding a feature to allow users to specify different terminal emulators like `kitty` or others for enhanced flexibility. Also, implementing sizing modification options would improve user experience significantly.

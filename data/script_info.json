@@ -128,9 +128,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "improved-fzfmenu.sh",
-    "description": "A script to invoke fzf in Alacritty terminal with argument handling",
+    "description": "FZF menu integration with Alacritty, supporting output piping.",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "6ce66601743ab835c951e995ba88656c8843f07fb48c2a1728175363099e7e58"
+    "hash": "b3c455366df032f3edb7725637da46705ecec40498ecf1f70c88162e5761b0c9"
   },
   "jupyter_new_notebook.xsh": {
     "file": "jupyter_new_notebook.xsh",
@@ -254,9 +254,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "Run scripts with fzf for enhanced usability",
+    "description": "Run scripts with fzf for a streamlined execution and documentation preview.",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "dc1e4222ec0bddf5dd3d868cbb7d9d59e4280f280bf2cef4e7853eb69fafc3b7"
+    "hash": "decd5ea88429aeb54f060193ce0c97db3930b539057e7d1ce62edf7daadafcca"
   },
   "select_script": {
     "file": "select_script",
@@ -415,9 +415,9 @@
   "obsidian-vault-selector.sh": {
     "file": "obsidian-vault-selector.sh",
     "path": "obsidian-vault-selector.sh",
-    "description": "A script to select and open an Obsidian vault from a specified directory.",
+    "description": "Script to select and open an Obsidian vault from a directory.",
     "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "26b8678a0fc6c99e284d031745de7210c5e39ea1db29f9f532b2f68ed88b2bab"
+    "hash": "44c382ae3dcd218b967b608409b0b917efd0006a12bab0e320a1b2a15fb61705"
   },
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
@@ -432,5 +432,12 @@
     "description": "A script to display the most researched manual entries based on history.",
     "doc_path": "docs/scripts/read_the_fucking_manual.sh.md",
     "hash": "154e6527fda3f47f97034a2a5bad2df971e16fb393b423be0b00cbecc9a6c7de"
+  },
+  "shell_history_info.sh": {
+    "file": "shell_history_info.sh",
+    "path": "shell_history_info.sh",
+    "description": "Analyze and retrieve the most frequent entries in shell history",
+    "doc_path": "docs/scripts/shell_history_info.sh.md",
+    "hash": "b1e6d5c21f3ad3060a3e746200ce447f13f03eae37567a965d6002b9c051d0b0"
   }
 }

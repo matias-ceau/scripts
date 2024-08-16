@@ -18,7 +18,7 @@
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list git repositories on the local host and save to files.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script to clone git repositories based on developer/package name using various options.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Converts GRUB_INIT_TUNE strings into audio files.*
-- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to invoke fzf in Alacritty terminal with argument handling*
+- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *FZF menu integration with Alacritty, supporting output piping.*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs essential development and productivity tools on Arch Linux*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *A script to create and open a new Jupyter notebook in Chromium*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a tmux session for running cmus*
@@ -34,6 +34,7 @@
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
 - [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim*
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to select and open an Obsidian vault from a specified directory.*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to select and open an Obsidian vault from a directory.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
@@ -44,9 +45,10 @@
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified folder.*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to display the most researched manual entries based on history.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for enhanced usability*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for a streamlined execution and documentation preview.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
+- [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Analyze and retrieve the most frequent entries in shell history*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a local git repository with its remote counterpart.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a command and see the output.*
@@ -59,3 +61,6 @@
 - [vox.py](scripts/vox.py.md) -- *A Python script to list and describe Vox amp options in a formatted manner.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Automatically change wallpapers from a specified collection.*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *A script that finds scripts without inline documentation*
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes

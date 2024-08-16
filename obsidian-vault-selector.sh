@@ -5,10 +5,13 @@
 SHELL="$(which bash)"
 
 preview_cmd() {
-    eza -T \
+    eza \
+        -T \
         --sort=modified \
         --color=always \
-        "$HOME/PKM/$1"
+        --icons=always \
+        "$HOME/PKM/$1" |
+        rg -v '\.js|\.css|\.png|\.gif|\.svg|\.zip'
 }
 
 open_vault() {
@@ -30,6 +33,9 @@ vault="$(fd -td \
     awk -F/ '{print $(NF-2)}' |
     improved-fzfmenu.sh  \
         --pipe \
+        --preview-window='70%' \
+        --bind="resize:refresh-preview" \
+        --preview-label="CONTENT" \
         --preview='preview_cmd {}')"
 
 open_vault "$vault"
