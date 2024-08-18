@@ -9,9 +9,9 @@
   "ardour-open.sh": {
     "file": "ardour-open.sh",
     "path": "ardour-open.sh",
-    "description": "A script to open Ardour sessions quickly using dmenu.",
+    "description": "A script to quickly find and open Ardour audio projects.",
     "doc_path": "docs/scripts/ardour-open.sh.md",
-    "hash": "84cb8ed01c666ef94fe4f244919a378fac6d48bc9eebe9324120ce2eb3d3fe5c"
+    "hash": "f46220dedcda8b357e9bd15b3f07bf747de947eb3bd22e94a0939bb73c6c7644"
   },
   "chatgpt-all-scripts-describer.py": {
     "file": "chatgpt-all-scripts-describer.py",
@@ -72,9 +72,9 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "Launches fzf to edit Chezmoi managed config files with previews.",
+    "description": "A script to edit configuration files managed by Chezmoi using fzf.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "cded8717413cb144a2b43afce77b4fceea7021ab93daf6473456de0b83f9124e"
+    "hash": "dafb0936503fb7426a4aa43433a35bee53035b3f18c2f4d12bdd0f8a228a3c9b"
   },
   "editor.sh": {
     "file": "editor.sh",
@@ -128,9 +128,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "improved-fzfmenu.sh",
-    "description": "FZF menu integration with Alacritty, supporting output piping.",
+    "description": "A script to enhance fzf interface in Alacritty terminal, with output piping option.",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "b3c455366df032f3edb7725637da46705ecec40498ecf1f70c88162e5761b0c9"
+    "hash": "2c6ac71bc3aff0ebc1343ea0d7a95c3db525008aba009c1c925ed359eeb30d75"
   },
   "jupyter_new_notebook.xsh": {
     "file": "jupyter_new_notebook.xsh",

@@ -1,47 +1,52 @@
-# Open Ardour Session Script
+# Open Ardour Session
 
 ---
 
-**[ardour-open.sh](/ardour-open.sh)**: A script to open Ardour sessions quickly using dmenu.
+**ardour-open.sh**: A script to quickly find and open Ardour audio projects.
 
 ---
 
 ### Dependencies
 
-- `dmenu`: A dynamic menu for X11, used for selecting the Ardour session.
-- `ardour`: The digital audio workstation software that opens the selected session.
+- `bash`: The shell in which the script runs.
+- `fd`: A simple, fast file search tool that is used to locate `.ardour` files.
+- `stat`: A command for displaying file or file system status.
+- `sed`: A stream editor for filtering and transforming text.
+- `xargs`: A command that builds and executes command lines from standard input.
+- `bat`: A cat(1) clone with syntax highlighting and Git integration.
+- `improved-fzfmenu.sh`: An improved version of `fzf` for fuzzy finding, used for selecting files.
 
 ### Description
 
-This script streamlines the workflow for audio projects by providing a simple way to open Ardour sessions. It searches through the specified project directory (`/home/matias/audio/PROJECTS`), finds sessions with the `.ardour` file extension, and then displays them in a list using `dmenu`.
+This script enables users to quickly locate and open Ardour session files located in a specified directory (default: `$HOME/audio/PROJECTS`). It leverages the `fd` command to find files with the `.ardour` extension, displaying the files in a user-friendly format with colors for better readability.
 
-The main components of the script are:
+Key functions:
+- **search_cmd**: Looks for `.ardour` files in the defined audio projects directory, sorts them by modification time, and formats the output with colored paths.
+- **strip_ansi**: Removes ANSI color codes from strings.
+- **get_path**: Prepares the full file path for the selected Ardour project after removing formatting.
+- **preview_cmd**: Uses `bat` to provide a preview of the selected Ardour file in an improved format.
 
-1. **Finding Ardour Sessions**: It uses `find` to locate all files with the `.ardour` extension within the project directory. The results are then processed by `grep` to filter for only the Ardour files, and `sed` is used to format the output by removing the base directory path.
-
-2. **User Interaction via `dmenu`**: After collecting the session options, the script displays them in a `dmenu` prompt, allowing the user to select which session to open.
-
-3. **Launching Ardour**: Once a session is selected from `dmenu`, the script constructs the full path and launches Ardour with the chosen session.
+Once a file is selected through the `improved-fzfmenu.sh`, the script opens the desired Ardour project.
 
 ### Usage
 
-To execute the script, ensure it is marked as executable:
+To run this script, you can simply execute it from a terminal:
 
 ```bash
-chmod +x /home/matias/.scripts/ardour-open.sh
+bash /home/matias/.scripts/ardour-open.sh
 ```
 
-Then, run the script from the terminal:
+Upon running the script, you will be presented with a list of `.ardour` files. Navigate using the arrow keys and press `Enter` to open the selected session in Ardour.
 
-```bash
-/home/matias/.scripts/ardour-open.sh
+You can also bind this script to a key in your window manager (Qtile) as follows:
+
+```python
+Key([mod], "a", lazy.spawn("/home/matias/.scripts/ardour-open.sh")),
 ```
 
-Once executed, a `dmenu` list will appear with available Ardour sessions. You can navigate through the list and select the desired session to open it in Ardour.
-
-For convenience, you could assign this script to a keybinding in your window manager (Qtile) to make opening sessions even faster.
+This will allow you to open Ardour projects with a simple key press.
 
 ---
 
-> [!TIP]  
-> This script could be enhanced by adding error handling to inform the user if no `.ardour` files are found or if Ardour fails to launch. Additionally, consider adding an option for users to quickly create a new session if they prefer starting from scratch.
+> [!TIP] 
+> The script could be improved by adding error handling to manage scenarios where no `.ardour` files are found or the user cancels the selection. Additionally, consider adding configuration options for customizing the search path directly in the script or via environment variables. This will enhance its flexibility and usability in various user environments.

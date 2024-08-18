@@ -1,44 +1,50 @@
-# Improved FZF Menu
+# Improved Fzf Menu with Alacritty
 
 ---
 
-**improved-fzfmenu.sh**: FZF menu integration with Alacritty, supporting output piping.
+**improved-fzfmenu.sh**: A script to enhance fzf interface in Alacritty terminal, with output piping option.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder that provides an interactive searching interface.
-- `alacritty`: A terminal emulator designed for performance, written in Rust.
+- `fzf`: A command-line fuzzy finder, which the script relies on for interactive selection.
+- `alacritty`: A terminal emulator used for launching the fzf interface.
 
 ### Description
 
-`improved-fzfmenu.sh` is a Bash script that enhances user interaction with the fuzzy finder `fzf` by running it inside an Alacritty terminal. This script allows users to pass arguments to `fzf` and optionally pipe its output. The main features of the script include:
+This script serves as an enhanced wrapper around the `fzf` fuzzy finder, allowing it to run within the Alacritty terminal emulator. It simplifies the user experience by handling arguments and providing an option to pipe the output of the selection to standard output. Its structure allows for clear separation of functionalities, with specific handling for options provided during invocation.
 
-- **Argument Handling**: The script processes command-line arguments, allowing users to specify options for `fzf` easily. The `--pipe` option enables output piping from `fzf` to the standard output (stdout).
-- **Terminal Support**: The script is designed to launch `fzf` within the Alacritty terminal, providing a visually appealing interface. 
+Key features include:
 
-The main functionalities are achieved using conditional checks to determine whether to pipe the output or not based on the presence of the `--pipe` flag.
+- **Terminal support:** Currently defaults to `alacritty`, but plans to include support for other terminals like `kitty`.
+- **Output piping:** The script can optionally output the selected item either to the terminal or redirect it to other commands if the `--pipe` option is used.
+
+The script makes extensive use of command substitution and argument parsing to effectively manage user inputs.
 
 ### Usage
 
-To execute the script, run it from your terminal with any desired `fzf` options. Here are two examples:
+To execute the script, simply call it from the terminal as follows:
 
-**Without Piping:**
 ```bash
-~/scripts/improved-fzfmenu.sh --height 50% --reverse --preview "cat {}"
+/path/to/improved-fzfmenu.sh [fzf_options]
 ```
 
-**With Piping:**
-```bash
-~/scripts/improved-fzfmenu.sh --pipe --height 50% --reverse --preview "cat {}"
-```
+Examples:
 
-In the examples above:
-- The first command launches `fzf` in Alacritty without output piping, allowing for interactive selection.
-- The second command pipes the output from `fzf`, which can then be used for further processing in the terminal.
+1. Launch fzf without piping:
+   ```bash
+   /home/matias/.scripts/improved-fzfmenu.sh --height=40% --preview 'cat {}'
+   ```
+
+2. Launch fzf with piping option:
+   ```bash
+   /home/matias/.scripts/improved-fzfmenu.sh --pipe --height=40%
+   ```
+
+In these examples, you can replace `[fzf_options]` with any valid options you wish to pass to `fzf`. Remember, using the `--pipe` flag changes the behavior of the output.
 
 ---
 
 > [!TIP]  
-> The script currently limits terminal options to Alacritty. Consider adding a feature to allow users to specify different terminal emulators like `kitty` or others for enhanced flexibility. Also, implementing sizing modification options would improve user experience significantly.
+Consider adding error handling to check if `alacritty` and `fzf` are installed before executing commands. This can improve user experience by providing meaningful feedback when dependencies are missing. You could also enhance the script by allowing dynamic terminal selection and adding resizing options for the terminal.

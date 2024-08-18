@@ -1,5 +1,5 @@
 - [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Play a random album selection with cmus using dmenu*
-- [ardour-open.sh](scripts/ardour-open.sh.md) -- *A script to open Ardour sessions quickly using dmenu.*
+- [ardour-open.sh](scripts/ardour-open.sh.md) -- *A script to quickly find and open Ardour audio projects.*
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *Automatic documentation generator for user scripts using OpenAI API.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Script to initialize Chezmoi on a new system for a specific user*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and handle paper citations easily.*
@@ -9,7 +9,7 @@
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *A script to generate cover art from WAV file spectrograms*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to dynamically run scripts using rofi as a dmenu alternative.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Launches fzf to edit Chezmoi managed config files with previews.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to edit configuration files managed by Chezmoi using fzf.*
 - [editor.sh](scripts/editor.sh.md) -- *Quickly edit files using `fzf` to find them across specified directories.*
 - [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Generate a color palette with hex, RGB values, and names for quick reference.*
@@ -19,7 +19,7 @@
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list git repositories on the local host and save to files.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script to clone git repositories based on developer/package name using various options.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Converts GRUB_INIT_TUNE strings into audio files.*
-- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *FZF menu integration with Alacritty, supporting output piping.*
+- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to enhance fzf interface in Alacritty terminal, with output piping option.*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs essential development and productivity tools on Arch Linux*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *A script to create and open a new Jupyter notebook in Chromium*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a tmux session for running cmus*
