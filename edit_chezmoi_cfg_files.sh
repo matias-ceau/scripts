@@ -4,7 +4,7 @@ SHELL=$(which bash)
 
 preview_command() {
     if [ -f "$1" ]; then
-        bat --style=numbers --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" "$HOME/$1" \
+        bat --style=full --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" "$HOME/$1" \
             -m '*autosave:INI' -m '*.conf:INI'
     elif [ -d "$1" ]; then
         eza -1 --color=always --icons=always --sort=modified -m "$HOME/$1"
@@ -23,7 +23,6 @@ colorize_file_list() {
             # Directories are bold blue
             echo -e "${line}/"
         else
-            # Files are not colorized
             base_name="$(basename "$line")"
             dir_name="$(dirname "$line")/"
             if [ "$dir_name" = "./" ]; then
@@ -34,19 +33,28 @@ colorize_file_list() {
     done
 }
 
-#    --preview 'if [ -f {} ]; then bat --style=numbers --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" {}; elif [ -d {} ]; then eza -1 --color="always" --icons=always --sort=modified -m {}; fi' \
+
 export -f preview_command
 export -f colorize_file_list
 
 # Launch fzf with improved preview
 selected=$(
-    chezmoi managed | colorize_file_list | fzf \
+    chezmoi managed --include files |
+        colorize_file_list |
+        fzf \
         --ansi \
+        --multi \
         --preview='preview_command {}' \
         --preview-window=right:60%:wrap \
-        --walker-root="$HOME"
+        --preview-label="FILES" \
+        --header 'A-D> dirs ­ tab> select' \
+        --header-first \
+        --bind 'focus:transform-preview-label:basename {}' \
+        --bind 'alt-d:reload(chezmoi managed --include dirs)' \
+        --bind 'alt-f:reload(chezmoi managed --include files | colorize_file_list)' \
+        #--walker-root="$HOME"
 )
 
 if [ -n "$selected" ]; then
-    EDITOR=nvim chezmoi edit "$HOME/$selected"
+    nvim $(chezmoi source-path $selected)
 fi

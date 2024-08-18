@@ -4,6 +4,8 @@
 
 # Escape each argument
 #args=()
+term=alacritty
+title=floating
 pipe=0
 fzf_args=""
 
@@ -20,12 +22,12 @@ done
 #fzf_args="${args[*]}"
 
 if [ "$pipe" -eq 0 ]; then
-    alacritty \
-        -T 'fzfmenu' \
+    $term \
+        -T "$title" \
         -e bash -c "fzf $fzf_args < /proc/$$/fd/0" 
 else
-    alacritty \
-        -T 'fzfmenu' \
+    $term \
+        -T "$title" \
         -e bash -c "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"
 fi
 
