@@ -52,7 +52,7 @@
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a local git repository with its remote counterpart.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a command and see the output.*
-- [tmux-help.py](scripts/tmux-help.py.md) -- *tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.*
+- [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*
 - [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Script to toggle the Picom compositor on and off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *Convert symlinks to copies of their target files or directories.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *update_env.xsh - Update .env file with API keys from xonsh environment*
