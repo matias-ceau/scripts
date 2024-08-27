@@ -446,5 +446,19 @@
     "description": "Launch a command with history suggestions using fzf.",
     "doc_path": "docs/scripts/command_prompt.sh.md",
     "hash": "4b125af1f02adf7f58cba839b43dff80bd2b5d99175432b062aeaa77d5c4caca"
+  },
+  "keyboard-help.sh": {
+    "file": "keyboard-help.sh",
+    "path": "keyboard-help.sh",
+    "description": "Launches a terminal displaying the current keyboard layout.",
+    "doc_path": "docs/scripts/keyboard-help.sh.md",
+    "hash": "5338f88178ddd8462acd0de8c5e408e8ec8dfd2ebec376803e4429245beafe93"
+  },
+  "show_keyboard_layout.py": {
+    "file": "show_keyboard_layout.py",
+    "path": "show_keyboard_layout.py",
+    "description": "Displays a formatted representation of the keyboard layout.",
+    "doc_path": "docs/scripts/show_keyboard_layout.py.md",
+    "hash": "bd6c72e09cc2eae94f78291e30a52649a5bee51dc836329901b54b3f9e1d09ff"
   }
 }

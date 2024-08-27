@@ -4,27 +4,21 @@
 
 <!-- llm_generated_output_start -->
 
-The script repository contains a diverse collection of utility scripts developed to enhance productivity and streamline workflows within an Arch Linux environment, particularly for users running the Qtile window manager. Each script is tailored to perform specific tasks ranging from managing files and directories to operating applications and managing system configurations.
+This script repository is a curated collection of utility scripts designed to streamline various tasks on an Arch Linux system predominantly using the Qtile window manager. The repository emphasizes enhancing productivity, task automation, interactive selection, and improving user experiences with a suite of tools tailored to different workflows. Below is an overview of the key functionalities offered by these scripts.
 
-### Overview of Scripts
+One prominent feature includes scripts that facilitate **project and note management**, such as the `obsidian-vault-selector.sh`, which allows users to select and open their Obsidian vaults interactively. It works in conjunction with helper utilities and requires dependencies like `fzf`, `notify-send`, and `awk`. Similarly, `vimwiki.sh` provides a quick access function to open notes using fuzzy searching capabilities.
 
-- **File and Directory Management**: Several scripts such as [m3u_creator.sh](docs/scripts/m3u_creator.sh.md), and [transform_symlink.sh](docs/scripts/transform_symlink.sh.md) focus on file organization. The former creates M3U playlists from media files in a directory, while the latter converts symlinks into copies of files, allowing for better file management and accessibility.
+**Music management** is also extensively supported. Through scripts such as `albumplayer.xsh` and `fzf_albumlauncher.xsh`, users can choose and play music albums located in their libraries using `cmus`, leveraging tools like `dmenu` and `fzf` for selection. Meanwhile, `sandisk_music_transfert.py` focuses on transferring music to a specific media player, responsibly managing storage limitations.
 
-- **Interactive Utilities**:
-    - The [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) script enhances the traditional dmenu experience by integrating the powerful fuzzy finder `fzf`, allowing users to navigate commands and applications effortlessly.
-    - Similarly, scripts like [dmenu_run_scripts.sh](docs/scripts/dmenu_run_scripts.py.md) and [script_launcher.sh](docs/scripts/script_launcher.sh.md) leverage `fzf` and `dmenu` to facilitate running and selecting scripts interactively, improving operational efficiency.
+There are several **file and script handling utilities** available, such as `create_cover_art.sh` which generates visually appealing cover images from audio files, and `new_script_creator.sh` that simplifies the process of creating scripts with necessary directory linkage.
 
-- **Media Handling**: The repository includes various scripts such as [albumplayer.xsh](docs/scripts/albumplayer.xsh.md) and [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md), designed to manage audio playback and transfer music files to devices like the Sandisk media player, enhancing users' audio experience.
+Users of this repository will benefit from **improved command-line interfaces** through scripts like `dmenu_run_scripts.py`, which combines Python scripting with `rofi` to allow users to run their scripts quickly. Enhancements in user interface design are reflected in the use of `fzf` for commands and scripts, effectively replacing traditional `dmenu` for a more interactive experience.
 
-- **Program Launching and Session Management**: 
-    - Scripts like [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) and [open_nvim_in_new_terminal.sh](docs/scripts/nvim_in_new_terminal.sh.md) provide streamlined commands for managing terminal sessions and editing files, catering specifically to developers' needs.
-    - The repository also contains scripts intended for desktop environments, such as [toggle_picom.sh](docs/scripts/toggle_picom.sh.md), enabling or disabling the Picom compositor with ease.
+The repository also includes tools for **environment and configuration management**, such as `update_env.xsh` which compiles API keys into a `.env` file and `edit_chezmoi_cfg_files.sh` that enables easy editing of dotfiles managed by Chezmoi.
 
-- **Documentation and Updates**: The repository includes scripts like [llama-all-scripts-describer.py](docs/scripts/llama-all-scripts-describer.py.md) and [chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md) that automate the generation of documentation for user scripts, ensuring scripts are well-maintained.
+Each script ensures thorough documentation generation via utility scripts like `llama-all-scripts-describer.py`, which utilize AI models to create markdown documentation from user scripts, enhancing maintainability and usability within personal or collaborative projects.
 
-### Conclusion
-
-This repository provides a comprehensive suite of scripts that complement the Arch Linux environment, focusing on enhancing user interaction and operational efficiency. Users can benefit from the streamlined execution of tasks such as file management, script launching, media handling, and system configuration, all designed to work well with the Qtile window manager, making it a valuable asset for developers and advanced users alike. Each script is designed to be user-friendly, with robust features that allow for interactivity, making everyday tasks easier and more efficient.
+Overall, these scripts aim to simplify repetitive tasks, enhance user interaction, and automate workflows, making them essential tools for developers and power users on Arch Linux. Possible enhancements such as error handling, user prompts, and configuration options for path management ensure these utilities remain robust and adaptable to individual user needs.
 
 <!-- llm_generated_output_end -->
 
@@ -61,6 +55,7 @@ This repository provides a comprehensive suite of scripts that complement the Ar
 | [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md) | A script to enhance fzf interface in Alacritty terminal, with output piping option. |
 | [install_dependencies.sh](docs/scripts/install_dependencies.sh.md) | Installs essential development and productivity tools on Arch Linux |
 | [jupyter_new_notebook.xsh](docs/scripts/jupyter_new_notebook.xsh.md) | A script to create and open a new Jupyter notebook in Chromium |
+| [keyboard-help.sh](docs/scripts/keyboard-help.sh.md) | Launches a terminal displaying the current keyboard layout. |
 | [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) | Script to create a tmux session for running cmus |
 | [list_process.sh](docs/scripts/list_process.sh.md) | Script to list all running services on the system in sorted order. |
 | [llama-all-scripts-describer.py](docs/scripts/llama-all-scripts-describer.py.md) | Automates script documentation generation using Llama 3.1 |
@@ -88,6 +83,7 @@ This repository provides a comprehensive suite of scripts that complement the Ar
 | [select_script](docs/scripts/select_script.md) | A C script for selecting and executing a script from a cached list. |
 | [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) | Automates syncing of user directories to a backup location. |
 | [shell_history_info.sh](docs/scripts/shell_history_info.sh.md) | Analyze and retrieve the most frequent entries in shell history |
+| [show_keyboard_layout.py](docs/scripts/show_keyboard_layout.py.md) | Displays a formatted representation of the keyboard layout. |
 | [songlauncher.sh](docs/scripts/songlauncher.sh.md) | Play a song with cmus using dmenu |
 | [sync-repo.sh](docs/scripts/sync-repo.sh.md) | A script to sync a local git repository with its remote counterpart. |
 | [terminal_with_command.sh](docs/scripts/terminal_with_command.sh.md) | Opens a floating terminal to run a command and see the output. |

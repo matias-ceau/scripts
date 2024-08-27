@@ -22,6 +22,7 @@
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to enhance fzf interface in Alacritty terminal, with output piping option.*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs essential development and productivity tools on Arch Linux*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *A script to create and open a new Jupyter notebook in Chromium*
+- [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches a terminal displaying the current keyboard layout.*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a tmux session for running cmus*
 - [list_process.sh](scripts/list_process.sh.md) -- *Script to list all running services on the system in sorted order.*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automates script documentation generation using Llama 3.1*
@@ -49,6 +50,7 @@
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Analyze and retrieve the most frequent entries in shell history*
+- [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a formatted representation of the keyboard layout.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a local git repository with its remote counterpart.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a command and see the output.*
