@@ -2,7 +2,7 @@
 
 ---
 
-**[tmux-help.py](/tmux-help.py)**: tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.
+**tmux-help.py**: A script providing helpful utilities and search capabilities for tmux commands.
 
 ---
 
