@@ -18,7 +18,7 @@ The script repository contains a diverse collection of utility scripts developed
 
 - **Program Launching and Session Management**: 
     - Scripts like [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) and [open_nvim_in_new_terminal.sh](docs/scripts/nvim_in_new_terminal.sh.md) provide streamlined commands for managing terminal sessions and editing files, catering specifically to developers' needs.
-    - The repository also contains scripts intended for desktop environments, such as `[toggle_picom.sh](docs/scripts/toggle_picom.sh.md)`, enabling or disabling the Picom compositor with ease.
+    - The repository also contains scripts intended for desktop environments, such as [toggle_picom.sh](docs/scripts/toggle_picom.sh.md), enabling or disabling the Picom compositor with ease.
 
 - **Documentation and Updates**: The repository includes scripts like [llama-all-scripts-describer.py](docs/scripts/llama-all-scripts-describer.py.md) and [chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md) that automate the generation of documentation for user scripts, ensuring scripts are well-maintained.
 
