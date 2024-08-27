@@ -61,6 +61,3 @@
 - [vox.py](scripts/vox.py.md) -- *A Python script to list and describe Vox amp options in a formatted manner.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Automatically change wallpapers from a specified collection.*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *A script that finds scripts without inline documentation*
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
