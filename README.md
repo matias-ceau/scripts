@@ -11,16 +11,16 @@ The script repository contains a diverse collection of utility scripts developed
 - **File and Directory Management**: Several scripts such as `[m3u_creator.sh](docs/scripts/m3u_creator.sh.md)`, and `[transform_symlink.sh](docs/scripts/transform_symlink.sh.md)` focus on file organization. The former creates M3U playlists from media files in a directory, while the latter converts symlinks into copies of files, allowing for better file management and accessibility.
 
 - **Interactive Utilities**:
-    - The `[fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md)` script enhances the traditional dmenu experience by integrating the powerful fuzzy finder `fzf`, allowing users to navigate commands and applications effortlessly.
-    - Similarly, scripts like `[dmenu_run_scripts.sh](docs/scripts/dmenu_run_scripts.py.md)` and `[script_launcher.sh](docs/scripts/script_launcher.sh.md)` leverage `fzf` and `dmenu` to facilitate running and selecting scripts interactively, improving operational efficiency.
+    - The [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) script enhances the traditional dmenu experience by integrating the powerful fuzzy finder `fzf`, allowing users to navigate commands and applications effortlessly.
+    - Similarly, scripts like [dmenu_run_scripts.sh](docs/scripts/dmenu_run_scripts.py.md) and [script_launcher.sh](docs/scripts/script_launcher.sh.md) leverage `fzf` and `dmenu` to facilitate running and selecting scripts interactively, improving operational efficiency.
 
-- **Media Handling**: The repository includes various scripts such as `[albumplayer.xsh](docs/scripts/albumplayer.xsh.md)` and `[sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md)`, designed to manage audio playback and transfer music files to devices like the Sandisk media player, enhancing users' audio experience.
+- **Media Handling**: The repository includes various scripts such as [albumplayer.xsh](docs/scripts/albumplayer.xsh.md) and [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md), designed to manage audio playback and transfer music files to devices like the Sandisk media player, enhancing users' audio experience.
 
 - **Program Launching and Session Management**: 
-    - Scripts like `[launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md)` and `[open_nvim_in_new_terminal.sh](docs/scripts/nvim_in_new_terminal.sh.md)` provide streamlined commands for managing terminal sessions and editing files, catering specifically to developers' needs.
+    - Scripts like [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) and [open_nvim_in_new_terminal.sh](docs/scripts/nvim_in_new_terminal.sh.md) provide streamlined commands for managing terminal sessions and editing files, catering specifically to developers' needs.
     - The repository also contains scripts intended for desktop environments, such as `[toggle_picom.sh](docs/scripts/toggle_picom.sh.md)`, enabling or disabling the Picom compositor with ease.
 
-- **Documentation and Updates**: The repository includes scripts like `[llama-all-scripts-describer.py](docs/scripts/llama-all-scripts-describer.py.md)` and `[chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md)` that automate the generation of documentation for user scripts, ensuring scripts are well-maintained.
+- **Documentation and Updates**: The repository includes scripts like [llama-all-scripts-describer.py](docs/scripts/llama-all-scripts-describer.py.md) and [chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md) that automate the generation of documentation for user scripts, ensuring scripts are well-maintained.
 
 ### Conclusion
 
