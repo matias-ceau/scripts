@@ -8,7 +8,7 @@ The script repository contains a diverse collection of utility scripts developed
 
 ### Overview of Scripts
 
-- **File and Directory Management**: Several scripts such as `[m3u_creator.sh](docs/scripts/m3u_creator.sh.md)`, and `[transform_symlink.sh](docs/scripts/transform_symlink.sh.md)` focus on file organization. The former creates M3U playlists from media files in a directory, while the latter converts symlinks into copies of files, allowing for better file management and accessibility.
+- **File and Directory Management**: Several scripts such as [m3u_creator.sh](docs/scripts/m3u_creator.sh.md), and [transform_symlink.sh](docs/scripts/transform_symlink.sh.md) focus on file organization. The former creates M3U playlists from media files in a directory, while the latter converts symlinks into copies of files, allowing for better file management and accessibility.
 
 - **Interactive Utilities**:
     - The [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) script enhances the traditional dmenu experience by integrating the powerful fuzzy finder `fzf`, allowing users to navigate commands and applications effortlessly.
