@@ -55,6 +55,23 @@ selected=$(
         #--walker-root="$HOME"
 )
 
-if [ -n "$selected" ]; then
-    nvim $(chezmoi source-path $selected)
+path="$(chezmoi source-path "$HOME/$selected")"
+
+if [ -f "$path" ]; then
+    nvim "$path"
+elif [ -d "$path" ]; then
+    nvim $(fd . -tf "$path")
+else
+    exit 0
+fi
+
+read -p $'- [a] (default): Chezmoi apply\n- [s]: Chezmoi apply and sync repo\n- [x]: exit\n > ' input
+
+if [[ "$input" == "x" ]]; then
+    exit 0
+elif [[ "$input" == "s" ]]; then
+    chezmoi apply
+    $SCRIPTS/sync-repo.sh $CHEZMOI
+else
+    chezmoi apply
 fi
