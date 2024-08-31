@@ -3,10 +3,11 @@
 SHELL=$(which bash)
 
 preview_command() {
-    if [ -f "$1" ]; then
-        bat --style=full --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" "$HOME/$1" \
+    path="$HOME/$1"
+    if [ -f "$path" ]; then
+        bat --style=full --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" "$path" \
             -m '*autosave:INI' -m '*.conf:INI'
-    elif [ -d "$1" ]; then
+    elif [ -d "$path" ]; then
         eza -1 --color=always --icons=always --sort=modified -m "$HOME/$1"
     fi
 }
@@ -21,7 +22,7 @@ colorize_file_list() {
     while IFS= read -r line; do
         if [ -d "$HOME/$line" ]; then
             # Directories are bold blue
-            echo -e "${line}/"
+            echo -e "${FOLDER}${line}/${RESET}"
         else
             base_name="$(basename "$line")"
             dir_name="$(dirname "$line")/"
@@ -33,7 +34,6 @@ colorize_file_list() {
     done
 }
 
-
 export -f preview_command
 export -f colorize_file_list
 
@@ -42,17 +42,17 @@ selected=$(
     chezmoi managed --include files |
         colorize_file_list |
         fzf \
-        --ansi \
-        --multi \
-        --preview='preview_command {}' \
-        --preview-window=right:60%:wrap \
-        --preview-label="FILES" \
-        --header 'A-D> dirs ­ tab> select' \
-        --header-first \
-        --bind 'focus:transform-preview-label:basename {}' \
-        --bind 'alt-d:reload(chezmoi managed --include dirs)' \
-        --bind 'alt-f:reload(chezmoi managed --include files | colorize_file_list)' \
-        #--walker-root="$HOME"
+            --ansi \
+            --multi \
+            --preview='preview_command {}' \
+            --preview-window=right:60%:wrap \
+            --preview-label="FILES" \
+            --header 'A-D> dirs ­ tab> select' \
+            --header-first \
+            --bind 'focus:transform-preview-label:basename {}' \
+            --bind 'alt-d:reload(chezmoi managed --include dirs)' \
+            --bind 'alt-f:reload(chezmoi managed --include files | colorize_file_list)'
+    #--walker-root="$HOME"
 )
 
 path="$(chezmoi source-path "$HOME/$selected")"
