@@ -2,47 +2,55 @@
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: A script to edit configuration files managed by Chezmoi using fzf.
+**edit_chezmoi_cfg_files.sh**: A script to browse and edit Chezmoi-managed configuration files.
 
 ---
 
 ### Dependencies
 
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `fzf`: A command-line fuzzy finder that allows for quick file selection.
-- `nvim`: Neovim text editor for editing the selected configuration files.
-- `chezmoi`: A tool for managing your dotfiles across multiple machines.
-- `eza`: A modern replacement for `ls`, providing enhanced file listing capabilities.
+- `fzf`: A command-line fuzzy finder for selecting files with an interactive preview.
+- `bat`: A cat clone with syntax highlighting for improved file viewing.
+- `eza`: A modern replacement for `ls`, that provides colored and icon-rich output.
+- `nvim`: A text editor command for editing configuration files.
+- `chezmoi`: A tool for managing your dotfiles.
 
 ### Description
 
-This script enables users to quickly access and edit configuration files managed by Chezmoi. It utilizes `fzf` for an interactive file selection with a preview capability, allowing users to see file content before opening it in `nvim`. The script features two main functions:
+The `edit_chezmoi_cfg_files.sh` script allows users to browse and edit configuration files managed by Chezmoi, in a user-friendly manner using `fzf`. The script provides a preview feature for files and directories, utilizing external utilities for a better visual experience.
 
-- `preview_command()`: This function displays a preview of the selected file using `bat` if it's a file or `eza` if it's a directory.
-- `colorize_file_list()`: It ensures that the output from the `chezmoi managed` command is color-coded to easily distinguish between files and directories.
+Here’s a brief overview of the main functions:
 
-Upon execution, the script presents a list of files and directories managed by Chezmoi, enhanced by `fzf` functionalities such as highlighting and custom key binds for better user interaction.
+- `preview_command`: Displays a preview of the selected file or directory. It uses `bat` for files and `eza` for directories.
+- `colorize_file_list`: Formats the list of files and directories with ANSI color codes. Directories are shown in bold blue, while files are color-coded distinctly.
+
+The script executes the following steps:
+
+1. List all files managed by Chezmoi.
+2. Use `fzf` to allow the user to interactively select a file or directory.
+3. On selection, it opens the file in `nvim` or, if it’s a directory, opens it using the `fd` command.
+4. After editing, users are prompted to apply changes or sync the configuration with the repository.
 
 ### Usage
 
-To run this script, simply execute it in your terminal:
+To use the script, simply execute it from the terminal:
 
 ```bash
 bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-This will:
-1. Display a list of configuration files managed by Chezmoi.
-2. Enable file selection with a preview of the content.
-3. Edit the selected file in `nvim` once chosen. 
+You can navigate through your Chezmoi-managed files and directories with the arrow keys. Use the following key bindings while in `fzf`:
 
-Here are some useful key bindings when using `fzf`:
-- **A-D**: Navigate to directories.
-- **Tab**: Select a file for editing.
-- **Alt-D**: Reload the directory list.
-- **Alt-F**: Reload the file list.
+- **Tab**: Select multiple files
+- **Alt + D**: Reload directory list
+- **Alt + F**: Reload file list
+
+After editing, you will be prompted to choose one of the following actions:
+
+- **a** (default): Apply changes with `chezmoi`
+- **s**: Apply changes and sync the repository
+- **x**: Exit without applying changes
 
 ---
 
-> [!TIP]  
-> The script could be improved by adding error handling for commands like `chezmoi` or `nvim`, ensuring that users receive feedback if something goes wrong. Additionally, configuration options for customizing key bindings or preview styles could enhance usability, adapting the script to different workflows.
+> [!TIP]
+> Consider improving error handling throughout the script to manage cases where files or directories may not exist or are inaccessible. Additionally, enhancing the user experience with more informative prompts and messages could help users navigate through potential issues easily.

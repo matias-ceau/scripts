@@ -72,9 +72,9 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to edit configuration files managed by Chezmoi using fzf.",
+    "description": "A script to browse and edit Chezmoi-managed configuration files.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "dafb0936503fb7426a4aa43433a35bee53035b3f18c2f4d12bdd0f8a228a3c9b"
+    "hash": "cebf5e606691532d87f4a81d18c6d5720ff47df30fc9bd8a51205b2c7b4211b8"
   },
   "editor.sh": {
     "file": "editor.sh",
