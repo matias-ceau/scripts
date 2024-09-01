@@ -55,7 +55,9 @@ selected=$(
     #--walker-root="$HOME"
 )
 
-path="$(chezmoi source-path "$HOME/$selected")"
+if [ -n "$path" ]; then
+    path="$(chezmoi source-path "$HOME/$selected")"
+fi
 
 if [ -f "$path" ]; then
     nvim "$path"
