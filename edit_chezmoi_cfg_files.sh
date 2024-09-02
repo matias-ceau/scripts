@@ -55,7 +55,7 @@ selected=$(
     #--walker-root="$HOME"
 )
 
-if [ -n "$path" ]; then
+if [ -n "$selected" ]; then
     path="$(chezmoi source-path "$HOME/$selected")"
 fi
 
