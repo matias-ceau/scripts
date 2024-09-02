@@ -1,44 +1,47 @@
-# Script Launcher with fzf
+# Script Launcher
 
 ---
 
-**script_launcher.sh**: Run scripts with fzf for a streamlined execution and documentation preview.
+**script_launcher.sh**: Launch scripts with fzf and provides documentation previews.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder, used for interactive script selection.
-- `fd`: A simple, fast, and user-friendly alternative to `find`, used for finding files.
-- `bat`: A cat with wings. This utility is for syntax highlighting and displaying documentation.
-- `improved-fzfmenu.sh`: A user-defined script that augments fzf with additional features.
+- `fzf`: A command-line fuzzy finder, which enables easier navigation and selection.
+- `bat`: A cat clone with syntax highlighting and Git integration, used here for previewing documentation and source files.
+- `fd`: A simple, fast, and user-friendly alternative to `find`, utilized for searching scripts in the specified directory.
+- `improved-fzfmenu.sh`: A custom script that enhances the `fzf` interface and user interaction.
 
 ### Description
 
-This script is a powerful tool designed to efficiently run and edit scripts using `fzf`, a command-line fuzzy finder. It allows the user to browse through scripts located in the specified directory and preview their documentation or source code interactively.
+The `script_launcher.sh` script allows users to browse through a collection of scripts located in a specified directory using `fzf`. It provides a convenient searching mechanism with previews of documentation and script sources.
 
-Upon execution, the script utilizes `fd` to list all scripts in the defined `$SCRIPTS` directory. It then passes these results to `improved-fzfmenu.sh`, which handles the selection interface. The interface features:
+When initiated, this script prepares a presentation layer where:
+- Users can view documentation associated with the scripts through `bat`, using a beautifully formatted and colorized display.
+- Custom bindings facilitate quick actions, such as executing the scripts directly, editing them, and switching context between viewing documentation and source code.
 
-- A customizable preview of each selected script's documentation using `bat` for syntax highlighting and formatting. The preview command has two modes: one for documentation (`preview_cmd_docs`) and another for source code (`preview_cmd_source`).
-- Keyboard shortcuts for executing scripts directly, editing them in `nvim`, and toggling between views for documentation and source code.
-- A carefully crafted header that provides quick reference to the available actions.
-
-This script serves as an integral part of a developer's workflow, enhancing productivity by allowing for rapid script execution and documentation access.
+The header adds clarity by using color formatting to distinguish between different options available to the user. The primary functionalities are driven by options in `fzf`, enabling quick navigation through scripts with powerful previewing capabilities.
 
 ### Usage
 
-To use this script, simply run it from the terminal. You can customize the script to fit your specific needs by modifying the `$SCRIPTS` variable in the script where you define the path to your scripts directory.
+To run the script, execute the following command in your terminal:
 
-Here are some examples of keybindings and their functionalities:
+```bash
+bash /home/matias/.scripts/script_launcher.sh
+```
 
-- **Enter**: Executes the selected script in a new shell.
-- **Alt + Enter**: Executes the selected script within a terminal window.
-- **Ctrl + E**: Opens the script in a new `nvim` editor window.
-- **Alt + E**: Opens the script in `nvim` in a new terminal session.
-- **Alt + S**: Switches preview to the source of the script.
-- **Alt + D**: Switches back to the documentation view.
+Once running:
+- Use the arrow keys to navigate through your scripts.
+- Press `Enter` to execute the selected script.
+- Press `Alt+Enter` to run the script in a terminal window.
+- Press `Ctrl+E` to edit the selected script with `nvim`.
+- Use `Alt+E` for editing in a new terminal window.
+- Press `Alt+D` and `Alt+S` to toggle between source preview and documentation.
 
-To start the script, you would run:
+**Examples:**
+
+- To launch the script and start searching scripts:
 
 ```bash
 bash /home/matias/.scripts/script_launcher.sh
@@ -46,5 +49,5 @@ bash /home/matias/.scripts/script_launcher.sh
 
 ---
 
-> [!TIP] 
-This script could benefit from more customization options for the preview window, including size adjustments and support for multiple selections. Implementing a logging feature to keep track of executed scripts might also enhance usability and troubleshooting.
+> [!TIP]  
+> The script currently lacks features such as multi-selection for executing multiple scripts or advanced preview controls. Implementing these enhancements could significantly improve user experience. Additionally, consider handling cases where dependencies are missing or prompting users about the installation of required packages for smoother functionality.

@@ -1,50 +1,47 @@
-# Improved Fzf Menu with Alacritty
+# Improved FZF Menu Script
 
 ---
 
-**improved-fzfmenu.sh**: A script to enhance fzf interface in Alacritty terminal, with output piping option.
+**improved-fzfmenu.sh**: Launches FZF in Alacritty with options for piping the output
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder, which the script relies on for interactive selection.
-- `alacritty`: A terminal emulator used for launching the fzf interface.
+- `fzf`: A general-purpose command-line fuzzy finder. This script utilizes `fzf` for interactive menu selection.
+- `alacritty`: A terminal emulator that is used to execute the FZF command in a floating window.
 
 ### Description
 
-This script serves as an enhanced wrapper around the `fzf` fuzzy finder, allowing it to run within the Alacritty terminal emulator. It simplifies the user experience by handling arguments and providing an option to pipe the output of the selection to standard output. Its structure allows for clear separation of functionalities, with specific handling for options provided during invocation.
+The `improved-fzfmenu.sh` script is designed to enhance user interaction by launching `fzf` (Fuzzy Finder) within the Alacritty terminal emulator. This script allows users to pipe the output from `fzf` back to the shell or other commands, providing seamless integration and usability across different contexts.
 
-Key features include:
+Key features of this script include:
 
-- **Terminal support:** Currently defaults to `alacritty`, but plans to include support for other terminals like `kitty`.
-- **Output piping:** The script can optionally output the selected item either to the terminal or redirect it to other commands if the `--pipe` option is used.
-
-The script makes extensive use of command substitution and argument parsing to effectively manage user inputs.
+- **Terminal Selection**: The script defaults to using Alacritty but can potentially be modified to support other terminal emulators in the future, such as Kitty, per the `TODO` comments.
+- **Argument Handling**: It efficiently processes command-line arguments, escaping each to ensure that they are handled correctly by the shell. The user can specify a "--pipe" option to decide whether to pipe the output.
+- **Dynamic Options**: The script is set up for future modifications, such as changing terminal windows or adjusting sizing parameters for the FZF interface.
 
 ### Usage
 
-To execute the script, simply call it from the terminal as follows:
+To utilize the `improved-fzfmenu.sh`, it can be executed in a terminal as shown below. You can pass optional arguments to customize the behavior:
 
 ```bash
-/path/to/improved-fzfmenu.sh [fzf_options]
+./improved-fzfmenu.sh [OPTIONS]
 ```
 
-Examples:
+- To run `fzf` without piping:
+```bash
+./improved-fzfmenu.sh
+```
 
-1. Launch fzf without piping:
-   ```bash
-   /home/matias/.scripts/improved-fzfmenu.sh --height=40% --preview 'cat {}'
-   ```
+- To run `fzf` with output piped to another command:
+```bash
+./improved-fzfmenu.sh --pipe | some_other_command
+```
 
-2. Launch fzf with piping option:
-   ```bash
-   /home/matias/.scripts/improved-fzfmenu.sh --pipe --height=40%
-   ```
-
-In these examples, you can replace `[fzf_options]` with any valid options you wish to pass to `fzf`. Remember, using the `--pipe` flag changes the behavior of the output.
+Here, `[OPTIONS]` could represent filters or flags for `fzf`. This script is intended to run directly from a command line, but it can also be easily assigned to a keybinding for quick access in your workspace.
 
 ---
 
 > [!TIP]  
-Consider adding error handling to check if `alacritty` and `fzf` are installed before executing commands. This can improve user experience by providing meaningful feedback when dependencies are missing. You could also enhance the script by allowing dynamic terminal selection and adding resizing options for the terminal.
+> Consider implementing error handling to manage situations where `alacritty` or `fzf` is not installed or accessible. Additionally, allowing the user to specify the terminal as an argument or through a configuration file could enhance the script's flexibility. Including documentation within the script itself can further help users understand how to customize and utilize options effectively.

@@ -2,55 +2,65 @@
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: A script to browse and edit Chezmoi-managed configuration files.
+**edit_chezmoi_cfg_files.sh**: Script for selecting and editing Chezmoi managed configuration files.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder for selecting files with an interactive preview.
-- `bat`: A cat clone with syntax highlighting for improved file viewing.
-- `eza`: A modern replacement for `ls`, that provides colored and icon-rich output.
-- `nvim`: A text editor command for editing configuration files.
-- `chezmoi`: A tool for managing your dotfiles.
+- `chezmoi`: This is the primary tool for managing dotfiles and configuration files.
+- `fzf`: A command-line fuzzy finder for selecting items interactively.
+- `bat`: A cat clone with syntax highlighting and Git integration (used for previewing files).
+- `eza`: An enhanced version of `ls` with colored output and icons.
+- `nvim`: Neovim, a text editor used to open the configuration files.
+- `fd`: A simple, fast, and user-friendly alternative to `find` (used for locating files).
 
 ### Description
 
-The `edit_chezmoi_cfg_files.sh` script allows users to browse and edit configuration files managed by Chezmoi, in a user-friendly manner using `fzf`. The script provides a preview feature for files and directories, utilizing external utilities for a better visual experience.
+This script facilitates the editing of configuration files managed by Chezmoi. It allows users to visually select files or directories from their Chezmoi-managed configurations through an interactive fuzzy finder (`fzf`). 
 
-Here’s a brief overview of the main functions:
+When executed, the script performs the following:
 
-- `preview_command`: Displays a preview of the selected file or directory. It uses `bat` for files and `eza` for directories.
-- `colorize_file_list`: Formats the list of files and directories with ANSI color codes. Directories are shown in bold blue, while files are color-coded distinctly.
+1. It defines two helper functions:
+   - `preview_command`: Previews files and directories using `bat` or `eza`.
+   - `colorize_file_list`: Colorizes file and directory names for improved readability in `fzf`.
 
-The script executes the following steps:
+2. The script gathers all files managed by Chezmoi and pipes them into `fzf`, presenting the user with a list to select from. The selected file's path is determined based on the Chezmoi source path and opened with Neovim.
 
-1. List all files managed by Chezmoi.
-2. Use `fzf` to allow the user to interactively select a file or directory.
-3. On selection, it opens the file in `nvim` or, if it’s a directory, opens it using the `fd` command.
-4. After editing, users are prompted to apply changes or sync the configuration with the repository.
+3. After editing, the user is presented with options to apply changes:
+   - Apply changes directly to Chezmoi.
+   - Sync the changes to a repository.
+   - Exit without applying any changes.
 
 ### Usage
 
-To use the script, simply execute it from the terminal:
+To use this script, simply run it in your terminal. Here’s a quick command to execute it:
 
 ```bash
-bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh
+/home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-You can navigate through your Chezmoi-managed files and directories with the arrow keys. Use the following key bindings while in `fzf`:
+This will trigger an interactive session where you can:
 
-- **Tab**: Select multiple files
-- **Alt + D**: Reload directory list
-- **Alt + F**: Reload file list
+- Navigate through your managed configuration files.
+- Preview files on the right-hand side as you navigate using `fzf`.
+- Select a file or directory, which will open it in Neovim.
 
-After editing, you will be prompted to choose one of the following actions:
+After editing, you will see the following prompt:
 
-- **a** (default): Apply changes with `chezmoi`
-- **s**: Apply changes and sync the repository
-- **x**: Exit without applying changes
+```
+- [a] (default): Chezmoi apply
+- [s]: Chezmoi apply and sync repo
+- [x]: exit
+ > 
+```
+
+You can then choose to apply changes, apply and sync, or exit.
 
 ---
 
 > [!TIP]
-> Consider improving error handling throughout the script to manage cases where files or directories may not exist or are inaccessible. Additionally, enhancing the user experience with more informative prompts and messages could help users navigate through potential issues easily.
+> Potential improvements for the script could include:
+> - Adding error handling for various commands to manage unexpected behavior gracefully.
+> - Implementing user-configurable options for `fzf` layout or preview settings.
+> - Documentation for the functions included within the script for further clarity on usage and customization options.

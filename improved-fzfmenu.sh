@@ -11,10 +11,10 @@ fzf_args=""
 
 for arg in "$@"; do
     if [[ "$arg" == "--pipe" ]]; then
-            pipe=1
-        else
-            fzf_args+=$(printf "%q " "$arg")
-            #args+=("$(printf %q "$arg")")
+        pipe=1
+    else
+        fzf_args+=$(printf "%q " "$arg")
+        #args+=("$(printf %q "$arg")")
     fi
 done
 
@@ -24,7 +24,7 @@ done
 if [ "$pipe" -eq 0 ]; then
     $term \
         -T "$title" \
-        -e bash -c "fzf $fzf_args < /proc/$$/fd/0" 
+        -e bash -c "fzf $fzf_args < /proc/$$/fd/0"
 else
     $term \
         -T "$title" \

@@ -45,5 +45,5 @@ fd . -tx --format '{/}' "$SCRIPTS" |
 # toggle header
 # customize preview label
 # multiple selection
-# editing in specific dir 
+# editing in specific dir
 # stats and logger function

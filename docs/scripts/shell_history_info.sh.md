@@ -1,54 +1,52 @@
-# Shell History Info
+# Shell History Analyzer
 
 ---
 
-**shell_history_info.sh**: Analyze and retrieve the most frequent entries in shell history
+**shell_history_info.sh**: Analyzes shell history files to find frequent lines, words, or characters.
 
 ---
 
 ### Dependencies
 
-- `cat`: Standard command-line utility for concatenating and displaying file contents.
+- `bash`: The shell in which the script is written.
+- `rg` (ripgrep): A fast text searching tool used for cleaning up lines.
 - `sed`: A stream editor for filtering and transforming text.
-- `rg`: `ripgrep`, a line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `sort`: Command used to sort lines of text files.
-- `uniq`: Command that reports or omits repeated lines in a file.
+- `sort`: A command for sorting lines of text files.
+- `uniq`: A command for reporting or omitting repeated lines.
+- `bat`: A cat clone with syntax highlighting and Git integration, used here for displaying the help documentation within the script.
 
 ### Description
 
-This script provides a way to analyze shell history files to determine the most frequently occurring lines, words, or characters from both Zsh and Bash history. The script implements several functions to process the history information:
+This script analyzes the shell history files located in the `XDG_STATE_HOME` directory and identifies the most frequent lines, words, or characters based on the provided command-line arguments. The script defines several helper functions to facilitate this analysis:
 
-- **get_history**: Combines and outputs the contents of Zsh and Bash history files.
-- **split_by_word**: Converts spaces into new lines, allowing word counting.
-- **clean_up**: Eliminates empty lines and trims leading/trailing whitespace.
-- **sort_by_occurence**: Sorts the cleaned data, counts occurrences, and filters results to show only those with occurrences greater than 5.
+- **get_history**: Combines `bash` and `zsh` history files.
+- **split_by_word**: Converts spaces in text to new lines for word analysis.
+- **clean_up**: Removes empty lines and trims whitespace.
+- **sort_by_occurence**: Counts occurrences of each line, keeps only those with more than four occurrences, and formats the output.
 
-The script uses a `case` statement to handle command-line arguments, enabling the user to specify whether they want to analyze lines, words, or characters.
+The script accepts various command-line options to specify what kind of frequency analysis to perform.
 
 ### Usage
 
-To use the script, execute it in a terminal with one of the following options:
+Run the script from the terminal with the appropriate option to analyze your shell history:
 
-- To analyze full lines:
-  ```bash
-  ./shell_history_info.sh --lines
-  ```
-- To analyze words:
-  ```bash
-  ./shell_history_info.sh --words
-  ```
-- To analyze characters:
-  ```bash
-  ./shell_history_info.sh --character
-  ```
-- For a generic option which currently behaves like lines:
-  ```bash
-  ./shell_history_info.sh --option
-  ```
+```bash
+# Analyze the most frequent lines
+./shell_history_info.sh -l
 
-If you provide an invalid argument, the script will notify you to check the usage.
+# Analyze the most frequent words
+./shell_history_info.sh -w
+
+# Analyze the most frequent characters
+./shell_history_info.sh -c
+
+# Display options starting with a specific character
+./shell_history_info.sh -o
+```
+
+If an invalid option is provided, the script will display a message indicating the error and show the script documentation embedded in the source code.
 
 ---
 
-> [!TIP] 
-> While the script serves its purpose well, consider adding more detailed usage instructions or help features (like `-h` or `--help`) for clarity. Also, implementing error handling for file existence checks could prevent potential failures if the history files are not present.
+> [!TIP]  
+> The script could benefit from improved error handling, such as checking if the history files exist before trying to read them. Implementing input validation for the `XDG_STATE_HOME` environment variable can also enhance robustness. Additionally, consider using more efficient text processing tools to improve performance on large history files.

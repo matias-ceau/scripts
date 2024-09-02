@@ -72,9 +72,9 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to browse and edit Chezmoi-managed configuration files.",
+    "description": "Script for selecting and editing Chezmoi managed configuration files.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "cebf5e606691532d87f4a81d18c6d5720ff47df30fc9bd8a51205b2c7b4211b8"
+    "hash": "c599b1ea3a1fd175cc0698f8ce120e3ea40493ff06d4e1fa71c4b6d0e0da4353"
   },
   "editor.sh": {
     "file": "editor.sh",
@@ -128,9 +128,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "improved-fzfmenu.sh",
-    "description": "A script to enhance fzf interface in Alacritty terminal, with output piping option.",
+    "description": "Launches FZF in Alacritty with options for piping the output",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "2c6ac71bc3aff0ebc1343ea0d7a95c3db525008aba009c1c925ed359eeb30d75"
+    "hash": "86980e24caa67923f4773a35d8848f33be7109646e7592883350ba74de7bef16"
   },
   "jupyter_new_notebook.xsh": {
     "file": "jupyter_new_notebook.xsh",
@@ -254,9 +254,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "Run scripts with fzf for a streamlined execution and documentation preview.",
+    "description": "Launch scripts with fzf and provides documentation previews.",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "decd5ea88429aeb54f060193ce0c97db3930b539057e7d1ce62edf7daadafcca"
+    "hash": "3d695a1649311959d4f07f2342e328b7eec6635fd7cd3d679f77618b8554747f"
   },
   "select_script": {
     "file": "select_script",
@@ -436,9 +436,9 @@
   "shell_history_info.sh": {
     "file": "shell_history_info.sh",
     "path": "shell_history_info.sh",
-    "description": "Analyze and retrieve the most frequent entries in shell history",
+    "description": "Analyzes shell history files to find frequent lines, words, or characters.",
     "doc_path": "docs/scripts/shell_history_info.sh.md",
-    "hash": "b1e6d5c21f3ad3060a3e746200ce447f13f03eae37567a965d6002b9c051d0b0"
+    "hash": "e558136667169d0edca712a579a35b50d07a3a66e7ae05e1318a885a90f0ca24"
   },
   "command_prompt.sh": {
     "file": "command_prompt.sh",
@@ -460,5 +460,12 @@
     "description": "Displays a formatted representation of the keyboard layout.",
     "doc_path": "docs/scripts/show_keyboard_layout.py.md",
     "hash": "bd6c72e09cc2eae94f78291e30a52649a5bee51dc836329901b54b3f9e1d09ff"
+  },
+  "qtile_dice_group.py": {
+    "file": "qtile_dice_group.py",
+    "path": "qtile_dice_group.py",
+    "description": "Switches to the complementary group in Qtile dynamically.",
+    "doc_path": "docs/scripts/qtile_dice_group.py.md",
+    "hash": "5c6c47fddc043e42d8888164b0e640f37ef846d0685d1549afa85eac7d4b5a9e"
   }
 }
