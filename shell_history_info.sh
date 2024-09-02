@@ -28,6 +28,7 @@ sort_by_occurence() {
 	sed 's/^ *//; s/ /\t/; /^[1-5]\t/d'
 }
 
+#<DOC>
 case $1 in
 	-l|--lines)
 		get_history |
@@ -50,11 +51,15 @@ case $1 in
 		;;
 	-o|--option)
 		get_history |
+			split_by_word |
 			clean_up | 
+			rg '^-' |
 			sort_by_occurence
 		;;
 	*)
 		echo "Wrong argument, check the code:"
-		echo "$0"
+		cat "$0" | sed -n '/#<DOC>/,/#<\/DOC>/p' | sed '1d;$d' |
+			bat --no-pager -plbash
 		;;
 esac
+#</DOC>
