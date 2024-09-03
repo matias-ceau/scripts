@@ -1,47 +1,49 @@
-# Improved FZF Menu Script
+# Improved FZF Menu Integrator
 
 ---
 
-**improved-fzfmenu.sh**: Launches FZF in Alacritty with options for piping the output
+**improved-fzfmenu.sh**: A script to launch FZF in Alacritty, with optional output piping.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A general-purpose command-line fuzzy finder. This script utilizes `fzf` for interactive menu selection.
-- `alacritty`: A terminal emulator that is used to execute the FZF command in a floating window.
+- `fzf`: A command-line fuzzy finder used for interactive selection.
+- `alacritty`: A fast terminal emulator that supports modern OpenGL-powered rendering.
 
 ### Description
 
-The `improved-fzfmenu.sh` script is designed to enhance user interaction by launching `fzf` (Fuzzy Finder) within the Alacritty terminal emulator. This script allows users to pipe the output from `fzf` back to the shell or other commands, providing seamless integration and usability across different contexts.
+The `improved-fzfmenu.sh` script provides a streamlined way to integrate the FZF fuzzy finder with the Alacritty terminal emulator on Arch Linux, specifically designed for window managers like Qtile. The script accepts arguments and determines whether to pipe the output of FZF or not based on user input.
 
-Key features of this script include:
+Key functionalities include:
 
-- **Terminal Selection**: The script defaults to using Alacritty but can potentially be modified to support other terminal emulators in the future, such as Kitty, per the `TODO` comments.
-- **Argument Handling**: It efficiently processes command-line arguments, escaping each to ensure that they are handled correctly by the shell. The user can specify a "--pipe" option to decide whether to pipe the output.
-- **Dynamic Options**: The script is set up for future modifications, such as changing terminal windows or adjusting sizing parameters for the FZF interface.
+- **Terminal Selection**: Currently set to `alacritty`, but the script has room for expanding to additional terminals (e.g., `kitty`).
+- **Output Piping**: Users can toggle the output between standard output and piping to another command using the `--pipe` argument.
+- **Argument Handling**: Automatically escapes arguments to ensure compatibility with the shell environment.
 
 ### Usage
 
-To utilize the `improved-fzfmenu.sh`, it can be executed in a terminal as shown below. You can pass optional arguments to customize the behavior:
+To run the script, simply execute it from the terminal with any arguments you wish to pass to FZF. Here are a few examples:
 
+**Basic Usage:**
 ```bash
-./improved-fzfmenu.sh [OPTIONS]
+~/scripts/improved-fzfmenu.sh
 ```
+This command opens the FZF menu in Alacritty with no specific arguments.
 
-- To run `fzf` without piping:
+**Using with Arguments:**
 ```bash
-./improved-fzfmenu.sh
+~/scripts/improved-fzfmenu.sh --height 40% --preview 'cat {}'
 ```
+This runs FZF with a specific height and a preview of the selected item.
 
-- To run `fzf` with output piped to another command:
+**Using with Output Piping:**
 ```bash
-./improved-fzfmenu.sh --pipe | some_other_command
+~/scripts/improved-fzfmenu.sh --pipe
 ```
-
-Here, `[OPTIONS]` could represent filters or flags for `fzf`. This script is intended to run directly from a command line, but it can also be easily assigned to a keybinding for quick access in your workspace.
+This command executes FZF and pipes the selected output, which can be handled differently in your workflow.
 
 ---
 
-> [!TIP]  
-> Consider implementing error handling to manage situations where `alacritty` or `fzf` is not installed or accessible. Additionally, allowing the user to specify the terminal as an argument or through a configuration file could enhance the script's flexibility. Including documentation within the script itself can further help users understand how to customize and utilize options effectively.
+> [!TIP] 
+> The script currently defaults to Alacritty. It would be beneficial to implement dynamic terminal selection through a command-line argument, enhancing the script's versatility. Additionally, as the TODO comment suggests, adding functionality for terminal sizing would make it more user-friendly and adaptable to various screen configurations. Consider implementing verbose logging for easier debugging and monitoring of script behavior.

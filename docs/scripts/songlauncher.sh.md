@@ -2,46 +2,45 @@
 
 ---
 
-**[songlauncher.sh](/songlauncher.sh)**: Play a song with cmus using dmenu
+**songlauncher.sh**: Play a song with cmus using dmenu
 
 ---
 
 ### Dependencies
 
-- `cmus`: A multipurpose audio player for Unix-like operating systems. This script utilizes `cmus` to control playback of your music files.
-- `dmenu`: A dynamic menu for X, which is used in this script to display a list of music files for selection. 
+- `cmus`: A small, fast, and powerful music player for Unix-like operating systems.
+- `dmenu`: A dynamic menu for X which allows for simple and efficient navigation.
 
 ### Description
 
-The `songlauncher.sh` script is a simple shell script that leverages the capabilities of `cmus` and `dmenu` to allow users to play a song directly from their music files. The script uses the `find` command to locate all music files in the specified directory (`music` in this case) and then presents them in a dmenu interface, from which the user can select a song to play.
+The `songlauncher.sh` script is an efficient solution to play music tracks using the `cmus` music player in conjunction with `dmenu`, a lightweight dynamic menu. 
 
-This script is executed in the shell and functions effectively within the Qtile window manager environment on Arch Linux. 
+When executed, the script performs the following operations:
+1. **Searching for Music Files**: It uses the `find` command to locate all music files in the specified directory (`music`). The `-L` option ensures that it follows symlinks.
+2. **Displaying a Menu**: The found files are presented in a graphical menu through `dmenu`. The `-i` option makes the menu case-insensitive, while `-l 30` limits the display to 30 lines, allowing for better usability when many files are present.
+3. **Playing Selected Track**: The `cmus-remote -f` command is used to play the selected song from the output of `dmenu`.
 
-The usage of `find -L` extracts all file types in the `music` directory, and `-type f` ensures only files are listed. The `dmenu -i -l 30` part specifies that the dmenu should be case insensitive (`-i`) and list up to 30 items (`-l 30`) at a time for selection.
+This script is particularly useful for users who wish to quickly play a song from their music directory without navigating through their file manager.
 
 ### Usage
 
-To run the script, it simply needs to be executed from the terminal. You can also bind it to a key combination within your window manager configuration for easier access.
-
-Here’s how to run the script from the terminal:
+To use this script, run it directly from your terminal:
 
 ```bash
-~/path/to/songlauncher.sh
+sh /home/matias/.scripts/songlauncher.sh
 ```
 
-Replace `~/path/to/` with the actual path where your `songlauncher.sh` is located. 
+Upon execution, a list of music files will be displayed in `dmenu`. Navigate through the list and select a song to start playing it in `cmus`. 
 
-Additionally, you may consider adding a keybinding in your Qtile configuration like this:
+You can also create a keybinding in your window manager (qtile) to launch this script quickly. For example, you may add the following to your `config.py`:
 
 ```python
-keybinds.extend([
-    Key([mod], "p", lazy.spawn("sh ~/path/to/songlauncher.sh")),
-])
+Key([mod], "m", lazy.spawn("sh /home/matias/.scripts/songlauncher.sh")),
 ```
 
-With this keybinding, pressing `mod + p` will invoke the song launcher.
+This allows you to press a specific key combination to open the song launcher instantly.
 
 ---
 
-> [!TIP]  
-> This script assumes the `music` directory is located in the current working directory. Consider allowing users to specify a path via command-line arguments to enhance functionality. Additionally, checking if `cmus` is running before executing `cmus-remote` may prevent unexpected errors.
+> [!TIP] 
+> Consider adding error handling to your script. For example, if `find` does not return any music files, the script currently fails silently. You could check if the command returns any results before passing it to `cmus-remote`. This would enhance the user experience significantly.

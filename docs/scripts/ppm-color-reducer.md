@@ -2,54 +2,46 @@
 
 ---
 
-**[ppm-color-reducer](/ppm-color-reducer.c)**: A tool to reduce color depth in PPM images based on a given palette.
+**ppm-color-reducer**: A command-line tool to reduce the color depth of PPM images using a custom palette.
 
 ---
 
 ### Dependencies
 
-- `gcc`: The GNU Compiler Collection used to compile this C program.
-- `stdio.h`: Standard I/O for file operations.
-- `stdlib.h`: Standard library for memory allocation and general utilities.
-- `math.h`: Math library for basic calculations.
-- `string.h`: String manipulation functions.
-- `limits.h`: Provides macros for limits of integral types.
+- `gcc`: The GNU Compiler Collection, required to compile the C program.
+- `ppm` format: The script specifically works with PPM files in the P6 format.
 
 ### Description
 
-The **PPM Color Reducer** is a C program that reduces the color depth of PPM images (specifically in P6 format) by mapping the colors in the image to a limited palette of colors defined in a separate text file. The palette file should list colors in the format `r,g,b`, where `r`, `g`, and `b` are integers ranging from 0 to 255.
+The `ppm-color-reducer` is a console-based tool that allows users to reduce the color depth of PPM images by mapping their colors to a specified color palette, which is provided in a separate text file. The palette file should contain colors formatted as `r,g,b` where `r`, `g`, and `b` are integers representing the red, green, and blue components of the color, respectively.
 
-The core functionalities include:
-- **Color Structure**: A simple structure to hold RGB values.
-- **Color Distance Calculation**: A method to compute the squared Euclidean distance between two colors, allowing the program to find the closest match in the palette.
-- **Palette Reading**: Functionality to read and parse the palette from a specified text file, ensuring the data is sanitized and adheres to expected formats.
-- **PPM File Handling**: The program reads the header and pixel data from the input PPM file, processes each pixel to find its nearest color in the loaded palette, and writes the modified image to an output file.
+Here's how the script functions:
+1. **Color Structure**: Defines a `Color` structure to hold RGB values.
+2. **Color Distance Function**: Implements the `color_distance_sq` function to compute the squared Euclidean distance between two colors, which is used to find the closest color in the palette.
+3. **Palette Reading**: The `read_palette` function loads color values from a given palette file into an internal array.
+4. **PPM Processing**: Reads the input PPM file, finds the closest palette color for each pixel, and writes the converted pixel to the output file.
 
 ### Usage
 
-To run the script, compile the code with `gcc` and then execute it with the necessary parameters. The basic command structure is:
+To run the script, use the following command in the terminal:
 
 ```bash
-gcc -o ppm-color-reducer ppm-color-reducer.c
 ./ppm-color-reducer <input_file.ppm> <output_file.ppm> <palette_file.txt>
 ```
 
-#### Example
-
-Given the following files:
-- Input File: `image.ppm`
-- Output File: `output.ppm`
-- Palette File: `palette.txt`
-
-You can run:
+Here’s an example:
 
 ```bash
-./ppm-color-reducer image.ppm output.ppm palette.txt
+./ppm-color-reducer input.ppm output.ppm palette.txt
 ```
 
-This will create `output.ppm`, where each pixel's color has been replaced with the nearest color defined in `palette.txt`.
+- `<input_file.ppm>`: The PPM image file that you want to reduce in color depth.
+- `<output_file.ppm>`: The resultant PPM file after processing.
+- `<palette_file.txt>`: A text file containing the palette of colors, defined in the format `r,g,b`, with one color per line.
+
+Make sure to handle errors properly as the program checks for issues such as file access and format validity.
 
 ---
 
-> [!TIP]
-> The current implementation reads PPM files in binary format (`P6`), which is efficient, but ensure that your input files are formatted correctly. Consider adding more robust error handling or supporting additional PPM formats (like `P3`). Moreover, the palette loading could benefit from additional checks to optimize for maximum color count without exceeding the defined limit.
+> [!IMPORTANT]  
+> This script currently supports only the P6 format of PPM files. You may want to extend the functionality to support P3 format as well, along with additional error handling for various possible edge cases. Additionally, consider implementing logging for better tracking of the operational process. Test the script with various images and palettes to ensure robustness.

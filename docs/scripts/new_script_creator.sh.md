@@ -2,40 +2,51 @@
 
 ---
 
-**new_script_creator.sh**: A simple script to create new scripts with directory linking
+**new_script_creator.sh**: A simple bash script to create new scripts quickly.
 
 ---
 
 ### Dependencies
 
-- `bat`: A command-line tool to view files with syntax highlighting.
-- `nvim`: The Neovim text editor, used for editing the newly created scripts.
-  
+- `bat`: A modern alternative to `cat` with syntax highlighting and Git integration, used for displaying the contents of scripts. 
+- `nvim`: Neovim, a text editor based on Vim, used to create and edit scripts.
+
 ### Description
 
-The **new_script_creator.sh** script is designed to streamline the process of creating new shell scripts within a specified directory. The script sets up a template using **Neovim** for editing and, upon creation, links the script to the user's local bin for easy execution.
+The `new_script_creator.sh` script facilitates the creation of new scripts by providing a straightforward interface via the command line. It begins by defining a usage function that outlines the correct command format for the user. The main functionality is encapsulated in the `script_creator` function.
 
-Key features:
-- **Usage Function**: Displays a help message showing how to use the script.
-- **Script Creation**: Takes one argument (the name of the new script), opens a new file in a specified location, and checks if the file is created successfully.
-- **Permissions and Linking**: If the newly created script is not empty, it sets the file as executable and creates a symbolic link in `~/.local/bin`, allowing for easy access.
+Upon invoking the script with a script name as an argument, the following processes take place:
+
+1. The path for the new script is determined by concatenating the environment variable `SCRIPTS` with the provided script name.
+2. The script opens in `nvim` for editing.
+3. After editing, it checks if the script is not empty (size > 0):
+   - If it contains code, it grants execute permissions.
+   - It then creates a symbolic link to the script in the `~/.local/bin` directory, allowing for easy execution from anywhere in the terminal.
+   - Finally, it displays the contents of the created script using `bat`.
+4. If the script is created without any contents, it alerts the user and does not create the symbolic link.
 
 ### Usage
 
-To use the script, run it from the command line followed by the desired script name you wish to create. 
+To create a new script, simply run the following command:
 
 ```bash
-./new_script_creator.sh my_new_script.sh
+./new_script_creator.sh <script_name>
 ```
 
-If the script is created successfully, it will be opened in Neovim for editing. If there's any content in the script file, it will also set executable permissions and create a link to the script in your local bin. If the file is empty, it will notify you that no script was created.
+For example, to create a script named `example_script.sh`, run:
 
 ```bash
-# Example Usage
-./new_script_creator.sh my_script.sh
+./new_script_creator.sh example_script.sh
+```
+
+If no argument is provided, the script displays usage instructions:
+
+```bash
+Usage:
+    new_script_creator.sh [script]
 ```
 
 ---
 
 > [!TIP]  
-> The script currently lacks error handling for file creation failures and validating that `$SCRIPTS` directory exists. These checks should be added to improve robustness. Additionally, consider implementing a templating feature to add boilerplate code customized to the type of scripts you frequently create, enhancing the initial setup process.
+> Consider adding templating functionality as noted in the TODO comment within the script. This would enhance the usability of the script creator by allowing users to start with a predefined structure or boilerplate code for their scripts, making it easier for them to start coding. Additionally, consider implementing error handling to ensure the `SCRIPTS` environment variable is set and valid before attempting to create a new script.

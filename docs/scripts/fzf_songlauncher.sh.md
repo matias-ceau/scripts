@@ -1,44 +1,40 @@
-# FZF Song Launcher
+# fzf Song Launcher
 
 ---
 
-**[fzf_songlauncher.sh](/fzf_songlauncher.sh)**: Play a song with cmus using fzf to choose the file.
+**fzf_songlauncher.sh**: Play a song with cmus, choosing it with fzf
 
 ---
 
 ### Dependencies
 
-- `cmus`: A small, powerful console music player for Unix-like operating systems.
-- `fzf`: A general-purpose command-line fuzzy finder that makes it easier to select files interactively.
+- `cmus`: A lightweight music player for Linux, allowing for efficient music playback.
+- `fzf`: A command-line fuzzy finder that allows you to search and select files interactively.
 
 ### Description
 
-The `fzf_songlauncher.sh` script is a simple yet effective tool for users of `cmus` who want to quickly select and play a song from their music library. Using `fzf`, the script presents a fuzzy search interface that makes it easy to find audio files.
+The `fzf_songlauncher.sh` script provides a simple and effective way to play music from the command line using `cmus`. It utilizes `fzf` to present a fuzzy search interface, allowing users to quickly locate and select a song from their music directory. The script is designed to work seamlessly with the `cmus` music player, making it easy to integrate into your workflow in an Arch Linux environment, specifically when using the `qtile` window manager.
 
-When executed, this shell script utilizes the `find` command to recursively search for files within the 'music' directory. The result is piped into `fzf`, providing an interactive listing of song files. The user can navigate through this list to select a song. The chosen file's path is then sent to `cmus-remote` with the `-f` flag to play the selected song.
+The script operates by:
+
+1. Utilizing the `find` command to recursively search your `music` directory for audio files.
+2. Passing the list of found files to `fzf`, enabling users to filter through them interactively.
+3. Once a file is selected, it is played in `cmus` using the `cmus-remote` command.
 
 ### Usage
 
-To use the script:
-1. Ensure that you have both `cmus` and `fzf` installed on your Arch Linux system.
-2. Place the script somewhere in your PATH to enable easy execution, or run it directly from its directory.
-3. Make sure the `music` directory exists and is located at the same level as where the script is executed, or adjust the path in the script accordingly.
-
-Here’s a simple way to execute the script from the terminal:
+To use the `fzf_songlauncher.sh` script, make sure it's executable and then run it from your terminal:
 
 ```bash
-sh /home/matias/.scripts/fzf_songlauncher.sh
+chmod +x /home/matias/.scripts/fzf_songlauncher.sh
+/home/matias/.scripts/fzf_songlauncher.sh
 ```
 
-Alternatively, you might want to bind it to a key in your window manager. For example, in `qtile`, you could add a key binding like this:
+You will be presented with a list of music files to choose from. Simply start typing the name of the song you want to play, and `fzf` will filter the results. Press `Enter` once you've found the song you want, and `cmus` will start playing it. 
 
-```python
-Key([mod], "s", lazy.spawn("/home/matias/.scripts/fzf_songlauncher.sh")),
-```
-
-This would allow you to press a key combination (defined by `mod + s` in this case) to launch the song selection interface while using qtile.
+You may also consider binding this script to a keyboard shortcut in your `qtile` configuration for quicker access.
 
 ---
 
-> [!TIP] 
-> The script currently uses a relative path to the `music` directory. To enhance its flexibility, consider passing the music directory as a command-line argument or defining it as an environment variable. Additionally, error handling could be implemented to check if `fzf` or `cmus` are installed and provide user feedback accordingly.
+> [!TIP]  
+> This script currently searches for all files in the `music` directory without filtering based on file type. This could lead to non-audio files appearing in the list, which might cause confusion. Consider modifying the `find` command to only look for common audio file extensions (like `.mp3`, `.wav`, `.flac`, etc.) to enhance user experience.

@@ -1,48 +1,45 @@
-# FZF Album Launcher
+# fzf Album Launcher
 
 ---
 
-**[fzf_albumlauncher.xsh](/fzf_albumlauncher.xsh)**: Choose and play an album using fzf and cmus
+**fzf_albumlauncher.xsh**: Launches and plays selected albums using fzf and cmus.
 
 ---
 
 ### Dependencies
 
-- `beet`: A tool to manage your music collection, extracting album titles.
-- `fzf`: A command-line fuzzy finder to select albums interactively.
-- `cmus`: A small and fast music player that supports various formats.
+- `beet`: A music library manager for easier organization and playback of music collections.
+- `fzf`: A command-line fuzzy finder for selecting items from a list.
+- `cmus`: A lightweight console music player that is used for playback in this script.
+- `xonsh`: A Python-powered shell that is used to execute this script.
 
 ### Description
 
-The **FZF Album Launcher** script utilizes `beet`, `fzf`, and `cmus` to make selecting and playing albums from a music library intuitive and efficient. Upon execution, it lists the available albums, allowing the user to interactively select one with `fzf`. Once an album is selected, the script interacts with `cmus` to update the queue and play the chosen album.
+The `fzf_albumlauncher.xsh` script allows the user to select an album from their music library and play it using cmus. It employs `beet` to list available albums and `fzf` to provide a user-friendly interface for selection. 
 
-Here's an overview of the key operations performed by the script:
-
-- The script pulls a list of albums using `beet ls -a` and processes this using `sed` to format the output.
-- With the user’s input via `fzf`, it constructs a query for `cmus` to narrow down the selection to the chosen album.
-- It clears the current queue and loads the newly selected album, preparing it for playback.
-- Lastly, it saves the current queue state to a temporary `.m3u` file.
+Upon choosing an album, the script sends commands to cmus to clear the current playlist and filter in the selected album. This is done through various `cmus-remote` commands, which facilitate interaction with the cmus player. The script also saves the current playlist for future reference. 
 
 ### Usage
 
-To use the FZF Album Launcher, simply execute the script from the terminal:
+To use this script, simply run it in your terminal. Ensure you have `beet`, `fzf`, and `cmus` installed and configured properly. Here’s a step-by-step guide:
 
-```bash
-$ ./fzf_albumlauncher.xsh
-```
+1. Make sure the script is executable:
+   ```bash
+   chmod +x /home/matias/.scripts/fzf_albumlauncher.xsh
+   ```
+   
+2. Execute the script with:
+   ```bash
+   /home/matias/.scripts/fzf_albumlauncher.xsh
+   ```
 
-This will trigger the album selection process. Here’s a step-by-step breakdown of the interactions:
+3. A list of albums will be presented via fzf, use your arrow keys to navigate and select your desired album.
 
-1. The script fetches the album list and passes it to `fzf`.
-2. Once you make a selection:
-   - The script clears the current queue in `cmus`.
-   - It applies the selected album as a filter within the `cmus` interface.
-   - The selected album gets marked and added to the queue for playback.
-3. Finally, it informs `cmus` to play the queued songs.
+4. The script will automatically play your selected album in cmus.
 
-Make sure to customize the paths or configuration based on your environment if necessary.
+**Note:** You may bind the script to a key combination in your window manager (qtile) for quicker access. 
 
 ---
 
 > [!TIP]  
-> Consider implementing error handling for cases where `beet ls -a` returns no results, and ensure that `cmus` is running before attempting to execute commands. Additionally, adding option flags or arguments to customize the behavior or output paths could enhance the script's usability.
+> The script relies on `beet` for listing albums, which means your albums need to be configured correctly in Beet. Consider adding error handling to manage situations when no albums are found or if cmus is not running. Additionally, the script currently interacts with a hardcoded path for saving playlists, which may not be ideal for all users. You might want to make the save path configurable.

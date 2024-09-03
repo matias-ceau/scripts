@@ -1,39 +1,39 @@
-# Open NVIM in Floating Terminal
+# Open Neovim in a Floating Terminal
 
 ---
 
-**nvim_in_new_terminal.sh**: Opens a floating terminal to edit a file with nvim
+**nvim_in_new_terminal.sh**: Opens a floating terminal to edit a file with Neovim.
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A modern terminal emulator that is required to run this script.
-- `nvim`: Neovim, an editor that serves as an enhanced version of Vim and is used for editing files.
+- `alacritty`: A modern terminal emulator that supports tiling and floating windows
+- `nvim`: Neovim, an extensible and cross-platform text editor, providing a powerful interface for text editing.
 
 ### Description
 
-The `nvim_in_new_terminal.sh` script is designed to provide a seamless way to open files in Neovim (`nvim`) within a floating terminal. This can be particularly useful for users of qtile who want a quick method to edit files while maintaining their workflow. 
+This script is designed to enhance the workflow by allowing users to easily open files using Neovim (`nvim`) in a dedicated floating terminal. Utilizing `alacritty`, a highly efficient terminal emulator, the script creates a new instance of a terminal for editing purposes without disrupting the current workspace.
 
-When run, this script:
-1. Uses the `setsid` command to start a new session, ensuring that the terminal can run independently.
-2. Launches the `alacritty` terminal emulator, which will open a specified file with `nvim` in a floating window.
-
-The script takes one argument, which is the filename that the user wishes to edit. If the file exists, it will be opened; if not, `nvim` will create a new file with that name.
+The script leverages the `setsid` command to ensure that `alacritty` runs in a new session, preventing it from being affected by the current terminal's session. The `-T 'floating'` option sets the terminal window title, and the `-e nvim "$1"` command executes Neovim with the file specified as the first argument.
 
 ### Usage
 
-To use this script, you must have both `alacritty` and `nvim` installed. You can run the script from the terminal or bind it to a key combination in your window manager (qtile).
+To use the script, you must provide the path to the file you want to edit as an argument. Here’s how to do it:
 
-To execute the script, simply provide the file you want to edit as an argument:
+1. Ensure the script is executable. You can make it executable by running:
+   ```bash
+   chmod +x /home/matias/.scripts/nvim_in_new_terminal.sh
+   ```
 
-```bash
-./nvim_in_new_terminal.sh myfile.txt
-```
+2. Run the script from your terminal, providing the filename as an argument:
+   ```bash
+   /home/matias/.scripts/nvim_in_new_terminal.sh path/to/your/file.txt
+   ```
 
-This command will open `myfile.txt` in a floating `alacritty` terminal window running `nvim`. If the specified file does not exist, it will create a new file with that name.
+3. This will open `alacritty` with `nvim`, editing the specified file in a floating terminal.
 
 ---
 
-> [!TIP]  
-> The script assumes that `alacritty` is properly configured to be used in floating mode. Consider adding checks to ensure that the necessary programs are installed before executing the command. Additionally, implementing error handling would improve user feedback, especially if a file does not exist or if `nvim` fails to launch.
+> [!TIP]
+> The script currently opens `alacritty` as a floating terminal with the default size and behavior. Consider adding options for custom window size or position to enhance user experience. Additionally, you could implement error checking to ensure that the file passed as an argument exists, preventing errors in case of typos or nonexistent files.

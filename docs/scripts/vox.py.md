@@ -1,60 +1,49 @@
-# Vox Amp Options List
+# VOX Amp Options List
 
 ---
 
-**vox.py**: A Python script to list and describe Vox amp options in a formatted manner.
+**vox.py**: Lists VOX amplifier options and their details.
 
 ---
 
 ### Dependencies
 
-- `pandas`: A powerful data manipulation library for Python. It is used to create and manage a DataFrame for the amp options.
-- `tabulate`: A library to display data in a tabular format for better readability in the console.
+- `pandas`: A powerful data analysis and manipulation library for Python.
+- `tabulate`: A library for formatting tables.
 
 ### Description
 
-The `vox.py` script provides an interactive command-line interface to list and describe various Vox amplifier models. Featuring an internal DataFrame constructed with the names, modes, colors, and descriptions of different amp models, the script allows users to query information quickly and effectively.
+This script, `vox.py`, is designed to list and manage VOX amplifier models and their associated details, which include model names, modes, amp names, and brief descriptions. The data is organized in a pandas DataFrame, allowing for efficient lookups and information display. 
 
-The main functionalities include:
+The script supports various query mechanisms:
+- By default, it displays a summary of all VOX amp options.
+- If passed a numeric index, it provides detailed information about that specific amplifier.
+- It accepts color filters (specified as `g`, `o`, or `r`) to narrow down displayed options.
+- Additionally, it can search for amp names based on user input.
 
-- Displaying a brief description of each amp model when no arguments are provided.
-- Extracting detailed information about a specific amplifier when the corresponding index is provided.
-- Filtering amplifier models based on their color (represented as a single character).
-- Searching amp names by partial strings input by the user.
-
-The program achieves this by leveraging pandas for data management and tabulate for rendering neat tables in the terminal.
+The output is organized and printed in a table format, thanks to the `tabulate` library.
 
 ### Usage
 
-To run the script, execute it from the command line. The following examples illustrate its usage:
-
-1. **List All Amplifier Options:**
+To run the script, execute it from the terminal with the desired options. Here are some examples:
 
 ```bash
+# Display a list of all amp options
 python vox.py
-```
 
-2. **Get Details for a Specific Amp by Index (e.g., index 5):**
+# Get detailed information for a specific amp by its index
+python vox.py 0
 
-```bash
-python vox.py 5
-```
-
-3. **Filter by Color (e.g., green 'g'):**
-
-```bash
+# Filter amps by color (green)
 python vox.py g
-```
 
-4. **Search Amp Names by Partial Match:**
-
-```bash
+# Search for amps by name (e.g., 'CLEAN')
 python vox.py CLEAN
 ```
 
-For any of these commands, the output will be formatted in an easy-to-read table, making it simple to compare and choose amp options.
+The argparse library can be implemented for better command-line argument handling in future versions.
 
 ---
 
-> [!TIP]  
-> The script could benefit from improved input validation and error handling. Specifically, it would be helpful to notify users when an out-of-range index is supplied or when no amps match the search query. Additionally, consider allowing the script to support more flexible color options for the filtering feature. This way, user experience will be enhanced significantly.
+> [!TIP] 
+This script handles basic functionality well but could benefit from enhanced documentation. Consider adding usage examples directly in the help output to clarify its operations. Additionally, integrating error handling (for invalid inputs) will improve user experience. For large data sets, you may want to implement pagination or search suggestions for better usability.

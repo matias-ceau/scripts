@@ -1,50 +1,38 @@
-# Llama Script Describer
+# Script Describer
 
 ---
 
-**[llama-all-scripts-describer.py](/llama-all-scripts-describer.py)**: Automates script documentation generation using Llama 3.1
+**llama-all-scripts-describer.py**: Automatically generates GitHub documentation for scripts using Llama 3.1.
 
 ---
 
 ### Dependencies
 
-- `ollama`: A library to interface with the Llama language model for generating documentation.
-- `colorama`: A package for cross-platform colored terminal text.
-- `fd`: A fast and simple file finder.
-- `rg`: A command-line search tool (ripgrep) for filtering files.
+- `argparse`: Built-in library for parsing command-line arguments.
+- `csv`: Built-in library to handle CSV files.
+- `subprocess`: Used for executing shell commands.
+- `ollama`: Python client for interacting with the Llama model.
+- `colorama`: Facilitates colored terminal output for better readability.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `rg`: A tool that combines text searching (grep) with the power of Rust.
 
 ### Description
 
-This Python script is designed to facilitate the automatic generation of documentation for user scripts found in a specified directory. By leveraging the Llama 3.1 model, the script reads the content of each script file, analyzes it, and produces a structured markdown documentation file.
+This script is designed to automate the process of generating descriptive documentation for various scripts within a defined directory. It utilizes the Llama 3.1 model for generating descriptions based on the script content. Here’s how the script operates:
 
-Key functionalities:
-
-1. **Script Detection**: It identifies script files in the directory specified by the `SCRIPTS` environment variable, excluding markdown files.
-2. **Orphaned Documentation Checking**: It checks for existing markdown documentation files and alerts the user if they do not have corresponding script files.
-3. **Binary File Handling**: If a script is binary, it attempts to find its source file.
-4. **Llama Interaction**: It communicates with the Llama model to generate documentation based on script content.
-5. **Markdown Generation**: It creates and writes markdown files with generated documentation and updates an index.
+1. **Completion Check**: The script checks for the existence of binary files and tries to find their source counterparts.
+2. **Descriptive Generation**: Content from the identified scripts is sent to the Llama 3.1 model, which generates a comprehensive description.
+3. **Documentation Management**: It manages orphaned documentation files by identifying documentation that doesn’t correspond to any script.
+4. **Interactive Features**: The script prompts the user about whether to run a utility script for updating symlinks.
 
 ### Usage
 
-To execute the script, navigate to the terminal and run:
-
+To run the script, call it from the terminal and pass the path to the CSV file containing script information:
 ```bash
-python /home/matias/.scripts/llama-all-scripts-describer.py [path_to_csv]
+python /home/matias/.scripts/llama-all-scripts-describer.py /path/to/your.csv
 ```
-
-If `path_to_csv` is not supplied, the script defaults to `$SCRIPTS/data/symlink_data.csv`.
-
-#### Example:
-
-```bash
-# Running the script with the default CSV file
-python /home/matias/.scripts/llama-all-scripts-describer.py
-```
-
-**Interactive Element**: The script will prompt whether to execute `utils_update_symlinks.sh`. Respond with 'y' or 'yes' to run it or 'n' to skip.
+If no CSV path is provided, it defaults to `$SCRIPTS/data/symlink_data.csv`.
 
 ---
 
-> [!TIP]  
-> The script could benefit from additional error handling for file I/O operations to ensure robustness, especially during the reading of binary files. Additionally, logging can be implemented for better tracking of operations and errors across larger projects. Consider compressing redundant functionalities into reusable functions to improve code readability and maintenance.
+> [!TIP] Consider handling the case where the Llama model is unavailable or fails to generate a description, and improve user interactions by providing more detailed prompts or confirmations. Additionally, consider logging more errors to better understand potential issues during execution.

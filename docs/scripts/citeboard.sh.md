@@ -1,44 +1,45 @@
-# CiteBoard: Quick Access to Paper Citations
+# Citeboard Script
 
 ---
 
-**[citeboard.sh](/citeboard.sh)**: A script to find and handle paper citations easily.
+**citeboard.sh**: A script to find and manage paper citations from your bibliography.
 
 ---
 
 ### Dependencies
 
-- `findutils`: A set of utilities for searching files and directories in the filesystem.
-- `xsel`: A command-line tool to manipulate the X selection, useful for clipboard operations.
-- `dmenu`: A dynamic menu for X, used to create interactive interfaces for user selection.
+- `findutils`: Essential for file searching operations.
+- `xsel`: Command-line tool to access and manipulate X selections.
+- `dmenu`: Dynamic menu for fast selection from a list.
 
 ### Description
 
-The `citeboard.sh` script is designed to streamline the process of finding and managing paper citations within your workflow. It allows users to search through BibTeX files to locate paper references, presenting them in an interactive selection menu powered by `dmenu`. 
+The `citeboard.sh` script is designed to facilitate the search and handling of paper citations from a bibliography file. It performs the following key functions:
 
-The script does the following:
+1. **Extracting References**: 
+   The script scans through BibTeX files located in the `data/bib` directory, extracting citation keys for entries that contain a comma and are formatted correctly. The extracted references are presented to the user in a list.
 
-1. **Searches for Citations**: It uses `grep` to collect citations from all BibTeX files in the `data/bib/` directory and cleans up the formatting to present a list of references.
-2. **User Selection with dmenu**: After retrieving the citations, it presents them in a vertical list for easy access.
-3. **Choice of Action**: Users can then choose to either copy the citation to the clipboard or open the paper directly using `evince` (a PDF viewer) by searching for the citation in the Zotero storage directory.
+2. **User Interaction**: 
+   The user interacts with `dmenu` to select a reference from the list, and then chooses between two options:
+   - **Open the Paper**: If this option is selected, the script finds the corresponding PDF file in the `data/zotero/storage` directory and opens it using `evince`.
+   - **Copy to Clipboard**: If this option is selected, it copies the citation key to the clipboard using `xsel`.
 
 ### Usage
 
-To run the script, simply execute it from your terminal. Make sure it's executable (`chmod +x /home/matias/.scripts/citeboard.sh`) and you can run it with:
+To run the script, make sure it's executable and simply execute it in a terminal:
 
 ```bash
+chmod +x /home/matias/.scripts/citeboard.sh
 /home/matias/.scripts/citeboard.sh
 ```
 
-#### Workflow Example:
+#### Steps:
 
-1. Run the script with the above command.
-2. Use the `dmenu` interface to select a paper from the list.
-3. Choose either the **open** option to view the paper or the **clipboard** option to copy the citation.
-
-*Note*: Ensure that the `data/bib/` folder contains your BibTeX files and that your Zotero storage path is correctly set to where your PDFs are located.
+1. **Initiate the Script**: Running the script will open a `dmenu` interface with available references.
+2. **Select a Citation**: Use the arrow keys to navigate and hit enter to select a citation.
+3. **Choose Action**: After selecting a citation, a second `dmenu` will prompt you to either "open" the paper or copy the citation to the clipboard.
 
 ---
 
 > [!TIP]  
-> The script could benefit from error handling when invoking `xargs` to open files or copying to clipboard when no file is found. Additionally, consider using a more robust method for handling the case when no citation is selected to improve user experience. Adding comments within the code itself would also enhance maintainability.
+> Consider implementing error handling within your script. For instance, if the PDF file is not found, it might be useful to notify the user with a message. Furthermore, handling empty cases where `dmenu` returns no selection would enhance user experience.

@@ -2,57 +2,55 @@
 
 ---
 
-**[git_clone_by_author.sh](/git_clone_by_author.sh)**: A script to clone git repositories based on developer/package name using various options.
+**git_clone_by_author-repo.sh**: A script for cloning Git repositories by specifying developer and package.
 
 ---
 
 ### Dependencies
 
-- `git`: A version control system required to clone repositories from GitHub.
+- `git`: A version control system to clone repositories. Ensure `git` is installed on your Arch Linux system.
 
 ### Description
 
-This script simplifies the process of cloning GitHub repositories by allowing users to specify options for SSH cloning, local repository cloning, or HTTPS cloning. The script defines a usage function that displays the correct command-line usage if the user inputs incorrect arguments or fails to provide sufficient input. 
+This Bash script simplifies the process of cloning Git repositories from GitHub by allowing users to specify the developer and package directly as arguments. It provides flexible options for cloning:
 
-Here’s how the script works:
+- **SSH URL**: Use SSH for cloning.
+- **Local Repository**: Clone from a local path.
 
-- It sets a default directory for cloning repositories, with the option to customize it via the `GIT_REPOS` environment variable.
-- It assesses command-line flags:
-  - `-s` or `--ssh`: This flag enables SSH cloning.
-  - `-l` or `--local`: This flag allows specifying a local path from which to clone.
-- It ensures that only one of these options can be selected at a time.
-- The main parameters expected from the user are `developer/package`, which the script extracts to determine the appropriate subdirectory.
+The script starts by defining a usage function that outputs the instruction on how to use the script if the input arguments are incorrect. The required structure is:
 
-The target directory structure is organized as:
-
-```plaintext
-$GIT_REPOS/
-└── developer/
-    └── package/
 ```
+git_clone_by_author-repo.sh [-s | -l <path>] developer/package
+```
+
+The key parts of the script include:
+
+- Parsing command-line arguments to check for flags (`-s` for SSH and `-l` for specifying local paths).
+- Validating user inputs, ensuring only valid combinations of flags and arguments are permitted.
+- Cloning the specified repository into a designated Git directory, which defaults to `~/git`.
 
 ### Usage
 
-To utilize this script, you can run it in your terminal. Below are the command examples:
+To use the script, follow the syntax provided below:
 
-```bash
-# Clone using HTTPS
-./git_clone_by_author-repo.sh user/repo
+1. **Clone using HTTPS**:
+   ```
+   ./git_clone_by_author-repo.sh developer/package
+   ```
 
-# Clone using SSH
-./git_clone_by_author-repo.sh -s user/repo
+2. **Clone using SSH**:
+   ```
+   ./git_clone_by_author-repo.sh -s developer/package
+   ```
 
-# Clone a local repository
-./git_clone_by_author-repo.sh -l /path/to/local/repo user/repo
-```
+3. **Clone from a local repository**:
+   ```
+   ./git_clone_by_author-repo.sh -l /path/to/local/repo developer/package
+   ```
 
-**Command-line arguments:**
-- `-s`, `--ssh`: Use SSH for cloning the repository.
-- `-l`, `--local <path>`: Clone a repository from a local path.
-
-If the command is executed without valid options or with incomplete input, the script will display the correct usage format to guide the user.
+Note that using both `-s` and `-l` together will result in an error, as these options are mutually exclusive.
 
 ---
 
 > [!TIP]  
-> The script could be improved by implementing error handling for the `git clone` command to provide clear feedback in case of failures (e.g., incorrect SSH key, invalid repository name). Additionally, consider allowing the user to specify a custom directory for repos as a command-line option for further flexibility.
+> While the script provides good flexibility, consider adding error handling for git operations to capture and display errors encountered during cloning. Additionally, implementing logging to keep track of cloned repositories could be beneficial for later reference.

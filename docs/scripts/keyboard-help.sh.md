@@ -2,47 +2,47 @@
 
 ---
 
-**keyboard-help.sh**: Launches a terminal displaying the current keyboard layout.
+**keyboard-help.sh**: Launches an xterm window displaying the current keyboard layout.
 
 ---
 
 ### Dependencies
 
-- `show_keyboard_layout.py`: A script that outputs the current keyboard layout. Make sure it's located in your PATH.
-- `bat`: A cat clone with syntax highlighting and Git integration. It enhances the output formatting in the terminal.
-- `xterm`: A terminal emulator for the X Window System, necessary to launch the script in a window.
+- `show_keyboard_layout.py`: A user script that fetches the current keyboard layout.
+- `bat`: A cat clone with syntax highlighting and file preview features, useful for displaying the output in a more readable format.
+- `xterm`: A terminal emulator for the X Window System, required to run the script in a separate terminal session.
 
 ### Description
 
-The `keyboard-help.sh` script serves as a convenient utility for Arch Linux users utilizing the Qtile window manager to quickly reference the current keyboard layout. This is particularly useful when switching between multiple layouts or languages. 
+The `keyboard-help.sh` script is designed to provide users with an easy way to view their current keyboard layout in a separate terminal window. When executed, the script performs the following steps:
 
-When executed, the script performs the following actions:
-1. It uses the `which` command to locate the `show_keyboard_layout.py` script, ensuring that the script exists and is executable.
-2. It uses `setsid` to start a new session and launch `xterm`. Inside this terminal, it runs the keyboard layout script and pipes the output to `bat`, which formats it aesthetically for better readability.
+1. **Identifies the script location**: It uses `which` to find the path of `show_keyboard_layout.py`, which is responsible for retrieving the current keyboard layout.
 
-Here’s how the key command works:
-```bash
-"$keyboard_script | bat --paging=always --style=plain"
-```
-The `bat` command displays the output from `show_keyboard_layout.py` with paging support, making it easier for you to read through long outputs.
+2. **Opens xterm**: It uses the `setsid` command to start a new session and launch `xterm`. The terminal is titled "floating", has a font size of 20, and runs the command to display the keyboard layout.
+
+3. **Output rendering**: The output from `show_keyboard_layout.py` is piped to `bat`, which enhances the readability with paging and style formatting.
+
+The decision to use `bat` for displaying the layout is particularly useful for verbose layouts, allowing the user to scroll through without clutter.
 
 ### Usage
 
-To use the `keyboard-help.sh` script:
-1. Ensure that both `show_keyboard_layout.py` and `bat` are installed on your system.
-2. Make the script executable:
-   ```bash
-   chmod +x /home/matias/.scripts/keyboard-help.sh
-   ```
+To use the script, simply execute it from your terminal. It can be run interactively or mapped to a keybinding in your window manager (Qtile). 
 
-3. Run the script from a terminal or bind it to a key in your Qtile configuration. For example, you can start it from a terminal by executing:
-   ```bash
-   /home/matias/.scripts/keyboard-help.sh
-   ```
+You can execute the script with the following command:
 
-Alternatively, add a keybinding in your `config.py` for Qtile to run this script quickly.
+```bash
+bash /home/matias/.scripts/keyboard-help.sh
+```
+
+If you'd like to set it in your Qtile configuration for easy access, you can add a keybinding in your `config.py` like this:
+
+```python
+Key([mod], "h", lazy.spawn("/home/matias/.scripts/keyboard-help.sh")),
+```
+
+When triggered, this will open the xterm window displaying the current keyboard layout.
 
 ---
 
 > [!TIP]  
-> Consider adding error handling in your script to check if the dependencies are installed before attempting to execute the commands. For instance, you could check if `show_keyboard_layout.py` and `bat` exist and provide user-friendly messages if they do not.
+> Consider adding error handling to check if `show_keyboard_layout.py` is available or if `bat` is installed. This could enhance the user experience by providing clear feedback rather than failing silently. Additionally, if the `xterm` window is closed, the layout command should terminate gracefully.

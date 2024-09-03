@@ -2,57 +2,53 @@
 
 ---
 
-**install_dependencies.sh**: Installs essential development and productivity tools on Arch Linux
+**install_dependencies.sh**: Script to install essential packages on Arch Linux using pacman.
 
 ---
 
 ### Dependencies
 
-- `bash`: This script is written in Bash and requires it to be executed.
-- `sudo`: Necessary for executing commands with superuser privileges.
+- `sudo`: Used to run commands as a superuser.
+- `pacman`: The package manager for Arch Linux, required to install software packages.
 
 ### Description
 
-The `install_dependencies.sh` script is a straightforward Bash script designed to automate the installation of various essential development and productivity tools on an Arch Linux system using the `pacman` package manager. This script includes popular utilities that can greatly enhance your development workflow and overall system functionality.
+This script is a simple yet effective Bash script designed for users of Arch Linux. It streamlines the process of installing several essential packages by utilizing the `pacman` package manager. 
 
-The following packages are installed by the script:
+The script does the following:
 
-- `git`: A version control system to manage your code repositories.
-- `fd`: A fast and user-friendly alternative to `find`.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `ripgrep`: A fast text searching tool that recursively searches your current directory.
-- `neovim`: A modernized version of Vim influenced by extensibility and usability.
-- `chezmoi`: A tool for managing your dotfiles easily.
-- `dmenu`: A dynamic menu for X11 that displays a list of choices.
-- `findutils`: A package providing tools like `find`, `locate`, and `updatedb`.
-- `rofi`: A window switcher, application launcher, and dmenu replacement.
-- `dunst`: A lightweight notification daemon.
-- `python-pandas`: A powerful data analysis and manipulation library for Python.
-- `python-colorama`: A library to colorize terminal text in Python applications.
+1. Runs `sudo pacman -S` to initiate the installation.
+2. Lists multiple packages to install, which include:
+   - `git`: A version control system for tracking changes in source code.
+   - `fd`: A fast and user-friendly alternative to `find`.
+   - `bat`: A cat alternative that includes syntax highlighting and Git integration.
+   - `fzf`: A general-purpose command-line fuzzy finder.
+   - `ripgrep`: A line-oriented search tool that recursively searches your current directory for a regex pattern.
+   - `neovim`: An extension of the popular text editor Vim, which adds features that enhance usability.
+   - `chezmoi`: A tool to manage your dotfiles.
+   - `dmenu`: A dynamic menu for X11.
+   - `findutils`: A collection of utilities for locating files.
+   - `rofi`: A window switcher, application launcher, and dmenu replacement.
+   - `dunst`: A lightweight and customizable notification daemon.
+   - `python-pandas`: A powerful data analysis and manipulation library for Python.
+   - `python-colorama`: A library that makes terminal text colored and styled.
 
 ### Usage
 
-To use the script, simply execute it from the terminal. Make sure that you have the necessary permissions and `sudo` access:
+To use the script, follow these steps:
 
-```bash
-bash install_dependencies.sh
-```
+1. Ensure the script is executable:
+   ```bash
+   chmod +x /home/matias/.scripts/install_dependencies.sh
+   ```
+2. Execute the script in the terminal:
+   ```bash
+   /home/matias/.scripts/install_dependencies.sh
+   ```
 
-Alternatively, if you find yourself often needing to install these dependencies, you can create a keybinding in your window manager (qtile) that executes the script:
-
-```python
-from libqtile.config import Key
-from libqtile.command import lazy
-
-keys = [
-    Key(["mod4"], "d", lazy.spawn("bash /home/matias/.scripts/install_dependencies.sh")),
-]
-```
-
-This allows you to install dependencies quickly with a simple key press.
+**Note:** You will be prompted for your sudo password during execution to allow installation of the specified packages.
 
 ---
 
-> [!TIP]
-> The script currently does not check if the packages are already installed before attempting to install them. Consider adding logic to verify the installation status of each package to avoid unnecessary operations or notify the user if any fail to install. This could be accomplished using conditional statements or by querying the package manager before installation.
+> [!TIP]  
+> Consider enhancing script functionality by including package checks before installation. This would prevent unnecessary installation if packages are already present on the system. Additionally, it could be useful to include options for removing packages or updating them, making the script more versatile.

@@ -1,45 +1,38 @@
-# fzfmenu: A Fuzzy Finder with Xterm
+# fzfmenu - A Fuzzy Finder Menu in xterm
 
 ---
 
-**fzfmenu.sh**: Launches fzf in an xterm window using provided arguments.
+**fzfmenu.sh**: A helper script to create a fuzzy finder menu using `fzf` within `xterm`.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder, essential for this script to function.
-- `xterm`: A terminal emulator for the X Window System, used to launch the fzf interface.
+- `bash`: The shell in which the script is run.
+- `fzf`: A command-line fuzzy finder tool that allows you to search and filter text efficiently.
+- `xterm`: A terminal emulator that will execute the fuzzy finder in a new window.
 
 ### Description
 
-This script creates a simple interface for the `fzf` fuzzy finder within an `xterm` terminal. It accepts arguments from the command line, escapes them properly, and then executes the `fzf` command within a new terminal window. 
+This script offers users a fuzzy finding capability similar to `dmenu` by utilizing the `fzf` tool within an `xterm` terminal. It is flexible enough to accept any arguments, which are processed and escaped to ensure they are safely passed to the `fzf` command. The resulting selection made within the `fzf` interface can be retrieved or redirected as needed.
 
-**Key Features:**
-
-- **Argument Handling:** The script accepts any number of arguments, escaping each one to ensure that they are safely parsed by the shell.
-- **Process Redirection:** It redirects standard input and output, allowing for seamless interaction with the `fzf` command. This means you can pipe the results directly into and out of `fzf`, enhancing its interactivity.
-
-The `fzf` interface opens in an `xterm` window with the title `fzfmenu`, providing a clean and focused environment for the user to search through the given inputs.
+The script works as follows:
+1. It first captures all the command-line arguments provided to the script.
+2. Each argument is escaped using `printf %q`, making them safe for passing to other commands.
+3. The arguments are then joined into a single string to form the command to execute.
+4. A new `xterm` window is launched with the title 'fzfmenu', which executes the `fzf` command and reads either from standard input or from a list of items specified by the arguments.
 
 ### Usage
 
-To use the script, simply call `fzfmenu.sh` followed by any options or text you want to search through using `fzf`. Here are some examples:
+To utilize this script, simply pass the items you want to filter as arguments directly from the command line. Make sure that `fzf` is installed, as well as `xterm`. Here’s a quick guideline on how to invoke the script:
 
 ```bash
-# Open fzf with options
-/home/matias/.scripts/fzfmenu.sh --preview 'cat {}'
-
-# Fuzzy search through a list of files
-ls | /home/matias/.scripts/fzfmenu.sh
-
-# Chain with other commands, e.g., searching through history
-history | /home/matias/.scripts/fzfmenu.sh
+./fzfmenu.sh item1 item2 item3 item4
 ```
 
-You can also assign this script to a keybinding in your window manager, making it accessible anytime you need to use it.
+This will open an `xterm` window displaying a fuzzy search interface containing `item1`, `item2`, `item3`, and `item4`. After making a selection in `fzf`, the chosen item(s) will be printed to standard output.
 
 ---
 
-> [!TIP]  
-> The script currently uses `xterm`, which may not be installed by default in all setups. Consider adding a check for `xterm` and providing a fallback option, such as `gnome-terminal` or printing an error message if `xterm` is unavailable. Additionally, adding `fzf` options for customization directly from the command-line arguments could enhance its flexibility.
+> [!TIP] 
+> Consider adding options for customizing the look of `fzf` or specify a default set of items if none are provided, which could enhance user experience. Additionally, handling cases where `fzf` is not installed could prevent errors and guide users towards installation steps.

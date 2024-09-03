@@ -1,42 +1,37 @@
-# Qutebrowser Bookmark Synchronization
+# Qutebrowser Bookmark Synchronization Script
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Script to synchronize Qutebrowser bookmarks with Chezmoi-managed config.
+**qutebrowser-modify-source-bookmarks.sh**: Sync local Qutebrowser bookmarks with ChezMoi.
 
 ---
 
 ### Dependencies
 
-- `bash`: Standard shell for executing the script.
-- `chezmoi`: A tool to manage your dotfiles (used for syncing configurations).
+- `bash`: The script is written in Bash, a popular shell scripting language.
+- `chezmoi`: A tool for managing your dotfiles conveniently.
 
 ### Description
 
-This Bash script is designed to automate the synchronization of bookmarks and quickmarks from your local Qutebrowser configuration to a Chezmoi-managed directory. It serves as a backup and version control mechanism for your browser's bookmarks, which are frequently modified.
+This script is designed to facilitate the synchronization of Qutebrowser bookmarks and quickmarks from the local configuration directory to a ChezMoi-managed directory. It operates by copying the contents of your local bookmarks and quickmarks files into the corresponding ChezMoi directories, enabling easy backup and version control of your browser bookmarks.
 
-**Key Operations:**
-1. **Setting Paths**: The script sets the paths for both local and Chezmoi bookmark and quickmark files using environment variables defined by the user.
-   - `local_book`: Path to local bookmarks.
-   - `chezm_book`: Path to Chezmoi bookmarks.
-   - `local_quick`: Path to local quickmarks.
-   - `chezm_quick`: Path to Chezmoi quickmarks.
+The script performs the following key actions:
 
-2. **Synchronization**: After a pause (to accommodate any changes made to quickmarks), the script uses `cat` to overwrite the Chezmoi bookmark and quickmark files with the local versions.
-
-3. **Commented Out Git Operations**: The script includes commented-out lines for potential addition to a Git repository, suggesting a workflow to commit changes to your bookmarks automatically.
+1. **Define Paths**: It sets up path variables for local bookmarks and quickmarks as well as their equivalents in the ChezMoi-managed configuration.
+2. **Delay Execution**: It incorporates a 20-second wait time. This is beneficial in scenarios where you might be modifying quickmarks and need to ensure that changes are accurately recorded.
+3. **File Copying**: It copies the content of `urls` from both local bookmarks and quickmarks directories into their ChezMoi counterparts.
 
 ### Usage
 
-To execute the script, run the following command in your terminal:
+To use the script, simply run it from a terminal:
 
 ```bash
 bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
 ```
 
-You can also set it up as a cron job for automated running at specified intervals, or bind it to a key in your window manager for quick access.
+This script does not accept command-line arguments; it is designed to be run as-is. You can also set up a keybinding in your window manager (Qtile) to execute this script quickly.
 
 ---
 
 > [!TIP]  
-> Consider using error checking to ensure that the local bookmark files exist before attempting to copy them. You might also want to manage the `sleep` duration dynamically based on whether changes are detected in bookmarks or quickmarks. Additionally, uncommenting and integrating the Git commands could significantly enhance version control, allowing you to track changes over time.
+The script has commented-out sections regarding version control with Git, which can be beneficial for those who want to track changes made to bookmarks over time. Consider activating these lines to automatically add, commit, and push the changes to your Git repository whenever the bookmarks are updated. Keeping your bookmarks under version control can offer added safety against accidental deletions or overwrites.

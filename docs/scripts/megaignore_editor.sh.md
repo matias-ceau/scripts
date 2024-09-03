@@ -1,52 +1,47 @@
-# MegaIgnore Editor Script
+# Megaignore Editor
 
 ---
 
-**megaignore_editor.sh**: A bash script for editing and managing .megaignore files interactively
+**megaignore_editor.sh**: A script to manage and edit `.megaignore` files using `fzf` and `nvim`.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`. It is used to search for files.
-- `fzf`: A general-purpose command-line fuzzy finder that allows for easy selection of files.
-- `bat`: A cat clone with syntax highlighting and Git integration, used for file previews.
-- `nvim`: Neovim, a refactored version of Vim, utilized here for editing files.
+- `bash`: The shell environment in which the script is executed.
+- `fd`: A simple, fast and user-friendly alternative to `find`. It's used here to search for `.megaignore` files.
+- `fzf`: A command-line fuzzy finder; it provides a user interface to search through the found files.
+- `bat`: A cat clone with syntax highlighting and Git integration. It's used to preview file contents.
+- `nvim`: Neovim text editor; allows you to edit the selected `.megaignore` file.
 
 ### Description
 
-The `megaignore_editor.sh` script is designed for users who need to manage their `.megaignore` files efficiently. It leverages the power of `fd` to search for `.megaignore` files within specified directories (`$HOME` and `/mnt`), piping the results to `fzf`, which provides a fuzzy search interface for easy file selection.
+This script is designed for users who want to streamline their workflow when dealing with `.megaignore` files located in their home directory and external mounts (like `/mnt`). It makes use of `fd` to find `.megaignore` files, `fzf` for a user-friendly selection experience, and `nvim` for editing the selected file. 
 
-The script operates in a continuous loop that allows the user to perform various actions on the found `.megaignore` files:
-
-1. **File Search**: It searches for all `.megaignore` files using `fd`.
-2. **Preview**: Each file is displayed with a preview through `bat`, enhancing usability.
-3. **Edit and Manage**:
-   - Pressing **Enter** opens the selected file with `nvim`.
-   - Pressing **Ctrl+D** deletes the selected file.
-
-After each operation, the user is prompted to continue or exit the script, providing flexibility to manage multiple files in one session.
+The script operates in an infinite loop, allowing users to repeatedly search for `.megaignore` files. Upon a search, it displays the results in `fzf`, where users can easily preview the file contents using `bat`. Users can also execute specific commands: pressing `Enter` opens the selected file in `nvim`, while `Ctrl+D` deletes the file.
 
 ### Usage
 
-To use the `megaignore_editor.sh` script, follow these steps:
+To run the script, simply execute it from the terminal:
 
-1. Make the script executable:
-   ```bash
-   chmod +x /home/matias/.scripts/megaignore_editor.sh
-   ```
-2. Execute the script directly in the terminal:
-   ```bash
-   /home/matias/.scripts/megaignore_editor.sh
-   ```
+```bash
+bash ~/path/to/megaignore_editor.sh
+```
 
-#### Interactive Execution
+You can navigate through results using arrow keys and interact with files as follows:
 
-- The script will yield search results from `.megaignore` files in the specified directories.
-- Use arrow keys or type to filter through the results.
-- Press **Enter** to edit with `nvim` or **Ctrl+D** to delete the selected file.
-- After an operation, respond to the prompt to either continue or stop running the script.
+- **Enter**: Open selected `.megaignore` file with `nvim`.
+- **Ctrl+D**: Delete the selected `.megaignore` file.
+  
+After each operation, you will be prompted to continue or exit:
+
+```
+Continue? [y]/n:
+```
+
+You can type `n` to exit the script, or just press `Enter` to continue searching.
 
 ---
 
-> [!TIP] Consider implementing error handling for scenarios where the dependencies are missing, or the selected file does not exist. Also, add clearer prompts for user actions and confirmations before executing dangerous commands such as file deletions. This will enhance usability and prevent accidental data loss.
+> [!TIP] 
+> The script lacks validation for file deletion and could potentially delete important files without further confirmation. It could be enhanced by adding a safety prompt before executing the `rm` command, or by implementing a move to trash functionality instead of permanent deletion. Additionally, consider providing an option to customize search paths or the file pattern to enhance usability.

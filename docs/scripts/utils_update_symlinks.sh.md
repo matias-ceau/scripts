@@ -1,50 +1,45 @@
-# Symlink Manager 
+# Utilities Update Symlinks
 
 ---
 
-**utils_update_symlinks.sh**: Create and maintain symbolic links in ~/.local/bin.
+**utils_update_symlinks.sh**: Script to create and manage symlinks in ~/.local/bin, cleaning old ones.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to 'find'.
-- `bat`: A cat(1) clone with wings. It provides syntax highlighting for the CSV output.
+- `bash`: The shell used to execute this script.
+- `fd`: A fast file finder that is used to locate files for symlinking.
+- `bat`: A cat clone with syntax highlighting and Git integration, used to display CSV content.
 
 ### Description
 
-The `utils_update_symlinks.sh` script automates the management of symbolic links in the `~/.local/bin` directory. It primarily operates using the following functionalities:
+This Bash script automates the process of creating symlinks in the `~/.local/bin` directory from a source directory defined by the `$SCRIPTS` environment variable. The script also cleans up any broken symlinks and logs the actions taken. It uses an external CSV file to keep track of symlinks for record-keeping and future reference.
 
-- It initializes a CSV file to log existing symlinks, and backs up the previous log if it exists.
-- The script removes any broken symlinks found in the target directory and logs this activity.
-- It creates new symlinks from files discovered in a specified source directory defined by the environment variable `SCRIPTS`.
-- Lastly, it records the newly created symlinks into a CSV format for easier reference.
+The main operations include:
 
-The script uses functions for better organization and readability:
+1. **Initialization**: It starts by checking if the CSV log of symlinks exists. If it does, the contents (excluding headers) are backed up into a log file. A new CSV file is then created with an appropriate header.
 
-- `log_info` and `log_error`: Handle logging of messages and errors with timestamps.
-- `remove_broken_symlinks`: Scans the target directory, removing any broken symlinks.
-- `create_symlinks`: Checks for existing symlinks and creates new ones as needed, logging any conflicts.
-- `add_symlinks_to_csv`: Updates the CSV file to reflect the symlinks created, displaying the contents using `bat`.
+2. **Logging Functions**: The script includes functions for logging both informational messages and errors, formatting the output to include timestamps.
+
+3. **Removing Broken Symlinks**: A function scans the target directory for broken symlinks (links that do not point to valid files) and removes them while logging this action.
+
+4. **Creating Symlinks**: The main functionality of the script is to create new symlinks. It checks for any conflicts—specifically if a symlink already exists and points to a different file.
+
+5. **CSV Logging**: Finally, the script collects the newly created symlinks and adds them to the CSV file for tracking purposes. The contents of the CSV file are displayed at the end of the operation.
 
 ### Usage
 
-To run this script, ensure to execute it in a terminal. It does not take any command-line arguments. Ensure the environment variable `SCRIPTS` is correctly set to the source directory containing files you wish to symlink.
-
-To execute the script, simply run:
+To run the script, execute the following command in your terminal. Make sure to adjust the `$SCRIPTS` variable in your environment to point to the correct source directory:
 
 ```bash
-bash /home/matias/.scripts/sys/utils_update_symlinks.sh
+chmod +x /home/matias/.scripts/sys/utils_update_symlinks.sh
+/home/matias/.scripts/sys/utils_update_symlinks.sh
 ```
 
-The script will then:
-1. Remove broken symlinks.
-2. Create new symlinks from the SOURCE_DIR to TARGET_DIR.
-3. Log the status of the operation into a CSV file.
-
-You can set this script to run at regular intervals using a cron job or bind it to a keybinding in your Window Manager for ease of access.
+You can automate this script through a cron job or bind it to a key in your window manager (Qtile) for easy access. It’s designed to run conveniently without needing user interaction.
 
 ---
 
 > [!TIP]
-> The script currently only handles symlinks in the TARGET_DIR. It could be enhanced by adding an option to directly specify a new source directory or to create logs in a structured format. Also, consider adding more detailed error handling or user notifications to improve usability.
+> Consider adding a check for the existence of the `$SCRIPTS` environment variable early in the script to prevent errors if it is not set. Additionally, you might want to handle potential permission issues when creating symlinks, which could lead to unexpected failures during execution.

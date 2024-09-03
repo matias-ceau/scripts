@@ -1,53 +1,47 @@
-# Token Counter with tiktoken
+# Count Tokens with Tiktoken
 
 ---
 
-**[count_tokens_with_tiktoken.py](/count_tokens_with_tiktoken.py)**: A Python script to count the number of tokens in a text file using tiktoken
+**count_tokens_with_tiktoken.py**: A Python script to count the number of tokens in a text file using the `tiktoken` library.
 
 ---
 
 ### Dependencies
 
-- `tiktoken`: A tokenizer for OpenAI models, providing functions for encoding and decoding text into tokens. Install via pip (`pip install tiktoken`).
+- `tiktoken`: A library for encoding text to token counts specifically tailored for models like GPT. Ensure it's installed via `pip install tiktoken`.
 
 ### Description
 
-The `count_tokens_with_tiktoken.py` script is designed to count the number of tokens in a given text file using the `tiktoken` library, which is specifically tailored for OpenAI's language models. Tokens are the basic units that these models use to process and generate text, making this script a valuable tool for understanding text length in a format that models comprehend.
+This script is designed to count the number of tokens in a given text file using the `tiktoken` library, which provides tokenization capabilities specifically optimized for OpenAI's language models. 
 
-The script includes the function `count_tokens(file_path)` that:
-1. Reads the contents of the specified text file.
-2. Encodes the text into tokens using the model "gpt-4o".
-3. Returns the total number of tokens.
+The core functionality lies within the `count_tokens(file_path)` function, which:
+1. Opens a specified text file and reads its content.
+2. Utilizes the `tiktoken` library to encode the text based on the tokenization scheme for the "gpt-4o" model.
+3. Returns the total number of tokens as an integer.
 
-The script also handles command-line interaction, ensuring that the user provides the necessary file path.
+The script also includes a command-line interface to specify the text file for token counting. If the user does not provide exactly one argument, it prints usage instructions.
 
 ### Usage
 
-To use the script, follow these steps:
+To execute the script, navigate to the directory where the script is located and run the following command, replacing `<file_path>` with the path to the desired text file:
 
-1. Make sure you have Python 3 and the necessary library installed:
-   ```bash
-   pip install tiktoken
-   ```
+```bash
+python count_tokens_with_tiktoken.py <file_path>
+```
 
-2. Execute the script from the terminal by providing the path to the text file you want to analyze:
-   ```bash
-   python count_tokens_with_tiktoken.py <file_path>
-   ```
+Example: To count tokens in a file named `example.txt`, you would use:
 
-   Replace `<file_path>` with the actual path to your text file.
+```bash
+python count_tokens_with_tiktoken.py example.txt
+```
 
-   For example:
-   ```bash
-   python count_tokens_with_tiktoken.py /path/to/your/textfile.txt
-   ```
+The script will output the total number of tokens in the specified file:
 
-   You will receive an output with the number of tokens used in the provided file:
-   ```
-   Number of tokens: 256
-   ```
+```
+Number of tokens: <num_tokens>
+```
 
 ---
 
-> [!TIP]  
-> Consider adding input validation for the file path to handle cases where the provided file does not exist or is not readable. Additionally, expanding the script to accept multiple file paths as arguments would enhance its usability for batch processing.
+> [!TIP] 
+> The script currently requires the file to be in UTF-8 encoding. Consider adding error handling for file reading to manage potential issues such as FileNotFound. Additionally, allowing the user to specify the model type might increase flexibility.

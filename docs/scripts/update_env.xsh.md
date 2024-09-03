@@ -2,45 +2,47 @@
 
 ---
 
-**[update_env.xsh](/update_env.xsh)**: update_env.xsh - Update .env file with API keys from xonsh environment
+**update_env.xsh**: Update the .env file with API keys from the current environment
 
 ---
 
 ### Dependencies
 
-- `xonsh`: An expressive shell language that combines Python and shell scripting. This script is designed to be run in a xonsh shell environment.
+- `xonsh`: A Python-powered shell that combines the best of bash and Python. This script relies on it to run properly.
 
 ### Description
 
-The `update_env.xsh` script is designed to compile API keys stored in the xonsh environment into a standardized `.env` file format. The script identifies environment variables ending with `API_KEY` and writes them to a file named `.env` located in the user's home directory. 
+The `update_env.xsh` script is designed to streamline the process of managing API keys by updating a `.env` file within the user's home directory. This file is often used in various applications to store environment variables securely. 
 
-The main function, `update_env`, works as follows:
-1. It constructs a dictionary, `apikeys_dict`, by filtering through all environment variables, selecting only those whose keys terminates with `API_KEY`.
-2. It then creates a string, `apikeys_content`, that formats these keys and their corresponding values in the form `KEY=VALUE`, each on a new line.
-3. Finally, it opens (or creates) the `.env` file and writes the formatted content into it.
+This script defines a function named `update_env` which does the following:
+
+1. **Collect API Keys**: It creates a dictionary `apikeys_dict` containing all items in the current environment whose keys end with 'API_KEY'. This is achieved through a dictionary comprehension that filters the environment's items.
+
+2. **Prepare Content for .env**: It then creates a formatted string `apikeys_content`, where each key-value pair is represented in the format `KEY=VALUE`, separated by newlines, followed by an additional newline.
+
+3. **Write to .env File**: The script opens (or creates) the `.env` file in the home directory and writes the formatted API keys content to it.
+
+---
 
 ### Usage
 
-To use this script, follow these steps:
+To utilize this script, simply execute it from your terminal while in the xonsh environment:
 
-1. Ensure that your shell is running xonsh.
-2. Place the script in an accessible directory and make it executable:
+```bash
+xonsh /home/matias/.scripts/update_env.xsh
+```
 
-   ```bash
-   chmod +x /home/matias/.scripts/update_env.xsh
-   ```
+This will trigger the `update_env` function, automatically updating the `.env` file with any API keys you have in your environment.
 
-3. Run the script directly in the terminal:
+For convenience, you could set a keybinding in qtile to run this script, allowing for easy updates whenever you need them. For example, you could add the following to your `~/.config/qtile/config.py`:
 
-   ```bash
-   /home/matias/.scripts/update_env.xsh
-   ```
+```python
+Key([mod], "u", lazy.spawn('xonsh /home/matias/.scripts/update_env.xsh')),
+```
 
-After execution, your `.env` file will be populated with the API keys from your environment.
-
-You can also bind this script to a keyboard shortcut or run it automatically at certain intervals based on your workflow preferences.
+This would bind the update script to the "mod+u" key combination.
 
 ---
 
 > [!TIP]  
-> Consider adding error handling to the script, particularly when opening the `.env` file for writing. It would help manage situations where the file might be unwritable due to permissions or other issues. Additionally, consider whether you want to overwrite the existing file unconditionally or provide an incremental update feature.
+> Ensure that your environment variables are correctly set prior to running this script. Consider implementing error handling in the script to manage cases where the `.env` file cannot be written or if no API keys are found, enhancing its robustness.

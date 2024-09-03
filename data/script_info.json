@@ -2,175 +2,210 @@
   "albumplayer.xsh": {
     "file": "albumplayer.xsh",
     "path": "albumplayer.xsh",
-    "description": "Play a random album selection with cmus using dmenu",
+    "description": "Play an album using cmus with random selection of other albums",
     "doc_path": "docs/scripts/albumplayer.xsh.md",
     "hash": "ece1447f9419325093b7f5c5bdd808888c674869c078c4201022a837727b4fbe"
   },
   "ardour-open.sh": {
     "file": "ardour-open.sh",
     "path": "ardour-open.sh",
-    "description": "A script to quickly find and open Ardour audio projects.",
+    "description": "Script to search and open Ardour session files.",
     "doc_path": "docs/scripts/ardour-open.sh.md",
     "hash": "f46220dedcda8b357e9bd15b3f07bf747de947eb3bd22e94a0939bb73c6c7644"
   },
   "chatgpt-all-scripts-describer.py": {
     "file": "chatgpt-all-scripts-describer.py",
-    "path": "chatgpt-all-scripts-describer.py",
-    "description": "Automatic documentation generator for user scripts using OpenAI API.",
+    "path": "archived/chatgpt-all-scripts-describer.py",
+    "description": "Generates GitHub markdown documentation for scripts using GPT-4o.",
     "doc_path": "docs/scripts/chatgpt-all-scripts-describer.py.md",
     "hash": "57b8ec01e58c30bd70b1ea2d5473d751f2ec0542ef7895bb006fa54c4b7ec933"
   },
   "chezmoi_on_a_new_system.sh": {
     "file": "chezmoi_on_a_new_system.sh",
     "path": "sys/setup/chezmoi_on_a_new_system.sh",
-    "description": "Script to initialize Chezmoi on a new system for a specific user",
+    "description": "Automates the setup of Chezmoi on a new Arch Linux system.",
     "doc_path": "docs/scripts/chezmoi_on_a_new_system.sh.md",
     "hash": "f985d2d1cf08d0731953fdbceea89a6091e041f171ebb92f1dae08ed49dfb285"
   },
   "citeboard.sh": {
     "file": "citeboard.sh",
     "path": "citeboard.sh",
-    "description": "A script to find and handle paper citations easily.",
+    "description": "A script to find and manage paper citations from your bibliography.",
     "doc_path": "docs/scripts/citeboard.sh.md",
     "hash": "ae03892e4d8c38702217154d1f804275c1ca1308be688f6a9f305d54411b5f03"
   },
   "colormap_from_text.sh": {
     "file": "colormap_from_text.sh",
     "path": "colormap_from_text.sh",
-    "description": "Script to extract color palettes from text files",
+    "description": "Simple script that extracts color palettes from config files",
     "doc_path": "docs/scripts/colormap_from_text.sh.md",
     "hash": "be58184ba693c4d0be5421c3d270d0d5a60f36a49e0433243a2cad639ee803b3"
+  },
+  "command_prompt.sh": {
+    "file": "command_prompt.sh",
+    "path": "command_prompt.sh",
+    "description": "Launch a command with history suggestions using fzf.",
+    "doc_path": "docs/scripts/command_prompt.sh.md",
+    "hash": "4b125af1f02adf7f58cba839b43dff80bd2b5d99175432b062aeaa77d5c4caca"
   },
   "count_tokens_with_tiktoken.py": {
     "file": "count_tokens_with_tiktoken.py",
     "path": "count_tokens_with_tiktoken.py",
-    "description": "A Python script to count the number of tokens in a text file using tiktoken",
+    "description": "A Python script to count the number of tokens in a text file using the `tiktoken` library.",
     "doc_path": "docs/scripts/count_tokens_with_tiktoken.py.md",
     "hash": "49124e07d8663099324d9fdd2ee6f44701c655100bd3ca109d2d929673959857"
   },
   "create_cover_art.sh": {
     "file": "create_cover_art.sh",
     "path": "create_cover_art.sh",
-    "description": "A script to generate cover art from WAV file spectrograms",
+    "description": "Create a cover art based on file spectrogram.",
     "doc_path": "docs/scripts/create_cover_art.sh.md",
     "hash": "05070594a2b22e47486c57bc76a240dd4bcd1f5f74f081a72150b4d1bf724439"
   },
   "dmenu_run_scripts.py": {
     "file": "dmenu_run_scripts.py",
     "path": "dmenu_run_scripts.py",
-    "description": "A Python script to dynamically run scripts using rofi as a dmenu alternative.",
+    "description": "A script to execute selected scripts using rofi with options from xonsh.",
     "doc_path": "docs/scripts/dmenu_run_scripts.py.md",
     "hash": "b0c68cea1daf052b6d413f80ab7fbbaed7605251c5f91f9c3d299ae309a7fb8e"
-  },
-  "dmenu_run_scripts.xsh": {
-    "file": "dmenu_run_scripts.xsh",
-    "path": "dmenu_run_scripts.xsh",
-    "description": "A script to run user scripts via dmenu or rofi.",
-    "doc_path": "docs/scripts/dmenu_run_scripts.xsh.md",
-    "hash": "c8c5e096169ae42c75378ead129af518c4869df4b4fb62aa9b4dd4ed33b99a26"
   },
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to select and edit Chezmoi-managed configuration files with fzf.",
+    "description": "A script for editing and managing Chezmoi configuration files.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
     "hash": "c599b1ea3a1fd175cc0698f8ce120e3ea40493ff06d4e1fa71c4b6d0e0da4353"
   },
   "editor.sh": {
     "file": "editor.sh",
     "path": "editor.sh",
-    "description": "Quickly edit files using `fzf` to find them across specified directories.",
+    "description": "Edit files from the shell using fzf with customizable search options.",
     "doc_path": "docs/scripts/editor.sh.md",
     "hash": "f8cdbf64cdf3e0404794fd2992645ee587fd1609590c0ef16c56c07e748443b4"
+  },
+  "fix-markdown-links.sh": {
+    "file": "fix-markdown-links.sh",
+    "path": "dev/fix-markdown-links.sh",
+    "description": "A script to convert markdown links to be relative to a specified base directory.",
+    "doc_path": "docs/scripts/fix-markdown-links.sh.md",
+    "hash": "6aa54826672ca92d456ee5376357afe67ff284471e51785c1e5f94c9174db8b5"
+  },
+  "flexoki_show.sh": {
+    "file": "flexoki_show.sh",
+    "path": "flexoki_show.sh",
+    "description": "Display a formatted chart of colors with HEX, RGB, and names.",
+    "doc_path": "docs/scripts/flexoki_show.sh.md",
+    "hash": "af13df7cb3217f006e2a36b2d8fdc7131e8313b0711c1f4cea6c54f04f27eddc"
   },
   "fzf_albumlauncher.xsh": {
     "file": "fzf_albumlauncher.xsh",
     "path": "fzf_albumlauncher.xsh",
-    "description": "Choose and play an album using fzf and cmus",
+    "description": "Launches and plays selected albums using fzf and cmus.",
     "doc_path": "docs/scripts/fzf_albumlauncher.xsh.md",
     "hash": "8771925b55e88d5378fe1855b424088207bbccbf3048f9fc47e69f217dfdb31b"
   },
   "fzfmenu_run.sh": {
     "file": "fzfmenu_run.sh",
     "path": "fzfmenu_run.sh",
-    "description": "A script to replace Dmenu with fzf for enhanced run functionality.",
+    "description": "A lightweight dmenu replacement using fzf within a floating xterm terminal.",
     "doc_path": "docs/scripts/fzfmenu_run.sh.md",
     "hash": "cef5b8615ff29142c2fcab588cbeea3d6c632dd437860936a84c377df8f410a4"
   },
   "fzfmenu.sh": {
     "file": "fzfmenu.sh",
     "path": "fzfmenu.sh",
-    "description": "Launches fzf in an xterm window using provided arguments.",
+    "description": "A helper script to create a fuzzy finder menu using `fzf` within `xterm`.",
     "doc_path": "docs/scripts/fzfmenu.sh.md",
     "hash": "183e791947e3e39cf2f564708652a76628507e1a9f940836252bd04d45bdea40"
   },
   "fzf_songlauncher.sh": {
     "file": "fzf_songlauncher.sh",
     "path": "fzf_songlauncher.sh",
-    "description": "Play a song with cmus using fzf to choose the file.",
+    "description": "Play a song with cmus, choosing it with fzf",
     "doc_path": "docs/scripts/fzf_songlauncher.sh.md",
     "hash": "c413364981e14637e7a030f363b0632f88262138b0323e6ff9f30a1a1f049e95"
   },
   "get_repos_present_on_host.sh": {
     "file": "get_repos_present_on_host.sh",
     "path": "get_repos_present_on_host.sh",
-    "description": "Script to list git repositories on the local host and save to files.",
+    "description": "A script to list Git repositories present on the current host.",
     "doc_path": "docs/scripts/get_repos_present_on_host.sh.md",
     "hash": "ddcc48a756de727c6ef408469464cc4e95b41d2d7b1e7eacf743cd95b1308342"
   },
   "git_clone_by_author-repo.sh": {
     "file": "git_clone_by_author-repo.sh",
     "path": "git_clone_by_author-repo.sh",
-    "description": "A script to clone git repositories based on developer/package name using various options.",
+    "description": "A script for cloning Git repositories by specifying developer and package.",
     "doc_path": "docs/scripts/git_clone_by_author-repo.sh.md",
     "hash": "9d3bda700f6ae3d51b9423a2906fe8ff58783d7a78196a08d38b598f3e22bb49"
+  },
+  "grub-tune-to-audio-python.py": {
+    "file": "grub-tune-to-audio-python.py",
+    "path": "grub-tune-to-audio-python.py",
+    "description": "Convert GRUB_INIT_TUNE strings to audio files.",
+    "doc_path": "docs/scripts/grub-tune-to-audio-python.py.md",
+    "hash": "373c4b6b30054ef2c6c703bef4facf5cbb42c5b029320253941e5fbaeaa2dcf1"
   },
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "improved-fzfmenu.sh",
-    "description": "Launches FZF in Alacritty with options for piping the output",
+    "description": "A script to launch FZF in Alacritty, with optional output piping.",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
     "hash": "86980e24caa67923f4773a35d8848f33be7109646e7592883350ba74de7bef16"
+  },
+  "install_dependencies.sh": {
+    "file": "install_dependencies.sh",
+    "path": "install_dependencies.sh",
+    "description": "Script to install essential packages on Arch Linux using pacman.",
+    "doc_path": "docs/scripts/install_dependencies.sh.md",
+    "hash": "358eedb7ddfc5782dd201261f16edc27dbf82ac129124b8462870da83d1ba6cf"
   },
   "jupyter_new_notebook.xsh": {
     "file": "jupyter_new_notebook.xsh",
     "path": "jupyter_new_notebook.xsh",
-    "description": "A script to create and open a new Jupyter notebook in Chromium",
+    "description": "Create a new Jupyter notebook and open it in Chromium.",
     "doc_path": "docs/scripts/jupyter_new_notebook.xsh.md",
     "hash": "2aaedaf4e43785175380bb0ba76ef3d6db12f70bb74b1db5a99fc2e4f13c5a0a"
+  },
+  "keyboard-help.sh": {
+    "file": "keyboard-help.sh",
+    "path": "keyboard-help.sh",
+    "description": "Launches an xterm window displaying the current keyboard layout.",
+    "doc_path": "docs/scripts/keyboard-help.sh.md",
+    "hash": "5338f88178ddd8462acd0de8c5e408e8ec8dfd2ebec376803e4429245beafe93"
   },
   "launch_tmux_with_music_player.sh": {
     "file": "launch_tmux_with_music_player.sh",
     "path": "launch_tmux_with_music_player.sh",
-    "description": "Script to create a tmux session for running cmus",
+    "description": "Script to create a new tmux session called music and open cmus.",
     "doc_path": "docs/scripts/launch_tmux_with_music_player.sh.md",
     "hash": "33b90dbd3dc7b327e21a49b2359220cf46db001d0905faa52fba19212c51eda0"
   },
   "list_process.sh": {
     "file": "list_process.sh",
     "path": "list_process.sh",
-    "description": "Script to list all running services on the system in sorted order.",
+    "description": "A simple script to list all running services sorted by their status.",
     "doc_path": "docs/scripts/list_process.sh.md",
     "hash": "0ace3218a5b5f0cd4f6e08bbba0de1bbbb24ae888286358dd87cd2a0cd0a0afb"
   },
   "llama-all-scripts-describer.py": {
     "file": "llama-all-scripts-describer.py",
     "path": "llama-all-scripts-describer.py",
-    "description": "Automates script documentation generation using Llama 3.1",
+    "description": "Automatically generates GitHub documentation for scripts using Llama 3.1.",
     "doc_path": "docs/scripts/llama-all-scripts-describer.py.md",
     "hash": "0cae3a7dcf6953a0731118a0398092ab77264cabd51d3e06851c2849c70cbe06"
   },
   "llm-script-describer.py": {
     "file": "llm-script-describer.py",
     "path": "llm-script-describer.py",
-    "description": "Generates markdown documentation for user scripts using GPT-4.",
+    "description": "Generate GitHub markdown documentation from user scripts.",
     "doc_path": "docs/scripts/llm-script-describer.py.md",
-    "hash": "254035c07b5275f691acf2f315a6efc9df8b9263a62cdee7fad3dded4e3a23be"
+    "hash": "ae34ca2144da9a6d32c3c65daf069893e6c792e39f78172347e2cadc316c0e30"
   },
   "m3u_creator.sh": {
     "file": "m3u_creator.sh",
     "path": "m3u_creator.sh",
-    "description": "Generate an M3U playlist file from the current directory files.",
+    "description": "Create an m3u file from files in the current directory",
     "doc_path": "docs/scripts/m3u_creator.sh.md",
     "hash": "58a4118b39f470f5fd2137d9899860beb78408e03633e92683898eee38f5e527"
   },
@@ -181,38 +216,73 @@
     "doc_path": "docs/scripts/mechen_music_transfert.py.md",
     "hash": "0cd1be501de3087cf001ab77b8da43e16f4b463b82b058013b477f63c21c9362"
   },
+  "megacmd_launch_tmux.sh": {
+    "file": "megacmd_launch_tmux.sh",
+    "path": "megacmd_launch_tmux.sh",
+    "description": "Launches a new TMUX session for MegaCMD.",
+    "doc_path": "docs/scripts/megacmd_launch_tmux.sh.md",
+    "hash": "ce8895fffb7a381655495efa1415e582a452c5a8b6ec1a1224ed8ab78f6cb9c0"
+  },
+  "megaignore_editor.sh": {
+    "file": "megaignore_editor.sh",
+    "path": "megaignore_editor.sh",
+    "description": "A script to manage and edit `.megaignore` files using `fzf` and `nvim`.",
+    "doc_path": "docs/scripts/megaignore_editor.sh.md",
+    "hash": "685075c0aa2bfec0b4e2d290543b8e92e5a028ddc6746e23ce6762eaef1c6c33"
+  },
   "midi2arch.xsh": {
     "file": "midi2arch.xsh",
     "path": "midi2arch.xsh",
-    "description": "A script to transform a MIDI controller into a keyboard/script launcher",
+    "description": "Transform a MIDI controller into a keyboard/script launcher.",
     "doc_path": "docs/scripts/midi2arch.xsh.md",
     "hash": "79616979b1313d1a7bebe4c93cfc5646d6924ab8d6c7428fa24eb7774c775309"
+  },
+  "new_script_creator.sh": {
+    "file": "new_script_creator.sh",
+    "path": "new_script_creator.sh",
+    "description": "A simple bash script to create new scripts quickly.",
+    "doc_path": "docs/scripts/new_script_creator.sh.md",
+    "hash": "265db232ae9d951ff9371fce47f70316bcde46a5d0250c8fdec8a38ba4c88394"
   },
   "next_album.xsh": {
     "file": "next_album.xsh",
     "path": "next_album.xsh",
-    "description": "Skip to the next album in CMUS audio player",
+    "description": "Skip to the next album in CMUS music player.",
     "doc_path": "docs/scripts/next_album.xsh.md",
     "hash": "63d35bcfc1dce9cc7d4c39459303431ba6152c3e329e25d136479d1e9793cacb"
+  },
+  "nvim_in_new_terminal.sh": {
+    "file": "nvim_in_new_terminal.sh",
+    "path": "nvim_in_new_terminal.sh",
+    "description": "Opens a floating terminal to edit a file with Neovim.",
+    "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
+    "hash": "f946fcb565c014cfb35a72ad242188c05e9b670a9af58a75cc26b4f1416fbf72"
+  },
+  "obsidian-vault-selector.sh": {
+    "file": "obsidian-vault-selector.sh",
+    "path": "obsidian-vault-selector.sh",
+    "description": "Script to easily open any Obsidian vault from the terminal",
+    "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
+    "hash": "44c382ae3dcd218b967b608409b0b917efd0006a12bab0e320a1b2a15fb61705"
   },
   "obsidian.xsh": {
     "file": "obsidian.xsh",
     "path": "obsidian.xsh",
-    "description": "Open any Obsidian vault from a user-defined directory",
+    "description": "Open any Obsidian vault from your PKM directory",
     "doc_path": "docs/scripts/obsidian.xsh.md",
     "hash": "1878546c18f9aa0d3d9b15bff8c9804192665ac6288e06e7479d56e05e58f1da"
   },
   "pdfopener.sh": {
     "file": "pdfopener.sh",
     "path": "pdfopener.sh",
-    "description": "A script to pick and open a PDF file using Evince",
+    "description": "A script to select and open any PDF file from the home folder using Evince.",
     "doc_path": "docs/scripts/pdfopener.sh.md",
     "hash": "36e79169c07e34cd457f64008fa64f1aeadb1a0e994582e6116f55b781d5fd98"
   },
   "playlist_player.xsh": {
     "file": "playlist_player.xsh",
     "path": "playlist_player.xsh",
-    "description": "A script for selecting and playing playlists in cmus with dmenu.",
+    "description": "A simple script to pick and play a music playlist using cmus",
     "doc_path": "docs/scripts/playlist_player.xsh.md",
     "hash": "48236c3d086375da9e6a2afe0229a4a93079854c1c7dc06741c046177ce05d3c"
   },
@@ -226,44 +296,93 @@
   "ppm-color-reducer": {
     "file": "ppm-color-reducer",
     "path": "bin/ppm-color-reducer",
-    "description": "A tool to reduce color depth in PPM images based on a given palette.",
+    "description": "A command-line tool to reduce the color depth of PPM images using a custom palette.",
     "doc_path": "docs/scripts/ppm-color-reducer.md",
     "hash": "0938ae98863c44fb70df6b5cba51575aed68b74bb0df568d3a2b1c1dc777be2d"
+  },
+  "qtile_dice_group.py": {
+    "file": "qtile_dice_group.py",
+    "path": "qtile_dice_group.py",
+    "description": "A script to switch between Qtile groups using a complementary number.",
+    "doc_path": "docs/scripts/qtile_dice_group.py.md",
+    "hash": "5c6c47fddc043e42d8888164b0e640f37ef846d0685d1549afa85eac7d4b5a9e"
+  },
+  "quick-pass.sh": {
+    "file": "quick-pass.sh",
+    "path": "quick-pass.sh",
+    "description": "Launches a fuzzy finder for passwords stored in a specified directory.",
+    "doc_path": "docs/scripts/quick-pass.sh.md",
+    "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
+  },
+  "qutebrowser-modify-source-bookmarks.sh": {
+    "file": "qutebrowser-modify-source-bookmarks.sh",
+    "path": "qutebrowser-modify-source-bookmarks.sh",
+    "description": "Sync local Qutebrowser bookmarks with ChezMoi.",
+    "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
+    "hash": "b5ace7f64bbe70ce73712b54d3e7bc94f3a2266487bb54c99dc82951b038a1c4"
   },
   "random_album.xsh": {
     "file": "random_album.xsh",
     "path": "random_album.xsh",
-    "description": "Select random album and play it with cmus",
+    "description": "Selects a random album and plays it with cmus.",
     "doc_path": "docs/scripts/random_album.xsh.md",
     "hash": "e46781e13b8c868afc8950cc60bd321cce75a3c98cbd5882e7fe026f7dc97cb4"
   },
   "random_wallpapers.xsh": {
     "file": "random_wallpapers.xsh",
     "path": "random_wallpapers.xsh",
-    "description": "Pick a random wallpaper from a specified folder.",
+    "description": "Pick random wallpaper from a specified wallpaper list",
     "doc_path": "docs/scripts/random_wallpapers.xsh.md",
     "hash": "5181e4ee38c910c498c2e8d3bf0ad624b7dafe125dfd6c10586cece88486f227"
+  },
+  "read_the_fucking_manual.sh": {
+    "file": "read_the_fucking_manual.sh",
+    "path": "read_the_fucking_manual.sh",
+    "description": "A tool to view commonly searched manual entries.",
+    "doc_path": "docs/scripts/read_the_fucking_manual.sh.md",
+    "hash": "154e6527fda3f47f97034a2a5bad2df971e16fb393b423be0b00cbecc9a6c7de"
   },
   "sandisk_music_transfert.py": {
     "file": "sandisk_music_transfert.py",
     "path": "sandisk_music_transfert.py",
-    "description": "Python script to transfer music to a Sandisk media player from a local library.",
+    "description": "A script to transfer unlistened music albums to a Sandisk media player.",
     "doc_path": "docs/scripts/sandisk_music_transfert.py.md",
     "hash": "79717ef90dc3090d12af163333dd31fac3880899eea760994df8415bbcf6ecb1"
   },
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "Launch scripts with fzf and provides documentation previews.",
+    "description": "Launch scripts with fzf and provides rich previews",
     "doc_path": "docs/scripts/script_launcher.sh.md",
     "hash": "3d695a1649311959d4f07f2342e328b7eec6635fd7cd3d679f77618b8554747f"
   },
   "select_script": {
     "file": "select_script",
     "path": "bin/select_script",
-    "description": "A C script for selecting and executing a script from a cached list.",
+    "description": "A C script that selects a chosen script using cached data from a CSV file.",
     "doc_path": "docs/scripts/select_script.md",
     "hash": "8118344df099ac6269278bee4ff4541cbc7640e1675d01d8be75274c1cb86d6b"
+  },
+  "setting-up-syncs.sh": {
+    "file": "setting-up-syncs.sh",
+    "path": "setting-up-syncs.sh",
+    "description": "Script to sync user directories to a backup location using Mega.nz",
+    "doc_path": "docs/scripts/setting-up-syncs.sh.md",
+    "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
+  },
+  "shell_history_info.sh": {
+    "file": "shell_history_info.sh",
+    "path": "shell_history_info.sh",
+    "description": "Retrieves frequent lines, words, or characters from shell history files.",
+    "doc_path": "docs/scripts/shell_history_info.sh.md",
+    "hash": "e558136667169d0edca712a579a35b50d07a3a66e7ae05e1318a885a90f0ca24"
+  },
+  "show_keyboard_layout.py": {
+    "file": "show_keyboard_layout.py",
+    "path": "show_keyboard_layout.py",
+    "description": "Displays a visual representation of the keyboard layout in terminal.",
+    "doc_path": "docs/scripts/show_keyboard_layout.py.md",
+    "hash": "bd6c72e09cc2eae94f78291e30a52649a5bee51dc836329901b54b3f9e1d09ff"
   },
   "songlauncher.sh": {
     "file": "songlauncher.sh",
@@ -275,149 +394,9 @@
   "sync-repo.sh": {
     "file": "sync-repo.sh",
     "path": "sync-repo.sh",
-    "description": "A script to sync a local git repository with its remote counterpart.",
+    "description": "A script for syncing a Git repository, including fetching, pulling, and handling conflicts.",
     "doc_path": "docs/scripts/sync-repo.sh.md",
     "hash": "6c4d8c63aaeefbcfddea7b6497e65dd9df7a34688adb1cc7e80804be5e44445b"
-  },
-  "tmux-help.py": {
-    "file": "tmux-help.py",
-    "path": "dev/tmux-help.py",
-    "description": "tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.",
-    "doc_path": "docs/scripts/tmux-help.py.md",
-    "hash": "d6e88ef80189b80476678d2892a4674826f6bd6b7587902c7dc520821c1a9e08"
-  },
-  "toggle_picom.sh": {
-    "file": "toggle_picom.sh",
-    "path": "toggle_picom.sh",
-    "description": "Script to toggle the Picom compositor on and off.",
-    "doc_path": "docs/scripts/toggle_picom.sh.md",
-    "hash": "79a36619b1e24601df35b6ce4931f142b29855efb7ece055acb83f089d4b1700"
-  },
-  "transform_symlink.sh": {
-    "file": "transform_symlink.sh",
-    "path": "transform_symlink.sh",
-    "description": "Convert symlinks to copies of their target files or directories.",
-    "doc_path": "docs/scripts/transform_symlink.sh.md",
-    "hash": "7f7adf05e68fafb56cbf58221a0e087c939a646dd7466e1e72233a37bfe98a33"
-  },
-  "update_env.xsh": {
-    "file": "update_env.xsh",
-    "path": "update_env.xsh",
-    "description": "update_env.xsh - Update .env file with API keys from xonsh environment",
-    "doc_path": "docs/scripts/update_env.xsh.md",
-    "hash": "303c8ffa3530b40ff3f2d49ee6a499d6e211949dee2801ec1e6edd92d50515d6"
-  },
-  "utils_update_symlinks.sh": {
-    "file": "utils_update_symlinks.sh",
-    "path": "sys/utils_update_symlinks.sh",
-    "description": "Create and maintain symbolic links in ~/.local/bin.",
-    "doc_path": "docs/scripts/utils_update_symlinks.sh.md",
-    "hash": "b5066c456d311593adac63cc5e3bd47cbb372ee21f290c76f402b0962b367113"
-  },
-  "vimwiki.sh": {
-    "file": "vimwiki.sh",
-    "path": "vimwiki.sh",
-    "description": "Open a note in vim using fzf for quick selection.",
-    "doc_path": "docs/scripts/vimwiki.sh.md",
-    "hash": "852098a285baf222ac7f1251f98ce6f39ff74140f7fe7280a00e91a0eb8c22a1"
-  },
-  "vox.py": {
-    "file": "vox.py",
-    "path": "vox.py",
-    "description": "A Python script to list and describe Vox amp options in a formatted manner.",
-    "doc_path": "docs/scripts/vox.py.md",
-    "hash": "c11a48deacf487b191b891ab5e71c3c86cf713e0de96542c77741c2ef846fe24"
-  },
-  "wallpaper.sh": {
-    "file": "wallpaper.sh",
-    "path": "wallpaper.sh",
-    "description": "Automatically change wallpapers from a specified collection.",
-    "doc_path": "docs/scripts/wallpaper.sh.md",
-    "hash": "faee0d7137738d4c17d2d3ee9e09b14a2f4d8b0fc02453b0a6e882fb4a71bf7e"
-  },
-  "you_are_not_documented.sh": {
-    "file": "you_are_not_documented.sh",
-    "path": "you_are_not_documented.sh",
-    "description": "A script that finds scripts without inline documentation",
-    "doc_path": "docs/scripts/you_are_not_documented.sh.md",
-    "hash": "86e083c3282edc4e34b1a0e876575f39583c7ce34cde832ea57e54b9c429cd56"
-  },
-  "fix-markdown-links.sh": {
-    "file": "fix-markdown-links.sh",
-    "path": "fix-markdown-links.sh",
-    "description": "A script to fix relative links in Markdown files.",
-    "doc_path": "docs/scripts/fix-markdown-links.sh.md",
-    "hash": "6aa54826672ca92d456ee5376357afe67ff284471e51785c1e5f94c9174db8b5"
-  },
-  "new_script_creator.sh": {
-    "file": "new_script_creator.sh",
-    "path": "new_script_creator.sh",
-    "description": "A simple script to create new scripts with directory linking",
-    "doc_path": "docs/scripts/new_script_creator.sh.md",
-    "hash": "265db232ae9d951ff9371fce47f70316bcde46a5d0250c8fdec8a38ba4c88394"
-  },
-  "flexoki_show.sh": {
-    "file": "flexoki_show.sh",
-    "path": "flexoki_show.sh",
-    "description": "Generate a color palette with hex, RGB values, and names for quick reference.",
-    "doc_path": "docs/scripts/flexoki_show.sh.md",
-    "hash": "af13df7cb3217f006e2a36b2d8fdc7131e8313b0711c1f4cea6c54f04f27eddc"
-  },
-  "quick-pass.sh": {
-    "file": "quick-pass.sh",
-    "path": "quick-pass.sh",
-    "description": "Quickly select a password from your password store using fzf.",
-    "doc_path": "docs/scripts/quick-pass.sh.md",
-    "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
-  },
-  "megaignore_editor.sh": {
-    "file": "megaignore_editor.sh",
-    "path": "megaignore_editor.sh",
-    "description": "A bash script for editing and managing .megaignore files interactively",
-    "doc_path": "docs/scripts/megaignore_editor.sh.md",
-    "hash": "685075c0aa2bfec0b4e2d290543b8e92e5a028ddc6746e23ce6762eaef1c6c33"
-  },
-  "setting-up-syncs.sh": {
-    "file": "setting-up-syncs.sh",
-    "path": "setting-up-syncs.sh",
-    "description": "Automates syncing of user directories to a backup location.",
-    "doc_path": "docs/scripts/setting-up-syncs.sh.md",
-    "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
-  },
-  "grub-tune-to-audio-python.py": {
-    "file": "grub-tune-to-audio-python.py",
-    "path": "grub-tune-to-audio-python.py",
-    "description": "Converts GRUB_INIT_TUNE strings into audio files.",
-    "doc_path": "docs/scripts/grub-tune-to-audio-python.py.md",
-    "hash": "373c4b6b30054ef2c6c703bef4facf5cbb42c5b029320253941e5fbaeaa2dcf1"
-  },
-  "install_dependencies.sh": {
-    "file": "install_dependencies.sh",
-    "path": "install_dependencies.sh",
-    "description": "Installs essential development and productivity tools on Arch Linux",
-    "doc_path": "docs/scripts/install_dependencies.sh.md",
-    "hash": "358eedb7ddfc5782dd201261f16edc27dbf82ac129124b8462870da83d1ba6cf"
-  },
-  "megacmd_launch_tmux.sh": {
-    "file": "megacmd_launch_tmux.sh",
-    "path": "megacmd_launch_tmux.sh",
-    "description": "Launches the MEGA command line interface in a new tmux session.",
-    "doc_path": "docs/scripts/megacmd_launch_tmux.sh.md",
-    "hash": "ce8895fffb7a381655495efa1415e582a452c5a8b6ec1a1224ed8ab78f6cb9c0"
-  },
-  "nvim_in_new_terminal.sh": {
-    "file": "nvim_in_new_terminal.sh",
-    "path": "nvim_in_new_terminal.sh",
-    "description": "Opens a floating terminal to edit a file with nvim",
-    "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
-    "hash": "f946fcb565c014cfb35a72ad242188c05e9b670a9af58a75cc26b4f1416fbf72"
-  },
-  "obsidian-vault-selector.sh": {
-    "file": "obsidian-vault-selector.sh",
-    "path": "obsidian-vault-selector.sh",
-    "description": "Script to select and open an Obsidian vault from a directory.",
-    "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "44c382ae3dcd218b967b608409b0b917efd0006a12bab0e320a1b2a15fb61705"
   },
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
@@ -426,53 +405,67 @@
     "doc_path": "docs/scripts/terminal_with_command.sh.md",
     "hash": "ba118ae82bc92d126957d2ea3d4226611e9b4862ddf8c2f6862da36f2e8003b7"
   },
-  "read_the_fucking_manual.sh": {
-    "file": "read_the_fucking_manual.sh",
-    "path": "read_the_fucking_manual.sh",
-    "description": "A script to display the most researched manual entries based on history.",
-    "doc_path": "docs/scripts/read_the_fucking_manual.sh.md",
-    "hash": "154e6527fda3f47f97034a2a5bad2df971e16fb393b423be0b00cbecc9a6c7de"
+  "tmux-help.py": {
+    "file": "tmux-help.py",
+    "path": "dev/tmux-help.py",
+    "description": "Interactive script to assist with tmux commands and manage usage information.",
+    "doc_path": "docs/scripts/tmux-help.py.md",
+    "hash": "d6e88ef80189b80476678d2892a4674826f6bd6b7587902c7dc520821c1a9e08"
   },
-  "shell_history_info.sh": {
-    "file": "shell_history_info.sh",
-    "path": "shell_history_info.sh",
-    "description": "Retrieve and analyze frequent entries from shell history files.",
-    "doc_path": "docs/scripts/shell_history_info.sh.md",
-    "hash": "e558136667169d0edca712a579a35b50d07a3a66e7ae05e1318a885a90f0ca24"
+  "toggle_picom.sh": {
+    "file": "toggle_picom.sh",
+    "path": "toggle_picom.sh",
+    "description": "Script to toggle the picom compositor on or off.",
+    "doc_path": "docs/scripts/toggle_picom.sh.md",
+    "hash": "79a36619b1e24601df35b6ce4931f142b29855efb7ece055acb83f089d4b1700"
   },
-  "command_prompt.sh": {
-    "file": "command_prompt.sh",
-    "path": "command_prompt.sh",
-    "description": "Launch a command with history suggestions using fzf.",
-    "doc_path": "docs/scripts/command_prompt.sh.md",
-    "hash": "4b125af1f02adf7f58cba839b43dff80bd2b5d99175432b062aeaa77d5c4caca"
+  "transform_symlink.sh": {
+    "file": "transform_symlink.sh",
+    "path": "transform_symlink.sh",
+    "description": "A utility to transform symlinks into copies of their targets.",
+    "doc_path": "docs/scripts/transform_symlink.sh.md",
+    "hash": "7f7adf05e68fafb56cbf58221a0e087c939a646dd7466e1e72233a37bfe98a33"
   },
-  "keyboard-help.sh": {
-    "file": "keyboard-help.sh",
-    "path": "keyboard-help.sh",
-    "description": "Launches a terminal displaying the current keyboard layout.",
-    "doc_path": "docs/scripts/keyboard-help.sh.md",
-    "hash": "5338f88178ddd8462acd0de8c5e408e8ec8dfd2ebec376803e4429245beafe93"
+  "update_env.xsh": {
+    "file": "update_env.xsh",
+    "path": "update_env.xsh",
+    "description": "Update the .env file with API keys from the current environment",
+    "doc_path": "docs/scripts/update_env.xsh.md",
+    "hash": "303c8ffa3530b40ff3f2d49ee6a499d6e211949dee2801ec1e6edd92d50515d6"
   },
-  "show_keyboard_layout.py": {
-    "file": "show_keyboard_layout.py",
-    "path": "show_keyboard_layout.py",
-    "description": "Displays a formatted representation of the keyboard layout.",
-    "doc_path": "docs/scripts/show_keyboard_layout.py.md",
-    "hash": "bd6c72e09cc2eae94f78291e30a52649a5bee51dc836329901b54b3f9e1d09ff"
+  "utils_update_symlinks.sh": {
+    "file": "utils_update_symlinks.sh",
+    "path": "sys/utils_update_symlinks.sh",
+    "description": "Script to create and manage symlinks in ~/.local/bin, cleaning old ones.",
+    "doc_path": "docs/scripts/utils_update_symlinks.sh.md",
+    "hash": "b5066c456d311593adac63cc5e3bd47cbb372ee21f290c76f402b0962b367113"
   },
-  "qtile_dice_group.py": {
-    "file": "qtile_dice_group.py",
-    "path": "qtile_dice_group.py",
-    "description": "Switches to a complementary group in Qtile.",
-    "doc_path": "docs/scripts/qtile_dice_group.py.md",
-    "hash": "5c6c47fddc043e42d8888164b0e640f37ef846d0685d1549afa85eac7d4b5a9e"
+  "vimwiki.sh": {
+    "file": "vimwiki.sh",
+    "path": "vimwiki.sh",
+    "description": "Open a note in vim with fzf",
+    "doc_path": "docs/scripts/vimwiki.sh.md",
+    "hash": "852098a285baf222ac7f1251f98ce6f39ff74140f7fe7280a00e91a0eb8c22a1"
   },
-  "qutebrowser-modify-source-bookmarks.sh": {
-    "file": "qutebrowser-modify-source-bookmarks.sh",
-    "path": "qutebrowser-modify-source-bookmarks.sh",
-    "description": "Script to synchronize Qutebrowser bookmarks with Chezmoi-managed config.",
-    "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
-    "hash": "b5ace7f64bbe70ce73712b54d3e7bc94f3a2266487bb54c99dc82951b038a1c4"
+  "vox.py": {
+    "file": "vox.py",
+    "path": "vox.py",
+    "description": "Lists VOX amplifier options and their details.",
+    "doc_path": "docs/scripts/vox.py.md",
+    "hash": "c11a48deacf487b191b891ab5e71c3c86cf713e0de96542c77741c2ef846fe24"
+  },
+  "wallpaper.sh": {
+    "file": "wallpaper.sh",
+    "path": "wallpaper.sh",
+    "description": "A script to pick random wallpapers from a specified list.",
+    "doc_path": "docs/scripts/wallpaper.sh.md",
+    "hash": "faee0d7137738d4c17d2d3ee9e09b14a2f4d8b0fc02453b0a6e882fb4a71bf7e"
+  },
+  "you_are_not_documented.sh": {
+    "file": "you_are_not_documented.sh",
+    "path": "you_are_not_documented.sh",
+    "description": "A script that finds scripts without inline documentation.",
+    "doc_path": "docs/scripts/you_are_not_documented.sh.md",
+    "hash": "86e083c3282edc4e34b1a0e876575f39583c7ce34cde832ea57e54b9c429cd56"
   }
 }

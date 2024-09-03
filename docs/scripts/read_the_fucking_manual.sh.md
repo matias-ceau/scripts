@@ -2,66 +2,72 @@
 
 ---
 
-**read_the_fucking_manual.sh**: A script to display the most researched manual entries based on history.
+**read_the_fucking_manual.sh**: A tool to view commonly searched manual entries.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell in which this script is written.
-- `bat`: A tool to view files with syntax highlighting and Git integration.
-- `ripgrep` (`rg`): A command-line search tool that recursively searches your current directory for a regex pattern.
+- `bat`: A modern replacement for `cat`, providing syntax highlighting and Git integration.
+- `ripgrep (rg)`: A fast, recursive search tool that works similar to `grep`.
+- `sed`: A stream editor for filtering and transforming text.
+- `awk`: A programming language often used for pattern scanning and processing.
 
 ### Description
 
-This script provides an easy way to review the most frequently searched manual entries based on the user's command history. It aggregates entries from the Zsh and Bash histories and provides various options for filtering and displaying results.
+`read_the_fucking_manual.sh` is a Bash script designed to help users find the most searched entries in their manual pages using their shell's history. It specifically looks through the history logs of both Zsh and Bash to find commands that start with `man` or `batman`. 
 
-The script primarily utilizes the following functions:
-- `cat`: To concatenate the Bash and Zsh history files.
-- `rg`: Used to filter commands that start with either `man` or `batman`.
-- `sed`: For streamlining results by removing unwanted parts of each line.
-- `cut`: To separate the command from its options and arguments.
-- `sort`, `uniq`, and `awk`: These utilities work together to count occurrences and neatly format the output.
+The script utilizes several utilities:
+
+- `cat` joins the contents of the Bash and Zsh history files.
+- `rg` filters commands that search manuals.
+- `sed` and `cut` clean up the output to isolate the manual commands.
+- `sort` and `uniq` are utilized to tally occurrences.
+- `awk` is implemented for formatted output using a specified threshold.
 
 ### Usage
 
-To run the script, simply execute it in your terminal. By default, it returns the top 10 most searched man entries:
+Run the script directly from the command line:
 
 ```bash
 ./read_the_fucking_manual.sh
 ```
 
-You can also use several options to customize the output:
+This fetches the 10 most searched manual entries by default. Below are additional options you can use:
 
-- Display a specific number of results:
-  ```bash
-  ./read_the_fucking_manual.sh -n 5
-  ```
-  This command returns the top 5 searched manual entries.
+- Display help information:
 
-- Filter searches based on a minimum search count:
-  ```bash
-  ./read_the_fucking_manual.sh -m 3
-  ```
-  This displays entries that have been searched more than 3 times.
-
-- Retrieve all entries:
-  ```bash
-  ./read_the_fucking_manual.sh -a
-  ```
-
-- Search for specific entries:
-  ```bash
-  ./read_the_fucking_manual.sh grep
-  ```
-  This searches the history for entries containing "grep".
-
-For more information on how to use the script, run:
 ```bash
 ./read_the_fucking_manual.sh -h
 ```
 
+- Get a specified number of top searched entries:
+
+```bash
+./read_the_fucking_manual.sh -n 5
+```
+This fetches the top 5 searched entries.
+
+- Show searches that occurred more than a certain number of times:
+
+```bash
+./read_the_fucking_manual.sh -m 2
+```
+This displays entries searched more than 2 times.
+
+- Retrieve all searches:
+
+```bash
+./read_the_fucking_manual.sh -a
+```
+
+- Pass additional arguments to filter results with `ripgrep`:
+
+```bash
+./read_the_fucking_manual.sh search_term
+```
+
 ---
 
-> [!TIP]  
-> Consider adding error handling for cases where the history files might not exist or be empty. Currently, if either of the history files is missing or unpopulated, the script will fail silently. It could also be beneficial to check if `bat` and `ripgrep` are installed at the start of the script and notify the user if they are not found.
+> [!TIP] 
+The script currently depends on specific paths for the history files. Consider checking for the existence of these files and providing user-friendly error messages if they are not found. Additionally, adding error handling for invalid input (like non-numeric values for `-n` or `-m`) could enhance its robustness.

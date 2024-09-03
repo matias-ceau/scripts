@@ -1,63 +1,53 @@
-# Shell History Analyzer
+# Shell History Information Script
 
 ---
 
-**shell_history_info.sh**: Retrieve and analyze frequent entries from shell history files.
+**shell_history_info.sh**: Retrieves frequent lines, words, or characters from shell history files.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash and requires a compatible shell.
-- `rg` (Ripgrep): Used for searching and filtering text efficiently.
+- `cat`: Reads the content of files.
 - `sed`: Stream editor for filtering and transforming text.
-- `sort`: Standard Unix command for sorting lines of text.
-- `uniq`: Used to filter out repeated lines in the output.
-- `cat`: Concatenates and displays files.
+- `rg` (Ripgrep): Recursive search tool that can be used to perform searches with context.
+- `sort`: Sorts lines of text files.
+- `uniq`: Reports or omits repeated lines.
+- `tr`: Translates or deletes characters.
+- `bat`: A cat clone with syntax highlighting and Git integration.
 
 ### Description
 
-This script allows users to analyze their shell history and retrieve the most frequent lines, words, or characters from their `bash` and `zsh` history files. It does this by:
+The `shell_history_info.sh` script is designed to analyze shell history files for frequently occurring lines, words, or characters. It processes history files for both `bash` and `zsh`, allowing users to aggregate and summarize their command usage patterns efficiently. 
 
-1. **Extracting History**: Combines history from both `bash` and `zsh`.
-2. **Processing**: 
-   - **Cleaning Up**: Removes empty lines and extra whitespace.
-   - **Sorting and Counting**: Sorts the entries, counts occurrences, and filters results based on a specified threshold (minimum 5 occurrences).
-3. **Handling Input Options**: The script accepts command-line arguments to specify the analysis type (lines, words, characters), or provide instructions when the arguments are incorrect.
+The script defines several utility functions to handle the tasks:
+
+- **get_history**: Combines the history files from `bash` and `zsh` located in the user’s state directory.
+- **split_by_word**: Breaks each line into separate words, putting each on a new line.
+- **clean_up**: Cleans up the output by removing empty lines and trailing spaces.
+- **sort_by_occurence**: Sorts the items and filters them based on frequency, retaining only those with an occurrence greater than 5.
 
 ### Usage
 
-To execute the script, use the following command with your desired option:
+To use this script, you simply invoke it from the terminal with a specified option:
 
 ```bash
-./shell_history_info.sh [option]
+# To get the most frequent lines
+./shell_history_info.sh -l
+
+# To get the most frequent words
+./shell_history_info.sh -w
+
+# To get the most frequent characters
+./shell_history_info.sh -c
+
+# To get options that start with a dash
+./shell_history_info.sh -o
 ```
 
-#### Options:
-
-- `-l` or `--lines`: Analyze the most frequent lines in the history.
-    ```bash
-    ./shell_history_info.sh -l
-    ```
-
-- `-w` or `--words`: Analyze the most frequent words in the history.
-    ```bash
-    ./shell_history_info.sh -w
-    ```
-
-- `-c` or `--character`: Analyze the most frequent characters in the history.
-    ```bash
-    ./shell_history_info.sh -c
-    ```
-
-- `-o` or `--option`: Analyze options that start with a `-`.
-    ```bash
-    ./shell_history_info.sh -o
-    ```
-
-If an incorrect option is provided, the script will output the usage instructions.
+If an invalid argument is provided, the script will print an error message along with the script's usage instructions embedded in the source code.
 
 ---
 
-> [!TIP]  
-> Consider adding error handling for cases where history files do not exist. Additionally, a summary report could enhance the effectiveness of the script by consolidating findings for easier interpretation.
+> [!TIP] 
+> The script can be simplified by using functions for repeated `sed` and `sort` commands to enhance maintainability. Also, consider checking if `rg` is installed before execution to avoid errors, and possibly provide a fallback option to `grep`. Emphasizing error handling for cases where the user is on a system without `zsh` or `bash` can enhance user experience.

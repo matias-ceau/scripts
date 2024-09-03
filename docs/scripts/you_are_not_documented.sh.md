@@ -1,42 +1,38 @@
-# Script Name: Script Documentation Checker
+# You Are Not Documented
 
 ---
 
-**[you_are_not_documented.sh](/you_are_not_documented.sh)**: A script that finds scripts without inline documentation
+**you_are_not_documented.sh**: A script that finds scripts without inline documentation.
 
 ---
 
 ### Dependencies
 
-- `rg`: Also known as Ripgrep, a command-line search tool that recursively searches your current directory for a regex pattern. It is used here to locate files that lack documentation comments.
+- `rg`: This is a fast text searching tool. You will need it to locate scripts without the required documentation comments.
 
 ### Description
 
-This script is designed to simplify the identification of shell scripts that lack proper inline documentation. Using `rg` (Ripgrep), it performs a search for files that do not contain the administrative comment `#INFO:#`. This allows developers to efficiently locate scripts that may need further documentation efforts.
+The `you_are_not_documented.sh` script is designed to help developers manage their code by identifying files that lack inline documentation. Inline documentation is crucial for maintaining code readability and facilitating collaboration. 
 
-The script specifically targets files in a directory specified by the `$SCRIPTS` environment variable. Additionally, the results are filtered to exclude files in the `/docs/` and `/config/` directories, as well as common file types like `.csv` and `.md`, which typically do not need inline documentation.
+This script utilizes the `rg` (ripgrep) command, which searches recursively through files, to find any scripts that do not contain the specific documentation comment `#INFO:#`. This allows users to efficiently pinpoint scripts that may need additional comments or documentation to clarify their purpose and functionality.
 
-Here's a breakdown of the main command:
+Furthermore, the script includes criteria to exclude certain directories and file types from the search results. Specifically, it filters out:
+- Any files located in `docs/` or `config/` directories
+- Files with extensions `.csv` or `.md`
 
-- `rg '#INFO:#' --files-without-match "$SCRIPTS"`: This command searches for files in the `$SCRIPTS` directory that do not contain the pattern `#INFO:#`.
-- `| rg -v '/docs/|/config/|\.csv|\.md'`: The output is then piped to another `rg` command that filters out paths containing `/docs/`, `/config/`, or files with extensions `.csv` or `.md`.
+By narrowing down the search results, the script ensures that only relevant scripts are returned for documentation review.
 
 ### Usage
 
-To run this script, it should be executed in the terminal. Ensure that the `$SCRIPTS` environment variable is set to the directory you want to search through. You can execute the script by navigating to its directory and running:
+To use this script, simply execute it from a terminal prompt. Make sure that the environment variable `SCRIPTS` is set to the directory containing the scripts you wish to check for documentation. You can run the script with:
 
 ```bash
-./you_are_not_documented.sh
+bash /home/matias/.scripts/you_are_not_documented.sh
 ```
 
-If you want to set the `$SCRIPTS` variable inline, you can do so as follows:
-
-```bash
-export SCRIPTS=/path/to/your/scripts
-./you_are_not_documented.sh
-```
+This command will produce a list of scripts within the specified directory that do not have the `#INFO:#` comment tag.
 
 ---
 
-> [!TIP]  
-A potential improvement for this script could be the inclusion of an option to directly display which functions or scripts need documentation, not just the file names. Additionally, considering whether other file extensions should be included in the filter depending on the user's workflow might benefit its usability.
+> [!TIP] 
+> The script could be improved by allowing additional custom filters through command-line arguments. Also, adding a message indicating no undocumented scripts are found would enhance user experience. Consider implementing error handling to manage cases where the `$SCRIPTS` environment variable is not set or does not point to a valid directory.

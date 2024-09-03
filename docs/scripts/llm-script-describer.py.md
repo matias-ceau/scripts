@@ -2,50 +2,49 @@
 
 ---
 
-**llm-script-describer.py**: Generates markdown documentation for user scripts using GPT-4.
+**llm-script-describer.py**: Generate GitHub markdown documentation from user scripts.
 
 ---
 
 ### Dependencies
 
-- `python`: The base programming language.
-- `openai`: Needed to interact with the OpenAI API for generating script descriptions.
-- `colorama`: A library for colored terminal text output.
-- `csv`: Standard library for handling CSV files.
-- `subprocess`: Standard library for executing shell commands.
-- `argparse`: Standard library for command-line argument parsing.
-- `json`: Standard library for JSON file handling.
+- `argparse`: For parsing command line arguments.
+- `csv`: For handling CSV file operations.
+- `hashlib`: For generating file hashes.
+- `json`: For reading/writing JSON files.
+- `os`: For operating system dependent functionalities.
+- `subprocess`: To run shell commands.
+- `sys`: To access command line arguments and exit functionalities.
+- `colorama`: To provide colored output in the terminal.
+- `openai`: To utilize OpenAI's API for script description generation.
 
 ### Description
 
-The `llm-script-describer.py` script automates the process of generating Markdown documentation for user scripts based on GPT-4 model responses. Key functionalities include:
+The `llm-script-describer.py` script automates the creation of GitHub documentation for a collection of user scripts. It reads scripts specified in a CSV file, evaluates their content, and uses OpenAI's language model to generate descriptive markdown documentation. The script organizes documentation into a specified folder structure and also manages an index in the `README.md` file to keep track of script descriptions.
 
-- **Dependency Management**: Ensures necessary libraries are loaded and environment variables are set.
-- **Script Processing**: Reads and analyzes scripts, leveraging a conversational AI model to create detailed Markdown descriptions.
-- **File Management**: Identifies orphaned documentation, manages symlinks, and creates or updates documentation files.
-- **Indexing and README Updates**: Updates a central index of scripts and integrates summaries into a project README file.
-
-The script processes each script listed in a specified CSV file, handling both binary and source files, ensuring that documentation is accurate and up-to-date.
+Key functionalities include:
+- **Script Processing**: It reads scripts, decides if a script is a binary or a text file, and generates descriptions using the OpenAI API.
+- **Documentation Management**: It updates/create markdown files for each script in a dedicated documentation directory and manages orphans—unlinked markdown documents.
+- **Symlink Updates**: Optionally, it runs a secondary script to update symlinks.
+- **Indexing**: It updates an index of scripts for easy navigation in the documentation.
+- **Checksum Verification**: By maintaining hashes of scripts, it avoids unnecessary recomputation of documentation if the scripts haven't changed. 
 
 ### Usage
 
-To use the script, run it from the terminal with an optional CSV file path argument. The default path is set to `$SCRIPTS/data/symlink_data.csv`. Here’s how to do this:
+To run the script, use the following command in your terminal:
 
 ```bash
-python3 /home/matias/.scripts/llm-script-describer.py /path/to/your.csv
+python /home/matias/.scripts/llm-script-describer.py [path_to_csv]
 ```
 
-#### Command-Line Arguments
+- `path_to_csv`: Path to the CSV file containing the scripts to be documented. If not specified, it defaults to `$SCRIPTS/data/symlink_data.csv`.
 
-- `csv_path`: (optional) Path to the CSV file containing the script data. If not provided, defaults to `$SCRIPTS/data/symlink_data.csv`.
-
-**Interactive Prompt**: The script may prompt you to run an optional symlink update script (`utils_update_symlinks.sh`). You can decide whether to proceed with this update.
-
+**Example:**
 ```bash
-Do you want to run utils_update_symlinks.sh? (y/N):
+python /home/matias/.scripts/llm-script-describer.py /home/matias/.scripts/data/my_scripts.csv
 ```
 
 ---
 
-> [!TIP]  
-> The script assumes the OpenAI API key is set in the environment variable `OPENAI_API_KEY`. Ensure this is configured before running to avoid errors. Additionally, the script could benefit from more robust error handling, especially for network-related operations and while reading files.
+> [!TIP] 
+The script expects a valid CSV format and may fail if the input file is incorrect. Consider adding error handling for invalid file formats or providing feedback on the number of scripts processed. Additionally, the script relies heavily on external API calls; it may be wise to add rate limiting or error handling for API failures to ensure smoother execution.

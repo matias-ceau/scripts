@@ -1,48 +1,56 @@
-# Album Player for CMUS
+# Album Player Script
 
 ---
 
-**[albumplayer.xsh](/albumplayer.xsh)**: Play a random album selection with cmus using dmenu
+**albumplayer.xsh**: Play an album using cmus with random selection of other albums
 
 ---
 
 ### Dependencies
 
-- `cmus`: A console music player that runs in a terminal.
-- `dmenu`: A dynamic menu for X, allowing for easy selection of items.
+- `cmus`: A console music player that can be controlled via command line.
+- `dmenu`: A dynamic menu for X to select options interactively.
 
 ### Description
 
-This script provides a utility for playing a selected album through the `cmus` music player. It generates a list of albums based on a library file defined in the user's cmus configuration and allows for selection via `dmenu`. The following steps outline the script's functionality:
+The `albumplayer.xsh` script is designed to streamline the playback of music albums using the `cmus` player on Arch Linux, specifically tailored for `qtile` as the window manager. The script accomplishes the following:
 
-1. **Initialization**: It sets the temporary playlist file path in the user's cmus configuration directory.
-2. **Album Listing**: It retrieves paths of music files from `lib.pl` and constructs a unique list of albums by parsing the directory paths.
-3. **Display Albums**: Utilizing `dmenu`, it presents a list of formatted album names to the user. Each album can be a combination of the artist and the album title, truncated to ensure readability.
-4. **Selection Process**: After an album is selected, the script creates a playlist that includes the chosen album and shuffles a set of additional albums.
-5. **Playlist Creation**: It writes the playlist paths to a temporary M3U file, which is subsequently fed into `cmus`, allowing for smooth playback.
+1. It retrieves paths of music files from the `cmus` library configuration.
+2. It constructs a list of unique album names derived from these paths.
+3. It presents the album list to the user via `dmenu`, allowing for user selection.
+4. Upon selection, the script shuffles other album paths, picks a subset, and compiles a playlist.
+5. Finally, it communicates with `cmus` to manage playback by creating a temporary playlist and controlling the player's state.
+
+The selected album and randomly chosen additional albums are then written to a temporary M3U file which `cmus` uses to manage playback.
 
 ### Usage
 
-Run the script in your terminal as follows:
+To run the script, simply execute it in a terminal:
 
 ```bash
-/home/matias/.scripts/albumplayer.xsh 
+/home/matias/.scripts/albumplayer.xsh
 ```
 
-#### Interactive Steps
+This will present a graphical selection menu via `dmenu` where you can choose your desired album. 
 
-1. **Select an Album**: Upon execution, a dmenu popup will show the available albums. Use keyboard navigation to select your preferred album.
-2. **Playback**: After selection, the temporary playlist is populated, and `cmus` is instructed to play the new track sequence.
+When an album is selected:
+- The script will clear the current playlist in `cmus`.
+- Load the new playlist from the generated temporary M3U file.
+- Start playing the selected album along with a few randomly chosen other albums.
 
-### Example 
+### Example
 
-```bash
-$ /home/matias/.scripts/albumplayer.xsh
+Once executed, you should see a `dmenu` list like this:
+
+```
+             Album Name One    —    Artist One
+             Album Name Two    —    Artist Two
+             Album Name Three  —    Artist Three
 ```
 
-This will execute the script and allow you to pick an album for playback.
+Selecting any of the albums from this list will lead to the playback of that album in `cmus`.
 
 ---
 
 > [!TIP]  
-> The script currently uses a fixed limit of 10 albums fetched randomly. Consider adding a customizable option for the user to define how many albums to display or to exclude certain albums based on user preference. Error handling can also be improved, especially for cases where there are no albums available or if cmus is not installed.
+> Consider adding error handling for scenarios when no albums are found or when `cmus` is not running. This will enhance user experience and prevent unexpected crashes or failures. Additionally, providing a way to customize the number of random albums loaded could be beneficial for users wanting a different listening experience each time.

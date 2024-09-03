@@ -1,53 +1,47 @@
-# File Editor with fzf 
+# Edit Files Easily with FZF
 
 ---
 
-**editor.sh**: Quickly edit files using `fzf` to find them across specified directories.
+**editor.sh**: Edit files from the shell using fzf with customizable search options.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`. It is used to search files.
-- `fzf`: A command-line fuzzy finder, enabling you to interactively search files.
-- `bat`: A cat clone with syntax highlighting and Git integration, used to preview files.
+- `fzf`: A command-line fuzzy finder that enables quick file selection.
+- `bat`: A modern alternative to `cat` that provides syntax highlighting and line numbering.
+- `nvim`: A text editor that offers advanced editing features.
 
 ### Description
 
-The `editor.sh` script allows users to search for files using `fzf` and edit them in `neovim`. By utilizing `fd` for file discovery, it efficiently handles searches based on various user-defined options like directories or specific flags for configurations and scripts.
+The `editor.sh` script facilitates quick file editing from the terminal by leveraging `fzf` for fuzzy search. Users can specify various search paths and filter criteria through command-line options. The script effectively excludes non-editable files (like images and archives) and allows the user to specify whether they want to edit with regular or superuser permissions.
 
-The script excludes non-editable files like images, audio files, and various others using a robust list of patterns. This makes it particularly useful for developers and system administrators who need to focus only on relevant files in their workflows.
+The usage of `fd`, a simple, fast, and user-friendly alternative to `find`, allows rapid file discovery across specified directories, while also supporting hidden files. This script is particularly useful for users who frequently edit configuration files or scripts, as it streamlines the workflow to avoid tedious file navigation.
 
 ### Usage
 
-To execute the script, run it in the terminal. Here are the available options:
+Run the script directly from the terminal, optionally including flags to specify search parameters:
 
 ```bash
-./editor.sh [-s|--scripts] [-c|--cwd] [-C|--config] \
-            [-d|--dir <dir>] [-S|--sudo] [-h|--help]
+./editor.sh [-s|--scripts] [-c|--cwd] [-C|--config] [-d|--dir <dir>] [-S|--sudo] [-h|--help]
 ```
 
-- **No arguments**: Searches in default directories.
-- `-s` or `--scripts`: Only searches files in the user’s `$SCRIPTS` directory.
-- `-c` or `--cwd`: Limits the search to the current working directory.
-- `-C` or `--config`: Searches for ChezMoi unmanaged configuration files.
-- `-d <dir>`: Searches files within the specified directory.
-- `-S` or `--sudo`: Opens files with sudo permissions.
-- `-h` or `--help`: Displays the help message.
+Available options include:
 
-For example, to edit a file located in your scripts directory, use:
+- `-s`, `--scripts`: Search in the user's `$SCRIPTS` directory.
+- `-c`, `--cwd`: Limit search to the current directory.
+- `-C`, `--config`: Look for config files in an unmanaged state (specifically for `chezmoi`).
+- `-d`, `--dir <dir>`: Search for files in a specified directory.
+- `-S`, `--sudo`: Edit files with superuser permissions.
+- `-h`, `--help`: Display help information.
 
-```bash
-./editor.sh --scripts
-```
-
-To edit a configuration file, you can execute:
+_For example, to edit a file in the current directory, you would run:_
 
 ```bash
-./editor.sh --config
+./editor.sh --cwd
 ```
 
 ---
 
-> [!TIP]   
-> Consider refining the list of excluded files based on your specific needs, as maintaining a comprehensive exclusions list can enhance performance and user experience. Additionally, implementing a more dynamic method for including or excluding certain directories might simplify usage for varying contexts.
+> [!NOTE] 
+> The script could benefit from additional error handling, particularly when fetching files or executing commands as `sudo`. Furthermore, enhancing the flexibility of the excluded files list to allow user customization through command-line arguments could significantly improve usability.

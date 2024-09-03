@@ -1,48 +1,42 @@
-# Create Cover Art from WAV Files
+# Create Cover Art
 
 ---
 
-**[create_cover_art.sh](/create_cover_art.sh)**: A script to generate cover art from WAV file spectrograms
+**create_cover_art.sh**: Create a cover art based on file spectrogram.
 
 ---
 
 ### Dependencies
 
-- `sox`: A command-line utility that handles audio processing, required here to create the spectrogram.
-- `dmenu`: A dynamic menu for X, used for file selection in this script.
-- `imagemagick`: A software suite to create, edit, compose, or convert bitmap images, necessary for image processing in the script.
+- `sox`: A command-line utility that processes audio files. It is used here to generate the spectrogram from the audio file.
+- `dmenu`: A dynamic menu for X, which is utilized to select the audio file interactively.
+- `imagemagick`: An image manipulation toolset, used for resizing the generated spectrogram image.
 
 ### Description
 
-This script is designed to generate cover art from the spectrogram of WAV audio files located in the user's `PROJECTS` directory. It uses a combination of `sox` to create the spectrogram and `imagemagick` to resize the resulting image. 
+The `create_cover_art.sh` script provides a way to create visually appealing cover art from audio files in WAV format. It accomplishes this by generating a spectrogram of the audio, which represents the frequency spectrum as it varies with time.  
 
-The process is straightforward:
-1. The script initiates by searching for all `.wav` files in `/home/matias/audio/PROJECTS` using the `find` command.
-2. It lets the user select a file through `dmenu`, which presents a list of found WAV files.
-3. Once a file is selected, `sox` generates a spectrogram image of the selected audio file, saving it as a PNG.
-4. The PNG image is then resized to 1600x900 pixels using `convert` from ImageMagick.
-5. After resizing, the original PNG file is deleted, leaving only the resized version.
+When executed, this script performs the following steps:
+
+1. **File Selection**: It uses `find` to search for `.wav` files in the specified directory (`/home/matias/audio/PROJECTS`) and displays them in a list using `dmenu`. This allows the user to select which audio file to process.
+  
+2. **Spectrogram Creation**: Once a file is selected, `sox` is used to create a spectrogram image saved as a PNG file. The spectrogram has a resolution set at 1600x900 pixels.
+
+3. **Image Resizing**: After the spectrogram is generated, it is resized to 1600x900 pixels again using the `convert` command from ImageMagick. The resized image is saved with an appended "_RESIZED" suffix.
+
+4. **Cleanup**: Finally, the original unresized spectrogram image is removed to save storage space.
 
 ### Usage
 
-To use the script:
+To run the script, simply execute it from a terminal. Make sure to have the necessary dependencies installed. Here’s how you can execute the script:
 
-1. Make sure all dependencies (`sox`, `dmenu`, `imagemagick`) are installed.
-2. Save the script as `create_cover_art.sh` and make it executable:
+```bash
+sh /home/matias/.scripts/create_cover_art.sh
+```
 
-   ```bash
-   chmod +x /home/matias/.scripts/create_cover_art.sh
-   ```
-
-3. Run the script from a terminal:
-
-   ```bash
-   /home/matias/.scripts/create_cover_art.sh
-   ```
-
-Once executed, a menu will appear listing all the available `.wav` files in your projects folder. Select one to generate its cover art.
+Upon execution, a `dmenu` will pop up displaying the available `.wav` files. Select a file, and the script will generate the cover art in the same directory as the audio file.
 
 ---
 
-> [!TIP]  
-> Consider adding error handling to the script. For example, check if the `find` command returns any files or handle cases where `sox` might fail. This will make the script more robust and user-friendly. Additionally, you could allow for different output sizes or file formats as user inputs to enhance functionality.
+> [!TIP] 
+> Potential improvements include adding error handling for cases where no `.wav` files are found or if the user cancels the `dmenu` selection. Additionally, providing configurable parameters for spectrogram dimensions and output quality could enhance usability and flexibility.

@@ -2,48 +2,37 @@
 
 ---
 
-**[random_album.xsh](/random_album.xsh)**: Select random album and play it with cmus
+**random_album.xsh**: Selects a random album and plays it with cmus.
 
 ---
 
 ### Dependencies
 
-- `cmus`: A small and fast music player for Unix-like operating systems.
-- `xonsh`: A Python-powered shell that is useful for scripting.
-- `beet`: An open-source music library manager that allows organization of music collections (optional based on commented lines).
+- `cmus`: A lightweight music player that the script interfaces with to select and play music.
+- `xonsh`: A Python-powered shell that executes the script.
 
 ### Description
 
-The `random_album.xsh` script is designed for Arch Linux users who utilize the `cmus` music player and want to enhance their listening experience by automatically selecting and playing random albums from their music library. This script utilizes the xonsh shell to execute commands and manage files.
+This script leverages the capabilities of `xonsh` to automate the selection and playback of a random album using the `cmus` music player. 
 
-Key functionalities:
-- The script first unsets the current view in `cmus` and prepares the environment for a new playlist.
-- It retrieves the current music library paths from `cmus` and constructs a list of unique album names.
-- It randomly shuffles these album names and then selects from them to build a temporary playlist.
-- Finally, the constructed playlist is saved to a temporary `.m3u` file which is loaded by `cmus` for playback.
+The script begins by defining the path where a temporary playlist will be saved in M3U format, specifically targeting `~/.config/cmus/.temp.m3u`. It then communicates with `cmus` to prepare for clearing the current playlist. 
 
-This automation is efficient for those who wish to enjoy listening without manual album selection.
+The main functionality revolves around retrieving the paths to music files stored in the `cmus` library (`lib.pl`) and generating a list of unique albums derived from these paths. The script shuffles the list of albums and selects ten tracks from the chosen album to create a playlist.
+
+Once the playlist is generated, it is saved to the defined temporary file path, after which `cmus` is instructed to load this playlist and begin playback at the newly added tracks. The entire workflow ultimately provides a random yet curated listening experience.
 
 ### Usage
 
-To execute the script, simply run it from a terminal or link it to a keyboard shortcut in your window manager. The use of `xonsh` means you can directly run this script as follows:
+To use the script, ensure it is executable and then run it from the terminal:
 
 ```bash
+chmod +x /home/matias/.scripts/random_album.xsh
 /home/matias/.scripts/random_album.xsh
 ```
 
-When executed:
-- The script clears any existing playlist in `cmus`.
-- It generates a new playlist based on randomly selected albums.
-- It plays the newly selected albums immediately.
-
-You can adjust the number of albums played by changing the range in the for loop:
-
-```python
-for n in range(10):   # Change 10 to any number to adjust how many albums are selected
-```
+This script can also be bound to a key in `qtile` for quick access, allowing you to play a random album effortlessly.
 
 ---
 
-> [!TIP]  
-> The script assumes there are at least 10 unique albums available. If there are fewer, this will result in an index error. Consider adding a check to handle cases where there are not enough unique albums. Additionally, the commented-out part regarding `beet` indicates a potential for enhancing album retrieval, which could be a useful feature to include in future iterations.
+> [!TIP] 
+> The script could benefit from error handling, particularly for scenarios where there are fewer than ten albums available or if the `lib.pl` file cannot be found. Adding user feedback for such occurrences could improve usability, along with a feature to let the user specify the number of tracks to select. Additionally, consider cleaning up the commented-out lines for clarity and to avoid confusion.

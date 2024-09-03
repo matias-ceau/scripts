@@ -1,25 +1,35 @@
 #!/usr/bin/env python
 
-import sys
-import os
 import argparse
 import csv
-import subprocess
-import json
 import hashlib
+import json
+import os
+import subprocess
+import sys
+
+from colorama import Back, Fore, Style, init
 from openai import OpenAI
-from colorama import init, Fore, Style, Back
 
 # Initialize colorama for cross-platform colored output
 init()
 
+# SCRIPTS folder
 SCRIPTS_PATH = os.environ.get('SCRIPTS', '')
+
+README_PATH = os.path.join(SCRIPTS_PATH, 'README.md')
+
+# DOCUMENTATION
 DOCS_PATH = os.path.join(SCRIPTS_PATH, 'docs')
 INDEX_PATH = os.path.join(DOCS_PATH, "index.md")
 DOCS_SCRIPTS_PATH = os.path.join(DOCS_PATH, 'scripts')
-INFO_JSON_PATH = os.path.join(SCRIPTS_PATH, 'data', 'script_info.json')
-README_PATH = os.path.join(SCRIPTS_PATH, 'README.md')
 
+# JSON file (primarily used by this script to know if a new documentation is needed)
+INFO_JSON_PATH = os.path.join(SCRIPTS_PATH, 'data', 'script_info.json')
+
+# location and possible extensions of source files for binary scripts that can't be read
+BIN_FILE_SRC_PATH = os.path.join(SCRIPTS_PATH, 'lib')
+SRC_FILE_EXTENSIONS = ['.c', '.cpp', '.py', '.sh', '.rs', '.go', '.js', '.ts', '.rb', '.java', '.cs']
 
 client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 llm_model = "gpt-4o-mini"
@@ -42,14 +52,19 @@ NB: `<script_path>` is the path of the file and `<script_content>` is the conten
 The documentation's length should be between 200 and 400 words, depending on the complexity of the script.
 You can use any github flavored markdown formatting to make the description clear (including code blocks, bloquotes, lists, tables, footnote, lines, etc), except when explicitly told otherwise.
 
-4)For sections, always use the template provided below (NB: lines between double accolades ({{}}) are comments to give you guidance, words between double brackets ([[]]) are to be substituted with the relevant value (ie '[[filename]]' becomes 'ardour-open.sh' when documenting this files). Finally other words and lines should remain as is.):
+4) For sections, always use the template provided below, after the tag <TEMPLATE_START> and 3 new lines (don't include this tag).
+4.1) Lines between double accolades ({{ }}) are comments to give you guidance. Follow the advice but don't include the accolades.
+4.2) Words between double brackets ([[]]) are to be substituted with the relevant value (example: '[[filename]]' becomes 'ardour-open.sh' when documenting the file called 'ardour-open.sh').
+4.3) Finally other words and lines should remain as is.):
+
+<TEMPLATE_START>
 
 
-# [[Script Name]] {{ choose an appropriate title}}
+# [[Script Name]] {{choose an appropriate title}}
 
 ---
 
-**[[filename]]**: [Brief description of the script (maximum 100 characters), no special formating, be concise]
+**[[filename]]**: [[Brief description of the script (maximum 100 characters), no special formating, be concise]]
 
 ---
 
@@ -74,21 +89,23 @@ system_prompt_2 = """\
 1) You are a helpful assistant that generates a summary of the content of a GitHub script repository.Your audience is mainly the creator of the scripts themselves so provide information adapted to his context (OS : Arch linux, WM : qtile).
 2) Your goal is to create a summary of the script repository based on the documentation for all of the scripts that you will receive. This will be integrated in the README.md file, so it shouldn't be too specific (DON'T DESCRIBE EACH SCRIPT INDIVIDUALLY). 
 3) You should write a 300-400 word description of the kind of script it contains (You are free to format it using markdown features available on github, such as blockquotes, code blocks, lists, etc. WITH THE EXCEPTION OF HEADERS).
-4) If you want to reference a script called "<script.sh>" in the summary, you can reference it like this : "[script.sh](docs/scripts/<scripts.sh>.md)" so that it can point to the actual doc file in github.
-5) The user will only send you the full content of the script documentation in a message formatted like this:
+4) If you want to reference a script called "<script.sh>" in the summary, you can reference it like this : "[script.sh](docs/scripts/<scripts.sh>.md)" so that it will link to the documentation file on Github.
+5) The user will send you the full content of the documentation in a single message. Each file documents a single script. The script filename is preceded with [FILE] and separated of the file content by a new line, '***' and a couple more new lines. Finally, each file is separated by '==='. Below you can see an example with 2 files :
 
 
-[FILE]: script_filename1
+[FILE] script_filename1.sh
+***
 
 <content of documentation of script 1>
 
----
+===
 
-[FILE]: script_filename2
+[FILE] script_filename2.py
+***
 
 <content of documentation of script 2>
 
----
+===
 ...
 """ 
 
@@ -138,9 +155,17 @@ def run_update_symlinks():
         print_colored("Skipping utils_update_symlinks.sh", kind='info')
 
 def get_script_files():
+    # find all files in $SCRIPTS (not only executables because for binaries
+    # I need the source files as well)
+    fd_cmd = f"fd . -tf {SCRIPTS_PATH}"
+    # Exclude folders that for sure don't have useful data, and especially
+    # exclude 'archived' so its docs don't clunk up the documentation
+    fd_cmd += " -E archived -E config -E docs -E log -E data"
+    fd_cmd += " --format {/}"
+    # Get rid of potential other files
+    fd_cmd += " | rg -v '\\.md$|\\.png$|\\.csv$'"
     try:
-        result = subprocess.run(
-            f"fd '' -tf {SCRIPTS_PATH} | rg -v 'md$' | xargs -I {{}} basename {{}}",
+        result = subprocess.run(fd_cmd,
             shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True
         )
 
@@ -149,7 +174,7 @@ def get_script_files():
         print_colored("Error: Failed to get script files", kind='error')
         return set()
 
-def check_orphaned_docs(script_files):
+def rm_orphaned_docs(script_files):
     print_colored("Checking for orphaned doc files...", kind='function_call')
     orphaned_docs = []
     for doc_file in os.listdir(DOCS_SCRIPTS_PATH):
@@ -180,12 +205,9 @@ def find_source_file(binary_path):
     print_colored(f"Attempting to find source file for: {binary_path}", kind='function_call')
     filename = os.path.basename(binary_path)
     name_without_ext = os.path.splitext(filename)[0]
-    scripts_lib = os.path.join(SCRIPTS_PATH, 'lib')
     
-    extensions = ['.c', '.cpp', '.py', '.sh', '.rs', '.go', '.js', '.ts', '.rb', '.java', '.cs']
-    
-    for ext in extensions:
-        source_path = os.path.join(scripts_lib, f"{name_without_ext}{ext}")
+    for ext in SRC_FILE_EXTENSIONS:
+        source_path = os.path.join(BIN_FILE_SRC_PATH, f"{name_without_ext}{ext}")
         if os.path.exists(source_path):
             print_colored(f"Found source file: {source_path}", kind='success')
             return source_path
@@ -220,7 +242,7 @@ def llm_summarize():
         with open(os.path.join(DOCS_SCRIPTS_PATH, d)) as f:
             data = f.read()
         dic[d] = data
-    content = ''.join([f"[SCRIPT]: {k[:-3]}\n\n{v}\n\n---\n\n" for k,v in dic.items()])
+    content = ''.join([f"[FILE]: {k[:-3]}\n***\n\n{v}\n\n===\n\n" for k,v in dic.items()])
     try:
         response = client.chat.completions.create(
             model=llm_model,
@@ -295,7 +317,7 @@ def process_script(script_path):
         description = "No information could be generated for this binary file."
     
     os.makedirs(DOCS_PATH, exist_ok=True)
-    
+   
     write_markdown(markdown_path, description)
     
     relative_path = os.path.relpath(markdown_path, DOCS_PATH)
@@ -311,26 +333,31 @@ def process_script(script_path):
     }
 
 def update_readme():
+
     with open(README_PATH, 'r') as file:
         content = file.read()
 
     # Update the first section
-    start_index = content.index('<!-- llm_generated_output_start -->')
-    end_index = content.index('<!-- llm_generated_output_end -->')
+    llm_start_tag = '<!-- llm_generated_output_start -->'
+    llm_end_tag = '<!-- llm_generated_output_end -->'
+    start_idx = content.index(llm_start_tag)
+    end_idx = content.index(llm_end_tag)
     
     summary = llm_summarize()
     
-    new_content = f"{content[:start_index]}<!-- llm_generated_output_start -->\n\n{summary}\n\n<!-- llm_generated_output_end -->{content[end_index + len('<!-- llm_generated_output_end -->'):]}"
+    new_content = f"{content[:start_idx] + llm_start_tag}\n\n{summary}\n\n{llm_end_tag + content[end_idx + len(llm_end_tag):]}"
 
     # Update the table
-    table_start_index = new_content.index('<!-- table_start -->')
-    table_end_index = new_content.index('<!-- table_end -->')
+    table_start_tag = '<!-- table_start -->'
+    table_end_tag = '<!-- table_end -->'
+    table_start_index = new_content.index(table_start_tag)
+    table_end_index = new_content.index(table_end_tag)
     
     table_content = "| File | Description |\n| --- | --- |\n"
     for filename, info in sorted(INFO_JSON.items()):
         table_content += f"| [{filename}]({info['doc_path']}) | {info['description']} |\n"
     
-    new_content = f"{new_content[:table_start_index]}<!-- table_start -->\n\n{table_content}\n<!-- table_end -->{new_content[table_end_index + len('<!-- table_end -->'):]}"
+    new_content = f"{new_content[:table_start_index]+table_start_tag}\n\n{table_content}\n{table_end_tag + new_content[table_end_index + len(table_end_tag):]}"
 
     with open(README_PATH, 'w') as file:
         file.write(new_content)
@@ -363,15 +390,14 @@ def main():
     print_colored('Updating symlinks (optionnal)', kind='main_section')
     run_update_symlinks()
 
+    print_colored('Removing orphaned docs', kind='main_section')
+    rm_orphaned_docs(get_script_files())
+
     print_colored(f"Reading scripts from CSV file and creating docs and json datafile: {csv_path}", kind='main_section')
     process_csv(csv_path)
-    script_files = get_script_files()
     
     print_colored('Updating README.md', kind='main_section')
     update_readme()
-
-    print_colored('Doing some cleanup', kind='main_section')
-    check_orphaned_docs(script_files)
 
     print_colored("Script processing completed successfully.", kind='victory')
 

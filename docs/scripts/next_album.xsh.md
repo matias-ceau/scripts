@@ -1,44 +1,41 @@
-# Next Album in CMUS
+# Next Album Script for CMUS
 
 ---
 
-**[next_album.xsh](/next_album.xsh)**: Skip to the next album in CMUS audio player
+**next_album.xsh**: Skip to the next album in CMUS music player.
 
 ---
 
 ### Dependencies
 
-- `cmus` - A powerful and lightweight CLI audio player.
-- `xonsh` - A Python-powered shell that offers advanced functionality over traditional shells.
-
+- `cmus`: A small, fast, and powerful console music player for Unix-like operating systems.
+- `xonsh`: A Python-powered shell that can execute shell commands.
+  
 ### Description
 
-This script is designed to streamline your music listening experience by enabling you to skip to the next album in the CMUS (C Music Player) audio player. The script utilizes the `cmus-remote` command to interact with CMUS, fetching the currently playing album and providing an easy way to navigate through your album collection.
+This script is designed to control the CMUS music player, specifically to skip to the next album in the currently playing playlist. The script begins by sending a command to CMUS to view the fourth output pane. It then saves the currently playing tracks to a temporary `m3u` playlist file located at `/home/matias/.temp/now_playing.m3u`.
 
-Here is a breakdown of the script's functionality:
+Following this, it reads the contents of the playlist and processes it to build a list of albums. The script extracts the album names from the paths where the tracks are located, ignoring duplicates and focusing solely on the currently playing album. Through a loop, the script determines how many albums should be skipped based on the current album.
 
-1. **View Current Album**: The script first fetches the album details currently being viewed in CMUS by executing the command `cmus-remote -C 'view 4'`.
-
-2. **Save Current Playlist**: It saves the currently playing tracks to a temporary M3U file using `cmus-remote -C 'save /home/matias/.temp/now_playing.m3u'`.
-
-3. **Process the Playlist**: The script reads the temporary M3U file, filters out any empty lines, and extracts the album names from the file path.
-
-4. **Identify Current Album**: It identifies the current album by querying CMUS and splitting the retrieved data to isolate the album name.
-
-5. **Skip to Next Album**: The script counts how many albums are ahead of the current one and uses a loop to skip to the next album using `cmus-remote -n`.
+Finally, based on the calculated count, the script issues a command to CMUS to skip to the next track in the playlist until it reaches the first track of the next album. 
 
 ### Usage
 
-To use this script, ensure it is executable and run it from the terminal or assign it to a keybinding in your window manager (QTile in this case). Here’s how you can execute it from the terminal:
+To use the script, ensure it is executable and then run it directly in the terminal or bind it to a key in your window manager. To make the script executable, you can use the following command:
 
 ```bash
 chmod +x /home/matias/.scripts/next_album.xsh
+```
+
+Then you can execute it with:
+
+```bash
 /home/matias/.scripts/next_album.xsh
 ```
 
-This command will trigger the script, causing CMUS to skip to the next album automatically.
+Alternatively, this script can be assigned to a keybinding in your window manager (e.g., Qtile) for quick access.
 
 ---
 
 > [!TIP]  
-> The script could be enhanced by adding error handling to manage cases where CMUS is not running, or when the playlist file does not exist. This would make the script more robust and user-friendly. Additionally, consider implementing a feature that allows the user to configure where the temporary M3U file is stored, which could help prevent potential permission issues.
+> This script saves the current playlist to a file and parses it, which could be slow with large playlists. Consider simplifying the album retrieval process or checking if CMUS has built-in options for more efficient album navigation. Additionally, error handling could be added to ensure the script behaves well when interactions with CMUS fail.

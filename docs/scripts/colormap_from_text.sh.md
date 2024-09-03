@@ -2,60 +2,57 @@
 
 ---
 
-**colormap_from_text.sh**: Script to extract color palettes from text files
+**colormap_from_text.sh**: Simple script that extracts color palettes from config files
 
 ---
 
 ### Dependencies
 
-- `bat`: A command-line tool that provides syntax highlighting and file viewing. This script uses it to display usage information in a styled format.
+- `bash`: The script is written in Bash and requires a Bash environment to run.
+- `bat`: Used for syntax highlighting of the usage message; ensure it is installed for better readability.
 
 ### Description
 
-The `colormap_from_text.sh` script is designed to extract color palettes from text files, particularly those containing HEX color codes. The script reads from standard input (stdin) or from specified files and is capable of outputting colors in various formats:
+The `colormap_from_text.sh` script is designed to extract color palettes from input config files or from standard input. The script processes hex color codes, allowing users to output these codes in various formats including hexadecimal, RGB, or visual color blocks.
 
-- HEX format (e.g., `#ffffff`)
-- RGB format (e.g., `rgb(255, 255, 255)`)
-- RGB values as separate integers (e.g., `255, 255, 255`)
+#### Features:
 
-The script employs the following key features:
+- Supports extraction of color codes with options to display them in different formats:
+  - `-x` or `--hex-code`: Outputs color codes in hexadecimal format.
+  - `-r` or `--rgb`: Converts the hex codes to `rgb(r, g, b)` format.
+  - `-c` or `--color`: Outputs a visual block of color along with the color code.
 
-- Argument parsing: The script allows users to specify options for desired output formats and validations to prevent conflicting options.
-- Color extraction: It utilizes `grep` to find HEX codes and then converts them into RGB using `printf`.
-- Color visualization: When the `--color` option is enabled, the script visually displays the color in the terminal with the corresponding RGB or HEX code.
+- Checks for incompatible options (e.g., `-x` and `-r` cannot be used together) and provides helpful error messages when incorrect arguments are supplied.
 
 ### Usage
 
-To use the script effectively, you can either pipe data into it or provide it with file names as arguments. Usage syntax is as follows:
+To execute the script, you can either pipe input directly into it or specify files from which to extract colors. Here are a few usage examples:
+
+1. **Piping input directly**:
 
 ```bash
-<stdout> | ./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
-./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color] <file(s)>
+echo "Here is some text with a color #FF5733" | ./colormap_from_text.sh --hex-code
 ```
 
-**Examples**:
+2. **Reading from a file**:
 
-1. Extract and display colors in HEX format from a file:
-   ```bash
-   ./colormap_from_text.sh -x example.txt
-   ```
+```bash
+./colormap_from_text.sh --rgb config.txt
+```
 
-2. Output colors in RGB format:
-   ```bash
-   echo "Here is a color: #ff5733" | ./colormap_from_text.sh -r
-   ```
+3. **Displaying color blocks**:
 
-3. Display colors visually in the terminal:
-   ```bash
-   cat colors.txt | ./colormap_from_text.sh -c
-   ```
+```bash
+echo "#FFFFFF #000000 #FF5733" | ./colormap_from_text.sh --color
+```
 
-4. Check for errors: If attempting to use conflicting options:
-   ```bash
-   ./colormap_from_text.sh -x -r example.txt
-   ```
+For general usage and help message, you can run:
+
+```bash
+./colormap_from_text.sh
+```
 
 ---
 
 > [!TIP]  
-> Consider adding error handling for invalid file inputs and implementing a help flag (e.g., `-h` or `--help`) that shows the usage instructions directly without needing to invoke the script. This will improve user experience.
+> Consider adding more detailed error handling to improve user experience. For instance, inform the user if no valid hex codes were found in the input. Additionally, providing examples directly in the help message may guide users better.

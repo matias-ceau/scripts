@@ -1,50 +1,60 @@
-# Transform Symlinks
+# Transform Symlink Script
 
 ---
 
-**[transform_symlink.sh](/transform_symlink.sh)**: Convert symlinks to copies of their target files or directories.
+**transform_symlink.sh**: A utility to transform symlinks into copies of their targets.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`. Used for finding symlinks.
-- `fzf`: A command-line fuzzy finder. Provides an interactive interface for selecting items.
-- `bat`: A cat clone with syntax highlighting. Used to preview the contents of files in `fzf`.
+- `fd`: A simple and fast alternative to `find`, used to locate symlinks in the directory tree.
+- `fzf`: A general-purpose command-line fuzzy finder that allows interactive selection of symlinks.
+- `bat`: A cat clone with syntax highlighting and Git integration, used for previewing files in `fzf`.
 
 ### Description
 
-The `transform_symlink.sh` script is a utility designed to convert symbolic links (symlinks) into regular files or directories. It simplifies the process of dealing with symlinks in the file system by providing an interactive selection menu, allowing users to choose which symlinks to transform.
+The `transform_symlink.sh` script serves as an unsymlinking utility that allows users to convert symlinks into actual copies of their target files or directories. This script can operate in two modes: interactive mode, where it searches for symlinks recursively and presents them in an interactive `fzf` menu for selection, or command-line mode, where the user can specify one or more symlink paths directly as arguments.
 
-The script includes two operational modes:
-1. **Interactive Mode**: If no arguments are provided, the script searches the current directory recursively for symlinks using `fd` and presents them in an `fzf` menu for selection.
-2. **Direct Mode**: If one or more symlink paths are provided as arguments, the script attempts to transform each specified symlink without interactive assistance.
-
-In either mode, the script checks if the selected item is indeed a symlink. If valid, it retrieves the target path using `readlink`. It also checks if the target exists before proceeding to remove the original symlink and copy the target files/directories in its place.
+#### Key Functions:
+- **`usage`**: Displays help information about the script, including usage, options, and examples.
+- **`transform_symlink`**: Takes a symlink path as an argument, checks its validity, reads the target path, and performs the transformation by removing the symlink and copying the target content to its location.
 
 ### Usage
 
-To run the script, ensure it has execution permissions and then execute it as follows:
+Run the script in two primary ways:
 
-#### Interactive Mode
-```bash
-./transform_symlink.sh
-```
-This will initiate an interactive mode using `fzf` to select one or more symlinks to transform.
+1. **Interactive Mode**: 
+   To find and transform a symlink using fzf:
+   ```bash
+   ./transform_symlink.sh
+   ```
 
-#### Direct Mode
-```bash
-./transform_symlink.sh /path/to/symlink1 /path/to/symlink2
-```
-You can specify one or multiple symlink paths directly. The script will attempt to transform each one in turn.
+2. **Direct Mode**: 
+   To transform one or more specified symlinks:
+   ```bash
+   ./transform_symlink.sh /path/to/symlink
+   ./transform_symlink.sh link1 link2 ...
+   ```
 
-#### Help Option
-To view usage information and options:
-```bash
-./transform_symlink.sh --help
-```
+#### Options:
+- `-h` or `--help`: Displays help information.
+
+#### Examples:
+- Launch the interactive mode:
+  ```bash
+  ./transform_symlink.sh
+  ```
+- Transform a single symlink:
+  ```bash
+  ./transform_symlink.sh /path/to/symlink
+  ```
+- Transform multiple symlinks at once:
+  ```bash
+  ./transform_symlink.sh link1 link2 link3
+  ```
 
 ---
 
-> [!TIP]  
-> The script currently assumes that the target of the symlink exists and does not check for overwrite conditions where a file already exists at the symlink's location. Future enhancements could include a prompt for overwriting, as well as additional error handling for edge cases like circular symlinks.
+> [!TIP] 
+> Consider adding error handling for the case where `fd`, `fzf`, or `bat` are not installed, as this could lead to unexpected behavior if a user tries to run the script without those dependencies. Additionally, the script currently doesn't provide logging or verbose output, which could be useful for debugging in case of a failure.

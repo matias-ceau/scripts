@@ -1,50 +1,54 @@
-# Sync Git Repository
+# Sync Git Repository Script
 
 ---
 
-**sync-repo.sh**: A script to sync a local git repository with its remote counterpart.
+**sync-repo.sh**: A script for syncing a Git repository, including fetching, pulling, and handling conflicts.
 
 ---
 
 ### Dependencies
 
-- `git`: Essential for version control; ensures manipulation of repositories.
-- `bat`: A tool for catting files with syntax highlighting; enhances output readability.
-- `glow`: A terminal-based Markdown viewer; improves display of formatted messages.
+- `git`: Version control system required for repository operations.
+- `bat`: A cat clone with syntax highlighting and Git integration for better output display.
+- `glow`: A markdown viewer for terminal that enhances the display of markdown formatted output.
 
 ### Description
 
-This script automates the process of syncing a local Git repository with its remote version. It includes functionality to handle conflicts that arise during the rebase process, providing an interactive method for resolving such issues. The script leverages two external tools—`bat` for enhanced output and `glow` for rendering Markdown-based messages—making the interaction terminal-friendly.
+This script automates the process of syncing a Git repository by fetching the latest changes, rebasing them onto local branches, and handling potential merge conflicts interactively. It begins by checking for necessary tools like `bat` and `glow`, providing warnings if they are not installed. The script features custom functions for output formatting, command execution, and error handling. It intelligently manages local changes by stashing them before pulling updates and applies them afterward.
 
-The script performs the following key functions:
-- Checks if the necessary dependencies (`bat`, `glow`) are installed and sets corresponding flags.
-- Strips ANSI escape sequences for cleaner output when necessary.
-- Handles commands dynamically, providing formatted output using color coding and third-party tools.
-- Manages conflicts during rebase, allowing the user to choose different resolution strategies.
-- Displays a summary of changes made during the sync process.
+Key functions include:
+
+- **strip_ansi**: Removes color codes from text for cleaner output in certain contexts.
+- **print_command**: Displays commands being executed, highlighting them with `bat` if available.
+- **handle_conflicts**: Offers options to resolve conflicts during a rebase, enhancing user interactivity.
 
 ### Usage
 
-To run this script, provide the path of the repository you want to sync as an argument. The script can be executed from any terminal instance:
+To use the script, run it from the terminal with the path to the repository as an argument:
 
 ```bash
 ./sync-repo.sh <repository_path>
 ```
 
 **Examples:**
-```bash
-./sync-repo.sh ~/.scripts  # Syncs the repository located in ~/.scripts
-./sync-repo.sh $SCRIPTS    # Uses an environment variable to specify the path
-```
 
-The script also gracefully handles cases where there are:
-- No changes to pull from the remote repository.
-- Local uncommitted changes, prompting the user to manage them appropriately.
+- Sync a repository located at `~/.scripts`:
+    ```bash
+    ./sync-repo.sh ~/.scripts
+    ```
+- If you have defined an alias in your shell configuration:
+    ```bash
+    git_sync $SCRIPTS
+    ```
+
+### Important Commands
+
+The script performs several essential Git operations:
+- **git fetch**: Grabs the latest changes from the remote repository.
+- **git pull --rebase**: Integrates changes, reapplying local commits on top of incoming changes.
+- **git stash**: Temporarily saves local modifications to allow for safe pulling of updates.
 
 ---
 
-> [!TIP]  
-> **Potential Improvements:** 
-> - Consider adding support for displaying commit messages in a more user-friendly format.
-> - Implement a notification system for successful syncs or errors that can integrate with desktop notifications.
-> - Logging the output of each command to a log file could help in debugging issues more efficiently in the future.
+> [!TIP] 
+> This script could benefit from additional logging capabilities to help users troubleshoot issues more effectively. Additionally, it implies user interaction during conflict resolution, which might be automated for advanced users to improve workflow efficiency. Consider encapsulating logic that checks for changes before performing network operations, thus streamlining the process further.

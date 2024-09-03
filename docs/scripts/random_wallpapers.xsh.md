@@ -1,54 +1,48 @@
-# Random Wallpaper Picker
+# Random Wallpapers Selector
 
 ---
 
-**random_wallpapers.xsh**: Pick a random wallpaper from a specified folder.
+**random_wallpapers.xsh**: Pick random wallpaper from a specified wallpaper list
 
 ---
 
 ### Dependencies
 
-- `feh`: A lightweight image viewer that is used to set the desktop background. Ensure it's installed to use this script.
-- `xonsh`: An enhanced shell that allows for Python-like syntax. This is required to run the script.
+- `xonsh`: A Python-powered shell that allows you to run Python code directly in the shell.
+- `feh`: An image viewer that sets desktop wallpaper in Linux.
+- `dmenu` (optional): A dynamic menu for X; helps in interactive selection of wallpapers. 
 
 ### Description
 
-This script is designed to select a random wallpaper from a predefined folder containing image files (PNG or JPG). It utilizes the `os` and `random` modules from Python to facilitate file handling and selection.
+This script is designed to randomly select a wallpaper from a specified folder and set it as the desktop background. It utilizes the `xonsh` shell for scripting, making it easy to integrate Python code seamlessly with shell commands.
 
-Here's how it works:
-1. **Folder Definition**: The path to the wallpaper directory is defined (`/home/matias/.wallpapers`).
-2. **Wallpaper List Creation**: The script lists all files in the specified folder, filtering for those that end with `.png` or `.jpg`.
-3. **Random Selection**: It then randomly selects one of the available wallpapers.
-4. **Background Setting**: Finally, the script uses `feh` to set the selected wallpaper as the desktop background with a scale fit.
+The script operates by:
 
-Notably, there's a commented-out section that suggests an alternative method for selecting a wallpaper using `dmenu`. This could be used for interactive selection if desired.
+1. Importing the necessary modules (`os` for file handling and `random` for random selection).
+2. Defining the directory containing wallpapers (`/home/matias/.wallpapers`).
+3. Creating a list of wallpapers in the specified directory with extensions `.png` and `.jpg`.
+4. Using `random.choice()` to select one wallpaper at random.
+5. Setting the chosen wallpaper as the desktop background using `feh --bg-scale`.
+
+The commented-out section that uses `dmenu` offers an alternative interactive method to choose a wallpaper, allowing the user to select from the list visually.
 
 ### Usage
 
-To use the script, ensure all dependencies are installed and execute it in a terminal or assign it to a keybinding in your window manager. An example command to run the script is:
+To use the script, ensure it is executable and run it directly in an X session. Here's how to do it:
 
-```bash
-~/path/to/random_wallpapers.xsh
-```
+1. Make the script executable (if not done already):
+   ```bash
+   chmod +x /home/matias/.scripts/random_wallpapers.xsh
+   ```
 
-#### Keybinding Example for Qtile
+2. Execute the script:
+   ```bash
+   /home/matias/.scripts/random_wallpapers.xsh
+   ```
 
-You can easily add a keybinding in your `qtile` config to run this script. For example:
-
-```python
-from libqtile.config import Key
-from libqtile.lazy import lazy
-
-keys = [
-    Key([mod], "r", lazy.spawn("~/path/to/random_wallpapers.xsh")),
-]
-```
+You can also bind this script to a keybinding in qtile or any window manager to change wallpapers quickly.
 
 ---
 
-> [!TIP]
-> This script works well but could benefit from a few improvements:
-> - The ability to support a broader range of image formats (e.g., `.jpeg`, `.gif`).
-> - Implement error handling in case the specified directory contains no images or if `feh` fails to execute.
-> - Consider enabling user selection through `dmenu` or another utility to improve interactivity.
-> - Make the wallpaper folder configurable through a command-line argument to enhance usability across different setups.
+> [!TIP]  
+> The script does not currently handle cases when the wallpapers folder is empty, which may cause errors. Consider adding a check to inform the user if there are no wallpapers to select from, or provide a default value. Additionally, you might want to restore the `dmenu` section to allow interactive selection, giving users more flexibility.

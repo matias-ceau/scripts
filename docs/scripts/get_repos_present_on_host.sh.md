@@ -2,40 +2,43 @@
 
 ---
 
-**[get_repos_present_on_host.sh](/get_repos_present_on_host.sh)**: Script to list git repositories on the local host and save to files.
+**get_repos_present_on_host.sh**: A script to list Git repositories present on the current host.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is a Bash script that requires a compatible shell for execution.
-- `git`: This script is designed to work with git repositories, so git must be installed on your system.
+- `bash`: The shell interpreter used to run the script.
+- `git`: Required to identify Git repositories.
+- `awk`, `sed`, and `sort`: Utilities for processing text and output formatting.
 
 ### Description
 
-This script scans for all git repositories in a specified directory, formats the output, and saves the results to two text files. It requires two environment variables, `GIT_REPOS` (the root directory containing git repositories) and `LOCALDATA` (the path where output files should be saved).
+This script is designed to find and list all Git repositories located in a specified directory on the host machine. It requires two environment variables to be set: `GIT_REPOS`, which should point to the directory containing the repositories, and `LOCALDATA`, which is the base directory for saving output files.
 
-1. **Script Setup**: The script first checks if the required environment variables are set. If not, it exits with an error message.
-2. **Hostname Usage**: It retrieves the system's hostname and constructs file names based on it.
-3. **Directory Creation**: It ensures that the output directory exists before attempting to write to it.
-4. **Finding Repositories**: The script uses `find` to locate directories named `.git`, followed by `sed` to clean up the path and `awk` to filter the results to include only top-level repositories.
-5. **Sorting and Deduplication**: It sorts the repository names, removes any duplicates, and appends the results to a file listing all repositories.
-6. **Output Confirmation**: Finally, it outputs a message confirming the update.
+Upon execution, the script performs the following operations:
+
+1. **Check Environment Variables**: Verifies that both `GIT_REPOS` and `LOCALDATA` are set, exiting with an error message if not.
+2. **Get Hostname**: Captures the hostname of the machine to customize output file names.
+3. **Output File Paths**: Defines the paths for a host-specific repositories output file and a cumulative all-repositories file.
+4. **Create Output Directory**: Ensures the output directory exists, creating it if necessary.
+5. **Find and Format Repositories**: Locates all directories named `.git` within `GIT_REPOS` and formats the output to list the repository names at the top level.
+6. **Sort and Deduplicate**: Eliminates duplicate entries in the host-specific output file and appends the results to a global file that tracks repositories from all hosts, again ensuring there are no duplicates.
+7. **Completion Message**: Notifies the user when the updates are successful.
 
 ### Usage
 
-To use this script, set the required environment variables and execute the script from your terminal:
+To use the script, ensure that the environment variables are set properly and execute it directly in the terminal:
 
 ```bash
-export GIT_REPOS="/path/to/your/git/repositories"
-export LOCALDATA="/path/to/store/output/files"
+export GIT_REPOS="/path/to/git/repositories"
+export LOCALDATA="/path/to/localdata"
 bash /home/matias/.scripts/get_repos_present_on_host.sh
 ```
 
-Once executed, you can find:
-- A file at `$LOCALDATA/docs/git_repos/<hostname>-repos.txt` containing a list of repositories scoped to your hostname.
-- An aggregate file at `$LOCALDATA/docs/git_repos/all-repos.txt` containing a comprehensive list of all repositories across hosts.
+You might want to run this script periodically or via a cron job to keep the repository listings current. 
 
 ---
 
-> [!TIP] Consider implementing error handling for the `find` command to manage scenarios where no repositories are found, or the specified paths are incorrect. Additionally, enhancing the script to accept command-line parameters for `GIT_REPOS` and `LOCALDATA` could improve flexibility.
+> [!TIP]  
+Consider adding options for custom output locations or filenames as command-line arguments. This would enhance flexibility, allowing users to specify different output locations without modifying environment variables. Additionally, error handling for cases where no repositories are found could improve user experience.

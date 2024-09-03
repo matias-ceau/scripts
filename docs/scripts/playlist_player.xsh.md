@@ -2,47 +2,43 @@
 
 ---
 
-**[playlist_player.xsh](/playlist_player.xsh)**: A script for selecting and playing playlists in cmus with dmenu.
+**playlist_player.xsh**: A simple script to pick and play a music playlist using cmus
 
 ---
 
 ### Dependencies
 
-- `cmus`: A powerful music player that runs in a terminal.
-- `dmenu`: A dynamic menu for X, used for selecting options interactively.
-- `xonsh`: A Python-powered shell that integrates shell commands and scripting.
-
+- `cmus`: A lightweight, console-based music player that allows remote control through commands.
+- `dmenu`: A dynamic menu for X, allows for interaction with the user through a simple interface.
+- `xonsh`: A Python-like shell that can execute shell commands and Python code.
+  
 ### Description
 
-This script is designed to facilitate the process of playing music playlists stored in a specific directory using the `cmus` music player. It leverages `dmenu` for a user-friendly selection interface and `xonsh` for script execution.
+The `playlist_player.xsh` script enables users to select and play music playlists stored in the `~/.playlists` directory, leveraging the `cmus` music player. The script opens with a shebang pointing to `xonsh` and begins by importing the `os` module, which provides functions for interacting with the operating system.
 
-Here's how the script works:
+The `PLAYLIST_PATH` variable is initialized to point to the user's playlists directory. The script uses `cmus-remote` commands in sequence:
 
-1. It initializes the path to a user-defined directory (`~/.playlists`) where all playlist files are located.
-2. Using `cmus-remote`, it first clears any current tracks and views the playlist interface in cmus.
-3. The script then retrieves a sorted list of all `.m3u` files in the specified playlist directory.
-4. The user is prompted to select a playlist from this list using `dmenu`.
-5. Once the playlist is selected, it is added to `cmus`, and playback is started immediately.
-
-The use of `os.listdir()` allows the script to dynamically retrieve and display current playlists without hardcoding them.
+1. `cmus-remote -C 'view 4'`: Switches the cmus view to the playlist view.
+2. `cmus-remote -C clear`: Clears the current playlist in cmus.
+3. The script generates a sorted list of playlist files (only `.m3u` files) found in the specified directory.
+4. It presents this list to the user through `dmenu`, allowing them to select a playlist interactively.
+5. After selection, it adds the chosen playlist to `cmus` using `cmus-remote -C add {playlist}`.
+6. Finally, it uses `cmus-remote -n` to move to the next track and `cmus-remote -p` to start playback.
 
 ### Usage
 
-To use the script, simply execute it from the command line or bind it to a key in your window manager. Here's a basic example of how to run it from the terminal:
+To use the script, you can run it from the terminal. Make sure that you have your playlists in the `~/.playlists` directory in `.m3u` format.
 
+Run the script with the following command:
 ```bash
-~/scripts/playlist_player.xsh
+xonsh /home/matias/.scripts/playlist_player.xsh
 ```
 
-You can assign this script to a keybinding in your qtile configuration to quickly access your playlists. Here’s an example configuration snippet:
+After executing, you will see a list of available playlists. Use the arrow keys to select one, and press Enter to play it.
 
-```python
-Key([mod], "p", lazy.spawn("~/scripts/playlist_player.xsh")),
-```
-
-When executed, the script will display a list of available playlists for you to choose from. After you select a playlist, it automatically starts playing in `cmus`.
+Alternatively, you could bind this script to a key in your window manager for quicker access. 
 
 ---
 
-> [!TIP]  
-> Consider implementing error handling in the script to manage cases where the playlist directory is empty or if the user cancels the `dmenu` prompt. This would improve the user experience by preventing errors that could disrupt playback or interaction.
+> [!TIP] 
+> The script currently does not handle errors, such as the case where there are no playlists available. It could be improved by adding error checks, along with a notification if the user selects an empty playlist or if an invalid selection is made. Additionally, consider enhancing the user experience by displaying more detailed information about the playlists, such as the number of tracks included.

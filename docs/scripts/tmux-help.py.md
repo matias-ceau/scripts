@@ -2,71 +2,73 @@
 
 ---
 
-**tmux-help.py**: A script providing helpful utilities and search capabilities for tmux commands.
+**tmux-help.py**: Interactive script to assist with tmux commands and manage usage information.
 
 ---
 
 ### Dependencies
 
-- `argparse`: Used for creating command-line interfaces in Python.
-- `configparser`: Allows reading and writing configuration files.
-- `os`: Provides a way of using operating system functionalities like file and directory manipulation.
-- `re`: Enables regular expression operations for searching and manipulating strings.
-- `sys`: Provides access to command-line arguments.
-- `subprocess`: Used to execute other commands or scripts directly from Python.
-- `time`: Allows handling of time-related functions.
-- `fuzzywuzzy`: Utilizes fuzzy string matching for searching tmux commands.
+- `argparse`: For parsing command-line arguments.
+- `configparser`: To handle configuration files (not actively used in code).
+- `os`: Provides a way to use operating system-dependent functionality.
+- `re`: For regular expressions, useful for command parsing.
+- `sys`: Provides access to system-specific parameters and functions.
+- `subprocess`: To run shell commands from within Python.
+- `time`: For time-related functions.
+- `fuzzywuzzy`: Enables fuzzy string matching.
 
 ### Description
 
-The `tmux-help.py` script is a comprehensive tool designed to assist users in navigating and utilizing tmux commands effectively. It does so by providing the ability to:
+The `tmux-help.py` script is designed to help users easily access tmux commands and relevant sections of the tmux manpage. The script performs several key functions including:
 
-- Load and manage a local copy of the tmux manual page.
-- Search for commands based on fuzzy matching or exact string matching.
-- List available tmux commands categorized in a user-friendly format.
-- Update the local manpage and section logs from the latest tmux manual.
+- **Path Management**: It ensures necessary directory structures and files are in place for storing tmux data.
+- **Loading Commands**: Loads tmux commands from a manpage into memory for interaction.
+- **Command Searching**: Implements fuzzy and exact searches to filter tmux commands based on user input.
+- **Sections Handling**: Lists and displays specific sections from the tmux manpage, allowing for a focused view of commands based on categories.
 
-This script handles the creation of necessary configuration directories and files if they do not already exist. The key functionalities include:
-
-- **Listing Commands**: Commands can be listed in their original order or categorized for easier navigation.
-- **Searching**: Users can search for specific commands using keywords or key bindings.
-- **Updating Manpages**: Users can periodically update their local tmux manual to reflect any changes.
+The script is robust with built-in logging for tracking errors and information, ensuring users can debug easily.
 
 ### Usage
 
-To use the script, ensure it is executable and run from a terminal. Here are the command options available:
+To use this script, run it with Python 3 and provide command-line arguments as required. Here are some common examples:
 
-```bash
-./tmux-help.py -L
-```
-List tmux commands in the original order.
+- List all tmux commands:
+  ```bash
+  python3 tmux-help.py
+  ```
+  
+- List tmux commands in their original order:
+  ```bash
+  python3 tmux-help.py --list-tmux
+  ```
+  
+- Fuzzy search for commands containing a keyword:
+  ```bash
+  python3 tmux-help.py --find <keyword>
+  ```
+  
+- Exact search for commands:
+  ```bash
+  python3 tmux-help.py --find-exact <keyword>
+  ```
 
-```bash
-./tmux-help.py -f keyword
-```
-Fuzzy search for commands containing 'keyword'.
+- Search for commands associated with a specific key:
+  ```bash
+  python3 tmux-help.py --search <key>
+  ```
+  
+- List all sections or display a specific section by number/name:
+  ```bash
+  python3 tmux-help.py --section
+  python3 tmux-help.py --section <section_number_or_name>
+  ```
 
-```bash
-./tmux-help.py -F keyword
-```
-Search for commands that exactly match 'keyword' (case insensitive).
-
-```bash
-./tmux-help.py -s key
-```
-Search for commands associated with the specified key.
-
-```bash
-./tmux-help.py -u
-```
-Update local tmux manpage and sections.
-
-```bash
-./tmux-help.py -S
-```
-List all sections of tmux commands or specify a section by its name or number.
+- Update the tmux manpage:
+  ```bash
+  python3 tmux-help.py --update
+  ```
 
 ---
 
-> [!TIP]  
-> The script could benefit from enhanced error handling in `load_tmux_commands()` to provide more specific feedback on the issues encountered while loading files. Additionally, implementing a caching mechanism for loaded commands could improve performance, especially when repeatedly accessing command help.
+> [!TIP] 
+> The script currently logs errors and info but could benefit from a more comprehensive error handling strategy. For example, implementing retries for failed subprocess commands could enhance its robustness. Furthermore, consider cleaning up or managing the generated files more effectively to prevent clutter over time.

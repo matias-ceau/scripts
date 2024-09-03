@@ -8,30 +8,35 @@
 
 ### Dependencies
 
-- `shell_history_info.sh`: A script that fetches and displays the command history.
-- `improved-fzfmenu.sh`: A script for enhanced fuzzy finding capabilities using `fzf`.
+- `shell_history_info.sh`: A script to retrieve the shell command history.
+- `improved-fzfmenu.sh`: An enhanced version of fzf for navigating options with improved features.
+- `fzf`: A command-line fuzzy finder for filtering through a list of items.
 
 ### Description
 
-The `command_prompt.sh` script is designed to provide a streamlined way to launch commands from your shell history. It utilizes `fzf`, a powerful command-line fuzzy finder, to present a list of previously executed commands. The script is constructed using a series of functions that work together seamlessly:
+The `command_prompt.sh` script is designed to streamline the process of launching commands from your shell history. By leveraging the capabilities of `fzf`, which provides a fuzzy search interface, users can quickly access previously executed commands without having to type them out fully.
 
-1. **get_cmd**: This function calls `shell_history_info.sh` to list command history. It uses `cut` to extract the second field from the output, which is expected to be the command itself.
-  
-2. **fzf_cmd**: This function invokes `improved-fzfmenu.sh` to display the command options. The flags `--tac` and `--ansi` enhance the usability by formatting the output and allowing for ANSI colors.
+The script operates in the following way:
 
-After defining these functions, the script combines them to pipe the output from `get_cmd` into `fzf_cmd`, which then allows the user to select a command from their history to execute.
+1. **Get Command History**: It invokes the `shell_history_info.sh` script to list the command history, extracting the second field (typically the command itself). The command output is then piped for further processing.
+   
+2. **Fuzzy Search**: The extracted commands are passed to `improved-fzfmenu.sh`, where users can interactively select a command from their history using fuzzy matching. The parameters `--tac` and `--ansi` ensure that the list is displayed in inverse order and retains ANSI color formatting, respectively.
+
+This combination makes it much easier to find and execute past commands, enhancing workflow efficiency.
 
 ### Usage
 
-To use the script, you need to ensure that the necessary dependencies are installed and executable. Then, simply run the script from your terminal:
+To run the script, simply execute it in your terminal:
 
 ```bash
 bash /home/matias/.scripts/command_prompt.sh
 ```
 
-This will launch the fuzzy finder where you can begin typing to filter through your command history. Once you find the desired command, you can select it, and the command will be executed in your shell.
+Once executed, the script will display an interactive fzf menu populated with your recent commands. Use the arrow keys to navigate and press `Enter` to execute the selected command.
+
+You can also map this script to a keybinding in your window manager (Qtile) for quicker access, enhancing your productivity further.
 
 ---
 
 > [!TIP]  
-> Consider adding a feature to allow users to customize the number of previous commands fetched from history. This could enhance usability, especially for those who frequently run a large number of commands. Additionally, implementing error handling for cases where the dependencies are missing might improve the script's robustness.
+> Consider adding error handling to check if the required dependencies (`shell_history_info.sh` and `improved-fzfmenu.sh`) are installed and executable. Handling cases where no command history is available could improve the user experience. You may also want to implement a feature to allow users to define their own fzf options for customization.
