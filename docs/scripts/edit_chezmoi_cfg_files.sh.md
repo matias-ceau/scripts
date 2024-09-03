@@ -1,8 +1,8 @@
-# Edit Chezmoi Configuration Files
+# Edit Chezmoi Config Files
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: Script for selecting and editing Chezmoi managed configuration files.
+**edit_chezmoi_cfg_files.sh**: A script to select and edit Chezmoi-managed configuration files with fzf.
 
 ---
 
@@ -35,32 +35,27 @@ When executed, the script performs the following:
 ### Usage
 
 To use this script, simply run it in your terminal. Here’s a quick command to execute it:
-
 ```bash
+
 /home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-This will trigger an interactive session where you can:
+This will launch an interactive file selector powered by `fzf`. You can:
 
-- Navigate through your managed configuration files.
-- Preview files on the right-hand side as you navigate using `fzf`.
-- Select a file or directory, which will open it in Neovim.
+- Navigate directories or files using arrow keys.
+- Preview the selected file with the provided custom preview.
+- Select a file/directory by pressing `Enter`.
 
-After editing, you will see the following prompt:
-
-```
+After selecting a file, you will be prompted with options:
+```plaintext
 - [a] (default): Chezmoi apply
 - [s]: Chezmoi apply and sync repo
 - [x]: exit
- > 
 ```
 
-You can then choose to apply changes, apply and sync, or exit.
+You can choose to apply the changes, sync your repository, or exit.
 
 ---
 
-> [!TIP]
-> Potential improvements for the script could include:
-> - Adding error handling for various commands to manage unexpected behavior gracefully.
-> - Implementing user-configurable options for `fzf` layout or preview settings.
-> - Documentation for the functions included within the script for further clarity on usage and customization options.
+> [!TIP] 
+> Consider adding error handling for cases where `chezmoi` commands fail and ensure the script displays helpful error messages. Moreover, including an option for creating or editing new files might enhance its functionality further.

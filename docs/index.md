@@ -10,6 +10,7 @@
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to dynamically run scripts using rofi as a dmenu alternative.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script for selecting and editing Chezmoi managed configuration files.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to select and edit Chezmoi-managed configuration files with fzf.*
 - [editor.sh](scripts/editor.sh.md) -- *Quickly edit files using `fzf` to find them across specified directories.*
 - [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Generate a color palette with hex, RGB values, and names for quick reference.*
@@ -48,8 +49,9 @@
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A tool to reduce color depth in PPM images based on a given palette.*
-- [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *Switches to the complementary group in Qtile dynamically.*
+- [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *Switches to a complementary group in Qtile.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Quickly select a password from your password store using fzf.*
+- [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Script to synchronize Qutebrowser bookmarks with Chezmoi-managed config.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Select random album and play it with cmus*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified folder.*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to display the most researched manual entries based on history.*
@@ -59,7 +61,7 @@
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for a streamlined execution and documentation preview.*
 - [select_script](scripts/select_script.md) -- *A C script for selecting and executing a script from a cached list.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of user directories to a backup location.*
-- [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Analyzes shell history files to find frequent lines, words, or characters.*
+- [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Retrieve and analyze frequent entries from shell history files.*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a formatted representation of the keyboard layout.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to sync a local git repository with its remote counterpart.*
@@ -74,15 +76,3 @@
 - [vox.py](scripts/vox.py.md) -- *A Python script to list and describe Vox amp options in a formatted manner.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Automatically change wallpapers from a specified collection.*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *A script that finds scripts without inline documentation*
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
-=======
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
->>>>>>> Stashed changes
->>>>>>> Stashed changes

@@ -2,51 +2,62 @@
 
 ---
 
-**shell_history_info.sh**: Analyzes shell history files to find frequent lines, words, or characters.
+**shell_history_info.sh**: Retrieve and analyze frequent entries from shell history files.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell in which the script is written.
-- `rg` (ripgrep): A fast text searching tool used for cleaning up lines.
-- `sed`: A stream editor for filtering and transforming text.
-- `sort`: A command for sorting lines of text files.
-- `uniq`: A command for reporting or omitting repeated lines.
-- `bat`: A cat clone with syntax highlighting and Git integration, used here for displaying the help documentation within the script.
+- `bash`: The script is written in Bash and requires a compatible shell.
+- `rg` (Ripgrep): Used for searching and filtering text efficiently.
+- `sed`: Stream editor for filtering and transforming text.
+- `sort`: Standard Unix command for sorting lines of text.
+- `uniq`: Used to filter out repeated lines in the output.
+- `cat`: Concatenates and displays files.
 
 ### Description
 
-This script analyzes the shell history files located in the `XDG_STATE_HOME` directory and identifies the most frequent lines, words, or characters based on the provided command-line arguments. The script defines several helper functions to facilitate this analysis:
+This script allows users to analyze their shell history and retrieve the most frequent lines, words, or characters from their `bash` and `zsh` history files. It does this by:
 
-- **get_history**: Combines `bash` and `zsh` history files.
-- **split_by_word**: Converts spaces in text to new lines for word analysis.
-- **clean_up**: Removes empty lines and trims whitespace.
-- **sort_by_occurence**: Counts occurrences of each line, keeps only those with more than four occurrences, and formats the output.
-
-The script accepts various command-line options to specify what kind of frequency analysis to perform.
+1. **Extracting History**: Combines history from both `bash` and `zsh`.
+2. **Processing**: 
+   - **Cleaning Up**: Removes empty lines and extra whitespace.
+   - **Sorting and Counting**: Sorts the entries, counts occurrences, and filters results based on a specified threshold (minimum 5 occurrences).
+3. **Handling Input Options**: The script accepts command-line arguments to specify the analysis type (lines, words, characters), or provide instructions when the arguments are incorrect.
 
 ### Usage
 
-Run the script from the terminal with the appropriate option to analyze your shell history:
+To execute the script, use the following command with your desired option:
 
 ```bash
-# Analyze the most frequent lines
-./shell_history_info.sh -l
-
-# Analyze the most frequent words
-./shell_history_info.sh -w
-
-# Analyze the most frequent characters
-./shell_history_info.sh -c
-
-# Display options starting with a specific character
-./shell_history_info.sh -o
+./shell_history_info.sh [option]
 ```
 
-If an invalid option is provided, the script will display a message indicating the error and show the script documentation embedded in the source code.
+#### Options:
+
+- `-l` or `--lines`: Analyze the most frequent lines in the history.
+    ```bash
+    ./shell_history_info.sh -l
+    ```
+
+- `-w` or `--words`: Analyze the most frequent words in the history.
+    ```bash
+    ./shell_history_info.sh -w
+    ```
+
+- `-c` or `--character`: Analyze the most frequent characters in the history.
+    ```bash
+    ./shell_history_info.sh -c
+    ```
+
+- `-o` or `--option`: Analyze options that start with a `-`.
+    ```bash
+    ./shell_history_info.sh -o
+    ```
+
+If an incorrect option is provided, the script will output the usage instructions.
 
 ---
 
 > [!TIP]  
-> The script could benefit from improved error handling, such as checking if the history files exist before trying to read them. Implementing input validation for the `XDG_STATE_HOME` environment variable can also enhance robustness. Additionally, consider using more efficient text processing tools to improve performance on large history files.
+> Consider adding error handling for cases where history files do not exist. Additionally, a summary report could enhance the effectiveness of the script by consolidating findings for easier interpretation.

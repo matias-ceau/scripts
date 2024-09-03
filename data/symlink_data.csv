@@ -45,6 +45,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/ppm-color-reducer,/home/matias/.local/bin/ppm-color-reducer,ppm-color-reducer
 /home/matias/.scripts/qtile_dice_group.py,/home/matias/.local/bin/qtile_dice_group.py,qtile_dice_group.py
 /home/matias/.scripts/quick-pass.sh,/home/matias/.local/bin/quick-pass.sh,quick-pass.sh
+/home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh,/home/matias/.local/bin/qutebrowser-modify-source-bookmarks.sh,qutebrowser-modify-source-bookmarks.sh
 /home/matias/.scripts/random_album.xsh,/home/matias/.local/bin/random_album.xsh,random_album.xsh
 /home/matias/.scripts/random_wallpapers.xsh,/home/matias/.local/bin/random_wallpapers.xsh,random_wallpapers.xsh
 /home/matias/.scripts/read_the_fucking_manual.sh,/home/matias/.local/bin/read_the_fucking_manual.sh,read_the_fucking_manual.sh

@@ -72,7 +72,7 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "Script for selecting and editing Chezmoi managed configuration files.",
+    "description": "A script to select and edit Chezmoi-managed configuration files with fzf.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
     "hash": "c599b1ea3a1fd175cc0698f8ce120e3ea40493ff06d4e1fa71c4b6d0e0da4353"
   },
@@ -436,7 +436,7 @@
   "shell_history_info.sh": {
     "file": "shell_history_info.sh",
     "path": "shell_history_info.sh",
-    "description": "Analyzes shell history files to find frequent lines, words, or characters.",
+    "description": "Retrieve and analyze frequent entries from shell history files.",
     "doc_path": "docs/scripts/shell_history_info.sh.md",
     "hash": "e558136667169d0edca712a579a35b50d07a3a66e7ae05e1318a885a90f0ca24"
   },
@@ -464,8 +464,15 @@
   "qtile_dice_group.py": {
     "file": "qtile_dice_group.py",
     "path": "qtile_dice_group.py",
-    "description": "Switches to the complementary group in Qtile dynamically.",
+    "description": "Switches to a complementary group in Qtile.",
     "doc_path": "docs/scripts/qtile_dice_group.py.md",
     "hash": "5c6c47fddc043e42d8888164b0e640f37ef846d0685d1549afa85eac7d4b5a9e"
+  },
+  "qutebrowser-modify-source-bookmarks.sh": {
+    "file": "qutebrowser-modify-source-bookmarks.sh",
+    "path": "qutebrowser-modify-source-bookmarks.sh",
+    "description": "Script to synchronize Qutebrowser bookmarks with Chezmoi-managed config.",
+    "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
+    "hash": "b5ace7f64bbe70ce73712b54d3e7bc94f3a2266487bb54c99dc82951b038a1c4"
   }
 }

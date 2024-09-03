@@ -1,47 +1,51 @@
-# Qtile Dice Group Script
+# Qtile Dice Group
 
 ---
 
-**qtile_dice_group.py**: Switches to the complementary group in Qtile dynamically.
+**qtile_dice_group.py**: Switches to a complementary group in Qtile.
 
 ---
 
 ### Dependencies
 
-- `libqtile`: This is the core library used for configuring and interacting with the Qtile window manager. Make sure it is installed to use this script.
+- `libqtile`: The core library for managing and interacting with the Qtile window manager. This library must be properly installed for the script to function.
 
 ### Description
 
-This script is designed to work with the Qtile window manager, providing a quick way to switch between complementary groups. The concept of groups in Qtile allows users to organize their windows based on type or purpose, and with this script, you can easily toggle between two groups based on their numerical indices.
+The `qtile_dice_group.py` script provides an easy way to switch between groups in the Qtile window manager. It leverages the `libqtile.command.client` module to interact with the Qtile environment.
 
-Here's how the script works:
+When executed, the script performs the following actions:
 
-1. It initializes an `InteractiveCommandClient`, which allows for communication with the Qtile's command interface.
-2. It retrieves the current group's index as an integer from the group information.
-3. It calculates the complementary group index by subtracting the current group index from 7 (assuming you have groups indexed from 0 to 6).
-4. Finally, it switches focus to the complementary group using the `toscreen()` method.
+1. It creates an instance of `InteractiveCommandClient`, which allows sending commands to the running instance of Qtile.
+2. It retrieves the current group being displayed by querying its information.
+3. The script assumes that the user has a total of 7 groups (numbered from 0 to 6).
+4. It calculates the complementary group by subtracting the current group number from 7.
+5. Finally, it switches to the complementary group using `toscreen()` method.
+
+This can be particularly useful for users who wish to toggle between two sets of workspaces efficiently.
 
 ### Usage
 
-To use this script:
-1. Ensure it's executable:  
+To use the script, you must ensure it's executable and invoke it from the terminal or assign it to a key binding within your Qtile configuration.
+
+1. **Make the script executable**:
    ```bash
    chmod +x /home/matias/.scripts/qtile_dice_group.py
    ```
 
-2. Bind it to a key in your `~/.config/qtile/config.py` file:
-   ```python
-   Key([mod], "d", lazy.spawn("/home/matias/.scripts/qtile_dice_group.py")),
-   ```
-
-3. Alternatively, run it directly in a terminal:
+2. **Run the script directly**:
    ```bash
    /home/matias/.scripts/qtile_dice_group.py
    ```
-
-This will switch your current focus to the complementary group when invoked.
+   
+3. **Assign to a key binding** in your `config.py` for Qtile:
+   ```python
+   Key([mod], "d", lazy.spawn("/home/matias/.scripts/qtile_dice_group.py")),
+   ```
+   
+This configuration allows you to press `mod + d` to quickly switch to the complementary group.
 
 ---
 
 > [!TIP]  
-> Consider adding error handling for scenarios where the current group is not between 0 and 6, which could lead to an `IndexError` when trying to access `c.group[str(complementary)]`. A simple check or exception handling could enhance the robustness of your script.
+> This script assumes that the total number of groups is set to 7. If your configuration has a different number of groups, such as 8 or 6, you'll want to modify the calculation for `complementary` to reflect that. Consider enhancing this script to make the number of groups configurable. Also, adding error handling would improve robustness, especially when querying the current group.
