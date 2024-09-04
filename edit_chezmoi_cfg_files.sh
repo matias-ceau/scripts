@@ -56,13 +56,15 @@ selected=$(
 )
 
 if [ -n "$selected" ]; then
-    path="$(chezmoi source-path "$HOME/$selected")"
+    path="$(chezmoi source-path "$HOME/$selected")" || exit 0
 fi
 
+INITIAL_DIR="$(pwd)"
+
 if [ -f "$path" ]; then
-    nvim "$path"
+    cd "$CHEZMOI" && nvim "$path"
 elif [ -d "$path" ]; then
-    nvim $(fd . -tf "$path")
+    cd "$CHEZMOI" && nvim $(fd . -tf "$path")
 else
     exit 0
 fi
@@ -70,10 +72,9 @@ fi
 read -p $'- [a] (default): Chezmoi apply\n- [s]: Chezmoi apply and sync repo\n- [x]: exit\n > ' input
 
 if [[ "$input" == "x" ]]; then
-    exit 0
+    cd "$INITIAL_DIR" && exit 0
 elif [[ "$input" == "s" ]]; then
-    chezmoi apply
-    $SCRIPTS/sync-repo.sh $CHEZMOI
+    chezmoi apply && $SCRIPTS/sync-repo.sh $CHEZMOI && cd "$INITIAL_DIR"
 else
-    chezmoi apply
+    chezmoi apply && cd "$INITIAL_DIR"
 fi

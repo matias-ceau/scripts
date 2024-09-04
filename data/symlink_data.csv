@@ -8,6 +8,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/command_prompt.sh,/home/matias/.local/bin/command_prompt.sh,command_prompt.sh
 /home/matias/.scripts/count_tokens_with_tiktoken.py,/home/matias/.local/bin/count_tokens_with_tiktoken.py,count_tokens_with_tiktoken.py
 /home/matias/.scripts/create_cover_art.sh,/home/matias/.local/bin/create_cover_art.sh,create_cover_art.sh
+/home/matias/.scripts/dev/display_markdown.py,/home/matias/.local/bin/display_markdown.py,display_markdown.py
 /home/matias/.scripts/dmenu_run_scripts.py,/home/matias/.local/bin/dmenu_run_scripts.py,dmenu_run_scripts.py
 /home/matias/.scripts/edit_chezmoi_cfg_files.sh,/home/matias/.local/bin/edit_chezmoi_cfg_files.sh,edit_chezmoi_cfg_files.sh
 /home/matias/.scripts/editor.sh,/home/matias/.local/bin/editor.sh,editor.sh
@@ -18,6 +19,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/fzfmenu.sh,/home/matias/.local/bin/fzfmenu.sh,fzfmenu.sh
 /home/matias/.scripts/fzf_songlauncher.sh,/home/matias/.local/bin/fzf_songlauncher.sh,fzf_songlauncher.sh
 /home/matias/.scripts/get_repos_present_on_host.sh,/home/matias/.local/bin/get_repos_present_on_host.sh,get_repos_present_on_host.sh
+/home/matias/.scripts/dev/get-window-thumbnails.sh,/home/matias/.local/bin/get-window-thumbnails.sh,get-window-thumbnails.sh
 /home/matias/.scripts/git_clone_by_author-repo.sh,/home/matias/.local/bin/git_clone_by_author-repo.sh,git_clone_by_author-repo.sh
 /home/matias/.scripts/grub-tune-to-audio-python.py,/home/matias/.local/bin/grub-tune-to-audio-python.py,grub-tune-to-audio-python.py
 /home/matias/.scripts/improved-fzfmenu.sh,/home/matias/.local/bin/improved-fzfmenu.sh,improved-fzfmenu.sh
@@ -43,6 +45,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/playlist_randomizer.xsh,/home/matias/.local/bin/playlist_randomizer.xsh,playlist_randomizer.xsh
 /home/matias/.scripts/bin/ppm-color-reducer,/home/matias/.local/bin/ppm-color-reducer,ppm-color-reducer
 /home/matias/.scripts/qtile_dice_group.py,/home/matias/.local/bin/qtile_dice_group.py,qtile_dice_group.py
+/home/matias/.scripts/qtile_window_to_group_and_switch.py,/home/matias/.local/bin/qtile_window_to_group_and_switch.py,qtile_window_to_group_and_switch.py
 /home/matias/.scripts/quick-pass.sh,/home/matias/.local/bin/quick-pass.sh,quick-pass.sh
 /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh,/home/matias/.local/bin/qutebrowser-modify-source-bookmarks.sh,qutebrowser-modify-source-bookmarks.sh
 /home/matias/.scripts/random_album.xsh,/home/matias/.local/bin/random_album.xsh,random_album.xsh
