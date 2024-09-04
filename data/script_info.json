@@ -398,6 +398,146 @@
     "doc_path": "docs/scripts/sync-repo.sh.md",
     "hash": "6c4d8c63aaeefbcfddea7b6497e65dd9df7a34688adb1cc7e80804be5e44445b"
   },
+  "tmux-help.py": {
+    "file": "tmux-help.py",
+    "path": "dev/tmux-help.py",
+    "description": "tmux-help.py - A script providing helpful utilities and search capabilities for tmux commands.",
+    "doc_path": "docs/scripts/tmux-help.py.md",
+    "hash": "d6e88ef80189b80476678d2892a4674826f6bd6b7587902c7dc520821c1a9e08"
+  },
+  "toggle_picom.sh": {
+    "file": "toggle_picom.sh",
+    "path": "toggle_picom.sh",
+    "description": "Script to toggle the Picom compositor on and off.",
+    "doc_path": "docs/scripts/toggle_picom.sh.md",
+    "hash": "79a36619b1e24601df35b6ce4931f142b29855efb7ece055acb83f089d4b1700"
+  },
+  "transform_symlink.sh": {
+    "file": "transform_symlink.sh",
+    "path": "transform_symlink.sh",
+    "description": "Convert symlinks to copies of their target files or directories.",
+    "doc_path": "docs/scripts/transform_symlink.sh.md",
+    "hash": "7f7adf05e68fafb56cbf58221a0e087c939a646dd7466e1e72233a37bfe98a33"
+  },
+  "update_env.xsh": {
+    "file": "update_env.xsh",
+    "path": "update_env.xsh",
+    "description": "update_env.xsh - Update .env file with API keys from xonsh environment",
+    "doc_path": "docs/scripts/update_env.xsh.md",
+    "hash": "303c8ffa3530b40ff3f2d49ee6a499d6e211949dee2801ec1e6edd92d50515d6"
+  },
+  "utils_update_symlinks.sh": {
+    "file": "utils_update_symlinks.sh",
+    "path": "sys/utils_update_symlinks.sh",
+    "description": "Create and maintain symbolic links in ~/.local/bin.",
+    "doc_path": "docs/scripts/utils_update_symlinks.sh.md",
+    "hash": "b5066c456d311593adac63cc5e3bd47cbb372ee21f290c76f402b0962b367113"
+  },
+  "vimwiki.sh": {
+    "file": "vimwiki.sh",
+    "path": "vimwiki.sh",
+    "description": "Open a note in vim using fzf for quick selection.",
+    "doc_path": "docs/scripts/vimwiki.sh.md",
+    "hash": "852098a285baf222ac7f1251f98ce6f39ff74140f7fe7280a00e91a0eb8c22a1"
+  },
+  "vox.py": {
+    "file": "vox.py",
+    "path": "vox.py",
+    "description": "A Python script to list and describe Vox amp options in a formatted manner.",
+    "doc_path": "docs/scripts/vox.py.md",
+    "hash": "c11a48deacf487b191b891ab5e71c3c86cf713e0de96542c77741c2ef846fe24"
+  },
+  "wallpaper.sh": {
+    "file": "wallpaper.sh",
+    "path": "wallpaper.sh",
+    "description": "Automatically change wallpapers from a specified collection.",
+    "doc_path": "docs/scripts/wallpaper.sh.md",
+    "hash": "faee0d7137738d4c17d2d3ee9e09b14a2f4d8b0fc02453b0a6e882fb4a71bf7e"
+  },
+  "you_are_not_documented.sh": {
+    "file": "you_are_not_documented.sh",
+    "path": "you_are_not_documented.sh",
+    "description": "A script that finds scripts without inline documentation",
+    "doc_path": "docs/scripts/you_are_not_documented.sh.md",
+    "hash": "86e083c3282edc4e34b1a0e876575f39583c7ce34cde832ea57e54b9c429cd56"
+  },
+  "fix-markdown-links.sh": {
+    "file": "fix-markdown-links.sh",
+    "path": "fix-markdown-links.sh",
+    "description": "A script to fix relative links in Markdown files.",
+    "doc_path": "docs/scripts/fix-markdown-links.sh.md",
+    "hash": "6aa54826672ca92d456ee5376357afe67ff284471e51785c1e5f94c9174db8b5"
+  },
+  "new_script_creator.sh": {
+    "file": "new_script_creator.sh",
+    "path": "new_script_creator.sh",
+    "description": "A simple script to create new scripts with directory linking",
+    "doc_path": "docs/scripts/new_script_creator.sh.md",
+    "hash": "265db232ae9d951ff9371fce47f70316bcde46a5d0250c8fdec8a38ba4c88394"
+  },
+  "flexoki_show.sh": {
+    "file": "flexoki_show.sh",
+    "path": "flexoki_show.sh",
+    "description": "Generate a color palette with hex, RGB values, and names for quick reference.",
+    "doc_path": "docs/scripts/flexoki_show.sh.md",
+    "hash": "af13df7cb3217f006e2a36b2d8fdc7131e8313b0711c1f4cea6c54f04f27eddc"
+  },
+  "quick-pass.sh": {
+    "file": "quick-pass.sh",
+    "path": "quick-pass.sh",
+    "description": "Quickly select a password from your password store using fzf.",
+    "doc_path": "docs/scripts/quick-pass.sh.md",
+    "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
+  },
+  "megaignore_editor.sh": {
+    "file": "megaignore_editor.sh",
+    "path": "megaignore_editor.sh",
+    "description": "A bash script for editing and managing .megaignore files interactively",
+    "doc_path": "docs/scripts/megaignore_editor.sh.md",
+    "hash": "685075c0aa2bfec0b4e2d290543b8e92e5a028ddc6746e23ce6762eaef1c6c33"
+  },
+  "setting-up-syncs.sh": {
+    "file": "setting-up-syncs.sh",
+    "path": "setting-up-syncs.sh",
+    "description": "Automates syncing of user directories to a backup location.",
+    "doc_path": "docs/scripts/setting-up-syncs.sh.md",
+    "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
+  },
+  "grub-tune-to-audio-python.py": {
+    "file": "grub-tune-to-audio-python.py",
+    "path": "grub-tune-to-audio-python.py",
+    "description": "Converts GRUB_INIT_TUNE strings into audio files.",
+    "doc_path": "docs/scripts/grub-tune-to-audio-python.py.md",
+    "hash": "373c4b6b30054ef2c6c703bef4facf5cbb42c5b029320253941e5fbaeaa2dcf1"
+  },
+  "install_dependencies.sh": {
+    "file": "install_dependencies.sh",
+    "path": "install_dependencies.sh",
+    "description": "Installs essential development and productivity tools on Arch Linux",
+    "doc_path": "docs/scripts/install_dependencies.sh.md",
+    "hash": "358eedb7ddfc5782dd201261f16edc27dbf82ac129124b8462870da83d1ba6cf"
+  },
+  "megacmd_launch_tmux.sh": {
+    "file": "megacmd_launch_tmux.sh",
+    "path": "megacmd_launch_tmux.sh",
+    "description": "Launches the MEGA command line interface in a new tmux session.",
+    "doc_path": "docs/scripts/megacmd_launch_tmux.sh.md",
+    "hash": "ce8895fffb7a381655495efa1415e582a452c5a8b6ec1a1224ed8ab78f6cb9c0"
+  },
+  "nvim_in_new_terminal.sh": {
+    "file": "nvim_in_new_terminal.sh",
+    "path": "nvim_in_new_terminal.sh",
+    "description": "Opens a floating terminal to edit a file with nvim",
+    "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
+    "hash": "f946fcb565c014cfb35a72ad242188c05e9b670a9af58a75cc26b4f1416fbf72"
+  },
+  "obsidian-vault-selector.sh": {
+    "file": "obsidian-vault-selector.sh",
+    "path": "obsidian-vault-selector.sh",
+    "description": "Script to select and open an Obsidian vault from a directory.",
+    "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
+    "hash": "44c382ae3dcd218b967b608409b0b917efd0006a12bab0e320a1b2a15fb61705"
+  },
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
     "path": "terminal_with_command.sh",

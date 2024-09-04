@@ -37,14 +37,11 @@
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple bash script to create new scripts quickly.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
-- [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS music player.*
-- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with Neovim.*
-- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim.*
-- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to select and open an Obsidian vault from a specified directory.*
-- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to easily open any Obsidian vault from the terminal*
-- [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from your PKM directory*
-- [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to select and open any PDF file from the home folder using Evince.*
-- [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A simple script to pick and play a music playlist using cmus*
+- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to select and open an Obsidian vault from a directory.*
+- [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
+- [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
+- [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A command-line tool to reduce the color depth of PPM images using a custom palette.*
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *A script to switch between Qtile groups using a complementary number.*
