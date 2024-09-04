@@ -24,6 +24,7 @@ EOF
 
 get_searches() {
     cat "$XDG_STATE_HOME/zsh/history" "$XDG_STATE_HOME/bash/history" |
+        sed 's/^: [0-9]\+:[0-9];//' |
         rg '^(bat)?man ' |
         sed -E 's/^(bat)?man //; /^-/d' |
         cut -d' ' -f1 |
@@ -32,23 +33,22 @@ get_searches() {
 }
 
 case $1 in
-    '')
-        get_searches | head
-        ;;
-    -h|--help)
-        usage
-        ;;
-    -n|--number)
-        get_searches | head -n $2
-        ;;
-    -m|--mo*)
-        get_searches | awk -v threshold="$2" '$NF > threshold'
-        ;;
-    -a|--all)
-        get_searches
-        ;;
-    *)
-        get_searches | rg "$@"
-        ;;
+'')
+    get_searches | head
+    ;;
+-h | --help)
+    usage
+    ;;
+-n | --number)
+    get_searches | head -n $2
+    ;;
+-m | --mo*)
+    get_searches | awk -v threshold="$2" '$NF > threshold'
+    ;;
+-a | --all)
+    get_searches
+    ;;
+*)
+    get_searches | rg "$@"
+    ;;
 esac
-
