@@ -4,7 +4,8 @@
 
 get_history() {
 	cat "$XDG_STATE_HOME/zsh/history"\
-	    "$XDG_STATE_HOME/bash/history" 
+	    "$XDG_STATE_HOME/bash/history" |
+	    sed -E 's/^: [0-9]+:[0-9];//' # remove extra zsh indications
 }
 
 split_by_word() {
