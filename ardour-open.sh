@@ -41,6 +41,7 @@ export -f get_path
 
 selected="$(search_cmd |
     improved-fzfmenu.sh \
+        title_is_open-ardour \
         --pipe \
         --ansi \
         --preview-window='60%' \

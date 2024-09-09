@@ -3,4 +3,4 @@
 #INFO:# "Opens a floating terminal to run a command (and see the output)"
 
 cmd="$(which "$1")"
-setsid alacritty -T 'floating' -e bash -c "$cmd; exec $SHELL" &
+setsid alacritty -T term_w_cmd --class 'floating' -e bash -c "$cmd; exec $SHELL" &

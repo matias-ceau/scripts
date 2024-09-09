@@ -2,47 +2,46 @@
 
 ---
 
-**ardour-open.sh**: Script to search and open Ardour session files.
+**ardour-open.sh**: Opens an Ardour session by searching for `.ardour` files
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`, used to search for `.ardour` files.
-- `bat`: A cat clone with syntax highlighting and Git integration, used for previewing session files.
-- `fzf`: A command-line fuzzy finder that allows interactive searching.
-- `improved-fzfmenu.sh`: A custom script that enhances the fzf functionality and integrates with this script.
+- `bash`: The shell in which the script runs.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `xargs`: A command that builds and executes command lines from standard input.
+- `stat`: Used to retrieve file or file system status.
+- `sort`: Sorts lines of text files.
+- `sed`: A stream editor for filtering and transforming text.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `improved-fzfmenu.sh`: A custom FZF (fuzzy finder) menu script that enhances the user selection experience.
 
 ### Description
 
-This script allows users to open Ardour session files with ease by providing a search functionality through their audio projects directory. It leverages several powerful command-line utilities to enhance the user experience. 
+The `ardour-open.sh` script is designed to facilitate the process of opening an Ardour session by visually displaying available `.ardour` files within a specified audio projects directory. The script leverages various utilities to search, filter, and preview Ardour project files.
 
-1. **Searching for Session Files**: The function `search_cmd` uses `fd` to find `.ardour` files in the specified `AUDIO_PROJECTS` directory, retrieves their last modification times, and formats the output with ANSI colors for better visual distinction. 
-   
-2. **Previewing Files**: The `preview_cmd` function utilizes `bat` for a concise preview of the selected session file before opening it in Ardour. 
+Here's a breakdown of the main functions within the script:
 
-3. **User Interaction**: The script uses `improved-fzfmenu.sh` to provide an interactive menu for the user to select the session they want to open. 
+- **search_cmd**: This function utilizes `fd` to find all `.ardour` files within the `$AUDIO_PROJECTS` directory, retrieves their modification times and formats the output using ANSI color codes to improve readability in the FZF menu.
+
+- **strip_ansi**: This function removes any ANSI escape codes from text to ensure clean paths are displayed.
+
+- **get_path**: A utility function that constructs and cleans the path to the selected Ardour project file.
+
+- **preview_cmd**: Uses `bat` to preview the content of the selected `.ardour` file, providing syntax highlighting and a structured view in the terminal.
 
 ### Usage
 
-To use this script, simply execute it from your terminal:
+To use the script, simply run it in your terminal. The script conducts a search through your predefined audio project directory and presents a selectable list of `.ardour` files. You can invoke it using:
 
 ```bash
 bash /home/matias/.scripts/ardour-open.sh
 ```
 
-You will be presented with an interactive list of your Ardour session files, sorted by modification time. You can navigate through this list using arrow keys. Press `Enter` to open the selected session in Ardour.
-
-**Example Command:**
-```bash
-./ardour-open.sh
-```
-
-**Keybindings within fzf**: 
-- `enter`: Open the selected session in Ardour.
-- Resizing the preview window with `resize:refresh-preview`.
+Once you run the script, a menu will appear allowing you to select a session. You can navigate the list with arrow keys, preview the content of a project using the predefined preview window, and press Enter to open the selected project in Ardour.
 
 ---
 
-> [!TIP]
-> Consider adding error handling to improve user experience. For example, check if the `AUDIO_PROJECTS` directory contains any `.ardour` files before proceeding with the search, and handle cases where dependencies like `fd`, `bat`, and `fzf` are not installed. This will make the script more robust.
+> [!TIP] 
+> Consider adding error handling to manage cases where no `.ardour` files are found or if the `ardour` command fails. Additionally, ensuring that all dependencies are installed during setup will provide a smoother user experience. You could also consider making the hard-coded paths configurable through command-line arguments.

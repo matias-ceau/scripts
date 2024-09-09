@@ -1,43 +1,42 @@
-# Terminal With Command
+# Floating Terminal Command Runner
 
 ---
 
-**terminal_with_command.sh**: Opens a floating terminal to run a command and see the output.
+**terminal_with_command.sh**: Opens a floating terminal to run a specified command.
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A modern terminal emulator that supports advanced features like window management. This script requires `alacritty` to create a floating terminal.
+- `alacritty`: A terminal emulator that supports custom configurations and tiling features.
+- `bash`: The Bourne Again SHell, used for running shell commands.
 
 ### Description
 
-The `terminal_with_command.sh` script is designed to open a floating terminal window that executes a specified command while allowing the user to view the output in real-time. This can be particularly useful for long-running processes or commands where monitoring output is necessary without taking up screen real estate.
+This script is designed to open a floating terminal window (specifically using Alacritty) and execute a command provided by the user. The terminal opens in a designated floating state, allowing users to see the output of the executed command clearly without disrupting their workflow.
 
-The script works by first locating the command specified as an argument. It uses the `which` command to get the path of the command and stores it in the `cmd` variable. The `setsid` command is then used to start `alacritty`, passing the command to be executed along with a bash shell to keep the terminal open after the command completes. The terminal window is titled "floating", and the user is presented with a shell after the command's execution, allowing for further interaction.
+The script achieves this by first determining the full path of the command you want to run using the `which` command. It then launches Alacritty with the `setsid` command, allowing the terminal to run independently of the parent shell. The command is executed within a Bash shell, and after its execution, a new shell is initiated (`exec $SHELL`) to keep the terminal open for further interaction.
 
 ### Usage
 
-To use this script, follow these steps:
+To use the script, follow these steps:
 
-1. Make sure to give the script executable permissions:
+1. Make sure the script is executable. You can set the executable permission with:
    ```bash
    chmod +x /home/matias/.scripts/terminal_with_command.sh
    ```
 
-2. Invoke the script followed by the command you want to run. The command must be accessible by your user profile.
+2. Run the script by passing the command you wish to execute as an argument:
    ```bash
    /home/matias/.scripts/terminal_with_command.sh <command>
    ```
 
-   For example:
+   For example, to open a floating terminal to list files in your home directory, you would execute:
    ```bash
-   /home/matias/.scripts/terminal_with_command.sh top
+   /home/matias/.scripts/terminal_with_command.sh ls ~
    ```
-
-   This will open a floating terminal running the `top` command, allowing real-time monitoring of system processes.
 
 ---
 
 > [!TIP]  
-> One potential improvement for this script is to check if the command exists before attempting to execute it. If the command is not found, the script could notify the user with an appropriate message instead of failing silently or opening an empty terminal. Adding error handling could enhance user experience.
+> Consider adding error handling for cases where the command does not exist or is invalid. You could improve user experience by providing feedback if the command fails to execute, such as displaying an error message in the terminal. Additionally, you might want to allow multiple commands or provide options for terminal customization (like size, color scheme, etc.).

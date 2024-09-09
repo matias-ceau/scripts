@@ -9,9 +9,9 @@
   "ardour-open.sh": {
     "file": "ardour-open.sh",
     "path": "ardour-open.sh",
-    "description": "Script to search and open Ardour session files.",
+    "description": "Opens an Ardour session by searching for `.ardour` files",
     "doc_path": "docs/scripts/ardour-open.sh.md",
-    "hash": "f46220dedcda8b357e9bd15b3f07bf747de947eb3bd22e94a0939bb73c6c7644"
+    "hash": "4fb06824cbf0f11346ae85d507c370c5ff3ee8f593c8667d1e6cab5a810d5c98"
   },
   "chatgpt-all-scripts-describer.py": {
     "file": "chatgpt-all-scripts-describer.py",
@@ -44,9 +44,9 @@
   "command_prompt.sh": {
     "file": "command_prompt.sh",
     "path": "command_prompt.sh",
-    "description": "Launch a command with history suggestions using fzf.",
+    "description": "Launch a command with history suggestions using fzf",
     "doc_path": "docs/scripts/command_prompt.sh.md",
-    "hash": "4b125af1f02adf7f58cba839b43dff80bd2b5d99175432b062aeaa77d5c4caca"
+    "hash": "e45f987815b0becda25b3f8f034561bdb138bb5146a8d49305ebe2e752a9b582"
   },
   "count_tokens_with_tiktoken.py": {
     "file": "count_tokens_with_tiktoken.py",
@@ -149,9 +149,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "improved-fzfmenu.sh",
-    "description": "A script to launch FZF in Alacritty, with optional output piping.",
+    "description": "A versatile FZF menu launcher that uses Alacritty terminal.",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "86980e24caa67923f4773a35d8848f33be7109646e7592883350ba74de7bef16"
+    "hash": "70c619945d8af3fb09611eb8e622a24b22809274743d0da850d4b76eb2a01c49"
   },
   "install_dependencies.sh": {
     "file": "install_dependencies.sh",
@@ -170,9 +170,9 @@
   "keyboard-help.sh": {
     "file": "keyboard-help.sh",
     "path": "keyboard-help.sh",
-    "description": "Launches an xterm window displaying the current keyboard layout.",
+    "description": "Launches a terminal to display current keyboard layout using `bat`.",
     "doc_path": "docs/scripts/keyboard-help.sh.md",
-    "hash": "5338f88178ddd8462acd0de8c5e408e8ec8dfd2ebec376803e4429245beafe93"
+    "hash": "d2b19b7b7278aa48d78f311a664eeddea20bf9523ff619fd3996282805546232"
   },
   "launch_tmux_with_music_player.sh": {
     "file": "launch_tmux_with_music_player.sh",
@@ -254,16 +254,16 @@
   "nvim_in_new_terminal.sh": {
     "file": "nvim_in_new_terminal.sh",
     "path": "nvim_in_new_terminal.sh",
-    "description": "Opens a floating terminal to edit a file with nvim",
+    "description": "Opens a floating terminal to edit a file with Neovim.",
     "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
-    "hash": "f946fcb565c014cfb35a72ad242188c05e9b670a9af58a75cc26b4f1416fbf72"
+    "hash": "614daf8e8da646eaed2c991dd41276cf2b3853bf58eff78b3fcdaf74c49b6076"
   },
   "obsidian-vault-selector.sh": {
     "file": "obsidian-vault-selector.sh",
     "path": "obsidian-vault-selector.sh",
-    "description": "Script to select and open an Obsidian vault from a directory.",
+    "description": "Script to open any Obsidian vault through a user-friendly selector.",
     "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "44c382ae3dcd218b967b608409b0b917efd0006a12bab0e320a1b2a15fb61705"
+    "hash": "61761a2a517ad469b92d1eacb6e2786f527152520e2d91f529a5829b28b209f8"
   },
   "obsidian.xsh": {
     "file": "obsidian.xsh",
@@ -352,9 +352,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "Launch scripts with fzf and provides rich previews",
+    "description": "Run scripts with fzf for easy access and previews",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "3d695a1649311959d4f07f2342e328b7eec6635fd7cd3d679f77618b8554747f"
+    "hash": "ed6a45cb9babb0977919ac9f0ba7b9bb58ba94cd3f0de11d210f03d7a259080e"
   },
   "select_script": {
     "file": "select_script",
@@ -464,9 +464,9 @@
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
     "path": "terminal_with_command.sh",
-    "description": "Opens a floating terminal to run a command and see the output.",
+    "description": "Opens a floating terminal to run a specified command.",
     "doc_path": "docs/scripts/terminal_with_command.sh.md",
-    "hash": "ba118ae82bc92d126957d2ea3d4226611e9b4862ddf8c2f6862da36f2e8003b7"
+    "hash": "579297c532d02382ee7f59fdb900d70f4291137739a59067b3d8da063752de08"
   },
   "display_markdown.py": {
     "file": "display_markdown.py",

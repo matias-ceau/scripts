@@ -2,4 +2,4 @@
 
 #INFO:# "Opens a floating terminal to edit a file with nvim"
 
-setsid alacritty -T 'floating' -e nvim "$1" &
+setsid alacritty -T nvim-term --class 'floating' -e nvim "$1" &

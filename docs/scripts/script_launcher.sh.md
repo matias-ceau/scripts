@@ -2,50 +2,49 @@
 
 ---
 
-**script_launcher.sh**: Launch scripts with fzf and provides rich previews 
+**script_launcher.sh**: Run scripts with fzf for easy access and previews
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder used for searching and filtering through available scripts. 
-- `bat`: A cat clone with syntax highlighting and Git integration, used for previewing files.
-- `improved-fzfmenu.sh`: A custom menu that enhances the capabilities of `fzf`.
+- `bat`: Provides syntax highlighting and Git integration for file viewing.
+- `fzf`: A command-line fuzzy finder for search functionality.
+- `improved-fzfmenu.sh`: A custom script enhancing fzf's capabilities.
+- `nvim`: A powerful text editor based on Neovim.
 
 ### Description
 
-This script provides an interactive launcher for executing various user-defined scripts using `fzf`. It leverages `bat` to provide detailed previews of text files such as documentation and source scripts, enhancing the user experience.
+The `script_launcher.sh` is a Bash script designed to facilitate the running and editing of user scripts with enhanced previews using `fzf`. This tool integrates the fast fuzzy finding of scripts and allows for previewing documentation in various formats. 
 
-The script begins by defining parameters for the preview commands, customizing outputs based on the structure of your scripts. It allows users to preview documentation in markdown format or source code, depending on their selection:
+Key features:
+- Utilizes `bat` for viewing script contents and documentation with syntax highlighting.
+- Provides interactive features such as executing scripts, opening them in the editor, and changing preview modes between documentation and source code.
+- Supports customizable key bindings to enhance user experience.
+- The preview window can display either the script's documentation or the source code, toggled with specific key combinations.
 
-- `preview_cmd_docs`: Prepares a `bat` command to display documentation for the selected script.
-- `preview_cmd_source`: Prepares a `bat` command to show the source code of the selected script.
-
-The script also includes ANSI color codes for styling the menu header, making it visually appealing. The main part of the script utilizes `fd`, a simple, fast, and user-friendly alternative to `find`, to list available scripts in the `$SCRIPTS` directory. 
-
-The built `fzf` menu offers various bindings, such as:
-- Pressing `Enter` to execute the selected script.
-- `Alt+Enter` to run the script in a terminal.
-- `Ctrl+E` to edit the selected script with `nvim`.
+The script reads the available scripts from a given directory and then uses `fzf` to present them in a menu, allowing the user to pick and execute them via simple keybindings. 
 
 ### Usage
 
-To run the script, ensure that you have the appropriate dependencies installed:
+To use this script, simply execute it in your terminal:
 
 ```bash
-bash ~/path/to/script_launcher.sh
+bash /home/matias/.scripts/script_launcher.sh
 ```
 
-You can customize key bindings or functionalities by editing the script directly, accommodating your workflow better.
+Once the script is running, you'll see a list of the available scripts. Here are some keybindings you can use:
 
-#### Example Command:
+- `Enter`: Execute the selected script in the current shell.
+- `Alt + Enter`: Execute the script in a new terminal.
+- `Ctrl + E`: Edit the selected script with Neovim.
+- `Alt + E`: Edit the script in a new terminal window.
+- `Alt + S`: Toggle preview to show the source of the selected script.
+- `Alt + D`: Toggle back to the documentation preview.
 
-```bash
-bash ~/scripts/script_launcher.sh
-```
-- This command launches the script selection menu where users can navigate through available scripts and utilize the various bindings mentioned above.
+Additionally, you can resize the preview window, and navigate through the suggestions using arrow keys or a predefined scroll mechanism.
 
 ---
 
-> [!TIP] 
-> The script provides a comprehensive solution, but it has some areas for improvement. For example, adding options to render documentation in PDF/HTML format could enhance usability. Implementing additional features like multi-selection could streamline workflows by allowing batch processing of scripts. Consider implementing user-friendly error handling for better runtime resilience and experience.
+> [!TIP]  
+> There are potential areas for improvement in the script. For instance, it currently lacks a feature to render documentation as PDF/HTML. Consider implementing a way to navigate through previews using the Page Up and Down keys. Enabling multiple selections would also enhance the script's usability, along with including options for logging and statistics collection for user actions.

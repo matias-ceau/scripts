@@ -26,6 +26,7 @@ ${cy}C-E${Rs} edit (W)"
 
 fd . -tx --format '{/}' "$SCRIPTS" |
 	improved-fzfmenu.sh \
+		title_is_script_launcher \
 		--preview "$preview_cmd_docs" \
 		--preview-window='70%' \
 		--bind "enter:become(bash -c {})" \

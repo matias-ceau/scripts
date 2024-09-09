@@ -1,48 +1,47 @@
-# Keyboard Help Script
+# Keyboard Layout Helper
 
 ---
 
-**keyboard-help.sh**: Launches an xterm window displaying the current keyboard layout.
+**keyboard-help.sh**: Launches a terminal to display current keyboard layout using `bat`.
 
 ---
 
 ### Dependencies
 
-- `show_keyboard_layout.py`: A user script that fetches the current keyboard layout.
-- `bat`: A cat clone with syntax highlighting and file preview features, useful for displaying the output in a more readable format.
-- `xterm`: A terminal emulator for the X Window System, required to run the script in a separate terminal session.
+- `show_keyboard_layout.py`: A Python script that outputs the current keyboard layout. Make sure it is executable and accessible in your `PATH`.
+- `bat`: A clone of `cat` that provides syntax highlighting and Git integration to improve terminal output appearance. Install it using your package manager.
 
 ### Description
 
-The `keyboard-help.sh` script is designed to provide users with an easy way to view their current keyboard layout in a separate terminal window. When executed, the script performs the following steps:
+The `keyboard-help.sh` script serves as a helper tool to quickly display the current keyboard layout in a terminal window. It executes the `show_keyboard_layout.py` script and pipes its output to `bat`, which formats the output nicely for better readability.
 
-1. **Identifies the script location**: It uses `which` to find the path of `show_keyboard_layout.py`, which is responsible for retrieving the current keyboard layout.
+Upon execution, the script opens a new terminal window (using `xterm`) with the title "KB_layout_floating" and a font size of 20. The layout information is continuously displayed with paging capability enabled, allowing the user to scroll through the output easily.
 
-2. **Opens xterm**: It uses the `setsid` command to start a new session and launch `xterm`. The terminal is titled "floating", has a font size of 20, and runs the command to display the keyboard layout.
+The main components of the script include:
 
-3. **Output rendering**: The output from `show_keyboard_layout.py` is piped to `bat`, which enhances the readability with paging and style formatting.
-
-The decision to use `bat` for displaying the layout is particularly useful for verbose layouts, allowing the user to scroll through without clutter.
+- `which show_keyboard_layout.py`: Locates the absolute path of the `show_keyboard_layout.py` script.
+- `setsid xterm ...`: Starts `xterm` in a new session to prevent it from being affected by the current shell’s job control.
+- `bash -c "$keyboard_script | bat --paging=always --style=plain"`: Executes the keyboard layout script and pipes its output to `bat` for enhanced presentation.
 
 ### Usage
 
-To use the script, simply execute it from your terminal. It can be run interactively or mapped to a keybinding in your window manager (Qtile). 
-
-You can execute the script with the following command:
+To use the script, simply execute it from the terminal:
 
 ```bash
 bash /home/matias/.scripts/keyboard-help.sh
 ```
 
-If you'd like to set it in your Qtile configuration for easy access, you can add a keybinding in your `config.py` like this:
+Alternatively, you could bind it to a keyboard shortcut in your Window Manager (like qtile) for quick access. 
+
+For example, in your `~/.config/qtile/config.py`, you can add a key binding like:
 
 ```python
-Key([mod], "h", lazy.spawn("/home/matias/.scripts/keyboard-help.sh")),
+Key([mod], "k", lazy.spawn("/home/matias/.scripts/keyboard-help.sh")),
 ```
 
-When triggered, this will open the xterm window displaying the current keyboard layout.
+This will allow you to press `mod + k` to bring up the keyboard layout display.
 
 ---
 
 > [!TIP]  
-> Consider adding error handling to check if `show_keyboard_layout.py` is available or if `bat` is installed. This could enhance the user experience by providing clear feedback rather than failing silently. Additionally, if the `xterm` window is closed, the layout command should terminate gracefully.
+> Consider enhancing the script by allowing the user to specify the terminal type or size through command-line arguments. This would make it more flexible and user-friendly. Additionally, you may want to handle cases where `show_keyboard_layout.py` fails to execute, providing users with an error message.

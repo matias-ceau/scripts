@@ -32,6 +32,7 @@ vault="$(fd -td \
     "$HOME/PKM" |
     awk -F/ '{print $(NF-2)}' |
     improved-fzfmenu.sh  \
+        title_is_obsidian-open-vault \
         --pipe \
         --preview-window='70%' \
         --bind="resize:refresh-preview" \

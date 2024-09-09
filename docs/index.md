@@ -1,10 +1,10 @@
 - [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Play an album using cmus with random selection of other albums*
-- [ardour-open.sh](scripts/ardour-open.sh.md) -- *Script to search and open Ardour session files.*
+- [ardour-open.sh](scripts/ardour-open.sh.md) -- *Opens an Ardour session by searching for `.ardour` files*
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *Generates GitHub markdown documentation for scripts using GPT-4o.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Automates the setup of Chezmoi on a new Arch Linux system.*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and manage paper citations from your bibliography.*
 - [colormap_from_text.sh](scripts/colormap_from_text.sh.md) -- *Simple script that extracts color palettes from config files*
-- [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions using fzf.*
+- [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions using fzf*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *A Python script to count the number of tokens in a text file using the `tiktoken` library.*
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *Create a cover art based on file spectrogram.*
 - [display_markdown.py](scripts/display_markdown.py.md) -- *Renders Markdown files in the terminal using Rich.*
@@ -22,10 +22,10 @@
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *A script to list Git repositories present on the current host.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script for cloning Git repositories by specifying developer and package.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Convert GRUB_INIT_TUNE strings to audio files.*
-- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to launch FZF in Alacritty, with optional output piping.*
+- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A versatile FZF menu launcher that uses Alacritty terminal.*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *A script to install necessary packages on Arch Linux using paru.*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *Create a new Jupyter notebook and open it in Chromium.*
-- [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches an xterm window displaying the current keyboard layout.*
+- [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches a terminal to display current keyboard layout using `bat`.*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called music and open cmus.*
 - [list_process.sh](scripts/list_process.sh.md) -- *A simple script to list all running services sorted by their status.*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automatically generates GitHub documentation for scripts using Llama 3.1.*
@@ -39,8 +39,8 @@
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple bash script to create new scripts quickly.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
-- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim*
-- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to select and open an Obsidian vault from a directory.*
+- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with Neovim.*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to open any Obsidian vault through a user-friendly selector.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
@@ -55,15 +55,15 @@
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to retrieve the top researched manual entries*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *A script to transfer unlistened music albums to a Sandisk media player.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Launch scripts with fzf and provides rich previews*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for a streamlined execution and documentation preview.*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for easy access and previews*
 - [select_script](scripts/select_script.md) -- *A C script that selects a chosen script using cached data from a CSV file.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Script to sync user directories to a backup location using Mega.nz*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Obtains the most frequent lines, words, or characters in shell history files.*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a visual representation of the keyboard layout in terminal.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script for syncing a Git repository, including fetching, pulling, and handling conflicts.*
-- [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a command and see the output.*
+- [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a specified command.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *Interactive script to assist with tmux commands and manage usage information.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*
 - [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Script to toggle the picom compositor on or off.*

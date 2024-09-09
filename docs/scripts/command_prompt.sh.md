@@ -2,41 +2,42 @@
 
 ---
 
-**command_prompt.sh**: Launch a command with history suggestions using fzf.
+**command_prompt.sh**: Launch a command with history suggestions using fzf
 
 ---
 
 ### Dependencies
 
-- `shell_history_info.sh`: A script to retrieve the shell command history.
-- `improved-fzfmenu.sh`: An enhanced version of fzf for navigating options with improved features.
-- `fzf`: A command-line fuzzy finder for filtering through a list of items.
+- `shell_history_info.sh`: A script that retrieves the shell command history.
+- `improved-fzfmenu.sh`: A customized fzf menu for selecting commands.
 
 ### Description
 
-The `command_prompt.sh` script is designed to streamline the process of launching commands from your shell history. By leveraging the capabilities of `fzf`, which provides a fuzzy search interface, users can quickly access previously executed commands without having to type them out fully.
+The `command_prompt.sh` script is designed to enhance command input efficiency by leveraging your shell's command history. It uses two key components:
 
-The script operates in the following way:
-
-1. **Get Command History**: It invokes the `shell_history_info.sh` script to list the command history, extracting the second field (typically the command itself). The command output is then piped for further processing.
+1. **Command History Retrieval**: The `get_cmd()` function utilizes `shell_history_info.sh` to list previously executed commands, extracting only the command portion using `cut`.
    
-2. **Fuzzy Search**: The extracted commands are passed to `improved-fzfmenu.sh`, where users can interactively select a command from their history using fuzzy matching. The parameters `--tac` and `--ansi` ensure that the list is displayed in inverse order and retains ANSI color formatting, respectively.
+2. **fzf Interface**: The `fzf_cmd()` function invokes `improved-fzfmenu.sh`, which presents the retrieved command list in a fuzzy-searchable menu, allowing users to quickly find and select a command to execute.
 
-This combination makes it much easier to find and execute past commands, enhancing workflow efficiency.
+Upon running the script, it retrieves the command history, filters it, and presents it in a user-friendly interface powered by `fzf`, enabling rapid selection of commands by typing partial command text.
 
 ### Usage
 
-To run the script, simply execute it in your terminal:
+To execute the script, simply run it in your terminal:
 
 ```bash
 bash /home/matias/.scripts/command_prompt.sh
 ```
 
-Once executed, the script will display an interactive fzf menu populated with your recent commands. Use the arrow keys to navigate and press `Enter` to execute the selected command.
+This will invoke the `fzf` menu populated with your command history. You can start typing to filter the results and press `Enter` to execute the selected command.
 
-You can also map this script to a keybinding in your window manager (Qtile) for quicker access, enhancing your productivity further.
+You may want to consider adding it to your keybindings in `qtile` for convenient access. For example, you can bind it to a key combination in your `config.py`:
+
+```python
+Key([mod], "p", lazy.spawn("/home/matias/.scripts/command_prompt.sh")),
+```
 
 ---
 
 > [!TIP]  
-> Consider adding error handling to check if the required dependencies (`shell_history_info.sh` and `improved-fzfmenu.sh`) are installed and executable. Handling cases where no command history is available could improve the user experience. You may also want to implement a feature to allow users to define their own fzf options for customization.
+> The script currently does not handle cases where commands may not exist in the history or when there are no results from the `fzf` selection. Consider adding error handling to alert users when no commands are found or if the dependencies are not installed. Additionally, implementing a mechanism to clear or filter out redundant entries in the history could enhance usability.

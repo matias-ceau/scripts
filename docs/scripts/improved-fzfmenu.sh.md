@@ -1,49 +1,44 @@
-# Improved FZF Menu Integrator
+# Improved FZF Menu
 
 ---
 
-**improved-fzfmenu.sh**: A script to launch FZF in Alacritty, with optional output piping.
+**improved-fzfmenu.sh**: A versatile FZF menu launcher that uses Alacritty terminal.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder used for interactive selection.
-- `alacritty`: A fast terminal emulator that supports modern OpenGL-powered rendering.
+- `fzf`: Command-line fuzzy finder that processes the input and helps create an interactive menu.
+- `alacritty`: A fast terminal emulator that is required to launch the FZF menu. 
+- `bash`: The script is written in Bash.
 
 ### Description
 
-The `improved-fzfmenu.sh` script provides a streamlined way to integrate the FZF fuzzy finder with the Alacritty terminal emulator on Arch Linux, specifically designed for window managers like Qtile. The script accepts arguments and determines whether to pipe the output of FZF or not based on user input.
+The **improved-fzfmenu.sh** script launches an FZF (Fuzzy Finder) interface within the Alacritty terminal. It allows you to interactively choose from items presented in a fuzzy-search style. The script accepts several optional parameters allowing customization such as the terminal title and enabling piping of output.
 
-Key functionalities include:
+When the script is executed, it processes various command-line arguments:
 
-- **Terminal Selection**: Currently set to `alacritty`, but the script has room for expanding to additional terminals (e.g., `kitty`).
-- **Output Piping**: Users can toggle the output between standard output and piping to another command using the `--pipe` argument.
-- **Argument Handling**: Automatically escapes arguments to ensure compatibility with the shell environment.
+1. **--pipe**: If this argument is included, the output from FZF can be piped to the standard output stream.
+2. **Title Customization**: You can customize the terminal window title by providing a parameter that begins with `title_is_`.
+
+The script initializes variables for the terminal (`term`), title (`title`), class (`class`), and whether to enable piping (`pipe`). It then aggregates any additional arguments for FZF by escaping them for proper processing.
 
 ### Usage
 
-To run the script, simply execute it from the terminal with any arguments you wish to pass to FZF. Here are a few examples:
+To use the script, simply execute it from your terminal with any desired options. Here are some examples:
 
-**Basic Usage:**
 ```bash
-~/scripts/improved-fzfmenu.sh
-```
-This command opens the FZF menu in Alacritty with no specific arguments.
+# Basic usage without piping or title customization
+/home/matias/.scripts/improved-fzfmenu.sh "Option 1" "Option 2" "Option 3"
 
-**Using with Arguments:**
-```bash
-~/scripts/improved-fzfmenu.sh --height 40% --preview 'cat {}'
-```
-This runs FZF with a specific height and a preview of the selected item.
+# Using title customization
+/home/matias/.scripts/improved-fzfmenu.sh title_is_Custom_Title "Option A" "Option B"
 
-**Using with Output Piping:**
-```bash
-~/scripts/improved-fzfmenu.sh --pipe
+# Enabling piping
+/home/matias/.scripts/improved-fzfmenu.sh --pipe "Select this" "Or that"
 ```
-This command executes FZF and pipes the selected output, which can be handled differently in your workflow.
 
 ---
 
 > [!TIP] 
-> The script currently defaults to Alacritty. It would be beneficial to implement dynamic terminal selection through a command-line argument, enhancing the script's versatility. Additionally, as the TODO comment suggests, adding functionality for terminal sizing would make it more user-friendly and adaptable to various screen configurations. Consider implementing verbose logging for easier debugging and monitoring of script behavior.
+> Consider enhancing your script by implementing error handling for invalid arguments and terminal launching failures. Furthermore, adding options for different terminal emulators (e.g., `kitty`) and supporting window sizing would significantly increase its versatility.
