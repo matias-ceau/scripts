@@ -2,47 +2,54 @@
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: A script for editing and managing Chezmoi configuration files.
+**edit_chezmoi_cfg_files.sh**: Script to interactively edit and apply Chezmoi configuration files.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell interpreter used to run the script.
-- `chezmoi`: A tool for managing dotfiles and configuration files.
-- `fzf`: A command-line fuzzy finder to select files easily.
-- `bat`: A cat clone with syntax highlighting and Git integration for file previews.
-- `eza`: An enhanced version of `ls` for listing files and directories.
-- `nvim`: Neovim text editor used to open configuration files.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `bash`: The shell used to execute this script.
+- `fzf`: A command-line fuzzy finder that enables interactive file selection.
+- `bat`: A cat clone with syntax highlighting and Git integration designed for previewing files.
+- `eza`: An enhanced version of `ls` used for listing directory contents with colors and icons.
+- `chezmoi`: A tool for managing dotfiles across multiple machines.
+- `nvim`: The Neovim text editor used to edit configuration files.
 
 ### Description
 
-This script allows users to easily navigate, preview, and edit files managed by Chezmoi. It incorporates a fuzzy finder (`fzf`) which displays Chezmoi-managed files and directories, allowing for quick access. The preview of each file or directory is enhanced using `bat` and `eza` for better readability and user experience.
+This script provides a user-friendly interface to manage and edit configuration files with Chezmoi. It utilizes `fzf` to present a list of files tracked by Chezmoi, offering a preview of the selected file or directory with the help of `bat` and `eza` for enhanced visualization. 
 
-Key functions include:
+The script defines two core functions:
+- `preview_command()`: Displays the contents of selected files or the listing of directories inside a preview window.
+- `colorize_file_list()`: Outputs a formatted list of files and directories with ANSI color codes for improved readability.
 
-- `preview_command`: Previews files and directories in an organized manner using `bat` and `eza`.
-- `colorize_file_list`: Colorizes the output of file listings to differentiate between files and directories, using ANSI color codes for better visualization.
-- The script binds specific keys for custom actions within the fuzzy finder, such as reloading directories or files.
+The user can select multiple files or directories, and upon selection, they are prompted to choose between applying Chezmoi changes, syncing with the repository, or exiting the script.
 
 ### Usage
 
-To run this script, simply execute it in your terminal:
+To run the script, execute the following command in a terminal:
 
-```bash
-bash ~/.scripts/edit_chezmoi_cfg_files.sh
+```
+bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-Upon running, the script will initiate the fuzzy finder interface, where you can navigate through your Chezmoi-managed files and directories. You can select multiple files with the keyboard and preview them immediately. Pressing Enter opens the selected file in Neovim.
+This initiates the Chezmoi file management process. You can navigate the file list using the arrow keys. The following keybindings are available:
 
-At the end of your editing session, you can choose one of the following actions when prompted:
+- **Tab**: Select files or directories for subsequent action.
+- **Alt+D**: Reload the list with only directories.
+- **Alt+F**: Reload the list with files only.
 
-- **a** (default): Apply the changes made with Chezmoi.
-- **s**: Apply changes and sync the repository.
-- **x**: Exit without applying changes.
+Once a selection is made, a prompt allows you to:
+
+```
+- [a] (default): Chezmoi apply
+- [s]: Chezmoi apply and sync repo
+- [x]: exit
+```
+
+Simply enter your choice and press Enter to proceed accordingly.
 
 ---
 
-> [!TIP]  
-> The script assumes `chezmoi` is properly configured and that `SCRIPTS` and `CHEZMOI` variables are defined in your environment. Ensure that these paths are correctly set to avoid runtime errors. Additionally, consider adding error-handling mechanisms when dealing with file operations to enhance reliability.
+> [!TIP] 
+> This script handles user inputs and file selections effectively. However, consider adding error handling to manage scenarios where `chezmoi` commands might fail, or when a file cannot be opened in `nvim`. Additionally, implementing logging could help in troubleshooting and improving user experience.

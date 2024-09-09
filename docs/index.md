@@ -7,21 +7,23 @@
 - [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions using fzf.*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *A Python script to count the number of tokens in a text file using the `tiktoken` library.*
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *Create a cover art based on file spectrogram.*
+- [display_markdown.py](scripts/display_markdown.py.md) -- *Renders Markdown files in the terminal using Rich.*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A script to execute selected scripts using rofi with options from xonsh.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script for editing and managing Chezmoi configuration files.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script for selecting and editing Chezmoi managed configuration files.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to interactively edit and apply Chezmoi configuration files.*
 - [editor.sh](scripts/editor.sh.md) -- *Edit files from the shell using fzf with customizable search options.*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *A script to convert markdown links to be relative to a specified base directory.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Display a formatted chart of colors with HEX, RGB, and names.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Launches and plays selected albums using fzf and cmus.*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script to create a fuzzy finder menu using `fzf` within `xterm`.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A lightweight dmenu replacement using fzf within a floating xterm terminal.*
+- [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Capture window thumbnails from currently open windows and save them.*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *A script to list Git repositories present on the current host.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script for cloning Git repositories by specifying developer and package.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Convert GRUB_INIT_TUNE strings to audio files.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to launch FZF in Alacritty, with optional output piping.*
-- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Script to install essential packages on Arch Linux using pacman.*
+- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *A script to install necessary packages on Arch Linux using paru.*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *Create a new Jupyter notebook and open it in Chromium.*
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches an xterm window displaying the current keyboard layout.*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called music and open cmus.*
@@ -45,18 +47,19 @@
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A command-line tool to reduce the color depth of PPM images using a custom palette.*
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *A script to switch between Qtile groups using a complementary number.*
+- [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Switches the active window to a new group in Qtile.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Launches a fuzzy finder for passwords stored in a specified directory.*
 - [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Sync local Qutebrowser bookmarks with ChezMoi.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Selects a random album and plays it with cmus.*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick random wallpaper from a specified wallpaper list*
-- [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A tool to view commonly searched manual entries.*
+- [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to retrieve the top researched manual entries*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *A script to transfer unlistened music albums to a Sandisk media player.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Launch scripts with fzf and provides rich previews*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for a streamlined execution and documentation preview.*
 - [select_script](scripts/select_script.md) -- *A C script that selects a chosen script using cached data from a CSV file.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Script to sync user directories to a backup location using Mega.nz*
-- [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Retrieves frequent lines, words, or characters from shell history files.*
+- [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Obtains the most frequent lines, words, or characters in shell history files.*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a visual representation of the keyboard layout in terminal.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script for syncing a Git repository, including fetching, pulling, and handling conflicts.*

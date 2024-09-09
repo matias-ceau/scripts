@@ -2,53 +2,47 @@
 
 ---
 
-**install_dependencies.sh**: Script to install essential packages on Arch Linux using pacman.
+**install_dependencies.sh**: A script to install necessary packages on Arch Linux using paru.
 
 ---
 
 ### Dependencies
 
-- `sudo`: Used to run commands as a superuser.
-- `pacman`: The package manager for Arch Linux, required to install software packages.
+- `paru`: An AUR helper that simplifies the process of installing packages from the Arch User Repository.
 
 ### Description
 
-This script is a simple yet effective Bash script designed for users of Arch Linux. It streamlines the process of installing several essential packages by utilizing the `pacman` package manager. 
+This script automates the installation of commonly used packages for Arch Linux users, particularly beneficial for those using the QTile window manager. Instead of manually installing each package, this script utilizes `paru`, a popular AUR helper, to install multiple packages efficiently in one go.
 
-The script does the following:
+The script defines a here-document that lists the packages to be installed. The packages included are:
 
-1. Runs `sudo pacman -S` to initiate the installation.
-2. Lists multiple packages to install, which include:
-   - `git`: A version control system for tracking changes in source code.
-   - `fd`: A fast and user-friendly alternative to `find`.
-   - `bat`: A cat alternative that includes syntax highlighting and Git integration.
-   - `fzf`: A general-purpose command-line fuzzy finder.
-   - `ripgrep`: A line-oriented search tool that recursively searches your current directory for a regex pattern.
-   - `neovim`: An extension of the popular text editor Vim, which adds features that enhance usability.
-   - `chezmoi`: A tool to manage your dotfiles.
-   - `dmenu`: A dynamic menu for X11.
-   - `findutils`: A collection of utilities for locating files.
-   - `rofi`: A window switcher, application launcher, and dmenu replacement.
-   - `dunst`: A lightweight and customizable notification daemon.
-   - `python-pandas`: A powerful data analysis and manipulation library for Python.
-   - `python-colorama`: A library that makes terminal text colored and styled.
+- `git`: A version control system for tracking changes in source code.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `bat`: A cat(1) clone with syntax highlighting and Git integration.
+- `fzf`: A command-line fuzzy finder.
+- `ripgrep`: A line-oriented search tool that recursively searches your current directory for a regex pattern.
+- `neovim`: An extensible Vim-based text editor.
+- `chezmoi`: A tool for managing your dotfiles.
+- `dmenu`: A dynamic menu for X.
+- `findutils`: Utilities for finding files in a directory hierarchy.
+- `rofi`: A window switcher, application launcher, and dmenu replacement.
+- `dunst`: A lightweight notification daemon.
+- `python-pandas`: A data manipulation and analysis library for Python.
+- `python-colorama`: A library to help add color to output in terminal.
+- `light`: A lightweight command-line interface to control backlight.
+- `xdotool`: A tool for simulating keyboard input and mouse activity.
 
 ### Usage
 
-To use the script, follow these steps:
+To utilize the script, simply run it in the terminal:
 
-1. Ensure the script is executable:
-   ```bash
-   chmod +x /home/matias/.scripts/install_dependencies.sh
-   ```
-2. Execute the script in the terminal:
-   ```bash
-   /home/matias/.scripts/install_dependencies.sh
-   ```
+```bash
+bash /home/matias/.scripts/install_dependencies.sh
+```
 
-**Note:** You will be prompted for your sudo password during execution to allow installation of the specified packages.
+This command will execute the script and install all the listed dependencies at once. Ensure that you have `paru` installed prior to running the script, as it depends on it.
 
 ---
 
 > [!TIP]  
-> Consider enhancing script functionality by including package checks before installation. This would prevent unnecessary installation if packages are already present on the system. Additionally, it could be useful to include options for removing packages or updating them, making the script more versatile.
+> Consider adding a feature to check if each package is already installed before attempting to install it. This could save time and avoid unnecessary processing when the script is run multiple times. Additionally, including error handling to provide feedback if a package fails to install could improve user experience.

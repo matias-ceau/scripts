@@ -2,72 +2,47 @@
 
 ---
 
-**read_the_fucking_manual.sh**: A tool to view commonly searched manual entries.
+**read_the_fucking_manual.sh**: A script to retrieve the top researched manual entries
 
 ---
 
 ### Dependencies
 
-- `bat`: A modern replacement for `cat`, providing syntax highlighting and Git integration.
-- `ripgrep (rg)`: A fast, recursive search tool that works similar to `grep`.
-- `sed`: A stream editor for filtering and transforming text.
-- `awk`: A programming language often used for pattern scanning and processing.
+- `bat`: A modern alternative to cat that supports syntax highlighting and pagination.
+- `ripgrep` (`rg`): A line-oriented search tool that recursively searches the current directory for a regex pattern.
 
 ### Description
 
-`read_the_fucking_manual.sh` is a Bash script designed to help users find the most searched entries in their manual pages using their shell's history. It specifically looks through the history logs of both Zsh and Bash to find commands that start with `man` or `batman`. 
+The `read_the_fucking_manual.sh` script is designed for users who often reference the manual pages (`man`) or the `batman` tool and wish to streamline their workflow by retrieving the most frequently searched entries.
 
-The script utilizes several utilities:
+When executed, the script scans the user's shell history stored in `XDG_STATE_HOME` to identify the most searched manual entries. It utilizes a combination of tools such as `sed`, `rg`, `cut`, `sort`, and `awk` to process and filter the data.
 
-- `cat` joins the contents of the Bash and Zsh history files.
-- `rg` filters commands that search manuals.
-- `sed` and `cut` clean up the output to isolate the manual commands.
-- `sort` and `uniq` are utilized to tally occurrences.
-- `awk` is implemented for formatted output using a specified threshold.
+Key functions within the script include:
+- **`usage()`**: Displays a help message explaining how to use the script and its various options.
+- **`get_searches()`**: Gathers searches from both the `bash` and `zsh` history files, processes the data to extract `man` command entries, and summarizes them by frequency of searches.
 
 ### Usage
 
-Run the script directly from the command line:
+The script can be run directly from the terminal. Here’s how to use it:
 
 ```bash
+# Display the 10 most searched manual entries (default)
 ./read_the_fucking_manual.sh
-```
 
-This fetches the 10 most searched manual entries by default. Below are additional options you can use:
-
-- Display help information:
-
-```bash
-./read_the_fucking_manual.sh -h
-```
-
-- Get a specified number of top searched entries:
-
-```bash
+# Display a specific number of searched manual entries
 ./read_the_fucking_manual.sh -n 5
-```
-This fetches the top 5 searched entries.
 
-- Show searches that occurred more than a certain number of times:
-
-```bash
+# Display searches where commands were issued more than a specified number of times
 ./read_the_fucking_manual.sh -m 2
-```
-This displays entries searched more than 2 times.
 
-- Retrieve all searches:
-
-```bash
+# Display all searches
 ./read_the_fucking_manual.sh -a
-```
 
-- Pass additional arguments to filter results with `ripgrep`:
-
-```bash
-./read_the_fucking_manual.sh search_term
+# Filter searches using ripgrep (can pass any rg arguments)
+./read_the_fucking_manual.sh man ls
 ```
 
 ---
 
-> [!TIP] 
-The script currently depends on specific paths for the history files. Consider checking for the existence of these files and providing user-friendly error messages if they are not found. Additionally, adding error handling for invalid input (like non-numeric values for `-n` or `-m`) could enhance its robustness.
+> [!TIP]  
+> The script currently relies on the existence of history files in `XDG_STATE_HOME`. While this is likely the case for many systems, consider adding checks to ensure these files exist before attempting to read them. This could improve the script's robustness and user experience. Additionally, consider allowing for custom paths for history files in case users have them set up differently.

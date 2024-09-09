@@ -1,53 +1,69 @@
-# Shell History Information Script
+# Shell History Info
 
 ---
 
-**shell_history_info.sh**: Retrieves frequent lines, words, or characters from shell history files.
+**shell_history_info.sh**: Obtains the most frequent lines, words, or characters in shell history files.
 
 ---
 
 ### Dependencies
 
-- `cat`: Reads the content of files.
-- `sed`: Stream editor for filtering and transforming text.
-- `rg` (Ripgrep): Recursive search tool that can be used to perform searches with context.
-- `sort`: Sorts lines of text files.
-- `uniq`: Reports or omits repeated lines.
-- `tr`: Translates or deletes characters.
-- `bat`: A cat clone with syntax highlighting and Git integration.
+- `rg`: A fast text searching tool that is used for cleaning up history entries.
+- `bat`: A modern cat clone with syntax highlighting and Git integration, utilized for pretty-printing sections of the script.
 
 ### Description
 
-The `shell_history_info.sh` script is designed to analyze shell history files for frequently occurring lines, words, or characters. It processes history files for both `bash` and `zsh`, allowing users to aggregate and summarize their command usage patterns efficiently. 
+The `shell_history_info.sh` script is designed to analyze the shell history files and extract the most frequently used lines, words, or characters. The analysis is flexible and can be tailored to specific needs based on the command-line options provided. 
 
-The script defines several utility functions to handle the tasks:
+The script performs the following main functions:
 
-- **get_history**: Combines the history files from `bash` and `zsh` located in the user’s state directory.
-- **split_by_word**: Breaks each line into separate words, putting each on a new line.
-- **clean_up**: Cleans up the output by removing empty lines and trailing spaces.
-- **sort_by_occurence**: Sorts the items and filters them based on frequency, retaining only those with an occurrence greater than 5.
+- **get_history**: Reads the zsh and bash history files and formats the output to remove any unnecessary zsh-specific indications.
+- **split_by_word**: Inputs a string and splits it into individual words.
+- **clean_up**: Cleans the output by removing empty lines and trimming leading/trailing whitespace.
+- **sort_by_occurence**: Sorts the cleaned data by occurrence and formats the output to show only those items with counts greater than five.
 
 ### Usage
 
-To use this script, you simply invoke it from the terminal with a specified option:
+The script can be executed from the terminal or incorporated into shell workflows. Usage instructions are provided below:
+
+To execute the script, use the following command format:
 
 ```bash
-# To get the most frequent lines
-./shell_history_info.sh -l
-
-# To get the most frequent words
-./shell_history_info.sh -w
-
-# To get the most frequent characters
-./shell_history_info.sh -c
-
-# To get options that start with a dash
-./shell_history_info.sh -o
+./shell_history_info.sh [option]
 ```
 
-If an invalid argument is provided, the script will print an error message along with the script's usage instructions embedded in the source code.
+Where `[option]` can be:
+
+- `-l` or `--lines`: To get the most frequent lines in the history.
+- `-w` or `--words`: To get the most frequent words in the history.
+- `-c` or `--character`: To get the most frequent characters in the history.
+- `-o` or `--option`: Get options matching a specific pattern.
+
+**Examples**:
+
+1. Retrieve the most frequent lines:
+   ```bash
+   ./shell_history_info.sh -l
+   ```
+
+2. Retrieve the most frequent words:
+   ```bash
+   ./shell_history_info.sh -w
+   ```
+
+3. Retrieve the most frequent characters:
+   ```bash
+   ./shell_history_info.sh -c
+   ```
+
+4. Retrieve options matching a specific pattern:
+   ```bash
+   ./shell_history_info.sh -o
+   ```
+
+If the argument is incorrect, the script will output an error and show the relevant section of the code for correction.
 
 ---
 
 > [!TIP] 
-> The script can be simplified by using functions for repeated `sed` and `sort` commands to enhance maintainability. Also, consider checking if `rg` is installed before execution to avoid errors, and possibly provide a fallback option to `grep`. Emphasizing error handling for cases where the user is on a system without `zsh` or `bash` can enhance user experience.
+This script could be improved by adding error handling for the absence of the required history files or ensuring `rg` and `bat` are installed. Furthermore, comprehensive comments and better documentation for command-line arguments would enhance user understanding. Consider adding the option to specify custom history file locations as well.
