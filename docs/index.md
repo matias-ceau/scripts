@@ -10,7 +10,7 @@
 - [display_markdown.py](scripts/display_markdown.py.md) -- *Renders Markdown files in the terminal using Rich.*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A script to execute selected scripts using rofi with options from xonsh.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script for selecting and editing Chezmoi managed configuration files.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to manage and edit Chezmoi configuration files interactively using fzf.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to interactively edit and apply Chezmoi configuration files.*
 - [editor.sh](scripts/editor.sh.md) -- *Edit files from the shell using fzf with customizable search options.*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *A script to convert markdown links to be relative to a specified base directory.*
@@ -23,7 +23,7 @@
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script for cloning Git repositories by specifying developer and package.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Convert GRUB_INIT_TUNE strings to audio files.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A versatile FZF menu launcher that uses Alacritty terminal.*
-- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *A script to install necessary packages on Arch Linux using paru.*
+- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Automatically installs a set of required packages on Arch Linux.*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *Create a new Jupyter notebook and open it in Chromium.*
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches a terminal to display current keyboard layout using `bat`.*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called music and open cmus.*
@@ -39,8 +39,8 @@
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple bash script to create new scripts quickly.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
-- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with Neovim.*
-- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to open any Obsidian vault through a user-friendly selector.*
+- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with NVim.*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to easily select and open any Obsidian vault from your filesystem.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*

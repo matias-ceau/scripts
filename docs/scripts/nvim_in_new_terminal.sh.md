@@ -1,45 +1,33 @@
-# Open Neovim in a New Floating Terminal
+# Open NVim in New Terminal
 
 ---
 
-**nvim_in_new_terminal.sh**: Opens a floating terminal to edit a file with Neovim.
+**nvim_in_new_terminal.sh**: Opens a floating terminal to edit a file with NVim.
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A modern terminal emulator that supports floating windows and various features suited for developers.
-- `nvim`: Neovim is an extensible text editor based on Vim.
+- `alacritty`: A terminal emulator that supports multiple functionalities including floating windows.
+- `nvim`: The Neovim text editor, which enables modern text editing features.
 
 ### Description
 
-This script provides a convenient way to open files in Neovim within a floating terminal window. It utilizes `alacritty`, a fast OpenGL terminal emulator, to create a new terminal instance. The script is particularly useful for users who prefer to quickly edit files without leaving their current workspace in Qtile.
+This script provides a convenient way to open a file in Neovim within a floating terminal window. It uses `alacritty`, which supports floating terminal capabilities, allowing users to keep their workflow tidy by not cluttering their desktop with full-window terminal sessions.
 
-When executed, the script uses the `setsid` command to start a new session for `alacritty`. The terminal window is titled `nvim-term` and is assigned a class of 'floating', which allows it to overlay other windows effectively. The script then invokes `nvim` with the specified file as an argument.
+When executed, the script uses the `setsid` command to create a new session for `alacritty`, which is launched with a title `nvim-term` and a specific class for styling purposes. The `-e` flag specifies the command to run within that terminal instance, which in this case is `nvim` followed by the file provided as an argument ($1).
 
 ### Usage
 
-To use the script, simply execute it from the command line with the desired file to edit as an argument. Here’s how to run it:
+To use this script effectively, you need to provide the file path of the file you want to edit as an argument when executing the script. It can be run from the terminal as shown below:
 
 ```bash
-bash /home/matias/.scripts/nvim_in_new_terminal.sh /path/to/your/file.txt
+/home/matias/.scripts/nvim_in_new_terminal.sh path/to/your/file.txt
 ```
 
-Alternatively, you can assign this script to a keybinding in your window manager (Qtile). For example:
-
-```python
-# In your ~/.config/qtile/config.py
-from libqtile import key
-
-keys = [
-    key.Key([mod], "n", 
-             lazy.spawn("/home/matias/.scripts/nvim_in_new_terminal.sh ~/file_to_edit.txt"))
-]
-```
-
-This configuration would open the specified file in a floating terminal whenever you press the assigned key combination.
+This command will open `file.txt` in Neovim within a floating terminal window. You can also create a keybinding in your window manager (qtile) to trigger this script, enhancing productivity during file editing tasks.
 
 ---
 
 > [!TIP]  
-> The script currently does not check if the file exists before attempting to open it. To improve robustness, consider adding a file existence check and providing a user-friendly message if the file isn't found. This can prevent errors and enhance user experience. Additionally, allowing the user to specify terminal options via arguments could make the script more flexible.
+> Consider adding error handling for situations where no argument is given or the specified file does not exist. This would improve the user experience by providing informative messages rather than failing silently. Also, you could make the script more versatile by allowing it to accept multiple files for editing at once.
