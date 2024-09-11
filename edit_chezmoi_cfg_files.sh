@@ -2,64 +2,79 @@
 
 SHELL=$(which bash)
 
+remove_icons() {
+    tr -cd '[:print:]' | sed 's/^ *//'
+}
+export -f remove_icons
+
 preview_command() {
-    path="$HOME/$1"
+    path=$HOME/"$(echo "$1" | remove_icons)"
     if [ -f "$path" ]; then
         bat --style=full --color=always --terminal-width="$FZF_PREVIEW_COLUMNS" "$path" \
             -m '*autosave:INI' -m '*.conf:INI'
     elif [ -d "$path" ]; then
-        eza -1 --color=always --icons=always --sort=modified -m "$HOME/$1"
+        eza -T --color=always --icons=always "$path"
     fi
 }
-
-colorize_file_list() {
-    # ANSI color codes
-    RESET="\033[0m"
-    FOLDER="\033[34m"
-    BASE="\033[36m"
-    FILE="\033[35m"
-
-    while IFS= read -r line; do
-        if [ -d "$HOME/$line" ]; then
-            # Directories are bold blue
-            echo -e "${FOLDER}${line}/${RESET}"
-        else
-            base_name="$(basename "$line")"
-            dir_name="$(dirname "$line")/"
-            if [ "$dir_name" = "./" ]; then
-                dir_name=''
-            fi
-            echo -e "${BASE}${dir_name}${RESET}${FILE}${base_name}${RESET}"
-        fi
-    done
-}
-
 export -f preview_command
-export -f colorize_file_list
+# colorize_file_list() {
+#     # ANSI color codes
+#     RESET="\033[0m"
+#     FOLDER="\033[34m"
+#     BASE="\033[36m"
+#     FILE="\033[35m"
+#
+#     while IFS= read -r line; do
+#         if [ -d "$HOME/$line" ]; then
+#             # Directories are bold blue
+#             echo -e "${FOLDER}${line}/${RESET}"
+#         else
+#             base_name="$(basename "$line")"
+#             dir_name="$(dirname "$line")/"
+#             if [ "$dir_name" = "./" ]; then
+#                 dir_name=''
+#             fi
+#             echo -e "${BASE}${dir_name}${RESET}${FILE}${base_name}${RESET}"
+#         fi
+#     done
+# }
 
+search_files() {
+    chezmoi managed --include=files |
+        eza --stdin -1 --sort=modified --color=always --icons=always
+}
+export -f search_files
+
+search_dirs() {
+    chezmoi managed --include=dirs |
+        eza --stdin -d --icons=always -1 --color=always --sort=name
+}
+export -f search_dirs
+
+# export -f preview_command
+# export -f colorize_file_list
+
+INITIAL_DIR="$(pwd)"
+cd $HOME
 # Launch fzf with improved preview
 selected=$(
-    chezmoi managed --include files |
-        colorize_file_list |
+    search_files |
         fzf \
             --ansi \
-            --multi \
             --preview='preview_command {}' \
             --preview-window=right:60%:wrap \
-            --preview-label="FILES" \
-            --header 'A-D> dirs ­ tab> select' \
+            --header 'A-D> dirs' \
             --header-first \
-            --bind 'focus:transform-preview-label:basename {}' \
-            --bind 'alt-d:reload(chezmoi managed --include dirs)' \
-            --bind 'alt-f:reload(chezmoi managed --include files | colorize_file_list)'
-    #--walker-root="$HOME"
+            --bind 'alt-d:reload(search_dirs)' \
+            --bind 'alt-f:reload(search_files)' |
+            remove_icons
 )
 
 if [ -n "$selected" ]; then
     path="$(chezmoi source-path "$HOME/$selected")" || exit 0
 fi
 
-INITIAL_DIR="$(pwd)"
+# INITIAL_DIR="$(pwd)"
 
 if [ -f "$path" ]; then
     cd "$CHEZMOI" && nvim "$path"
