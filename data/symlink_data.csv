@@ -20,6 +20,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/fzfmenu.sh,/home/matias/.local/bin/fzfmenu.sh,fzfmenu.sh
 /home/matias/.scripts/fzf_songlauncher.sh,/home/matias/.local/bin/fzf_songlauncher.sh,fzf_songlauncher.sh
 /home/matias/.scripts/get_repos_present_on_host.sh,/home/matias/.local/bin/get_repos_present_on_host.sh,get_repos_present_on_host.sh
+/home/matias/.scripts/get_scripts_relations.py,/home/matias/.local/bin/get_scripts_relations.py,get_scripts_relations.py
 /home/matias/.scripts/dev/get-window-thumbnails.sh,/home/matias/.local/bin/get-window-thumbnails.sh,get-window-thumbnails.sh
 /home/matias/.scripts/git_clone_by_author-repo.sh,/home/matias/.local/bin/git_clone_by_author-repo.sh,git_clone_by_author-repo.sh
 /home/matias/.scripts/grub-tune-to-audio-python.py,/home/matias/.local/bin/grub-tune-to-audio-python.py,grub-tune-to-audio-python.py

@@ -4,27 +4,25 @@
 
 <!-- llm_generated_output_start -->
 
-This repository contains a collection of versatile shell scripts and utilities tailored for an Arch Linux environment using the Qtile window manager. The scripts are designed to enhance productivity, streamline workflows, and effectively manage tasks, especially for users who frequently work with command-line applications and tools.
+The repository contains a diverse collection of scripts primarily designed for enhancing productivity and managing various aspects of your workflow, especially tailored for **Arch Linux** and the **Qtile** window manager. These scripts take advantage of various command-line tools and libraries to provide users with efficient solutions for everyday tasks.
 
-Here’s a diverse overview of what you’ll find within this script repository:
+Here’s a brief overview of the functionalities included in these scripts:
 
-- **File Management**: Scripts like `[fzf-file-manager.sh](docs/scripts/fzf-file-manager.sh.md)` provide an interactive way to navigate and manage files using `fzf`, while `[m3u_creator.sh](docs/scripts/m3u_creator.sh.md)` generates playlists from files in a directory, perfect for audio management.
+- **File Management and Selection**: Scripts like `[fzf-file-manager.sh](docs/scripts/fzf-file-manager.md)`, and `[fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md)` use **fzf**, a powerful command-line fuzzy finder, to enable quick and intuitive navigation through files and albums. These scripts also employ **eza**, a file listing tool, to present data in a user-friendly manner, offering previews with tools like **bat**.
 
-- **Documentation and Help Utilities**: The repository includes tools for generating markdown documentation from scripts, like `[llm-script-describer.py](docs/scripts/llm-script-describer.py.md)`, which utilizes OpenAI’s language model to summarize and provide documentation for scripts automatically. Additionally, utility scripts like `[read_the_fucking_manual.sh](docs/scripts/read_the_fucking_manual.sh.md)` assist users by retrieving frequently referenced manual entries, improving accessibility to command usage.
+- **Personal Knowledge Management**: Scripts like `[obsidian-vault-selector.sh](docs/scripts/obsidian-vault-selector.md)` and `[obsidian.xsh](docs/scripts/obsidian.xsh.md)` focus on managing personal knowledge bases with Obsidian, allowing users to open vaults and notes easily and interactively.
 
-- **Interactive Launchers**: Scripts such as `[dmenu_run_scripts.py](docs/scripts/dmenu_run_scripts.py.md)` and `[select_script](docs/scripts/select_script.md)` facilitate the quick execution of scripts from a predefined selection using `rofi` or `dmenu`, promoting efficiency.
+- **Music Management**: Various audio-related scripts such as `[albumplayer.xsh](docs/scripts/albumplayer.xsh.md)`, and `[mechen_music_transfert.py](docs/scripts/mechen_music_transfert.py.md)` help organize and play music collections. These scripts perform functions ranging from selecting and playing albums through **cmus** to transferring unlistened music albums to portable media players.
 
-- **Music Playback Management**: For music enthusiasts, scripts like `[fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md)` and `[playlist_player.xsh](docs/scripts/playlist_player.xsh.md)` allow users to easily select and play music albums or playlists using the `cmus` player with the aid of fuzzy searching.
+- **Window Management**: The scripts provide utilities for managing windows and groups within the Qtile environment, like `[qtile_window_to_group_and_switch.py](docs/scripts/qtile_window_to_group_and_switch.py.md)`, which allows toggling between different groups in the window manager.
 
-- **Environment Setup**: There are scripts such as `[chezmoi_on_a_new_system.sh](docs/scripts/chezmoi_on_a_new_system.sh.md)` for automating the setup of `chezmoi`, enabling easy management of dotfiles and personal configurations on new systems.
+- **Documentation and Script Management**: There are mechanisms to automate and manage documents and scripts within the repository. For instance, `[llm-script-describer.py](docs/scripts/llm-script-describer.py.md)` utilizes AI to generate GitHub markdown documentation from user scripts, fostering better maintainability and usability of the codebase.
 
-- **Compositor and Wallpaper Management**: Scripts like `[toggle_picom.sh](docs/scripts/toggle_picom.sh.md)` manage the `picom` compositor’s state while `[wallpaper.sh](docs/scripts/wallpaper.sh.md)` helps users to randomly select or set wallpapers, augmenting the desktop experience.
+- **Task Automation and Configuration**: The repository includes scripts for creating symlinks ([utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md)), installing dependencies ([install_dependencies.sh](docs/scripts/install_dependencies.sh.md)), and synchronizing configurations with **chezmoi**.
 
-- **General Utilities**: Various other scripts provide functionality for tasks such as updating environment variables, sync processes with `Mega.nz`, and creating graphical outputs from data.
+- **Visual Feedback and Help**: Some scripts offer visual interfaces for selecting options, using **dmenu** and **rofi** alongside **fzf** for intuitive user interactions. Scripts like `[help-pastel.sh](docs/scripts/help-pastel.sh.md)` and `[keyboard-help.sh](docs/scripts/keyboard-help.sh.md)` serve to enhance user experience with real-time information and assistance.
 
-The design of these scripts emphasizes interaction through intuitive command-line interfaces, promoting a productive environment for those using the Qtile window manager on Arch Linux. Each script is documented with usage examples and tips for best practices, ensuring users can quickly adapt these tools into their daily workflows. 
-
-This repository aims to provide powerful, user-friendly command-line utilities that align seamlessly with a streamlined Arch Linux environment, enhancing efficiency and usability for its users.
+This repository effectively brings together a pragmatic assortment of scripts that cater to various needs, enhancing your productivity and experience while leveraging the capabilities of Arch Linux and Qtile. Each script is well-documented within the repository, providing clear guidance on usage and customizable features.
 
 <!-- llm_generated_output_end -->
 
@@ -58,6 +56,7 @@ This repository aims to provide powerful, user-friendly command-line utilities t
 | [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) | A lightweight dmenu replacement using fzf within a floating xterm terminal. |
 | [get-window-thumbnails.sh](docs/scripts/get-window-thumbnails.sh.md) | Capture window thumbnails from currently open windows and save them. |
 | [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) | A script to list Git repositories present on the current host. |
+| [get_scripts_relations.py](docs/scripts/get_scripts_relations.py.md) | Visualizes dependencies between user scripts in a directed graph. |
 | [git_clone_by_author-repo.sh](docs/scripts/git_clone_by_author-repo.sh.md) | A script for cloning Git repositories by specifying developer and package. |
 | [grub-tune-to-audio-python.py](docs/scripts/grub-tune-to-audio-python.py.md) | Converts GRUB_INIT_TUNE strings into audio files. |
 | [help-pastel.sh](docs/scripts/help-pastel.sh.md) | A script to display Pastel subcommands with live help. |

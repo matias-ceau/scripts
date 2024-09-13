@@ -21,6 +21,7 @@
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A lightweight dmenu replacement using fzf within a floating xterm terminal.*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Capture window thumbnails from currently open windows and save them.*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *A script to list Git repositories present on the current host.*
+- [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Visualizes dependencies between user scripts in a directed graph.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script for cloning Git repositories by specifying developer and package.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Convert GRUB_INIT_TUNE strings to audio files.*
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *A script to display Pastel subcommands with live help.*

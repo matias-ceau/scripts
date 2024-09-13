@@ -516,5 +516,12 @@
     "description": "Combines Ripgrep and FZF to search files and open in Vim interactively.",
     "doc_path": "docs/scripts/rgfzf.sh.md",
     "hash": "c23d6895c89f4c9b2ffaf02f14bb50ba647e45e0cdcbd8818578cd90a924f386"
+  },
+  "get_scripts_relations.py": {
+    "file": "get_scripts_relations.py",
+    "path": "get_scripts_relations.py",
+    "description": "Visualizes dependencies between user scripts in a directed graph.",
+    "doc_path": "docs/scripts/get_scripts_relations.py.md",
+    "hash": "1abae55f8d8f9441ae3cece514b7e8330aee298aac9dec54d5deae3e0e285aff"
   }
 }
