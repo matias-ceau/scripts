@@ -2,48 +2,60 @@
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: A script to manage and edit Chezmoi configuration files interactively using fzf.
+**edit_chezmoi_cfg_files.sh**: A script to efficiently edit and manage Chezmoi config files.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder allowing for easy search and selection of files.
-- `chezmoi`: A tool for managing your dotfiles, allowing you to source desired configurations easily.
-- `bat`: A tool to view files with syntax highlighting, used for previewing configs.
-- `eza`: An enhanced version of `ls` with color support and icons.
-- `nvim`: A modern text editor, used here to edit selected configuration files.
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `chezmoi`: A tool for managing dotfiles across machines.
+- `fzf`: A command-line fuzzy finder.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `eza`: A modern replacement for `ls`.
+- `nvim`: Neovim, a hyperextensible Vim-based text editor.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
 
 ### Description
 
-This script allows users to browse and edit Chezmoi-managed configuration files through an interactive interface powered by `fzf`. It enables previews of files and directories, which enhances the user experience by quickly providing context for the selections made.
+This script is designed to assist users in managing their Chezmoi configuration files through an interactive command-line interface. It provides functionalities such as searching for files and directories managed by Chezmoi and previews their content using `fzf`. The script leverages several utilities to enhance the user experience:
 
-**Key Functions:**
-- `remove_icons`: Cleans up output by removing non-printable characters.
-- `preview_command`: Displays file previews using `bat` for files and `eza` for directories.
-- `search_files`: Lists files managed by `chezmoi`, supported by `eza` for attractive output.
-- `search_dirs`: Lists directories managed by `chezmoi`.
+- `remove_icons`: Filters and removes non-printable characters from user input.
+- `preview_command`: Displays a preview of selected files or directories using `bat` for files and `eza` for directories.
+- `search_files` and `search_dirs`: These functions retrieve lists of managed files and directories, respectively, formatting them for user-friendly display.
 
-Users can bind keys to reload file or directory searches dynamically. Upon selection, the script will prompt for actions to apply Chezmoi changes or sync configurations with the repo.
+The core functionality allows users to select a file or directory, preview its contents, and then choose to edit or apply changes using Chezmoi.
 
 ### Usage
 
-To use the script, simply run it from a terminal:
+To execute the script, simply run:
 
 ```bash
-bash ~/home/matias/.scripts/edit_chezmoi_cfg_files.sh
+bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-While running:
-- Navigate files with arrow keys or type to filter.
-- Press `ALT + F` to reload the list of files or `ALT + D` to reload directories.
-- After selecting a file or directory, you will be prompted to choose an action:
-  - `a` (default): Apply the configuration.
-  - `s`: Apply and sync the repository.
-  - `x`: Exit without changes.
+The script will:
+
+1. Change the directory to your home directory.
+2. Launch `fzf`, showcasing a list of Chezmoi-managed files.
+3. Use the arrow keys to navigate through the files:
+   - Preview files with `bat` or directories with `eza`.
+   - Use `Alt-D` to refresh the directory list and `Alt-F` for files.
+
+After making a selection:
+- If the selected item is a file, it opens in `nvim`.
+- If it's a directory, it opens the first file found in that directory.
+
+After editing, you are prompted to:
+- Apply changes without syncing, apply and sync the repo, or exit.
+
+Here's a summary of the prompts:
+```text
+- [a] (default): Chezmoi apply
+- [s]: Chezmoi apply and sync repo
+- [x]: exit
+```
 
 ---
 
-> [!TIP] 
-> Consider enabling more user feedback during the script execution, such as progress notifications, especially when performing the apply or sync operations. Additionally, revising error handling could improve robustness, particularly in scenarios where `chezmoi` commands may fail.
+> [!TIP]  
+> The script could be improved by adding support for error handling throughout the file/directory checks and displaying user feedback. Additionally, it could benefit from more customization options for the preview window and user choices for editing tools.

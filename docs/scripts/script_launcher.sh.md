@@ -1,50 +1,48 @@
-# Script Launcher
+# Script Launcher 
 
 ---
 
-**script_launcher.sh**: Run scripts with fzf for easy access and previews
+**script_launcher.sh**: Run scripts with fzf
 
 ---
 
 ### Dependencies
 
-- `bat`: Provides syntax highlighting and Git integration for file viewing.
-- `fzf`: A command-line fuzzy finder for search functionality.
-- `improved-fzfmenu.sh`: A custom script enhancing fzf's capabilities.
-- `nvim`: A powerful text editor based on Neovim.
+- `fzf`: A command-line fuzzy finder that allows for script selection.
+- `bat`: A clone of `cat` with syntax highlighting and Git integration, used for displaying script contents.
+- `pastel`: A utility for terminal colors, required for color formatting.
 
 ### Description
 
-The `script_launcher.sh` is a Bash script designed to facilitate the running and editing of user scripts with enhanced previews using `fzf`. This tool integrates the fast fuzzy finding of scripts and allows for previewing documentation in various formats. 
+The `script_launcher.sh` script is a Bash utility designed to provide a convenient interactive interface for executing various scripts within a directory. Utilizing `fzf`, it allows users to browse and select scripts with real-time previews and various actions. 
 
-Key features:
-- Utilizes `bat` for viewing script contents and documentation with syntax highlighting.
-- Provides interactive features such as executing scripts, opening them in the editor, and changing preview modes between documentation and source code.
-- Supports customizable key bindings to enhance user experience.
-- The preview window can display either the script's documentation or the source code, toggled with specific key combinations.
+Key features of the script include:
 
-The script reads the available scripts from a given directory and then uses `fzf` to present them in a menu, allowing the user to pick and execute them via simple keybindings. 
+- **Preview functionality**: When a script is selected, detailed documentation (if available) or the script source can be viewed in a preview window.
+- **Color-coded outputs**: Different file types (like `.sh`, `.xsh`, and `.py`) are color-coded for quick visual identification, enhancing user experience.
+- **Keybindings**: The interface supports custom keybindings for executing scripts, editing source files, and toggling preview types.
+- **Flexibility for expansion**: The script outlines several TODO items for future features, including the possibility to render documentation in different formats (e.g., PDF, HTML).
 
 ### Usage
 
-To use this script, simply execute it in your terminal:
+To run the script, execute it from your terminal:
 
 ```bash
 bash /home/matias/.scripts/script_launcher.sh
 ```
 
-Once the script is running, you'll see a list of the available scripts. Here are some keybindings you can use:
+Once running, you can navigate the list of scripts using the keyboard. Here are some keybindings you can use:
 
-- `Enter`: Execute the selected script in the current shell.
-- `Alt + Enter`: Execute the script in a new terminal.
-- `Ctrl + E`: Edit the selected script with Neovim.
-- `Alt + E`: Edit the script in a new terminal window.
-- `Alt + S`: Toggle preview to show the source of the selected script.
-- `Alt + D`: Toggle back to the documentation preview.
+- **Enter**: Execute the selected script.
+- **Alt + Enter**: Run the script in a new terminal.
+- **Ctrl + E**: Open the script in `nvim`.
+- **Alt + E**: Open the script in `nvim` in a new terminal.
+- **Alt + S**: Switch to source preview of the script.
+- **Alt + D**: Switch back to documentation preview.
 
-Additionally, you can resize the preview window, and navigate through the suggestions using arrow keys or a predefined scroll mechanism.
+As the interface generates the list using `fd`, ensure your scripts are organized correctly in the `$SCRIPTS` directory.
 
 ---
 
 > [!TIP]  
-> There are potential areas for improvement in the script. For instance, it currently lacks a feature to render documentation as PDF/HTML. Consider implementing a way to navigate through previews using the Page Up and Down keys. Enabling multiple selections would also enhance the script's usability, along with including options for logging and statistics collection for user actions.
+> The script has potential for enhancements. Consider implementing multi-selection capabilities, which would allow for executing multiple scripts at once. Additionally, the inclusion of arguments for functions could make this tool more flexible for various workflows.

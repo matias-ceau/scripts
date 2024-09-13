@@ -7,14 +7,15 @@
 - [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions using fzf*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *A Python script to count the number of tokens in a text file using the `tiktoken` library.*
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *Create a cover art based on file spectrogram.*
-- [display_markdown.py](scripts/display_markdown.py.md) -- *Renders Markdown files in the terminal using Rich.*
+- [display_markdown.py](scripts/display_markdown.py.md) -- *A script to render Markdown files in the terminal using the Rich library.*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A script to execute selected scripts using rofi with options from xonsh.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to manage and edit Chezmoi configuration files interactively using fzf.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to efficiently edit and manage Chezmoi config files.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to interactively edit and apply Chezmoi configuration files.*
 - [editor.sh](scripts/editor.sh.md) -- *Edit files from the shell using fzf with customizable search options.*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *A script to convert markdown links to be relative to a specified base directory.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Display a formatted chart of colors with HEX, RGB, and names.*
+- [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *A shell script to manage files interactively using fzf and eza.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Launches and plays selected albums using fzf and cmus.*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script to create a fuzzy finder menu using `fzf` within `xterm`.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A lightweight dmenu replacement using fzf within a floating xterm terminal.*
@@ -22,6 +23,7 @@
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *A script to list Git repositories present on the current host.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script for cloning Git repositories by specifying developer and package.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Convert GRUB_INIT_TUNE strings to audio files.*
+- [help-pastel.sh](scripts/help-pastel.sh.md) -- *A script to display Pastel subcommands with live help.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A versatile FZF menu launcher that uses Alacritty terminal.*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Automatically installs a set of required packages on Arch Linux.*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *Create a new Jupyter notebook and open it in Chromium.*
@@ -42,6 +44,7 @@
 - [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with NVim.*
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to easily select and open any Obsidian vault from your filesystem.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
+- [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script to perform fuzzy searches for Arch Linux packages using fzf*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
@@ -53,10 +56,11 @@
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Selects a random album and plays it with cmus.*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick random wallpaper from a specified wallpaper list*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to retrieve the top researched manual entries*
+- [rgfzf.sh](scripts/rgfzf.sh.md) -- *Combines Ripgrep and FZF to search files and open in Vim interactively.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *A script to transfer unlistened music albums to a Sandisk media player.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for a streamlined execution and documentation preview.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for easy access and previews*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
 - [select_script](scripts/select_script.md) -- *A C script that selects a chosen script using cached data from a CSV file.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Script to sync user directories to a backup location using Mega.nz*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Obtains the most frequent lines, words, or characters in shell history files.*

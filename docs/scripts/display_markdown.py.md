@@ -1,46 +1,48 @@
-# Display Markdown in Terminal
+# Display Markdown in Terminal with Rich
 
 ---
 
-**display_markdown.py**: Renders Markdown files in the terminal using Rich.
+**display_markdown.py**: A script to render Markdown files in the terminal using the Rich library.
 
 ---
 
 ### Dependencies
 
-- `rich`: A Python library for rendering rich text and beautiful formatting in the terminal.
+- `rich`: A Python library for rich text and beautiful formatting in the terminal. It is used here to render Markdown content with specific styles and display in panels.
 
 ### Description
 
-The `display_markdown.py` script allows users to view Markdown files directly in their terminal with a visually appealing format. It utilizes the `rich` library, which provides advanced features for formatting and displaying content in the terminal, including colors, styles, and layouts.
+The `display_markdown.py` script allows users to display Markdown files nicely formatted in the terminal. It utilizes the `rich` library to process and render Markdown content, providing options for panel styling and width.
 
-When executed, the script first checks for the correct number of command-line arguments. It expects one argument, which should be the path to a Markdown file. If the argument is not provided, or if there are issues opening or reading the file, appropriate error messages are displayed.
+The main functionality revolves around reading a Markdown file specified in the command line and displaying it within a panel in the terminal. The script allows for customizable styling of the Markdown via the `md_style` parameter, defaulting to "github-dark". 
 
-Once the Markdown content is successfully read, it is rendered in a styled panel. The panel uses a darker GitHub style for the text, providing a pleasant reading experience.
+The script's structure includes:
+- A `main()` function that handles arguments, reads the file, and renders the output.
+- Error handling for file operations ensures robust execution and user feedback.
 
 ### Usage
 
-To use the script, execute it from the terminal with a Markdown file as an argument:
+To use this script, run it in the terminal with the following command:
 
 ```bash
 python display_markdown.py <markdown_file>
 ```
 
-For example, to display a Markdown file named `example.md`, you would use:
+Replace `<markdown_file>` with the path to your Markdown file. You can optionally specify the panel's width by passing it as a second argument:
 
 ```bash
-python display_markdown.py example.md
+python display_markdown.py <markdown_file> <panel_width>
 ```
 
-If the Markdown file is located in a different directory, ensure to provide the full path:
+Here's a simple example:
 
 ```bash
-python display_markdown.py /path/to/your/markdown_file.md
+python display_markdown.py my_notes.md 50
 ```
 
-In case of any errors (like file not being found), the script will print an error message indicating the issue in red text.
+This command will display the contents of `my_notes.md` in a panel that is 50 characters wide.
 
 ---
 
 > [!TIP]  
-> The script could be improved by adding more options for users, such as specifying different styling themes or scaling the panel size. Additionally, implementing a help command would improve usability for first-time users. Always consider handling more exceptions to cover potential edge cases with file handling.
+> The current implementation has a small bug in argument handling. The check for numeric width `if sys.argv[2].isnumeric():` occurs only if `len(sys.argv) != 2`, which seems incorrect. It should be placed after checking that `len(sys.argv) == 3`. Additionally, the default value for `panel_width` should be set when it's `None`, instead of relying solely on command line input.

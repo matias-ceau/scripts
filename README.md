@@ -4,23 +4,27 @@
 
 <!-- llm_generated_output_start -->
 
-The script repository consists of a diverse collection of utilities tailored for the Arch Linux environment, emphasizing interaction with the Qtile window manager and enhancing productivity through automation. The scripts within this repository are designed to simplify various tasks, from file management to music playback, and they can be easily integrated into everyday workflows.
+This repository contains a collection of versatile shell scripts and utilities tailored for an Arch Linux environment using the Qtile window manager. The scripts are designed to enhance productivity, streamline workflows, and effectively manage tasks, especially for users who frequently work with command-line applications and tools.
 
-### Key Features and Functionalities
+Here’s a diverse overview of what you’ll find within this script repository:
 
-- **Markdown and Documentation Management**: Scripts like [fix-markdown-links.sh](docs/scripts/fix-markdown-links.sh.md) facilitate the modification of markdown files, ensuring links are correctly formatted. Additionally, the [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) utilizes the OpenAI language model to generate comprehensive documentation for user scripts in markdown format.
+- **File Management**: Scripts like `[fzf-file-manager.sh](docs/scripts/fzf-file-manager.sh.md)` provide an interactive way to navigate and manage files using `fzf`, while `[m3u_creator.sh](docs/scripts/m3u_creator.sh.md)` generates playlists from files in a directory, perfect for audio management.
 
-- **Music Playback Utilities**: Several scripts, such as [m3u_creator.sh](docs/scripts/m3u_creator.sh.md) and [shuffle_album.xsh](docs/scripts/shuffle_album.xsh.md), focus on music management, allowing users to create playlists and select albums for playback using the CMUS music player, enhancing the audio experience directly from the terminal.
+- **Documentation and Help Utilities**: The repository includes tools for generating markdown documentation from scripts, like `[llm-script-describer.py](docs/scripts/llm-script-describer.py.md)`, which utilizes OpenAI’s language model to summarize and provide documentation for scripts automatically. Additionally, utility scripts like `[read_the_fucking_manual.sh](docs/scripts/read_the_fucking_manual.sh.md)` assist users by retrieving frequently referenced manual entries, improving accessibility to command usage.
 
-- **Task Automation**: The repository includes automation scripts like [update_env.xsh](docs/scripts/update_env.xsh.md) and [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) that streamline environment variable updates and repository management, making it easier to maintain project directories and local setups.
+- **Interactive Launchers**: Scripts such as `[dmenu_run_scripts.py](docs/scripts/dmenu_run_scripts.py.md)` and `[select_script](docs/scripts/select_script.md)` facilitate the quick execution of scripts from a predefined selection using `rofi` or `dmenu`, promoting efficiency.
 
-- **User Interface Enhancements**: Many utilities integrate with fuzzy finders like `fzf` and interactive menus such as `dmenu`, creating a user-friendly interface for file selection and script launching. For instance, [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) enables users to launch albums interactively.
+- **Music Playback Management**: For music enthusiasts, scripts like `[fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md)` and `[playlist_player.xsh](docs/scripts/playlist_player.xsh.md)` allow users to easily select and play music albums or playlists using the `cmus` player with the aid of fuzzy searching.
 
-- **Window Management and Navigation**: Scripts like [qtile_window_to_group_and_switch.py](docs/scripts/qtile_window_to_group_and_switch.py.md) facilitate the dynamic switching of Qtile window groups, allowing users to manage their workspace more effectively.
+- **Environment Setup**: There are scripts such as `[chezmoi_on_a_new_system.sh](docs/scripts/chezmoi_on_a_new_system.sh.md)` for automating the setup of `chezmoi`, enabling easy management of dotfiles and personal configurations on new systems.
 
-The repository also emphasizes good practices through tips for future improvements on each script, such as implementing error handling, logging mechanisms, and enhancing user interaction with command prompts.
+- **Compositor and Wallpaper Management**: Scripts like `[toggle_picom.sh](docs/scripts/toggle_picom.sh.md)` manage the `picom` compositor’s state while `[wallpaper.sh](docs/scripts/wallpaper.sh.md)` helps users to randomly select or set wallpapers, augmenting the desktop experience.
 
-By utilizing these scripts, users can significantly improve their productivity on Arch Linux, particularly when using Qtile as their window manager. Each script is designed to be easily executable and can be integrated into custom keybindings for even quicker access, making it an invaluable toolset for developers and power users alike.
+- **General Utilities**: Various other scripts provide functionality for tasks such as updating environment variables, sync processes with `Mega.nz`, and creating graphical outputs from data.
+
+The design of these scripts emphasizes interaction through intuitive command-line interfaces, promoting a productive environment for those using the Qtile window manager on Arch Linux. Each script is documented with usage examples and tips for best practices, ensuring users can quickly adapt these tools into their daily workflows. 
+
+This repository aims to provide powerful, user-friendly command-line utilities that align seamlessly with a streamlined Arch Linux environment, enhancing efficiency and usability for its users.
 
 <!-- llm_generated_output_end -->
 
@@ -41,12 +45,13 @@ By utilizing these scripts, users can significantly improve their productivity o
 | [command_prompt.sh](docs/scripts/command_prompt.sh.md) | Launch a command with history suggestions using fzf |
 | [count_tokens_with_tiktoken.py](docs/scripts/count_tokens_with_tiktoken.py.md) | A Python script to count the number of tokens in a text file using the `tiktoken` library. |
 | [create_cover_art.sh](docs/scripts/create_cover_art.sh.md) | Create a cover art based on file spectrogram. |
-| [display_markdown.py](docs/scripts/display_markdown.py.md) | Renders Markdown files in the terminal using Rich. |
+| [display_markdown.py](docs/scripts/display_markdown.py.md) | A script to render Markdown files in the terminal using the Rich library. |
 | [dmenu_run_scripts.py](docs/scripts/dmenu_run_scripts.py.md) | A script to execute selected scripts using rofi with options from xonsh. |
-| [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) | A script to manage and edit Chezmoi configuration files interactively using fzf. |
+| [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) | A script to efficiently edit and manage Chezmoi config files. |
 | [editor.sh](docs/scripts/editor.sh.md) | Edit files from the shell using fzf with customizable search options. |
 | [fix-markdown-links.sh](docs/scripts/fix-markdown-links.sh.md) | A script to fix relative links in Markdown files. |
 | [flexoki_show.sh](docs/scripts/flexoki_show.sh.md) | Generate a color palette with hex, RGB values, and names for quick reference. |
+| [fzf-file-manager.sh](docs/scripts/fzf-file-manager.sh.md) | A shell script to manage files interactively using fzf and eza. |
 | [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) | Launches and plays selected albums using fzf and cmus. |
 | [fzf_songlauncher.sh](docs/scripts/fzf_songlauncher.sh.md) | Play a song with cmus, choosing it with fzf |
 | [fzfmenu.sh](docs/scripts/fzfmenu.sh.md) | A helper script to create a fuzzy finder menu using `fzf` within `xterm`. |
@@ -55,6 +60,7 @@ By utilizing these scripts, users can significantly improve their productivity o
 | [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) | A script to list Git repositories present on the current host. |
 | [git_clone_by_author-repo.sh](docs/scripts/git_clone_by_author-repo.sh.md) | A script for cloning Git repositories by specifying developer and package. |
 | [grub-tune-to-audio-python.py](docs/scripts/grub-tune-to-audio-python.py.md) | Converts GRUB_INIT_TUNE strings into audio files. |
+| [help-pastel.sh](docs/scripts/help-pastel.sh.md) | A script to display Pastel subcommands with live help. |
 | [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md) | A versatile FZF menu launcher that uses Alacritty terminal. |
 | [install_dependencies.sh](docs/scripts/install_dependencies.sh.md) | Automatically installs a set of required packages on Arch Linux. |
 | [jupyter_new_notebook.xsh](docs/scripts/jupyter_new_notebook.xsh.md) | Create a new Jupyter notebook and open it in Chromium. |
@@ -73,6 +79,7 @@ By utilizing these scripts, users can significantly improve their productivity o
 | [nvim_in_new_terminal.sh](docs/scripts/nvim_in_new_terminal.sh.md) | Opens a floating terminal to edit a file with NVim. |
 | [obsidian-vault-selector.sh](docs/scripts/obsidian-vault-selector.sh.md) | A script to easily select and open any Obsidian vault from your filesystem. |
 | [obsidian.xsh](docs/scripts/obsidian.xsh.md) | Open any Obsidian vault from your PKM directory |
+| [pacman-fuzzy-search.sh](docs/scripts/pacman-fuzzy-search.sh.md) | A script to perform fuzzy searches for Arch Linux packages using fzf |
 | [pdfopener.sh](docs/scripts/pdfopener.sh.md) | A script to select and open any PDF file from the home folder using Evince. |
 | [playlist_player.xsh](docs/scripts/playlist_player.xsh.md) | A simple script to pick and play a music playlist using cmus |
 | [playlist_randomizer.xsh](docs/scripts/playlist_randomizer.xsh.md) | Randomly selects and plays a playlist of albums in cmus. |
@@ -84,8 +91,9 @@ By utilizing these scripts, users can significantly improve their productivity o
 | [random_album.xsh](docs/scripts/random_album.xsh.md) | Selects a random album and plays it with cmus. |
 | [random_wallpapers.xsh](docs/scripts/random_wallpapers.xsh.md) | Pick random wallpaper from a specified wallpaper list |
 | [read_the_fucking_manual.sh](docs/scripts/read_the_fucking_manual.sh.md) | A script to retrieve the top researched manual entries |
+| [rgfzf.sh](docs/scripts/rgfzf.sh.md) | Combines Ripgrep and FZF to search files and open in Vim interactively. |
 | [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md) | A script to transfer unlistened music albums to a Sandisk media player. |
-| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | Run scripts with fzf for easy access and previews |
+| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | Run scripts with fzf |
 | [select_script](docs/scripts/select_script.md) | A C script that selects a chosen script using cached data from a CSV file. |
 | [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) | Automates syncing of user directories to a backup location. |
 | [shell_history_info.sh](docs/scripts/shell_history_info.sh.md) | Obtains the most frequent lines, words, or characters in shell history files. |

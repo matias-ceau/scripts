@@ -72,9 +72,9 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to manage and edit Chezmoi configuration files interactively using fzf.",
+    "description": "A script to efficiently edit and manage Chezmoi config files.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "518c83a22a11409362c18333bbe67c569a3aef93200e0ffac71122c7d45f39db"
+    "hash": "80389d1143f0c2abf2364488ec065732d0d53fd275e149e494302d03edfc8067"
   },
   "editor.sh": {
     "file": "editor.sh",
@@ -352,9 +352,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "script_launcher.sh",
-    "description": "Run scripts with fzf for easy access and previews",
+    "description": "Run scripts with fzf",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "ed6a45cb9babb0977919ac9f0ba7b9bb58ba94cd3f0de11d210f03d7a259080e"
+    "hash": "0c4422b53457861a6a36da39b227e3452e1e1b18b9f93ef111464e525f076c01"
   },
   "select_script": {
     "file": "select_script",
@@ -471,9 +471,9 @@
   "display_markdown.py": {
     "file": "display_markdown.py",
     "path": "dev/display_markdown.py",
-    "description": "Renders Markdown files in the terminal using Rich.",
+    "description": "A script to render Markdown files in the terminal using the Rich library.",
     "doc_path": "docs/scripts/display_markdown.py.md",
-    "hash": "54f7b0a908129115a3e354a6343b73db83d6dad829335263af5507748994d514"
+    "hash": "8b14f6cc1ee5df6f8cedbf0c56fcfa21f583a38671af269b5e96b8370407dce4"
   },
   "get-window-thumbnails.sh": {
     "file": "get-window-thumbnails.sh",
@@ -488,5 +488,33 @@
     "description": "Switches the active window to a new group in Qtile.",
     "doc_path": "docs/scripts/qtile_window_to_group_and_switch.py.md",
     "hash": "50950d355649d0f31334cf320895d4a2ec9494abc557287194dfdf0c4fac5c40"
+  },
+  "fzf-file-manager.sh": {
+    "file": "fzf-file-manager.sh",
+    "path": "fzf-file-manager.sh",
+    "description": "A shell script to manage files interactively using fzf and eza.",
+    "doc_path": "docs/scripts/fzf-file-manager.sh.md",
+    "hash": "8d78aabb29474fd796dee97bd4b40c93ca133861e0a51b25b956cd69935fff0d"
+  },
+  "help-pastel.sh": {
+    "file": "help-pastel.sh",
+    "path": "help-pastel.sh",
+    "description": "A script to display Pastel subcommands with live help.",
+    "doc_path": "docs/scripts/help-pastel.sh.md",
+    "hash": "bff997b3d82b7cd109c3ce835e5c52790c71d5cd433a8329adeddf410f4e6385"
+  },
+  "pacman-fuzzy-search.sh": {
+    "file": "pacman-fuzzy-search.sh",
+    "path": "pacman-fuzzy-search.sh",
+    "description": "A script to perform fuzzy searches for Arch Linux packages using fzf",
+    "doc_path": "docs/scripts/pacman-fuzzy-search.sh.md",
+    "hash": "52847a370078ac69d9f37c2a3e2db3b86add42ef47e548eea7187f6bb92937e2"
+  },
+  "rgfzf.sh": {
+    "file": "rgfzf.sh",
+    "path": "rgfzf.sh",
+    "description": "Combines Ripgrep and FZF to search files and open in Vim interactively.",
+    "doc_path": "docs/scripts/rgfzf.sh.md",
+    "hash": "c23d6895c89f4c9b2ffaf02f14bb50ba647e45e0cdcbd8818578cd90a924f386"
   }
 }
