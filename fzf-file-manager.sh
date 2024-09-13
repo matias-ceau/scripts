@@ -37,7 +37,7 @@ preview_cmd() {
   done
   local path="$(echo "$inputpath" | sed 's/ $//')"
   eza_def --list-dirs "$path" | cut -d' ' -f6- |
-    bat --highlight-line 1 -p --force-colorization
+    bat --highlight-line 1 -p --force-colorization --terminal-width=$FZF_PREVIEW_COLUMNS
   eza_def --list-dirs -X "$path" | cut -d' ' -f-5
   file --brief -i "$path"
   if [[ -d "$(readlink -f "$path")" ]]; then
@@ -94,6 +94,7 @@ fzf_cmd() {
     --bind 'alt-space:execute(full_screen_preview {7..})' \
     --bind 'alt-h:transform:[[ ! $FZF_PROMPT =~ H ]] && echo "change-prompt(H> )+reload(ls_cmd --all)" || echo "change-prompt(> )+reload(ls_cmd)"' \
     --bind 'alt-f:jump' \
+    --bind 'resize:refresh-preview' \
     --color=disabled:$FLEXOKI_BLACK
     # --bind 'esc:execute(cmd_list)' \
     # --bind '/:enable-search+clear-query'
