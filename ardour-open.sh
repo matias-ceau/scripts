@@ -8,13 +8,13 @@ export AUDIO_PROJECTS="$HOME/audio/PROJECTS"
 search_cmd() {
     fd -tf -g '*.ardour' \
         --search-path="$AUDIO_PROJECTS" |
-        xargs stat -c "%Y===%n" |
-        sort -nr |
-        sed -e 's/.*===/"\\e\[0\;33m/' \
-            -e 's#/home/matias/audio/PROJECTS/##' \
-            -e 's#/#/\\e\[0\;36m#' \
-            -e 's#ardour$#ardour\\e[0m"#' |
-        xargs -I "{}" echo -e "{}"
+    xargs stat -c "%Y===%n" |
+    sort -nr |
+    sed -e 's/.*===/"\\e\[0\;33m/' \
+        -e 's#/home/matias/audio/PROJECTS/##' \
+        -e 's#/#/\\e\[0\;36m#' \
+        -e 's#ardour$#ardour\\e[0m"#' |
+    xargs -I "{}" echo -e "{}"
 }
 
 strip_ansi() {
@@ -46,7 +46,7 @@ selected="$(search_cmd |
         --ansi \
         --preview-window='60%' \
         --preview "preview_cmd {}" \
-        --bind "resize:refresh-preview")"
+    --bind "resize:refresh-preview")"
 
 ardour "$(get_path "$selected")"
 #--bind "enter:execute#setsid ardour $(get_path {}) &#"

@@ -60,36 +60,46 @@ cwd_mode=0
 dir_mode=0
 
 case $1 in
--S | --sudo)
-    sudo_mode=1
-    label="SUDO"
-    ;;
--c | --cwd)
-    cwd_mode=1
-    label="CWD ($(pwd))"
-    ;;
--C | --config)
-    cfg_mode=1
-    label="CFG (unmanaged)"
-    ;;
--d | --dir)
-    dir_mode=1
-    label="$(realpath "$2")"
-    ;;
--s | --scripts)
-    scripts_mode=1
-    label="SCRIPTS"
-    ;;
--h | --help)
-    usage
-    exit 0
-    ;;
-'') label="DEFAULT" ;;
-*)
-    echo "Unknown parameter: $1"
-    usage
-    exit 1
-    ;;
+    -S | --sudo)
+        sudo_mode=1
+        label="SUDO"
+        ;;
+    -c | --cwd)
+        cwd_mode=1
+        label="CWD ($(pwd))"
+        ;;
+    -C | --config)
+        cfg_mode=1
+        label="CFG (unmanaged)"
+        ;;
+    -d | --dir)
+        dir_mode=1
+        if [ -z $2 ]; then
+            sel="$(fd . -td "$HOME" --color=always | fzf --ansi)"
+            label="$(realpath "$sel")"
+        else
+            label="$(realpath "$2")"
+        fi
+        ;;
+    -s | --scripts)
+        scripts_mode=1
+        label="SCRIPTS"
+        ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    '') label="DEFAULT" ;;
+    *)
+        if [ -d "$(realpath "$1")" ]; then
+            dir_mode=1
+            label="$(realpath "$1")"
+        else
+            echo "Unknown parameter: $1"
+            usage
+            exit 1
+        fi
+        ;;
 esac
 
 # Function to generate fd command
@@ -130,14 +140,14 @@ default_fd_cmd=$(get_fd_cmd false)
 
 # Use fzf with preview and custom bindings
 selected=$(eval "$default_fd_cmd" | fzf \
-    --ansi \
-    --preview 'bat --style=numbers --color=always --line-range :500 {}' \
-    --preview-window 'right:60%' \
-    --preview-label="$label" \
-    --bind "ctrl-h:reload($(get_fd_cmd true))+change-prompt(Hidden> )" \
-    --bind "ctrl-s:reload($default_fd_cmd)+change-prompt(> )" \
-    --header '<C-H>: hidden files | <C-S>: non-hidden' \
-    --header-first \
+        --ansi \
+        --preview 'bat --style=numbers --color=always --line-range :500 {}' \
+        --preview-window 'right:60%' \
+        --preview-label="$label" \
+        --bind "ctrl-h:reload($(get_fd_cmd true))+change-prompt(Hidden> )" \
+        --bind "ctrl-s:reload($default_fd_cmd)+change-prompt(> )" \
+        --header '<C-H>: hidden files | <C-S>: non-hidden' \
+        --header-first \
     --prompt '> ')
 
 # If a file is selected, open it (with sudo if necessary)
