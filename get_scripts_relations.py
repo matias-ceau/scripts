@@ -35,6 +35,10 @@ for file, dependencies in dic.items():
     for dep in dependencies:
         G.add_edge(file, dep)
 
+
+# Export to GraphGML for cytoscape
+nx.write_gml(G, "/tmp/get_scripts_relations.gml")
+
 # Draw the graph
 pos = nx.spring_layout(G)
 nx.draw(
@@ -54,4 +58,3 @@ nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
 # Show the plot
 plt.axis("off")
 plt.show()
-
