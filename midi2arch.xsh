@@ -7,7 +7,6 @@
 import subprocess
 import yaml
 import os
-from xonsh.lexer import Lexer
 #########################
 cfg_path = os.path.expanduser('~/.scripts/config/midi2arch/nanoKONTROL2.yaml')
 with open(cfg_path,'r') as f:
