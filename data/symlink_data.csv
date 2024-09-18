@@ -70,6 +70,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/dev/tmux-help.py,/home/matias/.local/bin/tmux-help.py,tmux-help.py
 /home/matias/.scripts/toggle_picom.sh,/home/matias/.local/bin/toggle_picom.sh,toggle_picom.sh
 /home/matias/.scripts/transform_symlink.sh,/home/matias/.local/bin/transform_symlink.sh,transform_symlink.sh
+/home/matias/.scripts/try_the_bat_suit.sh,/home/matias/.local/bin/try_the_bat_suit.sh,try_the_bat_suit.sh
 /home/matias/.scripts/update_env.xsh,/home/matias/.local/bin/update_env.xsh,update_env.xsh
 /home/matias/.scripts/sys/utils_update_symlinks.sh,/home/matias/.local/bin/utils_update_symlinks.sh,utils_update_symlinks.sh
 /home/matias/.scripts/vimwiki.sh,/home/matias/.local/bin/vimwiki.sh,vimwiki.sh

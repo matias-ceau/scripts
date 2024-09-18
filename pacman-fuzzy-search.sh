@@ -1,55 +1,30 @@
-# printformat="\
-# %a for arch, \n\
-# %b for builddate,\n\
-# %d for description,\n\
-# %e for pkgbase,\n\
-# %f for filename,\n\
-# %g for base64 encoded PGP signature,\n\
-# %h for sha256sum,\n\
-# %m for md5sum,\n\
-# %n for pkgname,\n\
-# %p for packager,\n\
-# %v for pkgver,\n\
-# %l for location,\n\
-# %r for repository,\n\
-# %s for size,\n\
-# %C for checkdepends,\n\
-# %D for depends,\n\
-# %G for groups,\n\
-# %H for conflicts,\n\
-# %L for licenses,\n\
-# %M for makedepends,\n\
-# %O for optional depends,\n\
-# %P for provides\n\
-# %R for replaces.\n"
+#!/usr/bin/bash
 
-printformat="\
-+ repository: %r\n\
-+ pkgname: %n\n\
-+ builddate: %b\n\
-+ description: %d\n\
-+ pkgbase: %e\n\
-+ filename: %f\n\
-+ packager: %p\n\
-+ pkgver: %v\n\
-+ size: %s\n\
-+ location: %l\n\
-+ arch: %a\n\
-+ checkdepends: %C\n\
-+ depends: %D\n\
-+ groups: %G\n\
-+ conflicts: %H\n\
-+ licenses: %L\n\
-+ makedepends: %M\n\
-+ optional depends: %O\n\
-+ provides: %P \n\
-+ replaces: %R \n"
-pacman -Sp --print-format="$(echo -e "$printformat")" autoconf
-exit
-pacman -Sl --color=always |
-        fzf \
-                -q "$1" \
-                -m \
-                --ansi \
-                --preview 'pacman -Sp --print-format="$printformat" --color=always {2}' \
-                --preview-window '60%'
+SHELL=/usr/bin/bash
+
+preview_cmd() {
+    local cmd='-Si'
+    local prefix=''
+    echo "$1" | rg -q '\[installed\]' && cmd='-Qi' || prefix="$2/"
+    paru "$cmd" "$prefix$3" |
+    sed -E 's/^ +(.+: )/  \1/' |
+    sed -E 's/(^.*): *(.*: .*$)/\1:\n  \2/' |
+    sed -E 's/None/No/; /[Ss]ize/s/([MGkK]iB)/# \1/' |
+    sed -E 's/^([A-Za-z]+.*[A-Za-z])( +):/\1:\2/' |
+    sed -E 's/(.+~:)/  \1/g' |
+    bat \
+        -pplyaml \
+        --color=always \
+        --terminal-width=100 \
+        --wrap=character |
+    sed -E 's/\[installed\]/\x1b[0m\x1b[1;97m\[installed\x1b[97m\]\x1b[0m/g'
+}
+export -f preview_cmd
+
+paru -Sla --color=always | sed -E 's/;35m/;33m/' |
+fzf \
+    -q "$1" \
+    -m \
+    --preview='preview_cmd "{}" {1} {2}' \
+    --ansi \
+    --preview-window '60%'
