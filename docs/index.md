@@ -1,5 +1,5 @@
 - [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Play an album using cmus with random selection of other albums*
-- [ardour-open.sh](scripts/ardour-open.sh.md) -- *Opens an Ardour session by searching for `.ardour` files*
+- [ardour-open.sh](scripts/ardour-open.sh.md) -- *Open an Ardour session quickly with previews from audio projects.*
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *Generates GitHub markdown documentation for scripts using GPT-4o.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Automates the setup of Chezmoi on a new Arch Linux system.*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and manage paper citations from your bibliography.*
@@ -12,16 +12,17 @@
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to efficiently edit and manage Chezmoi config files.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to interactively edit and apply Chezmoi configuration files.*
-- [editor.sh](scripts/editor.sh.md) -- *Edit files from the shell using fzf with customizable search options.*
+- [editor.sh](scripts/editor.sh.md) -- *A script to quickly edit files using fzf for file selection.*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *A script to convert markdown links to be relative to a specified base directory.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Display a formatted chart of colors with HEX, RGB, and names.*
-- [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *A shell script to manage files interactively using fzf and eza.*
+- [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *A file manager script using fzf for fuzzy finding and eza for enhanced file listings.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Launches and plays selected albums using fzf and cmus.*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script to create a fuzzy finder menu using `fzf` within `xterm`.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A lightweight dmenu replacement using fzf within a floating xterm terminal.*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Capture window thumbnails from currently open windows and save them.*
+- [get_hyperlinks_in_folder.py](scripts/get_hyperlinks_in_folder.py.md) -- *A Python script to identify hyperlinks in Markdown notes and visualize their relationships as a graph.*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *A script to list Git repositories present on the current host.*
-- [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Visualizes dependencies between user scripts in a directed graph.*
+- [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Generate and visualize dependencies among user scripts.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script for cloning Git repositories by specifying developer and package.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Convert GRUB_INIT_TUNE strings to audio files.*
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *A script to display Pastel subcommands with live help.*
@@ -36,7 +37,6 @@
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Create an m3u file from files in the current directory*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches a new TMUX session for MegaCMD.*
-- [megaignore_editor.sh](scripts/megaignore_editor.sh.md) -- *A script to manage and edit `.megaignore` files using `fzf` and `nvim`.*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple bash script to create new scripts quickly.*
@@ -67,6 +67,7 @@
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Obtains the most frequent lines, words, or characters in shell history files.*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a visual representation of the keyboard layout in terminal.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
+- [speach-to-text.py](scripts/speach-to-text.py.md) -- *A script to record audio and transcribe it using OpenAI's Whisper model.*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script for syncing a Git repository, including fetching, pulling, and handling conflicts.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a specified command.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *Interactive script to assist with tmux commands and manage usage information.*

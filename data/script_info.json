@@ -9,9 +9,9 @@
   "ardour-open.sh": {
     "file": "ardour-open.sh",
     "path": "ardour-open.sh",
-    "description": "Opens an Ardour session by searching for `.ardour` files",
+    "description": "Open an Ardour session quickly with previews from audio projects.",
     "doc_path": "docs/scripts/ardour-open.sh.md",
-    "hash": "4fb06824cbf0f11346ae85d507c370c5ff3ee8f593c8667d1e6cab5a810d5c98"
+    "hash": "2ba17020f5bf686f2fa4785999727c83b962061c5c3a2f8cc7dd95f414bbda76"
   },
   "chatgpt-all-scripts-describer.py": {
     "file": "chatgpt-all-scripts-describer.py",
@@ -79,9 +79,9 @@
   "editor.sh": {
     "file": "editor.sh",
     "path": "editor.sh",
-    "description": "Edit files from the shell using fzf with customizable search options.",
+    "description": "A script to quickly edit files using fzf for file selection.",
     "doc_path": "docs/scripts/editor.sh.md",
-    "hash": "f8cdbf64cdf3e0404794fd2992645ee587fd1609590c0ef16c56c07e748443b4"
+    "hash": "e5e6af4df9c85812077e2dbf2cb97b75574d47dc672805f1becdf02a70356b68"
   },
   "fix-markdown-links.sh": {
     "file": "fix-markdown-links.sh",
@@ -492,9 +492,9 @@
   "fzf-file-manager.sh": {
     "file": "fzf-file-manager.sh",
     "path": "fzf-file-manager.sh",
-    "description": "A shell script to manage files interactively using fzf and eza.",
+    "description": "A file manager script using fzf for fuzzy finding and eza for enhanced file listings.",
     "doc_path": "docs/scripts/fzf-file-manager.sh.md",
-    "hash": "8d78aabb29474fd796dee97bd4b40c93ca133861e0a51b25b956cd69935fff0d"
+    "hash": "0a46c1855c18338bd00d61921d3413de0292807f180fb6d290a7026623fe0de4"
   },
   "help-pastel.sh": {
     "file": "help-pastel.sh",
@@ -520,8 +520,22 @@
   "get_scripts_relations.py": {
     "file": "get_scripts_relations.py",
     "path": "get_scripts_relations.py",
-    "description": "Visualizes dependencies between user scripts in a directed graph.",
+    "description": "Generate and visualize dependencies among user scripts.",
     "doc_path": "docs/scripts/get_scripts_relations.py.md",
-    "hash": "1abae55f8d8f9441ae3cece514b7e8330aee298aac9dec54d5deae3e0e285aff"
+    "hash": "9eddff1f4bd5333462495ce2242998ebc2a9bafb6bc7323c11c1ec863b3f226f"
+  },
+  "get_hyperlinks_in_folder.py": {
+    "file": "get_hyperlinks_in_folder.py",
+    "path": "get_hyperlinks_in_folder.py",
+    "description": "A Python script to identify hyperlinks in Markdown notes and visualize their relationships as a graph.",
+    "doc_path": "docs/scripts/get_hyperlinks_in_folder.py.md",
+    "hash": "7bd750eb23d907acf5179afc3c86d70841c1010c21f01ec92b24bb949b8c7e9f"
+  },
+  "speach-to-text.py": {
+    "file": "speach-to-text.py",
+    "path": "speach-to-text.py",
+    "description": "A script to record audio and transcribe it using OpenAI's Whisper model.",
+    "doc_path": "docs/scripts/speach-to-text.py.md",
+    "hash": "e67e661177a700983f0c7ca3283d86c60d1b314ffb863e5faf432bd6dfaf280e"
   }
 }

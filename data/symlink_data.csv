@@ -19,6 +19,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/fzfmenu_run.sh,/home/matias/.local/bin/fzfmenu_run.sh,fzfmenu_run.sh
 /home/matias/.scripts/fzfmenu.sh,/home/matias/.local/bin/fzfmenu.sh,fzfmenu.sh
 /home/matias/.scripts/fzf_songlauncher.sh,/home/matias/.local/bin/fzf_songlauncher.sh,fzf_songlauncher.sh
+/home/matias/.scripts/get_hyperlinks_in_folder.py,/home/matias/.local/bin/get_hyperlinks_in_folder.py,get_hyperlinks_in_folder.py
 /home/matias/.scripts/get_repos_present_on_host.sh,/home/matias/.local/bin/get_repos_present_on_host.sh,get_repos_present_on_host.sh
 /home/matias/.scripts/get_scripts_relations.py,/home/matias/.local/bin/get_scripts_relations.py,get_scripts_relations.py
 /home/matias/.scripts/dev/get-window-thumbnails.sh,/home/matias/.local/bin/get-window-thumbnails.sh,get-window-thumbnails.sh

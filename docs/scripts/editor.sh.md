@@ -1,47 +1,47 @@
-# Edit Files Easily with FZF
+# File Editor with fzf
 
 ---
 
-**editor.sh**: Edit files from the shell using fzf with customizable search options.
+**editor.sh**: A script to quickly edit files using fzf for file selection.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder that enables quick file selection.
-- `bat`: A modern alternative to `cat` that provides syntax highlighting and line numbering.
-- `nvim`: A text editor that offers advanced editing features.
+- `fzf`: A command-line fuzzy finder for selecting files interactively.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `nvim`: Neovim, a modern text editor that the script uses for editing files.
+- `fd`: A simple, fast and user-friendly alternative to 'find'.
 
 ### Description
 
-The `editor.sh` script facilitates quick file editing from the terminal by leveraging `fzf` for fuzzy search. Users can specify various search paths and filter criteria through command-line options. The script effectively excludes non-editable files (like images and archives) and allows the user to specify whether they want to edit with regular or superuser permissions.
+This script provides a convenient way to edit files directly from the terminal by utilizing `fzf` to filter the available files based on different contexts. The user has the ability to specify file paths and edit them with `nvim`, while efficiently managing which files are visible for editing by excluding many non-editable formats like images, audio files, and more.
 
-The usage of `fd`, a simple, fast, and user-friendly alternative to `find`, allows rapid file discovery across specified directories, while also supporting hidden files. This script is particularly useful for users who frequently edit configuration files or scripts, as it streamlines the workflow to avoid tedious file navigation.
+The script supports multiple modes through command-line arguments, allowing users to specify where to search for files:
+
+- **SCRIPTS**: Limited to the user's `$SCRIPTS` directory.
+- **CWD**: Only finds files in the current working directory.
+- **CONFIG**: Specifically targets a config file managed by chezmoi.
+- **DIRECTORY**: A custom directory specified by the user.
+
+The script uses the `fd` command to generate a list of files while excluding specified patterns using a long list of `-E` flags.
 
 ### Usage
 
-Run the script directly from the terminal, optionally including flags to specify search parameters:
+To use the script, just run the command in your terminal, followed by any options you want to use:
 
 ```bash
-./editor.sh [-s|--scripts] [-c|--cwd] [-C|--config] [-d|--dir <dir>] [-S|--sudo] [-h|--help]
+./editor.sh                  # Use default search paths
+./editor.sh -s               # Search in the $SCRIPTS directory
+./editor.sh -c               # Search only in the current directory
+./editor.sh -C               # Edit a config file
+./editor.sh -d /path/to/dir  # Search in a specific directory
+./editor.sh -S               # Open files with sudo
 ```
 
-Available options include:
-
-- `-s`, `--scripts`: Search in the user's `$SCRIPTS` directory.
-- `-c`, `--cwd`: Limit search to the current directory.
-- `-C`, `--config`: Look for config files in an unmanaged state (specifically for `chezmoi`).
-- `-d`, `--dir <dir>`: Search for files in a specified directory.
-- `-S`, `--sudo`: Edit files with superuser permissions.
-- `-h`, `--help`: Display help information.
-
-_For example, to edit a file in the current directory, you would run:_
-
-```bash
-./editor.sh --cwd
-```
+Use `Ctrl-H` to include hidden files in the search and `Ctrl-S` to exclude them if visible. 
 
 ---
 
-> [!NOTE] 
-> The script could benefit from additional error handling, particularly when fetching files or executing commands as `sudo`. Furthermore, enhancing the flexibility of the excluded files list to allow user customization through command-line arguments could significantly improve usability.
+> [!TIP]  
+> The script could benefit from more detailed error handling when commands like `nvim` or `sudo` fail. Also, consider adding a configuration file or environment variables to set default options persistently. Additionally, you might want to modularize the options into functions to improve readability and maintenance.

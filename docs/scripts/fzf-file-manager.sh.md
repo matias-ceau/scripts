@@ -2,45 +2,50 @@
 
 ---
 
-**fzf-file-manager.sh**: A shell script to manage files interactively using fzf and eza.
+**fzf-file-manager.sh**: A file manager script using fzf for fuzzy finding and eza for enhanced file listings.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `eza`: A modern replacement for `ls`, which provides additional formatting options and color support.
-- `bat`: A cat clone with syntax highlighting and Git integration.
+- `bash`: The shell in which the script is written and executed.
+- `fzf`: A command-line fuzzy finder that allows for interactive selection of files and directories.
+- `eza`: An enhanced `ls` replacement with more features and visual capabilities.
+- `bat`: A cat clone with syntax highlighting. Used for previewing files.
+- `pastel`: A command-line tool for managing colors, particularly useful for formatting output.
 
 ### Description
 
-The `fzf-file-manager.sh` script creates a dynamic file management interface using `fzf` for fuzzy search capabilities, paired with `eza` for enhanced file listing. The script defines several commands with specific functionalities that help users navigate and preview files and directories efficiently.
+This script serves as a file manager utility that integrates with `fzf`, providing a fuzzy search interface to browse directories and files. Utilizing the `eza` command for enhanced listing, it displays files with colors and icons, leveraging other tools like `bat` for syntax highlighting and `rg` (ripgrep) for searching cell configurations.
 
-Key functions include:
+Key functionalities include:
 
-- `eza_def()`: Configures `eza` with specific flags for detailed and colored output.
-- `ls_cmd()`: Lists files and directories using `eza` with configuration for sorting and grouping.
-- `preview_cmd()`: Previews files or directories, providing insights like file type and contents, and supports higher-level previews for directories.
-- `fzf_cmd()`: Wraps the fuzzy finder with specific bindings for various commands, enhancing user interaction with quick previews, info displays, and ephemeral commands.
+- **get_color**: Fetches and formats color settings based on environment variables.
+- **eza_def**: Configures file listings with various options like long format, colors, icons, and timestamp formatting.
+- **ls_cmd**: Collects and organizes file listings, highlighting directories first and sorting them by name.
+- **preview_cmd**: Provides a preview of the selected file, adapting based on the file type (directories, images, or standard files).
   
+Additional commands such as `full_screen_preview`, `info_cmd`, and `cmd_list` serve for full screen viewing, information display about the fzf session, and command menu respectively.
+
 ### Usage
 
-To run this script, simply execute it in your terminal. It will open an interactive `fzf` interface with file navigation capabilities.
+To run the script, simply execute it in a terminal. It can take additional parameters for listing specific directories or files, e.g.:
 
 ```bash
-bash /home/matias/.scripts/fzf-file-manager.sh
+bash ~/path/to/fzf-file-manager.sh /path/to/directory
 ```
 
-#### Key Bindings
+While the file manager is running, you can utilize the following key bindings:
 
-- `Alt-P`: Toggle preview of the selected file or directory.
-- `Alt-Space`: Open the selected file in full screen.
-- `Alt-H`: Change prompt and reload file list.
-- `Alt-F`: Jump to a chosen file from the fzf list.
+- `Alt + P`: Toggle file preview.
+- `Alt + Space`: Open the selected file in full screen using `bat`.
+- `Alt + H`: Change the prompt and reload file listings.
+- `Alt + F`: Jump to relevant files.
+- `Esc`: Cancel or clear the current action (commented out).
 
-You can customize or extend the functionality by modifying the script directly to include additional commands as per your requirements.
+All your interactions will happen dynamically inside the `fzf` interface, which provides a clean and minimalistic view.
 
 ---
 
-> [!TIP]  
-> Consider improving error handling throughout the script to manage cases where `fzf`, `eza`, or `bat` are not installed or fail to execute properly. Additionally, documenting the key bindings directly in the script or in a help command would enhance user comprehension.
+> [!TIP] 
+> Consider adding more error handling, especially for cases when dependencies are missing or when the selected files or directories cannot be accessed. Additionally, improving the preview functionalities to support more file types (e.g., PDFs) can enhance the user experience.
