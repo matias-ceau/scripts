@@ -3,7 +3,8 @@
 SHELL=/usr/bin/bash
 
 if [[ -f "$1" ]]; then
-    FILE="$1"
+    FILES="$1"
+elif 
 else
     FILE="$(fd . -tf --color=always | fzf --ansi)"
 fi
