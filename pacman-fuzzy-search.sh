@@ -21,7 +21,7 @@ preview_cmd() {
 }
 export -f preview_cmd
 
-paru -Sla --color=always | sed -E 's/;35m/;33m/' |
+paru -Sl --color=always | sed -E 's/;35m/;33m/' |
 fzf \
     -q "$1" \
     -m \

@@ -29,6 +29,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/help-pastel.sh,/home/matias/.local/bin/help-pastel.sh,help-pastel.sh
 /home/matias/.scripts/improved-fzfmenu.sh,/home/matias/.local/bin/improved-fzfmenu.sh,improved-fzfmenu.sh
 /home/matias/.scripts/install_dependencies.sh,/home/matias/.local/bin/install_dependencies.sh,install_dependencies.sh
+/home/matias/.scripts/json_to_markdown.py,/home/matias/.local/bin/json_to_markdown.py,json_to_markdown.py
 /home/matias/.scripts/jupyter_new_notebook.xsh,/home/matias/.local/bin/jupyter_new_notebook.xsh,jupyter_new_notebook.xsh
 /home/matias/.scripts/keyboard-help.sh,/home/matias/.local/bin/keyboard-help.sh,keyboard-help.sh
 /home/matias/.scripts/launch_tmux_with_music_player.sh,/home/matias/.local/bin/launch_tmux_with_music_player.sh,launch_tmux_with_music_player.sh
