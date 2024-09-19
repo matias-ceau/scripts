@@ -1,41 +1,48 @@
-# Pacman Fuzzy Search Script
+# Pacman Fuzzy Search
 
 ---
 
-**pacman-fuzzy-search.sh**: A script to perform fuzzy searches for Arch Linux packages using fzf
+**pacman-fuzzy-search.sh**: A script to fuzzy search installed and available packages using `fzf`.
 
 ---
 
 ### Dependencies
 
-- `pacman`: The package manager for Arch Linux, required for package management operations.
-- `fzf`: A command-line fuzzy finder that allows for interactive searching and previewing.
+- `bash`: A widely-used shell that provides command-line interface for command execution.
+- `paru`: An AUR helper for managing packages in Arch Linux.
+- `fzf`: A command-line fuzzy finder that enables efficient searching through outputs.
+- `bat`: A command-line tool to view files with syntax highlighting and formatting.
 
 ### Description
 
-This script provides an interactive fuzzy search interface for Arch Linux packages. It utilizes `fzf` for the graphical selection of packages combined with `pacman` commands to fetch and display package details. 
+This script provides an interactive way to search for installed and available packages on an Arch Linux system using `paru` and `fzf`. When executed, it utilizes the `fzf` interface to display a list of packages while allowing you to filter results using fuzzy search, an intuitive method for querying data.
 
-The script defines a custom print format for displaying package information such as repository, package name, build date, description, and other relevant metadata. This is achieved through the use of `pacman -Sp --print-format`, which formats the output based on the specified template. 
+1. **Preview Function**: The `preview_cmd` function formats and beautifies output before displaying it. It checks whether the package is installed or available, modifies the command appropriately (`-Si` for available packages, `-Qi` for installed ones), and processes the output using several `sed` expressions to ensure readability and clarity.
 
-The user can type a search query to filter the list of packages, and upon selection, a preview pane displays detailed information for the chosen package which enhances the usability of package searching.
+2. **Output Customization**: The script also pipes output into `bat` for enhanced visualization, highlighting, and maintaining terminal compatibility.
+
+3. **Fuzzy Search Interface**: The command utilizes `fzf` to create an interactive interface, offering multi-selection capabilities and a preview pane to view detailed package information dynamically.
 
 ### Usage
 
-Run the script by executing the following command in your terminal. You can optionally pass a query parameter to filter the results:
+To run the script, simply execute it from the terminal:
 
 ```bash
-./pacman-fuzzy-search.sh [search_term]
+bash /home/matias/.scripts/pacman-fuzzy-search.sh
 ```
 
-When called without arguments, it lists all packages. To refine the search, provide a specific term:
+You can further refine your search by typing part of the package name inside the fuzzy search prompt.
+
+Example:
 
 ```bash
-./pacman-fuzzy-search.sh vim
+bash /home/matias/.scripts/pacman-fuzzy-search.sh | fzf
 ```
-
-The script outputs a listing of packages matching the search term. Upon highlighting a package in the list, you can view detailed information in the preview pane.
 
 ---
 
-> [!TIP]  
-> The script currently lacks error handling for cases where `fzf` or `pacman` may not be installed. Consider adding checks to ensure these dependencies are present before execution. Additionally, enhancing the preview window's information could improve user experience, as right now it shows basic package details only.
+> [!TIP] 
+> While the script is functional, you may want to consider:
+> - Adding error handling to check if dependencies (`paru`, `fzf`, and `bat`) are installed.
+> - Introducing command-line arguments to customize the behavior (e.g., searching only installed packages).
+> - Providing a setup or installation guide for users unfamiliar with Arch Linux package management.

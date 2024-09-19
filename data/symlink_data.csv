@@ -1,5 +1,6 @@
 Original Path,Symlink,Command Name
 /home/matias/.scripts/albumplayer.xsh,/home/matias/.local/bin/albumplayer.xsh,albumplayer.xsh
+/home/matias/.scripts/ansi8bit2rgb_hex.py,/home/matias/.local/bin/ansi8bit2rgb_hex.py,ansi8bit2rgb_hex.py
 /home/matias/.scripts/ansi-cheatsheet.sh,/home/matias/.local/bin/ansi-cheatsheet.sh,ansi-cheatsheet.sh
 /home/matias/.scripts/ardour-open.sh,/home/matias/.local/bin/ardour-open.sh,ardour-open.sh
 /home/matias/.scripts/archived/chatgpt-all-scripts-describer.py,/home/matias/.local/bin/chatgpt-all-scripts-describer.py,chatgpt-all-scripts-describer.py

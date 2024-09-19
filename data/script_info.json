@@ -235,14 +235,14 @@
     "path": "midi2arch.xsh",
     "description": "Transform a MIDI controller into a keyboard/script launcher.",
     "doc_path": "docs/scripts/midi2arch.xsh.md",
-    "hash": "79616979b1313d1a7bebe4c93cfc5646d6924ab8d6c7428fa24eb7774c775309"
+    "hash": "6a485338801fffadc810c31264a39280a17d61d46bfe6124cc87a8501df17a5d"
   },
   "new_script_creator.sh": {
     "file": "new_script_creator.sh",
     "path": "new_script_creator.sh",
-    "description": "A simple script to create new scripts with directory linking",
+    "description": "A utility for creating new scripts with predefined templates.",
     "doc_path": "docs/scripts/new_script_creator.sh.md",
-    "hash": "265db232ae9d951ff9371fce47f70316bcde46a5d0250c8fdec8a38ba4c88394"
+    "hash": "56df8d0ae1374c7955aefa25c6e3d9b38bf11f78f080dfb61edd1158904cee76"
   },
   "next_album.xsh": {
     "file": "next_album.xsh",
@@ -317,9 +317,9 @@
   "qutebrowser-modify-source-bookmarks.sh": {
     "file": "qutebrowser-modify-source-bookmarks.sh",
     "path": "qutebrowser-modify-source-bookmarks.sh",
-    "description": "Sync local Qutebrowser bookmarks with ChezMoi.",
+    "description": "Synchronizes qutebrowser bookmarks and quickmarks from local to chezmoi.",
     "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
-    "hash": "b5ace7f64bbe70ce73712b54d3e7bc94f3a2266487bb54c99dc82951b038a1c4"
+    "hash": "c67f3a9721362713a6261772cf030e353831a0da989c3b103636a14e8e8ca5e5"
   },
   "random_album.xsh": {
     "file": "random_album.xsh",
@@ -506,9 +506,9 @@
   "pacman-fuzzy-search.sh": {
     "file": "pacman-fuzzy-search.sh",
     "path": "pacman-fuzzy-search.sh",
-    "description": "A script to perform fuzzy searches for Arch Linux packages using fzf",
+    "description": "A script to fuzzy search installed and available packages using `fzf`.",
     "doc_path": "docs/scripts/pacman-fuzzy-search.sh.md",
-    "hash": "52847a370078ac69d9f37c2a3e2db3b86add42ef47e548eea7187f6bb92937e2"
+    "hash": "ee77aa889a63cfddb7e6f2d65967a8df0350450c8fa45ff40bd67922cf43cad8"
   },
   "rgfzf.sh": {
     "file": "rgfzf.sh",
@@ -537,5 +537,33 @@
     "description": "A script to record audio and transcribe it using OpenAI's Whisper model.",
     "doc_path": "docs/scripts/speach-to-text.py.md",
     "hash": "e67e661177a700983f0c7ca3283d86c60d1b314ffb863e5faf432bd6dfaf280e"
+  },
+  "ansi8bit2rgb_hex.py": {
+    "file": "ansi8bit2rgb_hex.py",
+    "path": "ansi8bit2rgb_hex.py",
+    "description": "Converts 8-bit ANSI colors to RGB or HEX format.",
+    "doc_path": "docs/scripts/ansi8bit2rgb_hex.py.md",
+    "hash": "ccd3924f74a4be3142a7ad9bb1cd9f2e0cec0471acf75b13581b940f59a2e490"
+  },
+  "ansi-cheatsheet.sh": {
+    "file": "ansi-cheatsheet.sh",
+    "path": "ansi-cheatsheet.sh",
+    "description": "Generate a comprehensive ANSI escape code cheatsheet.",
+    "doc_path": "docs/scripts/ansi-cheatsheet.sh.md",
+    "hash": "425a1c174c425b5ddeef9871de852518c32c674ea276c208b57bb6bd493ccdf4"
+  },
+  "json_to_markdown.py": {
+    "file": "json_to_markdown.py",
+    "path": "json_to_markdown.py",
+    "description": "Converts JSON content into a formatted Markdown file.",
+    "doc_path": "docs/scripts/json_to_markdown.py.md",
+    "hash": "c8a506fc89eb3845043b063c4a4e97559c2a05dc54649addea8a59d5009a43fd"
+  },
+  "try_the_bat_suit.sh": {
+    "file": "try_the_bat_suit.sh",
+    "path": "try_the_bat_suit.sh",
+    "description": "A script to preview files using `bat` with language highlighting.",
+    "doc_path": "docs/scripts/try_the_bat_suit.sh.md",
+    "hash": "2c89c5272876f5818439e6cb2e4b389969e79b577bd7d5606366a44e54b80115"
   }
 }

@@ -1,4 +1,6 @@
 - [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Play an album using cmus with random selection of other albums*
+- [ansi-cheatsheet.sh](scripts/ansi-cheatsheet.sh.md) -- *Generate a comprehensive ANSI escape code cheatsheet.*
+- [ansi8bit2rgb_hex.py](scripts/ansi8bit2rgb_hex.py.md) -- *Converts 8-bit ANSI colors to RGB or HEX format.*
 - [ardour-open.sh](scripts/ardour-open.sh.md) -- *Open an Ardour session quickly with previews from audio projects.*
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *Generates GitHub markdown documentation for scripts using GPT-4o.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Automates the setup of Chezmoi on a new Arch Linux system.*
@@ -28,6 +30,7 @@
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *A script to display Pastel subcommands with live help.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A versatile FZF menu launcher that uses Alacritty terminal.*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Automatically installs a set of required packages on Arch Linux.*
+- [json_to_markdown.py](scripts/json_to_markdown.py.md) -- *Converts JSON content into a formatted Markdown file.*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *Create a new Jupyter notebook and open it in Chromium.*
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches a terminal to display current keyboard layout using `bat`.*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called music and open cmus.*
@@ -37,15 +40,15 @@
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Create an m3u file from files in the current directory*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches a new TMUX session for MegaCMD.*
-- [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
-- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple bash script to create new scripts quickly.*
+- [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
+- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A utility for creating new scripts with predefined templates.*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
 - [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with NVim.*
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to easily select and open any Obsidian vault from your filesystem.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
-- [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script to perform fuzzy searches for Arch Linux packages using fzf*
+- [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script to fuzzy search installed and available packages using `fzf`.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
@@ -53,7 +56,7 @@
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *A script to switch between Qtile groups using a complementary number.*
 - [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Switches the active window to a new group in Qtile.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Launches a fuzzy finder for passwords stored in a specified directory.*
-- [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Sync local Qutebrowser bookmarks with ChezMoi.*
+- [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Synchronizes qutebrowser bookmarks and quickmarks from local to chezmoi.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Selects a random album and plays it with cmus.*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick random wallpaper from a specified wallpaper list*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to retrieve the top researched manual entries*
@@ -74,6 +77,7 @@
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*
 - [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Script to toggle the picom compositor on or off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *A utility to transform symlinks into copies of their targets.*
+- [try_the_bat_suit.sh](scripts/try_the_bat_suit.sh.md) -- *A script to preview files using `bat` with language highlighting.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *Update the .env file with API keys from the current environment*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Script to create and manage symlinks in ~/.local/bin, cleaning old ones.*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in vim with fzf*

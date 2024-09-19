@@ -1,37 +1,49 @@
-# Qutebrowser Bookmark Synchronization Script
+# qutebrowser Bookmarks Sync Script
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Sync local Qutebrowser bookmarks with ChezMoi.
+**qutebrowser-modify-source-bookmarks.sh**: Synchronizes qutebrowser bookmarks and quickmarks from local to chezmoi.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash, a popular shell scripting language.
-- `chezmoi`: A tool for managing your dotfiles conveniently.
+- `fd`: A simple, fast and user-friendly alternative to `find`. It is required to search for YAML files in the session directory.
+- `chezmoi`: A tool for managing your dotfiles conveniently, to allow synchronization of bookmarks.
 
 ### Description
 
-This script is designed to facilitate the synchronization of Qutebrowser bookmarks and quickmarks from the local configuration directory to a ChezMoi-managed directory. It operates by copying the contents of your local bookmarks and quickmarks files into the corresponding ChezMoi directories, enabling easy backup and version control of your browser bookmarks.
+This script is designed to facilitate the synchronization of qutebrowser bookmarks, quickmarks, and session files from your local configuration to your chezmoi-managed dotfiles. It essentially transfers data from predefined local paths to relevant chezmoi paths.
 
-The script performs the following key actions:
+The critical paths used in the script are:
 
-1. **Define Paths**: It sets up path variables for local bookmarks and quickmarks as well as their equivalents in the ChezMoi-managed configuration.
-2. **Delay Execution**: It incorporates a 20-second wait time. This is beneficial in scenarios where you might be modifying quickmarks and need to ensure that changes are accurately recorded.
-3. **File Copying**: It copies the content of `urls` from both local bookmarks and quickmarks directories into their ChezMoi counterparts.
+- **Bookmarks**: 
+  - Local: `$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls`
+  - Chezmoi: `$CHEZMOI/dot_config/qutebrowser/bookmarks/urls`
+  
+- **Quickmarks**: 
+  - Local: `$XDG_CONFIG_HOME/qutebrowser/quickmarks`
+  - Chezmoi: `$CHEZMOI/dot_config/qutebrowser/quickmarks`
+
+- **Sessions**: 
+  - Local: `$XDG_DATA_HOME/qutebrowser/sessions`
+  - Chezmoi: `$CHEZMOI/dot_local/share/private_qutebrowser/sessions`
+
+The script includes a delay of 20 seconds to allow for the addition of quickmarks before proceeding. It utilizes the `cat` command to copy file contents and uses `fd` to identify YAML files for session management.
 
 ### Usage
 
-To use the script, simply run it from a terminal:
+This script is intended for use within a terminal and can be executed directly as follows:
 
-```bash
+```
 bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
 ```
 
-This script does not accept command-line arguments; it is designed to be run as-is. You can also set up a keybinding in your window manager (Qtile) to execute this script quickly.
+To run it, ensure that the necessary variables (`XDG_CONFIG_HOME`, `CHEZMOI`, etc.) are set in your environment. The script operates silently, so no output will indicate success unless errors occur.
+
+You could also adapt this script to be executed automatically or bind it to a key in your window manager (Qtile) for quick access.
 
 ---
 
-> [!TIP]  
-The script has commented-out sections regarding version control with Git, which can be beneficial for those who want to track changes made to bookmarks over time. Consider activating these lines to automatically add, commit, and push the changes to your Git repository whenever the bookmarks are updated. Keeping your bookmarks under version control can offer added safety against accidental deletions or overwrites.
+> [!TIP] 
+> While the script is functional, consider adding error handling checks to validate the existence of source files before attempting to copy them. This will improve reliability and minimize silent failures. Including options for manual confirmations or logging could also enhance usability for users who synchronize frequently. Lastly, including a conditional check for the success of commands (such as `cat` or `fd`) would help ensure that all operations execute as intended.

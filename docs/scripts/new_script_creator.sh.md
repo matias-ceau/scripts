@@ -2,51 +2,58 @@
 
 ---
 
-**new_script_creator.sh**: A simple bash script to create new scripts quickly.
+**new_script_creator.sh**: A utility for creating new scripts with predefined templates.
 
 ---
 
 ### Dependencies
 
-- `bat`: A modern alternative to `cat` with syntax highlighting and Git integration, used for displaying the contents of scripts. 
-- `nvim`: Neovim, a text editor based on Vim, used to create and edit scripts.
+- `bat`: A command-line tool for syntax highlighting and displaying file contents.
+- `nvim`: Neovim, an editor to modify the created scripts.
+- `rg`: Ripgrep, a line-oriented search tool to match patterns.
+- `utils_update_symlimks.sh`: This is a custom script presumed to handle symbolic link updates.
 
 ### Description
 
-The `new_script_creator.sh` script facilitates the creation of new scripts by providing a straightforward interface via the command line. It begins by defining a usage function that outlines the correct command format for the user. The main functionality is encapsulated in the `script_creator` function.
+The `new_script_creator.sh` script automates the creation of new shell, python, or xonsh scripts based on user input. It offers functionalities to:
 
-Upon invoking the script with a script name as an argument, the following processes take place:
+- Create a new script, prompting for a name if none provided.
+- Change an existing file into a user script.
+- Build templates for different scripting languages based on the file extension.
 
-1. The path for the new script is determined by concatenating the environment variable `SCRIPTS` with the provided script name.
-2. The script opens in `nvim` for editing.
-3. After editing, it checks if the script is not empty (size > 0):
-   - If it contains code, it grants execute permissions.
-   - It then creates a symbolic link to the script in the `~/.local/bin` directory, allowing for easy execution from anywhere in the terminal.
-   - Finally, it displays the contents of the created script using `bat`.
-4. If the script is created without any contents, it alerts the user and does not create the symbolic link.
+**Functions Breakdown**:
+
+1. **usage()**: Displays help information and usage instructions.
+2. **templater()**: Generates a template header based on the file extension. It supports `bash`, `python`, and `xonsh`.
+3. **ensure_extension()**: Ensures that the filename provided has the correct extension; prompts the user if not.
+4. **script_creator()**: Handles the creation, editing, and permission assignment for the new script file. It also updates symbolic links after creation.
 
 ### Usage
 
-To create a new script, simply run the following command:
+To use the script, simply execute it from the terminal. Below are some usage examples:
 
-```bash
-./new_script_creator.sh <script_name>
-```
+- To create a new script, just run:
+  ```
+  ./new_script_creator.sh
+  ```
+  You will be prompted for the script filename.
 
-For example, to create a script named `example_script.sh`, run:
+- To create a specific script, provide the filename:
+  ```
+  ./new_script_creator.sh my_script.py
+  ```
 
-```bash
-./new_script_creator.sh example_script.sh
-```
+- If you wish to transform an existing file into a user script:
+  ```
+  ./new_script_creator.sh -f existing_script.sh
+  ```
 
-If no argument is provided, the script displays usage instructions:
-
-```bash
-Usage:
-    new_script_creator.sh [script]
-```
+- For help, you can run:
+  ```
+  ./new_script_creator.sh -h
+  ```
 
 ---
 
-> [!TIP]  
-> Consider adding templating functionality as noted in the TODO comment within the script. This would enhance the usability of the script creator by allowing users to start with a predefined structure or boilerplate code for their scripts, making it easier for them to start coding. Additionally, consider implementing error handling to ensure the `SCRIPTS` environment variable is set and valid before attempting to create a new script.
+> [!TIP] 
+> The script relies on several external tools (`bat`, `nvim`, `rg`) being installed on your system. Make sure to have them installed, or the script may not function as intended. Additionally, consider adding error handling for editing and file operations to improve robustness, such as checking if the file creation or moving was successful.
