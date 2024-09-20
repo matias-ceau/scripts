@@ -14,6 +14,9 @@ sleep 20 && \
 cat "$local_book" > "$chezm_book"
 
 for f in $(fd '.yml$' -tf --format '{/}' "$local_sessions"); do
+    if not [ -f "$chezm_sessions/$f" ]; then
+        chezmoi add "$local_sessions/$f"
+    fi
     cat "$local_sessions/$f" > "$chezm_sessions/$f"
 done
 # chezmoi cd && \
