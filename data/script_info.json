@@ -317,9 +317,9 @@
   "qutebrowser-modify-source-bookmarks.sh": {
     "file": "qutebrowser-modify-source-bookmarks.sh",
     "path": "qutebrowser-modify-source-bookmarks.sh",
-    "description": "Synchronizes qutebrowser bookmarks and quickmarks from local to chezmoi.",
+    "description": "Script to synchronize Qutebrowser bookmarks and quickmarks.",
     "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
-    "hash": "c67f3a9721362713a6261772cf030e353831a0da989c3b103636a14e8e8ca5e5"
+    "hash": "ff508db7fffbe8dd8cc036b8b3b585f16af5fdf5cdddf760a31230751331027e"
   },
   "random_album.xsh": {
     "file": "random_album.xsh",
@@ -565,5 +565,12 @@
     "description": "A script to preview files using `bat` with language highlighting.",
     "doc_path": "docs/scripts/try_the_bat_suit.sh.md",
     "hash": "2c89c5272876f5818439e6cb2e4b389969e79b577bd7d5606366a44e54b80115"
+  },
+  "closest_colors.py": {
+    "file": "closest_colors.py",
+    "path": "closest_colors.py",
+    "description": "Finds the nearest terminal colors for specified hex colors.",
+    "doc_path": "docs/scripts/closest_colors.py.md",
+    "hash": "c6f00ebde8506605828b8d1fbf202335ed10f3e17b96e1c36fe5c8424580a9e1"
   }
 }

@@ -1,49 +1,40 @@
-# qutebrowser Bookmarks Sync Script
+# Qutebrowser Source Bookmarks Synchronizer
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Synchronizes qutebrowser bookmarks and quickmarks from local to chezmoi.
+**qutebrowser-modify-source-bookmarks.sh**: Script to synchronize Qutebrowser bookmarks and quickmarks.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`. It is required to search for YAML files in the session directory.
-- `chezmoi`: A tool for managing your dotfiles conveniently, to allow synchronization of bookmarks.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `chezmoi`: A dotfile manager that helps you manage your configuration files.
 
 ### Description
 
-This script is designed to facilitate the synchronization of qutebrowser bookmarks, quickmarks, and session files from your local configuration to your chezmoi-managed dotfiles. It essentially transfers data from predefined local paths to relevant chezmoi paths.
+This script is designed to synchronize bookmarks and quickmarks from your local Qutebrowser configuration to a repository managed by Chezmoi. It accomplishes the following tasks:
 
-The critical paths used in the script are:
+1. **Synchronizing Quickmarks**: After a delay of 20 seconds to account for potential quickmark name additions, it copies the quickmarks from the local directory to the Chezmoi-managed directory.
 
-- **Bookmarks**: 
-  - Local: `$XDG_CONFIG_HOME/qutebrowser/bookmarks/urls`
-  - Chezmoi: `$CHEZMOI/dot_config/qutebrowser/bookmarks/urls`
-  
-- **Quickmarks**: 
-  - Local: `$XDG_CONFIG_HOME/qutebrowser/quickmarks`
-  - Chezmoi: `$CHEZMOI/dot_config/qutebrowser/quickmarks`
+2. **Synchronizing Bookmarks**: It directly copies the bookmarks from the local configuration to the Chezmoi's configuration directory.
 
-- **Sessions**: 
-  - Local: `$XDG_DATA_HOME/qutebrowser/sessions`
-  - Chezmoi: `$CHEZMOI/dot_local/share/private_qutebrowser/sessions`
+3. **Session Management**: The script then iterates through all YAML files in the local sessions directory. If the session file is not already tracked by Chezmoi, it adds that file to Chezmoi for tracking, and subsequently copies the session data to the corresponding Chezmoi directory.
 
-The script includes a delay of 20 seconds to allow for the addition of quickmarks before proceeding. It utilizes the `cat` command to copy file contents and uses `fd` to identify YAML files for session management.
+This workflow simplifies keeping your bookmark and session configurations consistent between your local setup and your versioned backups.
 
 ### Usage
 
-This script is intended for use within a terminal and can be executed directly as follows:
+To use this script, ensure that it has execute permissions and run it in a terminal:
 
+```bash
+chmod +x /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
+/home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
 ```
-bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
-```
 
-To run it, ensure that the necessary variables (`XDG_CONFIG_HOME`, `CHEZMOI`, etc.) are set in your environment. The script operates silently, so no output will indicate success unless errors occur.
-
-You could also adapt this script to be executed automatically or bind it to a key in your window manager (Qtile) for quick access.
+You can also automate its execution by setting up a cron job or binding it to a key combination in your window manager (Qtile).
 
 ---
 
-> [!TIP] 
-> While the script is functional, consider adding error handling checks to validate the existence of source files before attempting to copy them. This will improve reliability and minimize silent failures. Including options for manual confirmations or logging could also enhance usability for users who synchronize frequently. Lastly, including a conditional check for the success of commands (such as `cat` or `fd`) would help ensure that all operations execute as intended.
+> [!TIP]  
+> It's good to use robust error handling in scripts like this one to manage scenarios where files may not exist or permissions may be restricted. For example, you could check if the directories exist before attempting to copy files. Additionally, consider parameterizing the delay or allowing it to be updated through a command-line option, making the script more flexible.

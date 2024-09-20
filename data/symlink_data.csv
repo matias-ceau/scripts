@@ -6,6 +6,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/archived/chatgpt-all-scripts-describer.py,/home/matias/.local/bin/chatgpt-all-scripts-describer.py,chatgpt-all-scripts-describer.py
 /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh,/home/matias/.local/bin/chezmoi_on_a_new_system.sh,chezmoi_on_a_new_system.sh
 /home/matias/.scripts/citeboard.sh,/home/matias/.local/bin/citeboard.sh,citeboard.sh
+/home/matias/.scripts/closest_colors.py,/home/matias/.local/bin/closest_colors.py,closest_colors.py
 /home/matias/.scripts/colormap_from_text.sh,/home/matias/.local/bin/colormap_from_text.sh,colormap_from_text.sh
 /home/matias/.scripts/command_prompt.sh,/home/matias/.local/bin/command_prompt.sh,command_prompt.sh
 /home/matias/.scripts/count_tokens_with_tiktoken.py,/home/matias/.local/bin/count_tokens_with_tiktoken.py,count_tokens_with_tiktoken.py

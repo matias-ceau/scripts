@@ -5,6 +5,7 @@
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *Generates GitHub markdown documentation for scripts using GPT-4o.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Automates the setup of Chezmoi on a new Arch Linux system.*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and manage paper citations from your bibliography.*
+- [closest_colors.py](scripts/closest_colors.py.md) -- *Finds the nearest terminal colors for specified hex colors.*
 - [colormap_from_text.sh](scripts/colormap_from_text.sh.md) -- *Simple script that extracts color palettes from config files*
 - [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions using fzf*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *A Python script to count the number of tokens in a text file using the `tiktoken` library.*
@@ -56,7 +57,7 @@
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *A script to switch between Qtile groups using a complementary number.*
 - [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Switches the active window to a new group in Qtile.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Launches a fuzzy finder for passwords stored in a specified directory.*
-- [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Synchronizes qutebrowser bookmarks and quickmarks from local to chezmoi.*
+- [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Script to synchronize Qutebrowser bookmarks and quickmarks.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Selects a random album and plays it with cmus.*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick random wallpaper from a specified wallpaper list*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to retrieve the top researched manual entries*
