@@ -20,13 +20,13 @@ export -f preview_command
 
 search_files() {
     chezmoi managed --include=files |
-        eza --stdin -1 --sort=modified --color=always --icons=always
+    eza --stdin -1 --sort=modified --reverse --color=always --icons=always --no-quotes
 }
 export -f search_files
 
 search_dirs() {
     chezmoi managed --include=dirs |
-        eza --stdin -d --icons=always -1 --color=always --sort=name
+    eza --stdin -d --icons=always -1 --reverse --color=always --sort=name --no-quotes
 }
 export -f search_dirs
 
@@ -38,15 +38,15 @@ cd $HOME
 # Launch fzf with improved preview
 selected=$(
     search_files |
-        fzf \
-            --ansi \
-            --preview='preview_command {}' \
-            --preview-window=right:60%:wrap \
-            --header 'A-D> dirs' \
-            --header-first \
-            --bind 'alt-d:reload(search_dirs)' \
-            --bind 'alt-f:reload(search_files)' |
-            remove_icons
+    fzf \
+        --ansi \
+        --preview='preview_command {}' \
+        --preview-window=right:60%:wrap \
+        --header 'A-D> dirs' \
+        --header-first \
+        --bind 'alt-d:reload(search_dirs)' \
+        --bind 'alt-f:reload(search_files)' |
+    remove_icons
 )
 
 if [ -n "$selected" ]; then
