@@ -2,49 +2,47 @@
 
 ---
 
-**try_the_bat_suit.sh**: A script to preview files using `bat` with language highlighting.
+**try_the_bat_suit.sh**: A script to preview files using `bat` and `fzf` with language detection.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in bash and requires this shell to run.
-- `fd`: A simple, fast and user-friendly alternative to `find`. It is used for file searching.
-- `fzf`: A command-line fuzzy finder, utilized for selecting files interactively.
-- `bat`: A `cat` clone with syntax highlighting and Git integration, fundamental for previewing file contents.
-- `ripgrep (rg)`: A regex-based search tool that helps with filtering file content.
+- `bash`: A Unix shell and command language.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `fzf`: A command-line fuzzy finder.
+- `ripgrep` (`rg`): A line-oriented search tool that recursively searches your current directory for a regex pattern.
 
 ### Description
 
-The purpose of this script is to facilitate the preview of files with syntax highlighting using the `bat` command. It allows the user to either specify a file directly as an argument or to select one interactively from the current directory.
+This script enables users to preview files within a terminal using `bat`, a command line syntax highlighter, in conjunction with `fzf`, a fuzzy file finder. When executed, the script checks if a file path is provided as an argument. If not, it prompts the user to select a file from the current directory using `fd` and `fzf`.
 
-1. **File Selection**:
-   - If a file path is provided as an argument (`$1`), the script assigns that file to the `FILES` variable.
-   - If no argument is given, it invokes `fd` to list files in the current directory and uses `fzf` for a user-friendly selection interface.
+The selected file is then set as the variable `FILE`, and a language detection function (`preview_cmd`) is defined. This function extracts the language type from `bat` command output using `rg` and outputs a preview of the file with syntax highlighting. 
 
-2. **Preview Function**:
-   - The `preview_cmd` function constructs the language flag for `bat` by extracting the file type and its primary language from the output. The function runs `bat` with the necessary options to display the file preview in the terminal interface.
-
-3. **Language Listing**:
-   - The script utilizes `bat --list-languages` to fetch supported languages, formatting the output for better readability and integration with `fzf` to allow the user to preview files easily.
+The script leverages the functionality of `fzf` to integrate file selection with real-time previews, enhancing the user's experience when working with multiple files. 
 
 ### Usage
 
-To use the script, simply run it in your terminal. You can opt to supply a file name as an argument or make your selection:
+To use the script, simply make it executable and run it from the terminal:
 
-To preview a specific file:
 ```bash
-/home/matias/.scripts/try_the_bat_suit.sh /path/to/your/file.txt
+chmod +x /home/matias/.scripts/try_the_bat_suit.sh
+/home/matias/.scripts/try_the_bat_suit.sh [optional_file_path]
 ```
 
-To select a file interactively:
+- **Without argument**: The script will invoke `fd` to list files and allow you to search through them using `fzf`.
+- **With argument**: Directly pass a file path to preview it using `bat`.
+
+For example:
+
 ```bash
-/home/matias/.scripts/try_the_bat_suit.sh
+/home/matias/.scripts/try_the_bat_suit.sh myfile.txt
 ```
 
-Once you run the script, you will see a list of file types. Selecting one will invoke `bat` to show the file preview highlighted according to its language.
+This will open `myfile.txt` for preview if it exists; otherwise, it will allow interactive file selection.
 
 ---
 
-> [!TIP]
-> This script currently has an incomplete conditional structure in the file selection block (after `elif`). It would cause a syntax error when this path is taken. Additionally, consider adding error handling to manage cases where no files are found by `fd` or where `bat` fails to execute. This will improve user experience by providing informative messages.
+> [!TIP] 
+> Consider adding error handling for cases where `bat` or `fzf` is not installed, as this will enhance user experience by preventing the script from failing silently. Also, consider expanding language detection capabilities beyond what is currently done since it relies on the output format of the `bat --list-languages` command, which may change in future versions of `bat`.

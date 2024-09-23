@@ -54,6 +54,7 @@
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A command-line tool to reduce the color depth of PPM images using a custom palette.*
+- [pyman.sh](scripts/pyman.sh.md) -- *A script for navigating Python modules and viewing documentation interactively.*
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *A script to switch between Qtile groups using a complementary number.*
 - [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Switches the active window to a new group in Qtile.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Launches a fuzzy finder for passwords stored in a specified directory.*
@@ -67,7 +68,7 @@
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for easy access and previews*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
 - [select_script](scripts/select_script.md) -- *A C script that selects a chosen script using cached data from a CSV file.*
-- [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Script to sync user directories to a backup location using Mega.nz*
+- [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Syncs user folders to a mega backup directory structure.*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Obtains the most frequent lines, words, or characters in shell history files.*
 - [show-all-qutebrowser-scripts.sh](scripts/show-all-qutebrowser-scripts.sh.md) -- *Fetches and displays all Qutebrowser script files using bat.*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a visual representation of the keyboard layout in terminal.*
@@ -79,7 +80,7 @@
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*
 - [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Script to toggle the picom compositor on or off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *A utility to transform symlinks into copies of their targets.*
-- [try_the_bat_suit.sh](scripts/try_the_bat_suit.sh.md) -- *A script to preview files using `bat` with language highlighting.*
+- [try_the_bat_suit.sh](scripts/try_the_bat_suit.sh.md) -- *A script to preview files using `bat` and `fzf` with language detection.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *Update the .env file with API keys from the current environment*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Script to create and manage symlinks in ~/.local/bin, cleaning old ones.*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in vim with fzf*

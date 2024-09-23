@@ -366,9 +366,9 @@
   "setting-up-syncs.sh": {
     "file": "setting-up-syncs.sh",
     "path": "setting-up-syncs.sh",
-    "description": "Automates syncing of user directories to a backup location.",
+    "description": "Syncs user folders to a mega backup directory structure.",
     "doc_path": "docs/scripts/setting-up-syncs.sh.md",
-    "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
+    "hash": "9c55f7e31b4666b21a5c6f4e997cae17a61bbb69e8a7e80c5fad1d0e0c44206d"
   },
   "shell_history_info.sh": {
     "file": "shell_history_info.sh",
@@ -562,9 +562,9 @@
   "try_the_bat_suit.sh": {
     "file": "try_the_bat_suit.sh",
     "path": "try_the_bat_suit.sh",
-    "description": "A script to preview files using `bat` with language highlighting.",
+    "description": "A script to preview files using `bat` and `fzf` with language detection.",
     "doc_path": "docs/scripts/try_the_bat_suit.sh.md",
-    "hash": "2c89c5272876f5818439e6cb2e4b389969e79b577bd7d5606366a44e54b80115"
+    "hash": "af31e4aae58c605accf6eb3b4c4377915d845058ad5aa2dce07aae060d848dc3"
   },
   "closest_colors.py": {
     "file": "closest_colors.py",
@@ -579,5 +579,12 @@
     "description": "Fetches and displays all Qutebrowser script files using bat.",
     "doc_path": "docs/scripts/show-all-qutebrowser-scripts.sh.md",
     "hash": "6935901821b3a5c6e0d1b21ace42aff86414e04d2128ccfd715d39bc010ddf8a"
+  },
+  "pyman.sh": {
+    "file": "pyman.sh",
+    "path": "pyman.sh",
+    "description": "A script for navigating Python modules and viewing documentation interactively.",
+    "doc_path": "docs/scripts/pyman.sh.md",
+    "hash": "a2406993d16ebb62db3180277e352791a7ed495af7e794ebc9a57f084def0cf5"
   }
 }

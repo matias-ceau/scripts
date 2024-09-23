@@ -2,48 +2,35 @@
 
 ---
 
-**setting-up-syncs.sh**: Script to sync user directories to a backup location using Mega.nz
+**setting-up-syncs.sh**: Syncs user folders to a mega backup directory structure.
 
 ---
 
 ### Dependencies
 
-- `mega-sync`: This is the command-line utility for synchronizing files and directories with Mega.nz cloud storage. Ensure you have it installed and properly configured to use it.
+- `mega-sync`: A command-line utility provided by MEGA.nz for synchronizing folders with MEGA cloud storage. Make sure it is installed and configured for your user.
 
 ### Description
 
-The `setting-up-syncs.sh` script is designed to facilitate the backup of important user directories to a designated location on Mega.nz. The script retrieves the hostname of the machine using the `hostnamectl` command and constructs backup paths accordingly. It synchronizes the following directories located in the user's home directory:
+The `setting-up-syncs.sh` script is designed to simplify the process of backing up user directories to a designated MEGA cloud storage structure. It dynamically creates backup paths based on the hostname of the system, ensuring that individual configurations don’t conflict. This makes it suitable for users who may have multiple systems or need specific organization within their cloud backups.
 
-- Desktop
-- Downloads
-- Templates
-- Share
-- Documents
-- Music
-- Pictures
-- Videos
+Here's what the script does:
 
-Each directory's contents are mirrored to a corresponding directory within the `/BACKUPS/<hostname>/` folder on Mega.nz.
-
-The use of variables and shell commands ensures that the script is dynamically tailored to the system it runs on, eliminating the need for hard-coded values and allowing for seamless integration into Arch Linux setups, especially when utilizing the Qtile window manager.
+1. **Hostname Retrieval**: It fetches the hostname using `hostnamectl`, which ensures the path for backups is unique per device.
+2. **Systematic Syncing**: It synchronizes multiple user directories such as `Desktop`, `Downloads`, `Templates`, `Share`, `Documents`, `Music`, `Pictures`, and `Videos` with corresponding paths in the MEGA backup structure located under `/BACKUPS/[hostname]/`.
+3. **Conditional Syncing**: If the hostname is "karhu", it additionally syncs specific directories (`PKM`, `UnifiedLibrary`, and some mounted directories) unique to that system.
 
 ### Usage
 
-To use the script, simply execute it in the terminal as follows:
+To use the script, simply execute it via the terminal:
 
 ```bash
 bash /home/matias/.scripts/setting-up-syncs.sh
 ```
 
-Ensure that the Mega.nz synchronization tool is installed and configured with your account credentials beforehand. After running the script, your files will be backed up to Mega.nz in the specified directories. 
-
-To automate the process, you can schedule this script to run at regular intervals using `cron`. For example, to run the script every day at 2 AM, you can add the following line to your crontab:
-
-```bash
-0 2 * * * /bin/bash /home/matias/.scripts/setting-up-syncs.sh
-```
+Make sure to review the script if you need to modify the directories or paths being synced.
 
 ---
 
-> [!TIP] 
-> The script assumes the Mega.nz account is set up correctly. Consider adding checks to ensure the connection to Mega.nz is active before running the sync commands. Additionally, incorporating logging functionalities would help track the success or failure of each sync operation for better debugging and user experience.
+> [!TIP]  
+> Consider adding error handling to the script to manage failures during sync operations, such as network issues or invalid paths. Additionally, you may want to log the output of each sync operation to help monitor the success of backups or troubleshoot any issues that arise.
