@@ -10,3 +10,10 @@ mega-sync "$HOME/Documents" "/BACKUPS/$HOST/Documents"
 mega-sync "$HOME/Music" "/BACKUPS/$HOST/Music"
 mega-sync "$HOME/Pictures" "/BACKUPS/$HOST/Pictures"
 mega-sync "$HOME/Videos" "/BACKUPS/$HOST/Videos"
+
+if [ "$HOST" = karhu ]; then
+    mega-sync "$HOME/PKM" "/PKM"
+    mega-sync "$HOME/UnifiedLibrary" "/UnifiedLibrary"
+    mega-sync "/mnt/mega/hauki/xiaomi_mega" "/HOST_QUICKSHARES/xiaomi_mega"
+    mega-sync "/mnt/mega/karjala" "/BACKUPS/karjala"
+fi
