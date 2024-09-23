@@ -16,9 +16,9 @@
   "chatgpt-all-scripts-describer.py": {
     "file": "chatgpt-all-scripts-describer.py",
     "path": "archived/chatgpt-all-scripts-describer.py",
-    "description": "Generates GitHub markdown documentation for scripts using GPT-4o.",
+    "description": "A Python script to generate GitHub documentation for user scripts.",
     "doc_path": "docs/scripts/chatgpt-all-scripts-describer.py.md",
-    "hash": "57b8ec01e58c30bd70b1ea2d5473d751f2ec0542ef7895bb006fa54c4b7ec933"
+    "hash": "e49c13685e536d351dcf516caf14a4342129e4652d4402b97fbe1c66c1ee5430"
   },
   "chezmoi_on_a_new_system.sh": {
     "file": "chezmoi_on_a_new_system.sh",
@@ -72,9 +72,9 @@
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to efficiently edit and manage Chezmoi config files.",
+    "description": "A script to search and edit Chezmoi-managed configuration files.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "80389d1143f0c2abf2364488ec065732d0d53fd275e149e494302d03edfc8067"
+    "hash": "22dc81567396a49342a470fcc7a2c4bbfacaeff2d36a373ce83a2fad7170e240"
   },
   "editor.sh": {
     "file": "editor.sh",
@@ -191,16 +191,16 @@
   "llama-all-scripts-describer.py": {
     "file": "llama-all-scripts-describer.py",
     "path": "llama-all-scripts-describer.py",
-    "description": "Automatically generates GitHub documentation for scripts using Llama 3.1.",
+    "description": "Generates GitHub documentation for scripts using Llama 3.1 model.",
     "doc_path": "docs/scripts/llama-all-scripts-describer.py.md",
-    "hash": "0cae3a7dcf6953a0731118a0398092ab77264cabd51d3e06851c2849c70cbe06"
+    "hash": "5b78e71d509daeeae4fdecb66d9aad7e9a509ac8ca105f0dacace03304979112"
   },
   "llm-script-describer.py": {
     "file": "llm-script-describer.py",
     "path": "llm-script-describer.py",
-    "description": "Generate GitHub markdown documentation from user scripts.",
+    "description": "Generate markdown documentation for scripts using GPT-4o-mini.",
     "doc_path": "docs/scripts/llm-script-describer.py.md",
-    "hash": "ae34ca2144da9a6d32c3c65daf069893e6c792e39f78172347e2cadc316c0e30"
+    "hash": "1ed38985858358ef2051518096b2e0f41338cfcd9cdfeeca6a44b0a538828360"
   },
   "m3u_creator.sh": {
     "file": "m3u_creator.sh",
@@ -572,5 +572,12 @@
     "description": "Finds the nearest terminal colors for specified hex colors.",
     "doc_path": "docs/scripts/closest_colors.py.md",
     "hash": "c6f00ebde8506605828b8d1fbf202335ed10f3e17b96e1c36fe5c8424580a9e1"
+  },
+  "show-all-qutebrowser-scripts.sh": {
+    "file": "show-all-qutebrowser-scripts.sh",
+    "path": "show-all-qutebrowser-scripts.sh",
+    "description": "Fetches and displays all Qutebrowser script files using bat.",
+    "doc_path": "docs/scripts/show-all-qutebrowser-scripts.sh.md",
+    "hash": "6935901821b3a5c6e0d1b21ace42aff86414e04d2128ccfd715d39bc010ddf8a"
   }
 }

@@ -3,9 +3,8 @@
 SHELL=/usr/bin/bash
 
 if [[ -f "$1" ]]; then
-    FILES="$1"
-elif 
-else
+    FILE="$1"
+else 
     FILE="$(fd . -tf --color=always | fzf --ansi)"
 fi
 export FILE

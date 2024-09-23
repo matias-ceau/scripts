@@ -122,34 +122,22 @@ system_prompt_2 = """\
 """
 
 
-def print_colored(message, kind="normal", style=Style.NORMAL, end="\n"):
-    if kind == "main_section":
-        color = Back.BLUE
-        style = Style.BRIGHT
-    elif kind == "main_function":
-        color = Fore.CYAN
-        style = Style.BRIGHT
-    elif kind == "function_call":
-        color = Fore.BLUE
-    elif kind == "llm":
-        color = Fore.MAGENTA
-        style = Style.BRIGHT
-    elif kind == "success":
-        color = Fore.GREEN
-    elif kind == "victory":
-        color = Back.GREEN
-        style = Style.BRIGHT
-    elif kind == "error":
-        color = Back.RED
-        style = Style.BRIGHT
-    elif kind == "warn":
-        color = Fore.RED
-    elif kind == "info":
-        color = Fore.YELLOW
-    else:
-        color = Fore.WHITE
-        style = Style.NORMAL
-    print(f"{style}{color}{message}{Style.RESET_ALL}", end=end)
+def print_colored(message, kind="", style="", color="", end="\n"):
+    color_style = {
+        "main_section": (Back.BLUE, Style.BRIGHT),
+        "main_function": (Fore.CYAN, Style.BRIGHT),
+        "function_call": (Fore.BLUE, Style.NORMAL),
+        "llm": (Fore.MAGENTA, Style.BRIGHT),
+        "success": (Fore.GREEN, Style.NORMAL),
+        "victory": (Back.GREEN, Style.BRIGHT),
+        "error": (Back.RED, Style.BRIGHT),
+        "warn": (Fore.RED, Style.NORMAL),
+        "info": (Fore.YELLOW, Style.NORMAL),
+    }
+    s, c = color_style[kind] if kind else (Fore.WHITE, Style.NORMAL)
+    s = style if style else s
+    c = color if color else c
+    print(f"{s}{c}{message}{Style.RESET_ALL}", end=end)
 
 
 # INFO_JSON -> file content of INFO_JSON_PATH
@@ -163,22 +151,15 @@ else:
 
 
 def run_update_symlinks():
-    print_colored(
-        "Do you want to run utils_update_symlinks.sh? (y/N): ", kind="info", end=""
-    )
-    response = input().lower()
-    if response in ["y", "yes"]:
-        print_colored("Running utils_update_symlinks.sh...", kind="info")
-        try:
-            subprocess.run(["utils_update_symlinks.sh"], check=True)
-            print_colored(
-                "utils_update_symlinks.sh completed successfully.", kind="success"
-            )
-        except subprocess.CalledProcessError:
-            print_colored("Error: Failed to run utils_update_symlinks.sh", kind="error")
-            sys.exit(1)
-    else:
-        print_colored("Skipping utils_update_symlinks.sh", kind="info")
+    print_colored("Running utils_update_symlinks.sh...", kind="info")
+    try:
+        subprocess.run(["utils_update_symlinks.sh"], check=True)
+        print_colored(
+            "utils_update_symlinks.sh completed successfully.", kind="success"
+        )
+    except subprocess.CalledProcessError:
+        print_colored("Error: Failed to run utils_update_symlinks.sh", kind="error")
+        sys.exit(1)
 
 
 def get_script_files():
@@ -216,13 +197,12 @@ def rm_orphaned_docs(script_files):
                 orphaned_docs.append(doc_file)
 
     if orphaned_docs:
-        print("")
-        print_colored("Orphaned doc files found!", kind="warn")
+        print_colored("\nOrphaned doc files found!", kind="warn")
         for doc in orphaned_docs:
             print_colored(f"    - Removing {doc}", kind="info")
             subprocess.run(f"rm {DOCS_SCRIPTS_PATH}/{doc}", shell=True, check=True)
     else:
-        print_colored("No orphaned documentation files found.", kind="success")
+        print_colored("\nNo orphaned documentation files found.", kind="success")
 
 
 def is_binary(file_path):
@@ -425,7 +405,7 @@ def process_csv(csv_path):
         reader = csv.reader(csvfile)
         next(reader)  # Skip header
         for row in reader:
-            original_path, symlink, command_name = row
+            original_path = row[0]
             process_script(original_path)
 
     with open(INFO_JSON_PATH, "w") as f:
@@ -446,10 +426,7 @@ def main():
 
     csv_path = os.path.abspath(args.csv_path)
 
-    if not os.path.exists(csv_path):
-        print_colored(f"Error: The CSV file '{csv_path}' does not exist.", kind="error")
-
-    print_colored("Updating symlinks (optionnal)", kind="main_section")
+    print_colored("Updating symlinks", kind="main_section")
     run_update_symlinks()
 
     print_colored("Removing orphaned docs", kind="main_section")

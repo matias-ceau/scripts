@@ -2,49 +2,51 @@
 
 ---
 
-**llm-script-describer.py**: Generate GitHub markdown documentation from user scripts.
+**llm-script-describer.py**: Generate markdown documentation for scripts using GPT-4o-mini.
 
 ---
 
 ### Dependencies
 
-- `argparse`: For parsing command line arguments.
-- `csv`: For handling CSV file operations.
-- `hashlib`: For generating file hashes.
-- `json`: For reading/writing JSON files.
-- `os`: For operating system dependent functionalities.
+- `argparse`: To handle command-line arguments.
+- `csv`: For reading script metadata from CSV files.
+- `hashlib`: To compute file hashes for tracking changes.
+- `json`: For handling JSON data.
+- `os`: For directory and file operations.
 - `subprocess`: To run shell commands.
-- `sys`: To access command line arguments and exit functionalities.
-- `colorama`: To provide colored output in the terminal.
-- `openai`: To utilize OpenAI's API for script description generation.
+- `sys`: To exit the script with a status code.
+- `colorama`: For colored terminal output.
+- `openai`: To interact with OpenAI's API for generating script descriptions.
 
 ### Description
 
-The `llm-script-describer.py` script automates the creation of GitHub documentation for a collection of user scripts. It reads scripts specified in a CSV file, evaluates their content, and uses OpenAI's language model to generate descriptive markdown documentation. The script organizes documentation into a specified folder structure and also manages an index in the `README.md` file to keep track of script descriptions.
+This script provides an automated way to generate and update markdown documentation for a collection of scripts located in a designated directory. It utilizes the OpenAI GPT-4o-mini model to create descriptions based on the contents of each script. The generated documentation is then saved as markdown files in a specified location, and also updates a README file and an index of documentation automatically.
 
 Key functionalities include:
-- **Script Processing**: It reads scripts, decides if a script is a binary or a text file, and generates descriptions using the OpenAI API.
-- **Documentation Management**: It updates/create markdown files for each script in a dedicated documentation directory and manages orphans—unlinked markdown documents.
-- **Symlink Updates**: Optionally, it runs a secondary script to update symlinks.
-- **Indexing**: It updates an index of scripts for easy navigation in the documentation.
-- **Checksum Verification**: By maintaining hashes of scripts, it avoids unnecessary recomputation of documentation if the scripts haven't changed. 
-
+- **Reading Scripts**: Scans a directory for script files and reads their contents.
+- **Generating Descriptions**: For each script, a detailed description is generated using OpenAI's language model.
+- **Managing Documentation**: The script checks for orphaned documentation, updates documentation files, and maintains a JSON file tracking the state of each script and its documentation.
+- **CSV Integration**: It can read a specified CSV file to locate script files for documentation.
+  
 ### Usage
 
-To run the script, use the following command in your terminal:
+To use the script, it must be run from the command line with an optional CSV file path parameter. The default location for this file is `$SCRIPTS/data/symlink_data.csv`.
+
+Example usage:
 
 ```bash
-python /home/matias/.scripts/llm-script-describer.py [path_to_csv]
+python llm-script-describer.py
 ```
 
-- `path_to_csv`: Path to the CSV file containing the scripts to be documented. If not specified, it defaults to `$SCRIPTS/data/symlink_data.csv`.
+To specify a different CSV file:
 
-**Example:**
 ```bash
-python /home/matias/.scripts/llm-script-describer.py /home/matias/.scripts/data/my_scripts.csv
+python llm-script-describer.py /path/to/your/data.csv
 ```
+
+This command will update symlinks, remove orphaned documentation, read scripts from the provided CSV file, and update the README file with new summaries.
 
 ---
 
-> [!TIP] 
-The script expects a valid CSV format and may fail if the input file is incorrect. Consider adding error handling for invalid file formats or providing feedback on the number of scripts processed. Additionally, the script relies heavily on external API calls; it may be wise to add rate limiting or error handling for API failures to ensure smoother execution.
+> [!TIP]  
+> Consider implementing error logging instead of just printing errors to the console. This will improve debugging and tracking of issues over time. Additionally, enhancing the script to allow for better customization of the language model parameters could provide more tailored documentation outputs for different contexts.

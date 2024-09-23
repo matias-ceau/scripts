@@ -2,7 +2,7 @@
 - [ansi-cheatsheet.sh](scripts/ansi-cheatsheet.sh.md) -- *Generate a comprehensive ANSI escape code cheatsheet.*
 - [ansi8bit2rgb_hex.py](scripts/ansi8bit2rgb_hex.py.md) -- *Converts 8-bit ANSI colors to RGB or HEX format.*
 - [ardour-open.sh](scripts/ardour-open.sh.md) -- *Open an Ardour session quickly with previews from audio projects.*
-- [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *Generates GitHub markdown documentation for scripts using GPT-4o.*
+- [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *A Python script to generate GitHub documentation for user scripts.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Automates the setup of Chezmoi on a new Arch Linux system.*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and manage paper citations from your bibliography.*
 - [closest_colors.py](scripts/closest_colors.py.md) -- *Finds the nearest terminal colors for specified hex colors.*
@@ -13,7 +13,7 @@
 - [display_markdown.py](scripts/display_markdown.py.md) -- *A script to render Markdown files in the terminal using the Rich library.*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A script to execute selected scripts using rofi with options from xonsh.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to efficiently edit and manage Chezmoi config files.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to search and edit Chezmoi-managed configuration files.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to interactively edit and apply Chezmoi configuration files.*
 - [editor.sh](scripts/editor.sh.md) -- *A script to quickly edit files using fzf for file selection.*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *A script to convert markdown links to be relative to a specified base directory.*
@@ -36,8 +36,8 @@
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches a terminal to display current keyboard layout using `bat`.*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called music and open cmus.*
 - [list_process.sh](scripts/list_process.sh.md) -- *A simple script to list all running services sorted by their status.*
-- [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automatically generates GitHub documentation for scripts using Llama 3.1.*
-- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Generate GitHub markdown documentation from user scripts.*
+- [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Generates GitHub documentation for scripts using Llama 3.1 model.*
+- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Generate markdown documentation for scripts using GPT-4o-mini.*
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Create an m3u file from files in the current directory*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches a new TMUX session for MegaCMD.*
@@ -69,6 +69,7 @@
 - [select_script](scripts/select_script.md) -- *A C script that selects a chosen script using cached data from a CSV file.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Script to sync user directories to a backup location using Mega.nz*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Obtains the most frequent lines, words, or characters in shell history files.*
+- [show-all-qutebrowser-scripts.sh](scripts/show-all-qutebrowser-scripts.sh.md) -- *Fetches and displays all Qutebrowser script files using bat.*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a visual representation of the keyboard layout in terminal.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [speach-to-text.py](scripts/speach-to-text.py.md) -- *A script to record audio and transcribe it using OpenAI's Whisper model.*
