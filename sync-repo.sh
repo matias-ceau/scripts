@@ -82,32 +82,27 @@ print_glow() {
 
 # Function to handle conflicts
 handle_conflicts() {
-    echo -e "${YELLOW}Conflicts detected during rebase. Here are your options:${RESET}"
-    echo "1. Open your default editor to resolve conflicts manually"
-    echo "2. Abort the rebase and return to the previous state"
-    echo "3. Skip this commit and continue with the next one"
-    read -p "Enter your choice (1/2/3): " choice
-
+    echo -e "${YELLOW}Conflicts detected during rebase. Here are your options:${RESET}
+    [e] - Open your default editor to resolve conflicts manually
+    (a) - Abort the rebase and return to the previous state
+    (s) - Skip this commit and continue with the next one"
+    read -r choice
     case $choice in
-    1)
-        git status
-        echo "Opening editor to resolve conflicts..."
-        ${EDITOR:-vim} $(git diff --name-only --diff-filter=U)
-        git add .
-        git rebase --continue
-        ;;
-    2)
-        git rebase --abort
-        echo "Rebase aborted. Repository is back to its previous state."
-        ;;
-    3)
-        git rebase --skip
-        echo "Skipped conflicting commit. Continuing rebase..."
-        ;;
-    *)
-        echo "Invalid choice. Aborting rebase."
-        git rebase --abort
-        ;;
+        a)
+            git rebase --abort
+            echo "Rebase aborted. Repository is back to its previous state."
+            ;;
+        s)
+            git rebase --skip
+            echo "Skipped conflicting commit. Continuing rebase..."
+            ;;
+        *)
+            git status
+            echo "Opening editor to resolve conflicts..."
+            ${EDITOR:-vim} $(git diff --name-only --diff-filter=U)
+            git add .
+            git rebase --continue
+            ;;
     esac
 }
 
