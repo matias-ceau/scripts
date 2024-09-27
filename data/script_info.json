@@ -156,7 +156,7 @@
   "install_dependencies.sh": {
     "file": "install_dependencies.sh",
     "path": "install_dependencies.sh",
-    "description": "Automatically installs a set of required packages on Arch Linux.",
+    "description": "A script to install a predefined list of dependencies using paru.",
     "doc_path": "docs/scripts/install_dependencies.sh.md",
     "hash": "82fbb78e5e521328cfd4f1ec89a5073f247f23d3f4cf36991f58c4bae5a593d5"
   },
@@ -240,7 +240,7 @@
   "new_script_creator.sh": {
     "file": "new_script_creator.sh",
     "path": "new_script_creator.sh",
-    "description": "A utility for creating new scripts with predefined templates.",
+    "description": "A script to create user scripts with various templates.",
     "doc_path": "docs/scripts/new_script_creator.sh.md",
     "hash": "56df8d0ae1374c7955aefa25c6e3d9b38bf11f78f080dfb61edd1158904cee76"
   },
@@ -254,16 +254,16 @@
   "nvim_in_new_terminal.sh": {
     "file": "nvim_in_new_terminal.sh",
     "path": "nvim_in_new_terminal.sh",
-    "description": "Opens a floating terminal to edit a file with NVim.",
+    "description": "Opens a floating terminal to edit a file with Neovim.",
     "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
     "hash": "614daf8e8da646eaed2c991dd41276cf2b3853bf58eff78b3fcdaf74c49b6076"
   },
   "obsidian-vault-selector.sh": {
     "file": "obsidian-vault-selector.sh",
     "path": "obsidian-vault-selector.sh",
-    "description": "A script to easily select and open any Obsidian vault from your filesystem.",
+    "description": "Opens any Obsidian vault with a user-friendly selector.",
     "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "61761a2a517ad469b92d1eacb6e2786f527152520e2d91f529a5829b28b209f8"
+    "hash": "e57d8a6b1df1fff154ee5277511dadf62ddbf0768e55cd695c7460097724db9f"
   },
   "obsidian.xsh": {
     "file": "obsidian.xsh",
@@ -354,7 +354,7 @@
     "path": "script_launcher.sh",
     "description": "Run scripts with fzf",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "0c4422b53457861a6a36da39b227e3452e1e1b18b9f93ef111464e525f076c01"
+    "hash": "70a61cc1d35da009ad315326e3c35c83427adfba77f1aa5eef18650114dfddcb"
   },
   "select_script": {
     "file": "select_script",
@@ -366,9 +366,9 @@
   "setting-up-syncs.sh": {
     "file": "setting-up-syncs.sh",
     "path": "setting-up-syncs.sh",
-    "description": "Syncs user folders to a mega backup directory structure.",
+    "description": "Automates syncing specified directories with a cloud service.",
     "doc_path": "docs/scripts/setting-up-syncs.sh.md",
-    "hash": "9c55f7e31b4666b21a5c6f4e997cae17a61bbb69e8a7e80c5fad1d0e0c44206d"
+    "hash": "d772758354ea07e584b1927cc5d525584bd8aaeb92d3c3c5d3eaf8ccbbb8f53e"
   },
   "shell_history_info.sh": {
     "file": "shell_history_info.sh",
@@ -394,9 +394,9 @@
   "sync-repo.sh": {
     "file": "sync-repo.sh",
     "path": "sync-repo.sh",
-    "description": "A script for syncing a Git repository, including fetching, pulling, and handling conflicts.",
+    "description": "A script to synchronize a local Git repository with its remote counterpart.",
     "doc_path": "docs/scripts/sync-repo.sh.md",
-    "hash": "6c4d8c63aaeefbcfddea7b6497e65dd9df7a34688adb1cc7e80804be5e44445b"
+    "hash": "6d2ae2005766a6f3877dcd85aed1e16abff4e7f08b5fc8f9417bfb7c915d1e9d"
   },
   "tmux-help.py": {
     "file": "tmux-help.py",
@@ -460,83 +460,6 @@
     "description": "A script that finds scripts without inline documentation.",
     "doc_path": "docs/scripts/you_are_not_documented.sh.md",
     "hash": "86e083c3282edc4e34b1a0e876575f39583c7ce34cde832ea57e54b9c429cd56"
-  },
-  "fix-markdown-links.sh": {
-    "file": "fix-markdown-links.sh",
-    "path": "fix-markdown-links.sh",
-    "description": "A script to fix relative links in Markdown files.",
-    "doc_path": "docs/scripts/fix-markdown-links.sh.md",
-    "hash": "6aa54826672ca92d456ee5376357afe67ff284471e51785c1e5f94c9174db8b5"
-  },
-  "new_script_creator.sh": {
-    "file": "new_script_creator.sh",
-    "path": "new_script_creator.sh",
-    "description": "A simple script to create new scripts with directory linking",
-    "doc_path": "docs/scripts/new_script_creator.sh.md",
-    "hash": "265db232ae9d951ff9371fce47f70316bcde46a5d0250c8fdec8a38ba4c88394"
-  },
-  "flexoki_show.sh": {
-    "file": "flexoki_show.sh",
-    "path": "flexoki_show.sh",
-    "description": "Generate a color palette with hex, RGB values, and names for quick reference.",
-    "doc_path": "docs/scripts/flexoki_show.sh.md",
-    "hash": "af13df7cb3217f006e2a36b2d8fdc7131e8313b0711c1f4cea6c54f04f27eddc"
-  },
-  "quick-pass.sh": {
-    "file": "quick-pass.sh",
-    "path": "quick-pass.sh",
-    "description": "Quickly select a password from your password store using fzf.",
-    "doc_path": "docs/scripts/quick-pass.sh.md",
-    "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
-  },
-  "megaignore_editor.sh": {
-    "file": "megaignore_editor.sh",
-    "path": "megaignore_editor.sh",
-    "description": "A bash script for editing and managing .megaignore files interactively",
-    "doc_path": "docs/scripts/megaignore_editor.sh.md",
-    "hash": "685075c0aa2bfec0b4e2d290543b8e92e5a028ddc6746e23ce6762eaef1c6c33"
-  },
-  "setting-up-syncs.sh": {
-    "file": "setting-up-syncs.sh",
-    "path": "setting-up-syncs.sh",
-    "description": "Automates syncing of user directories to a backup location.",
-    "doc_path": "docs/scripts/setting-up-syncs.sh.md",
-    "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
-  },
-  "grub-tune-to-audio-python.py": {
-    "file": "grub-tune-to-audio-python.py",
-    "path": "grub-tune-to-audio-python.py",
-    "description": "Converts GRUB_INIT_TUNE strings into audio files.",
-    "doc_path": "docs/scripts/grub-tune-to-audio-python.py.md",
-    "hash": "373c4b6b30054ef2c6c703bef4facf5cbb42c5b029320253941e5fbaeaa2dcf1"
-  },
-  "install_dependencies.sh": {
-    "file": "install_dependencies.sh",
-    "path": "install_dependencies.sh",
-    "description": "Installs essential development and productivity tools on Arch Linux",
-    "doc_path": "docs/scripts/install_dependencies.sh.md",
-    "hash": "358eedb7ddfc5782dd201261f16edc27dbf82ac129124b8462870da83d1ba6cf"
-  },
-  "megacmd_launch_tmux.sh": {
-    "file": "megacmd_launch_tmux.sh",
-    "path": "megacmd_launch_tmux.sh",
-    "description": "Launches the MEGA command line interface in a new tmux session.",
-    "doc_path": "docs/scripts/megacmd_launch_tmux.sh.md",
-    "hash": "ce8895fffb7a381655495efa1415e582a452c5a8b6ec1a1224ed8ab78f6cb9c0"
-  },
-  "nvim_in_new_terminal.sh": {
-    "file": "nvim_in_new_terminal.sh",
-    "path": "nvim_in_new_terminal.sh",
-    "description": "Opens a floating terminal to edit a file with nvim",
-    "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
-    "hash": "f946fcb565c014cfb35a72ad242188c05e9b670a9af58a75cc26b4f1416fbf72"
-  },
-  "obsidian-vault-selector.sh": {
-    "file": "obsidian-vault-selector.sh",
-    "path": "obsidian-vault-selector.sh",
-    "description": "Script to select and open an Obsidian vault from a directory.",
-    "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "44c382ae3dcd218b967b608409b0b917efd0006a12bab0e320a1b2a15fb61705"
   },
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
@@ -663,5 +586,19 @@
     "description": "A script for navigating Python modules and viewing documentation interactively.",
     "doc_path": "docs/scripts/pyman.sh.md",
     "hash": "a2406993d16ebb62db3180277e352791a7ed495af7e794ebc9a57f084def0cf5"
+  },
+  "git_cd.sh": {
+    "file": "git_cd.sh",
+    "path": "git_cd.sh",
+    "description": "Quick navigation to git repositories using fzf.",
+    "doc_path": "docs/scripts/git_cd.sh.md",
+    "hash": "25efbc1325bee69dfad067edfe85f3eceb5ded6ca016a04bb83c28be8c5fa607"
+  },
+  "git_update_all_other_repos.sh": {
+    "file": "git_update_all_other_repos.sh",
+    "path": "git_update_all_other_repos.sh",
+    "description": "Updates all Git repositories except for the specified one.",
+    "doc_path": "docs/scripts/git_update_all_other_repos.sh.md",
+    "hash": "05744129f4590889c8dd66efa5ab790d8c032cc454ee55f3ccc3e1fa0c0a3878"
   }
 }

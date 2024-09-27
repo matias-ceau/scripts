@@ -1,30 +1,33 @@
-# Sync Git Repository Script
+# Sync Git Repository
 
 ---
 
-**sync-repo.sh**: A script for syncing a Git repository, including fetching, pulling, and handling conflicts.
+**sync-repo.sh**: A script to synchronize a local Git repository with its remote counterpart.
 
 ---
 
 ### Dependencies
 
-- `git`: Version control system required for repository operations.
-- `bat`: A cat clone with syntax highlighting and Git integration for better output display.
-- `glow`: A markdown viewer for terminal that enhances the display of markdown formatted output.
+- `git`: The version control system utilized for managing source code.
+- `bat`: A clone of `cat` with syntax highlighting and Git integration. It enhances the readability of output.
+- `glow`: A terminal markdown renderer that allows formatted output for better visibility.
 
 ### Description
 
-This script automates the process of syncing a Git repository by fetching the latest changes, rebasing them onto local branches, and handling potential merge conflicts interactively. It begins by checking for necessary tools like `bat` and `glow`, providing warnings if they are not installed. The script features custom functions for output formatting, command execution, and error handling. It intelligently manages local changes by stashing them before pulling updates and applies them afterward.
+`sync-repo.sh` is a Bash script designed for Arch Linux users using the Qtile window manager to facilitate the synchronization of a local Git repository with a remote repository. The script incorporates various functionalities to enhance usability and provide visual feedback on operations.
 
-Key functions include:
+Key features include:
 
-- **strip_ansi**: Removes color codes from text for cleaner output in certain contexts.
-- **print_command**: Displays commands being executed, highlighting them with `bat` if available.
-- **handle_conflicts**: Offers options to resolve conflicts during a rebase, enhancing user interactivity.
+- Color-coded output for warnings and errors, enhancing the user experience.
+- Integration of `bat` for pretty-printing commands and their outputs.
+- Usage of `glow` to display formatted messages when supported.
+- Support for stashing local changes, pulling updates from the remote, handling merge conflicts with interactive choices, and pushing commits.
+
+The script is modular with clearly defined functions for command execution, error handling, displaying usage information, and summarizing sync results.
 
 ### Usage
 
-To use the script, run it from the terminal with the path to the repository as an argument:
+To use the script, run it from the terminal by providing the path to the repository you wish to sync:
 
 ```bash
 ./sync-repo.sh <repository_path>
@@ -32,23 +35,24 @@ To use the script, run it from the terminal with the path to the repository as a
 
 **Examples:**
 
-- Sync a repository located at `~/.scripts`:
+- Syncing the repository located under `~/.scripts`:
     ```bash
     ./sync-repo.sh ~/.scripts
     ```
-- If you have defined an alias in your shell configuration:
+
+- Syncing a repository using an environment variable:
+    ```bash
+    ./sync-repo.sh $SCRIPTS
+    ```
+
+- Syncing a repository if you have set an alias for the script (e.g., `git_sync`):
     ```bash
     git_sync $SCRIPTS
     ```
 
-### Important Commands
-
-The script performs several essential Git operations:
-- **git fetch**: Grabs the latest changes from the remote repository.
-- **git pull --rebase**: Integrates changes, reapplying local commits on top of incoming changes.
-- **git stash**: Temporarily saves local modifications to allow for safe pulling of updates.
+If the script detects that it is being executed without arguments, it will display a usage guide.
 
 ---
 
-> [!TIP] 
-> This script could benefit from additional logging capabilities to help users troubleshoot issues more effectively. Additionally, it implies user interaction during conflict resolution, which might be automated for advanced users to improve workflow efficiency. Consider encapsulating logic that checks for changes before performing network operations, thus streamlining the process further.
+> [!TIP]  
+> Consider improving the error handling, especially for nested Git operations. Currently, the script aborts on the first failure; adding a feature to prompt the user for resolution can enhance workflow. Additionally, integrating logging functionality could trace operations for better troubleshooting in complex scenarios.

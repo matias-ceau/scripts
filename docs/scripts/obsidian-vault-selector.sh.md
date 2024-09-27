@@ -2,40 +2,45 @@
 
 ---
 
-**obsidian-vault-selector.sh**: A script to easily select and open any Obsidian vault from your filesystem.
+**obsidian-vault-selector.sh**: Opens any Obsidian vault with a user-friendly selector.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell where the script is executed.
-- `eza`: A modern replacement for `ls` that provides advanced options and colorful output.
-- `rg` (ripgrep): A fast search tool, used here for excluding specific file types from the output.
-- `fd`: A simple, fast, and user-friendly alternative to `find`, used to locate Obsidian vaults.
-- `improved-fzfmenu.sh`: A custom menu script for presenting the vault selection dialog with a preview feature.
+- `eza`: A modern replacement for `ls` that supports rich formatting and icons.
+- `rg`: Ripgrep, a line-oriented search tool that's faster than `grep`.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `jq`: A lightweight command-line JSON processor.
+- `improved-fzfmenu.sh`: A script for creating a fuzzy search interface.
 
 ### Description
 
-The **Obsidian Vault Selector** script allows you to quickly choose an Obsidian vault to open from your Personal Knowledge Management (PKM) directory. It leverages the power of tools like `fd`, `eza`, and `ripgrep` to efficiently list and filter directories.
+The `obsidian-vault-selector.sh` script provides a command-line utility to select and open an Obsidian vault. It integrates various commands to facilitate a user-friendly selection process and presents a list of available vaults with previews.
 
-1. **Vault Discovery**: The script uses `fd` to find all directories containing the `.obsidian` folder, indicative of an Obsidian vault.
-2. **Preview Functionality**: The `preview_cmd` function generates a preview of the contents in the selected vault, excluding specific file types such as `.js`, `.css`, or images.
-3. **Opening the Vault**: Upon selecting a vault, the `open_vault` function constructs a command to launch Obsidian with the selected vault's URL.
+The main functions in the script are:
+
+- **`preview_cmd`**: Uses `eza` to list directory contents in a formatted way and filters out certain file types (like `.js`, `.css`, etc.) while using `bat` for enhanced readability.
+- **`open_vault`**: Constructs the command to open an Obsidian vault based on the selected path, with a notification if no vault is chosen.
+- **`search_cmd`**: Reads the `obsidian.json` configuration file to retrieve paths of available vaults, using `jq` for JSON extraction.
+- **`plabel_cmd`**: Prepares a formatted display of directories for preview.
+
+The selection process utilizes `improved-fzfmenu.sh` to create an interactive menu, allowing for easy browsing and selection of vaults, with real-time previews of their contents.
 
 ### Usage
 
-1. To use the script, simply run it in a terminal:
-   ```bash
-   bash ~/path/to/obsidian-vault-selector.sh
-   ```
+To run this script, execute it from a terminal. The script does not require any command-line arguments and will launch an interactive vault selector.
 
-2. You will see a list of Obsidian vaults (directories) within your defined PKM path. 
+```bash
+bash /home/matias/.scripts/obsidian-vault-selector.sh
+```
 
-3. Use the arrow keys to select a vault and press Enter. 
-
-4. If no vault is selected, a notification will alert you that selection was unsuccessful.
+1. The script displays all available Obsidian vaults.
+2. You can navigate through the list and select a vault using arrow keys.
+3. A preview of the vault's contents will be displayed at the top.
+4. Press `Enter` to open the selected vault in Obsidian.
 
 ---
 
-> [!TIP]  
-> Consider adding error handling for scenarios where dependencies might not be installed. Additionally, you could enhance user experience by adding a command-line option to specify a different vault directory.
+> [!TIP] 
+> The script might encounter issues if `jq` or other dependencies are not installed. Consider adding a check at the beginning of the script to ensure all required tools are available. Additionally, enhancing error handling could improve user experience, particularly in the `open_vault` function for better feedback on failures.

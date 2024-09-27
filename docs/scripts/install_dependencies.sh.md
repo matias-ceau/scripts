@@ -1,57 +1,54 @@
-# Dependency Installer Script 
+# Install Dependencies Script
 
 ---
 
-**install_dependencies.sh**: Automatically installs a set of required packages on Arch Linux.
+**install_dependencies.sh**: A script to install a predefined list of dependencies using paru.
 
 ---
 
 ### Dependencies
 
-- `paru`: A community-driven package manager for Arch Linux that simplifies the installation of packages from the Arch User Repository (AUR).
+- `paru`: An AUR helper required to install packages from the Arch User Repository (AUR).
 
 ### Description
 
-The `install_dependencies.sh` script is a Bash script designed for Arch Linux users to streamline the process of installing essential packages. By leveraging the `paru` package manager, this script allows developers and users to easily install multiple packages from both the official repositories and the AUR in a single command.
+This script automates the installation of essential utilities and tools by leveraging `paru`, a popular AUR helper in the Arch Linux community. The script contains a list of packages that are commonly used and enhances productivity for users, particularly those using a tiling window manager like Qtile.
 
-The script defines a list of packages within a here-document, which is then passed to the `paru` command. The `--needed` flag ensures that only missing packages are installed, thereby avoiding unnecessary reinstallation of already installed software.
+The script utilizes a here-document to provide the list of packages to `paru`, which allows for a batch installation process. The `--needed` flag prevents reinstallation of already installed packages. The complete list of dependencies includes:
 
-The packages included in this script are:
-
-- **git**: Version control system for tracking changes.
-- **fd**: A simple, fast and user-friendly alternative to `find`.
-- **bat**: Command-line tool that provides syntax highlighting for files, similar to `cat`.
-- **fzf**: A command-line fuzzy finder.
-- **ripgrep**: A line-oriented search tool that recursively searches your current directory.
-- **neovim**: An extensible Vim-based text editor.
-- **chezmoi**: A tool to manage your dotfiles across multiple machines.
-- **dmenu**: A dynamic menu for X.
-- **findutils**: The GNU utilities to search for files in the filesystem.
-- **rofi**: A window switcher, application launcher, and dmenu replacement.
-- **dunst**: A lightweight and customizable notification daemon.
-- **python-pandas**: A powerful data analysis and manipulation library for Python.
-- **python-colorama**: A library to colorize terminal text in Python.
-- **light**: A tool for controlling backlight brightness.
-- **xdotool**: A utility that simulates keyboard input and mouse activity.
+- `git`: Version control system
+- `fd`: A simple, fast and user-friendly alternative to `find`
+- `bat`: A `cat` clone with syntax highlighting and Git integration
+- `fzf`: A command-line fuzzy finder
+- `ripgrep`: A line-oriented search tool that recursively searches your current directory
+- `neovim`: A hyperextensible Vim-based text editor
+- `chezmoi`: A tool for managing your dotfiles
+- `dmenu`: A dynamic menu for X11
+- `findutils`: Basic utilities for finding files
+- `rofi`: A window switcher, application launcher, and ssh launcher
+- `dunst`: A custom notification daemon
+- `python-pandas`: A fast, powerful, flexible, and easy-to-use open-source data analysis and manipulation tool
+- `python-colorama`: A library to make ANSI escape character sequences easier to use under Windows
+- `light`: A command-line interface for controlling backlight brightness
+- `xdotool`: A tool that simulates keyboard input and mouse activity
 
 ### Usage
 
-To run this script, simply execute it in your terminal. Ensure that you have the necessary permissions to execute it. You can use the command:
-
-```bash
-bash /home/matias/.scripts/install_dependencies.sh
-```
-
-Alternatively, you can make it executable and run it directly:
+To utilize this script, ensure it is executable and run it from the terminal. You can make it executable with the following command:
 
 ```bash
 chmod +x /home/matias/.scripts/install_dependencies.sh
+```
+
+Execute the script by running:
+
+```bash
 /home/matias/.scripts/install_dependencies.sh
 ```
 
-This will install all of the packages listed in the script if they are not already installed on your system.
+This command will initiate the installation process for all specified packages. If you wish to integrate this script with your custom workflow in Qtile, you could bind it to a key combination, allowing for quick access to setup or maintenance tasks.
 
 ---
 
-> [!TIP]
-This script could include error handling to ensure that any problems in the installation process are captured. Consider adding checks to verify if `paru` is installed before attempting to install the packages. Additionally, integrating a way to log the output of the install process could enhance the usability and troubleshooting experience.
+> [!TIP]  
+> While this script is efficient for installing a predefined workload, consider enhancing its flexibility by allowing users to pass additional arguments or specifying which packages to install. Adding error handling could also improve robustness against installation failures (e.g., if a package is already installed or not found).

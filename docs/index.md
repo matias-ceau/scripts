@@ -26,11 +26,13 @@
 - [get_hyperlinks_in_folder.py](scripts/get_hyperlinks_in_folder.py.md) -- *A Python script to identify hyperlinks in Markdown notes and visualize their relationships as a graph.*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *A script to list Git repositories present on the current host.*
 - [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Generate and visualize dependencies among user scripts.*
+- [git_cd.sh](scripts/git_cd.sh.md) -- *Quick navigation to git repositories using fzf.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script for cloning Git repositories by specifying developer and package.*
+- [git_update_all_other_repos.sh](scripts/git_update_all_other_repos.sh.md) -- *Updates all Git repositories except for the specified one.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Convert GRUB_INIT_TUNE strings to audio files.*
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *A script to display Pastel subcommands with live help.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A versatile FZF menu launcher that uses Alacritty terminal.*
-- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Automatically installs a set of required packages on Arch Linux.*
+- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *A script to install a predefined list of dependencies using paru.*
 - [json_to_markdown.py](scripts/json_to_markdown.py.md) -- *Converts JSON content into a formatted Markdown file.*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *Create a new Jupyter notebook and open it in Chromium.*
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches a terminal to display current keyboard layout using `bat`.*
@@ -43,11 +45,11 @@
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches a new TMUX session for MegaCMD.*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
-- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
+- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A script to create user scripts with various templates.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A utility for creating new scripts with predefined templates.*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
-- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with NVim.*
-- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *A script to easily select and open any Obsidian vault from your filesystem.*
+- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with Neovim.*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Opens any Obsidian vault with a user-friendly selector.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script to fuzzy search installed and available packages using `fzf`.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
@@ -65,16 +67,16 @@
 - [rgfzf.sh](scripts/rgfzf.sh.md) -- *Combines Ripgrep and FZF to search files and open in Vim interactively.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *A script to transfer unlistened music albums to a Sandisk media player.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf for easy access and previews*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
 - [select_script](scripts/select_script.md) -- *A C script that selects a chosen script using cached data from a CSV file.*
-- [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Syncs user folders to a mega backup directory structure.*
+- [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing specified directories with a cloud service.*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Obtains the most frequent lines, words, or characters in shell history files.*
 - [show-all-qutebrowser-scripts.sh](scripts/show-all-qutebrowser-scripts.sh.md) -- *Fetches and displays all Qutebrowser script files using bat.*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Displays a visual representation of the keyboard layout in terminal.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Play a song with cmus using dmenu*
 - [speach-to-text.py](scripts/speach-to-text.py.md) -- *A script to record audio and transcribe it using OpenAI's Whisper model.*
-- [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script for syncing a Git repository, including fetching, pulling, and handling conflicts.*
+- [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script to synchronize a local Git repository with its remote counterpart.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a specified command.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *Interactive script to assist with tmux commands and manage usage information.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*

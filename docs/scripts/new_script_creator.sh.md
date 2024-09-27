@@ -2,58 +2,49 @@
 
 ---
 
-**new_script_creator.sh**: A utility for creating new scripts with predefined templates.
+**new_script_creator.sh**: A script to create user scripts with various templates.
 
 ---
 
 ### Dependencies
 
-- `bat`: A command-line tool for syntax highlighting and displaying file contents.
-- `nvim`: Neovim, an editor to modify the created scripts.
-- `rg`: Ripgrep, a line-oriented search tool to match patterns.
-- `utils_update_symlimks.sh`: This is a custom script presumed to handle symbolic link updates.
+- `bat`: A modern alternative to `cat` with syntax highlighting.
+- `rg`: A command-line tool for searching text using regular expressions, often known as ripgrep.
+- `nvim`: An extensible text editor, specifically Neovim.
+- `utils_update_symlinks.sh`: A custom script assumed to manage symbolic links for your scripts.
 
 ### Description
 
-The `new_script_creator.sh` script automates the creation of new shell, python, or xonsh scripts based on user input. It offers functionalities to:
+The New Script Creator is a Bash script designed to streamline the creation of user scripts in different programming languages including Bash, Python, and Xonsh. This utility particularly benefits users working within the Arch Linux environment and using the Qtile window manager, as it allows for quick script generation from the command line.
 
-- Create a new script, prompting for a name if none provided.
-- Change an existing file into a user script.
-- Build templates for different scripting languages based on the file extension.
-
-**Functions Breakdown**:
-
-1. **usage()**: Displays help information and usage instructions.
-2. **templater()**: Generates a template header based on the file extension. It supports `bash`, `python`, and `xonsh`.
-3. **ensure_extension()**: Ensures that the filename provided has the correct extension; prompts the user if not.
-4. **script_creator()**: Handles the creation, editing, and permission assignment for the new script file. It also updates symbolic links after creation.
+#### Functions:
+- **usage**: Displays the help information with the usage of the script.
+- **templater**: Determines the script template based on the provided file extension and generates the appropriate shebang line.
+- **ensure_extension**: Ensures the provided filename has a valid extension or prompts the user to choose a language type.
+- **script_creator**: Handles the actual creation of the script file, makes it executable, and opens it in Neovim for edits.
 
 ### Usage
 
-To use the script, simply execute it from the terminal. Below are some usage examples:
+1. **Show help**: 
+   ```bash
+   ./new_script_creator.sh --help
+   ```
+2. **Create a new script**: Simply run the script and provide the desired filename.
+   ```bash
+   ./new_script_creator.sh my_script
+   ```
+3. **Specify a language**: If you do not provide an extension, it will prompt you to choose a language:
+   ```
+   [S]hell/[p]ython/[x]onsh? 
+   ```
+4. **Convert an existing file**:
+   ```bash
+   ./new_script_creator.sh -f existing_script.sh
+   ```
 
-- To create a new script, just run:
-  ```
-  ./new_script_creator.sh
-  ```
-  You will be prompted for the script filename.
-
-- To create a specific script, provide the filename:
-  ```
-  ./new_script_creator.sh my_script.py
-  ```
-
-- If you wish to transform an existing file into a user script:
-  ```
-  ./new_script_creator.sh -f existing_script.sh
-  ```
-
-- For help, you can run:
-  ```
-  ./new_script_creator.sh -h
-  ```
+The script ensures that the created script is executable if it has more than 22 characters and updates symbolic links accordingly after its creation.
 
 ---
 
 > [!TIP] 
-> The script relies on several external tools (`bat`, `nvim`, `rg`) being installed on your system. Make sure to have them installed, or the script may not function as intended. Additionally, consider adding error handling for editing and file operations to improve robustness, such as checking if the file creation or moving was successful.
+> This script could benefit from adding error handling, especially when dealing with file operations. Consider checking if the `$SCRIPTS` directory exists before creating a script, and improve the user prompts to handle unexpected inputs more gracefully. Additionally, implementing a confirmation step before overwriting existing scripts could prevent accidental data loss.

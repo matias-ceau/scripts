@@ -1,4 +1,4 @@
-# Script Launcher 
+# Script Launcher
 
 ---
 
@@ -8,41 +8,46 @@
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder that allows for script selection.
-- `bat`: A clone of `cat` with syntax highlighting and Git integration, used for displaying script contents.
-- `pastel`: A utility for terminal colors, required for color formatting.
+- `fzf`: Command-line fuzzy finder, used for interactive selection.
+- `bat`: A cat clone with syntax highlighting and Git integration, used for previewing scripts and documentation.
+- `pastel`: A tool to generate and manipulate colors in the terminal.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
 
 ### Description
 
-The `script_launcher.sh` script is a Bash utility designed to provide a convenient interactive interface for executing various scripts within a directory. Utilizing `fzf`, it allows users to browse and select scripts with real-time previews and various actions. 
+The `script_launcher.sh` script acts as a script execution launcher utilizing `fzf`, a fuzzy finder, to list and execute scripts stored in a specified directory (`$SCRIPTS`). Users can view documentation for each script via a preview pane, which uses `bat` to format the output nicely. It supports colored file types for better visual identification and enables various key-bindings for quick actions.
 
-Key features of the script include:
+- **Preview Commands**:
+  - Shows the documentation file if it exists (`$SCRIPTS/docs/scripts/{2}.md`).
+  - Displays the source code of the selected script.
 
-- **Preview functionality**: When a script is selected, detailed documentation (if available) or the script source can be viewed in a preview window.
-- **Color-coded outputs**: Different file types (like `.sh`, `.xsh`, and `.py`) are color-coded for quick visual identification, enhancing user experience.
-- **Keybindings**: The interface supports custom keybindings for executing scripts, editing source files, and toggling preview types.
-- **Flexibility for expansion**: The script outlines several TODO items for future features, including the possibility to render documentation in different formats (e.g., PDF, HTML).
+- **Coloring Utility**: The script includes a function `hex2ansi` to convert hex color codes to ANSI for colored outputs, improving visual distinction among different script types.
 
 ### Usage
 
-To run the script, execute it from your terminal:
+To use the script, run it from the terminal. It can be invoked with the optional `--embedded` argument, which changes its behavior:
 
+- To launch in terminal:
 ```bash
-bash /home/matias/.scripts/script_launcher.sh
+bash ~/scripts/script_launcher.sh
 ```
 
-Once running, you can navigate the list of scripts using the keyboard. Here are some keybindings you can use:
+- To launch embedded:
+```bash
+bash ~/scripts/script_launcher.sh --embedded
+```
 
-- **Enter**: Execute the selected script.
-- **Alt + Enter**: Run the script in a new terminal.
-- **Ctrl + E**: Open the script in `nvim`.
-- **Alt + E**: Open the script in `nvim` in a new terminal.
-- **Alt + S**: Switch to source preview of the script.
-- **Alt + D**: Switch back to documentation preview.
+The script lists scripts found in the `$SCRIPTS` directory. Use the following keybindings during selection:
 
-As the interface generates the list using `fd`, ensure your scripts are organized correctly in the `$SCRIPTS` directory.
+- `Enter`: Execute the selected script.
+- `Alt + Enter`: Run the script in a new terminal.
+- `Ctrl + E`: Open the script in `nvim`.
+- `Alt + E`: Open `nvim` in a new terminal with the script.
+- `Alt + S`: Switch to show the source code preview.
+- `Alt + D`: Switch back to documentation preview.
+- `Resize`: Refresh the preview window.
 
 ---
 
-> [!TIP]  
-> The script has potential for enhancements. Consider implementing multi-selection capabilities, which would allow for executing multiple scripts at once. Additionally, the inclusion of arguments for functions could make this tool more flexible for various workflows.
+> [!TIP] 
+> Review the dependencies to ensure they are installed and accessible in the `$PATH`. The script includes TODO comments for future improvements, such as adding PDF/HTML rendering, multiple script selection, and preview enhancements. Implementing these features could significantly enhance usability and functionality.
