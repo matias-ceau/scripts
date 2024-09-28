@@ -1,43 +1,52 @@
-# Get Hyperlinks in Folder
+# Hyperlink Note Graph Generator
 
 ---
 
-**get_hyperlinks_in_folder.py**: A Python script to identify hyperlinks in Markdown notes and visualize their relationships as a graph.
+**get_hyperlinks_in_folder.py**: A script to create a directed graph of hyperlinks within Markdown notes.
 
 ---
 
 ### Dependencies
 
-- `python`: The main programming language used for the script.
-- `click`: A package for creating command-line interfaces; it simplifies argument parsing.
-- `matplotlib`: A plotting library used for drawing the graph representation.
-- `networkx`: A library for the creation, manipulation, and study of complex networks.
-- `tqdm`: A fast, extensible progress bar for Python; it provides a visual indication of progress.
-- `fd`: A simple, fast, and user-friendly tool to find entries in the file system.
-- `rg (ripgrep)`: A command-line search tool that recursively searches your current directory for a regex pattern, faster than other search tools.
+- `fd`: A simple, fast and user-friendly alternative to 'find'.
+- `rg`: `ripgrep` is a line-oriented search tool that recursively searches your current directory for a regex pattern.
 - `jq`: A lightweight and flexible command-line JSON processor.
+- `matplotlib`: A Python plotting library to create static, interactive, and animated visualizations.
+- `networkx`: A Python library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks.
+- `click`: A Python package for creating command-line interfaces.
+- `tqdm`: A library for adding progress bars to Python scripts.
 
 ### Description
 
-This script is designed to locate all Markdown files in a specified directory, extract hyperlinks (noted by [[...]] syntax), and create a visual representation of these connections in a directed graph format.
+This script, **get_hyperlinks_in_folder.py**, is designed to analyze a directory of Markdown files and generate a directed graph of hyperlinks between these files. It uses several command-line tools (`fd`, `rg`, `jq`) to efficiently parse and extract references formatted as `[[Link Title]]` from your Markdown notes. It then compiles these references into a network graph using `networkx`, with nodes representing individual notes and edges representing hyperlinks between them. Optional visualization of the graph is provided through `matplotlib`.
 
-1. The script utilizes `click` for command-line interaction, allowing users to specify the directory containing Markdown files.
-2. It uses the `fd` command to efficiently list Markdown files and `rg` combined with `jq` to extract hyperlinks from those files.
-3. It constructs a directed graph using the `networkx` library, where nodes represent individual Markdown files, and edges represent hyperlinks between them.
-4. Advanced graph visualization is performed using `matplotlib`, which allows for an intuitive view of the relationships between notes.
+The primary functions include:
+- **get_search_path()**: Determines the folder path to search for Markdown files.
+- **list_all_notes()**: Lists all `.md` files in the specified directory.
+- **get_references()**: Uses `rg` and `jq` to extract hyperlink references from each Markdown file.
+- **create_graph()**: Constructs the graph using NetworkX.
+- **draw_graph()**: Visualizes the graph using Matplotlib.
 
 ### Usage
 
-To use the script, simply run it from the terminal. You can specify an alternative path containing your Markdown files and optionally choose to visualize the hyperlink graph. Here’s how you can run the script:
+To use this script, execute it from a terminal. You can optionally specify a directory to search and a flag to draw the graph:
 
 ```bash
 python get_hyperlinks_in_folder.py --path /path/to/your/notes --draw
 ```
 
-- `--path`: (Optional) Specify the path to the folder with Markdown files (defaults to current directory).
-- `--draw`: (Optional) Include this flag to generate and display the graph of links.
+- `--path`: Specify the directory containing your Markdown files. Defaults to the current directory.
+- `--draw`: Add this flag to visualize the graph using Matplotlib.
+
+Example command:
+
+```bash
+python get_hyperlinks_in_folder.py --path ~/Documents/notes --draw
+```
+
+Executing the above command will generate and display a graph of hyperlinks between Markdown files in the specified directory.
 
 ---
 
-> [!TIP] 
-> While the script successfully builds relationships between Markdown files, it could be improved by implementing error handling for cases where no Markdown files are found or when the graph is empty. Additionally, providing an option to export the graph in various formats (like PNG or SVG) could enhance usability.
+> [!TIP]
+> The script relies heavily on shell utilities like `fd`, `rg`, and `jq`. Ensure these are installed and properly configured in your system's `$PATH` on Arch Linux. Additionally, adding error handling for subprocess calls could improve robustness.

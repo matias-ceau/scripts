@@ -1,40 +1,40 @@
-# Git Update All Other Repositories
+# Git Update All Other Repos
 
 ---
 
-**git_update_all_other_repos.sh**: Updates all Git repositories except for the specified one.
+**git_update_all_other_repos.sh**: Update multiple Git repositories excluding personal ones
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find` for searching files. 
-- `sed`: A stream editor for filtering and transforming text in a pipeline.
-- `git`: The version control system that manages the repositories.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `sed`: Stream editor for filtering and transforming text.
+- `git`: Version control system necessary for pulling updates.
+- `bash`: Required to execute the script.
 
 ### Description
 
-This script is designed for users who maintain multiple Git repositories and want a convenient way to update them all at once. The script specifically excludes the repository located at `/home/matias/.git/matias-ceau`, allowing the user to perform updates without interfering with their active development.
+The script **git_update_all_other_repos.sh** is designed to update multiple Git repositories in a specified directory that are not your personal ones (as indicated by the exclusion of your username from the matching pattern). The script uses `fd` to search for directories ending with `.git`, except those containing 'matias-ceau'. Each matching directory is transformed with `sed` to remove the `.git` suffix for traversal. It changes into each directory and executes `git pull` to fetch and merge changes from a remote repository. Also, it checks the status of each repository.
 
-Here’s a breakdown of how the script works:
-
-1. **Finding Repositories**: The script uses `fd` to search for directories that contain a `.git` subdirectory, which indicates the presence of a Git repository.
-2. **Filtering and Formatting**: It utilizes `sed` to exclude the specified repository (`matias-ceau`) and to format the output.
-3. **Updating Repositories**: For each found repository, it changes the current working directory to the repository location, executes a `git pull --verbose` command to fetch the latest changes, and displays the status of the repository after the update.
-4. **Error Handling**: If the update fails for any repository, it prints an error message in red.
-5. **Progress Indication**: After updating each repository, it pauses for a second to allow the user to see the output.
+- **fd**: Searches for directories with `.git` suffix.
+- **sed**: Filters out personal repositories and cleans paths for navigation.
+- **git pull**: Updates the local repository by integrating changes from the remote branch.
+- **git status**: Provides a short summary of the repository state after each operation.
 
 ### Usage
 
-To run the script, execute the following command in your terminal:
+The script is meant to be run from a terminal in an interactive session as it provides verbose feedback. Here's how you can use it:
 
 ```bash
-bash /home/matias/.scripts/git_update_all_other_repos.sh
+export GIT_REPOS=/path/to/repos
+/home/matias/.scripts/git_update_all_other_repos.sh
 ```
 
-You can also create a keybinding in your window manager (Qtile) to make it easily accessible. For example, you could bind it to a key combination for quick access when managing your repositories.
+- Ensure that the `GIT_REPOS` environment variable is set to the directory containing your Git repositories.
+- The script will display each repository being updated and indicate if a pull operation fails with a distinct message.
 
 ---
 
 > [!TIP] 
-> Consider expanding the filtering logic to allow for multiple excluded repositories instead of hardcoding one. You could utilize an array to easily manage exclusions and make the script more versatile. Additionally, including some kind of logging mechanism may help in tracking updates across repositories, especially if running the script regularly or on a server.
+> Consider adding error handling to manage scenarios where `fd`, `git`, or directory navigation could fail unexpectedly. Enhancing log messages for clarity or adding a summary at the end could greatly improve usability.

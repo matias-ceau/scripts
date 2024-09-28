@@ -1,53 +1,51 @@
-# ANSI 8-Bit Color Converter to RGB and HEX
+# ANSI to RGB/HEX Converter
 
 ---
 
-**ansi8bit2rgb_hex.py**: Converts 8-bit ANSI colors to RGB or HEX format.
+**ansi8bit2rgb_hex.py**: Converts 8-bit ANSI color codes to RGB or HEX format.
 
 ---
 
 ### Dependencies
 
-- `python`: Required to run the script, as it is written in Python.
+- `python`: The script is written in Python and requires a Python interpreter.
+- `os` and `sys`: These are standard Python libraries used for interacting with the operating system and command-line arguments.
 
 ### Description
 
-The `ansi8bit2rgb_hex.py` script provides functionality to convert ANSI 8-bit color codes into RGB and HEX color formats. This is particularly useful for applications needing color representation in a more readable format (like web design or graphical design).
+This script converts 8-bit ANSI color codes to RGB or HEX formats. It supports standard colors, high intensity colors, and grayscale colors within the ANSI color range 0 to 255. The conversion is done by mapping colors to RGB tuples based on their position in the ANSI standard, with specific handling for the standard 0-15 color codes, 16-231 color range that map to RGB cubes, and 232-255 grayscale range.
 
-The core features of the script are encapsulated in various functions:
-
-- **ansi_to_rgb(color)**: Converts an 8-bit ANSI color code into a tuple of RGB values. It handles standard colors (0-15), 6x6x6 cube colors (16-231), and grayscale colors (232-255).
-- **format_color(rgb, color_format)**: Formats the RGB tuple into either HEX or RGB string format based on the specified `color_format`.
-- **print_colors(colors, color_format, colorize=False, print_names=False)**: Prints the resulting colors in the selected format, with options for colorizing the output on the terminal and including the color names.
+- **ansi_to_rgb(color)**: Converts an ANSI color code to an RGB tuple.
+- **format_color(rgb, color_format)**: Formats the RGB tuple into either a `rgb(r, g, b)` or `#rrggbb` hex string based on the requested format.
+- **print_colors(colors, color_format, colorize, print_names)**: Prints the list of color conversions with options for colorized and named output.
 
 ### Usage
 
-You can execute the script from the terminal to convert color codes. The basic command structure is:
+Run the script with commands and options to convert color codes:
 
 ```bash
-python ansi8bit2rgb_hex.py <command> [options] <number>|<range>|<list>
+./ansi8bit2rgb_hex.py <command> [options] <number>|<range>|<list>
 ```
 
 - **Commands**:
-  - `rgb`: Output the colors in RGB format.
-  - `hex`: Output the colors in HEX format.
-  - `help`: Display this help message.
+  - `rgb`: Outputs the 8-bit color as `rgb(r, g, b)`.
+  - `hex`: Outputs the color in `#rrggbb` hex format.
+  - `help`: Displays usage information.
 
 - **Options**:
-  - `--name`, `-n`: Print the color name alongside the value.
-  - `--colored`, `-c`: Colorize the output in the terminal.
+  - `-n`, `--name`: Prints the color name followed by its value.
+  - `-c`, `--colorize`: Colorizes the output for terminal displays.
 
-#### Examples:
-```bash
-python ansi8bit2rgb_hex.py rgb 242       # Outputs: rgb(108,108,108)
-python ansi8bit2rgb_hex.py rgb -n 242    # Outputs: color242    rgb(108,108,108)
-python ansi8bit2rgb_hex.py hex 242       # Outputs: #6c6c6c
-python ansi8bit2rgb_hex.py rgb            # Outputs all 256 colors
-python ansi8bit2rgb_hex.py rgb 35-167     # Outputs colors from 35 to 167 inclusive
-python ansi8bit2rgb_hex.py rgb 35,167     # Outputs colors 35 and 167
-```
+- **Examples**:
+  ```bash
+  ./ansi8bit2rgb_hex.py rgb 242          # Outputs: rgb(108,108,108)
+  ./ansi8bit2rgb_hex.py rgb -n 242       # Outputs: color242    rgb(108,108,108)
+  ./ansi8bit2rgb_hex.py hex 242          # Outputs: #6c6c6c
+  ./ansi8bit2rgb_hex.py rgb              # Outputs all 256 colors
+  ./ansi8bit2rgb_hex.py rgb 35-167       # Outputs colors from 35 to 167 (inclusive)
+  ./ansi8bit2rgb_hex.py rgb 35,167       # Outputs the colors 35 and 167
+  ```
 
 ---
 
-> [!TIP]  
-> The script lacks comprehensive error handling for cases where the supplied arguments do not match expected formats or ranges. Additionally, the main function could benefit from refactoring for improved clarity and modularity. Consider using a configurations object to handle arguments and flags, which would streamline the parsing logic.
+> [!TIP] The script assumes sane input; adding exception handling for incorrect arguments could improve robustness. Additionally, the CLI argument parsing could benefit from using a library like `argparse` for better maintainability and clarity.

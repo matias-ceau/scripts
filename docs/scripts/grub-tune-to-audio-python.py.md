@@ -1,46 +1,38 @@
-# GRUB Tune to Audio Generator
+# GRUB Tune to Audio Converter
 
 ---
 
-**grub-tune-to-audio-python.py**: Convert GRUB_INIT_TUNE strings to audio files.
+**grub-tune-to-audio-python.py**: Script to convert GRUB_INIT_TUNE string to an audio file (MP3 format)
 
 ---
 
 ### Dependencies
 
-- `pydub`: A simple and easy-to-use library for audio manipulation. It requires `ffmpeg` or `libav` for full audio capabilities.
+- `pydub`: This library is used to process audio, create tones, and export them to different audio formats.
+- `ffmpeg` or `libav`: Required for the `pydub` library to handle audio encoding and decoding.
 
 ### Description
 
-This Python script allows users to convert GRUB's `GRUB_INIT_TUNE` string format into an MP3 audio file. The `GRUB_INIT_TUNE` format specifies music in terms of a sequence of frequencies and respective durations. The script will parse this string, generate the corresponding tones using the `pydub` library, and save the final audio file as `output.mp3`.
+This script provides a utility to convert GRUB's `GRUB_INIT_TUNE` strings into actual audio files. The `GRUB_INIT_TUNE` is typically used to signal boot events with specific beeps; however, this script enables listening to these tunes outside of a boot loader environment by generating an MP3 file from the specified tune string.
 
-The main function `grub_tune_to_audio` does the heavy lifting by:
-1. Parsing the provided tune string into individual components.
-2. Calculating the duration of each note based on the specified tempo.
-3. Generating sine wave tones for each frequency and duration defined in the input string.
+The core function, `grub_tune_to_audio`, interprets the tune string by extracting the tempo and note parameters, and for each note, it calculates its duration based on the beats and tempo. It utilizes the `pydub` library's `Sine` wave generator to create the audio for each note, which are then concatenated into a single audio segment.
 
 ### Usage
 
-To use this script, you'll need to run it from the terminal and provide a valid `GRUB_INIT_TUNE` string as an argument. Below is the basic command structure:
+The script is executed via the command line and expects a single argument: the `GRUB_INIT_TUNE` string.
 
 ```bash
-python grub-tune-to-audio-python.py "<GRUB_INIT_TUNE string>"
+$ python /home/matias/.scripts/grub-tune-to-audio-python.py "120 440 4 330 2"
 ```
 
-**Example usage**:
+This command will generate an MP3 file named `output.mp3` in the current directory with the specified tones.
 
-```bash
-python grub-tune-to-audio-python.py "100 440 2 550 2 660 4"
-```
+#### Example
 
-This example translates to a tune with:
-- 2 beats of 440 Hz
-- 2 beats of 550 Hz
-- 4 beats of 660 Hz
-
-After running, it generates an MP3 file named `output.mp3` in the same directory.
+- **Input**: A `GRUB_INIT_TUNE` string like `"120 440 4 330 2"`
+- **Output**: An `output.mp3` file containing the converted audio sequence based on the input string.
 
 ---
 
-> [!TIP]  
-> The script currently only outputs MP3 files. It would be beneficial to add options for different audio formats (like WAV or OGG) based on user preferences. Additionally, consider adding error handling for invalid input formats to improve robustness.
+> [!TIP]
+> One potential improvement is to allow users to specify the output filename instead of defaulting to `output.mp3`. Also, ensuring the user has `ffmpeg` installed could be added to the script's checks to prevent runtime errors.

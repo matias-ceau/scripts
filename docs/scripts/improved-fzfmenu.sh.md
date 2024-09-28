@@ -1,44 +1,42 @@
-# Improved FZF Menu
+# Improved FZF Menu with Alacritty
 
 ---
 
-**improved-fzfmenu.sh**: A versatile FZF menu launcher that uses Alacritty terminal.
+**improved-fzfmenu.sh**: A customizable FZF menu utilizing Alacritty which can output piped data
 
 ---
 
 ### Dependencies
 
-- `fzf`: Command-line fuzzy finder that processes the input and helps create an interactive menu.
-- `alacritty`: A fast terminal emulator that is required to launch the FZF menu. 
-- `bash`: The script is written in Bash.
+- `alacritty`: A modern terminal emulator focused on performance.
+- `fzf`: A command-line fuzzy finder for quickly searching and opening files.
 
 ### Description
 
-The **improved-fzfmenu.sh** script launches an FZF (Fuzzy Finder) interface within the Alacritty terminal. It allows you to interactively choose from items presented in a fuzzy-search style. The script accepts several optional parameters allowing customization such as the terminal title and enabling piping of output.
+The **Improved FZF Menu** script is designed to launch a fuzzy finder interface using `fzf` within an `alacritty` terminal window. This script supports customization of the terminal window's title and behavior via command-line arguments. Additionally, it includes the ability to pipe results from `fzf` to other commands or outputs.
 
-When the script is executed, it processes various command-line arguments:
+The script processes all incoming arguments, identifying those prefixed with `title_is_` to set the window title and checking if `--pipe` is present to determine if output should be piped. Arguments are safely escaped to prevent command-line injection vulnerabilities.
 
-1. **--pipe**: If this argument is included, the output from FZF can be piped to the standard output stream.
-2. **Title Customization**: You can customize the terminal window title by providing a parameter that begins with `title_is_`.
-
-The script initializes variables for the terminal (`term`), title (`title`), class (`class`), and whether to enable piping (`pipe`). It then aggregates any additional arguments for FZF by escaping them for proper processing.
+The `term`, `class`, and default `title` can be adjusted in the script, offering flexible usage. 
 
 ### Usage
 
-To use the script, simply execute it from your terminal with any desired options. Here are some examples:
+To use this script, you can run it directly from the terminal. Below are some example usages:
 
 ```bash
-# Basic usage without piping or title customization
-/home/matias/.scripts/improved-fzfmenu.sh "Option 1" "Option 2" "Option 3"
+# Basic usage
+./improved-fzfmenu.sh
 
-# Using title customization
-/home/matias/.scripts/improved-fzfmenu.sh title_is_Custom_Title "Option A" "Option B"
+# Customize the title with a prefix
+./improved-fzfmenu.sh title_is_MyTitle
 
-# Enabling piping
-/home/matias/.scripts/improved-fzfmenu.sh --pipe "Select this" "Or that"
+# Use piped output
+./improved-fzfmenu.sh --pipe
 ```
+
+This script can be integrated into your `qtile` window manager for quick access, or used interactively in a terminal session.
 
 ---
 
-> [!TIP] 
-> Consider enhancing your script by implementing error handling for invalid arguments and terminal launching failures. Furthermore, adding options for different terminal emulators (e.g., `kitty`) and supporting window sizing would significantly increase its versatility.
+> [!NOTE]  
+> This script's customization options for terminal and sizing are not currently implemented, as mentioned in the TODO section. Providing users with terminal choices between `alacritty` and others like `kitty`, as well as adjustable window sizes, could enhance its utility.

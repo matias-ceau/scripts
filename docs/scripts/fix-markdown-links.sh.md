@@ -1,49 +1,46 @@
-# Fix Markdown Links
+# Fix Markdown Links Script
 
 ---
 
-**fix-markdown-links.sh**: A script to convert markdown links to be relative to a specified base directory.
+**fix-markdown-links.sh**: A script to ensure that markdown links have consistent leading slashes for relative paths.
 
 ---
 
 ### Dependencies
 
-- `sed`: A stream editor for filtering and transforming text, used here to modify markdown files.
+- `bash`: The script is written in bash, which should be available on Arch Linux by default.
+- `sed`: Utilized for processing and modifying text within files.
 
 ### Description
 
-The `fix-markdown-links.sh` script is designed to process one or multiple markdown files, adjusting their links to ensure that they are relative to a specified base directory. When invoked, the script can handle both single markdown files and entire directories containing markdown files. 
+This script, `fix-markdown-links.sh`, is designed to standardize the format of markdown links within specified files or directories by ensuring that all relative links have a leading slash. This is particularly useful for maintaining uniformity and resolving potential issues when links are rendered or served from different environments.
 
-The core functionality is implemented in the `process_file` function, which utilizes the `sed` command to update the links:
-
-- It searches for markdown links that do not begin with a leading slash and adds that slash, making them absolute relative to the specified base directory.
+The script functions by applying a regular expression with `sed` to identify markdown links that do not start with a slash (indicating a relative path) and modifying them to do so. It processes each file either individually or recursively if a directory is specified.
 
 ### Usage
 
-To use the script, you need to invoke it from the terminal with two arguments: the base directory and the target markdown file or directory. Here’s the general command format:
+The script takes two primary arguments:
+
+1. `<base_dir>`: This should include a leading slash to denote the base directory for relativizing paths.
+2. `<file or directory>`: The specific markdown file or directory containing markdown files to process.
+
+#### Example
+
+To process a single markdown file:
 
 ```bash
-./fix-markdown-links.sh <base_dir> <file or directory>
+./fix-markdown-links.sh /base/dir /path/to/file.md
 ```
 
-- **`<base_dir>`**: The absolute base directory which the links will reference (must start with a `/`).
-- **`<file or directory>`**: The markdown file (ending in `.md`) or directory that contains markdown files to process.
-
-#### Examples
-
-1. To process a single markdown file:
+To process all markdown files within a directory:
 
 ```bash
-./fix-markdown-links.sh /home/user/project /home/user/project/docs/readme.md
+./fix-markdown-links.sh /base/dir /path/to/directory
 ```
 
-2. To process all markdown files in a directory:
-
-```bash
-./fix-markdown-links.sh /home/user/project /home/user/project/docs/
-```
+Note: The script must be executed with the correct number of arguments; otherwise, it will prompt an error and display the usage message.
 
 ---
 
-> [!TIP]  
-> While the script effectively adds the leading slash to the links, it assumes all links are relative without additional checks, which may not cover malformed cases. Consider expanding the regex to handle edge cases, such as links containing paths that already start with a slash or other formatting issues. It may also be beneficial to implement a dry-run mode that allows users to see the changes that would be made before modifying the files.
+> [!TIP]
+> A potential improvement for the script is to include functionality for backing up the original files before modification, to prevent data loss in case of unexpected errors. Additionally, allowing users to optionally exclude certain directories or suffixes could make the script more versatile for various use cases. Adding logging capabilities could enhance the user's ability to audit and review changes made by the script.

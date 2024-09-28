@@ -1,51 +1,60 @@
-# Wallpaper Selector Script
+# Wallpaper Changer Script
 
 ---
 
-**wallpaper.sh**: A script to pick random wallpapers from a specified list.
+**wallpaper.sh**: Script to set and manage desktop wallpapers randomly or manually on Arch Linux with qtile WM.
 
 ---
 
 ### Dependencies
 
-- `feh`: A lightweight image viewer for setting wallpapers.
-- `notify-send`: A command-line tool to send desktop notifications.
-- `fzfmenu.sh`: An external fuzzy finder script (recommended for interactive selections).
-- `yad`: A GUI dialog tool for displaying graphical dialogs.
+- `feh`: A lightweight image viewer used here to set the wallpaper.
+- `notify-send`: Utilized for desktop notifications.
+- `fzfmenu.sh`: A fuzzy finder to select wallpapers manually (from the junegunn repository).
+- `yad`: Yet Another Dialog for GUI selections and previews.
 
 ### Description
 
-This script provides a convenient way to change your desktop wallpaper on Arch Linux using Bash. It allows you to select a wallpaper either randomly from a specified directory or through a GUI, ensuring a personalized desktop experience every time you use it.
+This script facilitates changing desktop wallpapers by selecting random images from a specified directory or manually choosing one through a CLI or GUI interface. A cache log of previously used wallpapers is maintained. It offers several modes of operation:
 
-The script primarily utilizes `feh`, which is crucial for setting the wallpaper. It keeps a cache of wallpapers that have been used recently, allowing users to revert to previous selections. 
+- **Random Selection**: Automatically pick a random wallpaper.
+- **Manual Selection**: Use a fuzzy finder (`fzf`) for CLI selection or a graphical dialog (`yad`) for GUI selection.
+- **Revert to Previous**: Set a previously used wallpaper.
+- **Set Default**: If no arguments are provided, revert to a default wallpaper.
 
-The core functionality of the script can be summarized as follows:
-- **Random Wallpaper**: If the `--random` argument is provided, it randomly selects a wallpaper from the `~/.wallpapers/` directory.
-- **Select Wallpaper**: Using the `--select` option, users can choose a wallpaper interactively with `fzfmenu.sh`.
-- **Previous Wallpaper**: The `--previous` option allows reverting to previously used wallpapers. You can specify how many steps back you want to go.
-- **GUI Selection**: The `--gui` option launches a graphical interface using `yad` to preview and select wallpapers.
+The script uses `feh` to set the wallpaper and `notify-send` for notifications. Additionally, the script prevents duplicate entries in the cache log.
 
 ### Usage
 
-To use the script, invoke it from the terminal or assign a keybinding in your window manager. Here are some examples of how to execute it:
+Run the script with the desired option:
 
 ```bash
-# Set wallpaper randomly
-bash /home/matias/.scripts/wallpaper.sh --random
-
-# Choose a wallpaper interactively
-bash /home/matias/.scripts/wallpaper.sh --select
-
-# Set the previous wallpaper (1 step back)
-bash /home/matias/.scripts/wallpaper.sh --previous [n]
-
-# Open the GUI for selecting a wallpaper
-bash /home/matias/.scripts/wallpaper.sh --gui
+./wallpaper.sh --random
 ```
 
-If no arguments are provided, the script defaults to a predefined wallpaper located at `~/.wallpapers/_toitssuze.jpg`.
+Changes the wallpaper to a random image from the configured directory.
+
+```bash
+./wallpaper.sh --select
+```
+
+Gives an interactive CLI selection menu using `fzf`.
+
+```bash
+./wallpaper.sh --previous [n]
+```
+
+Reverts to the previously set wallpaper, or `n` wallpapers ago.
+
+```bash
+./wallpaper.sh --gui
+```
+
+Opens a GUI dialog to select a wallpaper with a preview option.
+
+Without any arguments, it sets the default wallpaper provided in the script.
 
 ---
 
-> [!TIP] 
-> This script may benefit from improved error handling. For instance, it currently lacks checks to ensure that the wallpaper directory exists or that `feh` and `yad` are installed before executing commands. Adding such validation would enhance user experience and robustness. Additionally, consider expanding GUI options to make it more seamless, potentially integrating `fzf` directly into the script for a more comprehensive selection experience.
+> [!NOTE]
+> This script cleverly combines CLI and GUI methods for user interaction, accommodating different preferences. However, the `fzfmenu.sh` script is expected to be available, as it is a custom dependency not provided directly by common package managers. If the `yad` dialog is slow to load with many images, consider optimizing the file selection or preview logic. The `DEFAULT_WALLPAPER` path should be validated at runtime to avoid errors from non-existing paths, and consider using `$XDG_CACHE_HOME` instead of hardcoding the cache path for a more robust setup.

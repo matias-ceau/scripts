@@ -1,42 +1,49 @@
-# qtile_window_to_group_and_switch.py
+# Qtile Window Group Switcher
 
 ---
 
-**qtile_window_to_group_and_switch.py**: Switches the active window to a new group in Qtile.
+**qtile_window_to_group_and_switch.py**: Script to move and switch the current window to the next or previous group in Qtile.
 
 ---
 
 ### Dependencies
 
-- `python`: The script is written in Python and requires it to be executed.
-- `libqtile`: A library from the Qtile window manager necessary for interacting with window groups.
-- `notify-send`: A tool to display notifications, used here for error reporting.
+- `libqtile`: This script uses `InteractiveCommandClient` from the Qtile library, which facilitates communication with the Qtile window manager.
+- `subprocess`: Standard Python module for running system commands (used here for displaying error notifications).
+- `notify-send`: Sends desktop notifications, used to inform the user of errors if script arguments are invalid.
 
 ### Description
 
-This script allows the user to move the currently active window to a different group within the Qtile window manager. Depending on the argument passed (`-n` for next group or `-p` for previous group), it calculates the target group to which the active window should be sent. 
+This script is designed for the Qtile window manager on Arch Linux with the purpose of moving the currently focused window to the next or previous group and switching to it. It leverages the `libqtile.command.client.InteractiveCommandClient` to issue commands directly to the Qtile instance.
 
-When executed, the script queries the current active group using `c.screen[0].items("group")` to find the last active group's index. If the argument is `-n`, it increments the current group index, and if it's `-p`, it decrements it. An important constraint is that the target group index is wrapped around by using modulus operation with the total number of groups (in this case, assumed to be 6). 
-
-In case of incorrect usage, a notification is sent using `notify-send`, informing the user of the error.
+The script checks for command-line arguments `-n` (next) and `-p` (previous). Based on the argument, it computes the target group using a modulo operation that cycles through groups 1 to 6 and instructs Qtile to move the focused window to the computed group. If the arguments are incorrect, it sends a notification using `notify-send`.
 
 ### Usage
 
-To run this script, you need to invoke it from the terminal with either `-n` or `-p`. Here are some examples:
+This script should be executed in a terminal or bound to a key combination within Qtile for quick access. It requires one of two arguments:
 
-**To switch the active window to the next group:**
+- `-n`: Move the current window to the next group and switch to it.
+- `-p`: Move the current window to the previous group and switch to it.
+
+#### Example
+To move the current window to the next group:
 ```bash
-/home/matias/.scripts/qtile_window_to_group_and_switch.py -n
+python /home/matias/.scripts/qtile_window_to_group_and_switch.py -n
 ```
 
-**To switch the active window to the previous group:**
+To move the current window to the previous group:
 ```bash
-/home/matias/.scripts/qtile_window_to_group_and_switch.py -p
+python /home/matias/.scripts/qtile_window_to_group_and_switch.py -p
 ```
 
-You can also assign these commands to keybindings in your Qtile configuration file.
+### Keybinding
+Consider adding keybindings in your Qtile config to use this script. For example:
+```python
+Key([mod], "n", lazy.spawn("python /home/matias/.scripts/qtile_window_to_group_and_switch.py -n")),
+Key([mod], "p", lazy.spawn("python /home/matias/.scripts/qtile_window_to_group_and_switch.py -p")),
+```
 
 ---
 
-> [!TIP] 
-One potential improvement for this script would be to add error handling for cases where no arguments are passed. Currently, invoking the script without arguments results in an uncaught exception. Also, consider making the number of groups more dynamic by retrieving it from the configuration instead of hardcoding the value. This will enhance its reusability in different setups with varying group configurations.
+> [!TIP]
+> The script currently handles only six groups—this restriction can be adjusted if your configuration uses more. Additionally, including a check to ensure that the `InteractiveCommandClient` successfully retrieves the current group before operating could prevent potential runtime errors.

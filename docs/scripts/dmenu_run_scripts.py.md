@@ -1,46 +1,40 @@
-# dmenu_run_scripts.py
+# Script Selector & Executor
 
 ---
 
-**dmenu_run_scripts.py**: A script to execute selected scripts using rofi with options from xonsh.
+**dmenu_run_scripts.py**: A Python script to display executable scripts and run selected ones.
 
 ---
 
 ### Dependencies
 
-- `python`: Required to run the Python script.
-- `subprocess`: A built-in library to spawn new processes.
-- `xonsh`: A shell language that combines Python syntax and shell syntax. Used for script identification.
-- `rofi`: A customizable application switcher that serves as the dmenu replacement. It displays choices and allows selection.
+- `python`: The script is written in Python and requires Python to execute.
+- `xonsh`: A shell that combines Python and Bash functionalities, used to fetch available scripts.
+- `rofi`: A window switcher, application launcher, and dmenu replacement used for selecting scripts interactively.
 
 ### Description
 
-This script serves as an interactive launcher that allows users to select and execute scripts dynamically. It begins by gathering a list of executable scripts through the `script_identifier.xsh`, which is a xonsh script. The specified criteria (like `HOST` and `STATUS=active`) filter the scripts to be displayed. 
+This script is designed to mimic the functionality of `dmenu_run` by listing available scripts sourced from a separate `.xsh` file, allowing users to select and execute one of these scripts. The process involves the use of `xonsh` to gather script information such as the name and description with a predefined format, using `rofi` to present this list in a structured way to the user, and finally executing the selected script.
 
-The choices are formatted for visual clarity using markup, which colored the filename in green to enhance the user's selection experience. The filtered list is then piped into `rofi`, where users can interactively select a script. The selected script is executed, bringing convenience for users who frequently run various scripts from a defined set.
+1. **Choices Generation**: The script uses `xonsh` to run `script_identifier.xsh` with specific arguments, filtering for "active" scripts and formatting the output nicely with green colored text.
+   
+2. **User Interaction**: The output from the `xonsh` command serves as the input for `rofi`, which presents a scrollable list (30 lines in height and 80% of the screen width).
+
+3. **Execution**: After a selection is made, the script parses the chosen item and executes the corresponding command.
 
 ### Usage
 
-To use this script, follow these steps:
-
-1. Ensure all dependencies are installed on your Arch Linux machine.
-2. Make the script executable by running:
-   ```bash
-   chmod +x /home/matias/.scripts/dmenu_run_scripts.py
-   ```
-3. Execute the script in your terminal or configure a keybinding in your window manager (qtile) to run it. For example:
-   ```bash
-   /home/matias/.scripts/dmenu_run_scripts.py
-   ```
-4. Select the desired script using the `rofi` interface.
-
-Example of running the script in your terminal:
+To use the script, simply execute it in the terminal:
 
 ```bash
-/home/matias/.scripts/dmenu_run_scripts.py
+python /home/matias/.scripts/dmenu_run_scripts.py
 ```
+
+Ensure that `script_identifier.xsh` is configured correctly to list your desired scripts and that `rofi` is installed and running. The script will open a graphical menu where you can choose which script to run. Select the item and press `Enter` to execute it.
 
 ---
 
-> [!TIP] 
-This script relies heavily on the `script_identifier.xsh` for its functionality. Ensure that the `xonsh` script is correctly implemented and accessible. Additionally, consider adding error handling for cases where no script is selected or when `rofi` fails to launch properly. For better user experience, refine the choice extraction logic to ensure robustness.
+> [!TIP]
+> - The script assumes that `script_identifier.xsh` will provide valid command output. It might be beneficial to add error handling for cases where there is no output or the output is malformed.
+> - Ensure that the scripts listed have execution permissions, otherwise, the script will fail silently.
+> - Consider extending the script to optionally log executions or include additional filtering options through command-line arguments.

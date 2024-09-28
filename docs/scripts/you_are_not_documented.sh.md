@@ -1,38 +1,38 @@
-# You Are Not Documented
+# Undocumented Scripts Finder
 
 ---
 
-**you_are_not_documented.sh**: A script that finds scripts without inline documentation.
+**you_are_not_documented.sh**: A utility script to find scripts without inline documentation within a specified directory.
 
 ---
 
 ### Dependencies
 
-- `rg`: This is a fast text searching tool. You will need it to locate scripts without the required documentation comments.
-
+- `rg` (Ripgrep): A fast search tool for recursively searching your files. This script uses `rg` to find files that lack `#INFO:#` comments.
+ 
 ### Description
 
-The `you_are_not_documented.sh` script is designed to help developers manage their code by identifying files that lack inline documentation. Inline documentation is crucial for maintaining code readability and facilitating collaboration. 
+The script is designed to help you maintain clarity and organization in your script files by ensuring they have inline documentation. It achieves this by leveraging the capabilities of `ripgrep` to search through a specified directory, identify script files that do not contain the `#INFO:#` tag. Lines matching patterns like `/docs/`, `/config/`, `.csv`, or `.md` are excluded to focus the search on relevant scripts only.
 
-This script utilizes the `rg` (ripgrep) command, which searches recursively through files, to find any scripts that do not contain the specific documentation comment `#INFO:#`. This allows users to efficiently pinpoint scripts that may need additional comments or documentation to clarify their purpose and functionality.
-
-Furthermore, the script includes criteria to exclude certain directories and file types from the search results. Specifically, it filters out:
-- Any files located in `docs/` or `config/` directories
-- Files with extensions `.csv` or `.md`
-
-By narrowing down the search results, the script ensures that only relevant scripts are returned for documentation review.
+The core functionality is based on two `rg` commands:
+- The first command searches the specified directory for files that do not contain the `#INFO:#` tag.
+- The second `rg` filters out certain paths and file types that are not relevant.
 
 ### Usage
 
-To use this script, simply execute it from a terminal prompt. Make sure that the environment variable `SCRIPTS` is set to the directory containing the scripts you wish to check for documentation. You can run the script with:
+To use this script, make sure you have `ripgrep` installed. Assign the directory you wish to search to the `SCRIPTS` environment variable, then run the script. 
+
+Example usage in terminal:
 
 ```bash
-bash /home/matias/.scripts/you_are_not_documented.sh
+export SCRIPTS=/path/to/scripts
+/home/matias/.scripts/you_are_not_documented.sh
 ```
 
-This command will produce a list of scripts within the specified directory that do not have the `#INFO:#` comment tag.
+This will output a list of scripts that lack the `#INFO:#` tag and do not reside in `/docs/`, `/config/`, nor are `.csv` or `.md` files. Consider binding this script to a key combination in qtile for quick checks directly from your window manager.
 
 ---
 
-> [!TIP] 
-> The script could be improved by allowing additional custom filters through command-line arguments. Also, adding a message indicating no undocumented scripts are found would enhance user experience. Consider implementing error handling to manage cases where the `$SCRIPTS` environment variable is not set or does not point to a valid directory.
+> [!TIP]  
+> - The script currently relies on an environment variable `SCRIPTS` to determine the search directory. It could be improved by adding error handling for an unset `SCRIPTS` variable or by allowing a directory to be passed directly as an argument for more flexibility.
+> - Additionally, consider expanding the list of excluded patterns if other file types or directory names should be ignored in future updates.

@@ -1,37 +1,36 @@
-# Show Keyboard Layout
+# Display Keyboard Layout Script
 
 ---
 
-**show_keyboard_layout.py**: Displays a visual representation of the keyboard layout in terminal.
+**show_keyboard_layout.py**: A script to display a visual representation of a keyboard layout in the terminal.
 
 ---
 
 ### Dependencies
 
-- `python`: This script is written in Python and requires a compatible Python interpreter to run.
+None.
 
 ### Description
 
-The `show_keyboard_layout.py` script is a simple Python program designed to output the visual representation of a keyboard layout directly in the terminal. The layout is hardcoded in ASCII art format, showing the arrangement of keys in a clear and structured manner. 
+The script `show_keyboard_layout.py` is a simple Python script designed to display a representation of a keyboard layout directly in the terminal. The layout is hardcoded into the script as an ASCII art diagram, illustrating the positions of various characters and symbols on a typical keyboard. This can be particularly useful for users who frequently switch between keyboard layouts and need a quick visual reference for key positions.
 
-The keyboard layout includes:
-- Standard keys such as numbers, letters, function keys, and modifiers.
-- Special characters and symbols that are typically found on a keyboard.
-- Use of multi-line string (`r""" ... """`) for easy formatting and readability of the layout.
-
-When you run this script, it prints the keyboard layout to your terminal, allowing you to visualize key positions and associated characters.
+The implementation utilizes multi-line string literals in Python, denoted by triple quotes (`"""`). It then prints this layout directly to the terminal using Python's built-in `print()` function. 
 
 ### Usage
 
-To use the script, make sure you have Python installed. You can run this script directly from the terminal. Here’s how to execute the script:
+To run the script, you can execute it directly from a terminal. No special permissions are required, and it can be run in a terminal emulator. Here's how to use it:
 
 ```bash
 python /home/matias/.scripts/show_keyboard_layout.py
 ```
 
-This command will display the keyboard layout as defined in the script. You can also customize how you want to execute this script by binding it to a key in your window manager or running it as a part of a startup script if you want to have quick access to the keyboard layout.
+This command will output the keyboard layout to your terminal window. This script could also be mapped to a key combination within your qtile configuration for quick access, using a command like the following in your qtile keybindings:
+
+```python
+Key([mod], "k", lazy.spawn("python /home/matias/.scripts/show_keyboard_layout.py")),
+```
 
 ---
 
-> [!TIP]  
-> Consider adding command-line arguments to allow users to select different keyboard layouts. It could enhance the script's usability greatly, especially in multi-language environments. Additionally, error handling can be implemented to manage potential issues when executing the script. For instance, checking if a proper Python interpreter is available before proceeding.
+> [!IMPORTANT]
+> This script could be enhanced by dynamically determining the current keyboard layout using utilities such as `xkblayout-state` to show the currently active layout. Additionally, wrapping the layout in a function would make future expansions or modular inclusion into other scripts much easier.

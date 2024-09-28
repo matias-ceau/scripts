@@ -1,46 +1,37 @@
-# Song Launcher
+# Song Launcher with dmenu
 
 ---
 
-**songlauncher.sh**: Play a song with cmus using dmenu
+**songlauncher.sh**: Script to play a song using `cmus` with a `dmenu` interface.
 
 ---
 
 ### Dependencies
 
-- `cmus`: A small, fast, and powerful music player for Unix-like operating systems.
-- `dmenu`: A dynamic menu for X which allows for simple and efficient navigation.
+- `cmus`: A powerful ncurses-based music player.
+- `dmenu`: A dynamic menu for X, used to present song choices.
+- `find`: A utility to search for files in a directory hierarchy.
 
 ### Description
 
-The `songlauncher.sh` script is an efficient solution to play music tracks using the `cmus` music player in conjunction with `dmenu`, a lightweight dynamic menu. 
+This script provides an interactive way to play songs through `cmus` using the visual selection capability of `dmenu`. It leverages the `find` command to list all the files within the 'music' directory (and subdirectories) and passes this list to `dmenu`. The `dmenu` presents these options to you, allowing selection of a file to play. Once a selection is made, `cmus-remote` is used to play the chosen song.
 
-When executed, the script performs the following operations:
-1. **Searching for Music Files**: It uses the `find` command to locate all music files in the specified directory (`music`). The `-L` option ensures that it follows symlinks.
-2. **Displaying a Menu**: The found files are presented in a graphical menu through `dmenu`. The `-i` option makes the menu case-insensitive, while `-l 30` limits the display to 30 lines, allowing for better usability when many files are present.
-3. **Playing Selected Track**: The `cmus-remote -f` command is used to play the selected song from the output of `dmenu`.
-
-This script is particularly useful for users who wish to quickly play a song from their music directory without navigating through their file manager.
+The core pipeline of the script is:
+- `find -L music -type f`: Lists all files in the `music` directory. Using `-L` allows it to follow symbolic links, and `-type f` filters for regular files.
+- `dmenu -i -l 30`: Provides an interactive list from which the user can choose. The `-i` flag makes the selection case-insensitive, and `-l 30` sets the list's height to show up to 30 items.
+- `cmus-remote -f`: Plays the selected track in the `cmus` player.
 
 ### Usage
 
-To use this script, run it directly from your terminal:
+You can run this script from a terminal or bind it to a key combination within your qtile configuration for quick access. Follow this example to execute the script:
 
-```bash
-sh /home/matias/.scripts/songlauncher.sh
+```sh
+./songlauncher.sh
 ```
 
-Upon execution, a list of music files will be displayed in `dmenu`. Navigate through the list and select a song to start playing it in `cmus`. 
-
-You can also create a keybinding in your window manager (qtile) to launch this script quickly. For example, you may add the following to your `config.py`:
-
-```python
-Key([mod], "m", lazy.spawn("sh /home/matias/.scripts/songlauncher.sh")),
-```
-
-This allows you to press a specific key combination to open the song launcher instantly.
+This command initiates the `dmenu` interface to pick a song from the `music` directory. Ensure that `cmus` is running before executing the script.
 
 ---
 
 > [!TIP] 
-> Consider adding error handling to your script. For example, if `find` does not return any music files, the script currently fails silently. You could check if the command returns any results before passing it to `cmus-remote`. This would enhance the user experience significantly.
+> The script is designed to search within a directory named `music`. To make this script more flexible, you could allow passing a directory path as an argument to search in. Additionally, ensuring that `cmus` is running or prompting the user to start `cmus` if it's not could enhance user experience.

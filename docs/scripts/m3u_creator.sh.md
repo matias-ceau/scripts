@@ -1,37 +1,38 @@
-# m3u Creator
+# M3U Creator Script
 
 ---
 
-**m3u_creator.sh**: Create an m3u file from files in the current directory
+**m3u_creator.sh**: Script to create an M3U playlist file from files in the current directory
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash and requires a Bash shell to execute.
-- `ls`: Utilized to list the files in the current directory.
+- `bash`: This script is written in bash, so ensure you have bash installed to execute it.
 
 ### Description
 
-The `m3u_creator.sh` script is a simple utility designed to generate a `.m3u` playlist file from the files located in the current working directory. The script uses the following steps to create the playlist:
+This script is designed to quickly generate an M3U playlist file from all the files in the current directory. The M3U format is commonly used for playlists in media players. When executed, the script performs the following steps:
 
-1. It retrieves the name of the current directory using `basename "$PWD"`, which is stored as `dir_name`.
-2. It then constructs the name of the output playlist file by appending `.m3u` to the directory name.
-3. The `ls -1` command lists the files in the directory, outputting each filename on a new line, which is then redirected into the created `.m3u` file.
+1. It retrieves the current working directory's name using `basename "$PWD"`, which is used to create the playlist filename.
+2. It lists all files in the current directory using `ls -1` and writes the list to a file named after the directory with the `.m3u` extension.
 
-This script is particularly useful for quickly generating a playlist for media players that support m3u files, allowing for efficient playback of all files present in a particular directory without the need for manual entry.
+This script assumes that the user is already in the desired directory containing media files and that such files are ready to be added to an M3U playlist.
 
 ### Usage
 
-To use the script, navigate to the directory containing the files you wish to include in your m3u playlist and execute the script as follows:
+You can use this script by executing it in the terminal while you're located in the desired directory for playlist creation:
 
 ```bash
-/path/to/m3u_creator.sh
+cd /path/to/media/files
+bash /home/matias/.scripts/m3u_creator.sh
 ```
 
-After execution, you’ll find a new file named after the directory, ending with `.m3u`. For example, if your current directory is `Music`, the script will create a file named `Music.m3u` containing a list of all files in that directory.
+After running, a `.m3u` file will be created in the current directory, named after the directory itself (e.g., `mediafiles.m3u` if the directory is named `mediafiles`).
 
 ---
 
 > [!TIP] 
-> While the script effectively creates an m3u file, it currently includes all files indiscriminately. It may be beneficial to modify the script to filter specific file types (e.g., only audio files) or to handle potential errors, such as when there are no files in the directory or issues with file permissions. This could greatly enhance usability and robustness.
+> - The script could be improved by filtering files based on extensions typically used for media (like `.mp3`, `.mp4`) to ensure only playable files are included in the playlist.
+> - Consider adding error handling to check if the `ls` command was successful.
+> - This script assumes that filenames do not contain new lines. If they do, they might cause issues in the M3U file.

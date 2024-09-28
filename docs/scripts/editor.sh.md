@@ -1,47 +1,57 @@
-# File Editor with fzf
+# Quick File Editor with FZF
 
 ---
 
-**editor.sh**: A script to quickly edit files using fzf for file selection.
+**editor.sh**: Script to rapidly edit files using `fzf` for search and `nvim` for editing, suitable for various directory contexts.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder for selecting files interactively.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `nvim`: Neovim, a modern text editor that the script uses for editing files.
-- `fd`: A simple, fast and user-friendly alternative to 'find'.
+- `fzf`: A command-line fuzzy finder used to filter and select files.
+- `bat`: A clone of `cat` with syntax highlighting and Git integration, used for previewing files.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `chezmoi`: A personal dotfile manager (used when editing config files).
+- `nvim`: Neovim, a hyperextensible Vim-based text editor.
+- `sudo`: Required if editing files with root permissions.
 
 ### Description
 
-This script provides a convenient way to edit files directly from the terminal by utilizing `fzf` to filter the available files based on different contexts. The user has the ability to specify file paths and edit them with `nvim`, while efficiently managing which files are visible for editing by excluding many non-editable formats like images, audio files, and more.
+This script is designed to streamline file editing on an Arch Linux system with **qtile** as the window manager. It uses `fzf` to allow users to search for files within specified directories and various contexts. The selections made by `fzf` can then be edited with `nvim`.  
+- The functionality is ranger-like, making it ideal for users who work extensively with command-line interfaces and need quick access to their files without manual searching.
 
-The script supports multiple modes through command-line arguments, allowing users to specify where to search for files:
-
-- **SCRIPTS**: Limited to the user's `$SCRIPTS` directory.
-- **CWD**: Only finds files in the current working directory.
-- **CONFIG**: Specifically targets a config file managed by chezmoi.
-- **DIRECTORY**: A custom directory specified by the user.
-
-The script uses the `fd` command to generate a list of files while excluding specified patterns using a long list of `-E` flags.
+The script excludes certain directories and file types to optimize search results, aiming for editable files only. It supports several modes via flags, such as editing files within a specific directory, script directory, or configuration files, among others.
 
 ### Usage
 
-To use the script, just run the command in your terminal, followed by any options you want to use:
+The script can be executed directly in a terminal, and it supports various command-line arguments:
 
 ```bash
-./editor.sh                  # Use default search paths
-./editor.sh -s               # Search in the $SCRIPTS directory
-./editor.sh -c               # Search only in the current directory
-./editor.sh -C               # Edit a config file
-./editor.sh -d /path/to/dir  # Search in a specific directory
-./editor.sh -S               # Open files with sudo
+editor.sh [-s|--scripts] [-c|--cwd] [-C|--config]
+          [-d|--dir <dir>] [-S|--sudo] [-h|--help]
 ```
 
-Use `Ctrl-H` to include hidden files in the search and `Ctrl-S` to exclude them if visible. 
+**Options:**
+- `-s, --scripts`: Search in the user `SCRIPTS` directory.
+- `-c, --cwd`: Search within the current working directory.
+- `-C, --config`: Edit unmanaged config files.
+- `-d, --dir <dir>`: Search within a specified directory.
+- `-S, --sudo`: Open files with `sudo` permissions.
+- `-h, --help`: Display the usage message.
+
+**Key Bindings in FZF:**
+- `<C-H>`: Toggle hidden files.
+- `<C-S>`: Disable hidden files.
+
+Example of executing the script to search and edit files in scripts directory:
+
+```bash
+editor.sh --scripts
+```
 
 ---
 
-> [!TIP]  
-> The script could benefit from more detailed error handling when commands like `nvim` or `sudo` fail. Also, consider adding a configuration file or environment variables to set default options persistently. Additionally, you might want to modularize the options into functions to improve readability and maintenance.
+> [!TIP]
+> - Consider expanding the comment documentation within your script for better readability.
+> - Current script assumes the existence and correctness of environment variables like `$SCRIPTS` and `$LOCALDATA`. Ensure they are always set.
+> - Adding debugging or logging can be a valuable enhancement for complex scripts like this, to track operations and error handling.

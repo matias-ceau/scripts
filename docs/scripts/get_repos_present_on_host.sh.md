@@ -1,44 +1,49 @@
-# Get Repositories Present on Host
+# Repository Host Scanner
 
 ---
 
-**get_repos_present_on_host.sh**: A script to list Git repositories present on the current host.
+**get_repos_present_on_host.sh**: Script to list and document Git repositories present on the host machine.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell interpreter used to run the script.
-- `git`: Required to identify Git repositories.
-- `awk`, `sed`, and `sort`: Utilities for processing text and output formatting.
+- `bash`: The script runs in a bash environment.
+- Required environment variables:
+  - `GIT_REPOS`: This should be set to the root directory where Git repositories are stored.
+  - `LOCALDATA`: This should be set to the directory where output files will be stored.
 
 ### Description
 
-This script is designed to find and list all Git repositories located in a specified directory on the host machine. It requires two environment variables to be set: `GIT_REPOS`, which should point to the directory containing the repositories, and `LOCALDATA`, which is the base directory for saving output files.
+This script is designed to scan a specified directory for Git repositories on the host machine and document them. It relies on two environment variables: `GIT_REPOS`, which indicates where to search for repositories, and `LOCALDATA`, which specifies where to store the output.
 
-Upon execution, the script performs the following operations:
+Upon execution, it checks if these environment variables are set. If they aren't, the script exits with an error message. It then uses the `hostname` command to create a unique output file name based on the host's name and organizes the list of found repositories into a structured text format.
 
-1. **Check Environment Variables**: Verifies that both `GIT_REPOS` and `LOCALDATA` are set, exiting with an error message if not.
-2. **Get Hostname**: Captures the hostname of the machine to customize output file names.
-3. **Output File Paths**: Defines the paths for a host-specific repositories output file and a cumulative all-repositories file.
-4. **Create Output Directory**: Ensures the output directory exists, creating it if necessary.
-5. **Find and Format Repositories**: Locates all directories named `.git` within `GIT_REPOS` and formats the output to list the repository names at the top level.
-6. **Sort and Deduplicate**: Eliminates duplicate entries in the host-specific output file and appends the results to a global file that tracks repositories from all hosts, again ensuring there are no duplicates.
-7. **Completion Message**: Notifies the user when the updates are successful.
+The script:
+1. Searches recursively under `$GIT_REPOS` for directories named `.git`.
+2. Formats the output to list only the repository names.
+3. Saves these repository names into a host-specific file.
+4. Ensures the output files are sorted and free of duplicates.
+5. Aggregates this list into a general file for tracking all repositories across different hosts.
 
 ### Usage
 
-To use the script, ensure that the environment variables are set properly and execute it directly in the terminal:
+To use this script, ensure the necessary environment variables are set:
 
-```bash
-export GIT_REPOS="/path/to/git/repositories"
-export LOCALDATA="/path/to/localdata"
+```sh
+export GIT_REPOS="/path/to/your/git/directories"
+export LOCALDATA="/path/to/store/output"
+```
+
+Run the script from a terminal:
+
+```sh
 bash /home/matias/.scripts/get_repos_present_on_host.sh
 ```
 
-You might want to run this script periodically or via a cron job to keep the repository listings current. 
+The script is mostly designed to be run from the command line and can be integrated into larger automation or maintenance routines or even assigned to a keybinding in qtile for quick access.
 
 ---
 
-> [!TIP]  
-Consider adding options for custom output locations or filenames as command-line arguments. This would enhance flexibility, allowing users to specify different output locations without modifying environment variables. Additionally, error handling for cases where no repositories are found could improve user experience.
+> [!CAUTION]
+> An assumption is made that all git repositories contain a `.git` directory directly under the path specified by `GIT_REPOS`. If repositories are organized differently, you may need to adjust the `find` command's directory level filtering via the `awk -F/ 'NF==2'` part. Additionally, handling the script's output in error situations could be enhanced for more robust logging, especially for large-scale automation.

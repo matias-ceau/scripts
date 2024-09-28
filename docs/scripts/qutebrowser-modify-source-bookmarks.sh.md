@@ -1,40 +1,61 @@
-# Qutebrowser Source Bookmarks Synchronizer
+# Qutebrowser Source and Bookmark Sync Script
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Script to synchronize Qutebrowser bookmarks and quickmarks.
+**qutebrowser-modify-source-bookmarks.sh**: Script to synchronize qutebrowser bookmarks and sessions with chezmoi.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `chezmoi`: A dotfile manager that helps you manage your configuration files.
+- `qutebrowser`: A keyboard-driven, vim-like web browser.
+- `chezmoi`: A dotfile manager for keeping your configurations synchronized.
+- `fd`: A simple, fast, and user-friendly alternative to find.
+- `git`: Used in commented sections for version control (optional).
 
 ### Description
 
-This script is designed to synchronize bookmarks and quickmarks from your local Qutebrowser configuration to a repository managed by Chezmoi. It accomplishes the following tasks:
+This script is designed to synchronize your qutebrowser's bookmarks, quickmarks, and session files with a directory managed by `chezmoi`. This setup ensures that your personal browsing settings are regularly updated and versioned.
 
-1. **Synchronizing Quickmarks**: After a delay of 20 seconds to account for potential quickmark name additions, it copies the quickmarks from the local directory to the Chezmoi-managed directory.
+The script relies on environment variables such as `$XDG_CONFIG_HOME`, `$CHEZMOI`, and `$XDG_DATA_HOME` for locating the necessary folders, ensuring a clean organization that adheres to the XDG Base Directory Specification.
 
-2. **Synchronizing Bookmarks**: It directly copies the bookmarks from the local configuration to the Chezmoi's configuration directory.
+Here's how the script functions:
 
-3. **Session Management**: The script then iterates through all YAML files in the local sessions directory. If the session file is not already tracked by Chezmoi, it adds that file to Chezmoi for tracking, and subsequently copies the session data to the corresponding Chezmoi directory.
+1. **Synchronization**:
+   - Copies `quickmarks` and `bookmarks` from `$XDG_CONFIG_HOME` to `$CHEZMOI` after a brief sleep period in case of quickmark changes.
+   - Iterates through all session files ending with `.yml` in the `sessions` directory, adding them to chezmoi if they do not exist, and updating them if they do.
 
-This workflow simplifies keeping your bookmark and session configurations consistent between your local setup and your versioned backups.
+2. **Chez Moi Integration**:
+   - The session files are added using `chezmoi`, ensuring they are part of your dotfiles configuration.
+
+3. **Version Control (Commented Out)**:
+   - There are commented lines indicating an optional Git workflow, which includes adding, committing, and pushing updates to a version control repository. 
 
 ### Usage
 
-To use this script, ensure that it has execute permissions and run it in a terminal:
+To use this script, you need to have `chezmoi` and `fd` installed on your Arch system. `git` is required if you choose to enable the versioning section.
+
+Ensure all environment variables are correctly set:
 
 ```bash
-chmod +x /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
-/home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export CHEZMOI="$HOME/.local/chezmoiconfig"
 ```
 
-You can also automate its execution by setting up a cron job or binding it to a key combination in your window manager (Qtile).
+Run the script manually:
+
+```bash
+bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
+```
+
+Or integrate it with your window manager, qtile, for automation:
+
+```python
+Key([mod], "b", lazy.spawn("/home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh")),
+```
 
 ---
 
-> [!TIP]  
-> It's good to use robust error handling in scripts like this one to manage scenarios where files may not exist or permissions may be restricted. For example, you could check if the directories exist before attempting to copy files. Additionally, consider parameterizing the delay or allowing it to be updated through a command-line option, making the script more flexible.
+> [!TIP]
+> The script relies on environment variables that must be configured correctly before execution. Consider parameterizing these with flags or, for reliability, adding error handling to ensure path existence. Additionally, consider uncommenting and testing the Git commands for a robust version control experience.

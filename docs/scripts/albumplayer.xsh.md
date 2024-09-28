@@ -1,56 +1,41 @@
-# Album Player Script
+# Album Player Script for cmus
 
 ---
 
-**albumplayer.xsh**: Play an album using cmus with random selection of other albums
+**albumplayer.xsh**: Play a random selection of albums using cmus and dmenu
 
 ---
 
 ### Dependencies
 
-- `cmus`: A console music player that can be controlled via command line.
-- `dmenu`: A dynamic menu for X to select options interactively.
+- `cmus`: A small, fast and powerful console music player.
+- `dmenu`: A fast and lightweight dynamic menu for X.
 
 ### Description
 
-The `albumplayer.xsh` script is designed to streamline the playback of music albums using the `cmus` player on Arch Linux, specifically tailored for `qtile` as the window manager. The script accomplishes the following:
+This script allows you to play a random selection of albums using `cmus`. It utilizes the configuration file located at `~/.config/cmus/lib.pl`, which contains a list of music file paths. The script extracts album information from these paths, displays the albums using `dmenu`, and then generates a temporary playlist file that is played by `cmus`.
 
-1. It retrieves paths of music files from the `cmus` library configuration.
-2. It constructs a list of unique album names derived from these paths.
-3. It presents the album list to the user via `dmenu`, allowing for user selection.
-4. Upon selection, the script shuffles other album paths, picks a subset, and compiles a playlist.
-5. Finally, it communicates with `cmus` to manage playback by creating a temporary playlist and controlling the player's state.
-
-The selected album and randomly chosen additional albums are then written to a temporary M3U file which `cmus` uses to manage playback.
+Key functionalities include:
+- Extracting unique album identifiers by parsing music paths.
+- Using `dmenu` to present a list of albums to the user for selection.
+- Creating a temporary `.m3u` playlist file that includes the selected album and a random selection from other albums.
+- Controlling `cmus` to play the generated playlist.
 
 ### Usage
 
-To run the script, simply execute it in a terminal:
+To run this script, you can execute it directly from your terminal or bind it to a key combination in your window manager (e.g., qtile). Ensure that `cmus` is running before executing the script. The script will bring up a `dmenu` interface to select the desired album.
 
-```bash
-/home/matias/.scripts/albumplayer.xsh
+Example command:
+```sh
+./albumplayer.xsh
 ```
 
-This will present a graphical selection menu via `dmenu` where you can choose your desired album. 
-
-When an album is selected:
-- The script will clear the current playlist in `cmus`.
-- Load the new playlist from the generated temporary M3U file.
-- Start playing the selected album along with a few randomly chosen other albums.
-
-### Example
-
-Once executed, you should see a `dmenu` list like this:
-
+You can also add this script to your qtile keybindings:
+```python
+Key([mod], "a", lazy.spawn("/home/matias/.scripts/albumplayer.xsh")),
 ```
-             Album Name One    —    Artist One
-             Album Name Two    —    Artist Two
-             Album Name Three  —    Artist Three
-```
-
-Selecting any of the albums from this list will lead to the playback of that album in `cmus`.
 
 ---
 
-> [!TIP]  
-> Consider adding error handling for scenarios when no albums are found or when `cmus` is not running. This will enhance user experience and prevent unexpected crashes or failures. Additionally, providing a way to customize the number of random albums loaded could be beneficial for users wanting a different listening experience each time.
+> [!TIP]
+> The script assumes that `cmus` is already running. You might want to add a check to start `cmus` if it isn't running. Additionally, improving error handling and edge cases such as handling empty or malformed library files could be beneficial. Consider modularizing the code for better readability and maintainability.

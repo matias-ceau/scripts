@@ -1,58 +1,57 @@
-# Sync Git Repository
+# Sync Git Repository Script
 
 ---
 
-**sync-repo.sh**: A script to synchronize a local Git repository with its remote counterpart.
+**sync-repo.sh**: Script to synchronize a local git directory with its remote counterpart, utilizing color-coded output and optional formatting with external tools.
 
 ---
 
 ### Dependencies
 
-- `git`: The version control system utilized for managing source code.
-- `bat`: A clone of `cat` with syntax highlighting and Git integration. It enhances the readability of output.
-- `glow`: A terminal markdown renderer that allows formatted output for better visibility.
+- `bat`: Enhances syntax highlighting and formatting of command outputs.
+- `glow`: Renders markdown in the terminal for improved readability.
 
 ### Description
 
-`sync-repo.sh` is a Bash script designed for Arch Linux users using the Qtile window manager to facilitate the synchronization of a local Git repository with a remote repository. The script incorporates various functionalities to enhance usability and provide visual feedback on operations.
+The `sync-repo.sh` script is designed for users on Arch Linux using qtile as their window manager. It automates the process of synchronizing local git repositories with their remote counterparts. The script does so through several sophisticated steps:
 
-Key features include:
+- It verifies the presence of dependencies (`bat` and `glow`) to enhance the output but gracefully warns the user if they are missing.
+  
+- Utilizes colored output to differentiate between commands, status messages, and errors, enhancing the readability of terminal sessions.
 
-- Color-coded output for warnings and errors, enhancing the user experience.
-- Integration of `bat` for pretty-printing commands and their outputs.
-- Usage of `glow` to display formatted messages when supported.
-- Support for stashing local changes, pulling updates from the remote, handling merge conflicts with interactive choices, and pushing commits.
+- Provides a comprehensive user experience by offering color-coded command lines with potential for error handling and conflict resolution.
 
-The script is modular with clearly defined functions for command execution, error handling, displaying usage information, and summarizing sync results.
+- Handles typical sync operations such as fetching, rebasing, stashing, committing, and pushing changes, while providing a mechanism to resolve conflicts via user selection.
 
 ### Usage
 
-To use the script, run it from the terminal by providing the path to the repository you wish to sync:
+To use the `sync-repo.sh` script, execute it from the terminal followed by the path to your local git repository:
 
 ```bash
 ./sync-repo.sh <repository_path>
 ```
 
-**Examples:**
+#### Examples
 
-- Syncing the repository located under `~/.scripts`:
-    ```bash
-    ./sync-repo.sh ~/.scripts
-    ```
+- Synchronizing when the script is in the `PATH` and the repository is in `~/.scripts`:
 
-- Syncing a repository using an environment variable:
-    ```bash
-    ./sync-repo.sh $SCRIPTS
-    ```
+  ```bash
+  sync-repo.sh ~/.scripts
+  ```
 
-- Syncing a repository if you have set an alias for the script (e.g., `git_sync`):
-    ```bash
-    git_sync $SCRIPTS
-    ```
+- Using an environment variable for the path:
 
-If the script detects that it is being executed without arguments, it will display a usage guide.
+  ```bash
+  sync-repo.sh $SCRIPTS
+  ```
+
+- Using an alias (e.g., `git_sync`) set to simplify the command:
+
+  ```bash
+  git_sync $SCRIPTS
+  ```
 
 ---
 
-> [!TIP]  
-> Consider improving the error handling, especially for nested Git operations. Currently, the script aborts on the first failure; adding a feature to prompt the user for resolution can enhance workflow. Additionally, integrating logging functionality could trace operations for better troubleshooting in complex scenarios.
+> [!NOTE]
+> The script is robust and handles many common scenarios, such as missing directories or non-git repositories. However, consider adding logging capabilities to help troubleshoot failed operations or errors. Also, the script defaults to `vim` for conflict resolution (`${EDITOR:-vim}`), which might cause issues if `vim` is not installed or configured as default. Ensure compatibility with this editor or provide an option to customize it.

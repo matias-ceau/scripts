@@ -2,43 +2,49 @@
 
 ---
 
-**playlist_player.xsh**: A simple script to pick and play a music playlist using cmus
+**playlist_player.xsh**: Script to pick and play a playlist using `cmus`.
 
 ---
 
 ### Dependencies
 
-- `cmus`: A lightweight, console-based music player that allows remote control through commands.
-- `dmenu`: A dynamic menu for X, allows for interaction with the user through a simple interface.
-- `xonsh`: A Python-like shell that can execute shell commands and Python code.
-  
+- `xonsh`: A shell language that combines Python and bash.
+- `cmus`: A small, fast, and powerful console music player for Unix-like operating systems.
+- `dmenu`: A dynamic menu for X, used here for selecting playlists.
+- A directory named `.playlists` in the home folder containing `.m3u` playlist files.
+
 ### Description
 
-The `playlist_player.xsh` script enables users to select and play music playlists stored in the `~/.playlists` directory, leveraging the `cmus` music player. The script opens with a shebang pointing to `xonsh` and begins by importing the `os` module, which provides functions for interacting with the operating system.
+This script is a Xonsh-based tool designed to allow the user to pick a music playlist and play it using `cmus`, a popular command-line music player. The script operates within the X11 environment using `dmenu` to provide a graphical menu for playlist selection.
 
-The `PLAYLIST_PATH` variable is initialized to point to the user's playlists directory. The script uses `cmus-remote` commands in sequence:
-
-1. `cmus-remote -C 'view 4'`: Switches the cmus view to the playlist view.
-2. `cmus-remote -C clear`: Clears the current playlist in cmus.
-3. The script generates a sorted list of playlist files (only `.m3u` files) found in the specified directory.
-4. It presents this list to the user through `dmenu`, allowing them to select a playlist interactively.
-5. After selection, it adds the chosen playlist to `cmus` using `cmus-remote -C add {playlist}`.
-6. Finally, it uses `cmus-remote -n` to move to the next track and `cmus-remote -p` to start playback.
+The process is as follows:
+1. It sets the `cmus` interface to the playlists view.
+2. Clears the current playlist in `cmus`.
+3. Lists all `.m3u` files from a predefined directory (`~/.playlists`).
+4. Uses `dmenu` to allow the user to select one of the available playlists.
+5. Once a selection is made, the selected playlist is added to `cmus`.
+6. Starts playing the music from the newly added playlist.
 
 ### Usage
 
-To use the script, you can run it from the terminal. Make sure that you have your playlists in the `~/.playlists` directory in `.m3u` format.
+To use the script:
 
-Run the script with the following command:
-```bash
-xonsh /home/matias/.scripts/playlist_player.xsh
-```
+1. Ensure that you have `xonsh`, `cmus`, `dmenu`, and `.m3u` playlist files in `~/.playlists`.
+2. Make sure the script is executable. You can run:
 
-After executing, you will see a list of available playlists. Use the arrow keys to select one, and press Enter to play it.
+   ```bash
+   chmod +x /home/matias/.scripts/playlist_player.xsh
+   ```
 
-Alternatively, you could bind this script to a key in your window manager for quicker access. 
+3. Execute the script by running:
+
+   ```bash
+   ./playlist_player.xsh
+   ```
+
+You can also bind this script to a key combination in `qtile` for quick access.
 
 ---
 
-> [!TIP] 
-> The script currently does not handle errors, such as the case where there are no playlists available. It could be improved by adding error checks, along with a notification if the user selects an empty playlist or if an invalid selection is made. Additionally, consider enhancing the user experience by displaying more detailed information about the playlists, such as the number of tracks included.
+> [!NOTE]
+> While this script effectively manages playlists with `cmus`, it relies on the `.m3u` file format, which may not be updated or modified easily through this script. For an enhanced user experience, adding error handling for scenarios where no playlists are present or the `cmus` command fails would improve robustness. Additionally, consider making the playlist path configurable outside the script for greater flexibility.

@@ -1,40 +1,41 @@
-# fzf Song Launcher
+# FZF Song Launcher
 
 ---
 
-**fzf_songlauncher.sh**: Play a song with cmus, choosing it with fzf
+**fzf_songlauncher.sh**: Select and play a song using `cmus`, with `fzf` for interactive selection.
 
 ---
 
 ### Dependencies
 
-- `cmus`: A lightweight music player for Linux, allowing for efficient music playback.
-- `fzf`: A command-line fuzzy finder that allows you to search and select files interactively.
+- `cmus-remote`: A command-line tool to control cmus, a feature-rich music player.
+- `find`: Unix command for searching files in a directory hierarchy.
+- `fzf`: A general-purpose command-line fuzzy finder, used here to interactively select a song.
+- Directory: The script expects a directory named `music` that contains the audio files.
 
 ### Description
 
-The `fzf_songlauncher.sh` script provides a simple and effective way to play music from the command line using `cmus`. It utilizes `fzf` to present a fuzzy search interface, allowing users to quickly locate and select a song from their music directory. The script is designed to work seamlessly with the `cmus` music player, making it easy to integrate into your workflow in an Arch Linux environment, specifically when using the `qtile` window manager.
-
-The script operates by:
-
-1. Utilizing the `find` command to recursively search your `music` directory for audio files.
-2. Passing the list of found files to `fzf`, enabling users to filter through them interactively.
-3. Once a file is selected, it is played in `cmus` using the `cmus-remote` command.
+This script provides a streamlined way to select and play music files using a combination of powerful command-line tools available on Arch Linux. It utilizes `find` to search files within the `music` directory and `fzf` to present a fuzzy-search interface, allowing the user to quickly find and select a song to play. The selected song path is then fed into `cmus` via `cmus-remote` to start playback. The use of symbolic links is explicitly enabled by `find` with the `-L` flag, ensuring that linked music files are also considered in the search.
 
 ### Usage
 
-To use the `fzf_songlauncher.sh` script, make sure it's executable and then run it from your terminal:
+This script is designed to be run from the terminal or integrated into your qtile keybindings for quick access. Here’s how to use it:
 
-```bash
-chmod +x /home/matias/.scripts/fzf_songlauncher.sh
-/home/matias/.scripts/fzf_songlauncher.sh
+1. **Run the Script**: Execute the script from the terminal.
+   ```bash
+   ~/.scripts/fzf_songlauncher.sh
+   ```
+
+2. **Select a Song**: A list of music files will appear via `fzf`. Begin typing to filter the list, and press `Enter` to select a song. The playback will begin immediately through `cmus`.
+
+To integrate with qtile, you could bind the script to a keystroke in your `config.py` like this:
+
+```python
+Key([mod], "m", lazy.spawn("~/.scripts/fzf_songlauncher.sh")),
 ```
-
-You will be presented with a list of music files to choose from. Simply start typing the name of the song you want to play, and `fzf` will filter the results. Press `Enter` once you've found the song you want, and `cmus` will start playing it. 
-
-You may also consider binding this script to a keyboard shortcut in your `qtile` configuration for quicker access.
 
 ---
 
-> [!TIP]  
-> This script currently searches for all files in the `music` directory without filtering based on file type. This could lead to non-audio files appearing in the list, which might cause confusion. Consider modifying the `find` command to only look for common audio file extensions (like `.mp3`, `.wav`, `.flac`, etc.) to enhance user experience.
+> [!TIP]
+> - Ensure the `music` directory is properly populated with accessible music files. The script doesn't account for music stored in other directories or system-wide music paths.
+> - Consider adding error handling to manage cases where `cmus` is not running or if `fzf` doesn't select a file. This would make the script more robust.

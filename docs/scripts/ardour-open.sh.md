@@ -2,55 +2,45 @@
 
 ---
 
-**ardour-open.sh**: Open an Ardour session quickly with previews from audio projects.
+**ardour-open.sh**: Script to open the most recent Ardour session
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell interpreter used to run the script.
-- `fd`: A fast and user-friendly alternative to `find` for searching files.
-- `xargs`: A command that builds and executes command lines from standard input.
-- `stat`: A command used to display file or file system status.
-- `sort`: A command for sorting lines of text files.
-- `sed`: A stream editor for filtering and transforming text.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `fzf`: A general-purpose command-line fuzzy finder, used for selecting items.
-- `improved-fzfmenu.sh`: A custom script to enhance fzf selection experience.
-
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `xargs`: A command to build and execute command lines from standard input.
+- `stat`: Displays file or file system status.
+- `sed`: Stream editor for filtering and transforming text.
+- `bat`: A `cat` clone with syntax highlighting and Git integration; used here for XML files.
+- `improved-fzfmenu.sh`: A custom script presumably functioning as an enhanced fzf interface. Ensure it's executable and in your PATH.
+- `ardour`: A digital audio workstation for recording and mixing.
+- `dmenu` (commented out): A dynamic menu for X11; optionally required if the commented code is reintroduced.
+  
 ### Description
 
-The `ardour-open.sh` script is designed to streamline the process of opening Ardour audio sessions from a specified directory containing `.ardour` files. It leverages powerful command-line tools to search, sort, and preview sessions interactively.
+This script is designed to streamline the process of opening audio projects in Ardour on your Arch Linux system with qtile as the window manager. It operates by searching through Ardour project files (`*.ardour`) within a designated directory, sorting them by their modification time to offer the most recently modified project files for selection. 
 
-1. **Search Functionality**: The `search_cmd` function utilizes `fd` to locate `.ardour` files within the `AUDIO_PROJECTS` directory, sorting them by last modification date.
+**Core Functions:**
 
-2. **Interactive Preview**: The `preview_cmd` function makes use of `bat` to provide a visually appealing preview of the selected session files using terminal color coding.
+- `search_cmd()`: Uses `fd` to find Ardour files and presents them with timestamps in a color-coded and human-readable format.
+- `strip_ansi()`: Removes ANSI color codes from text.
+- `get_path()`: Constructs a full path for the selected file, stripping ANSI codes for accuracy.
+- `preview_cmd()`: Uses `bat` for a color-highlighted preview of the selected Ardour file’s XML content.
 
-3. **ANSI Stripping**: The `strip_ansi` function cleans up ANSI color codes from the output, ensuring that file paths are presented cleanly to the user.
-
-The script makes extensive use of exporting functions to be accessible within the context of the `improved-fzfmenu.sh` script, facilitating a smooth user interaction for file selection.
+Finally, it employs `improved-fzfmenu.sh` to facilitate a menu-driven selection of the desired Ardour file and opens it with Ardour for editing or playback.
 
 ### Usage
 
-To use `ardour-open.sh`, simply execute the script via the terminal:
+Run the script by executing the following command in your terminal:
 
 ```bash
 bash /home/matias/.scripts/ardour-open.sh
 ```
 
-Once executed, it will:
-
-1. **Search for `.ardour` files**: Displays a list of available Ardour sessions sorted by their modification time.
-2. **Preview files**: Allows you to preview the contents of each session before selecting one.
-3. **Open Selected Session**: After making a selection, the script automatically opens the chosen Ardour session.
-
-For better usability, consider binding this script to a key in your window manager (qtile). Here’s a sample keybinding in your `config.py`:
-
-```python
-Key([mod], "a", lazy.spawn("bash /home/matias/.scripts/ardour-open.sh")),
-```
+You can also bind this script to a key combination in your qtile configuration for quick access. Upon execution, a list of `.ardour` files, sorted by modification time, is presented. Navigate through them using the selection menu and confirm your choice to open it in Ardour.
 
 ---
 
-> [!TIP]  
-> The script currently relies heavily on external dependencies like `bat` and `fzf`. Ensure these are installed and configured properly for optimal functionality. Additionally, consider adding error handling in the `search_cmd` to manage cases where no `.ardour` files are found, enhancing user experience.
+> [!TIP]
+> Consider removing the commented-out code section or fully integrating it following a decision to switch to `dmenu` based implementation. Moreover, ensure that the `improved-fzfmenu.sh` script is accessible and compatible. Adding error handling in case no file is selected would improve user experience by preventing unintended behavior.

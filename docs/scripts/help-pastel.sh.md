@@ -1,47 +1,44 @@
-# Help Pastel Script
+# Pastel Help Script with Fuzzy Finder
 
 ---
 
-**help-pastel.sh**: A script to display Pastel subcommands with live help.
+**help-pastel.sh**: Enhances `pastel` command help with syntax highlighting and interactive selection.
 
 ---
 
 ### Dependencies
 
-- `pastel`: A command-line tool for managing colors.
-- `rg`: Ripgrep, a line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `cut`: A command-line utility that removes sections from each line of files.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `fzf`: A command-line fuzzy finder used for searching and selecting.
+- `pastel`: A color tool for shell that generates, analyzes, and transforms colors.
+- `ripgrep` (`rg`): A fast search tool that respects your `.gitignore`.
+- `bat`: A cat(1) clone with syntax highlighting and Git integration.
+- `fzf`: A command-line fuzzy finder.
+- `display_markdown`: A hypothetical utility to render markdown files to the console.
+- `curl`: A command-line tool for transferring data with URLs.
 
 ### Description
 
-The `help-pastel.sh` script is designed to assist users in finding and understanding the various subcommands available in the `pastel` command-line tool. This script accomplishes the following:
+This script elevates the standard `pastel` help by integrating syntax highlighting and an interactive selection interface via `fzf`. It dynamically selects the help section starting from the 'SUBCOMMANDS' line and presents it with `bat` for enhanced readability. Further, it excludes certain lines with `rg` and prepares them for `fzf`.
 
-1. **Identify Subcommands**: It locates the line number in the help output where the subcommands begin using `rg` to search for the term 'SUBCOMMANDS'.
-2. **Generate Help Output**: It uses `pastel -h` and pipes the output through `bat` to provide a visually appealing format. The script removes lines that contain the word 'help' and appends the contents of `README.md` for reference.
-3. **Interactive Selection**: It leverages `fzf` to allow the user to interactively search through the list of subcommands. Users can preview the help information for each subcommand while selecting, enhancing the usability.
-
-The following command illustrates the main logic flow of the script:
-
-```bash
-pastel -h | bat --line-range ${line_number}: | cat - <(echo "README.md") | rg -v ' *help' | bat -fpplhelp | fzf ...
-```
+Upon selection in `fzf`, it differentiates between command and README display based on whether "README" is in the selection. Commands invoke `pastel {subcommand} --help` with enriched presentation, while selecting "README" fetches and displays the remote README of `pastel` using `display_markdown`.
 
 ### Usage
 
-To run the script, execute the following command from your terminal:
+To run this script, execute it directly from the terminal:
 
-```bash
-bash /home/matias/.scripts/help-pastel.sh
+```sh
+~/.scripts/help-pastel.sh
 ```
 
-Alternatively, you can bind this script to a key in your window manager (like Qtile) for quick access.
+Usage involves selecting a command or "README" from the displayed list. Navigation and selection are managed via `fzf`:
+
+- Use `↑` and `↓` to navigate.
+- Press `Enter` to select a line and see the relevant information.
+  
+> _tldr_: Execute `help-pastel.sh` for an interactive `pastel` documentation experience.
 
 ---
 
-> [!TIP]  
-> The script is generally well-structured; however, there are a few suggestions for improvement: 
-> - Consider adding comments in the code to improve readability.
-> - Error handling could be implemented to manage cases where the `pastel` command or its dependencies are not installed.
-> - You might want to use more descriptive variable names instead of `line_number` for clarity.
+> [!TIP]
+> - **Optimization**: Consider replacing `${line_number}:` with a direct pipeline to only focus on necessary lines.
+> - **Error Handling**: Add error checks for the availability of internet when accessing remote resources.
+> - **Portability**: The use of `bash` specific features limits portability to other systems using different shells. Consider using POSIX-compliant features where possible to increase compatibility.

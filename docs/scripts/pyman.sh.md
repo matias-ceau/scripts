@@ -1,53 +1,46 @@
-# Python Module Navigation Script
+# Python Manual Script for Arch Linux
 
 ---
 
-**pyman.sh**: A script for navigating Python modules and viewing documentation interactively.
+**pyman.sh**: Navigate and explore Python documentation and site-packages interactively.
 
 ---
 
 ### Dependencies
 
-- `python`: Required to fetch version information and built-in functions.
-- `bat`: A cat alternative that provides syntax highlighting and pager support.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory.
-- `fzf`: A command-line fuzzy finder to enhance the interactive experience.
+- `python`: The main programming language interpreter.
+- `pydoc`: Provides help documentation for Python modules.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `fd`: A simple, fast, and user-friendly alternative to find.
+- `rg` (ripgrep): A line-oriented search tool.
+- `fzf`: A command-line fuzzy finder.
+- `ranger`: A console file manager with VI key bindings.
+- `sed`, `tr`, `cut`, `sort`, `uniq`, `notify-send`: Various Unix utilities used within script for text processing and notifications.
 
 ### Description
 
-The `pyman.sh` script is designed to facilitate an interactive exploration of Python packages and modules within the Python environment on your system. It provides quick access to documentation and file structures using `fzf` for fuzzy searching, while leveraging several utilities for enhanced output formatting.
-
-Key functionalities of the script include:
-
-- **Getting Topics and Keywords**: Functions `get_topics` and `get_keywords` fetch the topics and keywords available in the Python modules and format them for easier readability using `bat`.
+The `pyman.sh` script acts as a robust tool for browsing and interacting with Python documentation and installed site-packages in an Arch Linux environment. It utilizes a combination of shell scripting and command-line utilities for displaying Python topics, keywords, site-packages, and built-in functions with enhanced formatting and preview capabilities.
   
-- **Retrieving Site Packages**: `get_site_packages` lists Python site packages in a structured format, emphasizing file types with color-coded outputs.
+- **Environment Setup**: The script initializes by setting variables for the shell, the Python version and related directories, ensuring that the correct Python environment is utilized.
   
-- **Submodules Listing**: `get_submodules` navigates within specified packages to find and display submodules.
-
-- **Built-ins**: The `get_builtins` function retrieves Python built-in functions, formatted appropriately.
-
-- **Dynamic Previewing**: `bat_preview` functions provide dynamic previews of module documentation when using `fzf` for selection.
-
-- **Command Execution**: The `enter_cmd` function allows users to execute commands for exploring files or directories within the selected modules.
+- **Functions**: It defines several functions such as `get_topics`, `get_keywords`, `get_site_packages`, `get_submodules`, and `get_builtins` to retrieve and format Python-related data.
+  
+- **Fuzzy Finder Integration**: The `fzf_cmd` function crafts an interactive user interface, leveraging `fzf` to provide a responsive and visual way to navigate documentation and code files with rich previews using `bat`.
 
 ### Usage
 
-To use the script, run the following command in your terminal:
-
+Run the script in a terminal to launch the interface:
 ```bash
 bash /home/matias/.scripts/pyman.sh
 ```
 
-This launches an interactive fuzzy finder interface that allows you to navigate through Python modules and documentation. You can use various key bindings such as:
+- Use **Alt**+**L** to view libraries, **Alt**+**B** for built-ins, **Alt**+**K** for keywords, and **Alt**+**T** for topics.
+- Select items to get detailed documentation, highlighted and paginated with `bat`.
+- Use **Alt**+**P** to toggle previews, resizing them with the resize bindings.
 
-- `Alt + B`: Show built-in functions.
-- `Alt + K`: Show keywords.
-- `Alt + T`: Show topics.
-- `Enter`: Preview the selected item or open it in `ranger` or `bat`.
+This script can be assigned to a keybinding using `qtile` for easier access.
 
 ---
 
-> [!TIP]
-> The script relies heavily on external utilities like `fzf`, `bat`, and `fd`. Ensure these are properly installed and configured on your Arch Linux system. Additionally, the initial directory may not be set up correctly if `$SEARCH_PATH` is not matching your Python installation. It would be beneficial to add error handling to manage scenarios where the required directories or commands are not accessible.
+> [!NOTE]
+> The script assumes `fzf`, `bat`, and `rg` are installed, which might not be available by default. Consider adding checks or installation prompts for these dependencies. Additionally, using `bat` assumes that highlighted syntax files are correctly configured for different languages (`rst`, `man`, `python`), which requires proper setup.

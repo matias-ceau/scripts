@@ -1,40 +1,54 @@
-# Dmenu Replacement with Fzf
+# FZFMenu Run Script
 
 ---
 
-**fzfmenu_run.sh**: A lightweight dmenu replacement using fzf within a floating xterm terminal.
+**fzfmenu_run.sh**: Dmenu run replacement using `fzf` within a floating xterm terminal
 
 ---
 
 ### Dependencies
 
-- `dmenu`: A dynamicmenu for X11, providing a way to present a list of items in a graphical interface.
-- `fzf`: A command-line fuzzy finder, which allows you to filter through text efficiently.
-- `xterm`: A terminal emulator for the X Window System that displays the output of shell commands.
+- `dmenu_path`: Provides a list of executable programs in the user's `PATH`.
+- `fzfmenu.sh`: A script that utilizes `fzf` to present a menu interface for selecting executables.
+- `xargs`: A command that builds and executes command lines from standard input.
+- `bash`: The Bourne Again Shell, required for script execution.
+- A floating terminal setup in your qtile configuration.
 
 ### Description
 
-This script serves as a convenient replacement for the traditional `dmenu` launcher, instead leveraging `fzf` for enhanced fuzzy searching capabilities. When executed, it gathers a list of available menu items from the `dmenu_path` command, which generally lists applications and commands available in the system. The output is then piped into `fzfmenu.sh`, a script that presumably utilizes `fzf` to allow users to search through the list interactively.
+The `fzfmenu_run.sh` script serves as a replacement for the standard `dmenu_run` by combining the power of `fzf` (a command-line fuzzy finder) with `dmenu_path` and executing commands within a floating `xterm` window. This script effectively creates a launcher for applications in your Arch Linux environment, styled to work with your qtile window manager configuration.
 
-The selected command is then passed to `xargs`, which executes the command in a new `xterm` instance. This makes it possible to launch applications or commands quickly while maintaining terminal access in a manageable floating window. The use of background execution (`&`) ensures that the terminal remains available for further use while the chosen command runs.
+- The script first runs `dmenu_path`, which generates a list of all executables available in your `PATH`.
+- It pipes this list to another script, `fzfmenu.sh`, which invokes `fzf` to display a searchable menu.
+- Once user selection is made, `xargs` executes the chosen command within a newly spawned `xterm` window.
 
 ### Usage
 
-To use this script, simply run it from your terminal:
+To use this script, ensure it is executable and can be added to keybindings or run directly from your terminal. Before using, verify that all dependencies, particularly `fzfmenu.sh`, are properly configured.
 
 ```bash
-bash /home/matias/.scripts/fzfmenu_run.sh
+chmod +x /home/matias/.scripts/fzfmenu_run.sh
 ```
 
-You will be presented with a menu where you can start typing to filter through the applications listed by `dmenu_path`. Once you find your desired application or command, select it, and it will open in a new `xterm` window.
+Run the script interactively:
 
-You can also bind this script to a key in your window manager or launcher for quick access. For example, in `qtile`, you can add a keybinding in your configuration like this:
+```bash
+/home/matias/.scripts/fzfmenu_run.sh
+```
+
+Or assign it to a keybinding in your qtile configuration for faster access.
+
+Example of a keybinding in qtile:
 
 ```python
-Key([mod], "r", lazy.spawn("/home/matias/.scripts/fzfmenu_run.sh")),
+Key([mod], "r", lazy.spawn("/home/matias/.scripts/fzfmenu_run.sh"))
 ```
+
+Ensure `xterm` is configured to open as a floating window in your `qtile` settings for optimal user experience.
 
 ---
 
-> [!TIP] 
-> Consider implementing error handling for cases where `dmenu_path` returns no results or `fzfmenu.sh` is not found. Additionally, you might want to customize the appearance of the `xterm` window to better fit your workflow or desktop environment. For example, adding options such as `-bg` for background color or `-fg` for foreground color can help improve visibility depending on your setup.
+> [!NOTE]
+> - Ensure that `fzfmenu.sh` exists and functions as expected since `fzfmenu_run.sh` relies on it.
+> - Consider adding error handling to manage cases where no command is selected or `fzfmenu.sh` is missing.
+> - Using `xargs -I {}` can sometimes lead to unexpected behavior with complex commands; test thoroughly.

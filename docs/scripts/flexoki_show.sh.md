@@ -2,54 +2,46 @@
 
 ---
 
-**flexoki_show.sh**: Display a formatted chart of colors with HEX, RGB, and names.
+**flexoki_show.sh**: Displays a table of colors with HEX, RGB, and descriptions
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash and requires a compatible environment.
+- `bash`: The script is a Bash script and requires Bash to be present on the system.
 
 ### Description
 
-The `flexoki_show.sh` script generates a visually formatted table displaying various colors along with their HEX values, RGB representations, shorthand names, and additional notes. This script can be particularly useful for designers, developers, or anyone interested in color palettes and their specifications.
+This script, `flexoki_show.sh`, generates a detailed table displaying color codes in both HEX and RGB formats, along with their names and various contexts of use. It is designed to help you visualize a palette of colors in a terminal on Arch Linux with the qtile window manager.
 
-The script uses ANSI escape codes for styling and colored output. Key components include:
+The script defines a function named `line_generator` which contains ANSI escape codes to colorize and format the output in a terminal, making use of Unicode block characters to illustrate colors visually. Each color entry includes:
 
-- `block`: A string representing a block character used for visual representation.
-- `BOW`: An ANSI escape sequence for a bold and bright appearance, enhancing the header and certain entries.
-- The `line_generator` function encapsulates the logic to generate the entire color list, showcasing a variety of colors commonly used in applications and web design.
+- **HEX Value**: The hexadecimal representation of the color.
+- **RGB Values**: The Red, Green, Blue values of the color.
+- **Name**: A human-readable name for easier identification.
+- **Short Name**: A short alias for quick reference.
+- **UI Indicator**: Which part of the UI uses this color (if any).
+- **Syntax Highlighting Context**: Where this color is used in syntax highlighting (such as error text, keywords, or comments).
 
-Each color entry includes:
-- HEX color code.
-- RGB color value.
-- Short names for quick reference.
-- Specific usages indicated in captions.
+Colors are printed in blocks next to their details, enhancing visibility and differentiation. The formatting uses bold (`\e[7m`) and italics (`\e[3m`) for aesthetic purposes.
 
 ### Usage
 
-To utilize the script, perform the following steps from a terminal:
+To use the script, ensure that it has the correct executable permissions. You can make it executable with the following command:
 
-1. Open a terminal in your Arch Linux environment.
-2. Execute the script by running:
-
-   ```bash
-   bash /home/matias/.scripts/flexoki_show.sh
-   ```
-
-Upon execution, the terminal will display a well-formatted chart like the following:
-
-```
-  HEX                  RGB            NAME           SHORT          UI              SYNTAX                    
-#d14d41 - [block] - 209,77,65    - red-400     -  re      [9]  -
-#af3029 - [block] - 175,48,41    - red-600     -  re-2    [1]  - Error text       Invalid, imports 
-...
-#fffcf0 - [block] - 255,252,240  - paper       -  (bg)         -
+```bash
+chmod +x /home/matias/.scripts/flexoki_show.sh
 ```
 
-This output provides immediate reference to the colors and their details.
+Run the script by executing:
+
+```bash
+./flexoki_show.sh
+```
+
+You can bind this script to a key combination in qtile to quickly display the color palette in your terminal.
 
 ---
 
-> [!TIP] 
-> The script might be extended to accept command-line arguments that allow users to customize the output, such as filtering by color families or allowing user-defined colors. Additionally, it currently outputs all colors statically; implementing dynamic color selection functionality could enhance usability.
+> [!NOTE]
+> Consider using command-line arguments to selectively display certain palettes or toggle the display of certain column details to enhance the flexibility of the script. Additionally, reduce redundant code by looping through color data to generate the table dynamically instead of hardcoding each line, which will improve maintainability and scalability.

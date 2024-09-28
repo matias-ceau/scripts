@@ -1,42 +1,34 @@
-# Create Cover Art
+# Create Spectrogram Cover Art
 
 ---
 
-**create_cover_art.sh**: Create a cover art based on file spectrogram.
+**create_cover_art.sh**: Generates cover art from audio file spectrograms.
 
 ---
 
 ### Dependencies
 
-- `sox`: A command-line utility that processes audio files. It is used here to generate the spectrogram from the audio file.
-- `dmenu`: A dynamic menu for X, which is utilized to select the audio file interactively.
-- `imagemagick`: An image manipulation toolset, used for resizing the generated spectrogram image.
+- `sox`: Required for generating the spectrogram from the audio file.
+- `dmenu`: Used to present a list of `.wav` files for selection.
+- `imagemagick`: Utilized for resizing the generated spectrogram image.
 
 ### Description
 
-The `create_cover_art.sh` script provides a way to create visually appealing cover art from audio files in WAV format. It accomplishes this by generating a spectrogram of the audio, which represents the frequency spectrum as it varies with time.  
+The `create_cover_art.sh` script allows users to create an image representation of the audio spectrum of a `.wav` file, ideal for use as cover art. The script takes advantage of `dmenu` to list available `.wav` files under the `/home/matias/audio/PROJECTS` directory for selection. The selected `.wav` file is then processed using `sox` to create a spectrogram, which is subsequently resized using `imagemagick` to a resolution of 1600x900 pixels. The intermediate spectrogram image is removed after resizing to save space.
 
-When executed, this script performs the following steps:
-
-1. **File Selection**: It uses `find` to search for `.wav` files in the specified directory (`/home/matias/audio/PROJECTS`) and displays them in a list using `dmenu`. This allows the user to select which audio file to process.
-  
-2. **Spectrogram Creation**: Once a file is selected, `sox` is used to create a spectrogram image saved as a PNG file. The spectrogram has a resolution set at 1600x900 pixels.
-
-3. **Image Resizing**: After the spectrogram is generated, it is resized to 1600x900 pixels again using the `convert` command from ImageMagick. The resized image is saved with an appended "_RESIZED" suffix.
-
-4. **Cleanup**: Finally, the original unresized spectrogram image is removed to save storage space.
+The resulting image is saved with the same name as the audio file, appended with `_RESIZED`.
 
 ### Usage
 
-To run the script, simply execute it from a terminal. Make sure to have the necessary dependencies installed. Here’s how you can execute the script:
+To use this script, execute it from a terminal. It is designed to be interactive, requiring the selection of a `.wav` file through a `dmenu` interface:
 
-```bash
+```sh
 sh /home/matias/.scripts/create_cover_art.sh
 ```
 
-Upon execution, a `dmenu` will pop up displaying the available `.wav` files. Select a file, and the script will generate the cover art in the same directory as the audio file.
+Once run, a `dmenu` window will appear, allowing you to select the `.wav` file. Upon selection, the script generates and resizes the spectrogram. The resultant image will be saved in the same directory as the original `.wav` file with `_RESIZED.png` appended to its filename.
 
 ---
 
-> [!TIP] 
-> Potential improvements include adding error handling for cases where no `.wav` files are found or if the user cancels the `dmenu` selection. Additionally, providing configurable parameters for spectrogram dimensions and output quality could enhance usability and flexibility.
+> [!TIP]
+> Consider adding error checking for cases where no file is selected or if any of the command processes fail. Additionally, you might want to add a check to ensure that `dmenu`, `sox`, and `imagemagick` are installed before attempting to use them. This can improve user experience by providing meaningful feedback when something goes wrong.

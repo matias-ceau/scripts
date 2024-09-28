@@ -1,47 +1,43 @@
-# Playlist Randomizer
+# Playlist Randomizer Script
 
 ---
 
-**playlist_randomizer.xsh**: Randomly selects and plays a playlist of albums in cmus.
+**playlist_randomizer.xsh**: Script to shuffle and play a playlist of albums in cmus.
 
 ---
 
 ### Dependencies
 
-- `pandas`: A powerful data analysis library used for handling playlist data.
-- `random`: Standard Python module for generating random numbers, utilized for shuffling.
-- `os`: Standard library for interacting with the operating system, used here to handle file paths.
-- `cmus`: A terminal-based music player that this script interfaces with.
-- `dmenu`: A dynamic menu for X, used for selecting playlists from the available options.
+- `xonsh`: A Python-powered shell to execute this script.
+- `pandas`: Python library for data manipulation, used to organize playlist data.
+- `dmenu`: A dynamic menu for X, used to select playlists interactively.
+- `cmus`: Console music player to play the selected, randomized playlist.
 
 ### Description
 
-The **Playlist Randomizer** script automates the process of selecting a playlist of albums and playing them in random order using cmus. It leverages `xonsh`, a Python-powered shell that combines shell scripting with Python's capabilities.
+This script is tailored for the Arch Linux environment with qtile as the window manager. The script picks a playlist from a specified directory and plays the albums in random order using cmus, a console music player.
 
-Key features of the script include:
+1. **Playlist Selection**: The script searches for `.m3u` playlist files in the `~/.playlists` directory. It uses `dmenu` to present the list of playlists for the user to choose from.
+   
+2. **Randomization**: After selecting a playlist, the script reads the `.m3u` file and processes its contents using `pandas`. It extracts album and song information, shuffles the albums, and reorders the songs to play the albums randomly.
 
-- **Playlist Selection**: The script lists all `.m3u` playlists from the user's specified playlist directory (`~/.playlists`). Users can select a playlist using `dmenu`, which is a user-friendly interface for selection.
-- **Randomization**: Once the playlist is chosen, the script reads the contents of the playlist file, extracts unique albums, and shuffles their order.
-- **Output Creation**: A temporary randomized playlist is created and written to `/home/matias/.temp/randomized.m3u`.
-- **Interaction with cmus**: The script communicates with cmus via `cmus-remote`, clearing any existing tracks, adding the new randomized playlist, and initiating playback.
+3. **Playback**: The randomized playlist is saved as a temporary file and then loaded into cmus for playback.
 
 ### Usage
 
-To run the script, simply execute it from a terminal:
+Run this script by invoking it in a terminal that supports the `xonsh` shell or set up a keybinding in your qtile configuration to execute it directly:
 
 ```bash
-./playlist_randomizer.xsh
+~/.scripts/playlist_randomizer.xsh
 ```
 
-Make sure you have executable permission on the script. You can add the following line to your keybinding configuration in qtile if you want to run it with a keyboard shortcut:
+1. You will be prompted with a `dmenu` interface listing available playlists.
+2. Select a playlist to randomize.
+3. The script will create a randomized version of the playlist and play it using cmus.
 
-```python
-Key([mod], "r", lazy.spawn("/home/matias/.scripts/playlist_randomizer.xsh")),
-```
-
-Once executed, the script will display a list of available playlists for selection. After selecting a playlist, the music will play in a randomized order.
+Make sure that your cmus is running and configured correctly to handle `.m3u` playlist files.
 
 ---
 
-> [!TIP] 
-> The script assumes that the specified paths and playlists exist. Consider adding error handling for cases where there are no playlists, or the selected file doesn’t exist. Additionally, handling for empty playlists might improve the user experience.
+> [!NOTE]
+> Although the script efficiently randomizes and plays playlists, it assumes the structure of the playlist files and directories without any fallback or error handling. Adding validation for the existence of paths and handling cases where playlists may not be properly formatted could improve robustness. Additionally, for portability, replace hardcoded paths with configuration parameters or environment variables.

@@ -1,48 +1,38 @@
-# Update Environment Variables Script
+# Environment Variables Updater
 
 ---
 
-**update_env.xsh**: Update the .env file with API keys from the current environment
+**update_env.xsh**: Extracts and updates environment variables related to API keys into a `.env` file
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell that combines the best of bash and Python. This script relies on it to run properly.
+- `xonsh`: A shell language that combines Python and shell commands for script execution.
 
 ### Description
 
-The `update_env.xsh` script is designed to streamline the process of managing API keys by updating a `.env` file within the user's home directory. This file is often used in various applications to store environment variables securely. 
+The `update_env.xsh` script is designed to dynamically extract environment variables, specifically those ending in `API_KEY`, and write them into a `.env` file in the user's home directory. 
 
-This script defines a function named `update_env` which does the following:
+It makes use of Python's dictionary comprehension to filter out and gather all environment variables terminating with the string `API_KEY`. These key-value pairs are then formatted in the style of `KEY=VALUE` and concatenated into a string with line breaks. Finally, this content is written to a `.env` file located at `$HOME/.env`.
 
-1. **Collect API Keys**: It creates a dictionary `apikeys_dict` containing all items in the current environment whose keys end with 'API_KEY'. This is achieved through a dictionary comprehension that filters the environment's items.
-
-2. **Prepare Content for .env**: It then creates a formatted string `apikeys_content`, where each key-value pair is represented in the format `KEY=VALUE`, separated by newlines, followed by an additional newline.
-
-3. **Write to .env File**: The script opens (or creates) the `.env` file in the home directory and writes the formatted API keys content to it.
-
----
+This utility is particularly useful if you handle multiple API keys within your environment and wish to consolidate them for easy access by applications that rely on `.env` files.
 
 ### Usage
 
-To utilize this script, simply execute it from your terminal while in the xonsh environment:
+1. **Run the script**: Execute the script directly from the terminal to update your `.env` file with the current API keys:
 
-```bash
-xonsh /home/matias/.scripts/update_env.xsh
-```
+   ```bash
+   xonsh ~/home/matias/.scripts/update_env.xsh
+   ```
 
-This will trigger the `update_env` function, automatically updating the `.env` file with any API keys you have in your environment.
+2. **Assign a Keybinding**: Given your setup with the `qtile` window manager, you may want to assign this script to a keyboard shortcut for faster execution.
 
-For convenience, you could set a keybinding in qtile to run this script, allowing for easy updates whenever you need them. For example, you could add the following to your `~/.config/qtile/config.py`:
+3. **Automate on system startup**: To ensure that the `.env` file is updated with the latest keys upon login, consider adding this script to your system's startup applications.
 
-```python
-Key([mod], "u", lazy.spawn('xonsh /home/matias/.scripts/update_env.xsh')),
-```
-
-This would bind the update script to the "mod+u" key combination.
+4. **Interactive Terminal**: The script needs to be executed in an environment where `xonsh` is installed and is generally run without any arguments.
 
 ---
 
-> [!TIP]  
-> Ensure that your environment variables are correctly set prior to running this script. Consider implementing error handling in the script to manage cases where the `.env` file cannot be written or if no API keys are found, enhancing its robustness.
+> [!TIP]
+> Consider enhancing the script by adding error handling. Currently, it assumes that the required environment variables are always present and writable to the `.env` file. Additionally, you may also want to add logging to track when the file was last updated, which could help in debugging or verifying the changes made by the script.

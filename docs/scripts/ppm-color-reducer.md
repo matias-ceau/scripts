@@ -2,46 +2,46 @@
 
 ---
 
-**ppm-color-reducer**: A command-line tool to reduce the color depth of PPM images using a custom palette.
+**ppm-color-reducer**: Reduce the number of colors in a PPM image using a specified palette.
 
 ---
 
 ### Dependencies
 
-- `gcc`: The GNU Compiler Collection, required to compile the C program.
-- `ppm` format: The script specifically works with PPM files in the P6 format.
+- `stdio.h`, `stdlib.h`: Standard input/output and utility libraries.
+- `math.h`: Math utilities.
+- `string.h`: String handling functions.
+- `limits.h`: For `INT_MAX`, used to initialize the minimum distance.
+- PPM image file (P6 format).
+- Text file containing the palette colors in "r,g,b" format.
 
 ### Description
 
-The `ppm-color-reducer` is a console-based tool that allows users to reduce the color depth of PPM images by mapping their colors to a specified color palette, which is provided in a separate text file. The palette file should contain colors formatted as `r,g,b` where `r`, `g`, and `b` are integers representing the red, green, and blue components of the color, respectively.
-
-Here's how the script functions:
-1. **Color Structure**: Defines a `Color` structure to hold RGB values.
-2. **Color Distance Function**: Implements the `color_distance_sq` function to compute the squared Euclidean distance between two colors, which is used to find the closest color in the palette.
-3. **Palette Reading**: The `read_palette` function loads color values from a given palette file into an internal array.
-4. **PPM Processing**: Reads the input PPM file, finds the closest palette color for each pixel, and writes the converted pixel to the output file.
+The **ppm-color-reducer** is a C program designed to reduce the number of colors in a PPM formatted image using a specified palette. It reads the input palette from a text file where each line contains a color in the format `r,g,b`. The image is processed pixel by pixel, and each pixel is replaced by the closest color from the palette based on the Euclidean distance in the RGB color space. The script currently supports images in the P6 binary format of PPM.
 
 ### Usage
 
-To run the script, use the following command in the terminal:
+To run the script, compile it using a C compiler and execute it with the following command:
 
-```bash
+```shell
 ./ppm-color-reducer <input_file.ppm> <output_file.ppm> <palette_file.txt>
 ```
 
-Here’s an example:
+- **input_file.ppm**: The PPM image file you want to color reduce.
+- **output_file.ppm**: The file where the reduced color image will be saved.
+- **palette_file.txt**: A text file containing the colors to use in the format `r,g,b`, one per line.
 
-```bash
-./ppm-color-reducer input.ppm output.ppm palette.txt
+#### Example:
+
+```shell
+./ppm-color-reducer input.ppm output.ppm colors.txt
 ```
 
-- `<input_file.ppm>`: The PPM image file that you want to reduce in color depth.
-- `<output_file.ppm>`: The resultant PPM file after processing.
-- `<palette_file.txt>`: A text file containing the palette of colors, defined in the format `r,g,b`, with one color per line.
-
-Make sure to handle errors properly as the program checks for issues such as file access and format validity.
+This will take the `input.ppm` file, apply the color reduction based on `colors.txt`, and write the results to `output.ppm`.
 
 ---
 
-> [!IMPORTANT]  
-> This script currently supports only the P6 format of PPM files. You may want to extend the functionality to support P3 format as well, along with additional error handling for various possible edge cases. Additionally, consider implementing logging for better tracking of the operational process. Test the script with various images and palettes to ensure robustness.
+> [!TIP]
+> - Ensure that your palette file does not exceed 256 colors, as the array `palette` has a fixed maximum size of 256.
+> - The script currently supports only P6 (binary) PPM files. Extending this script to handle other PPM formats can increase its usability.
+> - Error handling for file operations could be improved by checking file permissions and validating the input files beforehand.

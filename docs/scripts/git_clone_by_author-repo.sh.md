@@ -1,56 +1,46 @@
-# Git Clone by Author/Repo
+# Git Clone by Author-Repo
 
 ---
 
-**git_clone_by_author-repo.sh**: A script for cloning Git repositories by specifying developer and package.
+**git_clone_by_author-repo.sh**: Clone a GitHub repository by specifying the developer and package name with an option for SSH or a local path.
 
 ---
 
 ### Dependencies
 
-- `git`: A version control system to clone repositories. Ensure `git` is installed on your Arch Linux system.
+- `git`: The core tool required for cloning repositories.
 
 ### Description
 
-This Bash script simplifies the process of cloning Git repositories from GitHub by allowing users to specify the developer and package directly as arguments. It provides flexible options for cloning:
+This script facilitates cloning GitHub repositories directly under a specified directory structure, organizing them by developer. By default, it clones repositories into a directory specified by the `GIT_REPOS` environment variable, defaulting to `"$HOME/git"` if not set. You have the option to use HTTPS, SSH, or a local path for cloning:
 
-- **SSH URL**: Use SSH for cloning.
-- **Local Repository**: Clone from a local path.
-
-The script starts by defining a usage function that outputs the instruction on how to use the script if the input arguments are incorrect. The required structure is:
-
-```
-git_clone_by_author-repo.sh [-s | -l <path>] developer/package
-```
-
-The key parts of the script include:
-
-- Parsing command-line arguments to check for flags (`-s` for SSH and `-l` for specifying local paths).
-- Validating user inputs, ensuring only valid combinations of flags and arguments are permitted.
-- Cloning the specified repository into a designated Git directory, which defaults to `~/git`.
+- **HTTPS**: Default method for cloning via URL.
+- **SSH**: Enables cloning with SSH when `-s` or `--ssh` is specified (e.g., `git@github.com:developer/package.git`).
+- **Local Path**: Use a specified local directory as the source when `-l` or `--local <path>` is provided.
 
 ### Usage
 
-To use the script, follow the syntax provided below:
+Ensure the `git` tool is installed on your Arch Linux system. You can execute the script directly in a terminal. Below is a practical guide on how to utilize the script:
 
-1. **Clone using HTTPS**:
-   ```
-   ./git_clone_by_author-repo.sh developer/package
-   ```
+```bash
+# Clone using HTTPS by default
+./git_clone_by_author-repo.sh developer/package
 
-2. **Clone using SSH**:
-   ```
-   ./git_clone_by_author-repo.sh -s developer/package
-   ```
+# Clone using SSH
+./git_clone_by_author-repo.sh -s developer/package
 
-3. **Clone from a local repository**:
-   ```
-   ./git_clone_by_author-repo.sh -l /path/to/local/repo developer/package
-   ```
+# Clone using a specified local directory
+./git_clone_by_author-repo.sh -l /path/to/local/repo developer/package
+```
 
-Note that using both `-s` and `-l` together will result in an error, as these options are mutually exclusive.
+- Adjust `$GIT_REPOS` environment variable if different directory structures are desired.
+- Ensure you have correctly set up your SSH keys if opting for SSH cloning.
 
 ---
 
-> [!TIP]  
-> While the script provides good flexibility, consider adding error handling for git operations to capture and display errors encountered during cloning. Additionally, implementing logging to keep track of cloned repositories could be beneficial for later reference.
+> [!TIP]
+> - **Error Handling**: The script currently exits on any argument parsing issues. Implement enhanced error messages or logging for better debugging, especially if invalid paths are given or network errors occur during cloning.
+> 
+> - **Flexibility**: Consider allowing additional options like shallow cloning (`--depth 1`) for faster clones when the full history isn't needed.
+> 
+> - **Code Duplicity**: The while loop could be optimized by refactoring repeated code lines or using arrays for option arguments.

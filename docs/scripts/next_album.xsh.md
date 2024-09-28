@@ -1,41 +1,36 @@
-# Next Album Script for CMUS
+# Next Album Skip
 
 ---
 
-**next_album.xsh**: Skip to the next album in CMUS music player.
+**next_album.xsh**: A script to skip to the next album in `cmus`
 
 ---
 
 ### Dependencies
 
-- `cmus`: A small, fast, and powerful console music player for Unix-like operating systems.
-- `xonsh`: A Python-powered shell that can execute shell commands.
-  
+- `cmus`: A lightweight, console-based music player that this script interfaces with.
+- `xonsh`: A Python-powered shell used to run the script.
+
 ### Description
 
-This script is designed to control the CMUS music player, specifically to skip to the next album in the currently playing playlist. The script begins by sending a command to CMUS to view the fourth output pane. It then saves the currently playing tracks to a temporary `m3u` playlist file located at `/home/matias/.temp/now_playing.m3u`.
+The `next_album.xsh` script is designed for use with `cmus`, a terminal-based music player. This script is written in `xonsh`, a shell combining Python with shell language aspects.
 
-Following this, it reads the contents of the playlist and processes it to build a list of albums. The script extracts the album names from the paths where the tracks are located, ignoring duplicates and focusing solely on the currently playing album. Through a loop, the script determines how many albums should be skipped based on the current album.
+The primary functionality of this script is to skip to the next album in the current playlist. It first sets the view to '4', which corresponds to the playlist view in `cmus`, and saves the current playlist to a temporary `.m3u` file. The file is read, and each track's directory path is parsed to identify albums. 
 
-Finally, based on the calculated count, the script issues a command to CMUS to skip to the next track in the playlist until it reaches the first track of the next album. 
+The script compares the current album playing (retrieved through `cmus-remote -Q`) against the list of albums identified in the playlist. Once it finds an album that differs from the current one, it uses `cmus-remote -n` to skip tracks until the first track of the next album is reached.
 
 ### Usage
 
-To use the script, ensure it is executable and then run it directly in the terminal or bind it to a key in your window manager. To make the script executable, you can use the following command:
+To use this script, ensure you have `cmus` and `xonsh` installed and are running. The script can be executed from a terminal. It can be associated with a key binding in your `qtile` window manager or executed automatically. 
 
-```bash
-chmod +x /home/matias/.scripts/next_album.xsh
+```shell
+xonsh /home/matias/.scripts/next_album.xsh
 ```
 
-Then you can execute it with:
-
-```bash
-/home/matias/.scripts/next_album.xsh
-```
-
-Alternatively, this script can be assigned to a keybinding in your window manager (e.g., Qtile) for quick access.
+For convenience, consider mapping this script to a key binding within `qtile` for quick access during playback.
 
 ---
 
-> [!TIP]  
-> This script saves the current playlist to a file and parses it, which could be slow with large playlists. Consider simplifying the album retrieval process or checking if CMUS has built-in options for more efficient album navigation. Additionally, error handling could be added to ensure the script behaves well when interactions with CMUS fail.
+> [!NOTE]
+> The script assumes that the tracks in the playlist are ordered by album. If modifications occur in the playlist structure, behavior might be erratic.
+> A potential improvement could be handling exceptions in cases where files or directories aren't found, or when `cmus` isn't running. Moreover, storing paths or configurations in the script is inflexible; consider using environment variables or configuration files to make paths more adaptable.

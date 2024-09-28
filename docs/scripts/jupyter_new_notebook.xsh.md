@@ -1,46 +1,38 @@
-# Jupyter New Notebook Script
+# Jupyter Notebook Creator
 
 ---
 
-**jupyter_new_notebook.xsh**: Create a new Jupyter notebook and open it in Chromium.
+**jupyter_new_notebook.xsh**: Script to create a new Jupyter notebook and open it in Chromium on Arch Linux with qtile.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A shell language that is a superset of Python, allowing both shell commands and Python syntax.
-- `dmenu`: A dynamic menu for X which is lightweight and allows for selecting options interactively.
-- `jupyter-notebook`: The Jupyter Notebook application that allows you to create and manage notebooks.
-- `notify-send`: Command-line tool to send desktop notifications, useful for alerting the user about actions or errors.
+- `xonsh`: A Python-powered, Unix-gazing shell language and command prompt.
+- `dmenu`: A dynamic menu for X11, used here to prompt for the notebook's name.
+- `jupyter-notebook`: A browser-based computing platform.
+- `chromium`: An open-source web browser.
+- `notify-send`: A command to send desktop notifications.
 
 ### Description
 
-This script is designed to streamline the process of creating a new Jupyter notebook from within a terminal environment using the `xonsh` shell. 
-
-1. It begins by defining the path to the projects directory, which is set to `$HOME/projects`.
-2. An empty notebook template is created as a string, following the standard Jupyter notebook structure.
-3. The script prompts the user to enter a name for the new notebook via `dmenu`. 
-4. It checks if the user has specified a name; if not, it sends a notification indicating the requirement for a name.
-5. If a valid name is provided, it checks for existing notebooks in the targeted directory to avoid naming conflicts.
-6. If the notebook does not exist, it creates a new `.ipynb` file using the empty notebook structure defined earlier, opens it in Chromium using Jupyter Notebook, and reports success. Otherwise, it notifies the user of the conflict.
+This script facilitates the creation of a new Jupyter notebook file within a specified project directory and opens it immediately in the Chromium web browser. It uses `dmenu` to request a name for the new notebook from the user. The script checks if a notebook with the chosen name already exists in the `PROJECT_PATH`, which is set to `$HOME/projects`. If the name is unique, an empty notebook shell is created in JSON format, registered in the directory, and opened via Jupyter in Chromium. If the input name already exists or is left blank, a notification is sent to inform the user of the error.
 
 ### Usage
 
-To use this script:
-
-1. Ensure the required dependencies are installed.
-2. Make the script executable:
-   ```bash
-   chmod +x /home/matias/.scripts/jupyter_new_notebook.xsh
+1. Run the script using `xonsh`:
+   ```shell
+   ./jupyter_new_notebook.xsh
    ```
-3. Run the script from the terminal:
-   ```bash
-   /home/matias/.scripts/jupyter_new_notebook.xsh
-   ```
+   Alternatively, assign it to a keybinding in your qtile configuration for quick access.
 
-The script will prompt with a `dmenu` interface where you can enter the name of the notebook. If the notebook name already exists in the specified directory, you will receive a notification informing you of the conflict.
+2. A prompt will appear via `dmenu` asking for the new notebook's name.
+
+- **Example**:
+  - Launch the script and enter `Data_Analysis` when prompted.
+  - A new file named `Data_Analysis.ipynb` will be created in `$HOME/projects` and opened in Chromium.
+  - If no name is entered or if `Data_Analysis.ipynb` already exists, you will receive a desktop notification.
 
 ---
 
-> [!TIP]  
-> Consider incorporating error handling for scenarios where the `jupyter-notebook` command fails to execute. Additionally, ensuring that the user can provide a custom projects path via command-line arguments could enhance flexibility. You might also want to check for the existence of required dependencies and notify the user if any are missing before attempting to run the script.
+> [!TIP] Currently, the script does not handle invalid characters for filenames or provide an option for setting a different default directory. Consider adding a feature to handle special character input errors or allow the configuration of a custom project path.

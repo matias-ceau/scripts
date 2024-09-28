@@ -1,47 +1,44 @@
-# Keyboard Layout Helper
+# Keyboard Layout Help Script
 
 ---
 
-**keyboard-help.sh**: Launches a terminal to display current keyboard layout using `bat`.
+**keyboard-help.sh**: Launches a floating terminal displaying keyboard layout information
 
 ---
 
 ### Dependencies
 
-- `show_keyboard_layout.py`: A Python script that outputs the current keyboard layout. Make sure it is executable and accessible in your `PATH`.
-- `bat`: A clone of `cat` that provides syntax highlighting and Git integration to improve terminal output appearance. Install it using your package manager.
+- `show_keyboard_layout.py`: A script that provides keyboard layout information.
+- `xterm`: Terminal emulator for the X Window System.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `setsid`: Utility used to run a program in a new session.
 
 ### Description
 
-The `keyboard-help.sh` script serves as a helper tool to quickly display the current keyboard layout in a terminal window. It executes the `show_keyboard_layout.py` script and pipes its output to `bat`, which formats the output nicely for better readability.
+The **keyboard-help.sh** script is designed for users who need to quickly access their keyboard layout configuration. It achieves this by launching a floating XTerm window that executes the `show_keyboard_layout.py` script. The output of this Python script is then piped into `bat` for better readability, featuring paging and a plain style.
 
-Upon execution, the script opens a new terminal window (using `xterm`) with the title "KB_layout_floating" and a font size of 20. The layout information is continuously displayed with paging capability enabled, allowing the user to scroll through the output easily.
-
-The main components of the script include:
-
-- `which show_keyboard_layout.py`: Locates the absolute path of the `show_keyboard_layout.py` script.
-- `setsid xterm ...`: Starts `xterm` in a new session to prevent it from being affected by the current shell’s job control.
-- `bash -c "$keyboard_script | bat --paging=always --style=plain"`: Executes the keyboard layout script and pipes its output to `bat` for enhanced presentation.
+- `which show_keyboard_layout.py`: Locates the path to `show_keyboard_layout.py`.
+- `setsid`: Ensures that `xterm` runs in a new session.
+- `xterm -T KB_layout_floating -fs 20`: Opens xterm with a title "KB_layout_floating" and font size set to 20.
+- `bat --paging=always --style=plain`: Displays the output of the keyboard layout script with paging always enabled and style set to plain.
 
 ### Usage
 
-To use the script, simply execute it from the terminal:
+To use this script, you can execute it directly from the terminal. It does not require any command-line arguments and can be mapped to a keybinding for ease of access, or run automatically on certain events in your qtile configuration.
 
 ```bash
-bash /home/matias/.scripts/keyboard-help.sh
+bash ~/home/matias/.scripts/keyboard-help.sh
 ```
 
-Alternatively, you could bind it to a keyboard shortcut in your Window Manager (like qtile) for quick access. 
-
-For example, in your `~/.config/qtile/config.py`, you can add a key binding like:
+For binding to a key in qtile, you might use a snippet such as:
 
 ```python
 Key([mod], "k", lazy.spawn("/home/matias/.scripts/keyboard-help.sh")),
 ```
 
-This will allow you to press `mod + k` to bring up the keyboard layout display.
+This would open the keyboard layout helper using the mod+k key combination.
 
 ---
 
-> [!TIP]  
-> Consider enhancing the script by allowing the user to specify the terminal type or size through command-line arguments. This would make it more flexible and user-friendly. Additionally, you may want to handle cases where `show_keyboard_layout.py` fails to execute, providing users with an error message.
+> [!TIP]
+> The script assumes `show_keyboard_layout.py` is executable and in your PATH. Ensure proper permissions and PATH settings to avoid runtime errors. Additionally, consider adding error handling to check if dependencies are available and handle the absence gracefully to improve the script's robustness.

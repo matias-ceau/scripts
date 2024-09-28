@@ -1,42 +1,55 @@
-# Search and Open Files with Ripgrep and FZF
+# Ripgrep and FZF Integration Script
 
 ---
 
-**rgfzf.sh**: Combines Ripgrep and FZF to search files and open in Vim interactively.
+**rgfzf.sh**: Integrate `ripgrep` and `fzf` to search text and open files in `vim`
 
 ---
 
 ### Dependencies
 
-- `ripgrep` (`rg`): A powerful search tool that recursively searches your current directory for a regex pattern.
-- `fzf`: A command-line fuzzy finder that allows you to search through a list interactively.
-- `bat`: A cat clone with syntax highlighting and Git integration, used for previews during searches.
-- `neovim` (`nvim`): An extensible text editor, used to open files from the search.
+- `ripgrep` (`rg`): A fast search tool for files.
+- `fzf`: A command-line fuzzy finder.
+- `bat`: A syntax highlighting tool for viewing files.
+- `vim` or `neovim` (`nvim`): A highly configurable text editor built to work efficiently.
 
 ### Description
 
-This script provides an efficient way to search for text within files and open the selected file directly in Neovim. It utilizes Ripgrep to perform a fast search across directories, outputs results in a color-friendly format, and integrates with FZF for an interactive searching experience.
+This script combines the powerful searching capabilities of `ripgrep` (`rg`) with the interactive file selection provided by `fzf`. It allows you to search for text within your files and then select from the search results to open specific lines in `vim` or `neovim`.
 
-Here's how it works:
+The script performs the following steps:
 
-1. **Search**: The script begins with `rg` to search for the specified pattern in files.
-2. **Filter**: The output is piped to `fzf`, which allows users to narrow down results using fuzzy matching.
-3. **Preview**: During selection in FZF, `bat` shows a live preview of the file's content, enhancing usability.
-4. **Open**: Once a file and line number are selected, pressing `Enter` opens the file in Neovim at the specific line.
+1. **Search**: Uses `ripgrep` to search for text within files. You can provide a search pattern which is passed to `rg`.
+2. **Filter**: The search results are piped into `fzf`, allowing you to interactively narrow down the list. `fzf` is configured to display results with color and underlined highlights for better visibility.
+3. **Preview**: It uses `bat` to provide a preview of the file content, with the search term highlighted.
+4. **Open**: Once you select a result in `fzf`, pressing `Enter` opens the file in `vim` at the specific line containing the match.
 
 ### Usage
 
-To use the script, simply execute it in your terminal followed by the search term. For example:
+Make sure you have the required dependencies installed:
 
 ```bash
-./rgfzf.sh "search term"
+sudo pacman -S ripgrep fzf bat neovim
 ```
 
-If you run it without any arguments, it will prompt to input a search term interactively.
+To run the script, use:
 
-You can also bind this script to a key combination in your window manager (`qtile`), allowing for quick access without typing the command each time.
+```bash
+/home/matias/.scripts/rgfzf.sh <search_term>
+```
+
+- `<search_term>` is the text you want to search for within your files.
+- If you don't provide a search term, it will default to search without any restrictions, effectively listing all files in the directory hierarchy interactively.
+  
+You can bind this script to a key combination within `qtile` for quick access.
+
+Example to search "function":
+
+```bash
+/home/matias/.scripts/rgfzf.sh function
+```
 
 ---
 
-> [!TIP] 
-> This script is quite efficient, but there are opportunities for improvement. For instance, you might consider adding error handling to check if the dependencies are installed before proceeding with the search. Moreover, providing more customization options for FZF's preview window dimensions could enhance functionality based on personal preferences. It’s also a good practice to escape input arguments to avoid issues with special characters in search terms.
+> [!NOTE]
+> While this script is efficient, it depends heavily on the installed tools (`fzf`, `bat`, and `neovim`). Ensure all dependencies are correctly installed and configured. You might also consider making the command-line tools configurable via variables in the script for more flexibility, or adding error handling for cases where the search term yields no results.

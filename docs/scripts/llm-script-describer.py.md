@@ -1,52 +1,47 @@
-# LLM Script Describer
+# Script Documentation Assistant
 
 ---
 
-**llm-script-describer.py**: Generate markdown documentation for scripts using GPT-4o-mini.
+**llm-script-describer.py**: Automates the generation and maintenance of markdown documentation for scripts.
 
 ---
 
 ### Dependencies
 
-- `argparse`: To handle command-line arguments.
-- `csv`: For reading script metadata from CSV files.
-- `hashlib`: To compute file hashes for tracking changes.
-- `json`: For handling JSON data.
-- `os`: For directory and file operations.
-- `subprocess`: To run shell commands.
-- `sys`: To exit the script with a status code.
-- `colorama`: For colored terminal output.
-- `openai`: To interact with OpenAI's API for generating script descriptions.
+- `argparse`: Built-in Python library for handling command-line arguments.
+- `csv`: Built-in for reading and writing CSV data.
+- `hashlib`: Built-in library for generating hashes.
+- `json`: Built-in library for parsing JSON data.
+- `os`: Provides a way of using operating system dependent functionality.
+- `subprocess`: For managing subprocesses invoked by the script.
+- `sys`: Provides access to some variables used or maintained by the Python interpreter.
+- `colorama`: For cross-platform colored terminal output.
+- `openai`: OpenAI's Python client library for interfacing with their API.
+- User scripts such as `utils_update_symlinks.sh` likely help manage symlinks, specific to your environment.
 
 ### Description
 
-This script provides an automated way to generate and update markdown documentation for a collection of scripts located in a designated directory. It utilizes the OpenAI GPT-4o-mini model to create descriptions based on the contents of each script. The generated documentation is then saved as markdown files in a specified location, and also updates a README file and an index of documentation automatically.
+This script automates the documentation process for scripts in your project by leveraging OpenAI's language models. It reads a CSV file to list the scripts, generates documentation using GPT models, and maintains a JSON file for tracking modifications to scripts. It also updates an index file and the main `README.md` to reflect the current state of script documentation.
 
-Key functionalities include:
-- **Reading Scripts**: Scans a directory for script files and reads their contents.
-- **Generating Descriptions**: For each script, a detailed description is generated using OpenAI's language model.
-- **Managing Documentation**: The script checks for orphaned documentation, updates documentation files, and maintains a JSON file tracking the state of each script and its documentation.
-- **CSV Integration**: It can read a specified CSV file to locate script files for documentation.
-  
+The script begins by checking and updating symlinks to ensure all scripts are accessible. It then proceeds to read scripts from a CSV file, generates markdown documentation in the `docs/scripts` directory, and updates a JSON metadata file to keep track of script details like file path, description, doc path, and file hashes. Orphaned documentation files are removed to clean up the docs directory.
+
 ### Usage
 
-To use the script, it must be run from the command line with an optional CSV file path parameter. The default location for this file is `$SCRIPTS/data/symlink_data.csv`.
+This script is typically executed in a terminal and can be assigned to a keybinding in qtile or run automatically as a cron job:
 
-Example usage:
-
-```bash
-python llm-script-describer.py
+```shell
+python /home/matias/.scripts/llm-script-describer.py
 ```
 
-To specify a different CSV file:
+To specify a different OpenAI model:
 
-```bash
-python llm-script-describer.py /path/to/your/data.csv
+```shell
+python /home/matias/.scripts/llm-script-describer.py gpt-3.5-turbo
 ```
 
-This command will update symlinks, remove orphaned documentation, read scripts from the provided CSV file, and update the README file with new summaries.
+Ensure you have set the `OPENAI_API_KEY` environment variable for authentication with the OpenAI API.
 
 ---
 
-> [!TIP]  
-> Consider implementing error logging instead of just printing errors to the console. This will improve debugging and tracking of issues over time. Additionally, enhancing the script to allow for better customization of the language model parameters could provide more tailored documentation outputs for different contexts.
+> [!IMPORTANT]
+> While the script is comprehensive, it relies heavily on external functionalities which may need error handling improvements. It also assumes all critical environment variables and paths are correctly set, which could introduce errors in different configurations or environments. Integrate logging to catch and record unexpected behaviors for smoother debugging.

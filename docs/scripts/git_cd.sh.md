@@ -1,47 +1,50 @@
-# Git Change Directory Script
+# Git Directory Navigator
 
 ---
 
-**git_cd.sh**: Quick navigation to git repositories using fzf.
+**git_cd.sh**: Quick navigation to Git directories using `locate`, `eza`, and `fzf`
 
 ---
 
 ### Dependencies
 
-- `locate`: A command-line utility for finding files by name.
-- `eza`: An enhanced version of `ls` with additional features for better file listing.
-- `fzf`: A command-line fuzzy finder that allows users to search through lists interactively.
-- `awk`: A powerful text processing tool that is used for pattern scanning and processing.
+- `locate`: Searches for filenames in databases.
+- `eza`: Modern replacement for `ls` with improved features like color support and icons.
+- `fzf`: A general-purpose command-line fuzzy finder.
+- `awk`: A tool for pattern scanning and processing.
+- `sed`: A stream editor for filtering and transforming text.
 
 ### Description
 
-The `git_cd.sh` script facilitates quick navigation to Git repository directories from the command line. It leverages several Unix utilities to search for directories containing `.git` folders, allowing users to easily change their current working directory to one of these repositories.
+The `git_cd.sh` script is designed to streamline navigation within your system's Git repositories on Arch Linux. It utilizes the `locate` command to find all directories containing a `.git` folder, indicating a Git repository. Once located, it strips out the `.git` suffix with `sed` and then uses `eza` to format and list directories with color and icons.
 
-The script works as follows:
-
-1. **Locate**: It uses the `locate` command to find all directories containing `.git` at the end of their path.
-2. **Filter**: The output is processed using `sed` to remove the `.git` portion, leaving only the directory path.
-3. **List and Colorize**: It utilizes `eza` to display the found directories in a user-friendly format, including icons and colors, enhancing visibility.
-4. **Fuzzy Search**: The script passes this list to `fzf`, allowing users to interactively select the desired directory.
-5. **Change Directory**: If a directory is selected, the script converts any home directory path back from `~` to `/home/matias` and then changes the current directory to the selected Git repository.
+Results are then processed to replace `/home/matias` with `~` for cleaner display, before being handed to `fzf` for fuzzy searching through the repositories. After selection, the script replaces `~` back with the absolute path and navigates (`cd`) to the chosen directory, effectively transporting you to the desired Git repository.
 
 ### Usage
 
-To use the script, simply execute it from the terminal:
+This script is meant to be executed from the terminal directly. You can include it in your shell configuration for easy access or bind it to a keybinding using your window manager, qtile.
+
+Example of running the script in a terminal:
 
 ```bash
-bash /home/matias/.scripts/git_cd.sh
+bash ~/path/to/git_cd.sh
 ```
 
-Alternatively, you can bind the script to a key combination in your window manager, such as `qtile`, for faster access. Here is a sample key binding you could add to your `qtile` configuration:
+To bind it with a keybinding in qtile, you might add something like the following to your `config.py`:
 
 ```python
-Key([mod], "g", lazy.spawn("/home/matias/.scripts/git_cd.sh")),
+from libqtile.config import Key
+from libqtile.lazy import lazy
+
+keys = [
+    # other keybindings ...
+
+    Key(["mod1"], "g", lazy.spawn("bash /home/matias/.scripts/git_cd.sh")),
+]
 ```
 
-Once run, it will display a list of Git repositories found on your system. You can start typing to filter the results and press Enter to navigate to the selected repository.
+Pressing `Mod1 + g` would then prompt you to select a repository using `fzf`.
 
 ---
 
-> [!TIP]  
-> Consider adding error handling for cases where `locate` might not return any results or if the provided `fzf` selection does not yield a valid path. Additionally, using `trap` to handle exit signals could enhance user experience by ensuring the script exits gracefully.
+> [!TIP] A potential enhancement could be to integrate a check to confirm if the `locate` database is up-to-date before running the script, enhancing its accuracy. Additionally, you might consider redirecting the `cd` command to automatically open a terminal or file manager in the chosen directory rather than leaving it within the script's process.

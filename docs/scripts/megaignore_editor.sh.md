@@ -1,47 +1,51 @@
-# Megaignore Editor
+# MegaIgnore Editor
 
 ---
 
-**megaignore_editor.sh**: A script to manage and edit `.megaignore` files using `fzf` and `nvim`.
+**megaignore_editor.sh**: Interactive script to find and edit `.megaignore` files
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell environment in which the script is executed.
-- `fd`: A simple, fast and user-friendly alternative to `find`. It's used here to search for `.megaignore` files.
-- `fzf`: A command-line fuzzy finder; it provides a user interface to search through the found files.
-- `bat`: A cat clone with syntax highlighting and Git integration. It's used to preview file contents.
-- `nvim`: Neovim text editor; allows you to edit the selected `.megaignore` file.
-
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `fzf`: A general-purpose command-line fuzzy finder.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `nvim`: A hyperextensible Vim-based text editor.
+  
 ### Description
 
-This script is designed for users who want to streamline their workflow when dealing with `.megaignore` files located in their home directory and external mounts (like `/mnt`). It makes use of `fd` to find `.megaignore` files, `fzf` for a user-friendly selection experience, and `nvim` for editing the selected file. 
+The `megaignore_editor.sh` script provides an interactive interface for locating and editing `.megaignore` files across the user's home directory and mounted directories. It leverages the capabilities of `fd` to search for `.megaignore` files and lists them using `fzf`, a fuzzy finder. Users can preview the content of each file using `bat`, which gives a syntax-highlighted view. The script also binds certain keys to specific actions: pressing `Enter` opens the file in `nvim` for editing, while `Ctrl-D` deletes the selected file. 
 
-The script operates in an infinite loop, allowing users to repeatedly search for `.megaignore` files. Upon a search, it displays the results in `fzf`, where users can easily preview the file contents using `bat`. Users can also execute specific commands: pressing `Enter` opens the selected file in `nvim`, while `Ctrl+D` deletes the file.
+This loop continues until the user decides to stop, allowing for multiple iterations through the files. It prompts the user after each iteration for continuation, reading user input and stopping upon receiving 'n'.
 
 ### Usage
 
-To run the script, simply execute it from the terminal:
+Run the script in a terminal session to explore and manage `.megaignore` files:
 
-```bash
-bash ~/path/to/megaignore_editor.sh
+```sh
+bash /home/matias/.scripts/megaignore_editor.sh
 ```
 
-You can navigate through results using arrow keys and interact with files as follows:
+**Within the interactive session:**
 
-- **Enter**: Open selected `.megaignore` file with `nvim`.
-- **Ctrl+D**: Delete the selected `.megaignore` file.
-  
-After each operation, you will be prompted to continue or exit:
+- Use the `fzf` interface to select files.
+- Press `Enter` to open a file in `nvim` and edit it.
+- Press `Ctrl-D` to delete the chosen `.megaignore` file.
+- After each operation, respond to the continuation prompt to either go on or exit.
 
+**Sample Response:**
+
+```sh
+Continue? [y]/n: y
 ```
-Continue? [y]/n:
-```
 
-You can type `n` to exit the script, or just press `Enter` to continue searching.
+Press 'n' to exit the loop and stop the script.
 
 ---
 
-> [!TIP] 
-> The script lacks validation for file deletion and could potentially delete important files without further confirmation. It could be enhanced by adding a safety prompt before executing the `rm` command, or by implementing a move to trash functionality instead of permanent deletion. Additionally, consider providing an option to customize search paths or the file pattern to enhance usability.
+> [!TIP] Considerations for improvement:
+> 
+> - Add error handling to manage cases where dependencies are missing or commands fail.
+> - It could be beneficial to add logging for delete operations to prevent accidental file loss and assist in retrieving information on deleted files if necessary.
+> - Introducing a signal handler could enhance the user experience by gracefully exiting the script upon receiving interrupts (e.g., Ctrl-C).

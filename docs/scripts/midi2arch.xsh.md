@@ -1,44 +1,57 @@
-# MIDI to Arch Control Script
+# MIDI to Arch Keyboard/Script Launcher
 
 ---
 
-**midi2arch.xsh**: Transform a MIDI controller into a keyboard/script launcher.
+**midi2arch.xsh**: A script to transform a MIDI controller into a keyboard or script launcher.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-based shell that extends the functionality of traditional shells.
-- `subprocess`: A standard Python library for spawning new processes, connecting to their input/output/error pipes, and obtaining their return codes.
-- `yaml`: A library for parsing YAML, used here to read the configuration file for MIDI controls.
-- `aseqdump`: A MIDI event dumper from the `alsa-utils` package, required for listing MIDI events.
-- `xdotool`: A command-line tool that simulates keyboard input and mouse activity.
+- `xonsh`: A shell language for Python 3.6+.
+- `yaml`: Python library for YAML parsing.
+- `aseqdump`: A utility to monitor MIDI events, used to detect MIDI device events.
+- `xdotool`: A (commented) tool for simulating keyboard inputs.
 
 ### Description
 
-The `midi2arch.xsh` script allows users to leverage a MIDI controller, specifically the `nanoKONTROL2`, as a keyboard input or script launcher on Arch Linux, using a `xonsh` environment. The current implementation reads MIDI events and executes corresponding commands defined in a YAML configuration file, enhancing the interactivity and utility of the MIDI device.
+This script is designed to transform MIDI input from a specific device, namely the `nanoKONTROL2`, into actions on an Arch Linux system with the qtile window manager. Configuration for the MIDI controls is loaded from a YAML file located at `~/.scripts/config/midi2arch/nanoKONTROL2.yaml`. The script detects the connected MIDI device and listens for control change (CC) messages. These messages can then trigger associated commands defined in the configuration file.
 
-The script begins by loading the configuration file, which contains mappings of MIDI controls to commands. It checks for the presence of the `nanoKONTROL2` device and offers functionality to either output MIDI events or map those events to keyboard commands.
+The `main` function is central to this script. It continuously reads MIDI events from the `aseqdump` output and matches these events to configurations, triggering the specified command when a control event reaches its maximum value (127). It terminates when a specific control change event (`cc == 39`) is read, signaling it to stop listening for events. 
 
 ### Usage
 
-To use the script, ensure the following steps:
+To execute this script, ensure it has executable permissions:
 
-1. **Configuration**: Create and configure `~/.scripts/config/midi2arch/nanoKONTROL2.yaml` with your MIDI controls and their corresponding commands.
+```bash
+chmod +x /home/matias/.scripts/midi2arch.xsh
+```
 
-2. **Execution**:
-   - To execute the script normally, run:
-     ```bash
-     xonsh /home/matias/.scripts/midi2arch.xsh
-     ```
-   - To list MIDI events only (without executing any commands), run:
-     ```bash
-     xonsh /home/matias/.scripts/midi2arch.xsh -l
-     ```
+Run the script using xonsh:
 
-3. **Command Mappings**: Inside your YAML file, specify MIDI control changes that map to commands. The script will listen for these controls and execute commands correspondingly.
+```bash
+xonsh /home/matias/.scripts/midi2arch.xsh
+```
+
+Flags:
+
+- `-h`: Displays help information on usage.
+- `-l`: Lists MIDI events without triggering any commands. This is useful for debugging or understanding the MIDI messages sent by the device.
+
+Example:
+
+To start translating MIDI inputs to commands, simply run:
+
+```bash
+xonsh /home/matias/.scripts/midi2arch.xsh
+```
+
+To list the events without performing actions:
+
+```bash
+xonsh /home/matias/.scripts/midi2arch.xsh -l
+```
 
 ---
 
-> [!TIP]  
-> The script contains commented-out sections indicating planned future improvements, such as better handling for multiple devices and potential translations for different MIDI message types. These could enhance the code's flexibility and adaptability to different setups. Additionally, error handling could be expanded to avoid crashes during unexpected MIDI input. It's also recommended to maintain the YAML configuration outside the script for easier customization.
+> [!NOTE] The script currently comments out sections for translating note events to keypresses with `xdotool`. For future enhancements, you might consider uncommenting these features or improving error handling. Additionally, it might be beneficial to expand this script to support other MIDI devices beyond just the `nanoKONTROL2`.

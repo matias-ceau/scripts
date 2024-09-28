@@ -2,55 +2,48 @@
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: A script to search and edit Chezmoi-managed configuration files.
+**edit_chezmoi_cfg_files.sh**: A script to browse and edit Chezmoi-managed files with optional synchronization
 
 ---
 
 ### Dependencies
 
-- `chezmoi`: A tool for managing dotfiles across multiple machines.
-- `fzf`: A command-line fuzzy finder for interactive filtering.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `eza`: An improved version of `ls` with icons and other enhancements.
-- `nvim`: Neovim, a modernized text editor.
+- `chezmoi`: A dotfile manager that manages your dotfiles.
+- `bash`: The scripting shell interpreter.
+- `fzf`: A command-line fuzzy finder used for interactive file search.
+- `bat`: A cat clone with syntax highlighting and Git integration for previewing files.
+- `eza`: A modern replacement for `ls` with a focus on user-friendliness.
+- `nvim`: Neovim, a hyperextensible Vim-based text editor.
 - `fd`: A simple, fast, and user-friendly alternative to `find`.
 
 ### Description
 
-This script is designed to facilitate the editing of configuration files managed by Chezmoi. It leverages several command-line tools to provide an interactive experience for users looking to modify their dotfiles.
+The `edit_chezmoi_cfg_files.sh` script is designed for users who manage their configuration files using Chezmoi on an Arch Linux system with the Qtile window manager. It streamlines the process of searching, previewing, and editing both files and directories managed by Chezmoi. The script uses fuzzy finding (via `fzf`) to select the files or directories you wish to edit, while `bat` provides syntax-highlighted previews. Directories are listed with `eza` to display icons and colored output.
 
-The core functionality involves:
-
-- **Previewing Files**: The script provides a preview of the selected file or directory using `bat` for files and `eza` for directories.
-- **Searching**: It allows users to search through managed files and directories using `chezmoi` commands, sorting them by modification time or alphabetically.
-- **Interactive Selection**: With the help of `fzf`, users can visually select the desired file or directory to edit.
-- **Editing with Neovim**: After selection, it opens the file in Neovim, allowing immediate edits.
+The script automates the handling of Chezmoi `source-path` to open the selected file in `nvim`. Additionally, it provides options to apply changes with Chezmoi and optionally sync the repository if changes are meant to be shared.
 
 ### Usage
 
-To execute the script, you must have it saved and made executable:
-
-```bash
-chmod +x ~/.scripts/edit_chezmoi_cfg_files.sh
-```
-
-You can then run it from the terminal:
+To use this script, execute it from your terminal:
 
 ```bash
 ~/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-Upon running, users will encounter an interactive fuzzy search interface. Here's a rundown of the usage flow:
+Upon execution, you will see a list of Chezmoi-managed files where you can navigate using `fzf`. Use `Alt-D` to switch to displaying directories and `Alt-F` to revert to files. Once a selection is made and you're editing in `nvim`, an option will appear to:
 
-1. **File Search**: Type to filter through managed files.
-2. **Preview**: The right pane provides a preview of the highlighted file or directory.
-3. **Selection**: Press enter to select a file or directory.
-4. **Edit Prompt**: Based on the selection, you’ll be prompted with options:
-    - `[a]`: Apply the changes
-    - `[s]`: Apply and sync to the repository
-    - `[x]`: Exit without making changes
+- [a] Apply changes with Chezmoi.
+- [s] Apply changes and sync your repository.
+- [x] Exit without applying changes.
+
+Example use case:
+
+```bash
+# Just run and follow the prompt
+~/.scripts/edit_chezmoi_cfg_files.sh
+```
 
 ---
 
-> [!TIP]  
-> The usage of external commands (e.g., `bat`, `fzf`, `chezmoi`) should ensure they are installed and accessible from your `PATH`. Consider adding error handling or checking the availability of these commands before executing the script. Additionally, since this script uses a lot of external dependencies, it could benefit from a configuration section at the start where users can customize file search parameters or actions.
+> [!TIP]
+> Consider replacing direct calls to variables like `$HOME` with `${HOME}` to avoid potential word splitting. The script can also benefit from error checks for missing dependencies and ensuring that `cd` operations succeed before proceeding.

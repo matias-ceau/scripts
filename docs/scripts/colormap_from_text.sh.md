@@ -1,58 +1,60 @@
-# Color Map Extractor
+# Color Palette Extractor from Config Files
 
 ---
 
-**colormap_from_text.sh**: Simple script that extracts color palettes from config files
+**colormap_from_text.sh**: Simple script that extracts color palettes from text or configuration files in either hex or RGB format.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash and requires a Bash environment to run.
-- `bat`: Used for syntax highlighting of the usage message; ensure it is installed for better readability.
-
+- `bash`: The script is written in bash and requires the bash shell to execute.
+- `grep`: Utilized for finding color patterns in text.
+- `sort`: Used for sorting and ensuring unique colors.
+- `bat`: An enhanced cat command with syntax highlighting (optional for usage display).
+  
 ### Description
 
-The `colormap_from_text.sh` script is designed to extract color palettes from input config files or from standard input. The script processes hex color codes, allowing users to output these codes in various formats including hexadecimal, RGB, or visual color blocks.
+The `colormap_from_text.sh` script is a utility that extracts color information from text files or standard input, making it useful for configuration files often containing color codes. It supports color extraction in both hexadecimal and RGB format and can visually display the retrieved colors using ANSI escape codes for terminal color output.
 
-#### Features:
-
-- Supports extraction of color codes with options to display them in different formats:
-  - `-x` or `--hex-code`: Outputs color codes in hexadecimal format.
-  - `-r` or `--rgb`: Converts the hex codes to `rgb(r, g, b)` format.
-  - `-c` or `--color`: Outputs a visual block of color along with the color code.
-
-- Checks for incompatible options (e.g., `-x` and `-r` cannot be used together) and provides helpful error messages when incorrect arguments are supplied.
+#### Key Features:
+- **Hexadecimal and RGB Support**: Option to output colors in either hex (`#RRGGBB`) or RGB (`rgb(R, G, B)`) format.
+- **Visual Display**: Option to display the colors with a background matching the color code.
+- **Incompatible Options**: Ensures that both hex and RGB options are not used simultaneously.
+- **Flexibility**: Can process color codes from both files and piped inputs.
 
 ### Usage
 
-To execute the script, you can either pipe input directly into it or specify files from which to extract colors. Here are a few usage examples:
+Run this script in the terminal. It can take inputs in two forms:
 
-1. **Piping input directly**:
+1. **Piped Input**
+   ```bash
+   cat somefile.txt | ./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
+   ```
 
-```bash
-echo "Here is some text with a color #FF5733" | ./colormap_from_text.sh --hex-code
-```
+2. **Direct File Input**
+   ```bash
+   ./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color] file1.txt file2.txt
+   ```
 
-2. **Reading from a file**:
+#### Options:
+- `-x` or `--hex-code`: Outputs colors in hex format.
+- `-r` or `--rgb`: Outputs colors in RGB format.
+- `-c` or `--color`: Display the color in the terminal.
 
-```bash
-./colormap_from_text.sh --rgb config.txt
-```
+### Examples
 
-3. **Displaying color blocks**:
+- Extract and display hex colors from a configuration file:
+  ```bash
+  ./colormap_from_text.sh -x -c configfile.conf
+  ```
 
-```bash
-echo "#FFFFFF #000000 #FF5733" | ./colormap_from_text.sh --color
-```
-
-For general usage and help message, you can run:
-
-```bash
-./colormap_from_text.sh
-```
+- Extract unique RGB colors piped from a file and print them:
+  ```bash
+  cat configfile.conf | ./colormap_from_text.sh -r
+  ```
 
 ---
 
-> [!TIP]  
-> Consider adding more detailed error handling to improve user experience. For instance, inform the user if no valid hex codes were found in the input. Additionally, providing examples directly in the help message may guide users better.
+> [!TIP]
+> The script currently only extracts 6-digit hex colors and does not account for 3-digit shorthand colors or alpha channels. Extending the regex to include these cases could enhance functionality. Also, avoid using `cat` in line 52 with piped input as it is redundant.

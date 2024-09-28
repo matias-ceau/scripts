@@ -2,44 +2,46 @@
 
 ---
 
-**citeboard.sh**: A script to find and manage paper citations from your bibliography.
+**citeboard.sh**: A script to find and handle research papers by opening or copying citations.
 
 ---
 
 ### Dependencies
 
-- `findutils`: Essential for file searching operations.
-- `xsel`: Command-line tool to access and manipulate X selections.
-- `dmenu`: Dynamic menu for fast selection from a list.
+- `findutils`: A utility to search files and directories.
+- `xsel`: A tool to copy and paste data to and from the X clipboard.
+- `dmenu`: A dynamic menu for X, often used for selecting options in scripts.
 
 ### Description
 
-The `citeboard.sh` script is designed to facilitate the search and handling of paper citations from a bibliography file. It performs the following key functions:
+The `citeboard.sh` script is designed to assist users in locating and managing their research papers efficiently on an Arch Linux system with the qtile window manager. The script begins by searching through BibTeX bibliography files located in the `data/bib/` directory. It extracts BibTeX entry keys (the text following the `@`) and presents them using `dmenu` for selection.
 
-1. **Extracting References**: 
-   The script scans through BibTeX files located in the `data/bib` directory, extracting citation keys for entries that contain a comma and are formatted correctly. The extracted references are presented to the user in a list.
-
-2. **User Interaction**: 
-   The user interacts with `dmenu` to select a reference from the list, and then chooses between two options:
-   - **Open the Paper**: If this option is selected, the script finds the corresponding PDF file in the `data/zotero/storage` directory and opens it using `evince`.
-   - **Copy to Clipboard**: If this option is selected, it copies the citation key to the clipboard using `xsel`.
+Once a bibliography key is selected, it prompts the user whether they want to open the paper or copy its citation to the clipboard. If "clipboard" is selected, the chosen key is copied to the clipboard using `xsel`. If "open" is chosen, the script will search for the corresponding paper in the `data/zotero/storage` directory and open it with `evince`, a popular PDF reader.
 
 ### Usage
 
-To run the script, make sure it's executable and simply execute it in a terminal:
+This script is typically run from a terminal or hooked to a keybinding in environments like qtile. Ensure you have all the dependencies installed before using the script.
 
-```bash
-chmod +x /home/matias/.scripts/citeboard.sh
-/home/matias/.scripts/citeboard.sh
+To execute the script, use the following command in your terminal:
+
+```sh
+sh /home/matias/.scripts/citeboard.sh
 ```
 
-#### Steps:
+You can bind this script to a shortcut key in your qtile configuration to make it more accessible.
 
-1. **Initiate the Script**: Running the script will open a `dmenu` interface with available references.
-2. **Select a Citation**: Use the arrow keys to navigate and hit enter to select a citation.
-3. **Choose Action**: After selecting a citation, a second `dmenu` will prompt you to either "open" the paper or copy the citation to the clipboard.
+**Example:**
+
+Running the script:
+- Opens a selection menu with your papers' citations.
+- Allows you to choose between opening the document or copying the citation.
+
+```sh
+# Run the script and choose a paper
+sh /home/matias/.scripts/citeboard.sh
+```
 
 ---
 
-> [!TIP]  
-> Consider implementing error handling within your script. For instance, if the PDF file is not found, it might be useful to notify the user with a message. Furthermore, handling empty cases where `dmenu` returns no selection would enhance user experience.
+> [!TIP]
+> A potential improvement would include error checking if `evince` fails to open a PDF. The script could also benefit from handling cases where `find` does not locate any files. Additionally, consider adding support for different file viewers or export formats for more flexibility.

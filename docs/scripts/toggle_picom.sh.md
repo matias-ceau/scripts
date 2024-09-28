@@ -1,41 +1,36 @@
-# Toggle Picom
+# Toggle Picom Script
 
 ---
 
-**toggle_picom.sh**: Script to toggle the picom compositor on or off.
+**toggle_picom.sh**: Toggles the picom compositor on and off.
 
 ---
 
 ### Dependencies
 
-- `picom`: A lightweight compositor for X11, required to manage your window transparency and effects.
-- `notify-send`: A command to send desktop notifications, used to inform the user of the current action.
+- `picom`: A lightweight compositor for X11, commonly used to enable window shadows, transparency, and other effects.
+- `notify-send`: A utility that sends desktop notifications, used to inform you when picom starts or stops.
 
 ### Description
 
-The `toggle_picom.sh` script is a simple shell script designed to manage the `picom` compositor. It checks whether `picom` is currently running and toggles its state accordingly. By using `pgrep`, the script detects if an instance of `picom` is active. If it is active, the script will send a notification indicating that it is stopping `picom` and then proceeds to kill the running process using `pkill`. Conversely, if `picom` is not running, the script starts it as a background process with the command `picom -b` and notifies the user that it is starting.
-
-This script provides a convenient way to control your compositor directly from the command line or through a keybinding in your window manager.
+This script is designed for environments running X11, like qtile on Arch Linux. It toggles the state of `picom`, a widely-used compositor, particularly in lightweight window manager setups. By checking if `picom` is currently running (using `pgrep`), it either stops the compositor when running or starts it in the background (with `picom -b`) when it is not. Notification messages are displayed using `notify-send` to keep you informed about the change in picom's status.
 
 ### Usage
 
-To use the script, simply run it from your terminal: 
+To use the script, you can run it directly from the terminal:
 
 ```bash
-bash ~/home/matias/.scripts/toggle_picom.sh
+/home/matias/.scripts/toggle_picom.sh
 ```
 
-Alternatively, you can bind it to a key combination in your window manager (Qtile) for easier access. Here's how you can do that in your `config.py` for Qtile:
+You might consider integrating it into your qtile configuration as a keybinding:
 
 ```python
-keys.extend([
-    Key([mod], "p", lazy.spawn("bash ~/home/matias/.scripts/toggle_picom.sh")),
-])
+Key([mod], "p", lazy.spawn("~/.scripts/toggle_picom.sh")),
 ```
 
-This will allow you to toggle `picom` on and off with your chosen key combination.
+This setup allows you to easily toggle picom on and off by pressing `mod+p` [replace `mod` with your actual qtile modifier key].
 
 ---
 
-> [!TIP]  
-> Consider adding error handling for scenarios where `picom` fails to start or if the user does not have the necessary permissions to run `notify-send`. Additionally, you could provide an option to customize `picom` flags within the script, which could improve the script’s utility for advanced users.
+> [!TIP] In environments where minimal delay in toggling is desirable, consider verifying if the scripts or services that rely on picom have the appropriate conditions to handle sudden compositor state changes. Additionally, implementing a logging mechanism might help diagnose issues if the compositor fails to start or stop correctly.

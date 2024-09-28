@@ -257,7 +257,7 @@ def describe_script(script_path, script_content, client, llm_model):
 
 
 def llm_summarize(client, llm_model):
-    print_colored("Generating doc summary using gpt-4o-mini model...", kind="llm")
+    print_colored(f"Generating doc summary using {llm_model}...", kind="llm")
     dic = {}
     for d in os.listdir(DOCS_SCRIPTS_PATH):
         with open(os.path.join(DOCS_SCRIPTS_PATH, d)) as f:
@@ -439,7 +439,7 @@ def main():
     process_csv(client=C, llm_model=L)
 
     print_colored("Updating README.md", kind="main_section")
-    update_readme(client=C, llm_model=L)
+    update_readme(client=C, llm_model="gpt-4o-mini")
 
     print_colored("Script processing completed successfully.", kind="victory")
 

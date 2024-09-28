@@ -2,47 +2,46 @@
 
 ---
 
-**qtile_dice_group.py**: A script to switch between Qtile groups using a complementary number.
+**qtile_dice_group.py**: Switches to the complementary group in Qtile, based on a dice concept
 
 ---
 
 ### Dependencies
 
-- `libqtile`: This is the primary library for interacting with the Qtile window manager. It allows communication with the Qtile instance and managing window groups.
+- `qtile`: This script specifically uses the Qtile window manager's Python API to interact with workspaces.
+- `libqtile.command.client.InteractiveCommandClient`: A Qtile API module used for interacting with, and sending commands to, Qtile.
 
 ### Description
 
-This script provides a simple utility for users of the Qtile window manager to switch between groups in a unique way. The concept is based on complementary numbering. In a typical layout with 7 groups, the script will switch the current group (defined by a number from 0 to 6) to its complementary group:
+The `qtile_dice_group.py` script is a utility for the Qtile window manager that allows users to quickly switch between workspace groups like a die. In the context of this script, think of each workspace as a side of a 6-sided die. Each time the script is executed, it computes the "complementary" workspace on this "die". For example, if you're on workspace 1, the complementary workspace is 6 (since 7 - 1 = 6), making the total "7", similar to the sum of opposite sides on a standard die.
 
-- If the current group is 0, it switches to 7 (which wraps around to 0).
-- If the current group is 1, it switches to 6.
-- If the current group is 2, it switches to 5.
-- If the current group is 3, it switches to 4.
-
-Essentially, this results in toggling between pairs of groups based on their arrangement. The script utilizes the `InteractiveCommandClient` from the `libqtile.command.client` module to perform these actions.
+This script uses Qtile's `InteractiveCommandClient` to access the current group information and change to the complementary group.
 
 ### Usage
 
-To use this script, you need to have it executable and properly configured in your Qtile setup. You can run it manually from a terminal or assign it to a keybinding for quick access. 
+To use the `qtile_dice_group.py` script, ensure it is executable:
 
-1. **Make the script executable**:
-   ```bash
-   chmod +x /home/matias/.scripts/qtile_dice_group.py
-   ```
-   
-2. **Run the script directly**:
-   ```bash
-   /home/matias/.scripts/qtile_dice_group.py
-   ```
+```bash
+chmod +x /home/matias/.scripts/qtile_dice_group.py
+```
 
-3. **Assign to a keybinding** in your `~/.config/qtile/config.py`:
-   ```python
-   Key([mod], 'd', lazy.spawn('/home/matias/.scripts/qtile_dice_group.py')),
-   ```
+You can bind this script to a key within your Qtile configuration to quickly switch to the complementary group. For example, to bind the script to a key combination, you could add something like the following to your Qtile config:
 
-This will allow you to switch groups by pressing the defined key combination (e.g., `mod + d`).
+```python
+Key([mod], "g", lazy.spawn("/home/matias/.scripts/qtile_dice_group.py")),
+```
+
+Replace `[mod]` with your modifier key (e.g., `mod4` for the Super/Windows key).
+
+To run the script manually from the terminal, simply execute:
+
+```bash
+python /home/matias/.scripts/qtile_dice_group.py
+```
+
+This assumes you are running this script in an environment where the correct Python and Qtile installations are present.
 
 ---
 
-> [!TIP]  
-> This script assumes there are always 7 groups defined. If there are fewer, the complementary logic could lead to errors or unexpected behaviour. Consider adding checks to ensure the current group is within the range of defined groups and providing an error message if it is not.
+> [!TIP]
+> This script offers a unique way to switch between workspace groups, but it is limited to the concept of "complementary groups", meaning it only works effectively if you have exactly 6 groups set up in your Qtile configuration. If you have more or fewer groups, the logic will need adjustment to ensure correct functionality.

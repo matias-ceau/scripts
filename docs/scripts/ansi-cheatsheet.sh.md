@@ -1,39 +1,45 @@
-# ANSI Escape Code Cheatsheet
+# ANSI Escape Code Cheatsheet Script
 
 ---
 
-**ansi-cheatsheet.sh**: Generate a comprehensive ANSI escape code cheatsheet.
+**ansi-cheatsheet.sh**: Command-line script to display an ANSI escape code cheatsheet in the terminal using `bat`
 
 ---
 
 ### Dependencies
 
-- `bat`: A cat clone with syntax highlighting and Git integration, which is used to render the cheatsheet in a visually appealing way.
+- `bat`: A cat clone with syntax highlighting and Git integration. You can install it via `sudo pacman -S bat` on Arch Linux.
 
 ### Description
 
-This script, `ansi-cheatsheet.sh`, generates a formatted cheatsheet for ANSI escape codes which are widely used in terminal applications to control text formatting and color. When executed, it utilizes the `bat` command to display a structured overview of various ANSI escape codes, including:
+This script, `ansi-cheatsheet.sh`, provides an easy way to access a cheatsheet for ANSI escape codes directly from the terminal. It utilizes the `bat` command to display the cheatsheet with markdown formatting and syntax highlighting, making it easy to read and understand. The cheatsheet includes escape codes for various text formatting options, foreground and background colors, bright colors, cursor movement commands, and other miscellaneous functions.
 
-- **Text Formatting Codes**: These codes allow the user to modify the appearance of text (e.g., bold or italic).
-- **Text Color Codes**: This section provides codes for setting foreground and background colors, covering the standard and bright color sets.
-- **Cursor Movement Codes**: Codes for moving the cursor within the terminal can also be found here.
-- **Miscellaneous Codes**: Additional functionalities such as hiding the cursor and saving/restoring cursor position.
-
-Each section is clearly delineated and lists both the escape sequence and its effect, ensuring that users can easily understand and utilize these codes in their terminal applications.
+The escape codes are essential for adding color and text effects in terminal applications or scripts. This script is especially useful for developers working with terminal-based applications or writing scripts that require text styling and cursor control.
 
 ### Usage
 
-To use this script, simply run it in your terminal. It does not require any arguments:
+To use the script, simply execute it in the terminal. Ensure `bat` is installed and available in your PATH.
 
 ```bash
-bash /home/matias/.scripts/ansi-cheatsheet.sh
+# To display the ANSI escape code cheatsheet
+./ansi-cheatsheet.sh
 ```
 
-When you execute the script, a well-formatted cheatsheet will be displayed, showcasing the various ANSI codes and their respective descriptions. 
+You can also create an alias in your shell configuration file (e.g., `.bashrc` or `.zshrc`) for convenience:
 
-This script can also be assigned to a keybinding within your window manager (qtile) for quick access, allowing for efficient reference whenever you need to use ANSI codes.
+```bash
+alias ansicheat='/home/matias/.scripts/ansi-cheatsheet.sh'
+```
+
+After adding the alias, you can quickly access the cheatsheet by simply typing:
+
+```bash
+ansicheat
+```
+
+This script can be run interactively in a terminal or assigned to a keybinding in qtile for quick access.
 
 ---
 
-> [!TIP] 
-> While the script serves its purpose well, consider adding more interactive functionalities, such as allowing the user to customize the format or colors of the output. Additionally, providing a way to copy specific codes directly from the displayed cheatsheet could enhance usability. Lastly, ensure the script is executable by running `chmod +x /home/matias/.scripts/ansi-cheatsheet.sh`.
+> [!TIP]
+> The script currently uses `bat` with the `-plmd` options. Ensure these options are suitable for your intended display format. Otherwise, consider customizing the flags for better readability if themes are misaligned. Moreover, adding a fallback to standard `cat` in case `bat` isn't installed could make the script more robust on systems without `bat`.

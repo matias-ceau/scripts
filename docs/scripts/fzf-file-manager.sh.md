@@ -2,50 +2,46 @@
 
 ---
 
-**fzf-file-manager.sh**: A file manager script using fzf for fuzzy finding and eza for enhanced file listings.
+**fzf-file-manager.sh**: A script to enhance file browsing with fzf and color-enhanced listings
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell in which the script is written and executed.
-- `fzf`: A command-line fuzzy finder that allows for interactive selection of files and directories.
-- `eza`: An enhanced `ls` replacement with more features and visual capabilities.
-- `bat`: A cat clone with syntax highlighting. Used for previewing files.
-- `pastel`: A command-line tool for managing colors, particularly useful for formatting output.
+- `bash`: The Bourne Again SHell for executing the script.
+- `fzf`: A command-line fuzzy finder that helps in quick searching.
+- `eza`: A modern replacement for `ls` with additional features and options.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `rg` (ripgrep): A very fast grep alternative that works recursively in directories.
+- `pastel`: A command-line tool to generate, analyze, convert and manipulate colors.
+- `kitten` (from kitty terminal): A graphics communicator for image manipulation in terminal.
 
 ### Description
 
-This script serves as a file manager utility that integrates with `fzf`, providing a fuzzy search interface to browse directories and files. Utilizing the `eza` command for enhanced listing, it displays files with colors and icons, leveraging other tools like `bat` for syntax highlighting and `rg` (ripgrep) for searching cell configurations.
+This script acts as a sophisticated file manager using the capabilities of `fzf` for file searching and `eza` for colorful file listings. The script customizes the file previewing process, allowing you to preview files with `bat` or view images directly in the terminal if the right terminal emulator (like kitty) is used. The design of the script is such that it allows toggling and transformation of preview environments seamlessly. It heavily relies on `fzf`'s capabilities to bind key actions to various interactive elements within the file manager, enhancing navigational efficiency.
 
-Key functionalities include:
-
-- **get_color**: Fetches and formats color settings based on environment variables.
-- **eza_def**: Configures file listings with various options like long format, colors, icons, and timestamp formatting.
-- **ls_cmd**: Collects and organizes file listings, highlighting directories first and sorting them by name.
-- **preview_cmd**: Provides a preview of the selected file, adapting based on the file type (directories, images, or standard files).
-  
-Additional commands such as `full_screen_preview`, `info_cmd`, and `cmd_list` serve for full screen viewing, information display about the fzf session, and command menu respectively.
+Functions like `get_color`, `eza_def`, `ls_cmd`, and `preview_cmd` work together to deliver not only visually pleasing but also functionally efficient file management experience. This script tailors its output based on whether an item is a directory or a file, optimizing previews accordingly, and ensuring that you get the necessary information at a glance.
 
 ### Usage
 
-To run the script, simply execute it in a terminal. It can take additional parameters for listing specific directories or files, e.g.:
+To start using the script, ensure it is executable. You can integrate it into your workflow by running it from a terminal:
 
 ```bash
-bash ~/path/to/fzf-file-manager.sh /path/to/directory
+chmod +x /home/matias/.scripts/fzf-file-manager.sh
+/home/matias/.scripts/fzf-file-manager.sh
 ```
 
-While the file manager is running, you can utilize the following key bindings:
+Here's a brief rundown of how you can navigate through the file manager:
 
-- `Alt + P`: Toggle file preview.
-- `Alt + Space`: Open the selected file in full screen using `bat`.
-- `Alt + H`: Change the prompt and reload file listings.
-- `Alt + F`: Jump to relevant files.
-- `Esc`: Cancel or clear the current action (commented out).
+- **Alt + p**: Toggle file preview.
+- **Alt + Space**: View the current file in full-screen preview via `bat`.
+- **Alt + h**: Toggle hidden files view.
+- **Alt + f**: Jump between search results.
+- **Resize**: Automatically refresh preview for better adaptability.
 
-All your interactions will happen dynamically inside the `fzf` interface, which provides a clean and minimalistic view.
+This script can be conveniently bound to a key in your `qtile` wm, offering quick access.
 
 ---
 
-> [!TIP] 
-> Consider adding more error handling, especially for cases when dependencies are missing or when the selected files or directories cannot be accessed. Additionally, improving the preview functionalities to support more file types (e.g., PDFs) can enhance the user experience.
+> [!TIP]
+> The script could be improved by ensuring compatibility with more terminal emulators for features like image previews, potentially detecting or setting this at runtime. Additionally, simplifying some of the nested command executions or breaking the script into smaller, manageable sub-scripts might enhance maintainability and readability.

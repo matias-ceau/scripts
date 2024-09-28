@@ -1,46 +1,37 @@
-# Speech to Text Converter
+# Speech to Text Script
 
 ---
 
-**speach-to-text.py**: A script to record audio and transcribe it using OpenAI's Whisper model.
+**speach-to-text.py**: Records audio through a preferred device and transcribes it using OpenAI's Whisper.
 
 ---
 
 ### Dependencies
 
-- `sounddevice`: A library for recording and playing sound using NumPy arrays.
-- `openai`: The OpenAI Python client library to interface with OpenAI's services.
-- `scipy`: A scientific computation library, used here to write the recorded audio to a WAV file.
-
+- `sounddevice`: For recording audio from a microphone.
+- `scipy`: Used for audio file writing.
+- `openai`: Provides access to OpenAI's transcription services.
+  
 ### Description
 
-This Python script allows users to record audio from a specified input device and transcribe it using OpenAI's Whisper model. 
-
-1. **Audio Recording**: The script initializes the audio recording parameters such as sample rate and channels. It checks for the preferred audio device and allows users to select another if their device isn't available.
-  
-2. **Audio Input Handling**: The `record_or_abort` function records audio in a loop and lets users abort the recording by pressing <CR>. It saves the recorded audio as a temporary WAV file.
-
-3. **Transcription**: The saved audio file is then read and sent to the OpenAI API for transcription using the `transcribe` function. The transcribed text is printed to the console.
+This script is designed to record audio from a specified input device and transcribe it using OpenAI's Whisper model. The recording is limited to thirty seconds. It first attempts to use a preferred device (`UMC202HD 192k: USB`), or else it prompts for a device index. The actual recording duration might be shorter if stopped manually by entering a Carriage Return (`<CR>`). The audio is stored as a temporary WAV file before being sent for transcription. The result is printed directly to the terminal.
 
 ### Usage
 
-To use this script, follow these steps:
-
-1. Ensure you have the required dependencies installed:
-   ```bash
-   pip install sounddevice openai scipy
-   ```
-
-2. Run the script in your terminal:
+1. **Run the script**: 
    ```bash
    python /home/matias/.scripts/speach-to-text.py
    ```
 
-3. Follow the on-screen prompts to select your audio input device if necessary. Record your speech, and when you wish to stop recording, press the <CR> key.
+2. **Choose Device**: If your preferred device is unavailable, you'll be prompted to choose a device from a list.
 
-4. After recording, the script will automatically transcribe the audio and display the text in the terminal.
+3. **Stop Recording**: Manually stop the recording by pressing `<CR>` within 30 seconds.
+
+4. **View Transcription**: The transcribed text will be displayed in the terminal.
+
+This script can be run from a terminal and might be suitable for keybindings within qtile if you want quick access to transcription capabilities.
 
 ---
 
-> [!TIP]  
-> The script currently saves the audio file as `temp.wav`, which may lead to a conflict if the script is executed multiple times in quick succession. Consider implementing a mechanism to handle existing files (e.g., using a timestamp in the filename or deleting the file after processing). Additionally, error handling for audio device selection and file operations could improve script robustness.
+> [!IMPORTANT]
+> The script is missing proper exception handling. If the preferred device isn't available, any errors during recording or transcription might crash the script. Consider adding error handling measures. Also, the `openai` client instantiation might need API configuration, which isn't visible in the script. Make sure to set up your environment with the necessary authentication details.

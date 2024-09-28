@@ -1,54 +1,46 @@
-# Install Dependencies Script
+# Package Installer Script
 
 ---
 
-**install_dependencies.sh**: A script to install a predefined list of dependencies using paru.
+**install_dependencies.sh**: Automated script to install a list of necessary packages using `paru`.
 
 ---
 
 ### Dependencies
 
-- `paru`: An AUR helper required to install packages from the Arch User Repository (AUR).
+- `paru`: An AUR helper for Arch Linux. This script relies on `paru` to install packages, so ensure it is installed and configured on your system.
 
 ### Description
 
-This script automates the installation of essential utilities and tools by leveraging `paru`, a popular AUR helper in the Arch Linux community. The script contains a list of packages that are commonly used and enhances productivity for users, particularly those using a tiling window manager like Qtile.
+This script automates the installation of a predefined list of packages required for your Arch Linux environment set up on qtile. It utilizes the `paru` package manager with the `--needed` flag to install packages only if they are not already present. The packages are specified between a `cat` and `EOF` block, which is a convenient Bash technique for providing input through a here-document. Here is the list of packages:
 
-The script utilizes a here-document to provide the list of packages to `paru`, which allows for a batch installation process. The `--needed` flag prevents reinstallation of already installed packages. The complete list of dependencies includes:
-
-- `git`: Version control system
-- `fd`: A simple, fast and user-friendly alternative to `find`
-- `bat`: A `cat` clone with syntax highlighting and Git integration
-- `fzf`: A command-line fuzzy finder
-- `ripgrep`: A line-oriented search tool that recursively searches your current directory
-- `neovim`: A hyperextensible Vim-based text editor
-- `chezmoi`: A tool for managing your dotfiles
-- `dmenu`: A dynamic menu for X11
-- `findutils`: Basic utilities for finding files
-- `rofi`: A window switcher, application launcher, and ssh launcher
-- `dunst`: A custom notification daemon
-- `python-pandas`: A fast, powerful, flexible, and easy-to-use open-source data analysis and manipulation tool
-- `python-colorama`: A library to make ANSI escape character sequences easier to use under Windows
-- `light`: A command-line interface for controlling backlight brightness
-- `xdotool`: A tool that simulates keyboard input and mouse activity
+- `git`: Version control system.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `fzf`: A command-line fuzzy finder.
+- `ripgrep`: A line-oriented search tool that recursively searches your directory for a regex pattern.
+- `neovim`: A hyperextensible Vim-based text editor.
+- `chezmoi`: A manager for your dotfiles.
+- `dmenu`: A fast and minimal dynamic menu.
+- `findutils`: Collection of tools to fine-tune searches.
+- `rofi`: A window switcher, application launcher, and dmenu replacement.
+- `dunst`: Lightweight and customizable notification daemon.
+- `python-pandas`: Data analysis library for Python.
+- `python-colorama`: Conveniently handles colored terminal text in Python.
+- `light`: Display backlight control.
+- `xdotool`: Simulate keyboard input and mouse activity.
 
 ### Usage
 
-To utilize this script, ensure it is executable and run it from the terminal. You can make it executable with the following command:
+To use the script, simply run it from the terminal. Make sure you have execution permissions with `chmod +x install_dependencies.sh` if necessary.
 
 ```bash
-chmod +x /home/matias/.scripts/install_dependencies.sh
+./install_dependencies.sh
 ```
 
-Execute the script by running:
-
-```bash
-/home/matias/.scripts/install_dependencies.sh
-```
-
-This command will initiate the installation process for all specified packages. If you wish to integrate this script with your custom workflow in Qtile, you could bind it to a key combination, allowing for quick access to setup or maintenance tasks.
+This script is designed to be run interactively in your terminal. Alternatively, it can be integrated into automated scripts or system setup routines.
 
 ---
 
 > [!TIP]  
-> While this script is efficient for installing a predefined workload, consider enhancing its flexibility by allowing users to pass additional arguments or specifying which packages to install. Adding error handling could also improve robustness against installation failures (e.g., if a package is already installed or not found).
+> The use of `paru` is efficient, but ensure that the user running the script has the necessary permissions and that `paru` is correctly configured. Additionally, consider checking for existing installations before populating the list to avoid redundant or conflicting installations. This can optimize the script's execution and ensure smoother package management.

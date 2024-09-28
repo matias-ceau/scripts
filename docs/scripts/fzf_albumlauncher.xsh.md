@@ -1,45 +1,44 @@
-# fzf Album Launcher
+# FZF Album Launcher
 
 ---
 
-**fzf_albumlauncher.xsh**: Launches and plays selected albums using fzf and cmus.
+**fzf_albumlauncher.xsh**: Choose an album with fzf and play it with cmus
 
 ---
 
 ### Dependencies
 
-- `beet`: A music library manager for easier organization and playback of music collections.
-- `fzf`: A command-line fuzzy finder for selecting items from a list.
-- `cmus`: A lightweight console music player that is used for playback in this script.
-- `xonsh`: A Python-powered shell that is used to execute this script.
+- `xonsh`: A shell that executes the script.
+- `beet`: Music library manager used to list albums.
+- `fzf`: Command-line fuzzy finder utilized to select an album.
+- `cmus`: Console music player used for playing the selected album.
+- `cmus-remote`: Command tool for controlling `cmus` operations.
 
 ### Description
 
-The `fzf_albumlauncher.xsh` script allows the user to select an album from their music library and play it using cmus. It employs `beet` to list available albums and `fzf` to provide a user-friendly interface for selection. 
+This script is designed for selecting and playing albums using a command-line interface on an Arch Linux system with the qtile window manager. It leverages the `beet` command to list all albums available in the music library, then uses `fzf` to allow the user to interactively choose an album. Once an album is selected, it controls `cmus` through `cmus-remote` to play it.
 
-Upon choosing an album, the script sends commands to cmus to clear the current playlist and filter in the selected album. This is done through various `cmus-remote` commands, which facilitate interaction with the cmus player. The script also saves the current playlist for future reference. 
+The script executes several `cmus-remote` commands to ensure that the playlist is cleared, the album is filtered and marked, it gets queued with the specified number of tracks, and starts playing immediately. It also saves the currently playing albums' playlist as `nowplaying.m3u` in the specified directory for future reference.
 
 ### Usage
 
-To use this script, simply run it in your terminal. Ensure you have `beet`, `fzf`, and `cmus` installed and configured properly. Here’s a step-by-step guide:
+To use this script, simply execute it in a terminal that supports `xonsh`:
 
-1. Make sure the script is executable:
-   ```bash
-   chmod +x /home/matias/.scripts/fzf_albumlauncher.xsh
-   ```
-   
-2. Execute the script with:
-   ```bash
-   /home/matias/.scripts/fzf_albumlauncher.xsh
-   ```
+```shell
+~/.scripts/fzf_albumlauncher.xsh
+```
 
-3. A list of albums will be presented via fzf, use your arrow keys to navigate and select your desired album.
+This script isn't designed with any command-line arguments. It could be bound to a keybinding within your qtile configurations for quick access or just executed when you open a terminal session. It executes interactively, presenting you with a list of albums to choose from using `fzf`.
 
-4. The script will automatically play your selected album in cmus.
-
-**Note:** You may bind the script to a key combination in your window manager (qtile) for quicker access. 
+```shell
+# Example of keybinding in qtile:
+keys = [
+    Key([mod], 'm', lazy.spawn('~/.scripts/fzf_albumlauncher.xsh')),
+    # other keybindings...
+]
+```
 
 ---
 
-> [!TIP]  
-> The script relies on `beet` for listing albums, which means your albums need to be configured correctly in Beet. Consider adding error handling to manage situations when no albums are found or if cmus is not running. Additionally, the script currently interacts with a hardcoded path for saving playlists, which may not be ideal for all users. You might want to make the save path configurable.
+> [!TIP]
+> Currently, the script only handles albums and captures their name using simplistic `sed` operations which could potentially lead to unexpected behaviors with non-standard album naming conventions. Consider implementing more robust error handling or album name sanitization. Additionally, the script could be improved by confirming whether `cmus` is already running or starting it in the absence to avoid any control command failures.

@@ -1,48 +1,44 @@
-# Random Wallpapers Selector
+# Random Wallpaper Selector
 
 ---
 
-**random_wallpapers.xsh**: Pick random wallpaper from a specified wallpaper list
+**random_wallpapers.xsh**: Selects and sets a random wallpaper from a specified folder for use with `feh`.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell that allows you to run Python code directly in the shell.
-- `feh`: An image viewer that sets desktop wallpaper in Linux.
-- `dmenu` (optional): A dynamic menu for X; helps in interactive selection of wallpapers. 
+- `xonsh`: A Python-powered, cross-platform, Unix-gazing shell language and command prompt.
+- `feh`: A fast and light utility to set background images.
+- `dmenu` (commented out): A dynamic menu for X, which was presumably intended for manual selection but is not actively used in this script.
 
 ### Description
 
-This script is designed to randomly select a wallpaper from a specified folder and set it as the desktop background. It utilizes the `xonsh` shell for scripting, making it easy to integrate Python code seamlessly with shell commands.
+This script is designed to randomly select a wallpaper from a specified directory (`/home/matias/.wallpapers`) and set it as the desktop background using the `feh` utility. The script supports image formats with extensions `.png` and `.jpg`. Initially, there is a commented-out section intended to allow for manual selection via `dmenu`, though it defaults to automatically picking a random image.
 
-The script operates by:
-
-1. Importing the necessary modules (`os` for file handling and `random` for random selection).
-2. Defining the directory containing wallpapers (`/home/matias/.wallpapers`).
-3. Creating a list of wallpapers in the specified directory with extensions `.png` and `.jpg`.
-4. Using `random.choice()` to select one wallpaper at random.
-5. Setting the chosen wallpaper as the desktop background using `feh --bg-scale`.
-
-The commented-out section that uses `dmenu` offers an alternative interactive method to choose a wallpaper, allowing the user to select from the list visually.
+The process works as follows:
+1. It lists all files in the designated folder ending with `.png` or `.jpg`.
+2. Chooses one file at random, automatically selecting it.
+3. Utilizes `feh --bg-scale` to apply the chosen image as the wallpaper, ensuring it scales correctly on varying monitor sizes.
 
 ### Usage
 
-To use the script, ensure it is executable and run it directly in an X session. Here's how to do it:
+To execute the script, ensure you have xonsh and feh installed and run it in a terminal as follows:
 
-1. Make the script executable (if not done already):
-   ```bash
-   chmod +x /home/matias/.scripts/random_wallpapers.xsh
-   ```
+```bash
+xonsh /home/matias/.scripts/random_wallpapers.xsh
+```
 
-2. Execute the script:
-   ```bash
-   /home/matias/.scripts/random_wallpapers.xsh
-   ```
+If desired, automate the execution through qtile by binding it to a keybinding or running it during startup. 
 
-You can also bind this script to a keybinding in qtile or any window manager to change wallpapers quickly.
+```python
+# Example keybinding for Qtile
+Key([mod, "shift"], "w", lazy.spawn("xonsh /home/matias/.scripts/random_wallpapers.xsh"))
+```
+
+Ensure the folder `/home/matias/.wallpapers` contains valid `.png` and `.jpg` files.
 
 ---
 
-> [!TIP]  
-> The script does not currently handle cases when the wallpapers folder is empty, which may cause errors. Consider adding a check to inform the user if there are no wallpapers to select from, or provide a default value. Additionally, you might want to restore the `dmenu` section to allow interactive selection, giving users more flexibility.
+> [!NOTE]
+> The commented-out `dmenu` line in the script indicates a previous or intended feature for manual selection of wallpapers. If interactive selection is desired, consider uncommenting and fixing any issues with `dmenu` to integrate this functionality. Also, checking if the wallpapers list is not empty before choosing a wallpaper can prevent potential errors when the folder is empty.

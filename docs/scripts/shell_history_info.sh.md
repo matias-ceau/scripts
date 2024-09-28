@@ -2,68 +2,50 @@
 
 ---
 
-**shell_history_info.sh**: Obtains the most frequent lines, words, or characters in shell history files.
+**shell_history_info.sh**: Analyzes shell history files to find frequent lines, words, or characters
 
 ---
 
 ### Dependencies
 
-- `rg`: A fast text searching tool that is used for cleaning up history entries.
-- `bat`: A modern cat clone with syntax highlighting and Git integration, utilized for pretty-printing sections of the script.
+- `rg`: A tool for recursive searching, used for filtering and cleaning text.
+- `sed`: A stream editor for filtering and transforming text.
+- `tr`: Used to delete or translate characters.
+- `sort`, `uniq`: Used for sorting and finding unique entries.
+- `bat`: A cat clone with syntax highlighting and more, optional for enhanced error messages display.
 
 ### Description
 
-The `shell_history_info.sh` script is designed to analyze the shell history files and extract the most frequently used lines, words, or characters. The analysis is flexible and can be tailored to specific needs based on the command-line options provided. 
+`shell_history_info.sh` is a script that processes shell history files (Zsh and Bash) to identify the most frequent entries. It removes timestamp info specific to Zsh, and can then analyze this history data in various modes:
 
-The script performs the following main functions:
+- **Lines**: Finds the most frequently repeated command lines.
+- **Words**: Breaks down command lines into individual words and identifies the most common ones.
+- **Characters**: Analyzes the frequency of each character found in the command history.
+- **Options**: Specifically looks for command-line options (words beginning with a `-`).
 
-- **get_history**: Reads the zsh and bash history files and formats the output to remove any unnecessary zsh-specific indications.
-- **split_by_word**: Inputs a string and splits it into individual words.
-- **clean_up**: Cleans the output by removing empty lines and trimming leading/trailing whitespace.
-- **sort_by_occurence**: Sorts the cleaned data by occurrence and formats the output to show only those items with counts greater than five.
+The script assumes the user's history files are located in the directories specified by `$XDG_STATE_HOME`.
 
 ### Usage
 
-The script can be executed from the terminal or incorporated into shell workflows. Usage instructions are provided below:
-
-To execute the script, use the following command format:
+Run this script in a terminal with the appropriate options:
 
 ```bash
-./shell_history_info.sh [option]
+# To find the most frequent lines
+bash shell_history_info.sh --lines
+
+# To find the most frequent words
+bash shell_history_info.sh --words
+
+# To find the most frequent characters
+bash shell_history_info.sh --character
+
+# To find the most frequent command-line options
+bash shell_history_info.sh --option
 ```
 
-Where `[option]` can be:
-
-- `-l` or `--lines`: To get the most frequent lines in the history.
-- `-w` or `--words`: To get the most frequent words in the history.
-- `-c` or `--character`: To get the most frequent characters in the history.
-- `-o` or `--option`: Get options matching a specific pattern.
-
-**Examples**:
-
-1. Retrieve the most frequent lines:
-   ```bash
-   ./shell_history_info.sh -l
-   ```
-
-2. Retrieve the most frequent words:
-   ```bash
-   ./shell_history_info.sh -w
-   ```
-
-3. Retrieve the most frequent characters:
-   ```bash
-   ./shell_history_info.sh -c
-   ```
-
-4. Retrieve options matching a specific pattern:
-   ```bash
-   ./shell_history_info.sh -o
-   ```
-
-If the argument is incorrect, the script will output an error and show the relevant section of the code for correction.
+If an unknown option is provided, the script will display the list of valid options from the DOC comment within the script itself.
 
 ---
 
-> [!TIP] 
-This script could be improved by adding error handling for the absence of the required history files or ensuring `rg` and `bat` are installed. Furthermore, comprehensive comments and better documentation for command-line arguments would enhance user understanding. Consider adding the option to specify custom history file locations as well.
+> [!NOTE]
+> There is a lack of error handling for cases where the history files are not found or are inaccessible. Consider adding checks to verify the existence and readability of these files before proceeding with processing. Additionally, for better readability of the option summary, applying some text formatting to the output displayed by `bat` could be beneficial.

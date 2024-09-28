@@ -1,45 +1,44 @@
-# Utilities Update Symlinks
+# Utility Script for Symlink Management
 
 ---
 
-**utils_update_symlinks.sh**: Script to create and manage symlinks in ~/.local/bin, cleaning old ones.
+**utils_update_symlinks.sh**: Automate the creation and management of symlinks in your local bin directory, ensuring old links are removed.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell used to execute this script.
-- `fd`: A fast file finder that is used to locate files for symlinking.
-- `bat`: A cat clone with syntax highlighting and Git integration, used to display CSV content.
+- `fd`: A simple, fast, and user-friendly alternative to find, used for locating scripts.
+- `bat`: A clone of cat with syntax highlighting, utilized here for displaying CSV contents.
+- `glow`: A command-line Markdown renderer to style terminal output.
 
 ### Description
 
-This Bash script automates the process of creating symlinks in the `~/.local/bin` directory from a source directory defined by the `$SCRIPTS` environment variable. The script also cleans up any broken symlinks and logs the actions taken. It uses an external CSV file to keep track of symlinks for record-keeping and future reference.
+This script manages symlinks within your `$HOME/.local/bin` directory by creating new ones from scripts located in the `$SCRIPTS` directory, and removing outdated or broken links. It aims to ease access to frequently used scripts through a simplified shell command invocation.
 
-The main operations include:
-
-1. **Initialization**: It starts by checking if the CSV log of symlinks exists. If it does, the contents (excluding headers) are backed up into a log file. A new CSV file is then created with an appropriate header.
-
-2. **Logging Functions**: The script includes functions for logging both informational messages and errors, formatting the output to include timestamps.
-
-3. **Removing Broken Symlinks**: A function scans the target directory for broken symlinks (links that do not point to valid files) and removes them while logging this action.
-
-4. **Creating Symlinks**: The main functionality of the script is to create new symlinks. It checks for any conflicts—specifically if a symlink already exists and points to a different file.
-
-5. **CSV Logging**: Finally, the script collects the newly created symlinks and adds them to the CSV file for tracking purposes. The contents of the CSV file are displayed at the end of the operation.
+- **Initialization**: Prepares the CSV log file to store symlinks data, archiving past entries.
+- **Logging**: Provides timestamped logging of error messages and script activities for debugging and tracking.
+- **Symlinks Management**: 
+  - Removes any broken symlinks found in the target directory.
+  - Creates new symlinks for executable scripts found within the source directory (`$SCRIPTS`). Logs conflicts or mismatches when symlinks differ from expected targets.
+- **CSV Logging**: Updates the CSV file with the paths of all symlinks created, facilitates auditing or tracking changes.
 
 ### Usage
 
-To run the script, execute the following command in your terminal. Make sure to adjust the `$SCRIPTS` variable in your environment to point to the correct source directory:
+Run the script from your terminal to execute all included functionalities:
 
 ```bash
-chmod +x /home/matias/.scripts/sys/utils_update_symlinks.sh
-/home/matias/.scripts/sys/utils_update_symlinks.sh
+bash /home/matias/.scripts/sys/utils_update_symlinks.sh
 ```
 
-You can automate this script through a cron job or bind it to a key in your window manager (Qtile) for easy access. It’s designed to run conveniently without needing user interaction.
+**Example Use Cases:**
+
+1. **Automated Script Access**: Automatically link executable scripts to a directory in your $PATH, making them easily callable from the terminal.
+2. **Regular Cleaning**: Removes broken symlinks that may result from moved or deleted scripts.
+
+Assign this script to a keyboard shortcut in your qtile configuration for seamless integration and quick symlink updates.
 
 ---
 
 > [!TIP]
-> Consider adding a check for the existence of the `$SCRIPTS` environment variable early in the script to prevent errors if it is not set. Additionally, you might want to handle potential permission issues when creating symlinks, which could lead to unexpected failures during execution.
+> Consider adding command-line flags to allow selective execution of each function (e.g., cleaning only or symlinking only). This could provide more flexibility for users in managing the symlink process independently from the full script execution. Additionally, check to ensure `fd` output compatibility across different setups or versions, as changes in its behavior could affect symlink detection.

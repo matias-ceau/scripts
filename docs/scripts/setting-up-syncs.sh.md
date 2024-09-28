@@ -1,49 +1,47 @@
-# Setting Up Syncs
+# Automated Mega Sync Setup
 
 ---
 
-**setting-up-syncs.sh**: Automates syncing specified directories with a cloud service.
+**setting-up-syncs.sh**: Automates syncing of various directories to a Mega backup location based on the hostname.
 
 ---
 
 ### Dependencies
 
-- `mega-sync`: This is the command-line client for MEGA, a cloud storage service. Make sure it is installed and configured on your system.
+- `mega-sync`: This script relies on the `mega-sync` command, which is presumably used to synchronize local directories with a Mega cloud storage account. Ensure `mega-sync` is installed and properly configured on your system.
 
 ### Description
 
-The `setting-up-syncs.sh` script is designed to facilitate the backup of various user directories to a predefined structure in a MEGA cloud storage account. It dynamically creates backup paths based on the system's hostname, ensuring that backups are organized by device.
+This script is designed to facilitate automated syncing of user directories to specific backup locations on a Mega cloud storage service. It intelligently determines the backup paths based on the machine's hostname using `hostnamectl`. 
 
-The script performs the following actions:
+The script categorizes the directories into:
+- Standard XDG directories such as Desktop, Downloads, and more.
+- A specific "Notes" directory located at `$HOME/PKM`.
+- Additional directories are conditionally synced depending on whether the hostname is `karhu` or `karjala`. For instance, `karhu` synchronizes the `UnifiedLibrary`, while `karjala` handles larger media files.
 
-1. **XDG Folders**: It synchronizes common XDG directories such as Desktop, Downloads, Documents, Music, Pictures, and Videos from the user's home directory to the corresponding backup paths on MEGA.
-   
-2. **Notebooks Folder**: It specifically syncs the `PKM` (Personal Knowledge Management) folder to a designated location in cloud storage.
-
-3. **Host-Specific Syncs**: It includes conditional logic to handle two different hostnames: `karhu` and `karjala`. Depending on the hostname, specific libraries and large folders are synced to ensure the correct files are backed up for each device.
+This enables seamless and automated backup configurations tailored to machine-specific setups.
 
 ### Usage
 
-To use this script, follow these steps:
-
-1. **Ensure `mega-sync` is installed**: Verify that you can run the command:
-   ```bash
-   mega-sync --version
-   ```
-
-2. **Run the script**: You can execute this script in your terminal:
-   ```bash
-   bash /home/matias/.scripts/setting-up-syncs.sh
-   ```
-
-3. **Auto-sync Setup**: If you run this frequently, consider setting it up to run automatically using a cron job or creating a keybinding in your window manager.
-
-Example of setting up a cron job to run it daily at midnight:
+Ensure this script has execution permissions. Run the script from the terminal using the following command:
 ```bash
-0 0 * * * /bin/bash /home/matias/.scripts/setting-up-syncs.sh
+bash /home/matias/.scripts/setting-up-syncs.sh
 ```
+
+To run the script automatically, consider adding it to your startup applications in qtile or setting up a cron job.
+
+Example cron job, run every night at 2am:
+```cron
+0 2 * * * /home/matias/.scripts/setting-up-syncs.sh
+```
+
+This script can also be triggered by keybindings in qtile if interactive manual execution is required.
 
 ---
 
-> [!TIP] 
-> The script could be improved by adding logging to track the sync process and any errors encountered. Additionally, you might want to consider implementing flags that allow for selective syncing of certain directories without modifying the script directly. This could also prevent accidental overwrites during backups.
+> [!TIP]
+> 
+> - Make sure `mega-sync` is properly configured with authenticated access to your Mega account. 
+> - It’s recommended to handle errors or logs in the script to diagnose any synchronization issues easily. Currently, it executes `mega-sync` commands without verifying their success or failure.
+> - Consider implementing checksum or timestamp logic before syncing to avoid unnecessary data transfer, which could potentially optimize the synchronization process.
+> - Plan for the uncommented `TODO` items to ensure they do not impede the backup process inadvertently.
