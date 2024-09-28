@@ -17,6 +17,7 @@ init()
 # SCRIPTS folder
 SCRIPTS_PATH = os.environ.get("SCRIPTS", "")
 
+CSV_PATH = os.path.join(SCRIPTS_PATH, "data", "symlink_data.csv")
 README_PATH = os.path.join(SCRIPTS_PATH, "README.md")
 
 # DOCUMENTATION
@@ -43,8 +44,6 @@ SRC_FILE_EXTENSIONS = [
     ".cs",
 ]
 
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-llm_model = "gpt-4o-mini"
 
 system_prompt_1 = """\
 1) You are a helpful assistant that generates GitHub documentation in markdown format for user scripts. Your audience is mainly the creator of the scripts themselves so provide information adapted to his context (OS : Arch linux, WM : qtile).
@@ -238,8 +237,8 @@ def read_script(file_path):
         return file.read()
 
 
-def describe_script(script_path, script_content):
-    print_colored("Generating description using gpt-4o-mini model...", kind="llm")
+def describe_script(script_path, script_content, client, llm_model):
+    print_colored(f"Generating description using {llm_model} model...", kind="llm")
     try:
         response = client.chat.completions.create(
             model=llm_model,
@@ -257,7 +256,7 @@ def describe_script(script_path, script_content):
         return "Error: Unable to generate description."
 
 
-def llm_summarize():
+def llm_summarize(client, llm_model):
     print_colored("Generating doc summary using gpt-4o-mini model...", kind="llm")
     dic = {}
     for d in os.listdir(DOCS_SCRIPTS_PATH):
@@ -314,7 +313,7 @@ def get_file_hash(file_path):
     return sha256_hash.hexdigest()
 
 
-def process_script(script_path):
+def process_script(script_path, client, llm_model):
     print_colored(f"\nProcessing script: {script_path}", kind="function_call")
 
     filename = os.path.basename(script_path)
@@ -344,7 +343,7 @@ def process_script(script_path):
         script_content = read_script(script_path)
 
     if script_content:
-        description = describe_script(script_path, script_content)
+        description = describe_script(script_path, script_content, client, llm_model)
     else:
         description = "No information could be generated for this binary file."
 
@@ -365,7 +364,7 @@ def process_script(script_path):
     }
 
 
-def update_readme():
+def update_readme(client, llm_model):
 
     with open(README_PATH, "r") as file:
         content = file.read()
@@ -376,7 +375,7 @@ def update_readme():
     start_idx = content.index(llm_start_tag)
     end_idx = content.index(llm_end_tag)
 
-    summary = llm_summarize()
+    summary = llm_summarize(client, llm_model)
 
     new_content = f"{content[:start_idx] + llm_start_tag}\n\n{summary}\n\n{llm_end_tag + content[end_idx + len(llm_end_tag):]}"
 
@@ -398,15 +397,15 @@ def update_readme():
         file.write(new_content)
 
 
-def process_csv(csv_path):
+def process_csv(client, llm_model):
 
     # uses the csv file as script source
-    with open(csv_path, "r") as csvfile:
+    with open(CSV_PATH, "r") as csvfile:
         reader = csv.reader(csvfile)
         next(reader)  # Skip header
         for row in reader:
             original_path = row[0]
-            process_script(original_path)
+            process_script(original_path, client, llm_model)
 
     with open(INFO_JSON_PATH, "w") as f:
         json.dump(INFO_JSON, f, indent=2)
@@ -417,14 +416,15 @@ def main():
         description="Describe scripts from a CSV file using gpt-4o-mini model."
     )
     parser.add_argument(
-        "csv_path",
+        "llm_model",
         nargs="?",
-        default=os.path.join(SCRIPTS_PATH, "data", "symlink_data.csv"),
-        help="Path to the CSV file (default: $SCRIPTS/data/symlink_data.csv)",
+        default="gpt-4o-mini",
+        help="OpenAI LLM model",
     )
     args = parser.parse_args()
 
-    csv_path = os.path.abspath(args.csv_path)
+    C = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    L = args.llm_model
 
     print_colored("Updating symlinks", kind="main_section")
     run_update_symlinks()
@@ -433,13 +433,13 @@ def main():
     rm_orphaned_docs(get_script_files())
 
     print_colored(
-        f"Reading scripts from CSV file and creating docs and json datafile: {csv_path}",
+        f"Reading scripts from CSV file and creating docs and json datafile: {CSV_PATH}",
         kind="main_section",
     )
-    process_csv(csv_path)
+    process_csv(client=C, llm_model=L)
 
     print_colored("Updating README.md", kind="main_section")
-    update_readme()
+    update_readme(client=C, llm_model=L)
 
     print_colored("Script processing completed successfully.", kind="victory")
 
