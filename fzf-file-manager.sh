@@ -111,9 +111,11 @@ fzf_cmd() {
         --bind 'alt-p:toggle-preview' \
         --preview-window '~3,70%' \
         --bind 'focus:transform-preview-label:preview_label_cmd {7..}' \
-        --bind 'alt-space:execute(full_screen_preview {7..})' \
+        --bind 'alt-space:execute(preview_cmd {7..})' \
         --bind 'alt-h:transform:[[ ! $FZF_PROMPT =~ H ]] && echo "change-prompt(H> )+reload(ls_cmd --all)" || echo "change-prompt(> )+reload(ls_cmd)"' \
         --bind 'alt-f:jump' \
+        --bind 'ctrl-h:print(backward)+accept-non-empty' \
+        --bind 'ctrl-l:print(forward)+accept-non-empty' \
         --bind 'resize:refresh-preview' \
         --color=disabled:$FLEXOKI_BLACK
     # --bind 'esc:execute(cmd_list)' \
@@ -122,5 +124,26 @@ fzf_cmd() {
 }
 export -f fzf_cmd
 # --no-info = hide
-#
-ls_cmd "$@" "$(pwd)" | fzf_cmd
+
+CUR_DIR="$(pwd)"
+echo $CUR_DIR
+while true; do
+    result="$(ls_cmd "$@" "$CUR_DIR" | fzf_cmd)"
+    [ -z "$result" ] && exit 0
+    direction="$(echo -e "$result" | tail -n 2 | head -n 1)"
+    path="$CUR_DIR/$(echo -e "$result" |
+        tail -n 1 |
+        awk -F' ' '{for(i=7;i<=NF;i++) printf "%s%s", $i, (i<NF ? OFS : ORS)}')"
+    if [ -d "$path" ]; then
+        [ "$direction" = "backward" ] && CUR_DIR="$(dirname "$(dirname "$path")")" ||  CUR_DIR="$path"
+    elif [ -f "$path" ]; then
+        [ "$direction" = "backward" ] && CUR_DIR="$(dirname "$(dirname "$path")")"
+        # elif [ "$result" = "q" ] && [ "$direction" = "forward" ]; then
+        # exit 0
+        # elif [ "$result" = "q" ]; then
+        # exit 0
+    else
+        notify-send "result: $result" "direction $direction ; path: $path"
+    fi
+    cd "$CUR_DIR"
+done
