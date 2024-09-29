@@ -1,52 +1,53 @@
-# Vox Amplifier Options Script
+# Vox Amp Options List
 
 ---
 
-**vox.py**: Python script to list and filter Vox amplifier options.
+**vox.py**: A Python script to list and describe Vox amplifier options.
 
 ---
 
 ### Dependencies
 
-- `pandas`: Used for data manipulation and handling tabular data efficiently.
-- `tabulate`: Utilized to print data in a nicely formatted table.
-- `sys`: A Python standard library used for reading command-line arguments.
+- `pandas`: Used for data manipulation and analysis. This library provides data structures and functions needed to manage the amp options data.
+- `tabulate`: A package that makes it easy to create attractive tabular output. It formats the DataFrame into a readable table for the user.
+- `sys`: This module provides access to command line arguments.
 
 ### Description
 
-This script provides a command-line utility to list various Vox amplifier options. It utilizes a pandas DataFrame to store and organize amplifier data, which includes name, mode, color, amplifier name, and description of the model. With the aid of the `tabulate` library, the script outputs the data in a readable table format.
+The `vox.py` script manages a collection of Vox amplifier models, their modes, descriptions, and associated information. It utilizes the `pandas` library to create a DataFrame, encapsulating details of various Vox amps, including their names, modes (standard, split, custom), colors, associated amps, and descriptions.
 
-The script accepts command-line arguments to filter the amplifiers:
-- Running the script with no arguments will output a shortened description for all amplifiers.
-- A numeric argument will display detailed info for the amplifier at that index.
-- A color code ('g', 'o', 'r') argument filters amplifiers by the specified color.
-- Any other string will attempt to filter amplifiers by name, showing a truncated description.
+Upon execution, the script checks for command line arguments to determine how to display the information from the DataFrame:
+
+1. **No Arguments**: Displays a summary of all amp descriptions truncated to 40 characters.
+2. **Numeric Index**: If a valid index number is provided, it displays detailed information about the corresponding amp, including the name, mode, amp name, and full description.
+3. **Color Filter**: Pass 'g', 'o', or 'r' to show amps filtered by their color codes.
+4. **Name Search**: If a part of an amp's name is provided, it retrieves and shows all matching entries.
 
 ### Usage
 
-Run this script from the terminal on your Arch Linux system:
+To use `vox.py`, execute it from the command line. Here are some examples:
 
-```bash
-python /home/matias/.scripts/vox.py
-```
-This command lists all amplifiers with a shortened description.
+- Display all Vox amp options with brief descriptions:
+  ```
+  python vox.py
+  ```
 
-```bash
-python /home/matias/.scripts/vox.py 3
-```
-This returns detailed information for the amplifier at index 3. Ensure that the number provided is within the bounds of the DataFrame's index.
+- Get detailed information about a specific amp by its index (for example, index 2):
+  ```
+  python vox.py 2
+  ```
 
-```bash
-python /home/matias/.scripts/vox.py g
-```
-Filters and lists all amplifiers with the color code 'g'.
+- Filter amps by color (for example, color 'g'):
+  ```
+  python vox.py g
+  ```
 
-```bash
-python /home/matias/.scripts/vox.py CLEAN
-```
-Displays all amplifiers with 'CLEAN' in their name, with descriptions truncated to 40 characters.
+- Search for amps containing 'CLEAN' in their name:
+  ```
+  python vox.py CLEAN
+  ```
 
 ---
 
-> [!NOTE]
-> While the script effectively manages data via a DataFrame and tabulates it, there's a hardcoded data structure which may not scale well for modifications. You might consider importing these options from an external file or database for more dynamic behavior. Additionally, add error handling for potentially unexpected inputs, such as handling out-of-range index values or invalid input types.
+> [!TIP]
+> The script could benefit from enhanced error handling. Currently, if a non-numeric or an invalid index is provided, it may not give clear feedback. Consider using try-except blocks to capture such errors gracefully and provide informative messages to the user. Additionally, separating the data loading logic from the command handling logic would improve maintainability and clarity.

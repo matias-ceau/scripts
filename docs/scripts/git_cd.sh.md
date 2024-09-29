@@ -1,50 +1,48 @@
-# Git Directory Navigator
+# Git Directory Navigation Script
 
 ---
 
-**git_cd.sh**: Quick navigation to Git directories using `locate`, `eza`, and `fzf`
+**git_cd.sh**: Quickly navigate to a Git repository directory using a fuzzy finder.
 
 ---
 
 ### Dependencies
 
-- `locate`: Searches for filenames in databases.
-- `eza`: Modern replacement for `ls` with improved features like color support and icons.
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `awk`: A tool for pattern scanning and processing.
-- `sed`: A stream editor for filtering and transforming text.
+- `bash`: A Unix shell that provides command-line interface handling and scripting capabilities.
+- `locate`: A command-line utility used to find the location of files in the system.
+- `eza`: A modern replacement for `ls`, provides a colorful and formatted listing of directory contents.
+- `fzf`: A command-line fuzzy finder that allows interactive filtering.
+- `awk`: A programming language suitable for pattern scanning and processing.
 
 ### Description
 
-The `git_cd.sh` script is designed to streamline navigation within your system's Git repositories on Arch Linux. It utilizes the `locate` command to find all directories containing a `.git` folder, indicating a Git repository. Once located, it strips out the `.git` suffix with `sed` and then uses `eza` to format and list directories with color and icons.
+The `git_cd.sh` script is a Bash script designed to facilitate rapid navigation to Git repositories within your filesystem. It leverages several command-line utilities for locating and selecting repositories visually. The script works by doing the following:
 
-Results are then processed to replace `/home/matias` with `~` for cleaner display, before being handed to `fzf` for fuzzy searching through the repositories. After selection, the script replaces `~` back with the absolute path and navigates (`cd`) to the chosen directory, effectively transporting you to the desired Git repository.
+1. **Finding Git Repositories**: It uses `locate` to search for directories ending with `.git`, representing Git repositories.
+
+2. **Formatting Output**: The paths are then cleaned to remove the `.git` suffix and formatted with `eza` for colorful output, improving readability by displaying nested directories with icons.
+
+3. **Fuzzy Finding**: The script employs `fzf` to allow the user to interactively select a directory from the list of repositories.
+
+4. **Change Directory**: Upon selection, it converts the path from a simplified `~` format back to the full user path and uses `cd` to enter the chosen directory.
 
 ### Usage
 
-This script is meant to be executed from the terminal directly. You can include it in your shell configuration for easy access or bind it to a keybinding using your window manager, qtile.
-
-Example of running the script in a terminal:
+To use the script, simply invoke it from your terminal. Ensure you have set the appropriate permissions for execution. Here’s how to use the script:
 
 ```bash
 bash ~/path/to/git_cd.sh
 ```
 
-To bind it with a keybinding in qtile, you might add something like the following to your `config.py`:
+Alternatively, you can assign it to a keybinding in your window manager (like qtile):
 
 ```python
-from libqtile.config import Key
-from libqtile.lazy import lazy
-
-keys = [
-    # other keybindings ...
-
-    Key(["mod1"], "g", lazy.spawn("bash /home/matias/.scripts/git_cd.sh")),
-]
+Key([mod], "g", lazy.spawn("bash ~/path/to/git_cd.sh")),
 ```
 
-Pressing `Mod1 + g` would then prompt you to select a repository using `fzf`.
+This will allow you to open a fuzzy finder directly for your Git directories when you press the designated key combination.
 
 ---
 
-> [!TIP] A potential enhancement could be to integrate a check to confirm if the `locate` database is up-to-date before running the script, enhancing its accuracy. Additionally, you might consider redirecting the `cd` command to automatically open a terminal or file manager in the chosen directory rather than leaving it within the script's process.
+> [!TIP]  
+> Consider adding error handling for the situation where no Git directories are found or if `cd` fails. This could enhance the user experience by providing feedback or error messages when the selected repository path is invalid. Additionally, consider providing a configuration option to limit the search scope to specific directories, which could optimize performance for large filesystems.

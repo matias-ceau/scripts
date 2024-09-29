@@ -1,55 +1,43 @@
-# Ripgrep and FZF Integration Script
+# rgfzf.sh
 
 ---
 
-**rgfzf.sh**: Integrate `ripgrep` and `fzf` to search text and open files in `vim`
+**rgfzf.sh**: Search files with Ripgrep, filter with fzf, and open in Vim.
 
 ---
 
 ### Dependencies
 
-- `ripgrep` (`rg`): A fast search tool for files.
-- `fzf`: A command-line fuzzy finder.
-- `bat`: A syntax highlighting tool for viewing files.
-- `vim` or `neovim` (`nvim`): A highly configurable text editor built to work efficiently.
+- `rg`: This is the Ripgrep tool used for searching text in files. It is highly efficient and fast, making it suitable for large codebases.
+- `fzf`: A command-line fuzzy finder that is used to interactively filter results from the Ripgrep output.
+- `nvim`: Neovim, an extension of Vim, which is used to open the selected files. (You can adjust this to use Vim instead if preferred)
+- `bat`: A cat clone with syntax highlighting, used for previewing files in fzf.
 
 ### Description
 
-This script combines the powerful searching capabilities of `ripgrep` (`rg`) with the interactive file selection provided by `fzf`. It allows you to search for text within your files and then select from the search results to open specific lines in `vim` or `neovim`.
+The `rgfzf.sh` script is a powerful command-line utility that enhances the text searching experience on Arch Linux systems, particularly for users running the Qtile window manager. By leveraging the speed of Ripgrep for searching and the interactive capabilities of fzf for narrowing down results, this script allows you to quickly find and open files directly in Vim (or Neovim).
 
-The script performs the following steps:
-
-1. **Search**: Uses `ripgrep` to search for text within files. You can provide a search pattern which is passed to `rg`.
-2. **Filter**: The search results are piped into `fzf`, allowing you to interactively narrow down the list. `fzf` is configured to display results with color and underlined highlights for better visibility.
-3. **Preview**: It uses `bat` to provide a preview of the file content, with the search term highlighted.
-4. **Open**: Once you select a result in `fzf`, pressing `Enter` opens the file in `vim` at the specific line containing the match.
+1. **Search**: It uses `rg` to search through files for the specified text input.
+2. **Filter**: The output from `rg` is passed to `fzf`, allowing the user to filter results interactively.
+3. **Preview**: Users can see a live preview of the file content using `bat` integrated with fzf.
+4. **Open**: Selected files and lines can be opened directly in Vim (or Neovim) by pressing `Enter`.
 
 ### Usage
 
-Make sure you have the required dependencies installed:
+To use this script, simply execute it from the terminal with the text you wish to search for. Here’s a basic usage example:
 
 ```bash
-sudo pacman -S ripgrep fzf bat neovim
+./rgfzf.sh "search_term"
 ```
 
-To run the script, use:
+This command will search for "search_term" in the current directory and allow you to interactively select and open the desired result in Neovim.
 
-```bash
-/home/matias/.scripts/rgfzf.sh <search_term>
-```
+If no search term is provided, it will display all files for selection.
 
-- `<search_term>` is the text you want to search for within your files.
-- If you don't provide a search term, it will default to search without any restrictions, effectively listing all files in the directory hierarchy interactively.
-  
-You can bind this script to a key combination within `qtile` for quick access.
-
-Example to search "function":
-
-```bash
-/home/matias/.scripts/rgfzf.sh function
-```
+#### Key Bindings in fzf:
+- Press `Enter` after selecting a line from fzf to open the selected file in Neovim at the respective line number.
 
 ---
 
-> [!NOTE]
-> While this script is efficient, it depends heavily on the installed tools (`fzf`, `bat`, and `neovim`). Ensure all dependencies are correctly installed and configured. You might also consider making the command-line tools configurable via variables in the script for more flexibility, or adding error handling for cases where the search term yields no results.
+> [!TIP]  
+> Consider checking if tools like `bat` and `fzf` are installed before executing the search commands. Adding error handling can improve user experience, making it clear which dependencies are missing. Additionally, giving the user the option to choose between Vim and Neovim would increase flexibility.

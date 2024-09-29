@@ -1,61 +1,46 @@
-# Qutebrowser Source and Bookmark Sync Script
+# Qutebrowser Bookmark Synchronization Script
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Script to synchronize qutebrowser bookmarks and sessions with chezmoi.
+**qutebrowser-modify-source-bookmarks.sh**: Syncs local Qutebrowser bookmarks with Chezmoi-managed config files.
 
 ---
 
 ### Dependencies
 
-- `qutebrowser`: A keyboard-driven, vim-like web browser.
-- `chezmoi`: A dotfile manager for keeping your configurations synchronized.
-- `fd`: A simple, fast, and user-friendly alternative to find.
-- `git`: Used in commented sections for version control (optional).
+- `chezmoi`: A tool to manage your dotfiles effortlessly, allowing for easy synchronization across systems.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `bash`: The script is written in bash and requires a compatible shell environment.
 
 ### Description
 
-This script is designed to synchronize your qutebrowser's bookmarks, quickmarks, and session files with a directory managed by `chezmoi`. This setup ensures that your personal browsing settings are regularly updated and versioned.
+This script automates the synchronization of Qutebrowser bookmarks and quickmarks from local directories to those managed by Chezmoi. It ensures that any changes made to local Qutebrowser configurations are reflected in your Chezmoi setup, facilitating seamless migration and backup of browser settings.
 
-The script relies on environment variables such as `$XDG_CONFIG_HOME`, `$CHEZMOI`, and `$XDG_DATA_HOME` for locating the necessary folders, ensuring a clean organization that adheres to the XDG Base Directory Specification.
+The script defines several file paths, adapting to the user's configuration directories:
+- Local bookmarks and quickmarks are stored in `$XDG_CONFIG_HOME/qutebrowser/`
+- Chezmoi-managed equivalents reside in `$CHEZMOI/dot_config/qutebrowser/`
+- It synchronizes sessions from the data directory located at `$XDG_DATA_HOME/qutebrowser/sessions`.
 
-Here's how the script functions:
-
-1. **Synchronization**:
-   - Copies `quickmarks` and `bookmarks` from `$XDG_CONFIG_HOME` to `$CHEZMOI` after a brief sleep period in case of quickmark changes.
-   - Iterates through all session files ending with `.yml` in the `sessions` directory, adding them to chezmoi if they do not exist, and updating them if they do.
-
-2. **Chez Moi Integration**:
-   - The session files are added using `chezmoi`, ensuring they are part of your dotfiles configuration.
-
-3. **Version Control (Commented Out)**:
-   - There are commented lines indicating an optional Git workflow, which includes adding, committing, and pushing updates to a version control repository. 
+To handle potential race conditions with quickmark updates, the script incorporates a 20-second sleep before copying local quickmarks to the Chezmoi directory.
 
 ### Usage
 
-To use this script, you need to have `chezmoi` and `fd` installed on your Arch system. `git` is required if you choose to enable the versioning section.
-
-Ensure all environment variables are correctly set:
-
-```bash
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export CHEZMOI="$HOME/.local/chezmoiconfig"
-```
-
-Run the script manually:
+To execute the script, run the following command in your terminal:
 
 ```bash
 bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
 ```
 
-Or integrate it with your window manager, qtile, for automation:
+Alternatively, you can assign this script to a keybinding in your window manager (qtile) or set it up as a cron job for periodic execution. 
 
+**Example of a keybinding** in your qtile configuration:
 ```python
 Key([mod], "b", lazy.spawn("/home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh")),
 ```
 
+This keybinding would allow you to synchronize your bookmarks with a simple key press.
+
 ---
 
-> [!TIP]
-> The script relies on environment variables that must be configured correctly before execution. Consider parameterizing these with flags or, for reliability, adding error handling to ensure path existence. Additionally, consider uncommenting and testing the Git commands for a robust version control experience.
+> [!TIP]  
+> The script has a sleep command which might delay the execution unnecessarily. Consider optimizing the sleep timing or implementing a check to see if the quickmark operation has completed before proceeding. Additionally, removing the commented-out git commands and improving error-handling could enhance usability.

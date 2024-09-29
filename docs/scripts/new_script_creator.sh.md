@@ -2,50 +2,55 @@
 
 ---
 
-**new_script_creator.sh**: A script for creating and modifying user scripts with optional templating
+**new_script_creator.sh**: A script to create and manage user scripts effortlessly.
 
 ---
 
 ### Dependencies
 
-- `bat`: A syntax highlighting command-line tool used for enhanced viewing of files.
-- `rg`: Short for ripgrep, used for fast searching of patterns within files.
-- `nvim`: Neovim, a vim-based text editor for editing the scripts.
-- `utils_update_symlimks.sh`: This script is used to update symbolic links for new scripts.
+- `bat`: A modern alternative to `cat` that supports syntax highlighting.
+- `rg`: The Rust text search tool used for regex matching.
+- `nvim`: A text editor that opens the created script for editing.
+- `utils_update_symlimks.sh`: A user-defined utility for updating symlinks (assuming it exists in the script's context).
 
 ### Description
 
-The `new_script_creator.sh` script is designed to streamline the process of creating and managing user scripts on your Arch Linux system with qtile. It allows you to either create a new script with an optional template based on the file extension or convert an existing file into a user script. Depending on the file extension (`.sh`, `.py`, `.xsh`), it chooses the appropriate template (bash, python, xonsh) and includes shebang accordingly. The script also ensures file execution permissions are set and updates symbolic links for convenient usage.
+The `new_script_creator.sh` is designed to facilitate the creation of user scripts across different programming languages (Bash, Python, Xonsh) with minimal hassle. The script provides several functionalities:
+
+- **Usage Documentation**: The `usage` function displays how to invoke the script and explains the options available to the user.
+- **Template Generation**: The `templater` function creates a basic template for the specified language. The generated template includes a shebang line to specify the interpreter.
+- **File Extension Check**: The `ensure_extension` function ensures that the script file has the correct extension. If no extension is provided, it prompts the user to choose between Shell, Python, or Xonsh scripts.
+- **Script Creation and Opening**: The `script_creator` function creates the script at a defined path, opens it in `nvim`, and assigns execution permissions if the script is long enough.
 
 ### Usage
 
-You can execute the script directly from the terminal with various options:
+You can use the script in several ways:
 
-```bash
-# To get prompted for a script name, simply run:
-./new_script_creator.sh
+1. **Create a new script interactively**:
+   ```bash
+   ./new_script_creator.sh
+   ```
+   This will prompt you for a filename and script type.
 
-# To create a new script with a specified name:
-./new_script_creator.sh my_script.sh
+2. **Specify a filename directly**:
+   ```bash
+   ./new_script_creator.sh my_script.py
+   ```
+   This command creates a new Python script named `my_script.py`.
 
-# To convert an existing file into a user script:
-./new_script_creator.sh -f existing_file.py
+3. **Convert an existing file into a user script**:
+   ```bash
+   ./new_script_creator.sh -f existing_script.sh
+   ```
+   Use this command to change an existing file into a user script and open it in `nvim`.
 
-# To display help information:
-./new_script_creator.sh --help
-```
+4. **Display help**:
+   ```bash
+   ./new_script_creator.sh -h
+   ```
+   This shows the usage options for the script.
 
-#### Examples
+---
 
-- Create a new bash script:
-  ```bash
-  ./new_script_creator.sh my_new_script.sh
-  ```
-
-- Convert an existing python file to a script:
-  ```bash
-  ./new_script_creator.sh -f old_script.py
-  ```
-
-> [!WARNING]
-> One potential issue is the hardcoded paths, such as `$SCRIPTS`, which require proper setup in your environment variables. Additionally, the script relies on the presence of external dependencies and another script (`utils_update_symlimks.sh`). Ensure these are installed and accessible in your system. Also, when checking the file extension, the script assumes the usage of `rg`; replacing it with standard tools like `grep` might increase portability.
+> [!TIP]  
+> The script depends on external utilities like `bat`, `rg`, and `nvim`, which may not be installed on all systems. Consider incorporating user checks to ensure these tools are available before execution. Additionally, error handling could be improved for robustness, especially when dealing with file operations.

@@ -1,47 +1,51 @@
-# Flexoki Color Display Script
+# Flexoki Color Show
 
 ---
 
-**flexoki_show.sh**: Displays a table of colors with HEX, RGB, and descriptions
+**flexoki_show.sh**: A script to display a color palette with HEX, RGB, and names.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is a Bash script and requires Bash to be present on the system.
+- `bash`: The script is written in Bash and requires a Bash shell to run.
 
 ### Description
 
-This script, `flexoki_show.sh`, generates a detailed table displaying color codes in both HEX and RGB formats, along with their names and various contexts of use. It is designed to help you visualize a palette of colors in a terminal on Arch Linux with the qtile window manager.
+The `flexoki_show.sh` script is a Bash utility designed to present a visually appealing palette of colors. It generates a structured output in the terminal that includes the following columns:
 
-The script defines a function named `line_generator` which contains ANSI escape codes to colorize and format the output in a terminal, making use of Unicode block characters to illustrate colors visually. Each color entry includes:
+- **HEX**: The hexadecimal representation of the color.
+- **RGB**: The red, green, and blue values in decimal.
+- **NAME**: A descriptive name for the color.
+- **SHORT**: An abbreviation for quick references.
+- **UI**: A category of UI elements related to the color.
+- **SYNTAX**: Additional syntax or reference notes.
 
-- **HEX Value**: The hexadecimal representation of the color.
-- **RGB Values**: The Red, Green, Blue values of the color.
-- **Name**: A human-readable name for easier identification.
-- **Short Name**: A short alias for quick reference.
-- **UI Indicator**: Which part of the UI uses this color (if any).
-- **Syntax Highlighting Context**: Where this color is used in syntax highlighting (such as error text, keywords, or comments).
-
-Colors are printed in blocks next to their details, enhancing visibility and differentiation. The formatting uses bold (`\e[7m`) and italics (`\e[3m`) for aesthetic purposes.
+The main function, `line_generator`, uses escape sequences to format colors and styles in the terminal output, leveraging color codes to fill the blocks visually. Each line of output introduces a different color, making it easy for users to visually coordinate colors with their respective codes and descriptions.
 
 ### Usage
 
-To use the script, ensure that it has the correct executable permissions. You can make it executable with the following command:
+To utilize the script, execute it directly from a terminal session. Simply open your terminal and run:
 
 ```bash
-chmod +x /home/matias/.scripts/flexoki_show.sh
+bash /home/matias/.scripts/flexoki_show.sh
 ```
 
-Run the script by executing:
+This will display the color palette in the terminal, allowing you to view the colors side by side with their corresponding codes and details.
 
-```bash
-./flexoki_show.sh
+The script can also be integrated into your Qtile configuration for quick access. For example, bind the execution of this script to a key combination in your `~/.config/qtile/config.py` like so:
+
+```python
+from libqtile import hook
+from libqtile import key
+
+keys = [
+    key.Key([mod], "c", lazy.spawn("bash /home/matias/.scripts/flexoki_show.sh")),
+    # Add other key bindings here
+]
 ```
-
-You can bind this script to a key combination in qtile to quickly display the color palette in your terminal.
 
 ---
 
-> [!NOTE]
-> Consider using command-line arguments to selectively display certain palettes or toggle the display of certain column details to enhance the flexibility of the script. Additionally, reduce redundant code by looping through color data to generate the table dynamically instead of hardcoding each line, which will improve maintainability and scalability.
+> [!TIP]
+> Consider enhancing the script by allowing command-line arguments to filter or search for specific colors. Additionally, you could add an option to output the color palette to a text file for documentation purposes, improving the usability of the tool.

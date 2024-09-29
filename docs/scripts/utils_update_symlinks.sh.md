@@ -1,44 +1,46 @@
-# Utility Script for Symlink Management
+# Symlink Manager
 
 ---
 
-**utils_update_symlinks.sh**: Automate the creation and management of symlinks in your local bin directory, ensuring old links are removed.
+**utils_update_symlinks.sh**: Script to create and manage symlinks in ~/.local/bin.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to find, used for locating scripts.
-- `bat`: A clone of cat with syntax highlighting, utilized here for displaying CSV contents.
-- `glow`: A command-line Markdown renderer to style terminal output.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `bat`: A cat(1) clone with wings, used for displaying files with syntax highlighting.
 
 ### Description
 
-This script manages symlinks within your `$HOME/.local/bin` directory by creating new ones from scripts located in the `$SCRIPTS` directory, and removing outdated or broken links. It aims to ease access to frequently used scripts through a simplified shell command invocation.
+This script is designed to facilitate the management of symlinks located in the `~/.local/bin` directory. It performs several key functions, including:
 
-- **Initialization**: Prepares the CSV log file to store symlinks data, archiving past entries.
-- **Logging**: Provides timestamped logging of error messages and script activities for debugging and tracking.
-- **Symlinks Management**: 
-  - Removes any broken symlinks found in the target directory.
-  - Creates new symlinks for executable scripts found within the source directory (`$SCRIPTS`). Logs conflicts or mismatches when symlinks differ from expected targets.
-- **CSV Logging**: Updates the CSV file with the paths of all symlinks created, facilitates auditing or tracking changes.
+1. **Logging**: Keeps a comprehensive log of actions taken and errors encountered in a specified log file.
+2. **Cleanup**: Removes broken symlinks to maintain a clean symlink environment.
+3. **Creation**: Creates new symlinks for all executable files found in the specified `SOURCE_DIR`.
+4. **CSV Management**: Maintains a CSV file that records all symlinks created, along with their target paths and associated command names.
+
+The script starts by initializing the log file and a CSV data file, archiving previous data when applicable. It then removes any broken symlinks before creating new ones based on the contents of the defined source directory, logging conflicts when necessary. Finally, it updates the CSV file with current symlink details.
 
 ### Usage
 
-Run the script from your terminal to execute all included functionalities:
+To execute the script, simply run it from the terminal:
 
 ```bash
 bash /home/matias/.scripts/sys/utils_update_symlinks.sh
 ```
 
-**Example Use Cases:**
+#### Typical Workflow
 
-1. **Automated Script Access**: Automatically link executable scripts to a directory in your $PATH, making them easily callable from the terminal.
-2. **Regular Cleaning**: Removes broken symlinks that may result from moved or deleted scripts.
+1. **Execute the script**: This initiates the process of cleaning up and creating symlinks.
+2. **Review Log File**: Check `symlinking.log` for any errors or informational messages.
+3. **Inspect CSV**: The symlinks can be reviewed in the `symlink_data.csv` file; it is displayed using `bat` for convenience.
 
-Assign this script to a keyboard shortcut in your qtile configuration for seamless integration and quick symlink updates.
+```bash
+bat --no-pager $SCRIPTS/data/symlink_data.csv
+```
 
 ---
 
-> [!TIP]
-> Consider adding command-line flags to allow selective execution of each function (e.g., cleaning only or symlinking only). This could provide more flexibility for users in managing the symlink process independently from the full script execution. Additionally, check to ensure `fd` output compatibility across different setups or versions, as changes in its behavior could affect symlink detection.
+> [!TIP]  
+The script relies heavily on the `fd` and `bat` tools, which may need to be installed if not present on the system. Additionally, consider enhancing error handling, particularly around file I/O operations, to prevent unexpected script failures. Logging could also include severity levels and timestamps for better traceability.

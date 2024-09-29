@@ -1,51 +1,52 @@
-# Shell History Info
+# Shell History Analyzer
 
 ---
 
-**shell_history_info.sh**: Analyzes shell history files to find frequent lines, words, or characters
+**shell_history_info.sh**: Script to extract most frequent lines, words, or characters from shell history.
 
 ---
 
 ### Dependencies
 
-- `rg`: A tool for recursive searching, used for filtering and cleaning text.
+- `bash`: The script is written in Bash and requires a Bash environment to execute.
 - `sed`: A stream editor for filtering and transforming text.
-- `tr`: Used to delete or translate characters.
-- `sort`, `uniq`: Used for sorting and finding unique entries.
-- `bat`: A cat clone with syntax highlighting and more, optional for enhanced error messages display.
+- `sort`: Used to sort lines of text files.
+- `uniq`: Report or omit repeated lines in a file.
+- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
+- `bat`: A cat(1) clone with syntax highlighting and Git integration, used to display sections of the script.
 
 ### Description
 
-`shell_history_info.sh` is a script that processes shell history files (Zsh and Bash) to identify the most frequent entries. It removes timestamp info specific to Zsh, and can then analyze this history data in various modes:
+This script analyzes the shell history files located at `$XDG_STATE_HOME/zsh/history` and `$XDG_STATE_HOME/bash/history`. It performs operations to retrieve the most frequent lines, words, or characters. It utilizes several helper functions: 
 
-- **Lines**: Finds the most frequently repeated command lines.
-- **Words**: Breaks down command lines into individual words and identifies the most common ones.
-- **Characters**: Analyzes the frequency of each character found in the command history.
-- **Options**: Specifically looks for command-line options (words beginning with a `-`).
+- **get_history**: Concatenates the contents of Zsh and Bash history files while removing extraneous Zsh format indications.
+- **split_by_word**: Splits lines into separate words.
+- **clean_up**: Cleans the output by removing empty lines and stripping trailing and leading whitespaces.
+- **sort_by_occurence**: Counts the occurrence of each line/word/character, displaying only those with an occurrence greater than 5.
 
-The script assumes the user's history files are located in the directories specified by `$XDG_STATE_HOME`.
+The script can be run with various options, allowing users to specify the desired analysis type (lines, words, characters).
 
 ### Usage
 
-Run this script in a terminal with the appropriate options:
+To use the script, execute it in the terminal with one of the following options:
 
 ```bash
-# To find the most frequent lines
-bash shell_history_info.sh --lines
+# List most frequent lines
+bash shell_history_info.sh -l
 
-# To find the most frequent words
-bash shell_history_info.sh --words
+# List most frequent words
+bash shell_history_info.sh -w
 
-# To find the most frequent characters
-bash shell_history_info.sh --character
+# List most frequent characters
+bash shell_history_info.sh -c
 
-# To find the most frequent command-line options
-bash shell_history_info.sh --option
+# List options starting with a dash
+bash shell_history_info.sh -o
 ```
 
-If an unknown option is provided, the script will display the list of valid options from the DOC comment within the script itself.
+If an invalid argument is provided, the script outputs an error message along with its own source code for reference.
 
 ---
 
-> [!NOTE]
-> There is a lack of error handling for cases where the history files are not found or are inaccessible. Consider adding checks to verify the existence and readability of these files before proceeding with processing. Additionally, for better readability of the option summary, applying some text formatting to the output displayed by `bat` could be beneficial.
+> [!TIP] 
+> The script could benefit from error handling to check if the history files exist before attempting to read them. Additionally, consider implementing support for configuring the minimum occurrence threshold via command-line arguments, providing users flexibility.

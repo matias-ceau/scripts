@@ -1,39 +1,40 @@
-# Chezmoi Initialization Script for New System
+# Chezmoi Installation Script
 
 ---
 
-**chezmoi_on_a_new_system.sh**: Shell script to initialize and apply dotfiles with `chezmoi`
+**chezmoi_on_a_new_system.sh**: Automates Chezmoi setup on a new system for user matias-ceau.
 
 ---
 
 ### Dependencies
 
-- `bash`: Required to run this shell script.
-- `curl`: The script uses `curl` to download and execute the installer script for `chezmoi`.
-- `chezmoi`: A tool for managing your dotfiles across multiple machines. This script uses it to set up dotfiles from a GitHub repository.
+- `curl`: A command-line tool for transferring data with URLs, required to download Chezmoi.
+- `bash`: The script is written in Bash and needs a compatible shell to execute.
 
 ### Description
 
-This script is used to set up `chezmoi` on a new system by downloading and running its installation script directly through `curl`. It initializes `chezmoi` with a specific user configuration and applies the dotfiles maintained by `matias-ceau`.
+This script is designed for quickly setting up the [Chezmoi](https://chezmoi.io) configuration management tool on a new system. Chezmoi allows users to manage their dotfiles and configuration across multiple machines seamlessly.
 
-- The script is a brief `bash` command designed to be executed on new Arch Linux setups, running qtile as a window manager.
-- It uses the `curl` command with multiple flags:
-  - `-f` indicates that `curl` will fail silently on server errors.
-  - `-s` silences progress meter.
-  - `-L` follows redirects.
-  - `-S` ensures that `curl` shows an error message if it fails.
+The script works by using `curl` to fetch the installer for Chezmoi and initializing it with the `--init` and `--apply` flags, specifically for the user configuration named `matias-ceau`. 
+
+The process performed by the script is as follows:
+1. **Downloading the Installer**: It utilizes a command substitution with `$(...)` to execute `curl` commands that securely fetch the installation script for Chezmoi.
+2. **Initialization**: The `--init` flag sets up Chezmoi with the configurations stored under the specified user.
+3. **Application of Configurations**: The `--apply` flag automatically applies the dotfiles and configurations to the new system.
+
+This streamlined approach minimizes manual setup time and ensures that the necessary configurations are applied correctly upon installation.
 
 ### Usage
 
-To use this script, simply run it in your terminal to download and install `chezmoi`, then initialize it with your desired profile:
+To use this script, you need to run it in your terminal. You can execute it directly with the following command:
 
 ```bash
 bash /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh
 ```
 
-- This script does not require any additional arguments and is ready to use as it is.
-- It can be ideally placed in your setup documentation or as an automated setup script invoked after installing a fresh instance of Arch Linux with qtile.
+**Note**: Ensure that you have `curl` installed on your system before running the script. Also, you should replace `matias-ceau` with your username if necessary.
 
 ---
 
-> [!NOTE] This script assumes that all prerequisites are installed and the user has internet connectivity to download the installer script. Consider adding error handling to ensure `curl` is installed on the system. Usage instructions could also include information on verifying and trusting the source, especially when directly fetching and executing scripts over the internet.
+> [!TIP] 
+> While this script is simple and effective, consider adding error handling to ensure the script gracefully handles issues such as network problems or failed installations. Additionally, prompting the user for their username might make the script more flexible for different environments.

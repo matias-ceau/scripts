@@ -2,45 +2,46 @@
 
 ---
 
-**ardour-open.sh**: Script to open the most recent Ardour session
+**ardour-open.sh**: A script to open Ardour sessions from a user-defined directory.
 
 ---
 
 ### Dependencies
 
+- `bash`: The default shell used to run the script.
 - `fd`: A simple, fast, and user-friendly alternative to `find`.
-- `xargs`: A command to build and execute command lines from standard input.
-- `stat`: Displays file or file system status.
-- `sed`: Stream editor for filtering and transforming text.
-- `bat`: A `cat` clone with syntax highlighting and Git integration; used here for XML files.
-- `improved-fzfmenu.sh`: A custom script presumably functioning as an enhanced fzf interface. Ensure it's executable and in your PATH.
-- `ardour`: A digital audio workstation for recording and mixing.
-- `dmenu` (commented out): A dynamic menu for X11; optionally required if the commented code is reintroduced.
-  
+- `xargs`: A command that builds and executes command lines from standard input.
+- `stat`: Used to display file or file system status.
+- `sort`: Sorts lines of text files.
+- `sed`: A stream editor for filtering and transforming text.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `fzf`: A command-line fuzzy finder allowing you to open file selections interactively.
+
 ### Description
 
-This script is designed to streamline the process of opening audio projects in Ardour on your Arch Linux system with qtile as the window manager. It operates by searching through Ardour project files (`*.ardour`) within a designated directory, sorting them by their modification time to offer the most recently modified project files for selection. 
+This script provides a quick way to open Ardour project sessions located in a designated directory (`$HOME/audio/PROJECTS`). It utilizes several Unix utilities to search for `.ardour` files, display them in a visually organized manner, and allow the user to select one for opening in Ardour.
 
-**Core Functions:**
+1. **File Search**: The script leverages `fd` to find all `.ardour` files in the specified project directory and retrieves their modification times. The results are sorted in descending order.
+   
+2. **Visual Display**: The paths are formatted with ANSI escape codes for colored output, making it easier to navigate the session list when using a terminal.
 
-- `search_cmd()`: Uses `fd` to find Ardour files and presents them with timestamps in a color-coded and human-readable format.
-- `strip_ansi()`: Removes ANSI color codes from text.
-- `get_path()`: Constructs a full path for the selected file, stripping ANSI codes for accuracy.
-- `preview_cmd()`: Uses `bat` for a color-highlighted preview of the selected Ardour file’s XML content.
+3. **Session Preview**: Utilizes `bat` for a preview of the selected Ardour file, offering an enhanced viewing experience before opening the session.
 
-Finally, it employs `improved-fzfmenu.sh` to facilitate a menu-driven selection of the desired Ardour file and opens it with Ardour for editing or playback.
+4. **Session Launch**: The selected Ardour session is opened using the `ardour` command at the end of the script.
 
 ### Usage
 
-Run the script by executing the following command in your terminal:
+To execute the script, you will typically run it from your terminal. Here’s a short summary of how to use it:
 
 ```bash
 bash /home/matias/.scripts/ardour-open.sh
 ```
 
-You can also bind this script to a key combination in your qtile configuration for quick access. Upon execution, a list of `.ardour` files, sorted by modification time, is presented. Navigate through them using the selection menu and confirm your choice to open it in Ardour.
+Upon execution, you will see a list of your Ardour project sessions. You can navigate through this list using the arrow keys (when utilizing `fzf`) and hit Enter to select and open the desired session.
+
+Alternatively, this script can be bound to a key in your window manager (like qtile) to make it more accessible.
 
 ---
 
-> [!TIP]
-> Consider removing the commented-out code section or fully integrating it following a decision to switch to `dmenu` based implementation. Moreover, ensure that the `improved-fzfmenu.sh` script is accessible and compatible. Adding error handling in case no file is selected would improve user experience by preventing unintended behavior.
+> [!IMPORTANT]
+> This script assumes that the `$AUDIO_PROJECTS` directory is correctly set and contains Ardour sessions. Ensure `fzf` and `bat` are installed for the best experience. It is also advisable to handle situations where no `*.ardour` files are found, as this could lead to errors. Adding error checking and informative messages could improve user experience.

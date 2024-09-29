@@ -2,49 +2,38 @@
 
 ---
 
-**playlist_player.xsh**: Script to pick and play a playlist using `cmus`.
+**playlist_player.xsh**: Plays a selected playlist using cmus from a predefined directory.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A shell language that combines Python and bash.
-- `cmus`: A small, fast, and powerful console music player for Unix-like operating systems.
-- `dmenu`: A dynamic menu for X, used here for selecting playlists.
-- A directory named `.playlists` in the home folder containing `.m3u` playlist files.
+- `cmus` - A lightweight music player that can be controlled via the command line.
+- `dmenu` - A dynamic menu for X, used to present options to the user.
 
 ### Description
 
-This script is a Xonsh-based tool designed to allow the user to pick a music playlist and play it using `cmus`, a popular command-line music player. The script operates within the X11 environment using `dmenu` to provide a graphical menu for playlist selection.
+This script is designed to facilitate the selection and playback of music playlists stored in the user's `~/.playlists` directory using the command line music player `cmus`. The script makes use of the `xonsh` shell, which allows for both shell syntax and Python capabilities.
 
-The process is as follows:
-1. It sets the `cmus` interface to the playlists view.
-2. Clears the current playlist in `cmus`.
-3. Lists all `.m3u` files from a predefined directory (`~/.playlists`).
-4. Uses `dmenu` to allow the user to select one of the available playlists.
-5. Once a selection is made, the selected playlist is added to `cmus`.
-6. Starts playing the music from the newly added playlist.
+Upon execution, the script performs the following steps:
+
+1. **View Playlists**: It initially opens the playlist view in `cmus` by issuing the command `cmus-remote -C 'view 4'`.
+2. **Clears Existing Queue**: The command `cmus-remote -C clear` clears any existing tracks from the current play queue.
+3. **Gather Playlists**: The script then compiles a sorted list of all playlist files ending with `.m3u` in the configured playlist directory.
+4. **User Selection**: It uses `dmenu` to present the playlists in a menu format, allowing the user to make a selection.
+5. **Add and Play**: The selected playlist is then added to `cmus` using the command `cmus-remote -C add {PLAYLIST_PATH}/{choice}.m3u`, and playback is started with `cmus-remote -n` and `cmus-remote -p`.
 
 ### Usage
 
-To use the script:
-
-1. Ensure that you have `xonsh`, `cmus`, `dmenu`, and `.m3u` playlist files in `~/.playlists`.
-2. Make sure the script is executable. You can run:
-
+1. Ensure your playlists are stored in your `~/.playlists` directory and are in `.m3u` format.
+2. Run the script in your terminal with the command:
    ```bash
-   chmod +x /home/matias/.scripts/playlist_player.xsh
+   xonsh /home/matias/.scripts/playlist_player.xsh
    ```
 
-3. Execute the script by running:
-
-   ```bash
-   ./playlist_player.xsh
-   ```
-
-You can also bind this script to a key combination in `qtile` for quick access.
+3. A dmenu interface will appear where you can select the desired playlist.
 
 ---
 
-> [!NOTE]
-> While this script effectively manages playlists with `cmus`, it relies on the `.m3u` file format, which may not be updated or modified easily through this script. For an enhanced user experience, adding error handling for scenarios where no playlists are present or the `cmus` command fails would improve robustness. Additionally, consider making the playlist path configurable outside the script for greater flexibility.
+> [!TIP] 
+> The script could be enhanced by adding error handling to manage situations where the playlist directory is empty or when the user cancels the dmenu selection. Additionally, consider adding an option to create a new playlist or change the directory from which playlists are loaded to enhance flexibility.

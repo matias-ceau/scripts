@@ -1,46 +1,45 @@
-# Git Clone by Author-Repo
+# Git Clone by Author Repo
 
 ---
 
-**git_clone_by_author-repo.sh**: Clone a GitHub repository by specifying the developer and package name with an option for SSH or a local path.
+**git_clone_by_author-repo.sh**: A script to clone git repositories by specifying the developer/package format.
 
 ---
 
 ### Dependencies
 
-- `git`: The core tool required for cloning repositories.
+- `git`: This script requires Git to be installed on your system for cloning repositories.
 
 ### Description
 
-This script facilitates cloning GitHub repositories directly under a specified directory structure, organizing them by developer. By default, it clones repositories into a directory specified by the `GIT_REPOS` environment variable, defaulting to `"$HOME/git"` if not set. You have the option to use HTTPS, SSH, or a local path for cloning:
+The `git_clone_by_author-repo.sh` script is designed to simplify the process of cloning Git repositories from GitHub based on a specified developer/package format (e.g., `username/repository`). It provides options to clone using SSH or from a local path, making it flexible for various workflows.
 
-- **HTTPS**: Default method for cloning via URL.
-- **SSH**: Enables cloning with SSH when `-s` or `--ssh` is specified (e.g., `git@github.com:developer/package.git`).
-- **Local Path**: Use a specified local directory as the source when `-l` or `--local <path>` is provided.
+The script starts by defining a `usage` function that displays how to use the script if the provided arguments are incorrect or insufficient. 
+
+It handles command-line arguments to determine the preferred method of cloning:
+- `-s` or `--ssh`: Use SSH for cloning (requires SSH setup with GitHub).
+- `-l` or `--local`: Indicates that a local repository will be cloned from a specified path.
+
+The script processes the incoming arguments, ensuring that only one cloning method (SSH or local) can be used at a time. It constructs the target directory for the cloned repository under the defined environment variable `GIT_REPOS`, defaulting to `$HOME/git` if not set. The script then carries out the cloning operation based on user input, handling errors and usage notifications appropriately.
 
 ### Usage
 
-Ensure the `git` tool is installed on your Arch Linux system. You can execute the script directly in a terminal. Below is a practical guide on how to utilize the script:
+To use this script, run it from the terminal with the required arguments. Here are some examples:
 
 ```bash
-# Clone using HTTPS by default
-./git_clone_by_author-repo.sh developer/package
+# Clone a repository using HTTPS (default method)
+./git_clone_by_author-repo.sh username/repository
 
-# Clone using SSH
-./git_clone_by_author-repo.sh -s developer/package
+# Clone a repository using SSH
+./git_clone_by_author-repo.sh -s username/repository
 
-# Clone using a specified local directory
-./git_clone_by_author-repo.sh -l /path/to/local/repo developer/package
+# Clone a local repository
+./git_clone_by_author-repo.sh -l /path/to/local/repo username/repository
 ```
 
-- Adjust `$GIT_REPOS` environment variable if different directory structures are desired.
-- Ensure you have correctly set up your SSH keys if opting for SSH cloning.
+Note that the script requires you to provide either the SSH or local option but not both. If neither option is specified, it defaults to cloning via HTTPS.
 
 ---
 
 > [!TIP]
-> - **Error Handling**: The script currently exits on any argument parsing issues. Implement enhanced error messages or logging for better debugging, especially if invalid paths are given or network errors occur during cloning.
-> 
-> - **Flexibility**: Consider allowing additional options like shallow cloning (`--depth 1`) for faster clones when the full history isn't needed.
-> 
-> - **Code Duplicity**: The while loop could be optimized by refactoring repeated code lines or using arrays for option arguments.
+> This script could benefit from additional error handling, especially for cases where the clone operation fails (e.g., due to network issues or incorrect paths). Additionally, consider adding functionality for more user feedback during the cloning process, such as progress indicators. It might also be useful to provide an option to specify a custom directory for the `GIT_REPOS` variable through command-line arguments.

@@ -2,43 +2,42 @@
 
 ---
 
-**pdfopener.sh**: Select and open a PDF file in your home directory with `evince`
+**pdfopener.sh**: A simple script to select and open PDF files from the home directory using Evince.
 
 ---
 
 ### Dependencies
 
-- `dmenu`: A dynamic menu for X, used for presenting a list of PDF files to choose from.
-- `evince`: A document viewer for PDF files on Linux.
+- `dmenu`: A dynamic menu for X11 can be used for selecting the PDF files.
+- `evince`: A GNOME document viewer used to open PDF files.
 
 ### Description
 
-This script allows you to interactively select a PDF file from your home directory and open it using `evince`. It accomplishes this task in two main steps:
+This script provides a straightforward way to open PDF files located in the user's home directory. Once executed, it performs the following steps:
 
-1. **File Selection**: The script uses `find` to search for `.pdf` files within your home directory. This list is then piped into `dmenu`, which presents these options in a graphical menu where you can type to filter results and select the desired file.
-   
-2. **File Opening**: Once a PDF is selected, it is opened using `evince`.
+1. **Finding PDF Files**: It uses the `find` command to search for all files in the home directory and filters the results for files ending with the `.pdf` extension using `grep`.
 
-This script is handy for users who often need to quickly find and open PDF files without manually searching through directories.
+2. **User Selection**: The list of found PDF files is presented in a graphical menu powered by `dmenu`, allowing the user to select their desired file. The `dmenu` options include case-insensitive searching and a limit to 30 visible entries.
+
+3. **Opening the File**: After a selection is made, `evince`, the designated PDF viewer, is called to open the chosen PDF file.
 
 ### Usage
 
-To use this script, you can execute it directly from the terminal or bind it to a key combination in your window manager (e.g., qtile). Make sure the script is executable. Here’s a step-by-step usage example:
+To use this script, follow these simple steps:
 
-1. Open a terminal and navigate to the directory containing the script.
-2. Ensure the script is executable:
-   ```bash
-   chmod +x /home/matias/.scripts/pdfopener.sh
-   ```
-3. Run the script:
-   ```bash
-   /home/matias/.scripts/pdfopener.sh
-   ```
-4. A `dmenu` prompt will appear with a list of PDFs. Start typing to filter through the options and press `Enter` to open the selected file in `evince`.
+1. Open a terminal.
+2. Run the script directly:
 
-Alternatively, you can bind the script to a key in qtile for quick access.
+```bash
+sh /home/matias/.scripts/pdfopener.sh
+```
+
+3. A `dmenu` prompt will appear, listing PDF files from your home directory. Use the arrow keys or type to highlight/select a PDF.
+4. Press `Enter` to open the selected file with Evince.
+
+This script can also be assigned to a keybinding in your window manager for quicker access, enhancing your workflow.
 
 ---
 
-> [!NOTE]
-> The script currently searches the entire home directory, which might include many non-relevant directories and result in slow performance or large menu lists if your home directory is vast. Consider restricting the search to specific directories or adding more filters for performance improvement. Additionally, handling empty selections (i.e., if the user cancels out of `dmenu` without selecting a file) would make the script more robust.
+> [!TIP]  
+> Consider implementing error handling for scenarios where no PDF files are found or when Evince fails to open. You can add conditions to check if `$file` is empty and provide user feedback accordingly. Additionally, using `xdg-open` could allow for more flexibility, opening files with the default PDF viewer rather than being tied to Evince specifically.

@@ -1,49 +1,49 @@
-# Edit Chezmoi Configuration Files
+# Chezmoic Config File Editor
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: A script to browse and edit Chezmoi-managed files with optional synchronization
+**edit_chezmoi_cfg_files.sh**: A script for editing and applying changes to chezmoi-managed configuration files.
 
 ---
 
 ### Dependencies
 
-- `chezmoi`: A dotfile manager that manages your dotfiles.
-- `bash`: The scripting shell interpreter.
-- `fzf`: A command-line fuzzy finder used for interactive file search.
-- `bat`: A cat clone with syntax highlighting and Git integration for previewing files.
-- `eza`: A modern replacement for `ls` with a focus on user-friendliness.
-- `nvim`: Neovim, a hyperextensible Vim-based text editor.
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `chezmoi`: A tool for managing dotfiles effortlessly.
+- `fzf`: A command-line fuzzy finder tool for robust searching capabilities.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `eza`: A modern replacement for `ls` with additional features.
+- `nvim`: A text editor to modify files interactively.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
 
 ### Description
 
-The `edit_chezmoi_cfg_files.sh` script is designed for users who manage their configuration files using Chezmoi on an Arch Linux system with the Qtile window manager. It streamlines the process of searching, previewing, and editing both files and directories managed by Chezmoi. The script uses fuzzy finding (via `fzf`) to select the files or directories you wish to edit, while `bat` provides syntax-highlighted previews. Directories are listed with `eza` to display icons and colored output.
+This script is designed to efficiently search and edit configuration files managed by `chezmoi`. By leveraging the power of `fzf` for fuzzy finding and `bat` for file previews, the script enhances the user experience of managing dotfiles.
 
-The script automates the handling of Chezmoi `source-path` to open the selected file in `nvim`. Additionally, it provides options to apply changes with Chezmoi and optionally sync the repository if changes are meant to be shared.
+Key functions include:
+- **remove_icons**: Cleans up the input to remove special characters that can disrupt file paths.
+- **preview_command**: Previews files using `bat` for visual inspection of the config files and `eza` for directories.
+- **search_files** and **search_dirs**: Generate lists of files and directories managed by `chezmoi`, displaying them with `eza`.
+
+When executed, the script prompts the user to select a file or directory from the `chezmoi` managed files. After selection, it provides an option to apply changes or sync the repository.
 
 ### Usage
 
-To use this script, execute it from your terminal:
+Run the script in your terminal:
 
 ```bash
-~/.scripts/edit_chezmoi_cfg_files.sh
+bash /home/matias/.scripts/edit_chezmoi_cfg_files.sh
 ```
 
-Upon execution, you will see a list of Chezmoi-managed files where you can navigate using `fzf`. Use `Alt-D` to switch to displaying directories and `Alt-F` to revert to files. Once a selection is made and you're editing in `nvim`, an option will appear to:
+Follow these prompts:
+1. Use arrow keys to navigate or start typing to filter results.
+2. Press `Enter` to select a file/directory.
 
-- [a] Apply changes with Chezmoi.
-- [s] Apply changes and sync your repository.
-- [x] Exit without applying changes.
-
-Example use case:
-
-```bash
-# Just run and follow the prompt
-~/.scripts/edit_chezmoi_cfg_files.sh
-```
+Options upon selection:
+- `a` (default): Apply changes using `chezmoi`.
+- `s`: Apply changes and sync the repository.
+- `x`: Exit the script without action.
 
 ---
 
-> [!TIP]
-> Consider replacing direct calls to variables like `$HOME` with `${HOME}` to avoid potential word splitting. The script can also benefit from error checks for missing dependencies and ensuring that `cd` operations succeed before proceeding.
+> [!TIP] 
+> Consider handling potential errors more gracefully, especially when checking for file or directory existence. This can improve user experience by providing clearer feedback on what went wrong. Additionally, integrating logging could help in debugging issues that may arise during file operations. Furthermore, consider adding an interactive menu to let users select which action to perform, especially for advanced options like syncing the repository.

@@ -2,39 +2,41 @@
 
 ---
 
-**try_the_bat_suit.sh**: A script leveraging `bat` and `fzf` for file preview and selection
+**try_the_bat_suit.sh**: A script that utilizes `bat` and `fzf` for enhanced file previewing.
 
 ---
 
 ### Dependencies
 
-- `bash`: A Unix shell and command language interpreter.
-- `fd`: A simple, fast and user-friendly alternative to 'find'.
-- `fzf`: A command-line fuzzy finder, used for interactive file selection.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches the current directory for a regex pattern.
+- `bash`: The shell interpreter in which the script runs.
+- `fd`: A simple, fast, and user-friendly alternative to `find`, used for file discovery.
+- `fzf`: A command-line fuzzy finder that allows for interactive file selection.
+- `bat`: A modern alternative to `cat`, which provides syntax highlighting and other features for file viewing.
+- `rg` (ripgrep): A command-line search tool that recursively searches your current directory for a regex pattern.
 
 ### Description
 
-The `try_the_bat_suit.sh` script is designed to help you select and preview files interactively. It uses `fzf`, a powerful command-line fuzzy finder, to list files, and employs `bat` for syntax-highlighted previews. If a file path is provided as a command-line argument, the script directly uses it; otherwise, it lets you select a file using `fzf`.
+This script serves as an advanced file previewing tool, combining the capabilities of `bat` and `fzf`. The purpose of this script is to allow users to select a file and preview its content with syntax highlighting and language specifications.
 
-The script starts by checking if an argument (file path) is passed. If not, it uses `fd` to recursively search for files and lets you choose one using `fzf`. The core feature is the dynamic preview capability offered by leveraging `bat` within the `fzf` preview window. This is made possible through the `preview_cmd` function which handles extracting language highlighting settings from `bat`’s list of languages using `rg` to parse the necessary information.
+When executed, the script first checks if a file path has been provided as an argument. If a valid file is supplied, it will be used for the preview. If no filename is provided, it uses `fd` to list files in the current directory and `fzf` to select from them interactively.
+
+The `preview_cmd` function extracts the language that should be used for syntax highlighting from the selected file, leveraging commands like `rg` and `cut`. It then invokes `bat` to preview the file with the appropriate language settings.
 
 ### Usage
 
-This script can be executed from a terminal. You can either provide a file name or let the script guide you in selecting one:
+To run the script, execute it from your terminal. You can either provide a specific file or select one interactively:
 
 ```bash
-# Usage with a file argument
-./try_the_bat_suit.sh path/to/your/file
+# Run with an explicit file path
+./try_the_bat_suit.sh /path/to/your/file.txt
 
-# Usage without arguments to select a file interactively
+# Run without an argument to choose a file interactively
 ./try_the_bat_suit.sh
 ```
 
-It can also be integrated into your qtile keybindings for quick access, automating file preview and selection during workflow.
+Upon execution, if no file path is provided, a list of files will be displayed via `fzf`. Selecting a file will trigger the preview function, allowing you to view the contents of the file with syntax highlighting.
 
 ---
 
-> [!TIP]
-> The script uses hardcoded paths for `bash` and potentially `bat` and `fd`, which may not be consistent on all Arch-based systems, especially if packages are installed in custom directories. Consider using a more robust way to locate these tools, such as relying on the user's configured `$PATH`. Additionally, more informative user feedback on missing dependencies could enhance the script's usability by checking their availability before execution.
+> [!TIP]  
+> This script could benefit from input validation for the file path provided. Additionally, consider adding error handling in case `bat` or `fzf` fail during execution. Enhancing user feedback when selecting files may also improve the overall experience.

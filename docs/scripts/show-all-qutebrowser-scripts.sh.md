@@ -1,35 +1,41 @@
-# Display Qutebrowser Scripts
+# Show All Qutebrowser Scripts
 
 ---
 
-**show-all-qutebrowser-scripts.sh**: Display the scripts associated with Qutebrowser
+**show-all-qutebrowser-scripts.sh**: Displays all available Qutebrowser scripts with syntax highlighting.
 
 ---
 
 ### Dependencies
 
-- `pacman`: The package manager for Arch Linux, used to query the qutebrowser package.
-- `qutebrowser`: A keyboard-driven, minimalist web browser.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `sed`: A stream editor used for parsing and transforming text.
-- `xargs`: Used to build and execute command lines from standard input.
-- `bat`: A cat clone with syntax highlighting for code and terminal output.
+- `pacman`: Package manager for Arch-based systems, used to query installed packages.
+- `tail`: Command-line utility for outputting the last part of files, used here to limit the number of lines.
+- `rg`: Ripgrep, a line-oriented search tool that recursively searches your current directory.
+- `sed`: Stream editor for filtering and transforming text.
+- `xargs`: Utility for building and executing command lines from standard input.
+- `bat`: A cat clone with syntax highlighting and Git integration, used here for visualization.
 
 ### Description
 
-This script lists and displays the contents of the last 37 files installed by the `qutebrowser` package that are not directories. It uses `pacman` to query the list of files installed by the `qutebrowser` package, pipes the output to `tail` to focus on the last 37 lines, and filters out directories using `rg`. It then uses `sed` to simplify the file paths printed by `pacman` to just the files relating to `qutebrowser`. Finally, `xargs` is used to pass these file names to `bat`, which displays their contents with syntax highlighting.
+This script is designed to list all the scripts associated with the Qutebrowser installation. It leverages a combination of command-line utilities to achieve this:
+
+1. **`pacman -Ql qutebrowser`**: This command lists the files installed with the Qutebrowser package.
+2. **`tail -n 37`**: This filters the output to show only the last 37 lines, which is typically where user scripts may reside.
+3. **`rg -v '/$'`**: This uses ripgrep to exclude lines that represent directories, focusing on files.
+4. **`sed 's/^.*qutebrowser //'`**: The `sed` command cleans up the output, removing the leading path information and leaving just the script names.
+5. **`xargs bat`**: Finally, `xargs` pipes the cleaned list of script names to `bat` for display, providing a user-friendly output with syntax highlighting.
 
 ### Usage
 
-To use this script, ensure all dependencies are installed. Then, you can run it directly from a terminal to list and display the scripts associated with your qutebrowser installation.
+To run this script, simply execute it in your terminal:
 
-```shell
+```bash
 bash /home/matias/.scripts/show-all-qutebrowser-scripts.sh
 ```
 
-You may assign this script to a keybinding in your window manager for quicker access or add it to your shell's PATH for easier execution.
+The output will display all Qutebrowser scripts with syntax highlighting, allowing for easier identification and usability.
 
 ---
 
-> [!TIP]
-> This script assumes that `bat` and `rg` are installed, which might not be the case for all users. Consider including a check for these dependencies or providing instructions to install them easily. Additionally, the use of `tail -n 37` seems arbitrary; verifying why exactly 37 lines are considered might unveil more appropriate logic or even argument-based flexibility.
+> [!TIP] 
+> Consider adding error handling to provide informative messages if Qutebrowser is not installed or if there are no scripts available. Also, you might want to allow users to specify the number of lines displayed from the output of `pacman` for flexibility.

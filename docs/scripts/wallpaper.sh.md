@@ -1,60 +1,56 @@
-# Wallpaper Changer Script
+# Wallpaper Manager
 
 ---
 
-**wallpaper.sh**: Script to set and manage desktop wallpapers randomly or manually on Arch Linux with qtile WM.
+**wallpaper.sh**: Pick random wallpaper from wallpaper list
 
 ---
 
 ### Dependencies
 
-- `feh`: A lightweight image viewer used here to set the wallpaper.
-- `notify-send`: Utilized for desktop notifications.
-- `fzfmenu.sh`: A fuzzy finder to select wallpapers manually (from the junegunn repository).
-- `yad`: Yet Another Dialog for GUI selections and previews.
+- `feh`: A lightweight image viewer that is used to set the desktop wallpaper.
+- `notify-send`: Utility for sending desktop notifications. This script uses it to inform the user when the wallpaper changes.
+- `yad`: A fork of Zenity that allows the creation of graphical dialogs from shell scripts. This script uses it to present a GUI for selecting wallpapers.
+- `fzfmenu.sh`: A script intended for providing fuzzy searching for selections. This needs to be available to use the select feature in this script.
 
 ### Description
 
-This script facilitates changing desktop wallpapers by selecting random images from a specified directory or manually choosing one through a CLI or GUI interface. A cache log of previously used wallpapers is maintained. It offers several modes of operation:
+The `wallpaper.sh` script is a Bash script designed to manage and set desktop wallpapers on your system. The script offers several functionalities, allowing users to set a random wallpaper, select one interactively through a fuzzy search, or select a previously used wallpaper. It keeps a log of the wallpapers that have been set and removes duplicates to maintain an organized list.
 
-- **Random Selection**: Automatically pick a random wallpaper.
-- **Manual Selection**: Use a fuzzy finder (`fzf`) for CLI selection or a graphical dialog (`yad`) for GUI selection.
-- **Revert to Previous**: Set a previously used wallpaper.
-- **Set Default**: If no arguments are provided, revert to a default wallpaper.
-
-The script uses `feh` to set the wallpaper and `notify-send` for notifications. Additionally, the script prevents duplicate entries in the cache log.
+The script begins by defining a default wallpaper and a path to store a log of previously set wallpapers. The main functionality is encapsulated in a `set_wallpaper` function, which utilizes `feh` to change the desktop background and informs the user through a desktop notification.
 
 ### Usage
 
-Run the script with the desired option:
+To use the script, execute it in the terminal with one of the following options:
 
-```bash
-./wallpaper.sh --random
-```
+- Change to a random wallpaper:
+  ```bash
+  ./wallpaper.sh --random
+  ```
 
-Changes the wallpaper to a random image from the configured directory.
+- Select a wallpaper using a fuzzy search (requires `fzfmenu.sh`):
+  ```bash
+  ./wallpaper.sh --select
+  ```
 
-```bash
-./wallpaper.sh --select
-```
+- Set the previous wallpaper (you can specify how far back):
+  ```bash
+  ./wallpaper.sh --previous 2
+  ```
 
-Gives an interactive CLI selection menu using `fzf`.
+- Use a graphical interface to select a wallpaper:
+  ```bash
+  ./wallpaper.sh --gui
+  ```
 
-```bash
-./wallpaper.sh --previous [n]
-```
+- Set the default wallpaper:
+  ```bash
+  ./wallpaper.sh
+  ```
 
-Reverts to the previously set wallpaper, or `n` wallpapers ago.
-
-```bash
-./wallpaper.sh --gui
-```
-
-Opens a GUI dialog to select a wallpaper with a preview option.
-
-Without any arguments, it sets the default wallpaper provided in the script.
+The script will also log the wallpapers that have been set in the cache file (`/home/matias/.cache/wallpapers.log`) and manages duplicate entries effectively.
 
 ---
 
-> [!NOTE]
-> This script cleverly combines CLI and GUI methods for user interaction, accommodating different preferences. However, the `fzfmenu.sh` script is expected to be available, as it is a custom dependency not provided directly by common package managers. If the `yad` dialog is slow to load with many images, consider optimizing the file selection or preview logic. The `DEFAULT_WALLPAPER` path should be validated at runtime to avoid errors from non-existing paths, and consider using `$XDG_CACHE_HOME` instead of hardcoding the cache path for a more robust setup.
+> [!TIP]  
+> Consider implementing error handling for cases when no wallpapers are found or when dependencies aren't met. This would enhance the user experience by providing feedback about potential issues rather than failing silently. Additionally, ensure that `fzfmenu.sh` is properly integrated – currently, its absence may lead to errors when the `--select` option is invoked.

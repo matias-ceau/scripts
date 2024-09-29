@@ -1,48 +1,53 @@
-# Visualizing Script Dependencies
+# Get Scripts Relations
 
 ---
 
-**get_scripts_relations.py**: Visualizes relationships between scripts in a directory using a graph.
+**get_scripts_relations.py**: This script generates a visual representation of script dependencies.
 
 ---
 
 ### Dependencies
 
-- `fd`: A fast and user-friendly alternative to `find`. Used for locating script files.
-- `rg`: Short for Ripgrep, a line-oriented search tool that recursively searches the directory for a regex pattern.
-- `matplotlib`: A comprehensive library for creating static, animated, and interactive visualizations in Python.
-- `networkx`: A Python package for the creation, manipulation, and study of complex networks of nodes and edges.
+- `matplotlib`: A library for creating static, animated, and interactive visualizations in Python.
+- `networkx`: A package for the creation, manipulation, and study of complex networks.
+- `fd`: A fast alternative to `find`, used to search for files and directories.
+- `rg`: The Ripgrep command-line search tool, used to search for text patterns in files.
 
 ### Description
 
-This script, `get_scripts_relations.py`, helps visualize the relationships between various scripts located in a specified directory. By utilizing the environment variable `SCRIPTS` or the current directory, it searches for executable script files using `fd`. It then identifies which scripts reference each other using `rg`. The results are stored in a dictionary that maps each script to its dependencies.
+The `get_scripts_relations.py` script analyzes script dependencies in a specified directory and visualizes them using a directed graph. The script begins by defining a helper function, `run_command`, which executes shell commands and returns the output. 
 
-With this dependency information, the script constructs a directed graph using `networkx` where each node represents a script, and an edge illustrates a dependency between two scripts. The graph is not only displayed using `matplotlib`, but it is also exported in GraphGML format to `/tmp/get_scripts_relations.gml`, which can be further analyzed or visualized in tools like Cytoscape.
+It retrieves the directory containing the scripts from an environment variable `SCRIPTS` (defaulting to the current directory if not set) and uses `fd` to list all scripts in that directory. For each script, it identifies other scripts that depend on it using `rg`.
+
+The relationships between scripts are stored in a dictionary where each key is a script name, and the associated value is a list of scripts that depend on it. 
+
+After collecting this data, the script constructs a directed graph using `networkx`, adding nodes for each script and edges representing dependencies. 
+
+Finally, the graph is exported in GraphGML format for use with Cytoscape and visualized using `matplotlib`.
 
 ### Usage
 
-To use the script, ensure your environment is set up with the necessary dependencies.
+To run the script:
 
-1. Ensure `fd` and `rg` are installed on your Arch Linux system.
-   ```sh
-   sudo pacman -S fd ripgrep
-   ```
-2. Make sure the Python packages `matplotlib` and `networkx` are available.
-   ```sh
+1. Ensure you have the required dependencies installed:
+   ```bash
    pip install matplotlib networkx
    ```
-3. Set the `SCRIPTS` environment variable to your script directory if it's not the current working directory.
-   ```sh
-   export SCRIPTS=/path/to/your/scripts
+   Make sure `fd` and `rg` are also available in your environment.
+
+2. Set the `SCRIPTS` environment variable to your scripts directory, if needed:
+   ```bash
+   export SCRIPTS="/path/to/your/scripts"
    ```
-4. Run the script:
-   ```sh
+
+3. Execute the script:
+   ```bash
    python /home/matias/.scripts/get_scripts_relations.py
    ```
 
-This will generate a visualization of the dependencies and save the GraphGML file to your `/tmp` directory.
+This will display a graph showing which scripts depend on each other.
 
 ---
 
-> [!TIP]
-> The script currently assumes that all script files are executable and does not distinguish between script types. Implementing filtering based on file extensions could enhance accuracy. Additionally, consider adding error handling to improve robustness, especially around external command executions with `subprocess`.
+> [!TIP]  
+> The script currently lacks error handling for cases where `fd` or `rg` might fail, and it could benefit from comments explaining the purpose of each section. Additionally, consider allowing the user to specify the output path for the GML file to enhance flexibility.

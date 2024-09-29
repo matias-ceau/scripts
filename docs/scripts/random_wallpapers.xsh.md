@@ -1,44 +1,43 @@
-# Random Wallpaper Selector
+# Random Wallpaper Picker
 
 ---
 
-**random_wallpapers.xsh**: Selects and sets a random wallpaper from a specified folder for use with `feh`.
+**random_wallpapers.xsh**: Pick random wallpaper from a predefined list of wallpapers.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered, cross-platform, Unix-gazing shell language and command prompt.
-- `feh`: A fast and light utility to set background images.
-- `dmenu` (commented out): A dynamic menu for X, which was presumably intended for manual selection but is not actively used in this script.
+- `feh`: A lightweight image viewer that allows setting wallpapers.
+- `xonsh`: A Python-powered shell that is required to run this script.
 
 ### Description
 
-This script is designed to randomly select a wallpaper from a specified directory (`/home/matias/.wallpapers`) and set it as the desktop background using the `feh` utility. The script supports image formats with extensions `.png` and `.jpg`. Initially, there is a commented-out section intended to allow for manual selection via `dmenu`, though it defaults to automatically picking a random image.
-
-The process works as follows:
-1. It lists all files in the designated folder ending with `.png` or `.jpg`.
-2. Chooses one file at random, automatically selecting it.
-3. Utilizes `feh --bg-scale` to apply the chosen image as the wallpaper, ensuring it scales correctly on varying monitor sizes.
+This script randomly selects a wallpaper from a specified directory and sets it as the desktop background using `feh`. The wallpapers are filtered to include only those with `.png` or `.jpg` extensions, ensuring that only valid image files are considered.
 
 ### Usage
 
-To execute the script, ensure you have xonsh and feh installed and run it in a terminal as follows:
+To execute this script, simply run the following command in your terminal:
 
 ```bash
-xonsh /home/matias/.scripts/random_wallpapers.xsh
+./random_wallpapers.xsh
 ```
 
-If desired, automate the execution through qtile by binding it to a keybinding or running it during startup. 
+Make sure that the script is executable. If it's not, you can change its permissions with:
+
+```bash
+chmod +x ~/home/matias/.scripts/random_wallpapers.xsh
+```
+
+You can also assign it to a keybinding in your window manager, such as Qtile, by adding a keybinding in your `~/.config/qtile/config.py` file:
 
 ```python
-# Example keybinding for Qtile
-Key([mod, "shift"], "w", lazy.spawn("xonsh /home/matias/.scripts/random_wallpapers.xsh"))
+Key([mod], "w", lazy.spawn('path_to_your_script/random_wallpapers.xsh'))
 ```
 
-Ensure the folder `/home/matias/.wallpapers` contains valid `.png` and `.jpg` files.
+This would allow you to change the wallpaper at the press of a key.
 
 ---
 
-> [!NOTE]
-> The commented-out `dmenu` line in the script indicates a previous or intended feature for manual selection of wallpapers. If interactive selection is desired, consider uncommenting and fixing any issues with `dmenu` to integrate this functionality. Also, checking if the wallpapers list is not empty before choosing a wallpaper can prevent potential errors when the folder is empty.
+> [!TIP] 
+> Consider enhancing the script by using a GUI tool like `dmenu` to allow interactive selection of the wallpaper, rather than just a random choice each time. This will provide users with more control over their wallpaper selection. Additionally, you can implement error handling to manage scenarios where the specified wallpaper directory is empty or inaccessible.

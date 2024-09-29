@@ -1,46 +1,54 @@
-# Package Installer Script
+# Install Dependencies Script
 
 ---
 
-**install_dependencies.sh**: Automated script to install a list of necessary packages using `paru`.
+**install_dependencies.sh**: A script to automatically install essential dependencies on Arch Linux.
 
 ---
 
 ### Dependencies
 
-- `paru`: An AUR helper for Arch Linux. This script relies on `paru` to install packages, so ensure it is installed and configured on your system.
+- `paru`: An AUR helper that simplifies the process of installing packages from the Arch User Repository (AUR).
 
 ### Description
 
-This script automates the installation of a predefined list of packages required for your Arch Linux environment set up on qtile. It utilizes the `paru` package manager with the `--needed` flag to install packages only if they are not already present. The packages are specified between a `cat` and `EOF` block, which is a convenient Bash technique for providing input through a here-document. Here is the list of packages:
+This script automates the installation of a set of essential packages commonly used in an Arch Linux environment. The script utilizes `paru`, an AUR helper, to manage package installations in a streamlined manner.
 
-- `git`: Version control system.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `fzf`: A command-line fuzzy finder.
-- `ripgrep`: A line-oriented search tool that recursively searches your directory for a regex pattern.
-- `neovim`: A hyperextensible Vim-based text editor.
-- `chezmoi`: A manager for your dotfiles.
-- `dmenu`: A fast and minimal dynamic menu.
-- `findutils`: Collection of tools to fine-tune searches.
-- `rofi`: A window switcher, application launcher, and dmenu replacement.
-- `dunst`: Lightweight and customizable notification daemon.
-- `python-pandas`: Data analysis library for Python.
-- `python-colorama`: Conveniently handles colored terminal text in Python.
-- `light`: Display backlight control.
-- `xdotool`: Simulate keyboard input and mouse activity.
+The list of packages to be installed is defined in a here-document (EOF). The following tools and utilities are included:
+
+- `git`: A version control system for tracking changes in source code.
+- `fd`: A simple and fast alternative to `find`.
+- `bat`: A modern cat clone with syntax highlighting and Git integration.
+- `fzf`: A general-purpose command-line fuzzy finder.
+- `ripgrep`: A line-oriented search tool that recursively searches your current directory.
+- `neovim`: An extensible and open-source text editor.
+- `chezmoi`: A tool for managing your dotfiles across multiple machines.
+- `dmenu`: A dynamic menu for X, useful for launching applications.
+- `findutils`: Utilities for finding files.
+- `rofi`: A window switcher, application launcher, and more.
+- `dunst`: A lightweight notification daemon.
+- `python-pandas`: A powerful data analysis and manipulation library for Python.
+- `python-colorama`: A library for cross-platform colored terminal text in Python.
+- `light`: A lightweight, easy-to-use command-line utility for managing backlight brightness.
+- `xdotool`: A tool to simulate keyboard input and mouse activity.
 
 ### Usage
 
-To use the script, simply run it from the terminal. Make sure you have execution permissions with `chmod +x install_dependencies.sh` if necessary.
+To use this script, make sure it has executable permissions:
 
 ```bash
-./install_dependencies.sh
+chmod +x /home/matias/.scripts/install_dependencies.sh
 ```
 
-This script is designed to be run interactively in your terminal. Alternatively, it can be integrated into automated scripts or system setup routines.
+You can then execute the script in your terminal by running:
+
+```bash
+/home/matias/.scripts/install_dependencies.sh
+```
+
+This will trigger an installation process for all listed packages. It's designed to run non-interactively, automatically installing packages as per the defined list.
 
 ---
 
-> [!TIP]  
-> The use of `paru` is efficient, but ensure that the user running the script has the necessary permissions and that `paru` is correctly configured. Additionally, consider checking for existing installations before populating the list to avoid redundant or conflicting installations. This can optimize the script's execution and ensure smoother package management.
+> [!TIP] 
+> Consider adding error handling to the script to catch any issues that may arise during installations. For example, wrapping the `paru` command in a check to verify its success would provide a clearer understanding of any failures. Additionally, allow the user to customize the package list (e.g., through command-line arguments) for greater flexibility.

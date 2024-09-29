@@ -1,57 +1,53 @@
-# Quick File Editor with FZF
+# Quick File Editor
 
 ---
 
-**editor.sh**: Script to rapidly edit files using `fzf` for search and `nvim` for editing, suitable for various directory contexts.
+**editor.sh**: A script to quickly edit files using `fzf` in a terminal.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder used to filter and select files.
-- `bat`: A clone of `cat` with syntax highlighting and Git integration, used for previewing files.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `chezmoi`: A personal dotfile manager (used when editing config files).
-- `nvim`: Neovim, a hyperextensible Vim-based text editor.
-- `sudo`: Required if editing files with root permissions.
+- `fzf`: A command-line fuzzy finder used to search for files interactively.
+- `bat`: A syntax highlighting and paging program, used for previewing files.
 
 ### Description
 
-This script is designed to streamline file editing on an Arch Linux system with **qtile** as the window manager. It uses `fzf` to allow users to search for files within specified directories and various contexts. The selections made by `fzf` can then be edited with `nvim`.  
-- The functionality is ranger-like, making it ideal for users who work extensively with command-line interfaces and need quick access to their files without manual searching.
+This script provides a versatile way to edit files directly from the terminal using the `fzf` fuzzy finder. It leverages the power of `find` and `fd` to locate files excluding non-editable formats and directories. Users can smoothly navigate through file paths, make quick selections, and open files in `nvim` (Neovim) or with `sudo` if the required permissions are necessary. 
 
-The script excludes certain directories and file types to optimize search results, aiming for editable files only. It supports several modes via flags, such as editing files within a specific directory, script directory, or configuration files, among others.
+#### Key Features:
+- **Customizable Search Paths**: Depending on the user's input, it can search specific directories like scripts, current directories, or system configurations.
+- **Filtered File Types**: The script excludes certain file formats by default, ensuring only relevant files are presented for editing.
+- **Interactive Usage**: Integrates with `fzf` to provide a dynamic and responsive search experience with the option to show or hide hidden files.
 
 ### Usage
 
-The script can be executed directly in a terminal, and it supports various command-line arguments:
+To utilize this script, make sure it’s executable and run it from your terminal. Below are some command examples:
 
 ```bash
-editor.sh [-s|--scripts] [-c|--cwd] [-C|--config]
-          [-d|--dir <dir>] [-S|--sudo] [-h|--help]
-```
+# Default usage - search through sensible directories
+./editor.sh
 
-**Options:**
-- `-s, --scripts`: Search in the user `SCRIPTS` directory.
-- `-c, --cwd`: Search within the current working directory.
-- `-C, --config`: Edit unmanaged config files.
-- `-d, --dir <dir>`: Search within a specified directory.
-- `-S, --sudo`: Open files with `sudo` permissions.
-- `-h, --help`: Display the usage message.
+# Edit a file in the users' scripts directory
+./editor.sh --scripts
 
-**Key Bindings in FZF:**
-- `<C-H>`: Toggle hidden files.
-- `<C-S>`: Disable hidden files.
+# Find files to edit only in the current directory
+./editor.sh --cwd
 
-Example of executing the script to search and edit files in scripts directory:
+# Edit a configuration file
+./editor.sh --config
 
-```bash
-editor.sh --scripts
+# Edit files in a specific directory
+./editor.sh --dir /path/to/directory
+
+# Edit files with sudo permissions
+./editor.sh --sudo
+
+# Get help information
+./editor.sh --help
 ```
 
 ---
 
-> [!TIP]
-> - Consider expanding the comment documentation within your script for better readability.
-> - Current script assumes the existence and correctness of environment variables like `$SCRIPTS` and `$LOCALDATA`. Ensure they are always set.
-> - Adding debugging or logging can be a valuable enhancement for complex scripts like this, to track operations and error handling.
+> [!TIP]  
+> Consider enhancing the exclusion list based on specific use cases, or provide a configuration file to maintain user-preferred settings persistently. Additionally, integrating more robust error handling can improve the user experience when incorrect parameters are provided or if `fzf` encounters issues.

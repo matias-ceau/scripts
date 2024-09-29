@@ -2,42 +2,44 @@
 
 ---
 
-**mechen_music_transfert.py**: Automates syncing of unlistened music albums to a music player device.
+**mechen_music_transfert.py**: Custom script to copy music to Mechen
 
 ---
 
 ### Dependencies
 
-- `python3`
-- `beet`: A music library manager for querying and managing music files.
-- `pandas`: Data manipulation library used for handling album data in DataFrames.
-- `rsync`: Utility for synchronizing files between directories.
-- `subprocess`, `os`, `random`, `getpass`: Standard Python libraries for system commands, environment interaction, randomness, and password input.
+- `pandas`: A data manipulation library to handle data frames conveniently.
+- `beet`: This script uses Beets to query music libraries (ensure Beets is installed and configured).
+- `rsync`: A fast and versatile file copying tool, used for syncing files with remote destinations or directories.
 
 ### Description
 
-This script is designed to transfer music albums from your Arch Linux machine to a connected device named "Mechen". Specifically, it only transfers albums that haven't been listened to, as determined by a Beets query (`beet ls -ap status:0`).
+This Python script automates the process of transferring music albums from a local directory to a specified music player device (the Mechen). It calculates which albums haven't been listened to, determines their sizes, and ensures the total size does not exceed the player's maximum storage limit.
 
-1. **Password Input**: It securely prompts for a sudo password to execute subsequent commands with elevated privileges.
-2. **Space Calculation**: The script assumes a maximum space limit for the music player set at 50 MiB (`MAX_SPACE`), and calculates the total space needed for the unlistened albums.
-3. **Data Management**: Utilizes `pandas` to store and handle album information, ensuring that only the necessary music is copied over.
-4. **Folder Management**: Cleans up unnecessary albums and directories on the device, creates necessary directory structures using `mkdir`.
-5. **Data Transfer**: Transfers the albums with `rsync`, ensuring careful updating and deleting of files to keep the player content synchronized with the unlistened albums.
+Key functionalities include:
+
+- **Password Protection**: The script prompts for a password prior to executing operations that require superuser access.
+- **Folder Management**: It creates the necessary directory structure on the Mechen for each album being transferred.
+- **Space Management**: If the total size of albums exceeds the maximum storage space, it randomly drops albums until the size fit within the limit.
+- **Cleaning Up**: The script removes albums from the Mechen that are not in the source music directory and also cleans up empty artist folders.
 
 ### Usage
 
-To run this script, make sure your device "Mechen" is mounted at `/home/matias/MECHEN`, and your music library is located at `/home/matias/music/`. Simply execute the script in a terminal:
+To execute this script, run it from the terminal after ensuring all dependencies are installed:
 
 ```bash
-python /home/matias/.scripts/mechen_music_transfert.py
+python3 /home/matias/.scripts/mechen_music_transfert.py
 ```
 
-You will be prompted to enter your sudo password for authentication purposes.
+You will be prompted to enter your password before the script proceeds with copying the music. 
 
-This script can be run interactively in the terminal. It's well-suited to being executed as needed when you wish to sync your music.
+**Important Points:**
+- The script utilizes `sudo` for removing files and creating directories, so ensure your user has sudo privileges.
+- Modify the `MAX_SPACE` variable if your Mechen device's available space is different from the predefined 50 MB.
+
+When executed, the script will provide output indicating the number of albums not listened to, their total size, and the progress of the rsync operation.
 
 ---
 
-> [!TIP]
-> The script assumes the sudo password will be the same throughout its execution, which can be risky if any error occurs or if multiple password prompts are required. It might be improved by using a more secure way of handling privileged commands to avoid storing the password in plaintext or re-prompting securely as needed.
-> Additionally, the space calculation is quite rudimentary and does not account for variations in file sizes or potential space on the device, which might lead to issues when the hard limit is reached. A more dynamic checking mechanism could be beneficial.
+> [!TIP] 
+> Consider adding error handling for subprocess calls to gracefully manage any potential failures (e.g., if a directory cannot be created or if an album cannot be transferred). Also, logging the results instead of just printing them can help track long-term use and issues.

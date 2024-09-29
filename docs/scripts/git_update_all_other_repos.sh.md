@@ -1,40 +1,46 @@
-# Git Update All Other Repos
+# Git Update All Other Repositories
 
 ---
 
-**git_update_all_other_repos.sh**: Update multiple Git repositories excluding personal ones
+**git_update_all_other_repos.sh**: A script to update all Git repositories excluding a specific one.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
-- `sed`: Stream editor for filtering and transforming text.
-- `git`: Version control system necessary for pulling updates.
-- `bash`: Required to execute the script.
+- `fd`: A simple, fast, and user-friendly alternative to `find` to search for files.
+- `git`: A version control system to manage repositories.
 
 ### Description
 
-The script **git_update_all_other_repos.sh** is designed to update multiple Git repositories in a specified directory that are not your personal ones (as indicated by the exclusion of your username from the matching pattern). The script uses `fd` to search for directories ending with `.git`, except those containing 'matias-ceau'. Each matching directory is transformed with `sed` to remove the `.git` suffix for traversal. It changes into each directory and executes `git pull` to fetch and merge changes from a remote repository. Also, it checks the status of each repository.
+This script serves to automate the process of updating all Git repositories located in a specified directory, except for a repository named `matias-ceau`. It does this by leveraging the `fd` command to find all directories containing a `.git` subdirectory and then iterating over each of these directories.
 
-- **fd**: Searches for directories with `.git` suffix.
-- **sed**: Filters out personal repositories and cleans paths for navigation.
-- **git pull**: Updates the local repository by integrating changes from the remote branch.
-- **git status**: Provides a short summary of the repository state after each operation.
+The core functionality includes:
+1. **Finding Repositories**: Using `fd -td -H '\.git$'` to list directories that are Git repositories.
+2. **Filtering**: Excludes `matias-ceau` through a `sed` command.
+3. **Updating**: For each repository, the script navigates into the directory and executes `git pull --verbose` to fetch updates.
+4. **Status Check**: After each `git pull`, it runs `git status -v` to show the status of the repository. 
+5. **Visual Feedback**: Outputs the repository name in yellow and errors in red for better visibility.
 
 ### Usage
 
-The script is meant to be run from a terminal in an interactive session as it provides verbose feedback. Here's how you can use it:
+To use this script, ensure you have the required dependencies installed. You can run the script from the terminal like this:
 
 ```bash
-export GIT_REPOS=/path/to/repos
-/home/matias/.scripts/git_update_all_other_repos.sh
+bash /home/matias/.scripts/git_update_all_other_repos.sh
 ```
 
-- Ensure that the `GIT_REPOS` environment variable is set to the directory containing your Git repositories.
-- The script will display each repository being updated and indicate if a pull operation fails with a distinct message.
+The script will automatically find and update all Git repositories located in your specified GIT_REPOS directory, excluding the `matias-ceau` repository.
+
+If you want to make it executable and use it with a keybinding or launcher, you can do the following:
+
+```bash
+chmod +x /home/matias/.scripts/git_update_all_other_repos.sh
+```
+
+Then you can bind it to a key combination in your window manager or launch it from your desktop environment for quick access.
 
 ---
 
-> [!TIP] 
-> Consider adding error handling to manage scenarios where `fd`, `git`, or directory navigation could fail unexpectedly. Enhancing log messages for clarity or adding a summary at the end could greatly improve usability.
+> [!TIP]  
+> While the script is efficient, consider adding error handling that stops the script upon encountering a critical error or adding logging functionality to record which repositories were updated successfully or failed. This could enhance the script's usability significantly.

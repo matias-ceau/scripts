@@ -1,49 +1,44 @@
-# Repository Host Scanner
+# Get Repositories Present on Host
 
 ---
 
-**get_repos_present_on_host.sh**: Script to list and document Git repositories present on the host machine.
+**get_repos_present_on_host.sh**: Script to list git repositories in a specified directory and organize them by hostname.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script runs in a bash environment.
-- Required environment variables:
-  - `GIT_REPOS`: This should be set to the root directory where Git repositories are stored.
-  - `LOCALDATA`: This should be set to the directory where output files will be stored.
+- `bash`: The script runs in a Bash shell.
+- `find`: Used to locate `.git` directories within the specified path.
+- `sed`: Utilized for text processing to format the output.
+- `awk`: Helps in filtering and formatting the output based on directory structure.
+- `sort`: Employed to sort the list of repositories and remove duplicates.
 
 ### Description
 
-This script is designed to scan a specified directory for Git repositories on the host machine and document them. It relies on two environment variables: `GIT_REPOS`, which indicates where to search for repositories, and `LOCALDATA`, which specifies where to store the output.
+This script automates the process of gathering all git repositories located in a specified directory and organizes them according to the hostname of the device. It begins by checking for two essential environment variables: `GIT_REPOS`, which should point to the root directory containing the git repositories, and `LOCALDATA`, which determines where output files will be stored. If either variable is not set, the script exits with an error message.
 
-Upon execution, it checks if these environment variables are set. If they aren't, the script exits with an error message. It then uses the `hostname` command to create a unique output file name based on the host's name and organizes the list of found repositories into a structured text format.
+The core functionality involves:
 
-The script:
-1. Searches recursively under `$GIT_REPOS` for directories named `.git`.
-2. Formats the output to list only the repository names.
-3. Saves these repository names into a host-specific file.
-4. Ensures the output files are sorted and free of duplicates.
-5. Aggregates this list into a general file for tracking all repositories across different hosts.
+1. **Finding Repositories**: It uses the `find` command to search for directories that end with `.git` within `GIT_REPOS`. The output is modified by `sed` to strip unnecessary parts, hence returning only the relative repository paths.
+
+2. **Sorting and Duplicating**: Once the repositories are found, they are sorted and any duplicates are removed. This ensures that the output is clean and organized.
+
+3. **Saving Output**: The script saves the current list of repositories to a file named after the hostname, located in the specified `LOCALDATA` path. It also appends this list to a comprehensive `all-repos.txt` file while maintaining uniqueness.
 
 ### Usage
 
-To use this script, ensure the necessary environment variables are set:
+To run the script, ensure that the required environment variables are set and execute it in a terminal:
 
-```sh
-export GIT_REPOS="/path/to/your/git/directories"
-export LOCALDATA="/path/to/store/output"
-```
-
-Run the script from a terminal:
-
-```sh
+```bash
+export GIT_REPOS="/path/to/your/git/repos"
+export LOCALDATA="/path/to/local/data"
 bash /home/matias/.scripts/get_repos_present_on_host.sh
 ```
 
-The script is mostly designed to be run from the command line and can be integrated into larger automation or maintenance routines or even assigned to a keybinding in qtile for quick access.
+This script can also be connected to a scheduler or a keybinding for convenience in usage. Simply ensure that environment variables are set up correctly before execution.
 
 ---
 
-> [!CAUTION]
-> An assumption is made that all git repositories contain a `.git` directory directly under the path specified by `GIT_REPOS`. If repositories are organized differently, you may need to adjust the `find` command's directory level filtering via the `awk -F/ 'NF==2'` part. Additionally, handling the script's output in error situations could be enhanced for more robust logging, especially for large-scale automation.
+> [!TIP] 
+> This script could be enhanced by adding logging capabilities to better track any issues that arise during execution. Moreover, error handling could be improved to capture failures in the `find` or `sort` commands. A configurable option to specify the output format (e.g., JSON or CSV) could also make the script more versatile.

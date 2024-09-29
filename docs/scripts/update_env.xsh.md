@@ -1,38 +1,43 @@
-# Environment Variables Updater
+# Update Environment Variables Script
 
 ---
 
-**update_env.xsh**: Extracts and updates environment variables related to API keys into a `.env` file
+**update_env.xsh**: A script to extract and update API keys in a .env file.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A shell language that combines Python and shell commands for script execution.
+- `xonsh`: A Python-powered shell that is an essential dependency for executing this script. Ensure it's installed and configured on your Arch Linux system.
 
 ### Description
 
-The `update_env.xsh` script is designed to dynamically extract environment variables, specifically those ending in `API_KEY`, and write them into a `.env` file in the user's home directory. 
+The `update_env.xsh` script is designed to streamline the management of API keys by automatically extracting any key-value pairs from your current environment variables that end with `API_KEY` and saving them into a `.env` file located in your home directory. This is particularly useful for developers who frequently need to manage API keys securely and efficiently.
 
-It makes use of Python's dictionary comprehension to filter out and gather all environment variables terminating with the string `API_KEY`. These key-value pairs are then formatted in the style of `KEY=VALUE` and concatenated into a string with line breaks. Finally, this content is written to a `.env` file located at `$HOME/.env`.
+#### How it Works
 
-This utility is particularly useful if you handle multiple API keys within your environment and wish to consolidate them for easy access by applications that rely on `.env` files.
+1. **Environment Extraction**: The script leverages the Xonsh shell's capability to access environment variables. It filters these variables, retaining only those where the key's name concludes with `API_KEY`.
+2. **Formatting Keys and Values**: It constructs a formatted string that pairs each key with its corresponding value in the format required for `.env` files, which typically looks like `KEY=VALUE`.
+3. **Writing to File**: The script overwrites the existing `.env` file or creates it if it doesn't exist, ensuring that it always contains the most recent API keys.
 
 ### Usage
 
-1. **Run the script**: Execute the script directly from the terminal to update your `.env` file with the current API keys:
+To run the script, simply execute it in your terminal using:
 
-   ```bash
-   xonsh ~/home/matias/.scripts/update_env.xsh
-   ```
+```bash
+xonsh /home/matias/.scripts/update_env.xsh
+```
 
-2. **Assign a Keybinding**: Given your setup with the `qtile` window manager, you may want to assign this script to a keyboard shortcut for faster execution.
+You can also set up a keybinding in your qtile configuration to run this script conveniently:
 
-3. **Automate on system startup**: To ensure that the `.env` file is updated with the latest keys upon login, consider adding this script to your system's startup applications.
+```python
+# Example keybinding in qtile's config.py
+Key([mod], "u", lazy.spawn("xonsh /home/matias/.scripts/update_env.xsh")),
+```
 
-4. **Interactive Terminal**: The script needs to be executed in an environment where `xonsh` is installed and is generally run without any arguments.
+This will allow you to press the mod key plus 'u' to trigger the update.
 
 ---
 
-> [!TIP]
-> Consider enhancing the script by adding error handling. Currently, it assumes that the required environment variables are always present and writable to the `.env` file. Additionally, you may also want to add logging to track when the file was last updated, which could help in debugging or verifying the changes made by the script.
+> [!TIP]  
+> The current implementation overwrites the `.env` file every time the script runs, which may not be ideal if you want to keep certain keys unchanged. Consider enhancing the script to merge new keys with existing ones instead of overwriting the entire file. Additionally, implement error handling to manage potential file writing issues gracefully, ensuring the script runs reliably in various environments.

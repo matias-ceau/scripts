@@ -1,51 +1,48 @@
-# MegaIgnore Editor
+# Megaignore Editor
 
 ---
 
-**megaignore_editor.sh**: Interactive script to find and edit `.megaignore` files
+**megaignore_editor.sh**: A script to edit `.megaignore` files using fzf and nvim.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `fd`: A fast and user-friendly alternative to `find` for searching files.
 - `fzf`: A general-purpose command-line fuzzy finder.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `nvim`: A hyperextensible Vim-based text editor.
-  
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `nvim`: A modern text editor based on Vim.
+
 ### Description
 
-The `megaignore_editor.sh` script provides an interactive interface for locating and editing `.megaignore` files across the user's home directory and mounted directories. It leverages the capabilities of `fd` to search for `.megaignore` files and lists them using `fzf`, a fuzzy finder. Users can preview the content of each file using `bat`, which gives a syntax-highlighted view. The script also binds certain keys to specific actions: pressing `Enter` opens the file in `nvim` for editing, while `Ctrl-D` deletes the selected file. 
+The `megaignore_editor.sh` script provides a convenient way to browse and edit `.megaignore` files located in your home directory and a specified mount point (`/mnt`). It utilizes `fd` to search for files named `.megaignore`, and `fzf` for fuzzy finding among the results. 
 
-This loop continues until the user decides to stop, allowing for multiple iterations through the files. It prompts the user after each iteration for continuation, reading user input and stopping upon receiving 'n'.
+When you run the script, it enters an infinite loop where it executes the following process:
+
+1. **File Searching**: The script uses `fd` to look for `.megaignore` files within two specified directories: your home directory (`$HOME`) and the mount point (`/mnt`).
+
+2. **Interactive Selection**: The results of the `fd` search are piped into `fzf`, allowing you to visually browse the files. You can preview the contents using `bat` by pressing the preview key, and either:
+   - Open the selected file in `nvim` by pressing Enter.
+   - Delete the file using Ctrl+D.
+
+3. **Continue?**: After an action, the script prompts you to continue browsing or exit the loop. Typing `n` will end the script, while pressing Enter will continue searching.
 
 ### Usage
 
-Run the script in a terminal session to explore and manage `.megaignore` files:
+To use the script, simply run it from your terminal:
 
-```sh
-bash /home/matias/.scripts/megaignore_editor.sh
+```bash
+bash ~/scripts/megaignore_editor.sh
 ```
 
-**Within the interactive session:**
+Once the script is running, follow these steps:
 
-- Use the `fzf` interface to select files.
-- Press `Enter` to open a file in `nvim` and edit it.
-- Press `Ctrl-D` to delete the chosen `.megaignore` file.
-- After each operation, respond to the continuation prompt to either go on or exit.
-
-**Sample Response:**
-
-```sh
-Continue? [y]/n: y
-```
-
-Press 'n' to exit the loop and stop the script.
+1. Navigate through the `.megaignore` files using arrow keys.
+2. Press `Enter` to edit the selected file in `nvim`.
+3. Press `Ctrl+D` to delete a highlighted file.
+4. When prompted with "Continue? [y]/n:", type `n` to exit or just press Enter to continue.
 
 ---
 
-> [!TIP] Considerations for improvement:
-> 
-> - Add error handling to manage cases where dependencies are missing or commands fail.
-> - It could be beneficial to add logging for delete operations to prevent accidental file loss and assist in retrieving information on deleted files if necessary.
-> - Introducing a signal handler could enhance the user experience by gracefully exiting the script upon receiving interrupts (e.g., Ctrl-C).
+> [!TIP]
+> The script could be improved by adding error handling to manage situations where dependencies are not installed or when `.megaignore` files cannot be found. Additionally, implementing a more customizable search path could enhance usability for users with different directory structures.

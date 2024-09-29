@@ -1,43 +1,50 @@
-# Playlist Randomizer Script
+# Playlist Randomizer
 
 ---
 
-**playlist_randomizer.xsh**: Script to shuffle and play a playlist of albums in cmus.
+**playlist_randomizer.xsh**: Picks a playlist of albums and plays them in random order in cmus.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell to execute this script.
-- `pandas`: Python library for data manipulation, used to organize playlist data.
-- `dmenu`: A dynamic menu for X, used to select playlists interactively.
-- `cmus`: Console music player to play the selected, randomized playlist.
+- `pandas`: A library providing high-performance data manipulation and analysis.
+- `dmenu`: A dynamic menu for X, used for selecting the playlist interactively.
+- `cmus`: A powerful, terminal-based music player which this script interfaces with.
+- `xonsh`: A shell language that combines Python and Bash syntax; required to run the script.
 
 ### Description
 
-This script is tailored for the Arch Linux environment with qtile as the window manager. The script picks a playlist from a specified directory and plays the albums in random order using cmus, a console music player.
+The **playlist_randomizer.xsh** script is designed to streamline the process of selecting and playing music playlists in a random order using **cmus**. The script is written in **xonsh**, making Python and shell interactions seamless.
 
-1. **Playlist Selection**: The script searches for `.m3u` playlist files in the `~/.playlists` directory. It uses `dmenu` to present the list of playlists for the user to choose from.
-   
-2. **Randomization**: After selecting a playlist, the script reads the `.m3u` file and processes its contents using `pandas`. It extracts album and song information, shuffles the albums, and reorders the songs to play the albums randomly.
+Here's how the script works:
 
-3. **Playback**: The randomized playlist is saved as a temporary file and then loaded into cmus for playback.
+1. **Playlist Selection**: The script begins by defining the path to the playlists stored in the `~/.playlists` directory, allowing for dynamic updates if playlists change. It lists all `.m3u` files in that directory.
+
+2. **User Interaction**: By utilizing **dmenu**, the user is prompted to select one of these playlists from a visually appealing interactive menu.
+
+3. **Load Playlist Content**: After selection, the script reads the corresponding `.m3u` file to extract the list of albums and songs, creating a Pandas DataFrame for further processing.
+
+4. **Randomization**: Albums are shuffled randomly, and a new ordered playlist is constructed.
+
+5. **Playback with cmus**: Finally, the script interfaces with cmus to clear the current playlist, add the newly randomized playlist, and start playback.
 
 ### Usage
 
-Run this script by invoking it in a terminal that supports the `xonsh` shell or set up a keybinding in your qtile configuration to execute it directly:
+To use the script, enter the following command in your terminal:
 
 ```bash
-~/.scripts/playlist_randomizer.xsh
+xonsh /home/matias/.scripts/playlist_randomizer.xsh
 ```
 
-1. You will be prompted with a `dmenu` interface listing available playlists.
-2. Select a playlist to randomize.
-3. The script will create a randomized version of the playlist and play it using cmus.
+Once executed:
 
-Make sure that your cmus is running and configured correctly to handle `.m3u` playlist files.
+1. A dmenu selection will prompt you to choose a playlist.
+2. After you select, the songs will be shuffled and played in cmus.
+
+You can also bind this script to a key in your window manager for easy access.
 
 ---
 
-> [!NOTE]
-> Although the script efficiently randomizes and plays playlists, it assumes the structure of the playlist files and directories without any fallback or error handling. Adding validation for the existence of paths and handling cases where playlists may not be properly formatted could improve robustness. Additionally, for portability, replace hardcoded paths with configuration parameters or environment variables.
+> [!TIP] 
+> Consider adding error handling for cases where no playlists are available or if the `.m3u` file does not exist. This could improve the user experience by providing feedback and preventing crashes. Additionally, ensure that `xonsh` is set up as your shell, or consider providing instructions for installing it.

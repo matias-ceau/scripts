@@ -1,44 +1,45 @@
-# Keyboard Layout Help Script
+# Keyboard Layout Help
 
 ---
 
-**keyboard-help.sh**: Launches a floating terminal displaying keyboard layout information
+**keyboard-help.sh**: Launches an xterm to display the current keyboard layout.
 
 ---
 
 ### Dependencies
 
-- `show_keyboard_layout.py`: A script that provides keyboard layout information.
-- `xterm`: Terminal emulator for the X Window System.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `setsid`: Utility used to run a program in a new session.
+- `show_keyboard_layout.py`: A script to retrieve the current keyboard layout.
+- `xterm`: A terminal emulator for the X Window System, used to display the output.
+- `bat`: A cat clone with syntax highlighting and Git integration, used to enhance the output display.
 
 ### Description
 
-The **keyboard-help.sh** script is designed for users who need to quickly access their keyboard layout configuration. It achieves this by launching a floating XTerm window that executes the `show_keyboard_layout.py` script. The output of this Python script is then piped into `bat` for better readability, featuring paging and a plain style.
+The `keyboard-help.sh` script is a simple utility designed for users who need quick access to their current keyboard layout while using the Qtile window manager on Arch Linux. This script utilizes `show_keyboard_layout.py` to fetch the active keyboard layout and displays it in a new xterm window, formatted neatly with `bat`.
 
-- `which show_keyboard_layout.py`: Locates the path to `show_keyboard_layout.py`.
-- `setsid`: Ensures that `xterm` runs in a new session.
-- `xterm -T KB_layout_floating -fs 20`: Opens xterm with a title "KB_layout_floating" and font size set to 20.
-- `bat --paging=always --style=plain`: Displays the output of the keyboard layout script with paging always enabled and style set to plain.
+Here’s a breakdown of its core functionality:
+
+- The script uses `which` to locate the `show_keyboard_layout.py` script, ensuring that the current script has the correct path to execute it.
+- It then runs `setsid` to start a new session, preventing the xterm from being affected by the terminal that launched it.
+- The `xterm` command creates a new terminal window with a title "KB_layout_floating", a font size of 20, and executes the keyboard layout retrieval script. 
+- The output is piped to `bat`, which provides paging (`--paging=always`) and ensures the output is displayed in a clear and user-friendly format.
 
 ### Usage
 
-To use this script, you can execute it directly from the terminal. It does not require any command-line arguments and can be mapped to a keybinding for ease of access, or run automatically on certain events in your qtile configuration.
+To use the `keyboard-help.sh` script, simply execute it from your terminal or bind it to a key in your Qtile configuration file. To run it directly in the terminal, use the following command:
 
 ```bash
-bash ~/home/matias/.scripts/keyboard-help.sh
+bash /home/matias/.scripts/keyboard-help.sh
 ```
 
-For binding to a key in qtile, you might use a snippet such as:
+Alternatively, you can assign it to a Qtile keybinding by adding the following line to your `config.py`:
 
 ```python
-Key([mod], "k", lazy.spawn("/home/matias/.scripts/keyboard-help.sh")),
+Key([mod], "h", lazy.spawn("/home/matias/.scripts/keyboard-help.sh")),
 ```
 
-This would open the keyboard layout helper using the mod+k key combination.
+This binding will allow you to open the keyboard layout display quickly by pressing `mod + h`.
 
 ---
 
-> [!TIP]
-> The script assumes `show_keyboard_layout.py` is executable and in your PATH. Ensure proper permissions and PATH settings to avoid runtime errors. Additionally, consider adding error handling to check if dependencies are available and handle the absence gracefully to improve the script's robustness.
+> [!TIP]  
+> Consider adding error handling in your script to manage cases where `show_keyboard_layout.py` might not exist or return an unexpected result. This will improve usability and provide clearer feedback to the user. Additionally, you may want to allow users to configure the size and title of the xterm through command-line arguments for greater flexibility.

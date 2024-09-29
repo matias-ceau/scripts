@@ -1,37 +1,39 @@
-# Random Album Player with cmus
+# Random Album Selector
 
 ---
 
-**random_album.xsh**: Selects a random album from cmus library and plays it using cmus.
+**random_album.xsh**: Select random album and play it with cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered, bash-compatible shell.
-- `cmus`: A small, fast and powerful console music player.
-  
+- `cmus`: A music player that allows terminal control for playlist management.
+- `xonsh`: A Python-powered shell that combines Python and shell commands for scripting.
+
 ### Description
 
-This script selects a random album from your cmus music library and plays it using cmus. It operates by first reading the `lib.pl` file of cmus, which contains the indexing of all available tracks. Out of this list, it parses and randomizes the albums, selecting ten of them. The selected albums' track paths are then compiled into a temporary playlist file located at `~/.config/cmus/.temp.m3u`. This temporary playlist is subsequently loaded and played by cmus through `cmus-remote`, a utility to control cmus from an external script. 
+The `random_album.xsh` script automates the process of selecting a random album from your music library and playing it using `cmus`, a powerful terminal-based music player. This script utilizes `xonsh`, enabling seamless integration of Python and shell scripting.
+
+1. **Preparation**: The script begins by specifying the temporary playlist path in `~/.config/cmus/.temp.m3u`.
+2. **Interaction with cmus**: It first updates the existing `cmus` session using commands to view the appropriate playlist view (`view 4`), clear the existing playlist, and fetch paths to the albums stored in `lib.pl`.
+3. **Album Selection**: The script extracts album names and shuffles them randomly, then constructs a new playlist containing tracks from the first 10 randomly selected albums.
+4. **Writing the Playlist**: It writes the generated playlist to the temporary `.m3u` file, making it ready for playback.
+5. **Playback**: Finally, it instructs `cmus` to load the new playlist and begins playback.
 
 ### Usage
 
-To use this script, ensure it's executable and can be run from within a terminal that supports `xonsh`. It is designed to be used directly from the shell environment or could be bound to a shortcut key within the qtile window manager for easier access. Here's how to do it, step by step:
+To run the script, make sure you have `xonsh` installed and have access to `cmus`. You can execute the script directly from the terminal with the following command:
 
-1. **Run the script directly**:
-   ```bash
-   ~/.scripts/random_album.xsh
-   ```
+```sh
+xonsh /home/matias/.scripts/random_album.xsh
+```
 
-2. **Bind in qtile**: Add a keybinding in your `config.py` file like so:
-   ```python
-   Key([mod], 'r', lazy.spawn('xonsh ~/.scripts/random_album.xsh')),
-   ```
+This will initiate the process to select and play a random album through `cmus`. You might want to create a keybinding in your window manager (like `qtile`) to make this script easily accessible while using your system.
 
-After running, the script will clear the existing cmus playlist if opened, shuffle the random album list, and proceed to play the first track of the first random album selected.
+Additionally, for automation, you could include this script in your startup applications or bind it to a keyboard shortcut.
 
 ---
 
-> [!TIP]
-> This script could be improved by adding error handling, particularly for the lines where it reads from `lib.pl` and writes to `~/.config/cmus/.temp.m3u`. If these files do not exist or if there are file permission issues, the script might fail. Additionally, better handling of cases where there are fewer than ten albums in the library would ensure more robust execution.
+> [!TIP]  
+> Consider adding error handling to check if `cmus` is running or if `lib.pl` exists. This will make the script more robust and user-friendly. Also, you might want to allow configuration of how many albums to fetch by passing an argument to the script.

@@ -1,39 +1,37 @@
-# Quick Password Selector
+# Quick Pass Script
 
 ---
 
-**quick-pass.sh**: Quickly select a password from your password store using `fzf`.
+**quick-pass.sh**: A script to quickly search and display password entries using fzf.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`. Used for listing files within the password store directory.
-- `fzf`: A general-purpose command-line fuzzy finder that helps with interactively selecting files from the list.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `fzf`: A command-line fuzzy finder that allows quick searching through text.
 
 ### Description
 
-This script helps you swiftly locate and select password entries from your password store. It leverages `fd` to list all files within the directory specified by the `$PASSWORD_STORE_DIR` environment variable, which should correspond to your password store path. The absolute paths returned by `fd` are then stripped of the base `PASSWORD_STORE_DIR` path using `sed`, leaving only the relative paths to the password files.
+The `quick-pass.sh` script provides a streamlined way to browse password entries stored in the `PASSWORD_STORE_DIR` directory. It utilizes the `fd` command to find all entries in this directory and pipes them into `fzf` for a fuzzy search experience.
 
-Finally, the list of entries is piped into `fzf`, which will present you with an interactive fuzzy search interface. This allows for quick searching and selection of passwords by their entries.
+This script performs the following operations:
+
+1. Uses `fd` to traverse the directory specified in the environment variable `PASSWORD_STORE_DIR`, filtering for files (`. -tf`).
+2. The output from `fd` is then processed with `sed`, which removes the path prefix from the search results to present a cleaner list to the user.
+3. Finally, the processed file names are displayed in a fuzzy searchable interface through `fzf`, allowing users to easily locate their desired password entry.
 
 ### Usage
 
-To use the script, simply run it in your terminal. Ensure that your environment variable `PASSWORD_STORE_DIR` is set to the directory where your password store is located.
+To utilize the `quick-pass.sh` script, ensure that you have both `fd` and `fzf` installed on your Arch Linux setup. Once the dependencies are satisfied, you can run the script directly from the terminal.
 
 ```bash
-export PASSWORD_STORE_DIR=~/.password-store
-~/.scripts/quick-pass.sh
+bash /home/matias/.scripts/quick-pass.sh
 ```
 
-Make sure that `fd` and `fzf` are installed on your Arch Linux system:
-```bash
-sudo pacman -S fd fzf
-```
-
-You may also want to bind this script to a key combination in qtile for even quicker access.
+You may also consider assigning this script to a keybinding in your window manager (Qtile) or integrating it into your custom workflows for quick access to passwords.
 
 ---
 
-> [!TIP]
-> Currently, the script only lists and lets you select files but doesn’t open or display any content from the selected password. Consider adding functionality that opens the selected file or copies its content to the clipboard securely for convenient password retrieval.
+> [!TIP] 
+> While the script efficiently utilizes `fd` and `fzf`, it lacks error handling. Consider adding checks to verify if `PASSWORD_STORE_DIR` is set and if `fd` or `fzf` are installed, to enhance the user experience. Additionally, you might want to handle cases when no results are returned from `fd`, informing the user appropriately.

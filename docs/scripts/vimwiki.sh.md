@@ -1,35 +1,41 @@
-# Vimwiki Note Opener
+# VimWiki: Quick Note Opener
 
 ---
 
-**vimwiki.sh**: Opens a note from the `~/notes` directory in Vim using `fzf` for selection.
+**vimwiki.sh**: Open a note in vim using fzf for selection.
 
 ---
 
 ### Dependencies
 
-- `vim`: A highly configurable text editor built to enable efficient text editing.
-- `fzf`: A general-purpose command-line fuzzy finder used for interactive filtering.
+- `vim`: A highly configurable text editor used for creating and editing notes.
+- `fzf`: A command-line fuzzy finder that provides an interface for selecting files interactively.
 
 ### Description
 
-This script is designed to simplify the process of opening your notes stored in the `~/notes` directory using Vim. It leverages `fzf`, a fuzzy finder, to interactively select the note you wish to open. Once a note is selected, the script opens it in Vim, allowing you to quickly access and edit your documents.
+The `vimwiki.sh` script allows users to quickly open notes stored in the `~/notes` directory using Vim. By leveraging `fzf`, a fuzzy finder, it provides an interactive interface for selecting a note file. The user simply executes the script, and it presents a list of available notes, allowing them to select one to edit within Vim.
 
-The script is a minimal one-liner that ties together listing notes, filtering them with `fzf`, and opening the selection with `vim`. This provides a seamless experience for users who frequently manage a large collection of notes and prefer using Vim for text editing.
+This script operates by using the `ls` command to list the contents of the `~/notes` directory, which are then piped to `fzf`. Once the user makes a selection, the chosen file is passed to Vim, enabling immediate editing.
+
+Here's a breakdown of the script:
+
+1. The shebang (`#! /bin/sh`) indicates that this script should be run in a Bourne shell environment.
+2. The command `ls ~/notes | fzf` retrieves the list of notes in the specified directory, and `fzf` facilitates the user’s selection.
+3. The selected note path is then used as an argument in the `vim` command, allowing the note to be opened for editing.
 
 ### Usage
 
-To use this script, ensure that your notes are stored in the `~/notes` directory. You can run this script in a terminal or bind it to a key sequence in your qtile configuration for quick access.
+To use the script, simply execute it from the terminal:
 
-**Command**:  
-```sh
-./vimwiki.sh
+```bash
+sh /home/matias/.scripts/vimwiki.sh
 ```
 
-**Example**:  
-When executed, the script will display a list of files in the `~/notes` folder using `fzf`. Use the interface to fuzzy search and select the desired note. Upon selection, the note opens in Vim.
+Upon execution, you will see a list of notes from the `~/notes` directory displayed by `fzf`. You can start typing to filter the list, then press `Enter` to open the selected note in Vim.
+
+For convenience, you might consider binding this script to a key shortcut in your window manager so you can quickly access your notes without navigating through the terminal manually.
 
 ---
 
-> [!TIP]
-> The script currently assumes that all files in `~/notes` are plain text notes that can be opened with Vim. It doesn't handle directories or files with specific extensions. Consider updating the script to perform checks or expand its functionality by adding pattern matching with `fzf` to filter only specific types of files (e.g., `.md` for markdown notes).
+> [!TIP]  
+> The current implementation of the script relies on the standard output of `ls`, which may not handle files with spaces or special characters well. To improve robustness, consider using `find ~/notes -mindepth 1 -maxdepth 1 -print0 | fzf --read0` instead, which handles filenames more reliably.

@@ -1,51 +1,59 @@
-# ANSI to RGB/HEX Converter
+# ANSI 8-Bit to RGB/HEX Converter
 
 ---
 
-**ansi8bit2rgb_hex.py**: Converts 8-bit ANSI color codes to RGB or HEX format.
+**ansi8bit2rgb_hex.py**: A script to convert 8-bit ANSI color codes to RGB or HEX formats.
 
 ---
 
 ### Dependencies
 
-- `python`: The script is written in Python and requires a Python interpreter.
-- `os` and `sys`: These are standard Python libraries used for interacting with the operating system and command-line arguments.
+- `python`: The core dependency for running this script.
 
 ### Description
 
-This script converts 8-bit ANSI color codes to RGB or HEX formats. It supports standard colors, high intensity colors, and grayscale colors within the ANSI color range 0 to 255. The conversion is done by mapping colors to RGB tuples based on their position in the ANSI standard, with specific handling for the standard 0-15 color codes, 16-231 color range that map to RGB cubes, and 232-255 grayscale range.
+This Python script facilitates the conversion of 8-bit ANSI color codes into their equivalent RGB or HEX representations. It handles the full range of ANSI colors defined from 0 to 255, including both standard and extended colors. The script features several functions:
 
-- **ansi_to_rgb(color)**: Converts an ANSI color code to an RGB tuple.
-- **format_color(rgb, color_format)**: Formats the RGB tuple into either a `rgb(r, g, b)` or `#rrggbb` hex string based on the requested format.
-- **print_colors(colors, color_format, colorize, print_names)**: Prints the list of color conversions with options for colorized and named output.
+- **ansi_to_rgb(color)**: Converts a single ANSI color code to an RGB tuple. Supports color codes in three ranges:
+  - 0-15 for standard colors (basic color palette).
+  - 16-231 for colors based on a formula that calculates RGB values.
+  - 232-255 for grayscale colors.
+
+- **format_color(rgb, color_format)**: Formats the RGB values into the desired output string format—either 'hex' for hexadecimal representation or 'rgb' for the RGB format.
+
+- **print_colors(colors, color_format, colorize, print_names)**: Prints out the converted colors based on input options, applying any desired formatting and colorization.
+
+- **usage()**: Outputs the usage instructions for the script, detailing supported commands, options, and examples.
+
+The script runs from the command line and processes input arguments to determine which colors to convert.
 
 ### Usage
 
-Run the script with commands and options to convert color codes:
+To utilize this script, execute it from the command line with the desired parameters. Here are the available commands and options:
 
 ```bash
-./ansi8bit2rgb_hex.py <command> [options] <number>|<range>|<list>
+# General usage pattern
+python ansi8bit2rgb_hex.py <command> [options] <number>|<range>|<list>
+
+# Required commands
+rgb   --- outputs color in RGB format
+hex   --- outputs color in HEX format
+help  --- shows this message
+
+# Example executions
+python ansi8bit2rgb_hex.py rgb 242       # outputs: rgb(108,108,108)
+python ansi8bit2rgb_hex.py rgb -n 242    # outputs: color242    rgb(108,108,108)
+python ansi8bit2rgb_hex.py hex 242       # outputs: #6c6c6c
+python ansi8bit2rgb_hex.py rgb           # outputs all 256 colors
+python ansi8bit2rgb_hex.py rgb 35-167    # outputs colors from 35 to 167
+python ansi8bit2rgb_hex.py rgb 35,167    # outputs colors 35 and 167
 ```
 
-- **Commands**:
-  - `rgb`: Outputs the 8-bit color as `rgb(r, g, b)`.
-  - `hex`: Outputs the color in `#rrggbb` hex format.
-  - `help`: Displays usage information.
-
-- **Options**:
-  - `-n`, `--name`: Prints the color name followed by its value.
-  - `-c`, `--colorize`: Colorizes the output for terminal displays.
-
-- **Examples**:
-  ```bash
-  ./ansi8bit2rgb_hex.py rgb 242          # Outputs: rgb(108,108,108)
-  ./ansi8bit2rgb_hex.py rgb -n 242       # Outputs: color242    rgb(108,108,108)
-  ./ansi8bit2rgb_hex.py hex 242          # Outputs: #6c6c6c
-  ./ansi8bit2rgb_hex.py rgb              # Outputs all 256 colors
-  ./ansi8bit2rgb_hex.py rgb 35-167       # Outputs colors from 35 to 167 (inclusive)
-  ./ansi8bit2rgb_hex.py rgb 35,167       # Outputs the colors 35 and 167
-  ```
+Optional flags:
+- `--name, -n` : Include color name in the output.
+- `--colorize, -c` : Colorize the output based on ANSI codes.
 
 ---
 
-> [!TIP] The script assumes sane input; adding exception handling for incorrect arguments could improve robustness. Additionally, the CLI argument parsing could benefit from using a library like `argparse` for better maintainability and clarity.
+> [!TIP] 
+The script is robust, but consider adding error handling for invalid input ranges and improving functionality by allowing input from files or environment variables. Additionally, it might be useful to support further color formats, such as HSL or CMYK, enhancing its versatility for users needing diverse color representations.

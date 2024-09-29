@@ -1,53 +1,50 @@
-# Manual Search History Script
+# Read the Fucking Manual
 
 ---
 
-**read_the_fucking_manual.sh**: Script to retrieve the most searched manual entries using `man` or `batman`.
+**read_the_fucking_manual.sh**: A script to check frequently searched manual entries.
 
 ---
 
 ### Dependencies
 
-- `bat` : A clone of cat with syntax highlighting and Git integration.
-- `ripgrep` (`rg`) : A line-oriented search tool that recursively searches your current directory for a regex pattern. It's similar to `grep`, but faster.
-- `awk`, `sed`, `sort`, `uniq` : Standard Unix utilities for text processing.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `ripgrep` (`rg`): A line-oriented search tool that recursively searches your current directory for a regex pattern.
+- `sed`: A stream editor for filtering and transforming text.
+- `awk`: A programming language designed for text processing.
 
 ### Description
 
-This script is designed to extract and analyze historical search data of manual entries using the `man` or `batman` commands. It performs the following actions:
+`read_the_fucking_manual.sh` is a bash script that helps users quickly access their most researched manual entries by examining their shell command history files. This utility leverages several tools, including `bat`, `ripgrep`, `sed`, and `awk`, to sift through command history and extract relevant entries.
 
-1. Reads the shell history files from both Zsh and Bash, located in `$XDG_STATE_HOME/zsh/history` and `$XDG_STATE_HOME/bash/history`, respectively.
-2. Filters lines that contain manual entry searches initiated with `man` or `batman`.
-3. Parses and cleans the data to isolate the searched entries.
-4. Provides various options for displaying the searches, such as listing the most frequently searched entries, displaying all entries, or searching through the list with custom criteria.
+The script primarily reads from the `bash` and `zsh` history files located in the `$XDG_STATE_HOME` directory, applies regular expressions to filter entries that involve the `man` command (or its alternative, `batman`), and provides options to display the results based on the user's requirements. 
+
+#### Important Functions
+- **usage()**: Displays usage instructions and command options.
+- **get_searches()**: Processes history files, filters for manual commands, and returns results based on various criteria.
 
 ### Usage
 
-Here's how you can use the script:
+To use `read_the_fucking_manual.sh`, run the script from the terminal with one of the following options:
 
 ```bash
-# Default: Display the 10 most searched terms
+# Get the 10 most searched manual entries
 ./read_the_fucking_manual.sh
 
-# Help: Display usage information
-./read_the_fucking_manual.sh -h
-
-# Display the top n searches
+# Get a specific number of most searched entries
 ./read_the_fucking_manual.sh -n 5
 
-# Display searches done more than a certain number of times
+# Get entries where searches were done more than 'n' times
 ./read_the_fucking_manual.sh -m 3
 
-# Display all searches
+# Get all searches
 ./read_the_fucking_manual.sh -a
 
-# Search specific entries using ripgrep arguments
-./read_the_fucking_manual.sh man
+# Search for a specific term in the history
+./read_the_fucking_manual.sh <search_term>
 ```
-
-Assigning this script to a keybinding in Qtile or running it in a terminal can improve your workflow by quickly retrieving frequently referenced manual entries.
 
 ---
 
-> [!TIP] 
-> The script assumes that the history files are accessible and not empty. Consider adding error handling to manage missing or inaccessible files gracefully. Additionally, `$XDG_STATE_HOME` environment variable should be set properly; otherwise, the script might fail when trying to locate the history files. An improvement could include adding a default path if `$XDG_STATE_HOME` is not defined.
+> [!TIP]  
+> This script assumes that the user's command history is logged properly in the specified files. To enhance its functionality, consider adding error handling for cases where history files might not exist or are empty. Additionally, users may benefit from customizing the script to include more contextual information about the commands being searched.

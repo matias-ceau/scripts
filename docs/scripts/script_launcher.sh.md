@@ -1,50 +1,47 @@
-# Script Launcher with FZF Integration
+# Script Launcher for Qtile
 
 ---
 
-**script_launcher.sh**: Launch and manage scripts via an interactive fzf interface, with source and documentation preview capabilities.
+**script_launcher.sh**: Simple script launcher utilizing fzf for enhanced command execution.
 
 ---
 
 ### Dependencies
 
-- `fzf`: Command-line fuzzy finder for interactive script selection.
-- `improved-fzfmenu.sh`: Custom script wrapper for fzf with title integration.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `pastel`: Utility for color manipulation in scripts.
-- `fd`: A simple, fast, and user-friendly alternative to 'find'.
-- `rg` (ripgrep): Line-oriented search tool for filtering file types.
-- `nvim` (Neovim): Hyperextensible Vim-based text editor.
+- `fzf`: Command-line fuzzy finder used for efficient file searching and selection.
+- `bat`: A cat clone with syntax highlighting and Git integration, used for previewing files and documentation.
+- `pastel`: A tool for manipulating colors in shell scripts.
 
 ### Description
 
-The `script_launcher.sh` script is designed to help users on Arch Linux with qtile interactively run various scripts located in their `$SCRIPTS` directory. It leverages `fzf` for displaying and selecting the scripts, along with `bat` for previewing documentation and source code with syntax highlighting.
+The `script_launcher.sh` script allows users to execute scripts efficiently using the `fzf` fuzzy finder. It provides an intuitive interface with previews of documentation and source files while allowing users to execute selected commands easily. 
 
-Two styles of FZF commands are supported, determined by the presence of the `--embedded` flag. If `--embedded` is used, only `fzf` is called; otherwise, it uses `improved-fzfmenu.sh`.
+Upon running, it checks if the `--embedded` flag is given. If not, it uses a custom fzf script `improved-fzfmenu.sh` with a specified title. Two preview commands are defined for showing either documentation or the source of scripts selected by the user. The `hex2ansi` function converts hex colors into ANSI format for better terminal visuals.
 
-The script offers enhanced preview features through `bat` for both documentation and source code, utilizing dynamically assigned color variables for a visually appealing interface. Highlighting and filtering of scripts are enhanced by leveraging `rg` to classify script types by extensions—such as `.sh`, `.py`, and `.xsh`.
+The script reads directories and formats the output with different colors based on the file types (e.g., Python, shell scripts). It leverages the `fd` command to find scripts in the `$SCRIPTS` directory and presents them in an interactive `fzf` interface with customizable key bindings for executing the selected commands.
 
 ### Usage
 
-Run the script from the terminal using the following command:
+To use the script, simply execute it from the terminal. You can pass the `--embedded` flag to run `fzf` directly. Consider the following command examples:
 
 ```bash
-bash /path/to/script_launcher.sh [--embedded]
+bash /home/matias/.scripts/script_launcher.sh
 ```
 
-- With `--embedded`: Uses standard `fzf` command.
-- Without `--embedded`: Uses the custom `improved-fzfmenu.sh`.
+Or in embedded mode:
 
-### Keybindings within FZF
+```bash
+bash /home/matias/.scripts/script_launcher.sh --embedded
+```
 
-- **Enter**: Run the selected script.
-- **Alt-Enter**: Execute script in a new terminal.
-- **Ctrl-E**: Edit the selected script in `nvim`.
-- **Alt-E**: Edit script in a new terminal using `nvim`.
-- **Alt-S**: Switch preview to source code.
-- **Alt-D**: Switch back to documentation.
+With `fzf`, you can:
+- Press **Enter** to run the selected script.
+- Press **Alt + Enter** to execute the script in a dedicated terminal.
+- Use **Ctrl + E** to edit the script in `nvim`.
+- Press **Alt + E** to edit the script in a new terminal instance.
+- Utilize **Alt + D** or **Alt + S** to switch between documentation and source previews.
 
 ---
 
-> [!NOTE]
-> Consider adding support for generating PDFs/HTMLs of documentations and implementing new features such as multiple selections, enhanced header toggling, and additional argument functionalities in the fzf commands.
+> [!TIP]  
+> This script has several opportunities for improvement, such as adding support for rendering a PDF or HTML documentation page as indicated by the TODO comments. You might also consider integrating features for multiple selections and improved preview handling with page up/down functionality.

@@ -1,54 +1,43 @@
-# FZFMenu Run Script
+# Fuzzy Finder Menu for Running Commands
 
 ---
 
-**fzfmenu_run.sh**: Dmenu run replacement using `fzf` within a floating xterm terminal
+**fzfmenu_run.sh**: A script to replace DMenu with fzf for executing commands in a floating terminal.
 
 ---
 
 ### Dependencies
 
-- `dmenu_path`: Provides a list of executable programs in the user's `PATH`.
-- `fzfmenu.sh`: A script that utilizes `fzf` to present a menu interface for selecting executables.
-- `xargs`: A command that builds and executes command lines from standard input.
-- `bash`: The Bourne Again Shell, required for script execution.
-- A floating terminal setup in your qtile configuration.
+- `dmenu`: A dynamic menu for X. It is required for retrieving the list of commands to execute.
+- `fzf`: A command-line fuzzy finder that allows filtering through items like commands easily.
+- `xterm`: A terminal emulator for the X Window System, used to execute and display commands.
 
 ### Description
 
-The `fzfmenu_run.sh` script serves as a replacement for the standard `dmenu_run` by combining the power of `fzf` (a command-line fuzzy finder) with `dmenu_path` and executing commands within a floating `xterm` window. This script effectively creates a launcher for applications in your Arch Linux environment, styled to work with your qtile window manager configuration.
+This script utilizes `dmenu` to fetch a list of available commands, processes that list through `fzf` for an enhanced user experience, and then executes the selected command in a floating `xterm` terminal. This is particularly useful for lightweight window managers like `qtile`, as it provides a straightforward and efficient way to run applications without cluttering the screen.
 
-- The script first runs `dmenu_path`, which generates a list of all executables available in your `PATH`.
-- It pipes this list to another script, `fzfmenu.sh`, which invokes `fzf` to display a searchable menu.
-- Once user selection is made, `xargs` executes the chosen command within a newly spawned `xterm` window.
+The command execution process works as follows:
+
+1. `dmenu_path` generates a dynamic list of executable commands based on the user's environment PATH.
+2. The output is piped into `fzfmenu.sh`, which handles the fuzzy searching of the command list.
+3. Once a command is selected, it is passed through `xargs` to execute it in a newly opened `xterm` terminal window.
 
 ### Usage
 
-To use this script, ensure it is executable and can be added to keybindings or run directly from your terminal. Before using, verify that all dependencies, particularly `fzfmenu.sh`, are properly configured.
+To run this script, you simply need to execute it from the terminal. An ideal way to integrate it is using a keybinding in `qtile`, which can be set up in your `config.py`. Here is a basic example of how to call it directly from a terminal:
 
 ```bash
-chmod +x /home/matias/.scripts/fzfmenu_run.sh
+bash /home/matias/.scripts/fzfmenu_run.sh
 ```
 
-Run the script interactively:
-
-```bash
-/home/matias/.scripts/fzfmenu_run.sh
-```
-
-Or assign it to a keybinding in your qtile configuration for faster access.
-
-Example of a keybinding in qtile:
+You might want to bind it to a key in your `qtile` configuration:
 
 ```python
-Key([mod], "r", lazy.spawn("/home/matias/.scripts/fzfmenu_run.sh"))
+Key([mod], "r", lazy.spawn("bash /home/matias/.scripts/fzfmenu_run.sh")),
 ```
 
-Ensure `xterm` is configured to open as a floating window in your `qtile` settings for optimal user experience.
+With this setup, pressing `mod + r` will trigger the script, allowing you to quickly run commands.
 
 ---
 
-> [!NOTE]
-> - Ensure that `fzfmenu.sh` exists and functions as expected since `fzfmenu_run.sh` relies on it.
-> - Consider adding error handling to manage cases where no command is selected or `fzfmenu.sh` is missing.
-> - Using `xargs -I {}` can sometimes lead to unexpected behavior with complex commands; test thoroughly.
+> [!TIP] This script could benefit from error handling, particularly when executing commands. For instance, if a command fails to run or is not found, it would be prudent to provide user feedback. Additionally, incorporating options for customizing the appearance and behavior of `xterm` would enhance the user experience, such as setting specific colors or window sizes.

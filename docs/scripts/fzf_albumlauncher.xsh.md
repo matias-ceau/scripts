@@ -2,43 +2,51 @@
 
 ---
 
-**fzf_albumlauncher.xsh**: Choose an album with fzf and play it with cmus
+**fzf_albumlauncher.xsh**: Choose an album with fzf and play it with cmus.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A shell that executes the script.
-- `beet`: Music library manager used to list albums.
-- `fzf`: Command-line fuzzy finder utilized to select an album.
-- `cmus`: Console music player used for playing the selected album.
-- `cmus-remote`: Command tool for controlling `cmus` operations.
+- `fzf`: A command-line fuzzy finder, needed for selecting albums from your music library.
+- `cmus`: A music player which the script interfaces with to play selected albums.
+- `beet`: A command-line tool to manage your music library, used here to list albums.
 
 ### Description
 
-This script is designed for selecting and playing albums using a command-line interface on an Arch Linux system with the qtile window manager. It leverages the `beet` command to list all albums available in the music library, then uses `fzf` to allow the user to interactively choose an album. Once an album is selected, it controls `cmus` through `cmus-remote` to play it.
+This script provides a convenient way to select and play a music album using `fzf` and `cmus` on your Arch Linux setup with `qtile`. It retrieves a list of albums from your music library managed by `beet`, and allows you to conveniently choose one through the fuzzy finder interface.
 
-The script executes several `cmus-remote` commands to ensure that the playlist is cleared, the album is filtered and marked, it gets queued with the specified number of tracks, and starts playing immediately. It also saves the currently playing albums' playlist as `nowplaying.m3u` in the specified directory for future reference.
+Here's a breakdown of how the script operates:
+
+1. **Album Selection**: The script fetches a list of albums from `beet` and processes it to produce a clean list using `sed`. This list is then piped to `fzf`, where the user can interactively select an album.
+   
+2. **Control cmus**: Once an album is selected, the script utilizes `cmus-remote` commands to:
+   - Clear the current playlist.
+   - Filter the music library according to the selected album.
+   - Mark the filtered songs to be added to the cmus queue.
+   - Enqueue the songs, and play them immediately.
+
+3. **Playlist Management**: Finally, it saves the current song list to a temporary playlist file, allowing for a quick resume of the session.
 
 ### Usage
 
-To use this script, simply execute it in a terminal that supports `xonsh`:
+To run the script, simply call it from your terminal:
 
-```shell
-~/.scripts/fzf_albumlauncher.xsh
+```bash
+/home/matias/.scripts/fzf_albumlauncher.xsh
 ```
 
-This script isn't designed with any command-line arguments. It could be bound to a keybinding within your qtile configurations for quick access or just executed when you open a terminal session. It executes interactively, presenting you with a list of albums to choose from using `fzf`.
+This will present a fuzzy search interface to select an album. After selection, the script will manage playback in cmus accordingly.
 
-```shell
-# Example of keybinding in qtile:
-keys = [
-    Key([mod], 'm', lazy.spawn('~/.scripts/fzf_albumlauncher.xsh')),
-    # other keybindings...
+You may also bind this script to a key in your `qtile` configuration to allow for quick access. Here’s an example of how you might set that up:
+
+```python
+keybindings = [
+    Key([mod], "a", lazy.spawn("/home/matias/.scripts/fzf_albumlauncher.xsh")),
 ]
 ```
 
 ---
 
 > [!TIP]
-> Currently, the script only handles albums and captures their name using simplistic `sed` operations which could potentially lead to unexpected behaviors with non-standard album naming conventions. Consider implementing more robust error handling or album name sanitization. Additionally, the script could be improved by confirming whether `cmus` is already running or starting it in the absence to avoid any control command failures.
+> The script relies on `cmus` for playback, which means it must be running in the background for the commands to work. If `cmus` is not started, the script will fail silently. Consider adding error handling to notify the user if `cmus` is not active. Additionally, using `strip()` directly after the selection may lead to errors if nothing is selected; handling empty selections could enhance user experience.

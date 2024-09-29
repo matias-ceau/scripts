@@ -1,43 +1,46 @@
-# fzfmenu: Simplified Application Launcher with fzf and xterm
+# fzfmenu - Fuzzy Finder in Xterm
 
 ---
 
-**fzfmenu.sh**: A lightweight alternative to dmenu using `fzf` within an `xterm` terminal.
+**fzfmenu.sh**: A script that uses `fzf` to provide a fuzzy search interface in `xterm`.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `xterm`: A standard terminal emulator for the X Window System.
-- `bash`: The GNU Bourne Again SHell to run the script.
+- `fzf`: A command-line fuzzy finder that allows searching through a list of items.
+- `xterm`: A terminal emulator for the X Window System where the `fzf` interface will be displayed.
 
 ### Description
 
-This script serves as a substitute for `dmenu`, leveraging the power of `fzf` for fuzzy finding capabilities and `xterm` as the terminal emulator. The primary function of this script is to facilitate the launching of commands selected through a user-friendly fuzzy search interface.
+The `fzfmenu.sh` script serves as a convenient wrapper around the `fzf` tool, enabling users to select items from a list in a terminal environment. It is designed to run within an `xterm` session, making it a lightweight alternative to `dmenu` for those familiar with `fzf`.
 
-The script processes and escapes any input arguments to safely pass them to `fzf`. It executes `fzf` under an `xterm` session with the title "fzfmenu", which acts on standard input and outputs the selected result to the standard output.
+This script begins by escaping each argument passed to it, ensuring that any special characters do not interfere with the command-line execution. It uses a loop to iterate through the provided arguments, applying `printf %q` to each one to escape it properly. The escaped arguments are then joined into a single string, which is passed to the `fzf` command inside an `xterm` window.
+
+When invoked, the script opens `xterm` with the title 'fzfmenu', executing the `fzf` command while redirecting the input and output appropriately, allowing interactive selection.
 
 ### Usage
 
-The script should be run from a terminal, or it can be assigned to a keybinding within your qtile setup for quick access. Given its nature, it expects input from the user via piped data.
+To use `fzfmenu.sh`, run the script from an interactive shell. You can provide a list of items to search through as arguments. Here are some examples:
 
-Here's a basic usage example:
+1. **Basic Usage**:
+    ```bash
+    ./fzfmenu.sh item1 item2 item3
+    ```
 
-```bash
-# Assuming you have a list of applications in a file 'applications.txt'
-cat applications.txt | /home/matias/.scripts/fzfmenu.sh
-```
+2. **Using with a command**:
+    You can pipe output from commands directly into the script:
+    ```bash
+    ls | ./fzfmenu.sh
+    ```
 
-If integrated into `qtile`, you might want to bind the script to a key to launch apps quickly, using something like:
-
-```python
-Key([mod], "space", lazy.spawn("/home/matias/.scripts/fzfmenu.sh"))
-```
-
-This will open `fzf` inside an xterm window, showing you the list of options passed via standard input, allowing you to select one using fuzzy search.
+3. **Keybindings**:
+    You can bind this script to a key in your window manager configuration (for example, in Qtile):
+    ```python
+    Key([mod], "f", lazy.spawn("/home/matias/.scripts/fzfmenu.sh"))
+    ```
 
 ---
 
-> [!TIP]
-> Currently, the script relies on standard input and output file descriptors pointing to `/proc/$$/fd/0` and `/proc/$$/fd/1`. Error handling for closed descriptors or invalid input might improve robustness. Additionally, consider incorporating a fallback or error notification for systems where `xterm` or `fzf` isn't available.
+> [!TIP]  
+> The script could be improved by handling cases where no arguments are provided, potentially giving the user a graceful exit or a default list to choose from. Additionally, consider adding help information that can be displayed when executed with `-h` or `--help`.

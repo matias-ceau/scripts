@@ -1,44 +1,52 @@
-# Pastel Help Script with Fuzzy Finder
+# Help Pastel Script
 
 ---
 
-**help-pastel.sh**: Enhances `pastel` command help with syntax highlighting and interactive selection.
+**help-pastel.sh**: A script to enhance the `pastel` command help display with capabilities for previewing.
 
 ---
 
 ### Dependencies
 
-- `pastel`: A color tool for shell that generates, analyzes, and transforms colors.
-- `ripgrep` (`rg`): A fast search tool that respects your `.gitignore`.
-- `bat`: A cat(1) clone with syntax highlighting and Git integration.
-- `fzf`: A command-line fuzzy finder.
-- `display_markdown`: A hypothetical utility to render markdown files to the console.
-- `curl`: A command-line tool for transferring data with URLs.
+- `pastel`: A command-line tool for working with colors, required to access the help and subcommands.
+- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory.
+- `cut`: A utility to remove sections from lines in files.
+- `bat`: A cat clone with syntax highlighting, used for pretty-printing.
+- `fzf`: A general-purpose command-line fuzzy finder, used for interactive selection.
+- `display_markdown.py`: A script to display markdown files, enhance the README preview.
 
 ### Description
 
-This script elevates the standard `pastel` help by integrating syntax highlighting and an interactive selection interface via `fzf`. It dynamically selects the help section starting from the 'SUBCOMMANDS' line and presents it with `bat` for enhanced readability. Further, it excludes certain lines with `rg` and prepares them for `fzf`.
+The `help-pastel.sh` script is designed to provide an interactive help interface for the `pastel` command. The script works by extracting the relevant help information from `pastel -h`, identifying the relevant section that lists its subcommands, and then allows you to view it interactively.
 
-Upon selection in `fzf`, it differentiates between command and README display based on whether "README" is in the selection. Commands invoke `pastel {subcommand} --help` with enriched presentation, while selecting "README" fetches and displays the remote README of `pastel` using `display_markdown`.
+Here’s a breakdown of the key functionality:
+
+1. **Line Extraction**: The script finds the line number in the `pastel` help output that marks the start of the subcommands section.
+2. **Displaying Help**: It displays a specific range of lines from the `pastel` help using `bat`, which enhances visibility with syntax highlighting.
+3. **README Integration**: It also integrates the `README.md` documentation into the display, allowing users to see supplementary information.
+4. **Interactive Selection**: By using `fzf`, users can interactively select a subcommand to view detailed help. The script employs a preview feature where if the selected command's help differs from the README, it shows the command's specific help information.
 
 ### Usage
 
-To run this script, execute it directly from the terminal:
+To run the script, simply execute it in the terminal:
 
-```sh
-~/.scripts/help-pastel.sh
+```bash
+bash /home/matias/.scripts/help-pastel.sh
 ```
 
-Usage involves selecting a command or "README" from the displayed list. Navigation and selection are managed via `fzf`:
+You can also create a keybinding in your Window Manager (qtile) to execute this script quickly. For example, you might set it to `Mod + H` in your qtile configuration.
 
-- Use `↑` and `↓` to navigate.
-- Press `Enter` to select a line and see the relevant information.
-  
-> _tldr_: Execute `help-pastel.sh` for an interactive `pastel` documentation experience.
+```python
+# Example keybinding in qtile config.py
+from libqtile import qtile
+from libqtile.config import Key
+
+keys = [
+    Key([mod], 'h', lazy.spawn('/home/matias/.scripts/help-pastel.sh')),
+]
+```
 
 ---
 
-> [!TIP]
-> - **Optimization**: Consider replacing `${line_number}:` with a direct pipeline to only focus on necessary lines.
-> - **Error Handling**: Add error checks for the availability of internet when accessing remote resources.
-> - **Portability**: The use of `bash` specific features limits portability to other systems using different shells. Consider using POSIX-compliant features where possible to increase compatibility.
+> [!TIP] 
+> Consider adding error handling to check if dependencies like `pastel` or `fzf` are installed before executing the script. Additionally, it could be helpful to add comments in the code for better maintainability, especially in the preview handling section. Furthermore, providing usage instructions directly inside the script as comments will greatly aid users who may not check the documentation.

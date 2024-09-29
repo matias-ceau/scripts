@@ -1,44 +1,57 @@
-# Token Counter Script
+# Count Tokens with Tiktoken
 
 ---
 
-**count_tokens_with_tiktoken.py**: This script counts the number of tokens in a file using the `tiktoken` library.
+**count_tokens_with_tiktoken.py**: A script to count tokens in a given text or file using Tiktoken.
 
 ---
 
 ### Dependencies
 
-- `tiktoken`: A Python library used to encode text for different models. Ensure it is installed in your Python environment. You can install it via pip:
-
-  ```bash
-  pip install tiktoken
-  ```
+- `tiktoken`: A Python library for counting tokens in text. Ensure it is installed via pip (`pip install tiktoken`).
 
 ### Description
 
-This Python script reads a file and calculates the number of tokens using the `tiktoken` library, specifically for the "gpt-4o" model. It reads the file content, encodes it into tokens, and then returns the count of these tokens.
+This script provides a straightforward way to count the number of tokens in a given text using the Tiktoken library. Tokens are crucial for understanding how models like GPT interpret input, and this script facilitates that by using different models to encode the input text.
 
-The script opens the specified file in UTF-8 encoding to ensure it reads various text formats correctly. The use of `tiktoken.encoding_for_model("gpt-4o")` suggests it is aligned with a specific model from OpenAI, which might be significant for processing text in styles or ranges that model supports.
+#### Key Functions:
+
+- **count_tokens(text, model)**: Encodes the provided text using the specified model to count the number of tokens.
+  
+- **get_options(arguments)**: Parses command-line arguments to determine if the user wants to input text directly, read from a file, or specify a token model.
+
+- **usage(exit_code)**: Displays the usage information for the script, including options for help, model selection, and file input.
+
+- **main(arg)**: Main execution flow that processes input and counts tokens, ultimately printing out the result.
 
 ### Usage
 
-To utilize this script, execute it with Python and provide a path to the file you want to analyze. It expects one command-line argument, which is the path to the file:
+To utilize the script effectively, you can run it with command-line arguments, or pipe the text input directly into it.
 
+#### Command-Line Examples:
+
+1. **Count tokens from standard input:**
+   ```bash
+   echo "Your text here" | ./count_tokens_with_tiktoken.py
+   ```
+
+2. **Count tokens from a specific file:**
+   ```bash
+   ./count_tokens_with_tiktoken.py -f path/to/your/file.txt
+   ```
+
+3. **Specify a model (default is `gpt-4o`):**
+   ```bash
+   ./count_tokens_with_tiktoken.py -m gpt-3.5-turbo -f path/to/your/file.txt
+   ```
+
+#### Help Option:
+For detailed usage information, run:
 ```bash
-python count_tokens_with_tiktoken.py <file_path>
+./count_tokens_with_tiktoken.py -h
 ```
-
-Replace `<file_path>` with the path to your target file. For example, to count tokens in `example.txt`, you would run:
-
-```bash
-python count_tokens_with_tiktoken.py example.txt
-```
-
-The output will be the number of tokens found in the specified file.
 
 ---
 
-> [!TIP]
-> - The script currently requires Python 3 environment with the `tiktoken` library installed. Consider checking for these dependencies within the script itself and providing a clear error message if they are missing.
-> - There is no error handling for file access issues, such as the file not existing or having permission denied errors. Consider wrapping file operations in a try-except block to handle exceptions gracefully and inform the user accordingly.
-> - The script currently only supports token counting for the model "gpt-4o". If support for additional models is desired, consider parameterizing the model selection to make the script more versatile.
+> [!TIP]  
+> While the script is functional, improvements could be made regarding error handling, especially when dealing with file inputs. For instance, you might want to handle cases where the file does not exist or cannot be opened. Additionally, consider adding support for multiple input files or richer output formatting to better inform users.

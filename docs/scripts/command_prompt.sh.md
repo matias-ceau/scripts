@@ -1,35 +1,44 @@
-# Command Prompt Script
+# Command Prompt Launcher
 
 ---
 
-**command_prompt.sh**: Launch a command with history suggestions for easier execution.
+**command_prompt.sh**: Launch a command with history suggestions
 
 ---
 
 ### Dependencies
 
-- `shell_history_info.sh`: A script that extracts and formats shell history entries. It should output history in a tabular form where the command is in the second field.
-- `improved-fzfmenu.sh`: An enhanced version of `fzf` for interactive filtering. It is used to present the list of commands in an interactive manner.
-- `cut`: A standard Unix command to remove sections from each line of files.
+- `shell_history_info.sh`: A script to retrieve the command history.
+- `improved-fzfmenu.sh`: A script that enhances command selection using fzf (fuzzy finder).
 
 ### Description
 
-This script assists in running previously executed commands by leveraging the shell's history. It fetches a list of previously run commands using the `shell_history_info.sh` and pipes this list into an improved fuzzy finder menu script, `improved-fzfmenu.sh`. The commands are sorted with the most recent ones displayed first due to the `--tac` option, which reverses the order of lines. The `--ansi` option is used to process and display colored entries correctly, assuming color codes might be present in the history output.
+This script provides a user-friendly interface for launching commands by suggesting previously used commands from the user's shell history. 
 
-`get_cmd` is a function that retrieves the command history formatted by `shell_history_info.sh`, and only the second field (the command itself) is considered. The `fzf_cmd` function takes this list and runs it through the menu script.
+- **get_cmd**: This function retrieves the command history via the `shell_history_info.sh` script and extracts just the command part using the `cut` command.
+- **fzf_cmd**: This function utilizes the `improved-fzfmenu.sh` script to present the command suggestions in a visual, interactive way using the fzf tool. The `--tac` flag reverses the input, allowing users to see the most recent commands at the top, and `--ansi` ensures that any color codes in the command suggestions are interpreted correctly.
+
+The combination of these functions allows for quick, efficient command selection without needing to type the entire command again.
 
 ### Usage
 
-The script can be executed directly from a terminal. It could be simplified to a command that could be bound to a keybinding within qtile or executed on startup in a terminal session:
+To use the script, simply run it in your terminal. You can directly execute it as follows:
 
 ```bash
-/home/matias/.scripts/command_prompt.sh
+bash /home/matias/.scripts/command_prompt.sh
 ```
 
-- Ensure `shell_history_info.sh` and `improved-fzfmenu.sh` are executable and in your PATH, or update the script to use absolute paths.
-- Once executed, an interactive menu will display your command history to select from.
+When invoked, the script will pull up a list of commands from your history. You can navigate through this interactive list using your keyboard, select a command, and press Enter to execute it.
+
+If you wish to assign this script to a keybinding in `qtile`, add the following line to your `config.py`:
+
+```python
+Key([mod], "p", lazy.spawn("/home/matias/.scripts/command_prompt.sh")),
+```
+
+This will bind the command selection launcher to the key combination defined by `mod + p`.
 
 ---
 
 > [!TIP]  
-> Consider checking the performance of the `shell_history_info.sh` and `improved-fzfmenu.sh` scripts since their efficiency heavily influences this script. Furthermore, handling scenarios where these dependencies might not return expected results could improve the robustness of your script.
+> The script could be enhanced by adding error handling for cases where the `shell_history_info.sh` script fails or if no commands exist in the history. Additionally, consider implementing a graceful exit mechanism if the user quits the fzf menu without selecting a command.

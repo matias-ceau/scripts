@@ -1,57 +1,53 @@
-# Sync Git Repository Script
+# Sync Git Repository
 
 ---
 
-**sync-repo.sh**: Script to synchronize a local git directory with its remote counterpart, utilizing color-coded output and optional formatting with external tools.
+**sync-repo.sh**: A Bash script to synchronize a Git repository efficiently.
 
 ---
 
 ### Dependencies
 
-- `bat`: Enhances syntax highlighting and formatting of command outputs.
-- `glow`: Renders markdown in the terminal for improved readability.
+- `bash`: The script is written in Bash.
+- `git`: Required for version control operations.
+- `bat`: A cat clone with syntax highlighting and Git integration (optional for prettier output).
+- `glow`: A terminal-based Markdown viewer (optional for formatted output).
 
 ### Description
 
-The `sync-repo.sh` script is designed for users on Arch Linux using qtile as their window manager. It automates the process of synchronizing local git repositories with their remote counterparts. The script does so through several sophisticated steps:
+This script automates the process of syncing a Git repository by integrating various Git commands while providing user-friendly output. 
 
-- It verifies the presence of dependencies (`bat` and `glow`) to enhance the output but gracefully warns the user if they are missing.
-  
-- Utilizes colored output to differentiate between commands, status messages, and errors, enhancing the readability of terminal sessions.
+Key features include:
 
-- Provides a comprehensive user experience by offering color-coded command lines with potential for error handling and conflict resolution.
-
-- Handles typical sync operations such as fetching, rebasing, stashing, committing, and pushing changes, while providing a mechanism to resolve conflicts via user selection.
+- **Color-coded output**: Uses ANSI escape sequences to colorize terminal messages.
+- **Prettified command output**: Uses `bat` to highlight commands for better readability.
+- **Conflict resolution assistance**: Prompts the user with options if a conflict occurs during rebase.
+- **Change summary**: Displays a summary of changes post-sync using `glow` for a more interactive experience.
+- **Error handling**: Implements robust error checks at various stages to ensure smooth execution.
 
 ### Usage
 
-To use the `sync-repo.sh` script, execute it from the terminal followed by the path to your local git repository:
+To use the script, execute the following command in your terminal:
 
 ```bash
 ./sync-repo.sh <repository_path>
 ```
 
-#### Examples
+Here are some examples:
 
-- Synchronizing when the script is in the `PATH` and the repository is in `~/.scripts`:
+```bash
+./sync-repo.sh ~/.scripts  # If in path
+./sync-repo.sh $SCRIPTS    # If variable is set
+git_sync $SCRIPTS          # If alias is set
+```
 
-  ```bash
-  sync-repo.sh ~/.scripts
-  ```
+### Additional Notes
 
-- Using an environment variable for the path:
-
-  ```bash
-  sync-repo.sh $SCRIPTS
-  ```
-
-- Using an alias (e.g., `git_sync`) set to simplify the command:
-
-  ```bash
-  git_sync $SCRIPTS
-  ```
+- The script runs various Git commands such as `fetch`, `pull`, `stash`, and `push` depending on the current repository state.
+- It handles potential changes by stashing local changes before attempting to pull and will apply stashed changes afterward.
+- A summary of commits and any changes made will be displayed at the end.
 
 ---
 
-> [!NOTE]
-> The script is robust and handles many common scenarios, such as missing directories or non-git repositories. However, consider adding logging capabilities to help troubleshoot failed operations or errors. Also, the script defaults to `vim` for conflict resolution (`${EDITOR:-vim}`), which might cause issues if `vim` is not installed or configured as default. Ensure compatibility with this editor or provide an option to customize it.
+> [!TIP]  
+> Consider including error messages that give more context about failures as they occur. Additionally, you might want to enhance the user experience by allowing options to sync multiple repositories in one go or logging the operations to a file for future reference.

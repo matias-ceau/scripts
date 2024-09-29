@@ -1,42 +1,45 @@
-# Open Terminal with Command
+# Floating Terminal Command Runner
 
 ---
 
-**terminal_with_command.sh**: Opens a floating terminal to run a specified command and view its output
+**terminal_with_command.sh**: Opens a floating terminal to run a command and see the output.
 
 ---
 
 ### Dependencies
 
-- `bash`: A Unix shell and command language.
-- `alacritty`: A fast, cross-platform, OpenGL terminal emulator. It must be installed on your system.
-- `setsid`: A Unix utility to run a program in a new session.
+- `alacritty`: A modern terminal emulator that is required to display the floating terminal window.
+- `bash`: The shell in which the command is executed.
 
 ### Description
 
-This script allows you to open a terminal window that runs a specified command immediately upon opening, providing instantaneous feedback in a floating window. It utilizes `alacritty` with specific flags to ensure the terminal appears as a floating window, as determined by the window manager (`qtile` in your case).
+The `terminal_with_command.sh` script allows users to open a floating terminal window that executes a specified command and displays its output. This can be particularly useful for running scripts or commands while maintaining visibility on other desktop applications, making multitasking efficient.
 
-The script checks the location of the command by using `which` and then launches it in an `alacritty` terminal instance with a custom title ("term_w_cmd") and a specific WM_CLASS attribute (`floating`). The specified command will be executed upon launching, and the terminal remains open for interaction.
+When the script is executed, it leverages the `which` command to locate the full path of the provided command argument. The script then utilizes `setsid` to start a new process group which helps in managing the terminal session independently. The terminal is launched using `alacritty`, with the title set to `term_w_cmd`, and categorized under the 'floating' class for appropriate window management.
+
+The command is executed in a bash shell, and after the command completes, it keeps the terminal open by executing `exec $SHELL`.
 
 ### Usage
 
-To execute the script, you'll need to pass the command you wish to run in the terminal as an argument. The script can be run directly from the terminal or bound to a keybinding in `qtile`.
+To use the script, you need to pass the command you want to run as an argument. Here's how you can do this:
 
-```bash
-./terminal_with_command.sh <your-command>
-```
+1. Make the script executable (if not already done):
+   ```bash
+   chmod +x /home/matias/.scripts/terminal_with_command.sh
+   ```
+   
+2. Run the script with the desired command:
+   ```bash
+   /home/matias/.scripts/terminal_with_command.sh <command>
+   ```
+   For example, to run the `htop` command in a floating terminal, you would use:
+   ```bash
+   /home/matias/.scripts/terminal_with_command.sh htop
+   ```
 
-**Example:**
-
-```bash
-./terminal_with_command.sh htop
-```
-
-This will open an `alacritty` window, floating over your existing windows, and execute `htop`.
-
-The script can be integrated into your `qtile` configuration as a custom shortcut for a seamless workflow.
+You can also bind this script to a key in your window manager (qtile) to access it more easily.
 
 ---
 
-> [!NOTE]
-> This script currently only supports commands that are in your PATH. If the command is not found, the script might fail silently. It might be worth adding a check to ensure the command exists, providing feedback if it does not. Additionally, adding more customization options (such as adjusting alacritty's size or position) could enhance its flexibility.
+> [!TIP]  
+> Consider including error handling in the script for cases when the command isn’t found or if `alacritty` isn't installed. This would greatly enhance user experience and prevent unexpected failures. Additionally, allowing multiple commands to be executed sequentially could provide more flexibility.

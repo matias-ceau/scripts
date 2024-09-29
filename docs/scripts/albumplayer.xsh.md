@@ -1,41 +1,51 @@
-# Album Player Script for cmus
+# Album Player Script
 
 ---
 
-**albumplayer.xsh**: Play a random selection of albums using cmus and dmenu
+**albumplayer.xsh**: Play an album using cmus
 
 ---
 
 ### Dependencies
 
-- `cmus`: A small, fast and powerful console music player.
-- `dmenu`: A fast and lightweight dynamic menu for X.
+- `cmus`: A lightweight and versatile audio player for the terminal.
+- `dmenu`: A dynamic menu for X, useful for user selection.
 
 ### Description
 
-This script allows you to play a random selection of albums using `cmus`. It utilizes the configuration file located at `~/.config/cmus/lib.pl`, which contains a list of music file paths. The script extracts album information from these paths, displays the albums using `dmenu`, and then generates a temporary playlist file that is played by `cmus`.
+The `albumplayer.xsh` script is crafted to enhance your music listening experience by allowing users to randomly play an album using `cmus`, a terminal-based audio player. It extracts available albums from a specified library file and presents them in a user-friendly manner using `dmenu`, enabling quick selection. 
 
-Key functionalities include:
-- Extracting unique album identifiers by parsing music paths.
-- Using `dmenu` to present a list of albums to the user for selection.
-- Creating a temporary `.m3u` playlist file that includes the selected album and a random selection from other albums.
-- Controlling `cmus` to play the generated playlist.
+The script begins by defining a temporary path for a playlist file within the `cmus` configuration directory:
+
+```python
+temp_path = os.path.expanduser('~/.config/cmus/.temp.m3u')
+```
+
+It collects album paths from the `lib.pl` file, eliminating duplicates and isolating album names. A dictionary (`fancy_dict`) is created for formatting, where album paths are mapped to display names, providing a nice output format with alignment and separators.
+
+Once the user selects an album via `dmenu`, the script constructs a playlist that includes the chosen album and random tracks from different albums. Finally, it writes this playlist to the temporary file and sends commands to `cmus` for execution:
+
+```bash
+cmus-remote -U
+cmus-remote -C "view 4"
+cmus-remote -C clear
+cmus-remote -Q
+cmus-remote -q @(temp_path)
+cmus-remote -p
+cmus-remote -n
+```
 
 ### Usage
 
-To run this script, you can execute it directly from your terminal or bind it to a key combination in your window manager (e.g., qtile). Ensure that `cmus` is running before executing the script. The script will bring up a `dmenu` interface to select the desired album.
+To use the `albumplayer.xsh` script, simply run it from your terminal:
 
-Example command:
-```sh
-./albumplayer.xsh
+```bash
+~/path/to/albumplayer.xsh
 ```
 
-You can also add this script to your qtile keybindings:
-```python
-Key([mod], "a", lazy.spawn("/home/matias/.scripts/albumplayer.xsh")),
-```
+Make sure you have `cmus` running before you execute the script. The script will utilize `dmenu` to allow you to select your desired album easily.
 
 ---
 
-> [!TIP]
-> The script assumes that `cmus` is already running. You might want to add a check to start `cmus` if it isn't running. Additionally, improving error handling and edge cases such as handling empty or malformed library files could be beneficial. Consider modularizing the code for better readability and maintainability.
+> [!TIP]  
+> The script could be improved by adding error handling in case the album paths aren't found or if `cmus` isn't running. Additionally, providing user feedback on what is happening when the script is executed would enhance usability, especially for those unfamiliar with the terminal environment.

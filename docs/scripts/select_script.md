@@ -1,46 +1,54 @@
-# Script Selector with Cache
+# Script Selection Utility
 
 ---
 
-**select_script**: Utility to select and execute scripts from cached data using `rofi`
+**select_script**: C program for selecting and executing scripts based on cached information.
 
 ---
 
 ### Dependencies
 
-- `rofi`: This script utilizes `rofi` as a dmenu replacement for script selection.
+- `rofi`: A window switcher, application launcher, and dmenu replacement. Required for displaying script options.
 
 ### Description
 
-The `select_script` utility is designed to help users select and execute scripts from a pre-cached list. It relies on a cache file located at `~/.cache/script_info.csv`, which contains details about available scripts including filenames and descriptions. 
+This script is a C program that helps users select and execute scripts from a predefined set of scripts stored in CSV format in a cache file. The program uses the `rofi` application to display a visually appealing menu for the user to pick a script.
 
-The script performs the following steps:
+The core functionality of the script is outlined as follows:
 
-1. **Load Cache**: Reads `~/.cache/script_info.csv` to load available scripts and their descriptions into memory.
-2. **User Interface**: Uses `rofi`, a window switcher application, to present the list of scripts in a user-friendly way. Each script is displayed with its description.
-3. **User Selection**: Users select their desired script through `rofi`. 
-4. **Execution**: The chosen script is executed from `~/.scripts/`.
+1. **Cache file handling**: The program loads script information (including file names and descriptions) from a cache file located in the user's `.cache` directory. The cache file is expected to be in CSV format with the first line as a header.
+   
+2. **Memory Management**: It utilizes dynamic memory allocation to accommodate varying numbers of scripts. Memory is allocated for each script loaded from the cache.
 
-This script is particularly useful in environments where managing and executing a variety of scripts is frequent, providing a streamlined interface for managing these tasks.
+3. **Rofi Interface**: The user interface is handled using `rofi`, which presents the list of available scripts to the user in a menu-like format.
+
+4. **Execution of Selected Script**: Once the user makes a selection, the program attempts to execute the chosen script from the specified scripts directory.
 
 ### Usage
 
-Ensure the cache (`~/.cache/script_info.csv`) is correctly populated with scripts data. The format typically involves commna-separated values representing script metadata.
+To utilize the `select_script`, follow these steps:
 
-To execute the script:
+1. Ensure that `rofi` is installed on your system.
+2. Create a CSV file in the `~/.cache/script_info.csv` directory with the following structure:
+   ```
+   file,property1,property2,...,description
+   script1.sh,,,,"This is script 1"
+   script2.sh,,,,"This is script 2"
+   ```
 
-```bash
-./select_script
-```
+3. Compile the script:
+   ```bash
+   gcc -o select_script /home/matias/.scripts/bin/select_script.c
+   ```
 
-You can assign this script to a custom keybinding in your qtile configuration to quickly invoke the script selector when needed. 
+4. Execute the script:
+   ```bash
+   ~/path/to/select_script
+   ```
 
-Example of running the script manually:
-
-```
-$ /home/matias/.scripts/bin/select_script
-```
+5. A `rofi` menu will appear, displaying the available scripts. Select one and press Enter to execute it.
 
 ---
 
-> [!NOTE] The script assumes the cache file `~/.cache/script_info.csv` is always available and contains valid data. Error handling for missing or malformed cache files could be improved. Additionally, executing scripts might fail if they are not marked as executable or if their paths are incorrect, so verifying script permissions and paths could be a useful enhancement.
+> [!TIP]  
+> Consider adding more robust error handling, particularly when dealing with the CSV parsing to prevent crashes from improperly formatted data. Additionally, you might want to implement logging capabilities or add user feedback for no available scripts.

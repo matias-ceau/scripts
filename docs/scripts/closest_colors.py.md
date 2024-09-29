@@ -1,44 +1,59 @@
-# Closest Colors Script
+# Closest Colors Finder
 
 ---
 
-**closest_colors.py**: Find the closest ANSI color to a set of target colors.
+**closest_colors.py**: Find and compare the closest ANSI colors based on hexadecimal input.
 
 ---
 
 ### Dependencies
 
-- `python`: The script requires Python to be executed.
-- `sys`: Module for accepting command-line arguments.
+- `python`: A Python interpreter to run the script.
 
 ### Description
 
-This script is designed to find the closest matching color from a pre-defined list of ANSI colors to any hex colors specified in an input file. It leverages basic color conversion and distance calculation techniques. 
+The **closest_colors.py** script is designed to help users find the closest ANSI colors based on a given list of hexadecimal color values. It achieves this by converting hex colors to their RGB equivalent and calculating the distance between colors using the Euclidean method in an RGB space.
 
-The core functionality revolves around:
-- **`hex_to_rgb`**: Converts a hexadecimal color code to its RGB counterpart.
-- **`color_distance`**: Computes the distance between two RGB colors using Euclidean distance.
-- **`find_closest_color`**: Determines the closest ANSI color by comparing distances between the target color and each possible ANSI color.
+#### Key Functions:
 
-The script reads a list of desired colors from `file1`. Optionally, it reads possible matching colors from `file2`. If `file2` isn't provided, a default ANSI color list is used. The results are displayed with an ANSI escape code showing the original and closest matched colors visually in the terminal.
+- `hex_to_rgb(hex_color)`: Converts a hexadecimal color string to an RGB tuple.
+- `color_distance(c1, c2)`: Computes the distance between two RGB colors.
+- `find_closest_color(target_color, possible_colors)`: Determines the closest available ANSI color to the given target color from a list.
+
+The main logic of the script reads color values from a specified file (or uses a default set of ANSI colors) and identifies the nearest matching ANSI color for each desired color, outputting both the original color and its closest counterpart in a formatted manner.
 
 ### Usage
 
-To run the script, ensure that you have Python installed on your system (Arch Linux) and use the following command:
+The script can be run from the command line and accepts two arguments:
 
-```bash
-python /home/matias/.scripts/closest_colors.py <file1> [file2]
+1. **file1**: A text file containing the target hex color values, one per line.
+2. **file2** (optional): A second text file containing possible ANSI colors in hex format. If not provided, a default color set is used.
+
+To run the script, use the following command:
+
+```
+python closest_colors.py <file1> [<file2>]
 ```
 
-- **`<file1>`**: Path to the file containing the hex-color codes you wish to analyze.
-- **`[file2]`**: (Optional) File containing the list of potential colors; defaults to a built-in ANSI list if omitted.
+#### Example:
 
-Example:
-```bash
-python /home/matias/.scripts/closest_colors.py colors_to_check.txt
+Assuming you have a `colors.txt` file with the following content:
+
 ```
+#FF5733
+#33FF57
+#3357FF
+```
+
+You would run the script like this:
+
+```
+python closest_colors.py colors.txt
+```
+
+The script will output each color from `colors.txt`, its corresponding nearest ANSI color along with the ANSI color code, formatted visually.
 
 ---
 
-> [!TIP]
-> The script currently lacks proper error handling for invalid hex codes or file read errors. It could benefit from adding more robust exception handling to deal with potential issues like malformed input data or missing files. Moreover, improving the user feedback with a clearer usage guide would enhance usability.
+> [!TIP]  
+> While the script is functional, consider adding input validation to handle invalid hex color formats and improve error handling for file operations. Additionally, a usage example can be included in the output message for user training.

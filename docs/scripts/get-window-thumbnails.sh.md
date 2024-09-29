@@ -1,40 +1,43 @@
-# Get Window Thumbnails Script
+# Get Window Thumbnails
 
 ---
 
-**get-window-thumbnails.sh**: Captures and resizes screenshots of open windows on your desktop.
+**get-window-thumbnails.sh**: Script to capture and resize screenshots of all open windows.
 
 ---
 
 ### Dependencies
 
-- `wmctrl`: Used to list window IDs.
-- `xwininfo`: Used to gather window information, specifically the window names.
-- `xdotool`: Used to map and unmap windows, making them visible for screenshots.
-- `import`: A utility from ImageMagick suite, used for capturing window screenshots.
-- `mogrify`: Also from ImageMagick, used for resizing the screenshots to thumbnails.
+- `wmctrl`: A command line tool to interact with an X Window Manager.
+- `xdotool`: Tool for simulating keyboard input and mouse activity, and for window management.
+- `ImageMagick`: A software suite to create, edit, and compose bitmap images, here used for resizing.
 
 ### Description
 
-The **get-window-thumbnails.sh** script automates the process of capturing and resizing thumbnails of every window currently open in your desktop environment (Qtile on Arch Linux). The script first creates a directory called `window_screenshots` in your home directory to store these images. It uses `wmctrl` to retrieve the IDs of all open windows and iterates over each to perform the following sequences:
+This script automates the process of capturing thumbnails of all open windows on an Arch Linux system running the Qtile window manager. It does so by using a combination of tools that interact with the X Window System to display, capture, and manipulate window content.
 
-1. Retrieves the window name using `xwininfo` and formats it to ensure it is a valid filename.
-2. Ensures the window is visible using `xdotool windowmap`.
-3. Takes a screenshot of the window with the `import` command.
-4. Then, hides the window again using `xdotool windowunmap`.
-5. Finally, resizes the screenshot to 200x200 pixels and saves it in the specified directory using `mogrify`.
+1. **Directory Creation**: It starts by creating a directory (`$HOME/window_screenshots`) to store the screenshots.
+2. **Window Enumeration**: Retrieves all window IDs using `wmctrl`, which lists windows controlled by the window manager.
+3. **Window Management**:
+    - The script iterates over the list of window IDs.
+    - For each window:
+        - It unmapped (brings to the foreground) the window using `xdotool` to ensure it is visible on the screen.
+        - A brief pause (`sleep 0.2`) is introduced to allow the window to render completely before taking a screenshot.
+        - The `import` command from ImageMagick captures the window as a PNG and stores it in the previously created directory, appending the window name and ID to the filename.
+        - Finally, it remaps the window back to its original state (hides it).
+4. **Thumbnail Creation**: The captured images are then resized to 200x200 pixels using `mogrify` to create smaller thumbnails for quick access.
 
 ### Usage
 
-You can run this script interactively from a terminal to capture and create thumbnails of the windows:
+To run the script, simply execute it in a terminal:
 
 ```bash
 bash /home/matias/.scripts/dev/get-window-thumbnails.sh
 ```
 
-To make this script even more convenient, consider assigning it to a keybinding in Qtile or setting it to run periodically using a cron job.
+You can also bind this script to a key in your Qtile configuration file to quickly take screenshots whenever needed.
 
 ---
 
-> [!TIP]
-> Be aware that the script could potentially reveal contents of minimized windows which might contain sensitive information. Using sleep durations could be adjusted if certain windows do not render correctly before screenshot capture. Furthermore, localizing dependencies like `import` and `mogrify` requires ImageMagick, so make sure it's installed on your system. Additionally, consider error handling for cases where windows may be unresponsive or the external commands are unavailable.
+> [!TIP] 
+Consider adding error handling in the script. For instance, checking if the dependencies are installed before execution, or verifying if the screenshot was captured successfully. This will improve the robustness of your script and help you troubleshoot issues effectively.

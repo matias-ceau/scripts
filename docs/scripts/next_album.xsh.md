@@ -1,36 +1,49 @@
-# Next Album Skip
+# Next Album Script for Cmus
 
 ---
 
-**next_album.xsh**: A script to skip to the next album in `cmus`
+**next_album.xsh**: Skip to the next album in the Cmus music player.
 
 ---
 
 ### Dependencies
 
-- `cmus`: A lightweight, console-based music player that this script interfaces with.
-- `xonsh`: A Python-powered shell used to run the script.
+- `cmus` - A small and fast music player for Unix-like operating systems.
+- `xonsh` - A Python-powered shell that brings the best of all shells and programming languages together.
 
 ### Description
 
-The `next_album.xsh` script is designed for use with `cmus`, a terminal-based music player. This script is written in `xonsh`, a shell combining Python with shell language aspects.
+The `next_album.xsh` script allows users to skip to the next album while using the `cmus` music player. It leverages the `cmus-remote` command to achieve this functionality.
 
-The primary functionality of this script is to skip to the next album in the current playlist. It first sets the view to '4', which corresponds to the playlist view in `cmus`, and saves the current playlist to a temporary `.m3u` file. The file is read, and each track's directory path is parsed to identify albums. 
+Here’s a step-by-step breakdown of how the script functions:
 
-The script compares the current album playing (retrieved through `cmus-remote -Q`) against the list of albums identified in the playlist. Once it finds an album that differs from the current one, it uses `cmus-remote -n` to skip tracks until the first track of the next album is reached.
+1. The script begins by executing the command `cmus-remote -C 'view 4'`, which sets the view in `cmus` to the album view.
+2. It saves the currently playing playlist to a temporary M3U file located at `/home/matias/.temp/now_playing.m3u`.
+3. The script reads the contents of the `now_playing.m3u` file and constructs a list called `now`, filtering out any empty lines.
+4. It extracts the album names from the file paths into a list called `albums`.
+5. The current album is identified using `cmus-remote -Q`, which queries the current status of `cmus`.
+6. The script then iterates through the `albums` list and counts how many albums precede the current one.
+7. Finally, it skips to the next album by executing `cmus-remote -n` for as many times as counted.
 
 ### Usage
 
-To use this script, ensure you have `cmus` and `xonsh` installed and are running. The script can be executed from a terminal. It can be associated with a key binding in your `qtile` window manager or executed automatically. 
+To execute the script, simply run it in your terminal. Make sure you have `cmus` open and music is playing. Here’s how to invoke it:
 
-```shell
-xonsh /home/matias/.scripts/next_album.xsh
+```bash
+/home/matias/.scripts/next_album.xsh
 ```
 
-For convenience, consider mapping this script to a key binding within `qtile` for quick access during playback.
+You might also consider assigning it to a keybinding in your Window Manager (e.g., `qtile`) to have quicker access. 
+
+For example, you can add a keybinding in your `qtile` configuration file:
+
+```python
+Key([mod], "n", lazy.spawn("/home/matias/.scripts/next_album.xsh")),
+```
+
+This command will allow you to skip to the next album by pressing `mod + n`.
 
 ---
 
-> [!NOTE]
-> The script assumes that the tracks in the playlist are ordered by album. If modifications occur in the playlist structure, behavior might be erratic.
-> A potential improvement could be handling exceptions in cases where files or directories aren't found, or when `cmus` isn't running. Moreover, storing paths or configurations in the script is inflexible; consider using environment variables or configuration files to make paths more adaptable.
+> [!TIP]  
+> Consider implementing error handling to manage situations where `cmus` is not running or if the temporary file access fails. This would improve the robustness of your script. Additionally, consider allowing customization of the path for the temporary M3U file to make it more flexible for users with different directory structures.

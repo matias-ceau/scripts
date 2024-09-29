@@ -1,46 +1,43 @@
-# List Running Services Script
+# List Running Services
 
 ---
 
-**list_process.sh**: This script lists all running system services in a sorted order.
+**list_process.sh**: A script to list all running services using systemd.
 
 ---
 
 ### Dependencies
 
-- `systemctl`: A command-line utility to examine and control the systemd system and service manager.
-- `sort`: A command-line utility used to sort lines of text.
+- `systemctl`: The command-line tool to examine and control the systemd system and service manager.
 
 ### Description
 
-This script is intended for listing all system services on an Arch Linux system that are managed by `systemd`. It utilizes `systemctl list-units` to display the services, and it is executed with specific flags to format the output:
+This script utilizes `systemctl` to list currently running services on a system that employs the systemd initialization system, which is common across many Linux distributions, including Arch Linux. The command `systemctl list-units --type=service` retrieves all available service units, while the flags used in the command enhance its usability:
 
-- `--type=service`: Filters the units to include only services.
-- `--all`: Shows all loaded units regardless of their state.
-- `--no-pager`: Disables paging, allowing you to see the full output at once.
-- `--no-legend`: Removes the column headers for cleaner output, useful for scripting.
-- The output is then piped to `sort -k4`, which sorts the lines based on the fourth field, typically the status.
+- `--all`: Displays all service units, including those that are not currently loaded.
+- `--no-pager`: Prevents output from being paginated, allowing you to see the full list in one go.
+- `--no-legend`: Omits the header information from the output for cleaner results.
 
-This script is especially useful for managing and auditing services within a Unix-like environment, providing a quick way to check the statuses and details of currently loaded service units.
+Finally, `sort -k4` sorts the output based on the fourth column, which typically contains the status of the services, making it easier to read and analyze the state of each service.
 
 ### Usage
 
-To execute this script, open a terminal and navigate to the directory containing the script. You can run it using the following command:
+To use the script, simply ensure it has executable permissions and run it from the terminal:
 
-```sh
-sh /home/matias/.scripts/list_process.sh
-```
-
-Ensure that the script has executable permissions if you want to execute it directly:
-
-```sh
+```bash
 chmod +x /home/matias/.scripts/list_process.sh
-./home/matias/.scripts/list_process.sh
+/home/matias/.scripts/list_process.sh
 ```
 
-This script can be set up as a keybinding in qtile for quick access or run from terminal sessions.
+You can also create a keybinding in your window manager (qtile) to execute this script quickly. For example, you can add the following in your `config.py`:
+
+```python
+Key([mod], "l", lazy.spawn("/home/matias/.scripts/list_process.sh")),
+```
+
+This will allow you to list services by pressing the appropriate key combination (e.g., mod + l).
 
 ---
 
-> [!NOTE]  
-> An improvement could be the inclusion of additional information or context for the user, such as displaying only active services or including headers for more clarity. Additionally, more sorting options could be beneficial for users wanting different views of their service statuses.
+> [!TIP]  
+> While this script efficiently lists services, consider implementing additional features like filtering services based on their status (active, inactive, etc.) or redirecting output to a file for later analysis. This could enhance its usability, especially when managing numerous services.

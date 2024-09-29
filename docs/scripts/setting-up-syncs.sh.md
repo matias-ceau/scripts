@@ -1,47 +1,51 @@
-# Automated Mega Sync Setup
+# Setting Up Syncs
 
 ---
 
-**setting-up-syncs.sh**: Automates syncing of various directories to a Mega backup location based on the hostname.
+**setting-up-syncs.sh**: A script to synchronize directories with a MEGA cloud storage backup.
 
 ---
 
 ### Dependencies
 
-- `mega-sync`: This script relies on the `mega-sync` command, which is presumably used to synchronize local directories with a Mega cloud storage account. Ensure `mega-sync` is installed and properly configured on your system.
+- `mega-sync`: A command-line utility to synchronize files and folders with MEGA.nz cloud storage. Ensure it is installed and properly configured to use this script.
 
 ### Description
 
-This script is designed to facilitate automated syncing of user directories to specific backup locations on a Mega cloud storage service. It intelligently determines the backup paths based on the machine's hostname using `hostnamectl`. 
+This script automates the synchronization of important user directories to a specified backup location on your MEGA cloud storage. It identifies the hostname of the machine using `hostnamectl` and creates backup paths accordingly. 
 
-The script categorizes the directories into:
-- Standard XDG directories such as Desktop, Downloads, and more.
-- A specific "Notes" directory located at `$HOME/PKM`.
-- Additional directories are conditionally synced depending on whether the hostname is `karhu` or `karjala`. For instance, `karhu` synchronizes the `UnifiedLibrary`, while `karjala` handles larger media files.
+The script starts by syncing the common XDG directories that typically include user data, such as:
 
-This enables seamless and automated backup configurations tailored to machine-specific setups.
+- Desktop
+- Downloads
+- Templates
+- Share
+- Documents
+- Music
+- Pictures
+- Videos
+
+In addition, it creates a dedicated synchronization for the "PKM" folder, which is likely a personal knowledge management folder.
+
+The script also includes conditional logic based on the hostname. If the hostname is `karhu`, it syncs additional directories such as `UnifiedLibrary`, a media sharing folder, and specific directories tied to the device. Similarly, for the hostname `karjala`, it syncs other significant folders including larger media files and various device access points.
 
 ### Usage
 
-Ensure this script has execution permissions. Run the script from the terminal using the following command:
-```bash
-bash /home/matias/.scripts/setting-up-syncs.sh
-```
+To use this script, ensure it has executable permissions and run it in the terminal. Here are the steps to get it running:
 
-To run the script automatically, consider adding it to your startup applications in qtile or setting up a cron job.
+1. Make the script executable:
+   ```bash
+   chmod +x /home/matias/.scripts/setting-up-syncs.sh
+   ```
 
-Example cron job, run every night at 2am:
-```cron
-0 2 * * * /home/matias/.scripts/setting-up-syncs.sh
-```
+2. Execute the script:
+   ```bash
+   /home/matias/.scripts/setting-up-syncs.sh
+   ```
 
-This script can also be triggered by keybindings in qtile if interactive manual execution is required.
+This script is best run periodically, either through a manual execution or scheduled with a cron job.
 
 ---
 
-> [!TIP]
-> 
-> - Make sure `mega-sync` is properly configured with authenticated access to your Mega account. 
-> - It’s recommended to handle errors or logs in the script to diagnose any synchronization issues easily. Currently, it executes `mega-sync` commands without verifying their success or failure.
-> - Consider implementing checksum or timestamp logic before syncing to avoid unnecessary data transfer, which could potentially optimize the synchronization process.
-> - Plan for the uncommented `TODO` items to ensure they do not impede the backup process inadvertently.
+> [!TIP]  
+> The script assumes that the local directories exist. It would be beneficial to add checks to ensure directories are present before attempting to sync, which would prevent possible errors during execution. Additionally, you might consider logging the output of the sync operations for easier troubleshooting.
