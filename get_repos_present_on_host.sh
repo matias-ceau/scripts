@@ -2,12 +2,12 @@
 
 # Ensure the required environment variables are set
 if [ -z "$GIT_REPOS" ] || [ -z "$LOCALDATA" ]; then
-  echo "GIT_REPOS and LOCALDATA environment variables must be set."
-  exit 1
+    echo "GIT_REPOS and LOCALDATA environment variables must be set."
+    exit 1
 fi
 
 # Get the hostname
-HOSTNAME=$(hostname)
+HOSTNAME=$(hostnamectl hostname)
 
 # Define the output file paths
 OUTPUT_FILE="$LOCALDATA/docs/git_repos/${HOSTNAME}-repos.txt"
