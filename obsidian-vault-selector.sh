@@ -18,7 +18,7 @@ preview_cmd() {
 open_vault() {
     if [ -n "$1" ]; then
         vault_name="$(echo "$1" | awk -F/ '{print $(NF)}')"
-        cmd="obsidian obsidian://open?vault=$1"
+        cmd="obsidian obsidian://open?vault=$vault_name"
         setsid bash -c "$cmd" &
     else
         notify-send "Obsidian Vault Selector" "No vault selected!"

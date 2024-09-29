@@ -1,4 +1,3 @@
-{
   "albumplayer.xsh": {
     "file": "albumplayer.xsh",
     "path": "albumplayer.xsh",
@@ -600,5 +599,103 @@
     "description": "A utility script to find scripts without inline documentation within a specified directory.",
     "doc_path": "docs/scripts/you_are_not_documented.sh.md",
     "hash": "86e083c3282edc4e34b1a0e876575f39583c7ce34cde832ea57e54b9c429cd56"
+  },
+  "fix-markdown-links.sh": {
+    "file": "fix-markdown-links.sh",
+    "path": "fix-markdown-links.sh",
+    "description": "A script to fix relative links in Markdown files.",
+    "doc_path": "docs/scripts/fix-markdown-links.sh.md",
+    "hash": "6aa54826672ca92d456ee5376357afe67ff284471e51785c1e5f94c9174db8b5"
+  },
+  "new_script_creator.sh": {
+    "file": "new_script_creator.sh",
+    "path": "new_script_creator.sh",
+    "description": "A simple script to create new scripts with directory linking",
+    "doc_path": "docs/scripts/new_script_creator.sh.md",
+    "hash": "265db232ae9d951ff9371fce47f70316bcde46a5d0250c8fdec8a38ba4c88394"
+  },
+  "flexoki_show.sh": {
+    "file": "flexoki_show.sh",
+    "path": "flexoki_show.sh",
+    "description": "Generate a color palette with hex, RGB values, and names for quick reference.",
+    "doc_path": "docs/scripts/flexoki_show.sh.md",
+    "hash": "af13df7cb3217f006e2a36b2d8fdc7131e8313b0711c1f4cea6c54f04f27eddc"
+  },
+  "quick-pass.sh": {
+    "file": "quick-pass.sh",
+    "path": "quick-pass.sh",
+    "description": "Quickly select a password from your password store using fzf.",
+    "doc_path": "docs/scripts/quick-pass.sh.md",
+    "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
+  },
+  "megaignore_editor.sh": {
+    "file": "megaignore_editor.sh",
+    "path": "megaignore_editor.sh",
+    "description": "A bash script for editing and managing .megaignore files interactively",
+    "doc_path": "docs/scripts/megaignore_editor.sh.md",
+    "hash": "685075c0aa2bfec0b4e2d290543b8e92e5a028ddc6746e23ce6762eaef1c6c33"
+  },
+  "setting-up-syncs.sh": {
+    "file": "setting-up-syncs.sh",
+    "path": "setting-up-syncs.sh",
+    "description": "Automates syncing of user directories to a backup location.",
+    "doc_path": "docs/scripts/setting-up-syncs.sh.md",
+    "hash": "6aad513a56c239832ea0e55d5e8ef20bc8e901c5073e2e7e7fa40e38c6945970"
+  },
+  "grub-tune-to-audio-python.py": {
+    "file": "grub-tune-to-audio-python.py",
+    "path": "grub-tune-to-audio-python.py",
+    "description": "Converts GRUB_INIT_TUNE strings into audio files.",
+    "doc_path": "docs/scripts/grub-tune-to-audio-python.py.md",
+    "hash": "373c4b6b30054ef2c6c703bef4facf5cbb42c5b029320253941e5fbaeaa2dcf1"
+  },
+  "install_dependencies.sh": {
+    "file": "install_dependencies.sh",
+    "path": "install_dependencies.sh",
+    "description": "Installs essential development and productivity tools on Arch Linux",
+    "doc_path": "docs/scripts/install_dependencies.sh.md",
+    "hash": "358eedb7ddfc5782dd201261f16edc27dbf82ac129124b8462870da83d1ba6cf"
+  },
+  "megacmd_launch_tmux.sh": {
+    "file": "megacmd_launch_tmux.sh",
+    "path": "megacmd_launch_tmux.sh",
+    "description": "Launches the MEGA command line interface in a new tmux session.",
+    "doc_path": "docs/scripts/megacmd_launch_tmux.sh.md",
+    "hash": "ce8895fffb7a381655495efa1415e582a452c5a8b6ec1a1224ed8ab78f6cb9c0"
+  },
+  "nvim_in_new_terminal.sh": {
+    "file": "nvim_in_new_terminal.sh",
+    "path": "nvim_in_new_terminal.sh",
+    "description": "Opens a floating terminal to edit a file with nvim",
+    "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
+    "hash": "f946fcb565c014cfb35a72ad242188c05e9b670a9af58a75cc26b4f1416fbf72"
+  },
+  "obsidian-vault-selector.sh": {
+    "file": "obsidian-vault-selector.sh",
+    "path": "obsidian-vault-selector.sh",
+    "description": "Script to select and open an Obsidian vault from a directory.",
+    "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
+    "hash": "44c382ae3dcd218b967b608409b0b917efd0006a12bab0e320a1b2a15fb61705"
+  },
+  "terminal_with_command.sh": {
+    "file": "terminal_with_command.sh",
+    "path": "terminal_with_command.sh",
+    "description": "Opens a floating terminal to run a command and see the output.",
+    "doc_path": "docs/scripts/terminal_with_command.sh.md",
+    "hash": "ba118ae82bc92d126957d2ea3d4226611e9b4862ddf8c2f6862da36f2e8003b7"
+  },
+  "read_the_fucking_manual.sh": {
+    "file": "read_the_fucking_manual.sh",
+    "path": "read_the_fucking_manual.sh",
+    "description": "A script to display the most researched manual entries based on history.",
+    "doc_path": "docs/scripts/read_the_fucking_manual.sh.md",
+    "hash": "154e6527fda3f47f97034a2a5bad2df971e16fb393b423be0b00cbecc9a6c7de"
+  },
+  "shell_history_info.sh": {
+    "file": "shell_history_info.sh",
+    "path": "shell_history_info.sh",
+    "description": "Retrieve frequency data from shell history files.",
+    "doc_path": "docs/scripts/shell_history_info.sh.md",
+    "hash": "b1e6d5c21f3ad3060a3e746200ce447f13f03eae37567a965d6002b9c051d0b0"
   }
 }

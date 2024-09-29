@@ -13,6 +13,7 @@
 - [display_markdown.py](scripts/display_markdown.py.md) -- *Script to display markdown files using the Rich library with customizable styles and width.*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to display executable scripts and run selected ones.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
+<<<<<<< Updated upstream
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to browse and edit Chezmoi-managed files with optional synchronization*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to interactively edit and apply Chezmoi configuration files.*
 - [editor.sh](scripts/editor.sh.md) -- *Script to rapidly edit files using `fzf` for search and `nvim` for editing, suitable for various directory contexts.*
@@ -66,6 +67,43 @@
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Selects and sets a random wallpaper from a specified folder for use with `feh`.*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *Script to retrieve the most searched manual entries using `man` or `batman`.*
 - [rgfzf.sh](scripts/rgfzf.sh.md) -- *Integrate `ripgrep` and `fzf` to search text and open files in `vim`*
+=======
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Launches fzf to edit Chezmoi managed config files with previews.*
+- [editor.sh](scripts/editor.sh.md) -- *A script to edit files in the current folder or its subfolders using fzf.*
+- [fix-markdown-links.sh](cripts/fix-markdown-links.sh.md) -- *A script to fix relative links in Markdown files.*
+- [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Generate a color palette with hex, RGB values, and names for quick reference.*
+- [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose and play an album using fzf and cmus*
+- [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *Launches fzf in an xterm window using provided arguments.*
+- [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A script to replace Dmenu with fzf for enhanced run functionality.*
+- [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list git repositories on the local host and save to files.*
+- [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *A script to clone git repositories based on developer/package name using various options.*
+- [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Converts GRUB_INIT_TUNE strings into audio files.*
+- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A script to enhance fzf integration with Alacritty terminal*
+- [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs essential development and productivity tools on Arch Linux*
+- [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *A script to create and open a new Jupyter notebook in Chromium*
+- [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a tmux session for running cmus*
+- [list_process.sh](scripts/list_process.sh.md) -- *Script to list all running services on the system in sorted order.*
+- [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automates script documentation generation using Llama 3.1*
+- [llm-script-describer.py](cripts/llm-script-describer.py.md) -- *Generates markdown documentation for user scripts using GPT-4.*
+- [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Generate an M3U playlist file from the current directory files.*
+- [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to copy music to Mechen*
+- [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches the MEGA command line interface in a new tmux session.*
+- [megaignore_editor.sh](scripts/megaignore_editor.sh.md) -- *A bash script for editing and managing .megaignore files interactively*
+- [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard/script launcher*
+- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A simple script to create new scripts with directory linking*
+- [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album in CMUS audio player*
+- [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with nvim*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to select and open an Obsidian vault from a directory.*
+- [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault from a user-defined directory*
+- [pdfopener.sh](scripts/pdfopener.sh.md) -- *A script to pick and open a PDF file using Evince*
+- [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing playlists in cmus with dmenu.*
+- [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomly selects and plays a playlist of albums in cmus.*
+- [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A tool to reduce color depth in PPM images based on a given palette.*
+- [quick-pass.sh](scripts/quick-pass.sh.md) -- *Quickly select a password from your password store using fzf.*
+- [random_album.xsh](scripts/random_album.xsh.md) -- *Select random album and play it with cmus*
+- [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Pick a random wallpaper from a specified folder.*
+- [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *A script to display the most researched manual entries based on history.*
+>>>>>>> Stashed changes
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Python script to transfer music to a Sandisk media player from a local library.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Transfers music files to a Sandisk media player while managing storage capacity and file formats.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Launch and manage scripts via an interactive fzf interface, with source and documentation preview capabilities.*
