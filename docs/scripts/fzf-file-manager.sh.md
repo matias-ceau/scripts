@@ -2,7 +2,7 @@
 
 ---
 
-**fzf-file-manager.sh**: A Bash script using `fzf` and `eza` for enhanced file management.
+**fzf-file-manager.sh**: A file manager script utilizing `fzf` for efficient file navigation.
 
 ---
 

@@ -2,56 +2,50 @@
 
 ---
 
-**count_tokens_with_tiktoken.py**: A script to count tokens in a given text or file using Tiktoken.
+**count_tokens_with_tiktoken.py**: Script to count the number of tokens in a text using the Tiktoken library.
 
 ---
 
 ### Dependencies
 
-- `tiktoken`: A Python library for counting tokens in text. Ensure it is installed via pip (`pip install tiktoken`).
+- `tiktoken`: A library for tokenizing text, particularly useful for pre-processing text for models like GPT. Make sure to install it via pip or your package manager.
 
 ### Description
 
-This script provides a straightforward way to count the number of tokens in a given text using the Tiktoken library. Tokens are crucial for understanding how models like GPT interpret input, and this script facilitates that by using different models to encode the input text.
+This script is designed to count the number of tokens in a given text according to the specific model you choose. It utilizes the `tiktoken` library to perform the encoding, which converts the input text into tokens. The script can operate on text provided via standard input, a file, or a hard-coded string, making it versatile for different use cases.
 
-#### Key Functions:
+The core functionalities of the script include:
 
-- **count_tokens(text, model)**: Encodes the provided text using the specified model to count the number of tokens.
-  
-- **get_options(arguments)**: Parses command-line arguments to determine if the user wants to input text directly, read from a file, or specify a token model.
-
-- **usage(exit_code)**: Displays the usage information for the script, including options for help, model selection, and file input.
-
-- **main(arg)**: Main execution flow that processes input and counts tokens, ultimately printing out the result.
+- **count_tokens(text, model)**: This function takes a string of text and a model name, retrieves the appropriate encoding, and returns the count of tokens for that text.
+- **get_options(arguments)**: This function processes command-line arguments to fetch the text input from either a file or standard input and allows the user to specify the model being used.
+- **usage(exit_code)**: It prints the help message with usage instructions and exits the program.
+- **main(arg)**: This function orchestrates the script's flow, handling input and output.
 
 ### Usage
 
-To utilize the script effectively, you can run it with command-line arguments, or pipe the text input directly into it.
+You can use the script interactively in the terminal or through piping. Here's how you can use it:
 
-#### Command-Line Examples:
-
-1. **Count tokens from standard input:**
+1. To count tokens from standard input:
    ```bash
-   echo "Your text here" | ./count_tokens_with_tiktoken.py
+   echo "Your text goes here" | ./count_tokens_with_tiktoken.py
    ```
 
-2. **Count tokens from a specific file:**
+2. To count tokens from a file:
    ```bash
-   ./count_tokens_with_tiktoken.py -f path/to/your/file.txt
+   ./count_tokens_with_tiktoken.py -f /path/to/your/file.txt
    ```
 
-3. **Specify a model (default is `gpt-4o`):**
+3. To specify a different model:
    ```bash
-   ./count_tokens_with_tiktoken.py -m gpt-3.5-turbo -f path/to/your/file.txt
+   echo "Your text goes here" | ./count_tokens_with_tiktoken.py -m gpt-3
    ```
 
-#### Help Option:
-For detailed usage information, run:
-```bash
-./count_tokens_with_tiktoken.py -h
-```
+4. To see the help message:
+   ```bash
+   ./count_tokens_with_tiktoken.py -h
+   ```
 
 ---
 
-> [!TIP]  
-> While the script is functional, improvements could be made regarding error handling, especially when dealing with file inputs. For instance, you might want to handle cases where the file does not exist or cannot be opened. Additionally, consider adding support for multiple input files or richer output formatting to better inform users.
+> [!TIP] 
+> This script assumes that proper error handling is in place for the input text and file reading. Consider adding more robust exception handling, especially for file operations and input validation. Additionally, you may want to standardize the command-line argument parsing to utilize libraries like `argparse` for better flexibility and usability.

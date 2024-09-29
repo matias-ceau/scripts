@@ -72,7 +72,7 @@
   "count_tokens_with_tiktoken.py": {
     "file": "count_tokens_with_tiktoken.py",
     "path": "count_tokens_with_tiktoken.py",
-    "description": "A script to count tokens in a given text or file using Tiktoken.",
+    "description": "Script to count the number of tokens in a text using the Tiktoken library.",
     "doc_path": "docs/scripts/count_tokens_with_tiktoken.py.md",
     "hash": "ce55e580e46335adf89222146e0160505c72bda567dc11da9af750222e5d3024"
   },
@@ -621,5 +621,12 @@
     "description": "A script that finds scripts without inline docs.",
     "doc_path": "docs/scripts/you_are_not_documented.sh.md",
     "hash": "86e083c3282edc4e34b1a0e876575f39583c7ce34cde832ea57e54b9c429cd56"
+  },
+  "tui-gpt.py": {
+    "file": "tui-gpt.py",
+    "path": "tui-gpt.py",
+    "description": "A terminal-based interactive application to query an AI model.",
+    "doc_path": "docs/scripts/tui-gpt.py.md",
+    "hash": "1a3b038f3df683969a6e8659edc8cc4e966f2a907f414c9e5d24390f7d2d3bd5"
   }
 }
