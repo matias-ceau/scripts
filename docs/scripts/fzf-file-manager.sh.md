@@ -8,50 +8,46 @@
 
 ### Dependencies
 
-- `bash`: The shell used to run the script.
-- `fzf`: A command-line fuzzy finder, required for file searching and selection.
-- `eza`: A modern replacement for `ls`, providing enhanced file and directory listing capabilities.
-- `rg` (ripgrep): Used for regex searching, essential for processing environment variables.
-- `bat`: A cat clone with syntax highlighting and Git integration, used for file previews.
-- `pastel`: A command-line tool to generate and format colors, used in the script for custom color outputs.
-- `kitten`: A terminal image viewer for displaying images in the terminal.
+- `bash`: The shell interpreter used for executing the script.
+- `fzf`: Command-line fuzzy finder used for interactive file selection.
+- `eza`: An enhanced version of `ls` for colorful and informative file listings.
+- `pastel`: A tool to manipulate colors in the terminal.
+- `bat`: A cat clone with syntax highlighting and other features.
 
 ### Description
 
-This script serves as a file manager that utilizes `fzf` (fuzzy finder) alongside `eza` for better directory and file management in a terminal environment. It allows users to traverse through directories, preview files, and interact with them through a visually appealing and color-coded interface.
+The `fzf-file-manager.sh` script provides a versatile command-line file manager using `fzf` for navigation and file manipulation. The script features several functions that enhance the user experience, including:
 
-Key functions include:
+- **Color Functions**: Uses the `get_color` function to fetch and format colors based on certain environment variables.
+  
+- **File Display**: The `eza_def` function sets up various options for displaying files, such as long format, icons, and sorting.
 
-- **get_color**: Retrieves color codes from environment variables filtered by `FLEXOKI`.
-- **eza_def**: Configures file listing options for `eza`, enhancing visual output with colors, icons, and timestamps.
-- **ls_cmd**: Lists files in a specific format, grouping directories and sorting them.
-- **preview_cmd**: Shows a preview of files or directories, intelligently displaying images or file content.
-- **cmd_list**: Displays a help menu that can be accessed during runtime.
-- **fzf_cmd**: The main command that integrates `fzf` with file browsing functionalities.
+- **Preview Handling**: The `preview_cmd` function allows users to preview files of different types, such as text files, images, and directories, using `bat` and `kitten`.
+
+- **Command Binding**: The script provides various keyboard bindings for seamlessly interacting with the file manager, including toggling previews and jumping to directories.
 
 ### Usage
 
-To run the script and start managing files, execute:
+To use the script, simply execute it in a terminal:
 
 ```bash
 bash /home/matias/.scripts/fzf-file-manager.sh
 ```
 
-The script runs in an infinite loop driving the user to navigate through the file structure. While in the interface, users can:
+The script navigates the current directory allowing for multi-selection of files and directories. Use the following commands while the script is running:
 
-- Navigate using arrow keys.
-- Open a directory by selecting it and pressing Enter.
-- Preview files with the integrated preview feature, toggleable with keybindings like `alt-p`.
-- Navigate backward using a designated key.
+- **Navigation**:
+  - **Enter**: Select the file or directory.
+  - **Alt + P**: Toggle file preview.
+  - **Ctrl + H / Ctrl + L**: Move backward/forward through directories.
+  - **Esc**: Exit the file manager.
 
-Example of directory navigation:
+- **Fuzzy Searching**: Start typing to filter the file list interactively.
 
-```plaintext
-# Select a directory and press Enter to navigate into it.
-# Use the provided keybindings to manage your files.
-```
+- **Special Preview Features**: Image files can be previewed directly in the terminal using `kitten`.
 
 ---
 
-> [!TIP]
-> While the script is functional, it lacks error handling for invalid path selections or missing dependencies. Implementing checks for commands like `eza`, `fzf`, and `bat` at the start of the script could enhance stability. Furthermore, providing the user with clearer instructions for the keybindings would improve usability.
+> [!TIP]  
+Consider enhancing the script's error handling. For instance, if a command fails (such as during file reading), providing informative user feedback will improve usability. Additionally, think about implementing configuration options for `fzf` settings to tailor the user's experience even further.
+
