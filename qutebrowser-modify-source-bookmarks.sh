@@ -7,17 +7,17 @@ local_quick="$XDG_CONFIG_HOME/qutebrowser/quickmarks"
 chezm_quick="$CHEZMOI/dot_config/qutebrowser/quickmarks"
 
 local_sessions="$XDG_DATA_HOME/qutebrowser/sessions"
-chezm_sessions="$CHEZMOI/dot_local/share/private_qutebrowser/sessions"
+sessions="$LOCALDATA/qutebrowser/sessions"
 # wait in case it's a quickmark and the name needs to be added
 sleep 20 && \
     cat "$local_quick" > "$chezm_quick"
 cat "$local_book" > "$chezm_book"
 
 for f in $(fd '.yml$' -tf --format '{/}' "$local_sessions"); do
-    if not [ -f "$chezm_sessions/$f" ]; then
+    if not [ -f "$sessions/$f" ]; then
         chezmoi add "$local_sessions/$f"
     fi
-    cat "$local_sessions/$f" > "$chezm_sessions/$f"
+    cat "$local_sessions/$f" > "$sessions/$f"
 done
 # chezmoi cd && \
     # git add "$chezm_book_rel" && \
