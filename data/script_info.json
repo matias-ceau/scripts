@@ -170,9 +170,9 @@
   "get_repos_present_on_host.sh": {
     "file": "get_repos_present_on_host.sh",
     "path": "get_repos_present_on_host.sh",
-    "description": "Script to list Git repositories present on the current host and store them.",
+    "description": "Script to list and document Git repositories present on the host machine.",
     "doc_path": "docs/scripts/get_repos_present_on_host.sh.md",
-    "hash": "21ac52cf494301293b12a7ec4b9a4910a01d531c4436ebbecea625d72a906459"
+    "hash": "ddcc48a756de727c6ef408469464cc4e95b41d2d7b1e7eacf743cd95b1308342"
   },
   "get_scripts_relations.py": {
     "file": "get_scripts_relations.py",
@@ -345,9 +345,9 @@
   "obsidian-vault-selector.sh": {
     "file": "obsidian-vault-selector.sh",
     "path": "obsidian-vault-selector.sh",
-    "description": "A script to select and open any Obsidian vault.",
+    "description": "Bash script for selecting and opening an Obsidian vault efficiently",
     "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "a9f8e40562a190559b76d532229f91469b53e9741a477fe918c0d64f7c1c9205"
+    "hash": "e57d8a6b1df1fff154ee5277511dadf62ddbf0768e55cd695c7460097724db9f"
   },
   "obsidian.xsh": {
     "file": "obsidian.xsh",
@@ -422,9 +422,9 @@
   "qutebrowser-modify-source-bookmarks.sh": {
     "file": "qutebrowser-modify-source-bookmarks.sh",
     "path": "qutebrowser-modify-source-bookmarks.sh",
-    "description": "Syncs local Qutebrowser bookmarks to chezmoi directory.",
+    "description": "Script to synchronize qutebrowser bookmarks and sessions with chezmoi.",
     "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
-    "hash": "a532bdb54a15ef7d87e553788663a9247bf77097e5dcdd671b5bf862b8365507"
+    "hash": "ff508db7fffbe8dd8cc036b8b3b585f16af5fdf5cdddf760a31230751331027e"
   },
   "random_album.xsh": {
     "file": "random_album.xsh",
@@ -607,26 +607,5 @@
     "description": "A terminal-based interactive application to query an AI model.",
     "doc_path": "docs/scripts/tui-gpt.py.md",
     "hash": "1a3b038f3df683969a6e8659edc8cc4e966f2a907f414c9e5d24390f7d2d3bd5"
-  },
-  "improved_git_sync.sh": {
-    "file": "improved_git_sync.sh",
-    "path": "improved_git_sync.sh",
-    "description": "A script to sync a Git repository with additional error handling and output formatting.",
-    "doc_path": "docs/scripts/improved_git_sync.sh.md",
-    "hash": "a0cc3ae05222d55c00a409702a781477e6529ee99c8f921234f268a54b07a578"
-  },
-  "open_url_in_instance.sh": {
-    "file": "open_url_in_instance.sh",
-    "path": "open_url_in_instance.sh",
-    "description": "Launches a specified URL in an existing Qutebrowser instance.",
-    "doc_path": "docs/scripts/open_url_in_instance.sh.md",
-    "hash": "07cb4c8323474de8ea77d40af5bacf9f64dfc9974d6d4ec0f00695f778ef0fd2"
-  },
-  "openwebui-launcher.sh": {
-    "file": "openwebui-launcher.sh",
-    "path": "openwebui-launcher.sh",
-    "description": "Script to launch and monitor Open Web UI in a tmux session.",
-    "doc_path": "docs/scripts/openwebui-launcher.sh.md",
-    "hash": "8ee5f0cb40ee6a27354736fde47f430e6459fa1eaed366a137ab9ebb8b763d46"
   }
 }
