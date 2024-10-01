@@ -2,11 +2,15 @@
 
 #INFO:#@UTILS@=2024-10= "improved sync git repository"
 
+
+################ DEFINITIONS ####################################################
 # Color definitions
-BLUE="\e[34m"
-GREEN="\e[32m"
 RED="\e[31m"
+GREEN="\e[32m"
 YELLOW="\e[33m"
+BLUE="\e[34m"
+MAGENTA="\e[36m"
+CYAN="\e[36m"
 RESET="\e[0m"
 BOLD="\e[1m"
 
@@ -25,6 +29,7 @@ else
     USE_GLOW=true
 fi
 
+################ FUNCTIONS  ####################################################
 # Function to strip ANSI escape sequences
 strip_ansi() {
     echo "$1" | sed 's/\x1b\[[0-9;]*m//g'
@@ -35,7 +40,7 @@ print_command() {
     if $USE_BAT; then
         echo -e "${GREEN}$ ${BLUE}$1${RESET}" | bat -lzsh --style='rule' --highlight-line 1 --theme="gruvbox-dark"
     else
-        echo -e "${GREEN}$ ${BLUE}$1${RESET}"
+        echo -e "${GREEN}\$ ${BLUE}$1${RESET}"
     fi
 }
 
@@ -55,7 +60,7 @@ handle_error() {
 print_usage() {
     cmd_name="$(basename "$0")"
     echo -e "\n${YELLOW}USAGE:${RESET}"
-    echo -e "    ${RED}./$cmd_name${RESET}  ${BOLD}<repository_path>${RESET} [--dry-run]\n"
+    echo -e "    ${RED}./$cmd_name${RESET}  ${BOLD}<repository_path>${RESET} [--dry-run] [--help]\n"
     echo -e "${YELLOW}EXAMPLES:${RESET}"
     echo -e "    ${RED}$cmd_name${RESET}  ~/.scripts"
     echo -e "    ${RED}$cmd_name${RESET}  ${GREEN}\$SCRIPTS${RESET}    ---  (if var is set)"
@@ -82,7 +87,7 @@ print_glow() {
 }
 
 # Function to handle conflicts
-handle_conflicts() {
+handle_merge_pull_conflicts() {
     echo -e "${YELLOW}Conflicts detected during merge. Here are your options:${RESET}
     [e] - Open your default editor to resolve conflicts manually
     (a) - Abort the merge and return to the previous state
@@ -107,10 +112,41 @@ handle_conflicts() {
     esac
 }
 
+handle_stash_conflict() {
+    local file="$1"
+    echo -e "${YELLOW}Conflict detected when applying stashed changes in file: $file${RESET}"
+    echo -e "Options:"
+    echo -e "  [r] - Use remote version (discard local changes)"
+    echo -e "  [l] - Keep local version"
+    echo -e "  [m] - Manually resolve conflict"
+    read -p "Choose an option [r/l/m]: " choice
+
+    case "$choice" in
+        r|R)
+            run_command "git checkout --theirs -- \"$file\""
+            run_command "git add \"$file\""
+            echo -e "${GREEN}Remote version of $file has been applied.${RESET}"
+            ;;
+        l|L)
+            run_command "git checkout --ours -- \"$file\""
+            run_command "git add \"$file\""
+            echo -e "${GREEN}Local version of $file has been kept.${RESET}"
+            ;;
+        m|M)
+            ${EDITOR:-nvim} "$file"
+            run_command "git add \"$file\""
+            echo -e "${GREEN}Manual edits for $file have been staged.${RESET}"
+            ;;
+        *)
+            echo -e "${RED}Invalid option. Keeping conflict markers for manual resolution later.${RESET}"
+            ;;
+    esac
+}
 # Function to display sync summary
 display_summary() {
     print_glow '# Git log'
-    local changes=$(git diff --stat @{1} 2>/dev/null)
+    local changes
+    changes=$(git diff --stat '@{1}' 2>/dev/null)
     if [ -n "$changes" ]; then
         echo "                $(date +"%Y-%m-%d %H:%M:%S %z")"
         echo "Current commit: $(git show -s --format=%ci HEAD)"
@@ -122,6 +158,8 @@ display_summary() {
     fi
 }
 
+################ START ####################################################
+
 # Parse command line arguments
 DRY_RUN=false
 REPO_DIR=""
@@ -131,6 +169,10 @@ while [[ $# -gt 0 ]]; do
         --dry-run)
             DRY_RUN=true
             shift
+            ;;
+        --help|-h)
+            print_usage
+            exit 0
             ;;
         *)
             if [ -z "$REPO_DIR" ]; then
@@ -145,9 +187,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Check if a repository path is provided
-if [ -z "$REPO_DIR" ]; then
+if [ -z "${REPO_DIR}" ]; then
     print_usage
-    exit 1
+    handle_error "No path provided"
 fi
 
 ORIGINAL_DIR="$(pwd)"
@@ -165,11 +207,13 @@ if [ ! -d ".git" ]; then
     handle_error "The provided directory is not a git repository: $REPO_DIR"
 fi
 
+# Display repo name and involved branches
 REMOTE="$(git remote)"
 LOCAL="$(git branch --show-current)"
 REPO_NAME="$(git remote -v | grep fetch | awk '{print $2}' | sed 's/.*\/\(.*\)\.git/\1/')"
 
-print_formatted "Syncing repository in ${BOLD}$REPO_NAME${RESET}"
+print_formatted "Syncing ${BOLD}$REPO_NAME${RESET}"
+print_formatted "   ${CYAN}${LOCAL}${RESET} -> ${MAGENTA}${REMOTE}${RESET}"
 
 if $DRY_RUN; then
     echo -e "${YELLOW}Performing dry run. No changes will be made.${RESET}"
@@ -183,7 +227,7 @@ else
 fi
 
 # Check if there are any changes to pull
-if git diff --quiet "$LOCAL" "@{u}"; then
+if git diff --quiet "$LOCAL" '@{u}'; then
     echo "No changes to pull. Local branch is up to date."
 else
     # Check for local changes
@@ -194,13 +238,14 @@ else
             print_command "git stash"
         fi
     fi
+    ##
 
     # Try to fast-forward
     if ! $DRY_RUN; then
         if ! run_command "git merge --ff-only @{u}"; then
             echo "Cannot fast-forward. Attempting to rebase..."
             if ! run_command "git pull --rebase $REMOTE $LOCAL"; then
-                handle_conflicts
+                handle_merge_pull_conflicts
             fi
         fi
     else
@@ -209,8 +254,20 @@ else
     fi
 
     # Apply stashed changes if any
+    # if ! $DRY_RUN && [[ $(git stash list) ]]; then
+    #     run_command "git stash pop" || handle_error "Failed to apply stashed changes"
+    # fi
+    # Apply stashed changes if any
     if ! $DRY_RUN && [[ $(git stash list) ]]; then
-        run_command "git stash pop" || handle_error "Failed to apply stashed changes"
+        if ! run_command "git stash pop"; then
+            echo -e "${YELLOW}Conflicts detected when applying stashed changes.${RESET}"
+            conflicted_files=$(git diff --name-only --diff-filter=U)
+            for file in $conflicted_files; do
+                handle_stash_conflict "$file"
+            done
+            # After resolving conflicts, finalize the stash application
+            run_command "git stash drop"
+        fi
     fi
 fi
 
@@ -253,3 +310,47 @@ if ! $DRY_RUN; then
 fi
 
 cd "$ORIGINAL_DIR" || handle_error "Failed to return to original directory"
+
+#################
+# I understand you're encountering conflicts when applying stashed changes, and you want to prioritize the remote version over your local changes in such cases. To address this, we can modify the script to handle this scenario. Here's how we can update the relevant part of the script:
+#
+# 1. First, let's add a new function to handle stash conflicts:
+#
+# ```bash
+# ```
+#
+# 2. Now, let's modify the stash popping part of the script:
+#
+# ```bash
+# # Apply stashed changes if any
+# if [[ $(git stash list) ]]; then
+#     if ! run_command "git stash pop"; then
+#         echo -e "${YELLOW}Conflicts detected when applying stashed changes.${RESET}"
+#         conflicted_files=$(git diff --name-only --diff-filter=U)
+#         for file in $conflicted_files; do
+#             handle_stash_conflict "$file"
+#         done
+#         # After resolving conflicts, finalize the stash application
+#         run_command "git stash drop"
+#     fi
+# fi
+
+# This modification does the following:
+#
+# 1. It attempts to apply the stashed changes using git stash pop.
+# 2. If conflicts occur, it identifies the conflicted files.
+# 3. For each conflicted file, it calls the handle_stash_conflict function.
+# 4. The function gives you options to:
+#    - Use the remote version (discard local changes)
+#    - Keep the local version
+#    - Manually resolve the conflict
+# 5. After resolving all conflicts, it drops the stash.
+#
+# With these changes, when you encounter a situation like the one you described, you'll be prompted for each conflicted file. You can choose to use the remote version (option 'r'), which aligns with your preference to "get the remote and forget the local changes."
+#
+# To implement this in your script:
+#
+# 1. Add the handle_stash_conflict function to your script, preferably near your other function definitions.
+# 2. Replace the existing stash popping code with the new version provided above.
+#
+# This approach gives you more control over how conflicts are resolved, allowing you to easily prioritize remote changes when desired, while still providing flexibility for other scenarios.
