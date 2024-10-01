@@ -2,40 +2,44 @@
 
 ---
 
-**openwebui-launcher.sh**: Script to launch and monitor Open Web UI in a tmux session.
+**openwebui-launcher.sh**: A script to launch and serve the Open Web UI in a new tmux session.
 
 ---
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer that allows for multiple terminal sessions to be accessed simultaneously.
-- `curl`: Command line tool to transfer data from or to a server, used here for health checking.
-- `notify-send`: Utility to send desktop notifications.
-- `qutebrowser`: A keyboard-focused browser based on QtWebEngine utilized to open the web interface.
+- `tmux`: A terminal multiplexer that allows multiple terminal sessions to be accessed simultaneously.
+- `curl`: A command line tool for transferring data with URLs.
+- `notify-send`: A command to send desktop notifications.
+- `qutebrowser`: A keyboard-driven web browser that allows a high level of customization.
 
 ### Description
 
-The `openwebui-launcher.sh` script sets up a controlled environment to run an Open Web UI server within a detached `tmux` session and checks if the server is running correctly. 
+The `openwebui-launcher.sh` script is designed to facilitate the launching of the Open Web UI application in a separate tmux session. The script initializes a new tmux session named 'OPENWEBUI' where it runs the command `open-webui serve`.
 
-1. **Environment Setup**: The script begins by disabling authentication with `export WEBUI_AUTH=0`.
-2. **Launching in tmux**: It creates a new detached `tmux` session named `OPENWEBUI` and runs the command to serve the Open Web UI (`open-webui serve`).
-3. **Monitoring**: The script enters a loop where it uses `curl` to check the health of the server by sending a HEAD request to `http://localhost:8080`. 
-   - If the server responds, the loop breaks and the script continues to notify the user that the server is running.
-   - If there’s no response within 30 seconds, a timeout notification is sent.
-4. **Final Notification and Opening**: After confirming the server is up, the script opens it with `qutebrowser`, pointing to its web interface.
+Once the server is launched, the script immediately begins to check if it is accessible by sending requests to `http://localhost:8080` using `curl`. It operates in a loop that will retry the request every 3 seconds until the server responds positively, or a timeout of 30 seconds is reached.
+
+When the server becomes reachable, a notification is sent to indicate that it is up and running. If the server does not respond within the specified timeout period, a notification about the timeout will be sent, and the script will exit with an error code.
+
+Lastly, the script launches the site in `qutebrowser` with a specific configuration script provided in the user's configuration directory.
 
 ### Usage
 
-To run this script, ensure it is executable and simply execute it in your terminal:
+To use the script, simply run the following command in your terminal:
 
 ```bash
-chmod +x /home/matias/.scripts/openwebui-launcher.sh
-/home/matias/.scripts/openwebui-launcher.sh
+bash /home/matias/.scripts/openwebui-launcher.sh
 ```
 
-You may also bind this script to a key in your window manager (Qtile) for easier access.
+This command will:
+
+1. Start a new tmux session that runs the Open Web UI server.
+2. Notify you of the launch process via desktop notifications.
+3. Open the Open Web UI in `qutebrowser`.
+
+**Note**: Ensure that tmux and qutebrowser are installed and correctly set up on your system.
 
 ---
 
 > [!TIP]  
-> Consider adding error handling for scenarios where `tmux` or `qutebrowser` might not be installed. Additionally, providing a flag to toggle authentication could increase usability depending on the deployment environment. An option to customize the port could also enhance flexibility, allowing you to run multiple instances.
+> One potential improvement could be to make the so-called "timeout" duration configurable, possibly through a command-line argument for greater flexibility. Additionally, error handling for the initial tmux command could enhance the user experience by notifying if the session could not be started.

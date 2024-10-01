@@ -1,50 +1,38 @@
-# Qutebrowser Source Bookmarks Sync
+# Qutebrowser Source Bookmarks Modifier
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Syncs local Qutebrowser bookmarks to chezmoi directory.
+**qutebrowser-modify-source-bookmarks.sh**: A script to sync Qutebrowser bookmarks and sessions between local and chezmoi directories.
 
 ---
 
 ### Dependencies
 
-- `chezmoi`: A tool for managing configuration files across machines using a single source of truth.
-- `fd`: A simple, fast, and user-friendly alternative to `find` (ensure it's installed for file discovery).
+- `chezmoi`: A tool for managing your dotfiles across multiple machines. This script uses it for syncing the configuration.
+- `fd`: A simple, fast and user-friendly alternative to `find`. This is used in the script to locate YAML session files.
+- `bash`: The script is written in Bash, so it needs a compatible shell to run.
 
 ### Description
 
-This script is designed to facilitate the synchronization of bookmarks and quickmarks from your local Qutebrowser configuration to a repository managed by `chezmoi`. The primary objective is to ensure that your browsing data is consistently updated and backed up.
+This script is designed to streamline the process of syncing Qutebrowser bookmarks and quickmarks between local storage and a chezmoi-managed configuration directory. 
 
-Here's a breakdown of the script's components:
-
-- **Variables**:
-  - `local_book`: Points to the local bookmarks file.
-  - `chezm_book`: The destination for the bookmarks in the chezmoi directory.
-  - `local_quick` and `chezm_quick`: Similarly defined for quickmarks.
-  - `local_sessions` and `sessions`: Define local and chezmoi locations for session files.
-
-- **Sleep Command**: The script initiates a 20-second pause to allow any quickmark modifications that might require updating.
-
-- **File Operations**:
-  - The script first copies local quickmarks to the chezmoi quickmarks location.
-  - It then copies bookmarks in a similar manner.
-
-- **Session Management**:
-  - It uses `fd` to locate `.yml` session files within the local sessions directory.
-  - If a session file does not already exist in the chezmoi directory, it will be added.
-  - The script copies the sessions to the designated destination, ensuring all session information is synchronized.
+#### Key Components:
+- **Local and ChezMoi Paths**: It defines variables for local and chezmoi paths for bookmarks, quickmarks, and session files, utilizing XDG environment variables for flexibility.
+- **Quickmark Sync**: The script waits for 20 seconds (presumably to accommodate the addition of quickmarks) and then copies the content of the local quickmarks to the chezmoi equivalent.
+- **Bookmark Sync**: Similar to quickmarks, the local bookmarks are directly copied to the chezmoi bookmarks directory.
+- **Session File Management**: It scans for `.yml` session files in the local sessions directory. For each session file found, it checks if it exists in the chezmoi sessions directory. If not, it uses `chezmoi add` to track it, followed by copying the session content.
 
 ### Usage
 
-To use this script, you can simply execute it from the terminal:
+Make sure you have the required dependencies installed. To run the script, you can execute the following command in your terminal:
 
 ```bash
 bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
 ```
 
-It is also suitable to be assigned to a keybinding in your window manager or setup for automatic execution at a specific interval or event.
+It is recommended to run this script periodically or bind it to a specific key in your window manager (qtile) for ease of use.
 
 ---
 
-> [!TIP] 
-> The script uses a fixed sleep time which may not be efficient. Consider checking for file modifications instead of waiting, to enhance performance. Also, ensure error handling is included for better resilience against potential failures, such as inaccessible files or directories. Adding a logging mechanism could help track the sync process.
+> [!TIP]
+> The script utilizes a `sleep` command that might not be necessary. If the synchronization frequently fails due to timing issues, consider handling the quickmark addition more gracefully. Additionally, the commented-out lines suggest an intent to commit the changes made to the bookmarks; you might want to integrate this functionality cleanly into the script, ensuring version control is handled effectively.

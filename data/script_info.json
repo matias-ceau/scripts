@@ -170,9 +170,9 @@
   "get_repos_present_on_host.sh": {
     "file": "get_repos_present_on_host.sh",
     "path": "get_repos_present_on_host.sh",
-    "description": "Script to list and document Git repositories present on the host machine.",
+    "description": "Script to list Git repositories localized on the current host and update them into a summary.",
     "doc_path": "docs/scripts/get_repos_present_on_host.sh.md",
-    "hash": "ddcc48a756de727c6ef408469464cc4e95b41d2d7b1e7eacf743cd95b1308342"
+    "hash": "21ac52cf494301293b12a7ec4b9a4910a01d531c4436ebbecea625d72a906459"
   },
   "get_scripts_relations.py": {
     "file": "get_scripts_relations.py",
@@ -345,9 +345,9 @@
   "obsidian-vault-selector.sh": {
     "file": "obsidian-vault-selector.sh",
     "path": "obsidian-vault-selector.sh",
-    "description": "Bash script for selecting and opening an Obsidian vault efficiently",
+    "description": "Script to select and open any Obsidian vault.",
     "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "e57d8a6b1df1fff154ee5277511dadf62ddbf0768e55cd695c7460097724db9f"
+    "hash": "a9f8e40562a190559b76d532229f91469b53e9741a477fe918c0d64f7c1c9205"
   },
   "obsidian.xsh": {
     "file": "obsidian.xsh",
@@ -422,9 +422,9 @@
   "qutebrowser-modify-source-bookmarks.sh": {
     "file": "qutebrowser-modify-source-bookmarks.sh",
     "path": "qutebrowser-modify-source-bookmarks.sh",
-    "description": "Script to synchronize qutebrowser bookmarks and sessions with chezmoi.",
+    "description": "A script to sync Qutebrowser bookmarks and sessions between local and chezmoi directories.",
     "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
-    "hash": "ff508db7fffbe8dd8cc036b8b3b585f16af5fdf5cdddf760a31230751331027e"
+    "hash": "a532bdb54a15ef7d87e553788663a9247bf77097e5dcdd671b5bf862b8365507"
   },
   "random_album.xsh": {
     "file": "random_album.xsh",
@@ -520,9 +520,9 @@
   "sync-repo.sh": {
     "file": "sync-repo.sh",
     "path": "sync-repo.sh",
-    "description": "Script to synchronize a local git directory with its remote counterpart, utilizing color-coded output and optional formatting with external tools.",
+    "description": "A script for syncing a Git repository with improved user interaction and error handling.",
     "doc_path": "docs/scripts/sync-repo.sh.md",
-    "hash": "6d2ae2005766a6f3877dcd85aed1e16abff4e7f08b5fc8f9417bfb7c915d1e9d"
+    "hash": "240532bb7de6e943b1e26cdc91225c0b66e3d4a38638734f58f8b43b3f23798d"
   },
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
@@ -607,5 +607,47 @@
     "description": "A terminal-based interactive application to query an AI model.",
     "doc_path": "docs/scripts/tui-gpt.py.md",
     "hash": "1a3b038f3df683969a6e8659edc8cc4e966f2a907f414c9e5d24390f7d2d3bd5"
+  },
+  "generate_commit_message.sh": {
+    "file": "generate_commit_message.sh",
+    "path": "generate_commit_message.sh",
+    "description": "Script to generate git commit messages using OpenAI's API.",
+    "doc_path": "docs/scripts/generate_commit_message.sh.md",
+    "hash": "5c54cd3b2429521942cc81e5faaa70e4078f272e339c309d55b9278c7bad52e8"
+  },
+  "interactive_git_sync.sh": {
+    "file": "interactive_git_sync.sh",
+    "path": "interactive_git_sync.sh",
+    "description": "A script to synchronize multiple Git repositories interactively.",
+    "doc_path": "docs/scripts/interactive_git_sync.sh.md",
+    "hash": "3948253203f862c10842686c224c0961e68f06a7585a845538943daf9f1f7fbf"
+  },
+  "legacy-sync.repo.sh": {
+    "file": "legacy-sync.repo.sh",
+    "path": "legacy-sync.repo.sh",
+    "description": "A script to synchronize a Git repository while providing enhanced output formatting.",
+    "doc_path": "docs/scripts/legacy-sync.repo.sh.md",
+    "hash": "6d2ae2005766a6f3877dcd85aed1e16abff4e7f08b5fc8f9417bfb7c915d1e9d"
+  },
+  "open_url_in_instance.sh": {
+    "file": "open_url_in_instance.sh",
+    "path": "open_url_in_instance.sh",
+    "description": "Launches a URL in an existing Qutebrowser instance.",
+    "doc_path": "docs/scripts/open_url_in_instance.sh.md",
+    "hash": "07cb4c8323474de8ea77d40af5bacf9f64dfc9974d6d4ec0f00695f778ef0fd2"
+  },
+  "openwebui-launcher.sh": {
+    "file": "openwebui-launcher.sh",
+    "path": "openwebui-launcher.sh",
+    "description": "A script to launch and serve the Open Web UI in a new tmux session.",
+    "doc_path": "docs/scripts/openwebui-launcher.sh.md",
+    "hash": "8ee5f0cb40ee6a27354736fde47f430e6459fa1eaed366a137ab9ebb8b763d46"
+  },
+  "sync-repo-simple.sh": {
+    "file": "sync-repo-simple.sh",
+    "path": "sync-repo-simple.sh",
+    "description": "A script to synchronize a local Git repository with remote changes.",
+    "doc_path": "docs/scripts/sync-repo-simple.sh.md",
+    "hash": "9976259c0646dab2ddaca293b8a80a9c6d4c1d7a7455a4e77a36977b59f4fd0f"
   }
 }

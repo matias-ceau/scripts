@@ -22,9 +22,10 @@
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose an album with fzf and play it with cmus*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A lightweight alternative to dmenu using `fzf` within an `xterm` terminal.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *Dmenu run replacement using `fzf` within a floating xterm terminal*
+- [generate_commit_message.sh](scripts/generate_commit_message.sh.md) -- *Script to generate git commit messages using OpenAI's API.*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Captures and resizes screenshots of open windows on your desktop.*
 - [get_hyperlinks_in_folder.py](scripts/get_hyperlinks_in_folder.py.md) -- *A script to create a directed graph of hyperlinks within Markdown notes.*
-- [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list and document Git repositories present on the host machine.*
+- [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list Git repositories localized on the current host and update them into a summary.*
 - [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Visualizes relationships between scripts in a directory using a graph.*
 - [git_cd.sh](scripts/git_cd.sh.md) -- *Quick navigation to Git directories using `locate`, `eza`, and `fzf`*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *Clone a GitHub repository by specifying the developer and package name with an option for SSH or a local path.*
@@ -33,10 +34,12 @@
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *Enhances `pastel` command help with syntax highlighting and interactive selection.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A customizable FZF menu utilizing Alacritty which can output piped data*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Automated script to install a list of necessary packages using `paru`.*
+- [interactive_git_sync.sh](scripts/interactive_git_sync.sh.md) -- *A script to synchronize multiple Git repositories interactively.*
 - [json_to_markdown.py](scripts/json_to_markdown.py.md) -- *Convert JSON files to formatted Markdown documents*
 - [jupyter_new_notebook.xsh](scripts/jupyter_new_notebook.xsh.md) -- *Script to create a new Jupyter notebook and open it in Chromium on Arch Linux with qtile.*
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Launches a floating terminal displaying keyboard layout information*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called music and open cmus inside*
+- [legacy-sync.repo.sh](scripts/legacy-sync.repo.sh.md) -- *A script to synchronize a Git repository while providing enhanced output formatting.*
 - [list_process.sh](scripts/list_process.sh.md) -- *This script lists all running system services in a sorted order.*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Script to document user scripts and manage their associations with symlink data.*
 - [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Automates the generation and maintenance of markdown documentation for scripts.*
@@ -50,8 +53,10 @@
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A utility for creating new scripts with predefined templates.*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *A script to skip to the next album in `cmus`*
 - [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Script to open a file with `nvim` in a floating terminal window.*
-- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Bash script for selecting and opening an Obsidian vault efficiently*
+- [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to select and open any Obsidian vault.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault interactively using `fzf`*
+- [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Launches a URL in an existing Qutebrowser instance.*
+- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *A script to launch and serve the Open Web UI in a new tmux session.*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script to perform a fuzzy search on packages using `paru` with a preview feature.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *Select and open a PDF file in your home directory with `evince`*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *Script to pick and play a playlist using `cmus`.*
@@ -61,7 +66,7 @@
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *Switches to the complementary group in Qtile, based on a dice concept*
 - [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Script to move and switch the current window to the next or previous group in Qtile.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Quickly select a password from your password store using `fzf`.*
-- [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Script to synchronize qutebrowser bookmarks and sessions with chezmoi.*
+- [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *A script to sync Qutebrowser bookmarks and sessions between local and chezmoi directories.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Selects a random album from cmus library and plays it using cmus.*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Selects and sets a random wallpaper from a specified folder for use with `feh`.*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *Script to retrieve the most searched manual entries using `man` or `batman`.*
@@ -77,7 +82,8 @@
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *A script to display a visual representation of a keyboard layout in the terminal.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Script to play a song using `cmus` with a `dmenu` interface.*
 - [speach-to-text.py](scripts/speach-to-text.py.md) -- *Records audio through a preferred device and transcribes it using OpenAI's Whisper.*
-- [sync-repo.sh](scripts/sync-repo.sh.md) -- *Script to synchronize a local git directory with its remote counterpart, utilizing color-coded output and optional formatting with external tools.*
+- [sync-repo-simple.sh](scripts/sync-repo-simple.sh.md) -- *A script to synchronize a local Git repository with remote changes.*
+- [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script for syncing a Git repository with improved user interaction and error handling.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a specified command and view its output*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *A script to search and display helpful information from the tmux manpage.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*

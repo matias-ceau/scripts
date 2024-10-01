@@ -201,15 +201,7 @@ fi
 
 ####################################################################
 echo
-echo "        4. MAINTENANCE"
-echo
-####################################################################
-
-run_command "git maintenance run"
-
-####################################################################
-echo
-echo "        5. QUICK SUMMARY"
+echo "        4. QUICK SUMMARY"
 echo
 ####################################################################
 echo "Repository in $REPO_DIR has been successfully synced."
