@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-#INFO:#@UTILS@=2024-07= "sync git repository"
+#INFO:#@UTILS@=2024-10= "improved sync git repository"
 
 # Color definitions
 BLUE="\e[34m"
@@ -55,11 +55,12 @@ handle_error() {
 print_usage() {
     cmd_name="$(basename "$0")"
     echo -e "\n${YELLOW}USAGE:${RESET}"
-    echo -e "    ${RED}./$cmd_name${RESET}  ${BOLD}<repository_path>${RESET}\n"
+    echo -e "    ${RED}./$cmd_name${RESET}  ${BOLD}<repository_path>${RESET} [--dry-run]\n"
     echo -e "${YELLOW}EXAMPLES:${RESET}"
-    echo -e "    ${RED}$cmd_name${RESET}  ~/.scripts  ---  (if in path)"
+    echo -e "    ${RED}$cmd_name${RESET}  ~/.scripts"
     echo -e "    ${RED}$cmd_name${RESET}  ${GREEN}\$SCRIPTS${RESET}    ---  (if var is set)"
     echo -e "    ${BLUE}git_sync      ${GREEN}\$SCRIPTS${RESET}    ---  (if alias is set)"
+    echo -e "    ${RED}$cmd_name${RESET}  ${GREEN}\$SCRIPTS${RESET} --dry-run    ---  (perform a dry run)"
 }
 
 # Function to print formatted message
@@ -82,26 +83,26 @@ print_glow() {
 
 # Function to handle conflicts
 handle_conflicts() {
-    echo -e "${YELLOW}Conflicts detected during rebase. Here are your options:${RESET}
+    echo -e "${YELLOW}Conflicts detected during merge. Here are your options:${RESET}
     [e] - Open your default editor to resolve conflicts manually
-    (a) - Abort the rebase and return to the previous state
+    (a) - Abort the merge and return to the previous state
     (s) - Skip this commit and continue with the next one"
     read -r choice
     case $choice in
         a)
-            git rebase --abort
-            echo "Rebase aborted. Repository is back to its previous state."
+            git merge --abort
+            echo "Merge aborted. Repository is back to its previous state."
             ;;
         s)
-            git rebase --skip
-            echo "Skipped conflicting commit. Continuing rebase..."
+            git reset --hard
+            echo "Skipped conflicting commit. Continuing sync..."
             ;;
         *)
             git status
             echo "Opening editor to resolve conflicts..."
             ${EDITOR:-vim} $(git diff --name-only --diff-filter=U)
             git add .
-            git rebase --continue
+            git commit
             ;;
     esac
 }
@@ -121,13 +122,34 @@ display_summary() {
     fi
 }
 
+# Parse command line arguments
+DRY_RUN=false
+REPO_DIR=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        *)
+            if [ -z "$REPO_DIR" ]; then
+                REPO_DIR="$(realpath "$1")"
+            else
+                print_usage
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
+
 # Check if a repository path is provided
-if [ $# -eq 0 ]; then
+if [ -z "$REPO_DIR" ]; then
     print_usage
     exit 1
 fi
 
-REPO_DIR="$(realpath "$1")"
 ORIGINAL_DIR="$(pwd)"
 
 # Check if the provided path is a directory
@@ -149,23 +171,45 @@ REPO_NAME="$(git remote -v | grep fetch | awk '{print $2}' | sed 's/.*\/\(.*\)\.
 
 print_formatted "Syncing repository in ${BOLD}$REPO_NAME${RESET}"
 
-# Fetch the latest changes without merging
-run_command "git fetch $REMOTE $LOCAL" || handle_error "Failed to fetch latest changes"
+if $DRY_RUN; then
+    echo -e "${YELLOW}Performing dry run. No changes will be made.${RESET}"
+fi
+
+# Fetch the latest changes from all remotes and prune obsolete references
+if ! $DRY_RUN; then
+    run_command "git fetch --all --prune" || handle_error "Failed to fetch latest changes"
+else
+    print_command "git fetch --all --prune"
+fi
 
 # Check if there are any changes to pull
-if git diff --quiet "$LOCAL" "$REMOTE/$LOCAL"; then
-    echo "No changes to pull. Local repository is up to date."
+if git diff --quiet "$LOCAL" "@{u}"; then
+    echo "No changes to pull. Local branch is up to date."
 else
-    # Stash any local changes
-    run_command "git stash" || handle_error "Failed to stash local changes"
+    # Check for local changes
+    if ! git diff-index --quiet HEAD --; then
+        if ! $DRY_RUN; then
+            run_command "git stash" || handle_error "Failed to stash local changes"
+        else
+            print_command "git stash"
+        fi
+    fi
 
-    # Pull changes with rebase
-    if ! run_command "git pull --rebase $REMOTE $LOCAL"; then
-        handle_conflicts
+    # Try to fast-forward
+    if ! $DRY_RUN; then
+        if ! run_command "git merge --ff-only @{u}"; then
+            echo "Cannot fast-forward. Attempting to rebase..."
+            if ! run_command "git pull --rebase $REMOTE $LOCAL"; then
+                handle_conflicts
+            fi
+        fi
+    else
+        print_command "git merge --ff-only @{u}"
+        print_command "git pull --rebase $REMOTE $LOCAL"
     fi
 
     # Apply stashed changes if any
-    if [[ $(git stash list) ]]; then
+    if ! $DRY_RUN && [[ $(git stash list) ]]; then
         run_command "git stash pop" || handle_error "Failed to apply stashed changes"
     fi
 fi
@@ -174,22 +218,38 @@ run_command "git status -s"
 
 # Only proceed with commit and push if there are changes
 if [[ -n $(git status -s) ]]; then
-    run_command "git add -Av"
+    if ! $DRY_RUN; then
+        run_command "git add -A"
 
-    NB="$(git status -s | wc -l)"
-    MESSAGE="$NB change(s) from $USER@$HOSTNAME"
-    run_command "git commit -m \"$MESSAGE\""
+        NB="$(git status -s | wc -l)"
+        MESSAGE="$NB change(s) from $USER@$HOSTNAME"
+        run_command "git commit -m \"$MESSAGE\""
 
-    run_command "git push $REMOTE $LOCAL" || handle_error "Failed to push changes"
+        if ! run_command "git push $REMOTE $LOCAL"; then
+            echo -e "${YELLOW}Push failed. Pulling latest changes and trying again...${RESET}"
+            run_command "git pull --ff-only $REMOTE $LOCAL" || handle_error "Failed to pull latest changes"
+            run_command "git push $REMOTE $LOCAL" || handle_error "Failed to push changes"
+        fi
+    else
+        print_command "git add -A"
+        print_command "git commit -m \"...changes from $USER@$HOSTNAME\""
+        print_command "git push $REMOTE $LOCAL"
+    fi
 else
     echo "No local changes to commit and push."
 fi
 
-run_command "git maintenance run"
+if ! $DRY_RUN; then
+    run_command "git maintenance run"
+else
+    print_command "git maintenance run"
+fi
 
 print_glow "# Repository in **$REPO_DIR** has been successfully synced."
 
 # Display sync summary
-display_summary
+if ! $DRY_RUN; then
+    display_summary
+fi
 
 cd "$ORIGINAL_DIR" || handle_error "Failed to return to original directory"
