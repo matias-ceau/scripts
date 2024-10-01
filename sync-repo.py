@@ -150,13 +150,13 @@ def main():
         run_command("git fetch --all --prune")
         progress.update(task, advance=100)
 
-    if run_command("git diff --quiet {local} @{u}").returncode == 0:
+    if run_command(f"git diff --quiet {local} @{{u}}").returncode == 0:
         console.print("[green]No changes to pull. Local branch is up to date.[/green]")
     else:
         if run_command("git diff-index --quiet HEAD --").returncode != 0:
             run_command("git stash")
 
-        if run_command(f"git merge --ff-only @{{u}}").returncode != 0:
+        if run_command("git merge --ff-only @{u}").returncode != 0:
             console.print(
                 "[yellow]Cannot fast-forward. Attempting to rebase...[/yellow]"
             )
@@ -209,4 +209,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
