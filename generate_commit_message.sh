@@ -23,31 +23,19 @@ for file in $modified_files; do
     fi
 done
 
-# Prepare the API request payload
-read -r -d '' payload << EOM
-{
-    "model": "gpt-4o-mini",
-    "messages": [
-        {
-            "role": "system",
-            "content": "You are an AI assistant that generates git commit messages. Follow the git commit convention: a one-line summary (50 chars or less) followed by a blank line and then a more detailed description. Focus on the 'what' and 'why' of the changes, not the 'how'."
-        },
-        {
-            "role": "user",
-            "content": "Generate a commit message for the following changes:\n$file_info"
-        }
-    ]
-}
-EOM
-
 # Make the API call
-response=$(curl -s https://api.openai.com/v1/chat/completions \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -d "$payload")
 
-# Extract the commit message from the response
-commit_message=$(echo "$response" | jq -r '.choices[0].message.content')
+curl "https://api.openai.com/v1/chat/completions" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    --json '{ "model": "gpt-4o-mini", "messages": [ { "role": "system", "content": "You are an AI assistant that generates git commit messages. Follow the git commit convention: a one-line summary (50 chars or less) followed by a blank line and then a more detailed description. Focus on the WHAT and WHY of the changes, not the HOW." }, { "role": "user", "content": "Generate a commit message for the following changes:' \
+    --json "$file_info." \
+    --json '    } ] }'
 
-# Output the commit message
-echo "$commit_message"
+# echo "$response" | jq
+#
+# # Extract the commit message from the response
+# commit_message=$(echo "$response" | jq -r '.choices[0].message.content')
+#
+# # Output the commit message
+# echo "$commit_message"

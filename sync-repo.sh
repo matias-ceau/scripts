@@ -2,7 +2,7 @@
 
 #INFO:#@UTILS@=2024-10= "improved sync git repository"
 
-################ DEFINITIONS ####################################################
+############### DEFINITIONS ####################################################
 # Color definitions
 RED="\e[31m"
 GREEN="\e[32m"
@@ -87,13 +87,8 @@ print_glow() {
 
 # Function to generate a commit message (using an llm and another script)
 generate_commit_message() {
-    local message
-    which generate_commit_message.sh > /dev/null 2>&1 \
-        && message="$(generate_commit_message.sh "$1")"
-    if [ -z "$message" ]; then
-        NB="$(git status -s | wc -l)"
-        message="$NB change(s) from $USER@$HOSTNAME"
-    fi
+    NB="$(git status -s | wc -l)"
+    message="$NB change(s) from $USER@$HOSTNAME"
     echo -e "$message"
 }
 
