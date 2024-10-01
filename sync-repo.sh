@@ -2,7 +2,6 @@
 
 #INFO:#@UTILS@=2024-10= "improved sync git repository"
 
-
 ################ DEFINITIONS ####################################################
 # Color definitions
 RED="\e[31m"
@@ -84,6 +83,18 @@ print_glow() {
     else
         echo -e "$1"
     fi
+}
+
+# Function to generate a commit message (using an llm and another script)
+generate_commit_message() {
+    local message
+    which generate_commit_message.sh > /dev/null 2>&1 \
+        && message="$(generate_commit_message.sh)"
+    if [ -z "$message" ]; then
+        NB="$(git status -s | wc -l)"
+        message="$NB change(s) from $USER@$HOSTNAME"
+    fi
+    echo -e "$message"
 }
 
 # Function to handle conflicts
@@ -254,10 +265,6 @@ else
     fi
 
     # Apply stashed changes if any
-    # if ! $DRY_RUN && [[ $(git stash list) ]]; then
-    #     run_command "git stash pop" || handle_error "Failed to apply stashed changes"
-    # fi
-    # Apply stashed changes if any
     if ! $DRY_RUN && [[ $(git stash list) ]]; then
         if ! run_command "git stash pop"; then
             echo -e "${YELLOW}Conflicts detected when applying stashed changes.${RESET}"
@@ -277,9 +284,7 @@ run_command "git status -s"
 if [[ -n $(git status -s) ]]; then
     if ! $DRY_RUN; then
         run_command "git add -A"
-
-        NB="$(git status -s | wc -l)"
-        MESSAGE="$NB change(s) from $USER@$HOSTNAME"
+        MESSAGE="$(generate_commit_message)"
         run_command "git commit -m \"$MESSAGE\""
 
         if ! run_command "git push $REMOTE $LOCAL"; then
@@ -310,47 +315,3 @@ if ! $DRY_RUN; then
 fi
 
 cd "$ORIGINAL_DIR" || handle_error "Failed to return to original directory"
-
-#################
-# I understand you're encountering conflicts when applying stashed changes, and you want to prioritize the remote version over your local changes in such cases. To address this, we can modify the script to handle this scenario. Here's how we can update the relevant part of the script:
-#
-# 1. First, let's add a new function to handle stash conflicts:
-#
-# ```bash
-# ```
-#
-# 2. Now, let's modify the stash popping part of the script:
-#
-# ```bash
-# # Apply stashed changes if any
-# if [[ $(git stash list) ]]; then
-#     if ! run_command "git stash pop"; then
-#         echo -e "${YELLOW}Conflicts detected when applying stashed changes.${RESET}"
-#         conflicted_files=$(git diff --name-only --diff-filter=U)
-#         for file in $conflicted_files; do
-#             handle_stash_conflict "$file"
-#         done
-#         # After resolving conflicts, finalize the stash application
-#         run_command "git stash drop"
-#     fi
-# fi
-
-# This modification does the following:
-#
-# 1. It attempts to apply the stashed changes using git stash pop.
-# 2. If conflicts occur, it identifies the conflicted files.
-# 3. For each conflicted file, it calls the handle_stash_conflict function.
-# 4. The function gives you options to:
-#    - Use the remote version (discard local changes)
-#    - Keep the local version
-#    - Manually resolve the conflict
-# 5. After resolving all conflicts, it drops the stash.
-#
-# With these changes, when you encounter a situation like the one you described, you'll be prompted for each conflicted file. You can choose to use the remote version (option 'r'), which aligns with your preference to "get the remote and forget the local changes."
-#
-# To implement this in your script:
-#
-# 1. Add the handle_stash_conflict function to your script, preferably near your other function definitions.
-# 2. Replace the existing stash popping code with the new version provided above.
-#
-# This approach gives you more control over how conflicts are resolved, allowing you to easily prioritize remote changes when desired, while still providing flexibility for other scenarios.
