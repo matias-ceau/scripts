@@ -2,43 +2,56 @@
 
 ---
 
-**get_repos_present_on_host.sh**: Script to list git repositories in a specified directory and organize them by hostname.
+**get_repos_present_on_host.sh**: Script to list Git repositories present on the current host and store them.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script runs in a Bash shell.
-- `find`: Used to locate `.git` directories within the specified path.
-- `sed`: Utilized for text processing to format the output.
-- `awk`: Helps in filtering and formatting the output based on directory structure.
-- `sort`: Employed to sort the list of repositories and remove duplicates.
+- `bash`: The script is written in Bash and will require a Bash shell to execute.
+- `find`: Used to search for `.git` directories.
+- `sed`: Utilized for manipulating the output to the desired format.
+- `awk`: Employed to filter and format repository paths.
+- `sort`: Needed to sort the repository names and remove duplicates.
 
 ### Description
 
-This script automates the process of gathering all git repositories located in a specified directory and organizes them according to the hostname of the device. It begins by checking for two essential environment variables: `GIT_REPOS`, which should point to the root directory containing the git repositories, and `LOCALDATA`, which determines where output files will be stored. If either variable is not set, the script exits with an error message.
+This Bash script fetches and lists Git repositories that are located in the directory specified by the environment variable `GIT_REPOS`. It works by locating all directories containing a `.git` folder, extracting the repository names, and saving them to a local output file specific to the hostname obtained via `hostnamectl`. Additionally, it appends the found repositories to a collective file that maintains a list of all repositories across different hosts.
 
-The core functionality involves:
+Here’s how the script works step-by-step:
 
-1. **Finding Repositories**: It uses the `find` command to search for directories that end with `.git` within `GIT_REPOS`. The output is modified by `sed` to strip unnecessary parts, hence returning only the relative repository paths.
+1. **Environment Variable Checks**: The script begins by verifying that the environment variables `GIT_REPOS` and `LOCALDATA` are set. If either is missing, the script will exit with an error message.
+   
+2. **Hostname Retrieval**: It retrieves the current hostname using `hostnamectl`.
 
-2. **Sorting and Duplicating**: Once the repositories are found, they are sorted and any duplicates are removed. This ensures that the output is clean and organized.
+3. **Output File Definitions**: Defines paths for individual host output and a cumulative all-repos file.
 
-3. **Saving Output**: The script saves the current list of repositories to a file named after the hostname, located in the specified `LOCALDATA` path. It also appends this list to a comprehensive `all-repos.txt` file while maintaining uniqueness.
+4. **Directory Creation**: Ensures the target directory exists by creating it if it doesn't.
+
+5. **Repository Discovery**: Uses the `find` command to locate `.git` directories, formats the output with `sed` and `awk` to obtain clean repository names.
+
+6. **Sorting and Deduplication**: The script sorts the repository names, ensuring there are no duplicates before saving them to the output files.
+
+7. **Success Message**: Finally, it provides user feedback once the repository list is updated successfully.
 
 ### Usage
 
-To run the script, ensure that the required environment variables are set and execute it in a terminal:
+Before executing the script, ensure the environment variables are set:
 
 ```bash
-export GIT_REPOS="/path/to/your/git/repos"
-export LOCALDATA="/path/to/local/data"
+export GIT_REPOS="/path/to/your/git/repositories"
+export LOCALDATA="/path/to/your/local/data"
+```
+
+To run the script, simply execute:
+
+```bash
 bash /home/matias/.scripts/get_repos_present_on_host.sh
 ```
 
-This script can also be connected to a scheduler or a keybinding for convenience in usage. Simply ensure that environment variables are set up correctly before execution.
+This will update the appropriate files with the found repositories.
 
 ---
 
-> [!TIP] 
-> This script could be enhanced by adding logging capabilities to better track any issues that arise during execution. Moreover, error handling could be improved to capture failures in the `find` or `sort` commands. A configurable option to specify the output format (e.g., JSON or CSV) could also make the script more versatile.
+> [!TIP]  
+> The script currently does not handle situations where the paths specified in `GIT_REPOS` do not exist or are not accessible. Implementing error handling for such cases can improve robustness. Additionally, consider implementing logging to track operations performed by the script and potential errors.

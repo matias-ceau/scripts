@@ -1,46 +1,50 @@
-# Qutebrowser Bookmark Synchronization Script
+# Qutebrowser Source Bookmarks Sync
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Syncs local Qutebrowser bookmarks with Chezmoi-managed config files.
+**qutebrowser-modify-source-bookmarks.sh**: Syncs local Qutebrowser bookmarks to chezmoi directory.
 
 ---
 
 ### Dependencies
 
-- `chezmoi`: A tool to manage your dotfiles effortlessly, allowing for easy synchronization across systems.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `bash`: The script is written in bash and requires a compatible shell environment.
+- `chezmoi`: A tool for managing configuration files across machines using a single source of truth.
+- `fd`: A simple, fast, and user-friendly alternative to `find` (ensure it's installed for file discovery).
 
 ### Description
 
-This script automates the synchronization of Qutebrowser bookmarks and quickmarks from local directories to those managed by Chezmoi. It ensures that any changes made to local Qutebrowser configurations are reflected in your Chezmoi setup, facilitating seamless migration and backup of browser settings.
+This script is designed to facilitate the synchronization of bookmarks and quickmarks from your local Qutebrowser configuration to a repository managed by `chezmoi`. The primary objective is to ensure that your browsing data is consistently updated and backed up.
 
-The script defines several file paths, adapting to the user's configuration directories:
-- Local bookmarks and quickmarks are stored in `$XDG_CONFIG_HOME/qutebrowser/`
-- Chezmoi-managed equivalents reside in `$CHEZMOI/dot_config/qutebrowser/`
-- It synchronizes sessions from the data directory located at `$XDG_DATA_HOME/qutebrowser/sessions`.
+Here's a breakdown of the script's components:
 
-To handle potential race conditions with quickmark updates, the script incorporates a 20-second sleep before copying local quickmarks to the Chezmoi directory.
+- **Variables**:
+  - `local_book`: Points to the local bookmarks file.
+  - `chezm_book`: The destination for the bookmarks in the chezmoi directory.
+  - `local_quick` and `chezm_quick`: Similarly defined for quickmarks.
+  - `local_sessions` and `sessions`: Define local and chezmoi locations for session files.
+
+- **Sleep Command**: The script initiates a 20-second pause to allow any quickmark modifications that might require updating.
+
+- **File Operations**:
+  - The script first copies local quickmarks to the chezmoi quickmarks location.
+  - It then copies bookmarks in a similar manner.
+
+- **Session Management**:
+  - It uses `fd` to locate `.yml` session files within the local sessions directory.
+  - If a session file does not already exist in the chezmoi directory, it will be added.
+  - The script copies the sessions to the designated destination, ensuring all session information is synchronized.
 
 ### Usage
 
-To execute the script, run the following command in your terminal:
+To use this script, you can simply execute it from the terminal:
 
 ```bash
 bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
 ```
 
-Alternatively, you can assign this script to a keybinding in your window manager (qtile) or set it up as a cron job for periodic execution. 
-
-**Example of a keybinding** in your qtile configuration:
-```python
-Key([mod], "b", lazy.spawn("/home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh")),
-```
-
-This keybinding would allow you to synchronize your bookmarks with a simple key press.
+It is also suitable to be assigned to a keybinding in your window manager or setup for automatic execution at a specific interval or event.
 
 ---
 
-> [!TIP]  
-> The script has a sleep command which might delay the execution unnecessarily. Consider optimizing the sleep timing or implementing a check to see if the quickmark operation has completed before proceeding. Additionally, removing the commented-out git commands and improving error-handling could enhance usability.
+> [!TIP] 
+> The script uses a fixed sleep time which may not be efficient. Consider checking for file modifications instead of waiting, to enhance performance. Also, ensure error handling is included for better resilience against potential failures, such as inaccessible files or directories. Adding a logging mechanism could help track the sync process.

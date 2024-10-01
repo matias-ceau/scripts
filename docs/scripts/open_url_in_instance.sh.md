@@ -2,39 +2,41 @@
 
 ---
 
-**open_url_in_instance.sh**: Launches a URL in an instance of Qutebrowser.
+**open_url_in_instance.sh**: Launches a specified URL in an existing Qutebrowser instance.
 
 ---
 
 ### Dependencies
 
-- `socat`: A command-line based utility that establishes two bidirectional byte streams and transfers data between them.
-- `qutebrowser`: A keyboard-driven browser that is designed to be fast and efficient, written in Python.
+- `qutebrowser`: A keyboard-focused browser with a minimal GUI that is launched via command line.
+- `socat`: A command line based utility that establishes two bidirectional byte streams and transfers data between them. It is used here for IPC communication.
 
 ### Description
 
-The `open_url_in_instance.sh` script is designed to open a specified URL in an existing Qutebrowser instance, leveraging Unix domain sockets for inter-process communication. The script was inspired by Florian Bruhin and developed by Thore Bödecker. 
+The `open_url_in_instance.sh` script is designed to open a specified URL in a running instance of Qutebrowser using a form of inter-process communication (IPC). This can improve your workflow by allowing quick access to web pages without needing to start a new browser window. 
 
-Key variables in the script include:
-- `_url`: The URL to be opened, which is passed as an argument to the script.
-- `_qb_version`: The version of Qutebrowser to ensure compatibility; currently set to '1.0.4'.
-- `_proto_version`: The protocol version, set to 1.
-- `_ipc_socket`: The path to the Qutebrowser IPC (Inter-Process Communication) socket, generated using the user's name.
-- `_qute_bin`: The path to the Qutebrowser binary, typically located at `/usr/bin/qutebrowser`.
+The initial idea for this script was conceived by Florian Bruhin, and the current iteration is authored by Thore Bödecker. It utilizes pipes and sockets to send commands directly to a Qutebrowser instance that is already running, thus maintaining session state and open tabs.
 
-The main functionality is provided by `printf`, which formats a JSON string containing the URL and relevant metadata. This string is sent through a Unix socket using `socat`. If the communication fails (if there’s no running instance of Qutebrowser), it will open the URL in a new Qutebrowser instance.
+Essential metadata is constituted in JSON format, which includes:
+- `args`: an array containing the URL to open.
+- `target_arg`: set to null for compatibility.
+- `version`: the version of Qutebrowser being targeted.
+- `protocol_version`: a numeric value indicating the supported version of the protocol defined between processes.
+- `cwd`: the current working directory when this command is executed.
 
 ### Usage
 
-To use the script, execute it from the terminal with the desired URL as an argument. Here is how you can do it:
+To use this script, you can run it from the terminal followed by the desired URL as an argument. If Qutebrowser is running, the specified URL will be opened in that instance. If Qutebrowser is not running, it will launch a new instance with the provided URL.
+
+Example command:
 
 ```bash
-./open_url_in_instance.sh "http://example.com"
+/home/matias/.scripts/open_url_in_instance.sh "https://www.example.com"
 ```
 
-In case the script fails to send the message to an existing instance (due to no instance being open), it will then fall back to running the Qutebrowser with the URL as an argument.
+For other use cases, you could bind this script to a key combination in your window manager (e.g., Qtile) or automate it in your workflow to open frequently used links.
 
 ---
 
-> [!TIP]  
-> The script could be improved by adding error handling for scenarios where the URL is not provided or not valid. Additionally, checking if the Qutebrowser socket exists before attempting to connect could prevent runtime errors. You might want to implement logging to track issues encountered during execution for future troubleshooting.
+> [!TIP] 
+> Currently, the script does not handle errors such as failing to connect to the Qutebrowser IPC socket or invalid URL inputs. Adding error checking would improve its robustness. Additionally, you might consider supporting multiple tabs or browsing contexts by expanding the `args` array.
