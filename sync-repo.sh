@@ -89,7 +89,7 @@ print_glow() {
 generate_commit_message() {
     local message
     which generate_commit_message.sh > /dev/null 2>&1 \
-        && message="$(generate_commit_message.sh)"
+        && message="$(generate_commit_message.sh "$1")"
     if [ -z "$message" ]; then
         NB="$(git status -s | wc -l)"
         message="$NB change(s) from $USER@$HOSTNAME"
@@ -284,7 +284,7 @@ run_command "git status -s"
 if [[ -n $(git status -s) ]]; then
     if ! $DRY_RUN; then
         run_command "git add -A"
-        MESSAGE="$(generate_commit_message)"
+        MESSAGE="$(generate_commit_message "$REPO_DIR")"
         run_command "git commit -m \"$MESSAGE\""
 
         if ! run_command "git push $REMOTE $LOCAL"; then
