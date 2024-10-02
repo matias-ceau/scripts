@@ -82,7 +82,9 @@
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *A script to display a visual representation of a keyboard layout in the terminal.*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Script to play a song using `cmus` with a `dmenu` interface.*
 - [speach-to-text.py](scripts/speach-to-text.py.md) -- *Records audio through a preferred device and transcribes it using OpenAI's Whisper.*
+- [sync-repo-simple.py](scripts/sync-repo-simple.py.md) -- *Automates syncing a local git repository with its remote counterpart.*
 - [sync-repo-simple.sh](scripts/sync-repo-simple.sh.md) -- *A script to synchronize a local Git repository with remote changes.*
+- [sync-repo.py](scripts/sync-repo.py.md) -- *A script to automate syncing a Git repository with remote branches.*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *A script for syncing a Git repository with improved user interaction and error handling.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a specified command and view its output*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *A script to search and display helpful information from the tmux manpage.*

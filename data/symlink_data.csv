@@ -77,6 +77,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/show_keyboard_layout.py,/home/matias/.local/bin/show_keyboard_layout.py,show_keyboard_layout.py
 /home/matias/.scripts/songlauncher.sh,/home/matias/.local/bin/songlauncher.sh,songlauncher.sh
 /home/matias/.scripts/speach-to-text.py,/home/matias/.local/bin/speach-to-text.py,speach-to-text.py
+/home/matias/.scripts/sync-repo.py,/home/matias/.local/bin/sync-repo.py,sync-repo.py
 /home/matias/.scripts/sync-repo.sh,/home/matias/.local/bin/sync-repo.sh,sync-repo.sh
 /home/matias/.scripts/sync-repo-simple.py,/home/matias/.local/bin/sync-repo-simple.py,sync-repo-simple.py
 /home/matias/.scripts/sync-repo-simple.sh,/home/matias/.local/bin/sync-repo-simple.sh,sync-repo-simple.sh

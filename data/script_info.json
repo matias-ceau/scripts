@@ -649,5 +649,19 @@
     "description": "A script to synchronize a local Git repository with remote changes.",
     "doc_path": "docs/scripts/sync-repo-simple.sh.md",
     "hash": "9976259c0646dab2ddaca293b8a80a9c6d4c1d7a7455a4e77a36977b59f4fd0f"
+  },
+  "sync-repo.py": {
+    "file": "sync-repo.py",
+    "path": "sync-repo.py",
+    "description": "A script to automate syncing a Git repository with remote branches.",
+    "doc_path": "docs/scripts/sync-repo.py.md",
+    "hash": "4b0fe27631922ce55a6ed6e2b4a6a35471d89fe5d5a54fa24e9742f613e155f9"
+  },
+  "sync-repo-simple.py": {
+    "file": "sync-repo-simple.py",
+    "path": "sync-repo-simple.py",
+    "description": "Automates syncing a local git repository with its remote counterpart.",
+    "doc_path": "docs/scripts/sync-repo-simple.py.md",
+    "hash": "85c5a7c1b093739f1106217dfe135f02ff942f88b4c7f60c39daab783f22ea41"
   }
 }
