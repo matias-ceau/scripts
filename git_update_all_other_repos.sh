@@ -1,7 +1,11 @@
 #!/usr/bin/bash
 
-fd -td -H '\.git$' $GIT_REPOS | sed '/matias-ceau/d; s#/\.git.##' | while read -r line; do
-    echo -e "\n\e[33m$line\e[0m"
-    cd "$line" && git pull --verbose || echo -e "\e[31mFailed for $line\e[0m"
-    git status -v && sleep 1
+fd -td -H '\.git$' $GIT_REPOS --exact-depth=3 | while read line; do
+    repo="$(dirname "$line")"
+    if git -C "$repo" remote -v | rg fetch | rg -q 'https'; then
+        echo "$repo" |
+        sed -E "s#$GIT_REPOS/(.+)/(.+)#\n        [\2] \#\1/\2#" |
+        bat -ppltoml --theme=Monokai\ Extended --highlight-line 2
+        git -C "$repo" pull || echo -e "\e[41mFailed to pull:\e[0m\e[31m $repo\e[0m"
+    fi
 done
