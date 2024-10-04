@@ -205,9 +205,9 @@
   "git_update_all_other_repos.sh": {
     "file": "git_update_all_other_repos.sh",
     "path": "git_update_all_other_repos.sh",
-    "description": "Update multiple Git repositories excluding personal ones",
+    "description": "Automates pulling from all git repositories in a specified directory.",
     "doc_path": "docs/scripts/git_update_all_other_repos.sh.md",
-    "hash": "05744129f4590889c8dd66efa5ab790d8c032cc454ee55f3ccc3e1fa0c0a3878"
+    "hash": "efd54161739b556cab412a119a1cf1883133ad4a19c0cc51879e9198f2443e2a"
   },
   "grub-tune-to-audio-python.py": {
     "file": "grub-tune-to-audio-python.py",
@@ -663,5 +663,12 @@
     "description": "Automates syncing a local git repository with its remote counterpart.",
     "doc_path": "docs/scripts/sync-repo-simple.py.md",
     "hash": "85c5a7c1b093739f1106217dfe135f02ff942f88b4c7f60c39daab783f22ea41"
+  },
+  "ousse-update.sh": {
+    "file": "ousse-update.sh",
+    "path": "sys/ousse-update.sh",
+    "description": "A script to update various databases stored in a specified directory.",
+    "doc_path": "docs/scripts/ousse-update.sh.md",
+    "hash": "b16923f9c38777e140ddf424140d167339409c6d9f4f360983c8cc35ba7b5812"
   }
 }

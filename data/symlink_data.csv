@@ -54,6 +54,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/obsidian.xsh,/home/matias/.local/bin/obsidian.xsh,obsidian.xsh
 /home/matias/.scripts/open_url_in_instance.sh,/home/matias/.local/bin/open_url_in_instance.sh,open_url_in_instance.sh
 /home/matias/.scripts/openwebui-launcher.sh,/home/matias/.local/bin/openwebui-launcher.sh,openwebui-launcher.sh
+/home/matias/.scripts/sys/ousse-update.sh,/home/matias/.local/bin/ousse-update.sh,ousse-update.sh
 /home/matias/.scripts/pacman-fuzzy-search.sh,/home/matias/.local/bin/pacman-fuzzy-search.sh,pacman-fuzzy-search.sh
 /home/matias/.scripts/pdfopener.sh,/home/matias/.local/bin/pdfopener.sh,pdfopener.sh
 /home/matias/.scripts/playlist_player.xsh,/home/matias/.local/bin/playlist_player.xsh,playlist_player.xsh

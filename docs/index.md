@@ -29,7 +29,7 @@
 - [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Visualizes relationships between scripts in a directory using a graph.*
 - [git_cd.sh](scripts/git_cd.sh.md) -- *Quick navigation to Git directories using `locate`, `eza`, and `fzf`*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *Clone a GitHub repository by specifying the developer and package name with an option for SSH or a local path.*
-- [git_update_all_other_repos.sh](scripts/git_update_all_other_repos.sh.md) -- *Update multiple Git repositories excluding personal ones*
+- [git_update_all_other_repos.sh](scripts/git_update_all_other_repos.sh.md) -- *Automates pulling from all git repositories in a specified directory.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Script to convert GRUB_INIT_TUNE string to an audio file (MP3 format)*
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *Enhances `pastel` command help with syntax highlighting and interactive selection.*
 - [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *A customizable FZF menu utilizing Alacritty which can output piped data*
@@ -57,6 +57,7 @@
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault interactively using `fzf`*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Launches a URL in an existing Qutebrowser instance.*
 - [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *A script to launch and serve the Open Web UI in a new tmux session.*
+- [ousse-update.sh](scripts/ousse-update.sh.md) -- *A script to update various databases stored in a specified directory.*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script to perform a fuzzy search on packages using `paru` with a preview feature.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *Select and open a PDF file in your home directory with `evince`*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *Script to pick and play a playlist using `cmus`.*
