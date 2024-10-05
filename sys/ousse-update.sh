@@ -8,6 +8,10 @@ mkdir -p "$DBDIR"
 # # Optional: Minimum time in seconds before a database is considered out-of-date
 # MIN_AGE = 86400
 
+_custom_updatedb() {
+    [[ ! $# -eq 5 ]] && echo "invalid nb of args"
+}
+
 _home() {
     echo "Updating home..."
     updatedb -l 0 -o "$DBDIR/home.db" -U $HOME --prune-bind-mounts 0 --prunenames "" --prunepaths "/tmp"
@@ -46,15 +50,15 @@ _hdd2() {
 }
 
 _all() {
-    _home 
-    _dots 
-    _data 
-    _root 
-    _mega 
-    _devices 
-    _limbo 
-    _hdd2 
-}    
+    _home
+    _dots
+    _data
+    _root
+    _mega
+    _devices
+    _limbo
+    _hdd2
+}
 
 case "$1" in
     hom*) _home ;;
