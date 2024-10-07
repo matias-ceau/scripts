@@ -1,6 +1,8 @@
 #!/usr/bin/bash
 
-SHELL=/usr/bin/bash
+export SHELL=/usr/bin/bash
+export CACHE_DIR=$HOME/.cache/pacman-fuzzy-search
+mkdir -p "$CACHE_DIR"
 
 preview_cmd() {
     local cmd='-Si'
@@ -22,47 +24,64 @@ preview_cmd() {
 export -f preview_cmd
 
 paruSl() {
-    paru -Sl --color=always | sed -E 's/;35m/;33m/'
+    paru -Sl --color=always | sed -E 's/;35m/;33m/; s/unknown-version/unknown/'
 }
 export -f paruSl
 
 search_cmd() {
+    local args
     local repo
     local inst
-    [[ "$FZF_BORDER_LABEL" =~ 'A' ]] && repo='^aur '
-    [[ "$FZF_BORDER_LABEL" =~ 'I' ]] && inst='\[installed\]'
-    local rg_filter="$repo"'|'"$inst"
-    [[ "$rg_filter" == '|' ]] && paruSl || paruSl | rg -v "$rg_filter"
+    [[ "${FZF_BORDER_LABEL}" =~ a ]] && repo='^aur '
+    [[ "${FZF_BORDER_LABEL}" =~ i ]] && inst='\[installed\]'
+    [[ "$repo" ]] && args="${repo}"
+    [[ "$repo" && "$inst" ]] && args+='|' # implies empty if both false
+    [[ "$inst" ]] && args+="${inst}"
+    if [[ "$args" ]]; then
+        notify-send "pac" "repo: $repo\ninst: $inst\n${args}"
+        paruSl | rg -v "${args}"
+    else
+        paruSl
+    fi
 }
 export -f search_cmd
 
-blabel() {
-    if [[ "$1" == 'a' ]]; then
-        [[ "$FZF_BORDER_LABEL" =~ 'A' ]] && repo=a || repo=A
-    elif [[ "$1" == 'i'  ]]; then
-        [[ "$FZF_BORDER_LABEL" =~ 'I' ]] && inst=i || inst=I
-    else
-        [[ -z "$FZF_BORDER_LABEL" ]] && repo=A && inst=I
-    fi
-    echo -e "|\e[35m <${repo}> - <${inst}> \e[0m|"
-}
-export -f blabel
 
 fzf_cmd() {
     fzf \
-        -q "$1" \
-        -m \
+        --ansi \
+        --multi \
         --border 'bold' \
-        --border-label "$(blabel)" \
+        --border-label "" \
         --border-label-pos "top" \
+        --preview-window '60%' \
         --preview='preview_cmd "{}" {1} {2}' \
         --bind 'resize:refresh-preview' \
-        --bind 'alt-p:change-preview-window(right,60%|up,40%,border-horizontal|hidden|right)' \
-        --bind 'alt-a:transform-border-label(blabel a)+reload(search_cmd)' \
-        --bind 'alt-i:transform-border-label(blabel i)+reload(search_cmd)' \
-        --ansi \
-        --preview-window '60%' \
+        --bind 'alt-w:change-preview-window(right,50%|up,40%,border-horizontal|hidden)' \
         --bind 'enter:become:paru -S {+2}'
 }
-# --bind 'alt-h:transform:[[ ! $FZF_PROMPT =~ H ]] && echo "change-prompt(H> )+reload(search_cmd)" || echo "change-prompt(> )+reload()"' \
-    paruSl | fzf_cmd -q "$1"
+
+# --topdown Print search results from top to bottom. Repo packages will print first. This is the default.
+# --bottomup Print search results from bottom to top. AUR packages will print first.
+# j
+#ctrl-r reload in normal search
+#ctrl-s search term
+#ctrl-x
+#
+# alt-m mode --mode = aur|repo|pkgbuilds E.g. --mode=ar or --mode=arp.
+# alt-p pacman only
+# alt-o sort SortBy = <votes|popularity|name|base|submitted|modified|id|baseid>
+# alt c SearchBy = <name|name-desc|maintainer|depends|checkdepends|makedepends|optdepends>
+#               Defaults to name-desc. Search AUR packages according to the options in "Search by" visible here: https://aur.archlinux.org/packages/
+#
+#        Limit = N
+#               Limit the number of packages returned in a search to the given amount. Defaults to 0 (no limit). This applies separately to repo and AUR packages.
+export -f fzf_cmd
+
+paruSl | fzf_cmd
+# --bind 'alt-h:transform:[[ ! $FZF_PROMPT =~ H ]] && echo "change-prompt(H> )+reload(search_cmd)" || echo "change-prompt(> )+reload()"'
+# --bind 'alt-a:change-border-label#"$(blabel -a)"#' \
+    # --bind 'alt-i:change-border-label#"$(blabel -i)"#' \
+    #
+# --bind 'alt-a:transform-border-label#blabel -a#' --bind 'alt-a:+reload-sync#search_cmd#' \
+    # --bind 'alt-i:transform-border-label#blabel -i#' --bind 'alt-a:+reload-sync#search_cmd#' \

@@ -1,58 +1,49 @@
-# Pacman Fuzzy Search 
+# Pacman Fuzzy Search Script
 
 ---
 
-**pacman-fuzzy-search.sh**: A script for fuzzy searching Arch Linux packages with previews.
+**pacman-fuzzy-search.sh**: A fuzzy search script for Arch Linux's package manager with enhanced preview.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell used to execute the script.
-- `paru`: A package manager helper for `pacman` that supports AUR.
-- `rg` (ripgrep): A fast search tool for assisting in regex-based searches.
-- `sed`: A stream editor for filtering and transforming text.
+- `bash`: The shell interpreter used to execute the script.
+- `paru`: A modern AUR helper, required for package searching.
+- `fzf`: A command-line fuzzy finder that allows for flexible searching.
+- `ripgrep (rg)`: A fast command-line search tool for filtering results.
 - `bat`: A cat clone with syntax highlighting and Git integration.
-- `fzf`: A command-line fuzzy finder.
 
 ### Description
 
-This script leverages the `fzf` fuzzy finder to allow users to quickly search for installed or available packages in Arch Linux using the `paru` package manager. It provides a preview of the package details dynamically as the user types. 
+The `pacman-fuzzy-search.sh` script provides a user-friendly interface to search for installed and AUR packages using fuzzy searching capabilities. It enhances the search experience by integrating a preview feature and allowing for intuitive filtering between installed packages and available AUR packages.
 
-Key functions of the script include:
+The script defines several functions:
+- **`preview_cmd`**: This function generates a preview of package details from the output of `paru`. It applies various `sed` transformations to format the information for readability and highlights the installed status using ANSI escape codes.
+  
+- **`paruSl`**: A simple function to list all installed packages with colored output.
 
-- **preview_cmd**: This function prepares and formats the preview output for a selected package using `paru` combined with multiple `sed` transformations for clean presentation. It adapts the command based on whether the package is installed or not.
-- The script uses a pipeline to fetch the list of packages and formats the output to be compatible with `fzf`, which allows for real-time searching and selection.
+- **`search_cmd`**: It constructs search filters based on user-defined conditions (AUR or installed packages). The user can modify the search criteria dynamically by pressing designated keys within the fuzzy finder.
 
-Here’s how the preview generation works:
-- It checks if the package is installed and alters the command accordingly.
-- It enriches the displayed information using multiple substitutions via `sed` to enhance readability and format.
+- **`blabel`**: Creates a border label to indicate the current search mode. It handles switching labels between AUR and installed package searches.
+
+- **`fzf_cmd`**: This function utilizes `fzf` to produce an interactive fuzzy search interface, complete with custom key bindings for easier navigation.
 
 ### Usage
 
-To utilize the script, simply run it from the terminal. You can pass an optional query string that `fzf` will use for filtering:
-
-```bash
-bash /home/matias/.scripts/pacman-fuzzy-search.sh [search_query]
-```
-
-- `search_query`: An optional argument that is preloaded into the `fzf` search.
-
-Without any arguments, you can access the full list of packages:
+To use the script, execute it from a terminal:
 
 ```bash
 bash /home/matias/.scripts/pacman-fuzzy-search.sh
 ```
 
-### Example
-
-Run the script to search for packages containing "firefox":
-
-```bash
-bash /home/matias/.scripts/pacman-fuzzy-search.sh firefox
-```
+Within the fuzzy search interface:
+- Use the arrow keys to navigate through the list of packages.
+- Press `Enter` to install the selected package.
+- Use `Alt + a` to switch to searching AUR packages, `Alt + i` for installed packages.
+- The search results will dynamically update based on the selected mode.
 
 ---
 
 > [!TIP]  
-> The script could benefit from error handling, ensuring a smoother user experience, especially if dependencies are missing or commands fail. Another enhancement could be to allow keyboard shortcuts for ease of use inside `fzf` for faster operations.
+> Consider adding error handling in your script for cases where the `paru` command fails or when no packages meet the search criteria. Manual testing for edge cases would also enhance the script's robustness and usability. Additionally, documenting each function further within the code will help future users (or yourself) understand its operations quickly.

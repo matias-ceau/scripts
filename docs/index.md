@@ -49,6 +49,7 @@
 - [megaignore_editor.sh](scripts/megaignore_editor.sh.md) -- *Interactive script to find and edit `.megaignore` files*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *A script to transform a MIDI controller into a keyboard or script launcher.*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
+- [minimal-browser.py](scripts/minimal-browser.py.md) -- *A simple browser for viewing local HTML and markdown files.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A script for creating and modifying user scripts with optional templating*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A utility for creating new scripts with predefined templates.*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *A script to skip to the next album in `cmus`*
@@ -56,9 +57,9 @@
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to select and open any Obsidian vault.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault interactively using `fzf`*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Launches a URL in an existing Qutebrowser instance.*
-- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *A script to launch and serve the Open Web UI in a new tmux session.*
-- [ousse-update.sh](scripts/ousse-update.sh.md) -- *A script to update various databases stored in a specified directory.*
-- [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script to perform a fuzzy search on packages using `paru` with a preview feature.*
+- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *A script to launch Open Web UI in Qutebrowser.*
+- [ousse-update.sh](scripts/ousse-update.sh.md) -- *A script for maintaining and updating various databases of system paths.*
+- [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A fuzzy search script for Arch Linux's package manager with enhanced preview.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *Select and open a PDF file in your home directory with `evince`*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *Script to pick and play a playlist using `cmus`.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Script to shuffle and play a playlist of albums in cmus.*

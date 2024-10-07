@@ -2,44 +2,46 @@
 
 ---
 
-**openwebui-launcher.sh**: A script to launch and serve the Open Web UI in a new tmux session.
+**openwebui-launcher.sh**: A script to launch Open Web UI in Qutebrowser.
 
 ---
 
 ### Dependencies
 
-- `tmux`: A terminal multiplexer that allows multiple terminal sessions to be accessed simultaneously.
-- `curl`: A command line tool for transferring data with URLs.
-- `notify-send`: A command to send desktop notifications.
-- `qutebrowser`: A keyboard-driven web browser that allows a high level of customization.
+- `tmux`: A terminal multiplexer that allows you to create and manage multiple terminal sessions.
+- `curl`: A command-line tool for transferring data with URLs.
+- `notify-send`: A utility to display desktop notifications.
+- `qutebrowser`: A keyboard-driven web browser based on PyQt5.
 
 ### Description
 
-The `openwebui-launcher.sh` script is designed to facilitate the launching of the Open Web UI application in a separate tmux session. The script initializes a new tmux session named 'OPENWEBUI' where it runs the command `open-webui serve`.
+This script is designed to launch the Open Web UI service for Qutebrowser within a `tmux` session while providing user feedback through notifications. It allows users to customize several parameters, including the host address, port number, and database configuration. 
 
-Once the server is launched, the script immediately begins to check if it is accessible by sending requests to `http://localhost:8080` using `curl`. It operates in a loop that will retry the request every 3 seconds until the server responds positively, or a timeout of 30 seconds is reached.
+The script begins by defining default values for `HOST`, `PORT`, `QBDATA`, and `OWCFG`. It parses command-line arguments to allow customization of these variables. If the `open-webui` service is not already running on the specified port, it creates a new detached `tmux` session titled "OPENWEBUI" and executes the `open-webui serve` command. 
 
-When the server becomes reachable, a notification is sent to indicate that it is up and running. If the server does not respond within the specified timeout period, a notification about the timeout will be sent, and the script will exit with an error code.
-
-Lastly, the script launches the site in `qutebrowser` with a specific configuration script provided in the user's configuration directory.
+The script employs a loop that polls the server to check if it is live, and if not, it times out after 30 seconds, notifying the user if the launch fails. Once the server is confirmed as active, it launches the Qutebrowser with the specified configuration and opens the URL.
 
 ### Usage
 
-To use the script, simply run the following command in your terminal:
+To use this script, simply execute it from the terminal with optional parameters:
 
 ```bash
-bash /home/matias/.scripts/openwebui-launcher.sh
+./openwebui-launcher.sh [options]
 ```
 
-This command will:
+#### Options:
 
-1. Start a new tmux session that runs the Open Web UI server.
-2. Notify you of the launch process via desktop notifications.
-3. Open the Open Web UI in `qutebrowser`.
+- `-D` or `--database`: Specify the path to the Qutebrowser data directory.
+- `-H` or `--host`: Set a custom host IP (default is `0.0.0.0`).
+- `-p` or `--port`: Define a custom port (default is `8080`).
 
-**Note**: Ensure that tmux and qutebrowser are installed and correctly set up on your system.
+**Example:** Launching Open Web UI with a custom port:
+
+```bash
+./openwebui-launcher.sh -p 9090
+```
 
 ---
 
-> [!TIP]  
-> One potential improvement could be to make the so-called "timeout" duration configurable, possibly through a command-line argument for greater flexibility. Additionally, error handling for the initial tmux command could enhance the user experience by notifying if the session could not be started.
+> [!TIP] 
+> The script currently does not validate user input for the host and port arguments. Implementing validation logic would enhance its robustness. Additionally, consider adding more detailed logging to help troubleshoot issues during startup.

@@ -359,9 +359,9 @@
   "pacman-fuzzy-search.sh": {
     "file": "pacman-fuzzy-search.sh",
     "path": "pacman-fuzzy-search.sh",
-    "description": "A script to perform a fuzzy search on packages using `paru` with a preview feature.",
+    "description": "A fuzzy search script for Arch Linux's package manager with enhanced preview.",
     "doc_path": "docs/scripts/pacman-fuzzy-search.sh.md",
-    "hash": "ee77aa889a63cfddb7e6f2d65967a8df0350450c8fa45ff40bd67922cf43cad8"
+    "hash": "d686775cae9dc8a619ad364147e97660fbfb2cd59af8186c4b22de12824bede6"
   },
   "pdfopener.sh": {
     "file": "pdfopener.sh",
@@ -639,9 +639,9 @@
   "openwebui-launcher.sh": {
     "file": "openwebui-launcher.sh",
     "path": "openwebui-launcher.sh",
-    "description": "A script to launch and serve the Open Web UI in a new tmux session.",
+    "description": "A script to launch Open Web UI in Qutebrowser.",
     "doc_path": "docs/scripts/openwebui-launcher.sh.md",
-    "hash": "8ee5f0cb40ee6a27354736fde47f430e6459fa1eaed366a137ab9ebb8b763d46"
+    "hash": "bf9240d1541cc9c2f987196a6e39f1ecf17a37fa602828d3969aed7cf7e9fe96"
   },
   "sync-repo-simple.sh": {
     "file": "sync-repo-simple.sh",
@@ -667,8 +667,15 @@
   "ousse-update.sh": {
     "file": "ousse-update.sh",
     "path": "sys/ousse-update.sh",
-    "description": "A script to update various databases stored in a specified directory.",
+    "description": "A script for maintaining and updating various databases of system paths.",
     "doc_path": "docs/scripts/ousse-update.sh.md",
-    "hash": "b16923f9c38777e140ddf424140d167339409c6d9f4f360983c8cc35ba7b5812"
+    "hash": "2e8580414542817f0a96aebb7828c035a5b81257c6f40e36f3458fddc2ddd547"
+  },
+  "minimal-browser.py": {
+    "file": "minimal-browser.py",
+    "path": "minimal-browser.py",
+    "description": "A simple browser for viewing local HTML and markdown files.",
+    "doc_path": "docs/scripts/minimal-browser.py.md",
+    "hash": "cb5ea545f5584ff4b495e4c9a556c553e949a281cd040fbadaf63edd06786c05"
   }
 }
