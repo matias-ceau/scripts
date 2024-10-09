@@ -14,28 +14,28 @@ if [ $# -lt 1 ]; then
 fi
 
 GIT_REPOS="${GIT_REPOS:-"$HOME/git"}"
-SSH=false
-LOCAL=false
+SSH=''
+LOCAL=''
 LOCAL_PATH=""
 
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
     case $1 in
-    -s | --ssh)
-        SSH=true
-        ;;
-    -l | --local)
-        LOCAL=true
-        shift
-        LOCAL_PATH=$1
-        ;;
-    *)
-        usage
-        ;;
+        -s | --ssh)
+            SSH=true
+            ;;
+        -l | --local)
+            LOCAL=true
+            shift
+            LOCAL_PATH=$1
+            ;;
+        *)
+            usage
+            ;;
     esac
     shift
 done
 
-if [ "$SSH" = true ] && [ "$LOCAL" = true ]; then
+if [[ "$SSH"  &&  "$LOCAL" ]]; then
     usage
 fi
 
@@ -43,7 +43,7 @@ if [ "$#" -ne 1 ]; then
     usage
 fi
 
-REPO=$1
+REPO="$1"
 DEVELOPER="$(echo "$REPO" | cut -d'/' -f1)"
 PACKAGE="$(echo "$REPO" | cut -d'/' -f2)"
 
@@ -51,10 +51,13 @@ TARGET_DIR="$GIT_REPOS/$DEVELOPER"
 
 mkdir -p "$TARGET_DIR"
 
-if [ "$SSH" = true ]; then
+if [[ "$SSH" ]]; then
+    echo "Using SSH"
     git clone "git@github.com:$REPO.git" "$TARGET_DIR/$PACKAGE"
-elif [ "$LOCAL" = true ]; then
+elif [[ "$LOCAL" ]]; then
+    echo "Using local repo"
     git clone "$LOCAL_PATH" "$TARGET_DIR/$PACKAGE"
 else
+    echo "Using https"
     git clone "https://github.com/$REPO.git" "$TARGET_DIR/$PACKAGE"
 fi
