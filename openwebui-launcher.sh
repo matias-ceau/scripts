@@ -4,7 +4,7 @@
 
 # BROWSER
 
-HOST='0.0.0.0'
+HOST='localhost'
 PORT=8080
 QBDATA="$HOME/data/qutebrowser_data/open-webui"
 OWCFG="$XDG_CONFIG_HOME/qutebrowser/openwebui.py"
