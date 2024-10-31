@@ -10,6 +10,7 @@
 - [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions for easier execution.*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *Script to count the number of tokens in a text using the Tiktoken library.*
 - [create_cover_art.sh](scripts/create_cover_art.sh.md) -- *Generates cover art from audio file spectrograms.*
+- [desk_fzf.sh](scripts/desk_fzf.sh.md) -- *Find and execute .desktop files with fzf selection.*
 - [display_markdown.py](scripts/display_markdown.py.md) -- *Script to display markdown files using the Rich library with customizable styles and width.*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to display executable scripts and run selected ones.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
@@ -28,7 +29,7 @@
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list Git repositories localized on the current host and update them into a summary.*
 - [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Visualizes relationships between scripts in a directory using a graph.*
 - [git_cd.sh](scripts/git_cd.sh.md) -- *Quick navigation to Git directories using `locate`, `eza`, and `fzf`*
-- [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *Clone a GitHub repository by specifying the developer and package name with an option for SSH or a local path.*
+- [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *Clone Git repositories by specifying developer and package.*
 - [git_update_all_other_repos.sh](scripts/git_update_all_other_repos.sh.md) -- *Automates pulling from all git repositories in a specified directory.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Script to convert GRUB_INIT_TUNE string to an audio file (MP3 format)*
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *Enhances `pastel` command help with syntax highlighting and interactive selection.*
@@ -57,9 +58,9 @@
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Script to select and open any Obsidian vault.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Open any Obsidian vault interactively using `fzf`*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Launches a URL in an existing Qutebrowser instance.*
-- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *A script to launch Open Web UI in Qutebrowser.*
+- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *A script to launch the Open WebUI with customizable parameters.*
 - [ousse-update.sh](scripts/ousse-update.sh.md) -- *A script for maintaining and updating various databases of system paths.*
-- [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A fuzzy search script for Arch Linux's package manager with enhanced preview.*
+- [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A fuzzy search script for Arch Linux's pacman and AUR packages.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *Select and open a PDF file in your home directory with `evince`*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *Script to pick and play a playlist using `cmus`.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Script to shuffle and play a playlist of albums in cmus.*
@@ -67,7 +68,7 @@
 - [pyman.sh](scripts/pyman.sh.md) -- *Navigate and explore Python documentation and site-packages interactively.*
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *Switches to the complementary group in Qtile, based on a dice concept*
 - [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Script to move and switch the current window to the next or previous group in Qtile.*
-- [quick-pass.sh](scripts/quick-pass.sh.md) -- *Quickly select a password from your password store using `fzf`.*
+- [quick-pass.sh](scripts/quick-pass.sh.md) -- *A script to quickly access and copy GPG-encrypted passwords from a password store.*
 - [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *A script to sync Qutebrowser bookmarks and sessions between local and chezmoi directories.*
 - [random_album.xsh](scripts/random_album.xsh.md) -- *Selects a random album from cmus library and plays it using cmus.*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Selects and sets a random wallpaper from a specified folder for use with `feh`.*

@@ -198,9 +198,9 @@
   "git_clone_by_author-repo.sh": {
     "file": "git_clone_by_author-repo.sh",
     "path": "git_clone_by_author-repo.sh",
-    "description": "Clone a GitHub repository by specifying the developer and package name with an option for SSH or a local path.",
+    "description": "Clone Git repositories by specifying developer and package.",
     "doc_path": "docs/scripts/git_clone_by_author-repo.sh.md",
-    "hash": "9d3bda700f6ae3d51b9423a2906fe8ff58783d7a78196a08d38b598f3e22bb49"
+    "hash": "654f59d7a0f7d49f8d437ab4583bba81437b0a7c1a1170ab3369d3ecb3ec8d45"
   },
   "git_update_all_other_repos.sh": {
     "file": "git_update_all_other_repos.sh",
@@ -359,9 +359,9 @@
   "pacman-fuzzy-search.sh": {
     "file": "pacman-fuzzy-search.sh",
     "path": "pacman-fuzzy-search.sh",
-    "description": "A fuzzy search script for Arch Linux's package manager with enhanced preview.",
+    "description": "A fuzzy search script for Arch Linux's pacman and AUR packages.",
     "doc_path": "docs/scripts/pacman-fuzzy-search.sh.md",
-    "hash": "d686775cae9dc8a619ad364147e97660fbfb2cd59af8186c4b22de12824bede6"
+    "hash": "f7d95cea9b721828fe39fabfb84139e0298ae2299e89586b60f72d51e654ebb0"
   },
   "pdfopener.sh": {
     "file": "pdfopener.sh",
@@ -415,9 +415,9 @@
   "quick-pass.sh": {
     "file": "quick-pass.sh",
     "path": "quick-pass.sh",
-    "description": "Quickly select a password from your password store using `fzf`.",
+    "description": "A script to quickly access and copy GPG-encrypted passwords from a password store.",
     "doc_path": "docs/scripts/quick-pass.sh.md",
-    "hash": "09f66e0742ba3c9fef9057f25c662257298c78e1a935357dfb8c386269098587"
+    "hash": "85ca24bad7b8181add8d7c48cb0ebabc68dc0e98fb8fe7bd42fd06087a733aaa"
   },
   "qutebrowser-modify-source-bookmarks.sh": {
     "file": "qutebrowser-modify-source-bookmarks.sh",
@@ -639,9 +639,9 @@
   "openwebui-launcher.sh": {
     "file": "openwebui-launcher.sh",
     "path": "openwebui-launcher.sh",
-    "description": "A script to launch Open Web UI in Qutebrowser.",
+    "description": "A script to launch the Open WebUI with customizable parameters.",
     "doc_path": "docs/scripts/openwebui-launcher.sh.md",
-    "hash": "bf9240d1541cc9c2f987196a6e39f1ecf17a37fa602828d3969aed7cf7e9fe96"
+    "hash": "54c4412d410f23d42e416eab156da7bb041fcb988b72096751e8f4dabfeb4265"
   },
   "sync-repo-simple.sh": {
     "file": "sync-repo-simple.sh",
@@ -677,5 +677,12 @@
     "description": "A simple browser for viewing local HTML and markdown files.",
     "doc_path": "docs/scripts/minimal-browser.py.md",
     "hash": "cb5ea545f5584ff4b495e4c9a556c553e949a281cd040fbadaf63edd06786c05"
+  },
+  "desk_fzf.sh": {
+    "file": "desk_fzf.sh",
+    "path": "desk_fzf.sh",
+    "description": "Find and execute .desktop files with fzf selection.",
+    "doc_path": "docs/scripts/desk_fzf.sh.md",
+    "hash": "a06d79c79bc1a4b9aaf1119bd201a81b04b5f53d70b8bf337a534dbfd161e6b5"
   }
 }

@@ -11,6 +11,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/command_prompt.sh,/home/matias/.local/bin/command_prompt.sh,command_prompt.sh
 /home/matias/.scripts/count_tokens_with_tiktoken.py,/home/matias/.local/bin/count_tokens_with_tiktoken.py,count_tokens_with_tiktoken.py
 /home/matias/.scripts/create_cover_art.sh,/home/matias/.local/bin/create_cover_art.sh,create_cover_art.sh
+/home/matias/.scripts/desk_fzf.sh,/home/matias/.local/bin/desk_fzf.sh,desk_fzf.sh
 /home/matias/.scripts/dev/display_markdown.py,/home/matias/.local/bin/display_markdown.py,display_markdown.py
 /home/matias/.scripts/dmenu_run_scripts.py,/home/matias/.local/bin/dmenu_run_scripts.py,dmenu_run_scripts.py
 /home/matias/.scripts/edit_chezmoi_cfg_files.sh,/home/matias/.local/bin/edit_chezmoi_cfg_files.sh,edit_chezmoi_cfg_files.sh

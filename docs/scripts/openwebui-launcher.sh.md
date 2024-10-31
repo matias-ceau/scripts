@@ -1,47 +1,49 @@
-# Open Web UI Launcher
+# Open WebUI Launcher
 
 ---
 
-**openwebui-launcher.sh**: A script to launch Open Web UI in Qutebrowser.
+**openwebui-launcher.sh**: A script to launch the Open WebUI with customizable parameters.
 
 ---
 
 ### Dependencies
 
-- `tmux`: A terminal multiplexer that allows you to create and manage multiple terminal sessions.
-- `curl`: A command-line tool for transferring data with URLs.
-- `notify-send`: A utility to display desktop notifications.
-- `qutebrowser`: A keyboard-driven web browser based on PyQt5.
+- `bash`: The script is written for the Bash shell.
+- `tmux`: Required for running the server in a detached session.
+- `curl`: Used to check the availability of the server.
+- `qutebrowser`: Web browser used to open the Open WebUI.
+- `notify-send`: Used for desktop notifications indicating the status of the script.
 
 ### Description
 
-This script is designed to launch the Open Web UI service for Qutebrowser within a `tmux` session while providing user feedback through notifications. It allows users to customize several parameters, including the host address, port number, and database configuration. 
+This script facilitates launching the Open WebUI hosted on a specified `HOST` and `PORT`. It allows users to customize the database location and server parameters using command-line arguments. Here’s how the script works:
 
-The script begins by defining default values for `HOST`, `PORT`, `QBDATA`, and `OWCFG`. It parses command-line arguments to allow customization of these variables. If the `open-webui` service is not already running on the specified port, it creates a new detached `tmux` session titled "OPENWEBUI" and executes the `open-webui serve` command. 
+1. **Parameter Parsing**: The script processes command-line arguments for database location (`--database`), `host` (`--host`), and `port` (`--port`). Default values are set to `localhost`, `8080`, and a specified path in the user's home directory.
 
-The script employs a loop that polls the server to check if it is live, and if not, it times out after 30 seconds, notifying the user if the launch fails. Once the server is confirmed as active, it launches the Qutebrowser with the specified configuration and opens the URL.
+2. **Server Check**: It uses `ps` and `rg` to check if the Open WebUI is already running on the specified port. If not, it starts a new `tmux` session to handle the web server.
+
+3. **Server Notification**: After launching the server, it sends a notification about the server status. A loop checks for the server's readiness by sending a request to the URL, with a timeout of 30 seconds.
+
+4. **Launching the Browser**: Once the server is confirmed to be running, `qutebrowser` is launched with the specified user settings and the server URL.
 
 ### Usage
 
-To use this script, simply execute it from the terminal with optional parameters:
+To utilize the script, run it from the terminal with optional arguments to customize its behavior. Here are some examples:
 
 ```bash
-./openwebui-launcher.sh [options]
+# Launch with default settings
+./openwebui-launcher.sh
+
+# Launch specifying a different database and port
+./openwebui-launcher.sh --database /path/to/database -p 9000
+
+# Launch with custom host and port
+./openwebui-launcher.sh --host 127.0.0.1 --port 8081
 ```
 
-#### Options:
-
-- `-D` or `--database`: Specify the path to the Qutebrowser data directory.
-- `-H` or `--host`: Set a custom host IP (default is `0.0.0.0`).
-- `-p` or `--port`: Define a custom port (default is `8080`).
-
-**Example:** Launching Open Web UI with a custom port:
-
-```bash
-./openwebui-launcher.sh -p 9090
-```
+Remember to ensure that all dependencies are installed to avoid any runtime errors. Configure the `OWCFG` and `QBDATA` variables as needed to point to your specific settings.
 
 ---
 
-> [!TIP] 
-> The script currently does not validate user input for the host and port arguments. Implementing validation logic would enhance its robustness. Additionally, consider adding more detailed logging to help troubleshoot issues during startup.
+> [!TIP]
+> The script checks for existing server instances using `rg`, but this could lead to issues if multiple instances are running on different ports or using different names. Consider improving the uniqueness of the session name or implementing better instance management strategies. Additionally, consider implementing error handling for dependencies to alert the user if they are missing before trying to run the script.
