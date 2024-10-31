@@ -1,58 +1,44 @@
-# TUI GPT - Mother AI Interface
+# TUI GPT Interface
 
 ---
 
-**tui-gpt.py**: A terminal-based user interface for interacting with an AI named Mother from the Aliens movies.
+**tui-gpt.py**: A terminal-based GPT chat interface resembling 'Mother' from the Aliens movies.
 
 ---
 
 ### Dependencies
 
-- `llm`: API for language models, required for interfacing with OpenAI's models.
-- `textual`: A framework to build rich user interfaces in the terminal.
+- `python (>=3.12)`: The script requires Python version 3.12 or higher to run.
+- `llm`: A library for handling large language models.
+- `textual`: A library for creating TUI (Text User Interface) applications.
+- `rich`: Provides the `MONOKAI` theme used for text styling.
 
 ### Description
 
-The `tui-gpt.py` script creates a terminal user interface (TUI) that lets users interact with an AI modeled after "Mother" from the Aliens series. Built using the `textual` library, it connects to OpenAI's API to generate responses based on user input.
+The `tui-gpt.py` script creates a TUI application that acts as a conversational interface with OpenAI's GPT models, specifically the "gpt-4o-2024-08-06" model. It provides a retro feel, simulating the persona of "Mother" from the Aliens franchise. The user inputs prompts which are sent to the model, and the responses are displayed in the terminal application.
 
-The main features include:
-
-- A Markdown-based display for both user prompts and AI responses.
-- A responsive, scrollable interface that manages user queries effectively.
-- An automatic connection to OpenAI using the provided API key from environment variables.
-
-Key components include:
-
-- **Prompt & Response**: Custom classes derived from `Markdown` to render user inputs and AI responses respectively.
-- **Styling**: CSS-like syntax to define visual appearance for interactive elements within the TUI.
-- **Event Handling**: Listens for user input, processes it asynchronously with OpenAI's API, and updates the display in real time.
+The main class `MotherApp` uses `textual` to build a UI layout with thematic styling provided by `rich`. It consists of a header, a scrollable chat view, an input field where users type their prompts, and a footer. The script utilizes asynchronous handling to ensure the application remains responsive during interactions with the GPT API. The script is pre-configured to respond in a specific mode, by setting the `SYSTEM` variable, which guides the character of the responses.
 
 ### Usage
 
-Run the script in the terminal. Ensure you have set your OpenAI API key in your environment:
+To use the script, ensure all dependencies are installed and you have an OpenAI API key set in your environment variables as `OPENAI_API_KEY`.
 
-```bash
-export OPENAI_API_KEY='your_api_key_here'
-```
-
-To execute the script, simply run:
-
-```bash
-python /home/matias/.scripts/tui-gpt.py
-```
-
-Once running, it presents a prompt asking "How can I help you?". Type your query and press Enter:
-
-1. Type your question, for example:
-   ```
-   What is the purpose of your existence?
+1. **Run in terminal**: 
+   ```bash
+   python /home/matias/.scripts/bin/tui-gpt.py
    ```
 
-2. Press Enter to submit. The AI will respond promptly in the terminal interface.
+2. **Input a prompt** into the console's input field.
 
-The interface supports continuous interaction until you choose to exit the application.
+3. **View response**: The script will process and render the response from the GPT model in the chat view area.
+
+```bash
+API_KEY=your_openai_api_key python /home/matias/.scripts/bin/tui-gpt.py
+```
+
+Note: Replace `your_openai_api_key` with your actual OpenAI API key.
 
 ---
 
-> [!TIP] 
-> While the script has a solid foundation, consider implementing error handling for API failures or invalid inputs to enhance stability. Additionally, you may want to look into performance optimizations for rendering in larger conversations, such as limiting the message history displayed. Implementing pagination could also be beneficial for extensive outputs.
+> [!TIP]
+> The provided prompt handling is synchronous for text input, which might lead to a delay if the API response is large or slow. Consider implementing a more robust error-handling mechanism if the OpenAI service is unavailable or the API key is invalid. Also, improve the user experience by adding more customization options for the UI, such as color themes or model selections.

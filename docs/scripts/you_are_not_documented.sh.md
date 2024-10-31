@@ -1,35 +1,36 @@
-# You Are Not Documented
+# Find Scripts Without Inline Docs
 
 ---
 
-**you_are_not_documented.sh**: A script that finds scripts without inline docs.
+**you_are_not_documented.sh**: A script that finds scripts without inline docs in a specified directory
 
 ---
 
 ### Dependencies
 
-- `rg`: A fast search tool (ripgrep) used for searching through files.
-  
+- `rg` (ripgrep): A command-line search tool that recursively searches directories for a regex pattern.
+
 ### Description
 
-The `you_are_not_documented.sh` script is designed to help developers identify scripts in their projects that lack inline documentation. By utilizing `rg` (ripgrep), it searches for files that do not contain a specific comment pattern indicating documentation (`#INFO:#`). This effectively highlights scripts that may need additional explanation or comments regarding their functionality.
+This script, `you_are_not_documented.sh`, is designed to identify scripts within a specified directory that lack a predefined inline documentation comment tag, specifically `#INFO:#`. The script uses `rg` (ripgrep), a fast and flexible text searching tool, to efficiently search through files and directories.
 
-The script does not only look for all scripts—it specifically excludes files located within directories associated with documentation (`/docs/`), configuration (`/config/`), as well as files with the extensions `.csv` or `.md`. This makes the search more targeted and keeps the focus on executable scripts that might require attention.
+The first `rg` command searches for files that do not contain the pattern `#INFO:#`, which is used to indicate the presence of inline documentation. The search is limited to the directory specified by the environment variable `$SCRIPTS`.
+
+The output from the first `rg` command is then piped into a second `rg` command to exclude files within `/docs/` and `/config/` directories, as well as files with `.csv` and `.md` extensions. This ensures that only relevant script files are considered, and non-script files or documentation folders are ignored.
 
 ### Usage
 
-To run the script, simply execute it in a terminal session. Make sure that the environment variable `SCRIPTS` is set to the directory containing the scripts you want to check.
+To use the `you_are_not_documented.sh` script, make sure it is executable and that the `$SCRIPTS` environment variable is set to the directory you wish to scan. You can execute the script from the terminal as follows:
 
 ```bash
-export SCRIPTS=/path/to/your/scripts
-/home/matias/.scripts/you_are_not_documented.sh
+chmod +x /home/matias/.scripts/bin/you_are_not_documented.sh
+export SCRIPTS="/path/to/your/scripts"
+./you_are_not_documented.sh
 ```
 
-This command will list all scripts in the specified directory that do not contain the inline documentation marker.
-
-You can integrate this script into your workflow by running it periodically or assigning it to a keybinding in your window manager (qtile). 
+This will output a list of scripts within the `$SCRIPTS` directory that are missing the `#INFO:#` inline documentation tag.
 
 ---
 
-> [!TIP] 
-> Consider adding an option to print additional information about each found script (like its path) or prompting users to add documentation directly. Additionally, implementing a configuration option for customizing the search directory could enhance flexibility for varied project structures.
+> [!WARNING]  
+> The script relies on the `$SCRIPTS` environment variable being set correctly; if it's unset or pointed to the wrong location, the script will not function as intended. Consider adding error handling to check if `$SCRIPTS` is set and valid. Additionally, it might be useful to make the search pattern configurable to accommodate for different inline documentation tags.

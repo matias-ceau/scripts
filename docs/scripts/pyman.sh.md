@@ -1,60 +1,56 @@
-# Pyman: Python Package Management Interface
+# Python Manual Browser (pyman.sh)
 
 ---
 
-**pyman.sh**: A bash script for managing and exploring Python packages with enhanced interactivity.
+**pyman.sh**: A script to browse Python documentation topics, keywords, built-in functions, and site-packages using `fzf`.
 
 ---
 
 ### Dependencies
 
-- `python`: Required for retrieving version and documentation of Python packages.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `bat`: A cat clone with syntax highlighting and Git integration, enhancing the output style.
-- `fzf`: A command-line fuzzy finder, which provides interactive command-line feature.
-- `notify-send`: Utility to create desktop notifications.
+The script requires the following dependencies:
+- `python`: Provides the ability to run Python commands.
+- `pydoc`: Python documentation tool for the built-in pydoc server.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `rg` (Ripgrep): A fast tool for searching files.
+- `fzf`: A command-line fuzzy finder.
+- `ranger`: A file manager with a VI keybindings.
 
 ### Description
 
-Pyman is a command-line utility designed to streamline the process of managing and exploring Python packages in an interactive way. It provides an interface leveraging `fzf` to browse through topics, keywords, built-ins, and modules. 
+This script, `pyman.sh`, is designed to help users explore Python documentation by providing a convenient interface that shows topics, keywords, built-in functions, and site-packages from the installed Python version. It utilizes the `fzf` fuzzy finder to allow easy navigation and retrieval of documentation content. The script sets a cache directory and generates caching paths to temporarily store session-specific data.
 
-The script begins by setting environment variables based on the current Python version and its site packages directory. These variables include:
+Several functions are defined to fetch different Python-related information:
+- **`get_topics()`**: Retrieves Python documentation topics.
+- **`get_keywords()`**: Retrieves Python keywords.
+- **`get_site_packages()`**: Lists installed Python packages in the site-packages directory.
+- **`get_submodules()`**: Lists submodules of a given package.
+- **`get_builtins()`**: Lists Python built-in functions.
 
-- `VERS`: Stores the Python version.
-- `SEARCH_PATH`: The directory where Python libraries are located.
-- `PYMAN_CACHE_DIR`: A cache directory for current session files.
-
-Several functions are defined to extract information about Python packages. 
-
-- **get_topics**: Fetches and formats available doc topics.
-- **get_keywords**: Retrieves keywords from the documentation, styled by `bat`.
-- **get_site_packages**: Lists site packages, differentiating Python files from directories.
-- **get_submodules**: Investigates submodules of a specified package.
-- **get_builtins**: Displays built-in Python functions and variables.
-- **bat_preview**: Prepares documentation for preview.
-- **enter_cmd**: Executes commands based on user choices, such as opening files in `ranger` or displaying content with `bat`.
-
-The utility will pipe results into `fzf`, allowing users to interactively select their desired option.
+`fzf` is used to present this information to the user and allows filtering and previewing through the `bat` utility. The script is intended to be interactive and is executed in a shell environment.
 
 ### Usage
 
-To run the script, execute it in your terminal:
+Run the script directly from the terminal to start the interactive documentation browser:
 
 ```bash
-bash /home/matias/.scripts/pyman.sh
+./pyman.sh
 ```
 
-Users can navigate through different categories (Topics, Keywords, etc.) using the following key bindings:
+Inside the `fzf` interface:
+- Use `Alt-l` to load site-packages, `Alt-b` for built-ins, `Alt-k` for keywords, and `Alt-t` for topics.
+- Navigate between options and press `Enter` to view detailed information.
+- To view a file in the terminal, `bat` is used with colorized output, while directories open with `ranger`.
+- Use `Alt-m` to view submodules. 
 
-- `Alt + l`: List available site packages
-- `Alt + b`: Show built-in functions
-- `Alt + k`: Display keywords from documentation
-- `Alt + t`: View documentation topics
-- Select an item and hit `Enter` to execute it
+Ensure the script has executable permissions:
 
-If executed within a QTile keybinding, simply bind it to your shortcut of choice in your configuration file.
+```bash
+chmod +x /home/matias/.scripts/bin/pyman.sh
+```
 
 ---
 
-> [!TIP] 
-This script could be improved by adding error handling, such as checking if required commands (`python`, `fd`, `bat`, `fzf`, `notify-send`) are installed. Additionally, consider providing inline help for users who may not be familiar with the commands used.
+> [!CAUTION]  
+> One potential improvement for the script could be to handle edge cases such as missing commands or incorrect environment variables more gracefully. Additionally, relying on specific versions of `fzf` and `bat` may cause compatibility issues if they are updated significantly. Consider adding version checks or documentation on compatible versions.

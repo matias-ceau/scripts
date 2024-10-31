@@ -1,49 +1,39 @@
-# Launch TMUX with Music Player
+# Launch Tmux with Music Player
 
 ---
 
-**launch_tmux_with_music_player.sh**: Script to create a new tmux session named music and launch cmus.
+**launch_tmux_with_music_player.sh**: Script to create a tmux session for running the music player cmus
 
 ---
 
 ### Dependencies
 
-- `tmux`: A terminal multiplexer that allows multiple terminal sessions to be accessed and controlled from a single screen.
-- `cmus`: A highly customizable music player that runs in the terminal.
+- `tmux`: Terminal multiplexer for managing multiple terminal windows.
+- `cmus`: A small, fast, and powerful console music player.
 
 ### Description
 
-This script is designed for users who want to quickly create a new tmux session specifically for music playback using cmus. By utilizing tmux, the script allows the user to run cmus in a separate session, enabling multitasking in a terminal environment without the need for multiple terminal windows. 
-
-The script executes a simple command:
-
-```bash
-tmux new-session -d -s MUSIC -n cmus 'cmus'
-```
-
-- `tmux new-session`: This creates a new tmux session.
-- `-d`: This flag starts the session in detached mode, meaning it runs in the background.
-- `-s MUSIC`: This specifies the name of the session, which is set to "MUSIC".
-- `-n cmus`: This sets the name of the window in the new session to "cmus".
-- `'cmus'`: This is the command that runs within the tmux session.
+This script is designed for users who wish to manage their music through a dedicated background tmux session without directly opening a terminal window. Upon execution, it creates a new tmux session labeled `MUSIC` and launches `cmus`, a console music player, in the first window (named `cmus`) of this session. This setup is particularly useful if you manage tasks using multiple terminal sessions and wish to avoid clutter on your screen, while still utilizing the powerful music management features of `cmus`.
 
 ### Usage
 
-To use this script, simply execute it from the terminal. You can run it with the following command:
+To use this script, you simply need to run it from the terminal. 
 
 ```bash
-bash /home/matias/.scripts/launch_tmux_with_music_player.sh
+/home/matias/.scripts/bin/launch_tmux_with_music_player.sh
 ```
 
-Once the script is executed, a new tmux session named "MUSIC" will be created and cmus will start running. You can then attach to this session later if you want to control cmus:
+Alternatively, if you frequently need to run this script, consider binding it to a key or incorporating it into your qtile configuration for quick access. This way, you can launch your music environment with a simple keypress.
 
-```bash
-tmux attach-session -t MUSIC
+Example keybinding in qtile:
+
+```python
+Key([mod], "m", lazy.spawn("/home/matias/.scripts/bin/launch_tmux_with_music_player.sh")),
 ```
 
-You can also set up a keybinding in your window manager (qtile) to launch this script, allowing for quick access whenever you want to listen to music.
+This keybinding sets the `Mod+m` (replace `mod` with your mod key, typically `Mod4` for the super/windows key) to run your script, automatically setting up your music environment.
 
 ---
 
-> [!TIP]  
-> This script is straightforward but could benefit from additional features, such as checking if tmux or cmus is already running, and providing feedback messages to the user. Error handling could also be implemented to manage scenarios where the required software is not installed.
+> [!NOTE]  
+> This script assumes that the user has `tmux` and `cmus` installed and configured correctly. If you require additional features or wish to open more applications within the same session, consider extending the script with extra commands. Also, it currently doesn't check if a session named `MUSIC` already exists, which could lead to potential conflicts. Adding a check and conditional logic to handle such conflicts would make it more robust.

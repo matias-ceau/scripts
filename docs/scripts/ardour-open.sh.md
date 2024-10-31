@@ -2,46 +2,44 @@
 
 ---
 
-**ardour-open.sh**: A script to open Ardour sessions from a user-defined directory.
+**ardour-open.sh**: Opens the most recently modified Ardour session with a preview option through `fzf`.
 
 ---
 
 ### Dependencies
 
-- `bash`: The default shell used to run the script.
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
-- `xargs`: A command that builds and executes command lines from standard input.
-- `stat`: Used to display file or file system status.
-- `sort`: Sorts lines of text files.
-- `sed`: A stream editor for filtering and transforming text.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `fzf`: A command-line fuzzy finder allowing you to open file selections interactively.
+- `bash`: The script is implemented as a Bash script.
+- `fd`: Used to search for files with the `.ardour` extension.
+- `xargs`: Utilized to format the file paths.
+- `stat`: Extracts modification time of files.
+- `sed`: For text manipulation to format paths and output.
+- `improved-fzfmenu.sh`: A custom script that acts as an input selector using `fzf`.
+- `bat`: A code highlighter used to display XML contents with proper syntax highlighting.
+- `ardour`: The audio workstation opened by the script.
 
 ### Description
 
-This script provides a quick way to open Ardour project sessions located in a designated directory (`$HOME/audio/PROJECTS`). It utilizes several Unix utilities to search for `.ardour` files, display them in a visually organized manner, and allow the user to select one for opening in Ardour.
+This script aids in managing Ardour sessions by offering a way to open the most recently modified `.ardour` file within a certain directory hierarchy. It utilizes `fd` to find `.ardour` files within the `AUDIO_PROJECTS` directory, lists them by modification time using `stat`, sorts them with `sort`, and formats the output with `sed`. The use of ANSI color codes enhances readability in the terminal as it shows navigational paths in distinct colors.
 
-1. **File Search**: The script leverages `fd` to find all `.ardour` files in the specified project directory and retrieves their modification times. The results are sorted in descending order.
-   
-2. **Visual Display**: The paths are formatted with ANSI escape codes for colored output, making it easier to navigate the session list when using a terminal.
-
-3. **Session Preview**: Utilizes `bat` for a preview of the selected Ardour file, offering an enhanced viewing experience before opening the session.
-
-4. **Session Launch**: The selected Ardour session is opened using the `ardour` command at the end of the script.
+The script employs a custom `improved-fzfmenu.sh` for interactive selection, allowing the user to preview the session file's XML structure through `bat` before opening it with Ardour. This ensures that users have a clear and colorful view of their session metadata during selection, enhancing the usability of this script especially within terminal environments.
 
 ### Usage
 
-To execute the script, you will typically run it from your terminal. Here’s a short summary of how to use it:
+To use the script, make sure all dependencies are installed and the necessary environment variables are set, specifically `AUDIO_PROJECTS`, which should point to your Ardour project directory:
 
 ```bash
-bash /home/matias/.scripts/ardour-open.sh
+export AUDIO_PROJECTS="$HOME/audio/PROJECTS"
 ```
 
-Upon execution, you will see a list of your Ardour project sessions. You can navigate through this list using the arrow keys (when utilizing `fzf`) and hit Enter to select and open the desired session.
+Run the script from the terminal:
 
-Alternatively, this script can be bound to a key in your window manager (like qtile) to make it more accessible.
+```bash
+~/.scripts/bin/ardour-open.sh
+```
+
+This will produce a list of sessions in the terminal where you can use the interactive menu to select and preview the session you want to open. The selected session will then open with Ardour.
 
 ---
 
-> [!IMPORTANT]
-> This script assumes that the `$AUDIO_PROJECTS` directory is correctly set and contains Ardour sessions. Ensure `fzf` and `bat` are installed for the best experience. It is also advisable to handle situations where no `*.ardour` files are found, as this could lead to errors. Adding error checking and informative messages could improve user experience.
+> [!NOTE]
+> The script requires the `improved-fzfmenu.sh`, which wasn't detailed or included. Ensure this script is available in your path. Additionally, improving error handling and ensuring paths are not assumed could make the script more robust. Allow customization for users with different directory configurations or on systems other than Arch Linux.

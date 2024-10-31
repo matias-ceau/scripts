@@ -1,40 +1,36 @@
-# Chezmoi Installation Script
+# Initialize and Apply Chezmoi Configuration
 
 ---
 
-**chezmoi_on_a_new_system.sh**: Automates Chezmoi setup on a new system for user matias-ceau.
+**chezmoi_on_a_new_system.sh**: A script to initialize and apply Chezmoi configurations for a new system
 
 ---
 
 ### Dependencies
 
-- `curl`: A command-line tool for transferring data with URLs, required to download Chezmoi.
-- `bash`: The script is written in Bash and needs a compatible shell to execute.
+- `curl`: Command line tool for transferring data with URLs. Used here to fetch the Chezmoi installation script.
+- `chezmoi`: A tool for managing your dotfiles across multiple machines. This script sets up Chezmoi and applies configurations.
 
 ### Description
 
-This script is designed for quickly setting up the [Chezmoi](https://chezmoi.io) configuration management tool on a new system. Chezmoi allows users to manage their dotfiles and configuration across multiple machines seamlessly.
+This script automates the process of initializing and applying your Chezmoi configuration on a new system. Chezmoi is particularly useful for managing your dotfiles across different environments in a consistent manner. The script does the following:
 
-The script works by using `curl` to fetch the installer for Chezmoi and initializing it with the `--init` and `--apply` flags, specifically for the user configuration named `matias-ceau`. 
+1. Uses `curl` to download the Chezmoi installation script from the official source (`get.chezmoi.io`).
+2. Executes the installation script with options `--init` and `--apply` to directly initialize and apply the Chezmoi configuration for the user `matias-ceau`.
 
-The process performed by the script is as follows:
-1. **Downloading the Installer**: It utilizes a command substitution with `$(...)` to execute `curl` commands that securely fetch the installation script for Chezmoi.
-2. **Initialization**: The `--init` flag sets up Chezmoi with the configurations stored under the specified user.
-3. **Application of Configurations**: The `--apply` flag automatically applies the dotfiles and configurations to the new system.
-
-This streamlined approach minimizes manual setup time and ensures that the necessary configurations are applied correctly upon installation.
+This script assumes that Chezmoi is being used to manage the user's dotfiles or configurations and that `matias-ceau` is a configured identifier on Chezmoi.
 
 ### Usage
 
-To use this script, you need to run it in your terminal. You can execute it directly with the following command:
+To use this script, run it directly from the command line. It needs to be executed in a shell environment where `bash` is available and assumes that `curl` is installed. 
 
 ```bash
-bash /home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh
+bash /home/matias/.scripts/meta/run_once/chezmoi_on_a_new_system.sh
 ```
 
-**Note**: Ensure that you have `curl` installed on your system before running the script. Also, you should replace `matias-ceau` with your username if necessary.
+It's ideal for setting up a new installation or ensuring the dotfiles are in sync by executing it either manually in a terminal or as part of an automated setup routine.
 
 ---
 
-> [!TIP] 
-> While this script is simple and effective, consider adding error handling to ensure the script gracefully handles issues such as network problems or failed installations. Additionally, prompting the user for their username might make the script more flexible for different environments.
+> [!NOTE]
+> This script presumes `curl` is pre-installed and accessible in the user's PATH on the new system—common in most Linux distributions but worth checking. Additionally, this script lacks error handling; adding checks to verify successful installation and application of the configuration could enhance reliability.

@@ -1,38 +1,34 @@
-# Qutebrowser Source Bookmarks Modifier
+# Qutebrowser Bookmark Synchronization Script
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: A script to sync Qutebrowser bookmarks and sessions between local and chezmoi directories.
+**qutebrowser-modify-source-bookmarks.sh**: Script to sync Qutebrowser bookmarks and sessions with Chezmoi
 
 ---
 
 ### Dependencies
 
-- `chezmoi`: A tool for managing your dotfiles across multiple machines. This script uses it for syncing the configuration.
-- `fd`: A simple, fast and user-friendly alternative to `find`. This is used in the script to locate YAML session files.
-- `bash`: The script is written in Bash, so it needs a compatible shell to run.
+- `qutebrowser`: A keyboard-focused browser with vim-like bindings.
+- `chezmoi`: A tool to manage your dotfiles securely and across multiple machines.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
 
 ### Description
 
-This script is designed to streamline the process of syncing Qutebrowser bookmarks and quickmarks between local storage and a chezmoi-managed configuration directory. 
+The `qutebrowser-modify-source-bookmarks.sh` script is designed for maintaining synchronization between local Qutebrowser bookmarks, quickmarks, and session files with their respective remote counterparts managed through Chezmoi. This script utilizes environmental variables such as `$XDG_CONFIG_HOME`, `$CHEZMOI`, `$XDG_DATA_HOME`, and a custom `$LOCALDATA` to determine file paths.
 
-#### Key Components:
-- **Local and ChezMoi Paths**: It defines variables for local and chezmoi paths for bookmarks, quickmarks, and session files, utilizing XDG environment variables for flexibility.
-- **Quickmark Sync**: The script waits for 20 seconds (presumably to accommodate the addition of quickmarks) and then copies the content of the local quickmarks to the chezmoi equivalent.
-- **Bookmark Sync**: Similar to quickmarks, the local bookmarks are directly copied to the chezmoi bookmarks directory.
-- **Session File Management**: It scans for `.yml` session files in the local sessions directory. For each session file found, it checks if it exists in the chezmoi sessions directory. If not, it uses `chezmoi add` to track it, followed by copying the session content.
+It primarily copies bookmark and quickmark files to your Chezmoi directory to ensure these are backed up and potentially versioned. Additionally, the script iterates over Qutebrowser session files, identifies new or modified `.yml` session files, and adds them to Chezmoi for tracking. Although commented out, the script contains placeholders for automating the addition and commit process using `git` after modifying the bookmarks.
 
 ### Usage
 
-Make sure you have the required dependencies installed. To run the script, you can execute the following command in your terminal:
+To execute this script, simply run it from the terminal. Ensure that all dependencies are installed and that the necessary environment variables (`$XDG_CONFIG_HOME`, `$CHEZMOI`, etc.) are correctly set up in your environment.
 
 ```bash
-bash /home/matias/.scripts/qutebrowser-modify-source-bookmarks.sh
+bash /home/matias/.scripts/bin/qutebrowser-modify-source-bookmarks.sh
 ```
 
-It is recommended to run this script periodically or bind it to a specific key in your window manager (qtile) for ease of use.
+For automated backups and syncing, you might consider scheduling this script using a cron job or integrating it with a qtile keybinding if you wish to run it manually.
 
 ---
 
 > [!TIP]
-> The script utilizes a `sleep` command that might not be necessary. If the synchronization frequently fails due to timing issues, consider handling the quickmark addition more gracefully. Additionally, the commented-out lines suggest an intent to commit the changes made to the bookmarks; you might want to integrate this functionality cleanly into the script, ensuring version control is handled effectively.
+> The script contains a 20-second `sleep` command which could lead to unnecessary delays. Consider checking if this is essential, and if not, reduce or remove it for faster execution. Additionally, the git automation part is commented out. If version control with git is intended, it would be beneficial to enable and test this functionality.

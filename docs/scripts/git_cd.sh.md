@@ -1,48 +1,42 @@
-# Git Directory Navigation Script
+# Navigate to Git Directories
 
 ---
 
-**git_cd.sh**: Quickly navigate to a Git repository directory using a fuzzy finder.
+**git_cd.sh**: Script to quickly change directories to a Git repository.
 
 ---
 
 ### Dependencies
 
-- `bash`: A Unix shell that provides command-line interface handling and scripting capabilities.
-- `locate`: A command-line utility used to find the location of files in the system.
-- `eza`: A modern replacement for `ls`, provides a colorful and formatted listing of directory contents.
-- `fzf`: A command-line fuzzy finder that allows interactive filtering.
-- `awk`: A programming language suitable for pattern scanning and processing.
+- `locate`: Utility used to find files on the filesystem based on a given pattern. 
+- `sed`: Stream editor for filtering and transforming text.
+- `eza`: A modern, more colorful replacement for `ls`.
+- `fzf`: A command-line fuzzy finder used for interactive selection.
+- `awk`: A tool for processing and analyzing text data.
 
 ### Description
 
-The `git_cd.sh` script is a Bash script designed to facilitate rapid navigation to Git repositories within your filesystem. It leverages several command-line utilities for locating and selecting repositories visually. The script works by doing the following:
+This script allows you to locate and navigate to any `.git` directory on your system. It utilizes a combination of `locate`, `sed`, `eza`, `fzf`, and `awk` to list all Git repositories, format them aesthetically, and enable selection through an interactive interface powered by `fzf`. Once you select a desired repository from the list, it changes the current working directory to that repository.
 
-1. **Finding Git Repositories**: It uses `locate` to search for directories ending with `.git`, representing Git repositories.
-
-2. **Formatting Output**: The paths are then cleaned to remove the `.git` suffix and formatted with `eza` for colorful output, improving readability by displaying nested directories with icons.
-
-3. **Fuzzy Finding**: The script employs `fzf` to allow the user to interactively select a directory from the list of repositories.
-
-4. **Change Directory**: Upon selection, it converts the path from a simplified `~` format back to the full user path and uses `cd` to enter the chosen directory.
+The flow starts with `locate` to find paths ending with `.git`. These paths are trimmed of the `.git` suffix using `sed`, and then piped into `eza` to list directories stylishly. The home directory path can be the `/home/matias`, substituted with `~` for clarity, before `fzf` allows the user interaction. The final output is parsed with `awk` to isolate the directory path. 
 
 ### Usage
 
-To use the script, simply invoke it from your terminal. Ensure you have set the appropriate permissions for execution. Here’s how to use the script:
+To use the script, simply run it from your terminal:
 
 ```bash
-bash ~/path/to/git_cd.sh
+bash /home/matias/.scripts/bin/git_cd.sh
 ```
 
-Alternatively, you can assign it to a keybinding in your window manager (like qtile):
+or you can make it executable and run:
 
-```python
-Key([mod], "g", lazy.spawn("bash ~/path/to/git_cd.sh")),
+```bash
+/home/matias/.scripts/bin/git_cd.sh
 ```
 
-This will allow you to open a fuzzy finder directly for your Git directories when you press the designated key combination.
+You can bind this script to a keystroke within your qtile window manager for even faster access or include it in your shell configuration for quick access. This script will present you with a list of Git repositories, and after selecting one, you will be navigated directly to that directory.
 
 ---
 
-> [!TIP]  
-> Consider adding error handling for the situation where no Git directories are found or if `cd` fails. This could enhance the user experience by providing feedback or error messages when the selected repository path is invalid. Additionally, consider providing a configuration option to limit the search scope to specific directories, which could optimize performance for large filesystems.
+> [!TIP]
+> Consider checking for the existence of required command-line tools at the beginning of the script to provide informative feedback if any are missing. Also, if the script is moved to a different environment or user, update the hardcoded path `/home/matias`. Using `$HOME` would aid portability.

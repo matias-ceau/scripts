@@ -1,43 +1,47 @@
-# Fuzzy Finder Menu for Running Commands
+# FZFMenu Run Script
 
 ---
 
-**fzfmenu_run.sh**: A script to replace DMenu with fzf for executing commands in a floating terminal.
+**fzfmenu_run.sh**: A script to replace `dmenu_run` with `fzf` and a floating `xterm` terminal
 
 ---
 
 ### Dependencies
 
-- `dmenu`: A dynamic menu for X. It is required for retrieving the list of commands to execute.
-- `fzf`: A command-line fuzzy finder that allows filtering through items like commands easily.
-- `xterm`: A terminal emulator for the X Window System, used to execute and display commands.
+- `dmenu_path`: A utility to list executable files that appear in your `PATH`, typically part of the `dmenu` package.
+- `fzfmenu.sh`: Presumably, a custom script that utilizes `fzf`, a command-line fuzzy finder, to select commands.
+- `xargs`: A command used to build and execute command lines from standard input.
+- `xterm`: A terminal emulator for the X Window System.
 
 ### Description
 
-This script utilizes `dmenu` to fetch a list of available commands, processes that list through `fzf` for an enhanced user experience, and then executes the selected command in a floating `xterm` terminal. This is particularly useful for lightweight window managers like `qtile`, as it provides a straightforward and efficient way to run applications without cluttering the screen.
-
-The command execution process works as follows:
-
-1. `dmenu_path` generates a dynamic list of executable commands based on the user's environment PATH.
-2. The output is piped into `fzfmenu.sh`, which handles the fuzzy searching of the command list.
-3. Once a command is selected, it is passed through `xargs` to execute it in a newly opened `xterm` terminal window.
+This script is designed as an alternative to `dmenu_run`, providing a feature-rich command launcher experience using `fzf` for fuzzy finding. The script first uses `dmenu_path` to generate a list of available commands from the user's `PATH`. This list is then piped into `fzfmenu.sh`, which likely processes the input using `fzf` to allow the user to interactively search and select a command. The selected command is then executed in a new instance of `xterm`, allowing you to run any command in a floating terminal window. This setup is particularly useful in a tiling window manager like `qtile`, where floating windows can help maintain the workflow without disrupting the current tile layout.
 
 ### Usage
 
-To run this script, you simply need to execute it from the terminal. An ideal way to integrate it is using a keybinding in `qtile`, which can be set up in your `config.py`. Here is a basic example of how to call it directly from a terminal:
+To use this script, you can:
 
 ```bash
-bash /home/matias/.scripts/fzfmenu_run.sh
+bash /home/matias/.scripts/bin/fzfmenu_run.sh
 ```
 
-You might want to bind it to a key in your `qtile` configuration:
+For a seamless experience, consider binding this script to a key combination in your `qtile` configuration. Here is an example of how you might add a keybinding:
 
 ```python
-Key([mod], "r", lazy.spawn("bash /home/matias/.scripts/fzfmenu_run.sh")),
+from libqtile.config import Key
+from libqtile.lazy import lazy
+
+keys = [
+    # Other keybindings...
+
+    # Bind `Mod + r` to launch fzfmenu_run
+    Key(["mod4"], "r", lazy.spawn("/home/matias/.scripts/bin/fzfmenu_run.sh")),
+]
 ```
 
-With this setup, pressing `mod + r` will trigger the script, allowing you to quickly run commands.
+Once executed, this script will display a searchable list of executables in a floating `xterm` window, allowing you to quickly find and run any program installed on your system.
 
 ---
 
-> [!TIP] This script could benefit from error handling, particularly when executing commands. For instance, if a command fails to run or is not found, it would be prudent to provide user feedback. Additionally, incorporating options for customizing the appearance and behavior of `xterm` would enhance the user experience, such as setting specific colors or window sizes.
+> [!TIP]
+> To make this script more robust, consider adding error handling to check if `fzfmenu.sh` and `xterm` are available. Additionally, documenting the `fzfmenu.sh` script would increase usability and transparency, ensuring users understand its role and dependencies.

@@ -2,50 +2,49 @@
 
 ---
 
-**albumplayer.xsh**: Play an album using cmus
+**albumplayer.xsh**: Play an album using cmus and dmenu integration
 
 ---
 
 ### Dependencies
 
-- `cmus`: A lightweight and versatile audio player for the terminal.
-- `dmenu`: A dynamic menu for X, useful for user selection.
+- `cmus`: A small, fast and powerful console music player.
+- `dmenu`: A dynamic menu for X, typically used as a quick application launcher and selection tool.
+- `xonsh`: A Python-powered shell, script is written specifically for this environment.
 
 ### Description
 
-The `albumplayer.xsh` script is crafted to enhance your music listening experience by allowing users to randomly play an album using `cmus`, a terminal-based audio player. It extracts available albums from a specified library file and presents them in a user-friendly manner using `dmenu`, enabling quick selection. 
+This script allows you to play a selected album using the `cmus` music player. It starts by reading a library file located at `~/.config/cmus/lib.pl`, which is expected to contain a list of music file paths. It extracts album names from these paths and presents them through `dmenu` for selection.
 
-The script begins by defining a temporary path for a playlist file within the `cmus` configuration directory:
+Once an album is selected, the script generates a playlist file at `~/.config/cmus/.temp.m3u` containing songs from the selected album, as well as a random selection of songs from other albums. This playlist is loaded and played in `cmus`.
 
-```python
-temp_path = os.path.expanduser('~/.config/cmus/.temp.m3u')
-```
-
-It collects album paths from the `lib.pl` file, eliminating duplicates and isolating album names. A dictionary (`fancy_dict`) is created for formatting, where album paths are mapped to display names, providing a nice output format with alignment and separators.
-
-Once the user selects an album via `dmenu`, the script constructs a playlist that includes the chosen album and random tracks from different albums. Finally, it writes this playlist to the temporary file and sends commands to `cmus` for execution:
-
-```bash
-cmus-remote -U
-cmus-remote -C "view 4"
-cmus-remote -C clear
-cmus-remote -Q
-cmus-remote -q @(temp_path)
-cmus-remote -p
-cmus-remote -n
-```
+Key script operations include:
+- Reading and parsing the music library file.
+- Using set and dictionary operations to deduplicate and format album names for display.
+- Incorporating `dmenu` for album selection.
+- Managing playlist creation and cleanup of `cmus` state, using several `cmus-remote` commands for interaction.
 
 ### Usage
 
-To use the `albumplayer.xsh` script, simply run it from your terminal:
+To use this script:
 
-```bash
-~/path/to/albumplayer.xsh
-```
+1. Ensure you have Xonsh, CMUS, and Dmenu installed on your Arch Linux system.
+2. Optionally bind this script to a key combination in your qtile configuration. Here's an example in Python for qtile:
 
-Make sure you have `cmus` running before you execute the script. The script will utilize `dmenu` to allow you to select your desired album easily.
+    ```python
+    from libqtile.lazy import lazy
+    from libqtile.config import Key
+
+    keys = [
+        Key(["mod1"], "p", lazy.spawn("xonsh /home/matias/.scripts/bin/albumplayer.xsh")),
+    ]
+    ```
+
+3. Run the script from your terminal by executing `xonsh /home/matias/.scripts/bin/albumplayer.xsh`.
+4. Select an album from the `dmenu` list that appears, and enjoy your music session.
 
 ---
 
-> [!TIP]  
-> The script could be improved by adding error handling in case the album paths aren't found or if `cmus` isn't running. Additionally, providing user feedback on what is happening when the script is executed would enhance usability, especially for those unfamiliar with the terminal environment.
+> [!NOTE] 
+> The script assumes the existence of a properly formatted `~/.config/cmus/lib.pl` file. 
+> Consider adding error handling for scenarios where files do not exist to improve robustness. The selection from `dmenu` could be enhanced to handle cases where selection is cancelled or invalid inputs are provided. Additionally, it would be beneficial to document how the `.temp.m3u` file affects `cmus` behavior if it is used by other scripts or processes.

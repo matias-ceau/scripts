@@ -2,58 +2,52 @@
 
 ---
 
-**closest_colors.py**: Find and compare the closest ANSI colors based on hexadecimal input.
+**closest_colors.py**: A script to find and display the closest ANSI color matches to a list of provided hex colors
 
 ---
 
 ### Dependencies
 
-- `python`: A Python interpreter to run the script.
+- `Python 3`: Required to run the script as it uses Python's standard libraries.
 
 ### Description
 
-The **closest_colors.py** script is designed to help users find the closest ANSI colors based on a given list of hexadecimal color values. It achieves this by converting hex colors to their RGB equivalent and calculating the distance between colors using the Euclidean method in an RGB space.
+The `closest_colors.py` script is designed to map a list of given hex colors to their closest counterparts in an ANSI 8bit color palette. This tool could be particularly useful for developers working in terminal environments where specific colors need to be converted to available ANSI colors.
 
-#### Key Functions:
+The script uses several functions:
+- **`hex_to_rgb`**: Converts a hex color value to an RGB tuple.
+- **`color_distance`**: Calculates the Euclidean distance between two RGB color tuples.
+- **`find_closest_color`**: Finds the nearest color in the provided palette to a given hex color using the RGB distance metric.
 
-- `hex_to_rgb(hex_color)`: Converts a hexadecimal color string to an RGB tuple.
-- `color_distance(c1, c2)`: Computes the distance between two RGB colors.
-- `find_closest_color(target_color, possible_colors)`: Determines the closest available ANSI color to the given target color from a list.
-
-The main logic of the script reads color values from a specified file (or uses a default set of ANSI colors) and identifies the nearest matching ANSI color for each desired color, outputting both the original color and its closest counterpart in a formatted manner.
+The script processes input from two files:
+- **`file1`**: Contains the list of hex colors.
+- **`file2`** (optional): Specifies the list of possible colors. If not provided, a default ANSI palette is used.
+  
+For each target color, the script calculates the closest color from the possible palette and prints a visual comparison using ANSI escape sequences to show the original and closest colors.
 
 ### Usage
 
-The script can be run from the command line and accepts two arguments:
+The script is run via the command line and has the capability to visualize the results directly in the terminal:
 
-1. **file1**: A text file containing the target hex color values, one per line.
-2. **file2** (optional): A second text file containing possible ANSI colors in hex format. If not provided, a default color set is used.
-
-To run the script, use the following command:
-
-```
-python closest_colors.py <file1> [<file2>]
+```bash
+python closest_colors.py <file1> <file2>
 ```
 
-#### Example:
+- **`file1`**: Mandatory, a file containing a list of target hex colors, one color per line.
+- **`file2`**: Optional, a file containing possible hex color matches, one per line. If not provided, the script uses a pre-defined ANSI 8bit color set.
 
-Assuming you have a `colors.txt` file with the following content:
+#### Example
 
-```
-#FF5733
-#33FF57
-#3357FF
-```
-
-You would run the script like this:
-
-```
+```bash
+# With a file containing desired hex codes
 python closest_colors.py colors.txt
-```
 
-The script will output each color from `colors.txt`, its corresponding nearest ANSI color along with the ANSI color code, formatted visually.
+# With a file containing desired hex codes and another specifying the color palette
+python closest_colors.py colors.txt palette.txt
+```
 
 ---
 
-> [!TIP]  
-> While the script is functional, consider adding input validation to handle invalid hex color formats and improve error handling for file operations. Additionally, a usage example can be included in the output message for user training.
+> [!NOTE] 
+> The script currently reads directly from files and does not support standard input or interactive color input, which could be beneficial for more dynamic uses. Additionally, including a feature that prints available color names instead of just codes might improve usability.
+Also, it might be beneficial to optimize the color distance calculation for larger color palettes to improve performance.

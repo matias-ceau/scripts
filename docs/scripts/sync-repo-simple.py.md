@@ -2,45 +2,43 @@
 
 ---
 
-**sync-repo-simple.py**: Automates syncing a local git repository with its remote counterpart.
+**sync-repo-simple.py**: A script to automate synchronization of a local git repository with its remote counterpart
 
 ---
 
 ### Dependencies
 
-- `git`: The version control system that the script interacts with.
-- `python3`: The programming language used to run the script.
-- `bash`: The shell environment for command execution.
+- `python3`: Required to run the script.
+- `git`: Required for executing git commands.
+- `argparse`: Built-in python library for parsing command line arguments.
+- `subprocess`: Built-in python library for executing shell commands.
 
 ### Description
 
-This script is designed to simplify the synchronization of a local git repository with its remote version. Designed primarily for users running on Arch Linux with the Qtile window manager, it handles a variety of git operations seamlessly.
+This script is designed to automate the process of synchronizing a local git repository with its remote. It manages fetching, pulling changes, and handling commit conflicts using merge or rebase strategies. Key functionalities include:
+- **Merge & Stash Conflict Handling:** Offers options to resolve conflicts manually or by choosing between local and remote changes.
+- **Commit Message Generation:** Dynamically generates commit messages based on changes and user environment variables.
+- **Status Display & Summary:** Provides a detailed overview of the sync process including changes, commit history, and timestamps.
 
-The script operates through a series of functions that implement git commands, providing error handling in cases of conflicts during merging or stashing. Key functionalities include:
-
-- **Command Execution**: The `run_command` function executes shell commands and captures their output.
-- **Commit Message Generation**: Automatically creates meaningful commit messages based on local changes.
-- **Conflict Resolution**: Provides interactive prompts to resolve merge and stash conflicts, allowing user choices to manually edit or discard local changes.
-- **Summary Display**: After execution, it summarizes the sync operations, including commit times and last changes.
+It intelligently uses `subprocess` to execute shell commands and capture their output, allowing for dynamic interaction with the git workflow. 
 
 ### Usage
 
-To use the script, navigate to the terminal and execute the following command, providing the path to the git repository as an argument:
+To use the script, it must be executed from a terminal session. Here's a quick guide:
 
-```bash
-python3 /home/matias/.scripts/sync-repo-simple.py /path/to/your/repo
+```sh
+./sync-repo-simple.py /path/to/your/repo
 ```
 
-#### Example
-```bash
-python3 /home/matias/.scripts/sync-repo-simple.py ~/projects/my-project
-```
+Ensure you have provided the path to your local git repository as an argument. The script automates the following processes:
+1. **Fetching and Pulling:** It fetches all remote branches and attempts to fast-forward or rebase if necessary.
+2. **Conflict Management:** If conflicts arise, it offers interactive options for resolution.
+3. **Committing & Pushing:** Checks for local changes, stages them, and pushes to the remote.
+4. **Summary Display:** Concludes with a brief summary of the operations performed.
 
-In absence of the repository path, the script will return an error and exit. Ensure your working directory is a valid git repository; otherwise, it will notify about invalid conditions.
-
-The script also prompts for choices when conflicts arise during merges or stashes, making it user-friendly for resolving issues without requiring deep git knowledge.
+You can bind this script to a key combination in your qtile configuration for quick access.
 
 ---
 
-> [!TIP] 
-> While this script effectively handles basic git operations, consider adding features like logging individual command outputs to a file for advanced troubleshooting. Adding unit tests could also help ensure that future changes do not break existing functionality.
+> [!WARNING]
+> The script currently uses basic input() calls for handling user decisions during conflict resolution. This does not support non-interactive environments. Consider replacing these with environment-specific solutions or flags for better automation and error handling in scripts without user presence.

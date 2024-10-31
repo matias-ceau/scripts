@@ -1,59 +1,54 @@
-# ANSI 8-Bit to RGB/HEX Converter
+# Convert ANSI 8-bit Color to RGB/Hex
 
 ---
 
-**ansi8bit2rgb_hex.py**: A script to convert 8-bit ANSI color codes to RGB or HEX formats.
+**ansi8bit2rgb_hex.py**: Converts ANSI 8-bit color codes to RGB or Hexadecimal format with options for colorized output.
 
 ---
 
 ### Dependencies
 
-- `python`: The core dependency for running this script.
+- `python`: This script requires Python to be installed on your system.
 
 ### Description
 
-This Python script facilitates the conversion of 8-bit ANSI color codes into their equivalent RGB or HEX representations. It handles the full range of ANSI colors defined from 0 to 255, including both standard and extended colors. The script features several functions:
+This script provides a utility to convert ANSI 8-bit colors (commonly used in terminal emulators) to either RGB or Hexadecimal color formats. It handles:
 
-- **ansi_to_rgb(color)**: Converts a single ANSI color code to an RGB tuple. Supports color codes in three ranges:
-  - 0-15 for standard colors (basic color palette).
-  - 16-231 for colors based on a formula that calculates RGB values.
-  - 232-255 for grayscale colors.
+- **Standard Colors (0-15)**: Maps directly to basic color definitions.
+- **Extended Colors (16-231)**: Calculates RGB values by decomposing the color code into red, green, and blue components.
+- **Grayscale Colors (232-255)**: Represents shades of gray.
 
-- **format_color(rgb, color_format)**: Formats the RGB values into the desired output string format—either 'hex' for hexadecimal representation or 'rgb' for the RGB format.
-
-- **print_colors(colors, color_format, colorize, print_names)**: Prints out the converted colors based on input options, applying any desired formatting and colorization.
-
-- **usage()**: Outputs the usage instructions for the script, detailing supported commands, options, and examples.
-
-The script runs from the command line and processes input arguments to determine which colors to convert.
+The script includes functions to format colors and handles command-line options for generating output strings that are either colorized or include color names. It can print color information for a single color, a range, or a list, in both formats.
 
 ### Usage
 
-To utilize this script, execute it from the command line with the desired parameters. Here are the available commands and options:
+Run the script with one of the following command-line patterns. It can be executed directly in a terminal:
 
 ```bash
-# General usage pattern
-python ansi8bit2rgb_hex.py <command> [options] <number>|<range>|<list>
+# Output RGB representation of color 242
+./ansi8bit2rgb_hex.py rgb 242
 
-# Required commands
-rgb   --- outputs color in RGB format
-hex   --- outputs color in HEX format
-help  --- shows this message
+# Output Hex representation of color 242
+./ansi8bit2rgb_hex.py hex 242
 
-# Example executions
-python ansi8bit2rgb_hex.py rgb 242       # outputs: rgb(108,108,108)
-python ansi8bit2rgb_hex.py rgb -n 242    # outputs: color242    rgb(108,108,108)
-python ansi8bit2rgb_hex.py hex 242       # outputs: #6c6c6c
-python ansi8bit2rgb_hex.py rgb           # outputs all 256 colors
-python ansi8bit2rgb_hex.py rgb 35-167    # outputs colors from 35 to 167
-python ansi8bit2rgb_hex.py rgb 35,167    # outputs colors 35 and 167
+# List RGB values of colors from 35 to 167
+./ansi8bit2rgb_hex.py rgb 35-167
+
+# List RGB values of colors 35 and 167
+./ansi8bit2rgb_hex.py rgb 35,167
+
+# Show help message
+./ansi8bit2rgb_hex.py help
 ```
 
-Optional flags:
-- `--name, -n` : Include color name in the output.
-- `--colorize, -c` : Colorize the output based on ANSI codes.
+**Options**:
+
+- `-n` or `--name`: Include color names in the output.
+- `-c` or `--colorize`: Display output with ANSI colorized formatting.
+
+Use these options after the format type (e.g., `rgb`, `hex`) but before specifying color numbers or ranges.
 
 ---
 
-> [!TIP] 
-The script is robust, but consider adding error handling for invalid input ranges and improving functionality by allowing input from files or environment variables. Additionally, it might be useful to support further color formats, such as HSL or CMYK, enhancing its versatility for users needing diverse color representations.
+> [!NOTE]  
+> Some improvements to consider include more explicit error handling when parsing command-line arguments, as the current parsing logic may not gracefully handle all incorrect inputs. Consider adding more robust argument validation and clearer user feedback for incorrect usage scenarios. Additionally, the script could benefit from modularizing the command-line parsing to simplify the main function logic.

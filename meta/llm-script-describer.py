@@ -17,7 +17,7 @@ init()
 # SCRIPTS folder
 SCRIPTS_PATH = os.environ.get("SCRIPTS", "")
 
-CSV_PATH = os.path.join(SCRIPTS_PATH, "data", "symlink_data.csv")
+CSV_PATH = os.path.join(SCRIPTS_PATH, "symlink_data.csv")
 README_PATH = os.path.join(SCRIPTS_PATH, "README.md")
 
 # DOCUMENTATION
@@ -26,7 +26,7 @@ INDEX_PATH = os.path.join(DOCS_PATH, "index.md")
 DOCS_SCRIPTS_PATH = os.path.join(DOCS_PATH, "scripts")
 
 # JSON file (primarily used by this script to know if a new documentation is needed)
-INFO_JSON_PATH = os.path.join(SCRIPTS_PATH, "data", "script_info.json")
+INFO_JSON_PATH = os.path.join(SCRIPTS_PATH, "script_info.json")
 
 # location and possible extensions of source files for binary scripts that can't be read
 BIN_FILE_SRC_PATH = os.path.join(SCRIPTS_PATH, "src")
@@ -150,6 +150,7 @@ else:
 
 
 def run_update_symlinks():
+    print_colored("Updating symlinks", kind="main_section")
     print_colored("Running utils_update_symlinks.sh...", kind="info")
     try:
         subprocess.run(["utils_update_symlinks.sh"], check=True)
@@ -187,6 +188,7 @@ def get_script_files():
 
 
 def rm_orphaned_docs(script_files):
+    print_colored("Removing orphaned docs", kind="main_section")
     print_colored("Checking for orphaned doc files...", kind="function_call")
     orphaned_docs = []
     for doc_file in os.listdir(DOCS_SCRIPTS_PATH):
@@ -366,6 +368,8 @@ def process_script(script_path, client, llm_model):
 
 def update_readme(client, llm_model):
 
+    print_colored("Updating README.md", kind="main_section")
+
     with open(README_PATH, "r") as file:
         content = file.read()
 
@@ -398,7 +402,10 @@ def update_readme(client, llm_model):
 
 
 def process_csv(client, llm_model):
-
+    print_colored(
+        f"Reading scripts from CSV file and creating docs and json datafile: {CSV_PATH}",
+        kind="main_section",
+    )
     # uses the csv file as script source
     with open(CSV_PATH, "r") as csvfile:
         reader = csv.reader(csvfile)
@@ -418,7 +425,7 @@ def main():
     parser.add_argument(
         "llm_model",
         nargs="?",
-        default="gpt-4o-mini",
+        default="gpt-4o",
         help="OpenAI LLM model",
     )
     args = parser.parse_args()
@@ -426,19 +433,9 @@ def main():
     C = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
     L = args.llm_model
 
-    print_colored("Updating symlinks", kind="main_section")
     run_update_symlinks()
-
-    print_colored("Removing orphaned docs", kind="main_section")
     rm_orphaned_docs(get_script_files())
-
-    print_colored(
-        f"Reading scripts from CSV file and creating docs and json datafile: {CSV_PATH}",
-        kind="main_section",
-    )
     process_csv(client=C, llm_model=L)
-
-    print_colored("Updating README.md", kind="main_section")
     update_readme(client=C, llm_model="gpt-4o-mini")
 
     print_colored("Script processing completed successfully.", kind="victory")

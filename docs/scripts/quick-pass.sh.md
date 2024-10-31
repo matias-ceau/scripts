@@ -1,51 +1,39 @@
-# Quick Pass Script
+# Quick Password Manager
 
 ---
 
-**quick-pass.sh**: A script to quickly access and copy GPG-encrypted passwords from a password store.
+**quick-pass.sh**: Interactive script to quickly search and manage passwords with `pass`
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell in which the script is written.
-- `fd`: A simple and fast alternative to `find`.
-- `fzf`: A command-line fuzzy finder for selecting from a list.
-- `pass`: A standard Unix password manager.
-- `xdotool`: A tool that simulates keyboard input and mouse activity.
+- `fd`: A simple, fast and user-friendly alternative to `find`. Used for searching and listing `.gpg` files.
+- `pass`: The standard unix password manager. Used for retrieving and editing password entries.
+- `fzf`: A general-purpose command-line fuzzy finder. Used to interactively select a password entry.
+- `xdotool`: A command-line X11 automation tool. Used to automatically type out the password.
+- `sort`, `sed`, `xargs`, `cut`: Standard Unix utilities used for processing and piping text data.
 
 ### Description
 
-This script facilitates the retrieval of GPG-encrypted passwords managed with `pass`. It utilizes the `fd` command to find files with the `.gpg` extension within the specified password store directory. Once the files are located, the script formats the output and pipes it to `fzf`, allowing the user to interactively select a password.
-
-Here's how the script works step-by-step:
-
-1. **File Discovery**: The `fd` command searches for files ending with `.gpg` within the directory defined by the `PASSWORD_STORE_DIR` environment variable.
-
-2. **Output Formatting**: The script applies various formatting options using ANSI escape codes to enhance the visual representation of the found passwords.
-
-3. **Sorting and Filtering**: The results are sorted and processed through `sed` to clean up the output by removing the preceding `./` from file names.
-
-4. **Interactive Selection**: The cleaned list is fed into `fzf`, which presents the user with a selectable interface. Key bindings within `fzf` allow users to either edit the selected password or copy it to the clipboard.
-
-5. **Password Retrieval**: The selected password is then piped through `xargs` to the `pass` command to output the password content.
-
-The script has a TODO comment indicating future development to write directly to the qutebrowser FIFO.
+This script is designed to help users rapidly search and interact with their password store managed by `pass`. It utilizes the `fd` command to locate all `.gpg` files under the specified directory, formats them, and pipes the results to `fzf`, which allows the user to select a password entry interactively. Users can press `ctrl-e` to edit a password entry with `pass` or `ctrl-x` to type out the password using `xdotool`. Finally, the selected entry is picked with `cut` and `xargs` to execute a `pass` retrieval command.
 
 ### Usage
 
-To use this script, simply run it from the terminal as follows:
+To use this script, ensure all dependencies are installed on your system and execute the script in a terminal:
 
 ```bash
-bash /home/matias/.scripts/quick-pass.sh
+/home/matias/.scripts/bin/quick-pass.sh
 ```
+- Navigate the list using the arrow keys and select by pressing `Enter`.
+- Use `ctrl-e` to edit a password entry.
+- Use `ctrl-x` to type the password into an active window with `xdotool`.
 
-From the `fzf` list, you can:
-
-- Press `Ctrl + E` to edit the selected password using `pass edit`.
-- Press `Ctrl + X` to copy the selected password directly into the clipboard with `xdotool`.
+This script can also be integrated with your `qtile` WM as a custom keybinding for quick access.
 
 ---
 
-> [!TIP] 
-> This script assumes that the `PASSWORD_STORE_DIR` variable is properly set and that your password store is configured correctly. Consider adding error handling to manage cases where the environment variable is unset or if `fd` cannot find any files. Additionally, integrating with qutebrowser as the TODO suggests would elevate the script's utility for users who frequently use that browser.
+> [!NOTE]
+> Consider redirecting outputs or errors more explicitly, as the script does not handle exceptional cases elegantly.
+> Additionally, completing the TODO to write to `qutebrowser` FIFO would extend its functionality to web browsers.
+> It's worth mentioning that `PASSWORD_STORE_DIR` should be correctly set for the script to work properly.

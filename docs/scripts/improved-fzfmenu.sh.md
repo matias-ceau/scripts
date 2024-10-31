@@ -1,58 +1,50 @@
-# Improved FZF Menu
+# Improved FZF Menu with Alacritty
 
 ---
 
-**improved-fzfmenu.sh**: A script that utilizes `fzf` in an `alacritty` terminal, with output piping support.
+**improved-fzfmenu.sh**: Enhanced fzf integration with Alacritty, supports piping output
 
 ---
 
 ### Dependencies
 
-- `fzf`: Command-line fuzzy finder that provides an interactive selection interface.
-- `alacritty`: A fast, GPU-accelerated terminal emulator.
-  
+- `alacritty`: A modern terminal emulator, required to display the fzf menu.
+- `fzf`: A command-line fuzzy finder, used for interactive selections.
+- `bash`: The script is written in Bash.
+
 ### Description
 
-This script enhances the functionality of the `fzf` fuzzy finder by launching it in a specified terminal emulator, which defaults to `alacritty`. It allows users to pass various arguments to `fzf`, enabling flexible configurations and user preferences.
+The `improved-fzfmenu.sh` script serves as an enhanced wrapper for the `fzf` utility that integrates with the `alacritty` terminal. The script processes command-line arguments to configure the behavior of the fzf session. Key features include setting a custom window title, allowing output piping, and potentially supporting different terminal types and window sizes in the future.
 
-Key features include:
-
-- **Terminal & Title Configuration**: Users can customize the terminal type and window title when launching `fzf`.
-- **Piping Capability**: The script can conditionally pipe the output of `fzf` to different file descriptors based on the provided arguments.
-
-The script processes command-line arguments to determine if output piping is needed and what title to use for the terminal window. It uses bash features such as string manipulation and conditionals to achieve this.
+- **Customization Options**:
+  - **Title**: The terminal window title can be altered by passing an argument prefixed with `title_is_`. 
+  - **Class**: Sets the window class to `floating` for ease of interaction within tiling window managers like `qtile`.
+  - **Piping**: Control output behavior via a `--pipe` argument, enabling standard output redirection.
 
 ### Usage
 
-Run the script directly from the terminal. You can specify different options based on your needs. Here’s a quick usage guide:
-
-- To run `fzf` without output piping while showing in `alacritty`:
+To use the script, you can execute it from the terminal with optional parameters for customization:
 
 ```bash
+# Basic usage without piping
 ./improved-fzfmenu.sh
+
+# Customize the title of the window
+./improved-fzfmenu.sh title_is_MyFzfMenu
+
+# Pipe the output to another process
+./improved-fzfmenu.sh --pipe | tee output.txt
+
+# Combine fzf arguments
+./improved-fzfmenu.sh --bind=ctrl-r:reload
+
+# Example with a custom title and piping the output
+./improved-fzfmenu.sh title_is_CustomTitle --pipe > selected.txt
 ```
 
-- To customize the terminal title:
-
-```bash
-./improved-fzfmenu.sh title_is_CustomTitle
-```
-
-- To enable piping for output:
-
-```bash
-./improved-fzfmenu.sh --pipe
-```
-
-You can combine these commands by passing multiple arguments:
-
-```bash
-./improved-fzfmenu.sh title_is_MyTitle --pipe --reverse --height=20%
-```
-
-This command provides a custom title, enables output piping, and modifies `fzf` settings.
+Assigning this script to a hotkey in `qtile` would allow quick access to the fzf menu from anywhere in your environment.
 
 ---
 
-> [!TIP]  
-> Consider implementing enhancements like allowing users to select different terminal emulators (e.g., `kitty`) directly through an argument, thereby making the script more versatile. Additionally, providing options for window sizing and layout customization could improve user experience significantly.
+> [!CAUTION]
+> While the script works as intended, improvements could be considered. For example, introducing support for other terminals (e.g., `kitty`) and allowing users to adjust the size of the terminal window dynamically would increase flexibility. Also, more robust error handling and documentation of potential failures could improve usability.

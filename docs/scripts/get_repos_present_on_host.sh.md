@@ -1,49 +1,47 @@
-# Get Repositories Present on Host
+# Repository List Generator
 
 ---
 
-**get_repos_present_on_host.sh**: Script to list Git repositories localized on the current host and update them into a summary.
+**get_repos_present_on_host.sh**: Script to list Git repositories present on the current host.
 
 ---
 
 ### Dependencies
 
-- `bash`: Shell environment required for execution.
-- `find`: Utility to search for files and directories within the specified paths.
-- `sed`: Stream editor for filtering and transforming text.
-- `awk`: Pattern scanning and processing language, used for formatting output.
+- `bash`: The script is written in bash and requires it to be executed.
+- `hostnamectl`: Utilized to fetch the current hostname.
+- `find`, `sed`, `awk`, `sort`, `mkdir`, `echo`: Standard Unix tools used to process and manage file paths.
 
 ### Description
 
-This Bash script is designed to identify and list Git repositories present on the local filesystem as specified by the `GIT_REPOS` environment variable. It captures the username's hostname to generate distinct output files under the `LOCALDATA` directory.
+This script is designed to scan through a specified directory to locate Git repositories that are present on the host machine. It's an efficient tool for organizing and documenting your local repositories based on the host identity.
 
-The script follows these steps:
-1. It checks if the `GIT_REPOS` and `LOCALDATA` environment variables are set,. If not, it exits with an error message.
-2. It retrieves the current hostname using `hostnamectl`.
-3. It constructs output file paths for both the individual host's repositories and a collective file for all repositories.
-4. The script creates the necessary directories if they do not already exist.
-5. It uses the `find` command to search for directories containing `.git`, formats the output to derive the relative paths, and writes them to the host-specific output file.
-6. Both the host-specific file and a cumulative file are sorted and deduplicated to ensure unique entries.
-7. Lastly, it confirms the update process with a success message.
+- **Environment Variables**:
+  - `GIT_REPOS`: The base directory where all Git repositories are stored.
+  - `LOCALDATA`: The base directory where output files should be saved.
+
+The script performs the following tasks:
+1. Fetches the current hostname using `hostnamectl`.
+2. Constructs paths for output files based on the hostname.
+3. Ensures the output directory exists.
+4. Locates and lists all Git repositories under the `GIT_REPOS` directory with specific structure.
+5. Outputs this list to a file named after the host in the `LOCALDATA/docs/git_repos/` directory.
+6. Appends this list to a file `all-repos.txt` to maintain a comprehensive record.
+7. Sorts and removes duplicates in both output files to ensure uniqueness.
 
 ### Usage
 
-To use this script, you should ensure the environment variables `GIT_REPOS` and `LOCALDATA` are correctly set. You can execute this script from the terminal as follows:
+To use the script, make sure the environment variables `GIT_REPOS` and `LOCALDATA` are set. You can execute the script directly from the terminal. Here is a typical usage pattern:
 
 ```bash
-export GIT_REPOS="/path/to/your/git/repositories"
-export LOCALDATA="/path/to/store/output"
-bash /home/matias/.scripts/get_repos_present_on_host.sh
+export GIT_REPOS=/path/to/your/repositories
+export LOCALDATA=/path/to/save/data
+/home/matias/.scripts/bin/get_repos_present_on_host.sh
 ```
 
-This command will:
-- Search for Git repositories under the specified `GIT_REPOS` directory.
-- Generate a text file listing the repositories located on the current host.
-- Append the listings to a cumulative repositories file. 
-
-You can assign this script to a keybinding or schedule it with a cron job if you wish to automate the updates.
+This will produce text files in the format `/path/to/save/data/docs/git_repos/[HOSTNAME]-repos.txt` listing all unique repositories for the current host.
 
 ---
 
-> [!TIP]  
-> Consider adding error handling for cases where the `find` command may not locate any `.git` directories, or when writing to the output files. Including a verbose mode could also be beneficial for tracking the processing steps.
+> [!TIP]
+> The script assumes that repositories have a specific directory depth (two directories from the base `GIT_REPOS` path). If your repository structure varies, consider modifying the `awk` command accordingly. Additionally, error handling can be enhanced by checking for failure cases after critical operations like `mkdir` or `find`.

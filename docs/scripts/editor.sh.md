@@ -1,53 +1,49 @@
-# Quick File Editor
+# fzf-based File Editor
 
 ---
 
-**editor.sh**: A script to quickly edit files using `fzf` in a terminal.
+**editor.sh**: Quickly edit files by searching with `fzf`.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder used to search for files interactively.
-- `bat`: A syntax highlighting and paging program, used for previewing files.
+- `nvim`: Neovim text editor for opening files.
+- `fzf`: A command-line fuzzy finder to navigate file selections.
+- `fd`: A faster alternative to `find`, for listing file paths.
+- `bat`: A cat clone with syntax highlighting.
+- `chezmoi`: To manage personal configuration files.
 
 ### Description
 
-This script provides a versatile way to edit files directly from the terminal using the `fzf` fuzzy finder. It leverages the power of `find` and `fd` to locate files excluding non-editable formats and directories. Users can smoothly navigate through file paths, make quick selections, and open files in `nvim` (Neovim) or with `sudo` if the required permissions are necessary. 
+This script enhances your ability to edit files using `fzf` for fuzzy searching and `nvim` for editing. Depending on the options provided, it searches through directories, filtering non-editable files, in a concise manner to help you quickly find and edit the file you need. The script uses `fd` to locate files efficiently, respecting various modes such as `sudo`, `scripts`, `current working directory` (`cwd`), `config` (`chezmoi unmanaged`), or a user-specified directory. It excludes a comprehensive list of non-editable file extensions and directories.
 
-#### Key Features:
-- **Customizable Search Paths**: Depending on the user's input, it can search specific directories like scripts, current directories, or system configurations.
-- **Filtered File Types**: The script excludes certain file formats by default, ensuring only relevant files are presented for editing.
-- **Interactive Usage**: Integrates with `fzf` to provide a dynamic and responsive search experience with the option to show or hide hidden files.
+When run, it opens a file selector dialog with `fzf` where you can press `<C-H>` to toggle searching hidden files and `<C-S>` to exclude them.
 
 ### Usage
 
-To utilize this script, make sure it’s executable and run it from your terminal. Below are some command examples:
+The script can be invoked from the terminal with the following options:
 
 ```bash
-# Default usage - search through sensible directories
-./editor.sh
+./editor.sh [-s|--scripts] [-c|--cwd] [-C|--config]
+            [-d|--dir <dir>] [-S|--sudo] [-h|--help]
+```
 
-# Edit a file in the users' scripts directory
-./editor.sh --scripts
+- `-s, --scripts`     : Search in the user's `$SCRIPTS` directory.
+- `-c, --cwd`         : Search within the current directory.
+- `-C, --config`      : Open configuration files managed by `chezmoi`.
+- `-d, --dir <dir>`   : Specify a directory to search in.
+- `-S, --sudo`        : Edit files with administrative privileges.
+- `-h, --help`        : Display usage help.
 
-# Find files to edit only in the current directory
+Example usage to find a file in the current directory:
+```bash
 ./editor.sh --cwd
-
-# Edit a configuration file
-./editor.sh --config
-
-# Edit files in a specific directory
-./editor.sh --dir /path/to/directory
-
-# Edit files with sudo permissions
-./editor.sh --sudo
-
-# Get help information
-./editor.sh --help
 ```
 
 ---
 
-> [!TIP]  
-> Consider enhancing the exclusion list based on specific use cases, or provide a configuration file to maintain user-preferred settings persistently. Additionally, integrating more robust error handling can improve the user experience when incorrect parameters are provided or if `fzf` encounters issues.
+> [!NOTE]
+> - The script includes many hardcoded directories and file types to exclude, which may not fit all user needs. Consider making these customizable via configuration files or command-line arguments.
+> - The reliance on `$SCRIPTS` and `$LOCALDATA` environment variables requires them to be set correctly in your shell.
+> - Using `sudo` with `nvim` through this script might not allow `nvim` to fully utilize all features. Consider using a configuration that enables full access in `sudo` mode.

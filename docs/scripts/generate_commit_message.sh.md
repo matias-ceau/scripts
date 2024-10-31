@@ -1,46 +1,47 @@
-# Generate Commit Message Script
+# Generate Commit Message
 
 ---
 
-**generate_commit_message.sh**: Script to generate git commit messages using OpenAI's API.
+**generate_commit_message.sh**: Script to generate commit messages using OpenAI's GPT-4o-mini
 
 ---
 
 ### Dependencies
 
-- `git`: A version control system to manage repositories and track changes.
-- `curl`: A tool to transfer data from or to a server, used here for API requests.
-- OpenAI API Key: Required to authenticate requests to the OpenAI API.
-
+- `git`: Used to determine modified files and changes.
+- `curl`: Required to make API calls to OpenAI services.
+- `jq` (commented out but mentioned): Typically used for parsing JSON outputs which may be intended for future use.
+  
 ### Description
 
-This script automates the generation of git commit messages by leveraging the OpenAI API. It accepts a directory of a git repository as an argument and performs the following steps:
+This script is designed to automate the generation of commit messages in a git repository using OpenAI's model. It navigates to the specified repository directory, checks for an environment variable named `OPENAI_API_KEY`, and proceeds if set. The script lists modified files and retrieves detailed changes except for files with `.md` extensions, which are labeled as documentation changes.
 
-1. **Directory Navigation**: Changes into the specified repository directory.
-2. **Environment Check**: Validates that the `OPENAI_API_KEY` is set. If it's not set, the script exits with an error message.
-3. **File Modification Detection**: Uses `git diff --name-only` to list modified files since the last commit.
-4. **File Information Compilation**: Iterates through each modified file and gathers changes. If the file is a markdown file (`*.md`), it notes it as a documentation change. For all other file types, it appends the changes made to that file.
-5. **API Call**: Makes a POST request to the OpenAI API with a prompt designed to generate a proper commit message based on the collected file changes.
-
-The script is primarily useful for developers who want to maintain high commit message quality while saving time.
+The change information is then formatted and sent to OpenAI's API to receive a commit message that adheres to standard conventions: a succinct summary, followed by a blank line, and a detailed description focusing on the "what" and "why" of changes.
 
 ### Usage
 
-To use this script, follow these steps:
+To use this script, execute it from the terminal providing the repository directory path as an argument:
 
-1. **Set your OpenAI API Key**:
-   ```bash
-   export OPENAI_API_KEY="your_api_key_here"
-   ```
+```bash
+~/.scripts/bin/generate_commit_message.sh /path/to/your/repo
+```
 
-2. **Run the script with your repository directory as an argument**:
-   ```bash
-   /home/matias/.scripts/generate_commit_message.sh /path/to/your/repo
-   ```
+Ensure that:
 
-This command will generate a commit message considering the modifications in the specified repository.
+1. The `OPENAI_API_KEY` is exported in your shell environment.
+2. Git working directory is clean and contains modified files ready for commit.
+3. You have `curl` installed on your system.
+
+The script can be integrated with qtile as a keybinding or used interactively in a terminal. 
+
+Example on Arch Linux with a bash shell:
+
+```bash
+export OPENAI_API_KEY="your_openai_api_key"
+~/.scripts/bin/generate_commit_message.sh ~/projects/my-repo
+```
 
 ---
 
-> [!TIP]  
-> Consider adding a feature to save the generated commit message to a new file or directly commit the changes using `git commit -m`. Additionally, the error handling could be enhanced to provide more descriptive messages for various failure situations (e.g., no modified files found).
+> [!TIP]
+> The script currently doesn't handle API response parsing as the `jq` parts are commented out. For full automation, enable these sections to parse and display commit messages. Additionally, consolidate multiple `--json` options into a single structured JSON object for clarity and reliability. Consider implementing error handling for network issues during the API call.

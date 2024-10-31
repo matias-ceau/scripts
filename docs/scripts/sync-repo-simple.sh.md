@@ -1,49 +1,47 @@
-# Sync Repository Script
+# Simple Repository Synchronization Script
 
 ---
 
-**sync-repo-simple.sh**: A script to synchronize a local Git repository with remote changes.
+**sync-repo-simple.sh**: Automates syncing a git repository, handling conflicts, and providing sync summaries.
 
 ---
 
 ### Dependencies
 
-- `git`: The script assumes that Git is installed and available in the system.
-
+- `git`: Essential for interacting with git repositories.
+- `bash`: Required to execute the script.
+- `realpath`: Used for obtaining the absolute path of the provided repository.
+  
 ### Description
 
-This script simplifies the process of syncing a local Git repository with its remote. It streamlines fetching updates, managing local changes, and handling conflicts in merges and stashes. The main features include:
+This script automates the synchronization process of a git repository by executing a series of git commands. It addresses common scenarios encountered during repository synchronization, such as merge conflicts and stashing local changes. The script handles the repository specified by the user, changes directories, and performs operations like fetch, pull, stash, and push, ensuring the repository is up-to-date with its remote counterpart.
 
-- **Real-time Command Execution:** Outputs the command being executed for better debugging and monitoring.
-- **Automatic Commit Message Generation:** Generates a concise commit message based on local changes.
-- **Conflict Resolution:** Handles both merge and stash conflicts, allowing users to easily choose how to resolve them.
-- **Detailed Process Summary:** Provides a summary of what occurred during the sync process, including timestamps and the current state of commits.
-
-The script maintains several helper functions to manage different tasks throughout the synchronization process. These functions include error handling for failed commands, real-time output from commands, and options for the user to select when resolving conflicts.
+Key functionalities include:
+- **Conflict Resolution**: Provides options for resolving merge conflicts and stashing conflicts, allowing users to choose between local, remote, or manual resolutions.
+- **Commit Message Generation**: Automatically generates a commit message reflecting the number of changes and user details.
+- **Error Handling**: Outputs errors and halts proceedings if critical issues are encountered.
+- **Sync Summary**: Displays a summary including commit information, changes, and timestamps post-sync.
 
 ### Usage
 
-Run this script by passing the path to the desired Git repository as an argument:
+To run the script, use the command line and provide the path to your repository:
 
 ```bash
-./sync-repo-simple.sh /path/to/your/repo
+chmod +x /home/matias/.scripts/bin/sync-repo-simple.sh
+/home/matias/.scripts/bin/sync-repo-simple.sh /path/to/your/repo
 ```
 
-To get help or see usage information, simply include the `--help` or `-h` option:
+- The script can be executed directly from a terminal.
+- It can also be set as a keybinding in qtile or included in automation scripts.
+- Provides help output with `--help` or `-h` flags.
+  
+### Example
 
 ```bash
-./sync-repo-simple.sh --help
+/home/matias/.scripts/bin/sync-repo-simple.sh ~/projects/my-repo
 ```
-
-**Example Command:**
-
-```bash
-./sync-repo-simple.sh ~/myproject
-```
-
-This command will sync the local `myproject` repository with its remote counterpart.
 
 ---
 
-> [!TIP]  
-> Consider adding more robust error handling in cases where the Git commands may fail, such as network issues or permission problems. Moreover, enhancing logging capabilities to log the operations performed by the script could greatly assist in troubleshooting any issues that arise during sync operations.
+> [!TIP]
+> While the script effectively handles basic repository synchronization, it could be enhanced by providing clear output for the `help` command or invalid input cases. Additionally, incorporating more detailed logging or verbose mode could aid in debugging and transparency of operations.

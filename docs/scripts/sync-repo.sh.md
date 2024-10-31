@@ -1,61 +1,54 @@
-# Git Repository Sync Utility
+# Git Repository Synchronization Script
 
 ---
 
-**sync-repo.sh**: A script for syncing a Git repository with improved user interaction and error handling.
+**sync-repo.sh**: Automates synchronization of a Git repository with support for conflict handling.
 
 ---
 
 ### Dependencies
 
-- `git`: Required for functioning with Git repositories.
-- `bat`: Optional; enhances command output aesthetics.
-- `glow`: Optional; formats messages elegantly if available.
+- `git`: Essential for version control operations.
+- `bat`: Enhances output readability with syntax highlighting.
+- `glow`: Formats markdown output prettily in the terminal.
+  
+Both `bat` and `glow` are optional, but recommended for better visual output.
 
 ### Description
 
-This script efficiently syncs a specified Git repository with its remote counterpart. It provides robust error handling and options for conflict resolution during merges and stashing operations. The script incorporates colorful outputs using ANSI escape sequences for better visibility and uses external utilities like `bat` and `glow` to enhance display formatting.
+This script automates the process of keeping your local Git repositories synchronized with their remote counterparts. It checks for dependencies like `bat` and `glow` to improve the user interface but functions without them. Key functionalities include:
 
-Key functions include:
-- `strip_ansi()`: Strips color codes from output for compatibility with non-supporting terminals.
-- `run_command()`: Executes commands while printing their actions in a formatted manner.
-- `handle_merge_pull_conflicts()`: Manages merge conflicts by providing interactive options for conflict resolution.
-- `generate_commit_message()`: Automatically generates a commit message based on the number of changes.
-- `display_summary()`: Summarizes the sync operation with logs and timestamps.
+- **Fetch and Prune**: It fetches updates from all remotes while pruning obsolete references.
+- **Conflict Resolution**: Manages merge conflicts and stashed changes with manual resolution options in the default editor.
+- **Commit Automation**: Auto-generates commit messages based on changes detected.
+- **Dry-run Mode**: Simulates actions without making actual changes.
+  
+The script includes several parameters for customization and a suite of utility functions for error handling, command printing, and output formatting.
 
 ### Usage
 
-To run the script, use the following command format:
+Run in the terminal or bind it to a key in your qtile configuration for automatic execution:
 
 ```bash
-./sync-repo.sh <repository_path> [--dry-run] [--help]
+./sync-repo.sh /path/to/repo [--dry-run] [--help]
 ```
 
-#### Arguments:
+- `<repository_path>`: Path to the Git repository you wish to sync.
+- `--dry-run`: Executes the script in a simulation mode without making any changes to the repository.
+- `--help` or `-h`: Displays usage instructions.
 
-- `<repository_path>`: The local path to the Git repository you want to sync.
-- `--dry-run`: Optional. Will not apply any changes, useful for testing what would happen.
-- `--help` or `-h`: Displays the usage instructions.
+**Examples:**
 
-#### Examples:
-
-- Sync a specific repository:
+- Sync with actual changes:
   ```bash
-  ./sync-repo.sh ~/.scripts
+  ./sync-repo.sh ~/my-repo
   ```
-  
-- Perform a dry run to see potential changes without applying them:
+- Perform a dry run:
   ```bash
-  ./sync-repo.sh $SCRIPTS --dry-run
+  ./sync-repo.sh ~/my-repo --dry-run
   ```
 
 ---
 
-> [!TIP]  
-> The script could be further improved by adding logging capabilities to capture detailed output in a log file for debugging and analysis. Another improvement could be to allow multi-repository syncing in a single run for users managing several repositories.
-
-### Features
-
-- **Interactive Conflict Handling**: Users can easily resolve merge conflicts through prompts.
-- **Formatted Output**: Utilizes `bat` and `glow` to enhance command outputs, making it visually appealing and easier to read.
-- **Versatile Usage**: Supports both direct usage and through keybindings for quick operations from the desktop environment.
+> [!TIP]
+> The script currently assumes no other long-running processes are interfacing with the repository. Integrating this into a larger automation pipeline should ensure no simultaneous operations are being executed on the same Git directory. Additionally, considering implementing a log output option might help track changes and processes executed by the script for future debugging or review.

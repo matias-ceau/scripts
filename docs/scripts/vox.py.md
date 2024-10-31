@@ -1,53 +1,50 @@
-# Vox Amp Options List
+# Vox Amplifier Options
 
 ---
 
-**vox.py**: A Python script to list and describe Vox amplifier options.
+**vox.py**: A script to list and describe Vox amplifier settings and modes.
 
 ---
 
 ### Dependencies
 
-- `pandas`: Used for data manipulation and analysis. This library provides data structures and functions needed to manage the amp options data.
-- `tabulate`: A package that makes it easy to create attractive tabular output. It formats the DataFrame into a readable table for the user.
-- `sys`: This module provides access to command line arguments.
+- `pandas`: Provides data manipulation and analysis (e.g., DataFrame).
+- `tabulate`: Formats tabular data with ASCII tables for easy viewing.
+- `sys`: Access system-specific parameters and functions.
 
 ### Description
 
-The `vox.py` script manages a collection of Vox amplifier models, their modes, descriptions, and associated information. It utilizes the `pandas` library to create a DataFrame, encapsulating details of various Vox amps, including their names, modes (standard, split, custom), colors, associated amps, and descriptions.
+The script **vox.py** is designed to display a list of various Vox amplifier models, offering relevant attributes such as the amplifier's name, mode, color designation, and a brief description. The amplifier information is stored within a `pandas.DataFrame` and presented through the `tabulate` library for easy, tabular viewing. 
 
-Upon execution, the script checks for command line arguments to determine how to display the information from the DataFrame:
-
-1. **No Arguments**: Displays a summary of all amp descriptions truncated to 40 characters.
-2. **Numeric Index**: If a valid index number is provided, it displays detailed information about the corresponding amp, including the name, mode, amp name, and full description.
-3. **Color Filter**: Pass 'g', 'o', or 'r' to show amps filtered by their color codes.
-4. **Name Search**: If a part of an amp's name is provided, it retrieves and shows all matching entries.
+This script is intelligent in its display options, showing either a truncated version of each amplifier's description by default or providing detailed information about a specific model when an index is given. It can filter amplifiers based on their color code (g, o, r) or by portions of the amplifier's name present in the command arguments.
 
 ### Usage
 
-To use `vox.py`, execute it from the command line. Here are some examples:
+To execute this script, use the command line on your Arch Linux setup. No special permissions are needed unless read access is prohibited.
 
-- Display all Vox amp options with brief descriptions:
-  ```
-  python vox.py
-  ```
+```bash
+python /home/matias/.scripts/bin/vox.py
+```
+This will display a truncated list of all amplifier settings.
 
-- Get detailed information about a specific amp by its index (for example, index 2):
-  ```
-  python vox.py 2
-  ```
+To see the details of a specific amplifier indexed in the list:
+```bash
+python /home/matias/.scripts/bin/vox.py 3
+```
 
-- Filter amps by color (for example, color 'g'):
-  ```
-  python vox.py g
-  ```
+To filter amplifiers by color code:
+```bash
+python /home/matias/.scripts/bin/vox.py g
+```
 
-- Search for amps containing 'CLEAN' in their name:
-  ```
-  python vox.py CLEAN
-  ```
+To filter by a part of the amplifier name, for instance, 'CLEAN':
+```bash
+python /home/matias/.scripts/bin/vox.py CLEAN
+```
+
+This script can be interlinked with your qtile keybindings, enabling faster access to the information without opening a terminal each time.
 
 ---
 
 > [!TIP]
-> The script could benefit from enhanced error handling. Currently, if a non-numeric or an invalid index is provided, it may not give clear feedback. Consider using try-except blocks to capture such errors gracefully and provide informative messages to the user. Additionally, separating the data loading logic from the command handling logic would improve maintainability and clarity.
+> Although the script is functional, for enhanced code readability and maintainability, consider refactoring repeated code segments into helper functions. Besides, adding more comprehensive error handling, especially when dealing with user inputs, could improve the script robustness. Additionally, including an option to view the full description without truncation might be desirable for in-depth information access.

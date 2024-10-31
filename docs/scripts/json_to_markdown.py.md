@@ -1,38 +1,41 @@
-# Convert JSON to Markdown
+# JSON to Markdown Converter
 
 ---
 
-**json_to_markdown.py**: A script to convert JSON files into Markdown format.
+**json_to_markdown.py**: Convert JSON content to a formatted markdown file.
 
 ---
 
 ### Dependencies
 
-- `json`: A standard library for parsing JSON data, included with Python.
-- `os`: A standard library for interacting with the operating system, also part of Python.
-- `sys`: A standard library for accessing command-line arguments and system-specific parameters, included with Python.
+- `python`: The script is written in Python and requires a Python interpreter to run.
+- `json`: A built-in Python module for JSON parsing.
+- `os` and `sys`: Python modules used for file path management and accessing command-line arguments.
 
 ### Description
 
-This script provides a straightforward utility to convert JSON files into nicely formatted Markdown files. It reads a JSON file passed as a command-line argument, processes its content, and generates an output Markdown file with the same base name.
+This script reads a JSON file and converts its contents into a markdown formatted document. The JSON is expected to have entries with `"role"` and `"content"` keys. Each entry becomes a section in the markdown file, where the `"role"` is capitalized and used as a heading and the `"content"` is included under it. The sections in the markdown are separated by lines of underscores.
 
-The JSON structure expected by the script should be an array of objects, where each object contains at least two properties: `role` and `content`. The script capitalizes the `role` and formats the output in Markdown style. Each entry in the Markdown file is separated by horizontal lines, creating a clear distinction between different sections.
-
-The script saves the Markdown output in a new file, with the same name as the input JSON file but with a `.md` extension.
+Key parts of the script:
+- The `json_to_markdown` function handles the conversion from JSON to markdown format.
+- It reads the JSON file, interprets the data, and compiles it into a markdown string, structuring each JSON entry into separate markdown sections.
+- In the main block, the script takes a file path as a command-line argument, converts the file, and writes the output to a new markdown file with a `.md` extension.
 
 ### Usage
 
-To use the script, you must provide the path to the JSON file as a command-line argument. Here's a basic example of how to execute it:
+To use this script, execute it from the command line with the path to the JSON file as an argument:
 
 ```bash
-python /home/matias/.scripts/json_to_markdown.py /path/to/your/file.json
+python /home/matias/.scripts/bin/json_to_markdown.py /path/to/input.json
 ```
 
-After running the script, a new Markdown file will be created in the same directory as the original JSON file. The name of the generated Markdown file will be the same as the JSON file but with a `.md` suffix.
+This will generate a new file, replacing the `.json` extension with `.md` (if the file has a `.json` extension), or appending `.md` otherwise, in the same directory:
 
-For instance, if your input JSON file is named `example.json`, the output will be `example.md`.
+```bash
+# Output example:
+# /path/to/input.md
+```
 
 ---
 
-> [!TIP]  
-> The script currently does not handle errors, such as file reading issues or invalid JSON formats. Adding exception handling would make it more robust. Consider implementing checks to ensure that the input file exists and, if possible, validate the structure of the JSON data before attempting to process it.
+> [!TIP] It's important to check the JSON file format before running the script, ensuring each entry contains "role" and "content". Additionally, the script lacks error-handling mechanisms for potential file reading/writing issues or JSON parsing errors. Implementing exception handling would improve its robustness, especially in scenarios where the file does not exist or doesn't comply with the expected JSON structure.

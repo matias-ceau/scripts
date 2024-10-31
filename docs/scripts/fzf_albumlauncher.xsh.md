@@ -2,51 +2,48 @@
 
 ---
 
-**fzf_albumlauncher.xsh**: Choose an album with fzf and play it with cmus.
+**fzf_albumlauncher.xsh**: Choose an album with `fzf` and play it with `cmus`.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder, needed for selecting albums from your music library.
-- `cmus`: A music player which the script interfaces with to play selected albums.
-- `beet`: A command-line tool to manage your music library, used here to list albums.
+- `xonsh`: A shell scripting language, designed for use in a shell environment.
+- `beet`: Music library manager.
+- `sed`: Stream editor for filtering and transforming text.
+- `fzf`: Command-line fuzzy finder, used to select albums.
+- `cmus`: C* Music Player, a small, fast and powerful console music player.
+- `cmus-remote`: Remote control utility for cmus.
 
 ### Description
 
-This script provides a convenient way to select and play a music album using `fzf` and `cmus` on your Arch Linux setup with `qtile`. It retrieves a list of albums from your music library managed by `beet`, and allows you to conveniently choose one through the fuzzy finder interface.
+This script is designed to work in an Arch Linux environment using the qtile window manager. It uses `fzf`, a fuzzy finder, to let users select an album from their music library, managed by `beet`. Once an album is selected, it will be played in `cmus`.
 
-Here's a breakdown of how the script operates:
-
-1. **Album Selection**: The script fetches a list of albums from `beet` and processes it to produce a clean list using `sed`. This list is then piped to `fzf`, where the user can interactively select an album.
-   
-2. **Control cmus**: Once an album is selected, the script utilizes `cmus-remote` commands to:
-   - Clear the current playlist.
-   - Filter the music library according to the selected album.
-   - Mark the filtered songs to be added to the cmus queue.
-   - Enqueue the songs, and play them immediately.
-
-3. **Playlist Management**: Finally, it saves the current song list to a temporary playlist file, allowing for a quick resume of the session.
+The script utilizes `sed` to manipulate output by stripping unnecessary text and `cmus-remote` commands to control playback in `cmus`. It follows these general steps:
+1. Lists albums using `beet`.
+2. Uses `sed` to clean up the list format.
+3. Allows the user to choose an album using `fzf`.
+4. Controls `cmus` to play the selected album.
 
 ### Usage
 
-To run the script, simply call it from your terminal:
+To use this script, ensure that `xonsh`, `beet`, `sed`, `fzf`, `cmus`, and `cmus-remote` are installed. Run the script interactively in the terminal.
 
-```bash
-/home/matias/.scripts/fzf_albumlauncher.xsh
+```shell
+./fzf_albumlauncher.xsh
 ```
 
-This will present a fuzzy search interface to select an album. After selection, the script will manage playback in cmus accordingly.
+Then, an interactive `fzf` search will be displayed where you can select an album.
 
-You may also bind this script to a key in your `qtile` configuration to allow for quick access. Here’s an example of how you might set that up:
+Example:
 
-```python
-keybindings = [
-    Key([mod], "a", lazy.spawn("/home/matias/.scripts/fzf_albumlauncher.xsh")),
-]
-```
+- Run the script and search for an album.
+- Select an album using the interface provided by `fzf`.
+- The album will then be automatically queued and played in `cmus`.
+
+You can also bind it to a key combination in `qtile` by specifying this script's path in your keybindings configuration.
 
 ---
 
 > [!TIP]
-> The script relies on `cmus` for playback, which means it must be running in the background for the commands to work. If `cmus` is not started, the script will fail silently. Consider adding error handling to notify the user if `cmus` is not active. Additionally, using `strip()` directly after the selection may lead to errors if nothing is selected; handling empty selections could enhance user experience.
+> Ensure that all dependencies are properly installed and configured, especially `beet`, which needs to be set up to manage your music library. Additionally, this script assumes a specific file path for saving playlists (`/home/matias/.temp/nowplaying.m3u`). Consider making the path configurable to increase flexibility.

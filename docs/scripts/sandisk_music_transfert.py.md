@@ -2,49 +2,45 @@
 
 ---
 
-**sandisk_music_transfert.py**: A script to transfer music albums to a Sandisk media player.
+**sandisk_music_transfert.py**: Script to transfer and manage music files on a Sandisk media player
 
 ---
 
 ### Dependencies
 
-- `pandas`: A data manipulation library used for handling album data and sizes.
-- `subprocess`: A standard library for spawning new processes, used for shell commands.
-- `random`: A module used for random selections in the script.
-- `getpass`: A module for securely handling input of passwords.
+- `python3`: The script is written in Python and requires Python 3.x.
+- `subprocess`: A standard Python module used for executing shell commands.
+- `pandas`: A Python data manipulation library. Install via `pip install pandas`.
+- `random`: A Python module used to make random selections.
+- `getpass`: Used to handle password inputs securely.
+- `beet`: Expected to be part of `beets`, a music library manager, for querying songs. Install via `pip install beets`.
 
 ### Description
 
-This Python script automates the process of transferring music albums from a local music directory to a Sandisk media player. It checks for albums that have not been listened to using the `beet` music tagging tool and manages the transfer based on the capacity of the Sandisk device.
+This script automates the process of transferring music files from your computer to a Sandisk media player. The script is designed to work on a typical Arch Linux setup with the qtile window manager. It identifies albums marked as "not listened to" using `beets`, calculates their sizes, filters albums based on supported music formats (AAC, M4A, FLAC, MP3, WAV, and WMA), and ensures that the total size does not exceed the predefined space limit on the media player.
 
-Key functionalities include:
-
-1. **Album Query**: It gathers a list of albums marked as unwatched using `beet`, capturing their paths for further processing.
-2. **Size Calculation**: The script assesses the sizes of the albums to ensure that the total does not exceed the maximum capacity of the Sandisk player (set to 30MB in this case).
-3. **DataFrame Management**: Utilizing `pandas`, the script maintains a DataFrame that organizes album paths, artists, formats, and sizes while filtering out unsupported audio formats.
-4. **Artist Dropping Logic**: To manage space, a random artist is dropped if the total size exceeds the maximum limit.
-5. **Device Clean Up**: It checks and deletes any unnecessary albums from the Sandisk device.
-6. **Folder Creation**: It generates artist and album folders in the Sandisk device's music directory.
-7. **File Synchronization**: Finally, it uses `rsync` to transfer the selected albums to the Sandisk player.
+The script employs several key techniques:
+- **Shell Command Execution**: Using the `subprocess` module, shell commands are executed to query and handle files and directories.
+- **DataFrame Management**: `pandas` module manages data for albums and music files.
+- **Filesystem Operations**: Handles directories and files on the media player.
+- **Random Sampling**: Randomly chooses artists to drop when space exceeds the limit.
 
 ### Usage
 
-To run the script, simply execute it from the terminal:
+1. **Ensure all dependencies are installed.**
+2. **Run the script in a terminal:**
+   ```bash
+   python /home/matias/.scripts/bin/sandisk_music_transfert.py
+   ```
+3. **Enter your password if prompted.** The script uses `sudo` for managing media player files and directories.
+4. **The albums will be transferred using `rsync` to ensure efficient copying.**
 
-```bash
-python3 /home/matias/.scripts/sandisk_music_transfert.py
-```
-
-Before executing, ensure you have the following:
-
-1. Your bulk music collection is located in `/home/matias/music/`.
-2. The Sandisk device is mounted at `/run/media/matias/EC95-4FBB/`.
-3. Update the `password` input line (commented out) for any required permission for deletions if necessary.
-4. The necessary libraries (`pandas`, etc.) are installed.
-
-The script can be linked to a keybinding in your window manager (qtile) for ease of use.
+The script assumes `/run/media/matias/EC95-4FBB/Music` is the mount point of your Sandisk device.
 
 ---
 
-> [!TIP] 
-> The script could be further improved by handling potential exceptions from subprocess calls (e.g., if folders do not exist or `rsync` fails), logging actions to help debug issues, and modifying the method of acquiring the password to improve security while avoiding plain text usage. Also, consider enhancing the temperature management logic for dynamic storage needs.
+> [!NOTE]
+> The script contains some areas that could be improved:
+> - Hard-coded paths (`/run/media/matias/EC95-4FBB/Music` and `/home/matias/music`) should be parameterized for flexibility.
+> - Error handling could be added for subprocess executions to capture and manage exceptions or errors.
+> - Inline comments suggest password handling through the `getpass` library, yet commented out. Ensure security credentials management per your needs.

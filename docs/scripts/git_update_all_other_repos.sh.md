@@ -2,39 +2,47 @@
 
 ---
 
-**git_update_all_other_repos.sh**: Automates pulling from all git repositories in a specified directory.
+**git_update_all_other_repos.sh**: Automatically updates all git repositories found under a specified directory using HTTPS.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `git`: Version control system to manage code repositories.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `bat`: A cat(1) clone with wings. It provides syntax highlighting and a nice output.
-- `sed`: A stream editor for filtering and transforming text.
+- `fd`: A simple, fast, and user-friendly alternative to `find`, used here to locate git directories.
+- `git`: The version control system for pulling updates from remote repositories.
+- `rg` (ripgrep): A fast search tool to filter out repositories with HTTPS fetch URLs.
+- `bat`: A cat clone with syntax highlighting, used to display repository information in a visually appealing format.
+- `sed`: A stream editor for filtering and transforming text, used here to format the output.
+- Environment Variable: `$GIT_REPOS` should be set to the base directory containing your git repositories.
 
 ### Description
 
-The `git_update_all_other_repos.sh` script is designed to streamline the process of updating all Git repositories located within a specific directory, designated by the environment variable `GIT_REPOS`. This is particularly useful for users managing multiple repositories, as it automates the mundane task of pulling updates from each one.
-
-Here's how the script works:
-- It utilizes `fd` to find all directories containing a `.git` subdirectory that are exactly three levels deep in the directory structure defined by `GIT_REPOS`.
-- For each found repository, the script checks if it has an active remote set up, specifically looking for HTTPS remotes.
-- If a remote is found, it prints the repository name with formatting via `bat`, followed by executing a `git pull` command to fetch and merge changes from the remote repository.
-- If the `git pull` command fails, it outputs an error message colored in red for easy visibility.
+This script is designed to iterate through each git repository located within a specified directory, identified by `$GIT_REPOS`. It uses `fd` to scan for `.git` directories that are exactly three levels deep. For each discovered repository, it checks if the remote URL is of the type HTTPS using `rg`. If the condition is met, it outputs the repository name in a highlighted format with `bat` and attempts a `git pull` to update the repository. In case of a pull failure, it outputs an error message indicating which repository failed.
 
 ### Usage
 
-To use this script, ensure that the `GIT_REPOS` environment variable is set to the directory containing your Git repositories. You can run the script directly in the terminal using:
+To use the script:
 
-```bash
-GIT_REPOS="/path/to/your/git/repositories" bash /home/matias/.scripts/git_update_all_other_repos.sh
+1. Ensure that all dependencies are installed on your system.
+2. Set the `GIT_REPOS` environment variable to point to your base directory containing git repositories.
+3. Run the script from a terminal:
+
+   ```sh
+   /home/matias/.scripts/bin/git_update_all_other_repos.sh
+   ```
+
+The script can be assigned to a keybinding in your qtile configuration for easy access.
+
+**Example:**
+
+```sh
+export GIT_REPOS=~/projects
+/home/matias/.scripts/bin/git_update_all_other_repos.sh
 ```
 
-Alternatively, you can assign this script to a keybinding within your window manager, or set it to execute automatically at routine intervals using a cron job.
+This will update all repositories under the `~/projects` directory tree.
 
 ---
 
 > [!TIP]
-> The script currently checks for HTTPS remotes but could be enhanced by adding support for SSH remotes as well. Consider adding a more verbose logging mechanism to improve monitoring of repository statuses during the pull process.
+> Consider integrating logging to capture pull failures in a separate file for easier debugging and tracking. Further, you might want to add checks to handle repositories with network errors or those requiring authentication, as the current script assumes all remote URLs are accessible and do not require additional credentials.

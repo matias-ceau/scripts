@@ -1,53 +1,44 @@
-# MIDI to Arch Controller
+# MIDI to Arch Keyboard/Script Launcher
 
 ---
 
-**midi2arch.xsh**: Transform a MIDI controller into a keyboard/script launcher
+**midi2arch.xsh**: Transform a MIDI controller into a keyboard or script launcher for Arch Linux
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell that provides an extension of the typical shell capabilities.
-- `subprocess`: A Python module for launching and interacting with subprocesses.
-- `yaml`: A Python library for YAML parsing, used for configuration management.
-- `aseqdump`: A tool to display MIDI events.
-- `xdotool`: A utility that simulates keyboard input and mouse activity.
+- `xonsh`: A Python-powered shell needed to run this script.
+- `subprocess`: Standard Python library used for running external programs.
+- `yaml`: Python library for parsing YAML configuration files.
+- `aseqdump`: ALSA utility for displaying MIDI events (must be available on your system).
+- `xdotool` (commented in script): A tool to simulate keyboard input and mouse activity.
 
 ### Description
 
-This script is designed to facilitate MIDI controller integration with Arch Linux setups, allowing MIDI inputs to trigger keyboard actions or launch scripts. Written in `xonsh`, it detects a specified MIDI device (in this case, the `nanoKONTROL2`) and translates its output into actionable keypress commands.
+This script allows you to transform your `nanoKONTROL2` MIDI controller into a powerful tool for launching scripts or simulating keyboard shortcuts on your Arch Linux system, particularly within the qtile window manager environment. The script reads a YAML configuration file stored at `~/.scripts/config/midi2arch/nanoKONTROL2.yaml`, which specifies mappings of MIDI control changes to specific commands.
 
-The script reads from a YAML configuration file located at `~/.scripts/config/midi2arch/nanoKONTROL2.yaml`, which defines control mappings. Upon receiving MIDI input, the script runs an event loop to process these inputs, mapping specific MIDI control changes (CC messages) to key commands.
-
-Key functions in the script include:
-
-- **`detect_midi_keyboard(keyboard)`:** Checks if the specified MIDI device is connected.
-- **`main(config_file)`:** The main logic that processes MIDI inputs and triggers corresponding actions based on the configuration.
+The script first checks for the presence of the `nanoKONTROL2` device using the `aseqdump -l` command. It listens to MIDI events from the connected device, translates them based on the provided configuration, and executes the corresponding command when the specified control changes occur.
 
 ### Usage
 
-To use the script, navigate to the directory where it is located and run:
+To use the script, run it in a `xonsh` shell environment:
 
-```bash
-midi2arch.xsh
+```shell
+xonsh /home/matias/.scripts/bin/midi2arch.xsh
 ```
 
-If you need to list available MIDI events without triggering any key actions, use the command:
+- To list MIDI events without executing commands, use the `-l` argument:
 
-```bash
-midi2arch.xsh -l
+```shell
+xonsh /home/matias/.scripts/bin/midi2arch.xsh -l
 ```
 
-For more information on usage, you can call:
-
-```bash
-midi2arch.xsh -h
-```
-
-This will display the help message detailing arguments and options available.
+Make sure your `nanoKONTROL2` configuration is correctly set up in the YAML file. The script will print the control change (cc) and its value (val) for each detected event.
 
 ---
 
-> [!TIP]  
-> The current version of the script has commented-out sections that suggest further development opportunities. Consider implementing the functionality to trigger keypresses for additional MIDI control messages or refining error handling mechanisms for greater robustness. Adding more extensive documentation directly within the script would also enhance usability for future users or contributors.
+> [!NOTE]
+> There are a few parts of the script which appear to be commented out, such as functions for triggering key presses with `xdotool`. If you plan to implement these, ensure `xdotool` is installed and functioning correctly on your system.
+> 
+> Additionally, consider implementing exception handling for error messages to provide more user-friendly output. Moreover, some constants like device names could be parameterized to improve flexibility and scalability. Another improvement could be the continuation of execution when encountering an unsupported device instead of exiting out immediately.

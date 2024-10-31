@@ -1,59 +1,51 @@
-# Transform Symlink
+# Transform Symlinks
 
 ---
 
-**transform_symlink.sh**: A script to convert symlinks into copies of their target files or directories.
+**transform_symlink.sh**: Convert symbolic links to copies of their targets.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find` for searching files.
-- `fzf`: A command-line fuzzy finder that helps in selecting and interacting with files.
-- `bat`: A cat clone with syntax highlighting and Git integration. It is used for previewing files in the `fzf` menu.
+- `bash`: The script is written in Bash.
+- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `fzf`: A command-line fuzzy finder used for interactive selection.
+- `bat`: A command-line tool for displaying file contents with syntax highlighting (used in fzf preview).
 
 ### Description
 
-The `transform_symlink.sh` script provides a utility to convert symbolic links (symlinks) into actual copies of their target files or directories. This can be particularly useful when you want to eliminate symlinks and retain the actual content instead. The script executes in two modes:
+The **transform_symlink.sh** script is designed to convert symbolic links into physical copies of their targets. This utility can be especially useful when you need to remove symlinks but retain the content pointed to by the symlinks, either for backup purposes or to alter file structures while maintaining data integrity.
 
-1. **Interactive Mode**: If no arguments are passed, it employs `fd` to search for symlinks within the current directory and presents them in an interactive `fzf` menu.
-2. **Argument Mode**: If one or more symlink paths are specified as arguments, the script will directly transform each of them.
+Here’s a broad overview of how the script functions:
 
-The transformation process first checks if the provided path is indeed a symlink. If valid, it reads the target of the symlink and checks if it exists. If both validations pass, it removes the symlink and creates a copy of the target at the original symlink location.
+- Validates if provided arguments are symbolic links.
+- If no arguments are given, it uses `fd` to locate symlinks up to five levels deep within the current directory. These are then displayed via an `fzf` selection interface for the user to choose from.
+- The `transform_symlink` function checks if the provided path is a symlink and verifies the existence of the symlink's target. If valid, it removes the symlink and copies its target in its place.
+
+This script does not modify anything if the specified path is not a symlink or if the symlink target is unavailable.
 
 ### Usage
 
-To use the `transform_symlink.sh` script, you can run it from the terminal with the following syntax:
+To use this script, it can either run in interactive mode or accept direct arguments:
 
 ```bash
-./transform_symlink.sh [OPTION] [SYMLINK]...
+# Interactive mode using fzf
+/home/matias/.scripts/bin/transform_symlink.sh
+
+# Transform a specified symlink
+/home/matias/.scripts/bin/transform_symlink.sh /path/to/symlink
+
+# Transform multiple symlinks
+/home/matias/.scripts/bin/transform_symlink.sh link1 link2 link3
 ```
 
-- **Interactive Mode** (no arguments):
-```bash
-./transform_symlink.sh
-```
-This will trigger an interactive menu to select the symlink you wish to transform using `fzf`.
+To display the help and usage information:
 
-- **Transform a Single Symlink**:
 ```bash
-./transform_symlink.sh /path/to/symlink
+/home/matias/.scripts/bin/transform_symlink.sh --help
 ```
-Replace `/path/to/symlink` with the actual path to the symlink.
-
-- **Transform Multiple Symlinks**:
-```bash
-./transform_symlink.sh symlink1 symlink2 ...
-```
-Use this when you want to convert several symlinks in one command.
-
-- **Help Option**:
-```bash
-./transform_symlink.sh --help
-```
-Displays the help message with usage information.
 
 ---
 
-> [!TIP]  
-> Consider adding error logging features to this script. Currently, any failures during the transformation process are only echoed to the terminal. Logging them into a file could help with debugging and tracking issues in the future. Additionally, you could improve the user interface by providing progress indicators during the file copy operations.
+> [!NOTE] While this script handles basic conditions well, users should ensure that they have a backup of their data before transformation, especially if the process fails or is interrupted. Additionally, consider implementing a dry-run mode to preview actions before execution, which would enhance reliability and user confidence.

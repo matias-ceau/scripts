@@ -1,46 +1,43 @@
-# Open nvim in a Floating Terminal
+# Open Neovim in Floating Terminal
 
 ---
 
-**nvim_in_new_terminal.sh**: Opens a floating terminal to edit a file using nvim
+**nvim_in_new_terminal.sh**: Opens a floating terminal to edit a file with Neovim
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A GPU-accelerated terminal emulator that allows for floating windows.
-- `nvim`: Neovim, a modernized version of Vim, which is a highly extensible text editor.
+- `alacritty`: A fast, cross-platform, OpenGL terminal emulator.
+- `nvim`: Neovim, a hyperextensible Vim-based text editor.
+- `setsid`: Runs a program in a new session, used here to launch `alacritty` independently.
 
 ### Description
 
-This script is designed to launch a new floating terminal window using **Alacritty** and open a specified file in **Neovim**. By utilizing `setsid`, the script ensures that the terminal runs in a new session, keeping it independent from the terminal that initiated it.
-
-The command used is:
-
-```bash
-setsid alacritty -T nvim-term --class 'floating' -e nvim "$1" &
-```
-
-- **setsid**: Starts a new session and detaches the terminal, which prevents the script from terminating when the calling terminal is closed.
-- **alacritty**: This command specifies the terminal emulator to be opened.
-  - `-T nvim-term`: Sets the title of the terminal window to "nvim-term".
-  - `--class 'floating'`: Assigns a specific class to the window for window manager (WM) purposes, making it behave as a floating window.
-  - `-e nvim "$1"`: Executes the command to run neovim with the first argument passed to the script, which is the file to be edited.
+This script is designed to open a specified file in Neovim inside a new, floating terminal window. Leveraging the power of `alacritty` to provide a graphical terminal, the script ensures that your editing session is visually distinct by running `alacritty` with a custom title (`nvim-term`) and class name ('floating'). This allows you to utilize window management features in qtile specific to windows with the 'floating' class. The script uses `setsid` to detach the process from the terminal, allowing the script to exit without closing the terminal window.
 
 ### Usage
 
-To use the script, simply provide the filename you wish to edit as an argument. You can run the script from the terminal as follows:
+To use this script, pass the file you want to edit as an argument. The script can be executed directly from the terminal or bound to a key combination in your qtile configuration for quick access.
 
 ```bash
-bash /home/matias/.scripts/nvim_in_new_terminal.sh path/to/yourfile.txt
+~/.scripts/bin/nvim_in_new_terminal.sh /path/to/file.txt
 ```
 
-Alternatively, you can create a keybinding in your window manager to execute this script quickly. For instance, in **Qtile**, you can add a key binding like so in your configuration file:
+Example of running the script:
+
+```bash
+~/.scripts/bin/nvim_in_new_terminal.sh ~/Documents/notes.txt
+```
+
+For integration with qtile, you might bind the script to a key combination by editing your qtile configuration file (`config.py`) with something like:
 
 ```python
-Key([mod], 'n', lazy.spawn('bash /home/matias/.scripts/nvim_in_new_terminal.sh path/to/yourfile.txt')),
+Key(["mod4"], "e", lazy.spawn("~/.scripts/bin/nvim_in_new_terminal.sh '/path/to/file.txt'")),
 ```
+
+Replace `/path/to/file.txt` with your desired default file or modify as per your workflow.
 
 ---
 
-> [!TIP] The script assumes that the `nvim` command and `alacritty` are accessible in your system's PATH. You may want to add error handling to notify the user if either command fails to execute. Additionally, consider implementing a default filename if none is provided, ensuring the script remains robust during usage.
+> [!TIP] This script assumes that `alacritty` and `nvim` are installed and located in your `$PATH`. Ensure that these dependencies are met before using the script. Additionally, consider enhancing the script to check if the file specified exists before attempting to open it, or to handle multiple file arguments to increase its versatility.

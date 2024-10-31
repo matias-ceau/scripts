@@ -1,56 +1,54 @@
-# Wallpaper Manager
+# Random Wallpaper Picker
 
 ---
 
-**wallpaper.sh**: Pick random wallpaper from wallpaper list
+**wallpaper.sh**: Sets a random, previously selected, or GUI-chosen wallpaper from your collection
 
 ---
 
 ### Dependencies
 
-- `feh`: A lightweight image viewer that is used to set the desktop wallpaper.
-- `notify-send`: Utility for sending desktop notifications. This script uses it to inform the user when the wallpaper changes.
-- `yad`: A fork of Zenity that allows the creation of graphical dialogs from shell scripts. This script uses it to present a GUI for selecting wallpapers.
-- `fzfmenu.sh`: A script intended for providing fuzzy searching for selections. This needs to be available to use the select feature in this script.
+- `feh`: Utility for setting wallpapers
+- `notify-send`: Displays notifications on your desktop
+- `yad`: A tool to create graphical dialogs from shell scripts
+- `shuf`: Generates random permutations
+- `awk`: For text processing
+- `fzfmenu.sh`: Might be a custom or user-provided script for file selection with fzf
 
 ### Description
 
-The `wallpaper.sh` script is a Bash script designed to manage and set desktop wallpapers on your system. The script offers several functionalities, allowing users to set a random wallpaper, select one interactively through a fuzzy search, or select a previously used wallpaper. It keeps a log of the wallpapers that have been set and removes duplicates to maintain an organized list.
+The `wallpaper.sh` script allows you to manage your desktop wallpapers by setting random wallpapers or selecting specific ones. Primarily designed for your Arch Linux setup with Qtile, it offers flexibility to change wallpapers via command-line arguments or a graphical interface.
 
-The script begins by defining a default wallpaper and a path to store a log of previously set wallpapers. The main functionality is encapsulated in a `set_wallpaper` function, which utilizes `feh` to change the desktop background and informs the user through a desktop notification.
+- **Default Wallpaper**: If no arguments are given, it defaults to the wallpaper located at `$HOME/.wallpapers/_toitssuze.jpg`.
+- **Wallpaper cache**: Keeps a log of all the wallpapers used in `~/.cache/wallpapers.log` to allow returning to a previous wallpaper.
+
+This script integrates different functionalities through a set of options:
+
+1. **Random Selection**: Chooses a random wallpaper from `~/.wallpapers` using the `--random` flag.
+2. **Selection with fzf**: Enables choosing a wallpaper from a list using the `--select` flag and relies on the `fzfmenu.sh` script.
+3. **Return to Previous**: With the `--previous` flag, you can opt to return to a prior wallpaper logged in the cache.
+4. **Graphical Mode**: Utilizes the `--gui` flag for a GUI interface to select and preview wallpapers using `yad`.
 
 ### Usage
 
-To use the script, execute it in the terminal with one of the following options:
+```bash
+# Set a random wallpaper
+./wallpaper.sh --random
 
-- Change to a random wallpaper:
-  ```bash
-  ./wallpaper.sh --random
-  ```
+# Select a wallpaper interactively with fzf
+./wallpaper.sh --select
 
-- Select a wallpaper using a fuzzy search (requires `fzfmenu.sh`):
-  ```bash
-  ./wallpaper.sh --select
-  ```
+# Revert to a previous wallpaper
+./wallpaper.sh --previous [n]
 
-- Set the previous wallpaper (you can specify how far back):
-  ```bash
-  ./wallpaper.sh --previous 2
-  ```
+# Use a graphical interface to select a wallpaper
+./wallpaper.sh --gui
 
-- Use a graphical interface to select a wallpaper:
-  ```bash
-  ./wallpaper.sh --gui
-  ```
-
-- Set the default wallpaper:
-  ```bash
-  ./wallpaper.sh
-  ```
-
-The script will also log the wallpapers that have been set in the cache file (`/home/matias/.cache/wallpapers.log`) and manages duplicate entries effectively.
+# Set the default wallpaper
+./wallpaper.sh
+```
 
 ---
 
-> [!TIP]  
-> Consider implementing error handling for cases when no wallpapers are found or when dependencies aren't met. This would enhance the user experience by providing feedback about potential issues rather than failing silently. Additionally, ensure that `fzfmenu.sh` is properly integrated – currently, its absence may lead to errors when the `--select` option is invoked.
+> [!NOTE]
+> The function `fzfmenu.sh` used in the `--select` case might not work if `fzfmenu.sh` isn't present. Additionally, if `yad` is not installed, the `--gui` option will fail. You might want to set checks and install instructions for these dependencies. Also, consider using absolute paths or environment variables to handle multi-user execution more gracefully.

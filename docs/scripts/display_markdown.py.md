@@ -1,56 +1,41 @@
-# Display Markdown in Rich Panel
+# Display Markdown Script
 
 ---
 
-**display_markdown.py**: Displays Markdown content in a rich console panel.
+**display_markdown.py**: Script to display markdown files in the terminal with styling
 
 ---
 
 ### Dependencies
 
-- `rich`: A Python library for rich text and beautiful formatting in the terminal. Ensure to install this library using pip: `pip install rich`.
+- `rich`: A Python library for rich text and formatting in the terminal.
 
 ### Description
 
-This script is designed to read and display Markdown files in a visually appealing manner using the `rich` library. The content is presented within a panel that features rounded corners and a customizable width. By default, the Markdown content is styled to resemble GitHub’s dark theme, enhancing readability.
+This script is designed to display markdown files directly in your terminal with enhanced styling using the `rich` library. By default, it styles the markdown content with the `github-dark` theme. The script presents the content inside a styled panel, providing visually appealing rounded borders with a blue border style. 
 
-The script achieves the following:
-
-1. **Command-line Argument Handling**: It requires a single argument that is the path to the Markdown file to be displayed. If the optional second argument is provided and is numeric, it will set the width of the panel.
-2. **Error Handling**: It gracefully handles errors such as:
-   - File not found
-   - Issues in reading the file, displaying helpful messages to the user.
-3. **Markdown Rendering**: Utilizes the `Markdown` class from `rich` to convert the Markdown text into rich formatted output.
+The script reads a markdown file specified by the user via command-line argument and optionally takes a second argument for the panel width. If the width is not provided or is not a number, it defaults to an adaptive width. The use of `rich`'s `Markdown` and `Panel` classes enables the script to render complex markdown syntax and present it elegantly, enhancing legibility.
 
 ### Usage
 
-To use the script, follow these steps:
-
-1. Ensure you have the `rich` library installed.
-2. Run the script from a terminal with the following command:
+To use the script, execute it from a terminal on your Arch Linux environment as follows:
 
 ```bash
-python display_markdown.py <path_to_markdown_file> [panel_width]
+python /home/matias/.scripts/dev/display_markdown.py /path/to/markdown.md [panel_width]
 ```
 
-- **`<path_to_markdown_file>`**: The path to the Markdown file you wish to display.
-- **`[panel_width]`**: (Optional) An integer to specify the width of the panel.
+- Replace `/path/to/markdown.md` with the path to the markdown file you wish to display.
+- Optionally, specify `[panel_width]` as a numeric value to set the desired width of the styled panel.
 
-**Examples**:
-
-- Display a Markdown file with default settings:
+For example, if you have a markdown file located at `/home/matias/docs/example.md`, you would run:
 
 ```bash
-python display_markdown.py notes.md
+python /home/matias/.scripts/dev/display_markdown.py /home/matias/docs/example.md 80
 ```
 
-- Display a Markdown file with a specific panel width:
-
-```bash
-python display_markdown.py notes.md 80
-```
+This command will render the markdown content inside an 80-character wide panel.
 
 ---
 
-> [!TIP]  
-> The script currently only checks for two command-line arguments, but it should ideally check if just one argument is provided before attempting to access `sys.argv[2]`. Additionally, it would benefit from better input validation on the panel width to ensure it is within a sensible range, preventing potential issues with overly large panels.
+> [!WARNING]
+> The current implementation of the script contains a logic error in checking the number of arguments. Ensure that the condition `if len(sys.argv) != 2:` should correctly handle both arguments, especially when counting how many arguments are provided. Additionally, consider implementing error handling for the conversion of `panel_width` to ensure it gracefully handles invalid inputs. Consider refactoring to allow optional styling themes from the command line for versatility.

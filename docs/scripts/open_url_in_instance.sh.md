@@ -1,42 +1,46 @@
-# Open URL in Qutebrowser Instance
+# Qutebrowser URL Opener
 
 ---
 
-**open_url_in_instance.sh**: Launches a URL in an existing Qutebrowser instance.
+**open_url_in_instance.sh**: Opens a URL in an existing Qutebrowser instance or starts a new one.
 
 ---
 
 ### Dependencies
 
-- `socat`: A command line based utility that establishes two bidirectional byte streams and transfers data between them. It is essential for IPC communication in this script.
-- `qutebrowser`: A keyboard-focused browser with a minimal GUI, used as the target application for opening URLs.
+- `qutebrowser`: Minimalistic keyboard-driven web browser. Make sure it is installed at `/usr/bin/qutebrowser`.
+- `socat`: Utility used for data transfer between two endpoints.
+- `md5sum`: Utility to calculate the MD5 hash, used here for generating a socket identifier.
 
 ### Description
 
-The `open_url_in_instance.sh` script allows users to efficiently open a specified URL in an existing instance of Qutebrowser without opening a new window. It utilizes Inter-Process Communication (IPC) to send a JSON-formatted command that instructs the Qutebrowser to navigate to the desired URL.
+The script is designed to open a given URL in an existing instance of Qutebrowser or launch a new one if needed. This is done by utilizing Inter-Process Communication (IPC) through a socket file designated by `XDG_RUNTIME_DIR`. The script constructs a JSON message with details such as the URL, Qutebrowser version, protocol version, and current working directory, then sends it to Qutebrowser via the socket. If this IPC communication fails (when no instance is running), the script launches a new Qutebrowser session with the provided URL.
 
-The script is designed with a few key variables:
-- `_url`: The URL to be opened, passed as the first command-line argument.
-- `_qb_version`: This represents the version of Qutebrowser that the command is targeting; it defaults to '1.0.4'.
-- `_proto_version`: The version of the IPC protocol, set to 1.
-- `_ipc_socket`: Dynamically created IPC socket path based on the current user's execution environment.
-- `_qute_bin`: Specifies the path to the Qutebrowser binary, ensuring proper execution.
-
-The core functionality consists of formatting the necessary command into JSON and using `socat` to send it over the IPC socket. If the connection fails, the script falls back to attempting to open the URL in a new Qutebrowser instance.
+Behind the scenes, the script utilizes several key components:
+- Variables like `_url`, `_qb_version`, `_proto_version`, and `_ipc_socket` are initialized to store essential information.
+- The `printf` command constructs the JSON message.
+- `socat` is employed to attempt connection to the existing Qutebrowser IPC socket.
+- If `socat` fails, Qutebrowser is called directly to open the URL, thereby starting a new instance.
 
 ### Usage
 
-To use this script, simply call it from the terminal with the desired URL as an argument:
+This script is designed to take one argument, the URL to open, and can be executed as follows:
 
-```bash
-sh /home/matias/.scripts/open_url_in_instance.sh https://example.com
+```sh
+open_url_in_instance.sh https://example.com
 ```
 
-If the Qutebrowser instance is running and properly configured to accept IPC commands, it should navigate to the specified URL. If it’s not running, the URL will open in a new instance.
+You can run this script from a terminal or bind it to a key combination in your window manager (qtile), using a custom keybinding setup.
 
-You can also bind this script to a key combination in your window manager, allowing for a seamless workflow when browsing.
+For example, you can utilize qtile’s key bindings feature in your `config.py`:
+
+```python
+Key([mod], "u", lazy.spawn("/home/matias/.scripts/bin/open_url_in_instance.sh")),
+```
+
+Replace `mod` and `u` with your preferred modifier key and key combination.
 
 ---
 
 > [!TIP]
-> The script currently assumes that the environment is set up correctly (e.g., Qutebrowser is configured for IPC). To enhance robustness, you might want to include error handling to inform the user if the URL opens in a new instance due to IPC failure. Additionally, consider making `_qb_version` and `_proto_version` configurable as command-line arguments, providing flexibility for users with different setups.
+> The script could be expanded to include more robust error handling, such as catching exceptions when `socat` is unavailable. Also, adding support for handling URLs without a protocol (e.g., adding `http://` if missing) would improve user experience.

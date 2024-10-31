@@ -2,48 +2,40 @@
 
 ---
 
-**obsidian-vault-selector.sh**: Script to select and open any Obsidian vault.
+**obsidian-vault-selector.sh**: Opens and previews Obsidian vaults using improved FZF menu
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell used to execute the script.
-- `eza`: A modern alternative to `ls`, providing enhanced directory listings and file information.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
+- `obsidian`: The Obsidian application for managing vaults.
+- `eza`: Enhanced version of `ls` that lists files with more options.
+- `rg` (Ripgrep): A line-oriented search tool for recursively searching your current directory.
 - `bat`: A cat clone with syntax highlighting and Git integration.
-- `jq`: A lightweight and flexible command-line JSON processor.
-- `improved-fzfmenu.sh`: A script for fuzzy finding selections with a preview window.
+- `jq`: Command-line JSON processor.
+- `improved-fzfmenu.sh`: A custom script to enhance the fuzzy finder menu. Ensure this script is available in your PATH.
+- `setsid`: Utility to run a program in a new session.
+- `notify-send`: Send desktop notifications.
 
 ### Description
 
-The `obsidian-vault-selector.sh` script allows users to easily select and open an Obsidian vault stored on their filesystem. It provides a graphical user interface for listing the available vaults using the `improved-fzfmenu.sh` fuzzy finder and displays previews of the selected vault contents. Utilitarian commands like `eza`, `rg`, and `bat` are combined to enhance file listings with notable features, such as color-coding, icon support, and detailed previews of files, excluding certain file types for a cleaner view.
+This script is designed to enhance your workflow with Obsidian on an Arch Linux system employing Qtile as a window manager. It provides a dynamic way to open Obsidian vaults by listing available vault directories and offering a preview of the contents. This is achieved using the `eza` command for directory listing, `ripgrep` to filter files, and `bat` for a colorful preview of files. The script extracts the list of vaults from `obsidian.json` and leverages `improved-fzfmenu.sh` for a streamlined, interactive selection process.
 
-#### Key Functions:
-- **`preview_cmd`**: Lists files within the selected vault, excluding specific file types for a focused view.
-- **`open_vault`**: Opens the chosen vault in Obsidian using a constructed URI.
-- **`search_cmd`**: Extracts available vault paths from Obsidian's configuration, outputting them in a user-friendly format.
-- **`plabel_cmd`**: Lists directories in a specified format.
+The script defines functions to:
+- **Preview a directory's contents** with `eza` and `bat`.
+- **Open a selected vault** in Obsidian using a custom URI scheme.
+- **Search through the Obsidian configuration** to find vault paths.
 
 ### Usage
 
-To use the script, run the following command in your terminal:
+To utilize this script, ensure all dependencies are installed and available in your environment. You can execute the script from your terminal as follows:
 
 ```bash
-bash /home/matias/.scripts/obsidian-vault-selector.sh
+~/.scripts/bin/obsidian-vault-selector.sh
 ```
 
-This initiates an interactive session where you can select your desired Obsidian vault. After selecting one, the script will open Obsidian with the chosen vault.
-
-You can bind this script to a key combination in your window manager (Qtile) or executable environment for quick access. For example, you might add it as a keybinding in your `~/.config/qtile/config.py`:
-
-```python
-@lazy.function
-def open_obsidian_vault(qtile):
-    qtile.cmd_spawn('/home/matias/.scripts/obsidian-vault-selector.sh')
-```
+On execution, a menu will appear listing your Obsidian vaults. Navigate using your keyboard and select a vault to open it in Obsidian. The script can be integrated into your Qtile WM keybindings for quick access.
 
 ---
 
-> [!TIP]
-> This script could benefit from better error handling, such as checking if necessary commands (`eza`, `rg`, `bat`, etc.) are installed before execution. Additionally, the vault directory extraction process might fail if the configuration file is missing or incorrectly formatted; adding checks would improve robustness. It may also be useful to include a caching mechanism or a quicker way to access frequently used vaults.
+> [!TIP] The script could be further improved by handling more file types in the preview or by providing detailed error handling for cases like missing vault directories or failed process initializations. Integrating default paths or ensuring `improved-fzfmenu.sh` is properly sourced in your script would also enhance robustness.

@@ -2,55 +2,43 @@
 
 ---
 
-**new_script_creator.sh**: A script to create and manage user scripts effortlessly.
+**new_script_creator.sh**: Automates script creation with templating based on file extension
 
 ---
 
 ### Dependencies
 
-- `bat`: A modern alternative to `cat` that supports syntax highlighting.
-- `rg`: The Rust text search tool used for regex matching.
-- `nvim`: A text editor that opens the created script for editing.
-- `utils_update_symlimks.sh`: A user-defined utility for updating symlinks (assuming it exists in the script's context).
+- `bat`: A `cat` clone with syntax highlighting
+- `rg` (ripgrep): A line-oriented search tool that recursively searches directories for a regex pattern
+- `nvim`: Neovim, an extensible Vim-based text editor
+- `utils_update_symlimks.sh`: A user-defined script to update symbolic links
 
 ### Description
 
-The `new_script_creator.sh` is designed to facilitate the creation of user scripts across different programming languages (Bash, Python, Xonsh) with minimal hassle. The script provides several functionalities:
+The **new_script_creator.sh** script automates the creation of new scripts tailored to specific programming languages based on file extensions. It supports `.sh` for Bash, `.py` for Python, and `.xsh` for Xonsh, adding appropriate shebang lines. When executed, it prompts the user for a script name and uses `templater` to decide on the script's template based on its extension.
 
-- **Usage Documentation**: The `usage` function displays how to invoke the script and explains the options available to the user.
-- **Template Generation**: The `templater` function creates a basic template for the specified language. The generated template includes a shebang line to specify the interpreter.
-- **File Extension Check**: The `ensure_extension` function ensures that the script file has the correct extension. If no extension is provided, it prompts the user to choose between Shell, Python, or Xonsh scripts.
-- **Script Creation and Opening**: The `script_creator` function creates the script at a defined path, opens it in `nvim`, and assigns execution permissions if the script is long enough.
+The script handles file extensions with `ensure_extension`, suggesting `.sh`, `.py`, or `.xsh` based on user input. It supports converting existing files into user scripts with the `-f` or `--from` flag.
+
+The core function `script_creator` creates the script in a predefined `$SCRIPTS` directory, opens it in `nvim` for editing, and if the file size is larger than 22 characters, makes it executable and updates symlinks using `utils_update_symlimks.sh`.
 
 ### Usage
 
-You can use the script in several ways:
+```bash
+# Display help
+new_script_creator.sh -h
 
-1. **Create a new script interactively**:
-   ```bash
-   ./new_script_creator.sh
-   ```
-   This will prompt you for a filename and script type.
+# Create a new script with a specific name
+new_script_creator.sh my_script.sh
 
-2. **Specify a filename directly**:
-   ```bash
-   ./new_script_creator.sh my_script.py
-   ```
-   This command creates a new Python script named `my_script.py`.
+# Convert an existing file into a user script
+new_script_creator.sh -f /path/to/existing_file.sh
 
-3. **Convert an existing file into a user script**:
-   ```bash
-   ./new_script_creator.sh -f existing_script.sh
-   ```
-   Use this command to change an existing file into a user script and open it in `nvim`.
+# Run without arguments to be prompted for a filename
+new_script_creator.sh
+```
 
-4. **Display help**:
-   ```bash
-   ./new_script_creator.sh -h
-   ```
-   This shows the usage options for the script.
+Plugin the script into your Arch Linux environment, preferably assigning a keybinding in qtile for quick access.
 
 ---
 
-> [!TIP]  
-> The script depends on external utilities like `bat`, `rg`, and `nvim`, which may not be installed on all systems. Consider incorporating user checks to ensure these tools are available before execution. Additionally, error handling could be improved for robustness, especially when dealing with file operations.
+> [!TIP] Consider improving error handling within the script. Currently, the script assumes the presence of required tools like `bat`, `rg`, and `nvim`, which might not be available or configured correctly on every system. Incorporating checks would enhance robustness. Additionally, the symlink update script `utils_update_symlimks.sh` should be explicitly verified for existence and functionality. Connecting it to a version-controlled repository would provide version tracking and enable collaborative improvements.

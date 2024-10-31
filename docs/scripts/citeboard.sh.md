@@ -1,53 +1,42 @@
-# Citeboard Script
+# Citeboard: Paper Finder and Citation Manager
 
 ---
 
-**citeboard.sh**: A script to find and open a paper or copy its citation.
+**citeboard.sh**: Script to find a paper and either open it or copy its citation.
 
 ---
 
 ### Dependencies
 
-- `findutils`: A set of utilities for file searching and processing.
-- `xsel`: Command-line interface to the X selection, allowing interaction with clipboard contents.
-- `dmenu`: Dynamic menu for X, useful for selection interfaces.
+- `findutils`: Used to search for files in directories.
+- `xsel`: A command-line tool to manipulate the X selection, allowing clipboard operations.
+- `dmenu`: A dynamic menu for X, used to make selections. 
 
 ### Description
 
-The `citeboard.sh` script streamlines the process of accessing academic papers and their citations. It operates by searching for BibTeX entries in a specified directory, displaying them through `dmenu` for selection. After selecting a citation, the user can choose to either copy the citation to the clipboard or open the associated paper using the Evince document viewer.
+The **citeboard.sh** script is a simple utility tailored for Arch Linux users with the qtile window manager, aiming to streamline the process of either opening a paper or copying its citation to the clipboard. The script pulls from a bibliography database located in `data/bib/*`, using the BibTeX citation format. 
 
-Here's a breakdown of how the script functions:
-
-1. **Search BibTeX Files**: The script uses `grep` to scan through all BibTeX files located in the `data/bib/` directory for entries, filtering those lines that represent valid bibliographic references.
-2. **User Selection via dmenu**: The script pipes the filtered references into `dmenu`, allowing the user to visually select a reference from a displayed list of options.
-3. **Action Selection**: Following the selection of a citation, the user is prompted to choose whether to copy the citation to the clipboard or open the corresponding paper via another `dmenu` prompt.
-4. **Final Actions**: Depending on the user's choice, the script either copies the citation to the clipboard using `xsel` or opens the associated PDF file located in the Zotero storage directory using `evince`.
+- It starts by extracting references from the BibTeX files, using `grep` to identify lines beginning with `@` and removing unwanted characters through `sed`.
+- It then presents a menu using `dmenu` to allow the user to select which reference to use.
+- Depending on the subsequent choice (open the paper or copy the citation), it either copies the reference to the clipboard using `xsel` or finds and opens the corresponding paper in the `data/zotero/storage` directory using `evince`.
 
 ### Usage
 
-To use the script, run it directly from your terminal:
+To use the script, follow these steps:
 
-```bash
-./citeboard.sh
-```
+1. Execute the script from the terminal:
+   ```bash
+   ~/.scripts/bin/citeboard.sh
+   ```
+2. Upon execution, a menu appears listing all available references (based on your BibTeX files). 
+3. Select the desired reference and another menu pops up asking to either `open` the file or copy to `clipboard`.
+4. Depending on your choice:
+   - If `clipboard` is selected, the reference is copied and ready to be pasted.
+   - If `open` is selected, the paper is opened using Evince.
 
-From there, you will go through the following prompts:
-
-1. **Select a Citation**: A list of citations will appear. Navigate to the desired entry and select it.
-2. **Choose an Action**: You will then have the choice to either "open" the paper or "clipboard" to copy the citation.
-
-Example interaction:
-
-1. Launch the script:
-
-```bash
-./citeboard.sh
-```
-
-2. Choose a reference from the `dmenu`.
-3. Select either "open" to view the paper or "clipboard" to copy the citation.
+This script can also be bound to a keybinding in qtile for quicker access.
 
 ---
 
-> [!TIP] 
-> The script assumes specific file structures and external tools being installed. It might fail if the `data/bib/` directory is empty or if files are not organized correctly. Consider adding error handling to provide feedback when no significant matches or files are found. Additionally, support for other document viewers could expand its usability.
+> [!NOTE]
+> One potential improvement could be handling non-existent or improperly indexed papers more gracefully. Additionally, consider extending the script to support other PDF viewers or reference managers. Integrating error handling such as notifying the user if a paper cannot be found when 'open' is selected would enhance user experience.

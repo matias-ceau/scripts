@@ -1,52 +1,49 @@
-# Shell History Analyzer
+# Shell History Information Extractor
 
 ---
 
-**shell_history_info.sh**: Script to extract most frequent lines, words, or characters from shell history.
+**shell_history_info.sh**: Analyze and extract the most frequent lines, words, or characters from shell history files.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash and requires a Bash environment to execute.
-- `sed`: A stream editor for filtering and transforming text.
-- `sort`: Used to sort lines of text files.
-- `uniq`: Report or omit repeated lines in a file.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `bat`: A cat(1) clone with syntax highlighting and Git integration, used to display sections of the script.
+- `sed`: A stream editor used for parsing and transforming text.
+- `rg` (ripgrep): A line-oriented search tool similar to `grep`.
+- `tr`: A command for translating or deleting characters.
+- `uniq`: Report or omit repeated lines.
+- `bat`: A cat clone with syntax highlighting for code.
 
 ### Description
 
-This script analyzes the shell history files located at `$XDG_STATE_HOME/zsh/history` and `$XDG_STATE_HOME/bash/history`. It performs operations to retrieve the most frequent lines, words, or characters. It utilizes several helper functions: 
+This script examines your Zsh and Bash shell history files to identify the most frequently used lines, words, and characters. It removes timestamps and session identifiers from the Zsh history and presents a sorted list of entries by frequency, excluding any that occur fewer than five times. By using various options, you can choose whether to analyze lines, words, individual characters, or command options.
 
-- **get_history**: Concatenates the contents of Zsh and Bash history files while removing extraneous Zsh format indications.
-- **split_by_word**: Splits lines into separate words.
-- **clean_up**: Cleans the output by removing empty lines and stripping trailing and leading whitespaces.
-- **sort_by_occurence**: Counts the occurrence of each line/word/character, displaying only those with an occurrence greater than 5.
-
-The script can be run with various options, allowing users to specify the desired analysis type (lines, words, characters).
+**Components**:
+- **get_history**: Concatenates your Zsh and Bash history files while stripping unnecessary Zsh-specific components like timestamps.
+- **split_by_word**: Breaks lines into individual words for detailed frequency analysis.
+- **clean_up**: Removes empty lines and leading or trailing spaces to ensure clean data handling.
+- **sort_by_occurence**: Sorts and filters the data, providing a count of each unique line or word while ensuring a minimum occurrence threshold.
 
 ### Usage
 
-To use the script, execute it in the terminal with one of the following options:
+Execute the script with the desired option:
 
 ```bash
-# List most frequent lines
-bash shell_history_info.sh -l
+# To sort by lines
+./shell_history_info.sh -l
 
-# List most frequent words
-bash shell_history_info.sh -w
+# To sort by words
+./shell_history_info.sh -w
 
-# List most frequent characters
-bash shell_history_info.sh -c
+# To sort by characters
+./shell_history_info.sh -c
 
-# List options starting with a dash
-bash shell_history_info.sh -o
+# To sort by options (flags starting with "-")
+./shell_history_info.sh -o
 ```
 
-If an invalid argument is provided, the script outputs an error message along with its own source code for reference.
+It is advisable to create a keybinding in qtile for quick execution or run it directly from the terminal.
 
 ---
 
-> [!TIP] 
-> The script could benefit from error handling to check if the history files exist before attempting to read them. Additionally, consider implementing support for configuring the minimum occurrence threshold via command-line arguments, providing users flexibility.
+> [!TIP] Consider enhancing robustness by checking if the history files exist before attempting to read them. This script currently assumes the presence of both `$XDG_STATE_HOME/zsh/history` and `$XDG_STATE_HOME/bash/history`. You could implement a check and handle the absence of these files more gracefully, possibly with a user-friendly error message. Additionally, introducing unit tests might help ensure that each function behaves as expected.

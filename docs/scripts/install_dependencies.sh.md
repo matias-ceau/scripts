@@ -2,53 +2,46 @@
 
 ---
 
-**install_dependencies.sh**: A script to automatically install essential dependencies on Arch Linux.
+**install_dependencies.sh**: Installs a list of necessary packages using `paru`
 
 ---
 
 ### Dependencies
 
-- `paru`: An AUR helper that simplifies the process of installing packages from the Arch User Repository (AUR).
+- `paru`: AUR helper used for installing packages on Arch Linux. `paru` is required for this script as it automates package installation from the Arch User Repository (AUR).
 
 ### Description
 
-This script automates the installation of a set of essential packages commonly used in an Arch Linux environment. The script utilizes `paru`, an AUR helper, to manage package installations in a streamlined manner.
+This script automates the installation of several useful packages for development and daily operations. It uses `paru`, an AUR helper, to install packages if they are not already present on the system. The packages are listed in a here document, which allows for easy readability and maintenance.
 
-The list of packages to be installed is defined in a here-document (EOF). The following tools and utilities are included:
-
-- `git`: A version control system for tracking changes in source code.
-- `fd`: A simple and fast alternative to `find`.
-- `bat`: A modern cat clone with syntax highlighting and Git integration.
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `ripgrep`: A line-oriented search tool that recursively searches your current directory.
-- `neovim`: An extensible and open-source text editor.
-- `chezmoi`: A tool for managing your dotfiles across multiple machines.
-- `dmenu`: A dynamic menu for X, useful for launching applications.
-- `findutils`: Utilities for finding files.
-- `rofi`: A window switcher, application launcher, and more.
-- `dunst`: A lightweight notification daemon.
-- `python-pandas`: A powerful data analysis and manipulation library for Python.
-- `python-colorama`: A library for cross-platform colored terminal text in Python.
-- `light`: A lightweight, easy-to-use command-line utility for managing backlight brightness.
-- `xdotool`: A tool to simulate keyboard input and mouse activity.
+Packages included:
+- `git`: Version control system
+- `fd`: Simple, fast, and user-friendly alternative to `find`
+- `bat`: Clone of `cat` with syntax highlighting and Git integration
+- `fzf`: Command-line fuzzy finder
+- `ripgrep`: Fast search tool written in Rust 
+- `neovim`: Hyperextensible Vim-based text editor
+- `chezmoi`: Manage your dotfiles across multiple diverse machines
+- `dmenu`: Dynamic menu for X
+- `findutils`: Tools for finding files and searching within them
+- `rofi`: A window switcher, run dialog, and dmenu replacement
+- `dunst`: Customizable and lightweight notification daemon
+- `python-pandas`: Data analysis library for Python
+- `python-colorama`: Simple cross-platform colored terminal text in Python
+- `light`: Program to control backlight controllers
+- `xdotool`: Command-line X11 automation tool
 
 ### Usage
 
-To use this script, make sure it has executable permissions:
+To execute the script, simply run it in a terminal session. You can run this script directly by navigating to its directory and executing:
 
 ```bash
-chmod +x /home/matias/.scripts/install_dependencies.sh
+bash install_dependencies.sh
 ```
 
-You can then execute the script in your terminal by running:
-
-```bash
-/home/matias/.scripts/install_dependencies.sh
-```
-
-This will trigger an installation process for all listed packages. It's designed to run non-interactively, automatically installing packages as per the defined list.
+Alternatively, integrate it as part of your system setup routine or run it whenever you configure a new system.
 
 ---
 
-> [!TIP] 
-> Consider adding error handling to the script to catch any issues that may arise during installations. For example, wrapping the `paru` command in a check to verify its success would provide a clearer understanding of any failures. Additionally, allow the user to customize the package list (e.g., through command-line arguments) for greater flexibility.
+> [!TIP]
+> Consider adding error handling to the script to manage cases where `paru` is not installed or if any of the package installations fail. Additionally, integrating a confirmation step before beginning the installation could help prevent unintended package installations. Defining variables for the executables rather than embedding commands directly improves maintainability.

@@ -1,48 +1,41 @@
-# Qtile Window Group Switcher
+# qtile_window_to_group_and_switch.py
 
 ---
 
-**qtile_window_to_group_and_switch.py**: A script to toggle windows to specific groups in Qtile.
+**qtile_window_to_group_and_switch.py**: Move the current window to the next or previous group and switch to it.
 
 ---
 
 ### Dependencies
 
-- `libqtile`: This is the core library that provides the interactive command client functionality for managing windows and groups in the Qtile window manager.
-- `notify-send`: Used to display notifications on the desktop, providing user feedback in case of an error.
+- `libqtile`: The script interacts with qtile through the `InteractiveCommandClient`.
+- `notify-send`: Used for sending notifications in case of an error.
 
 ### Description
 
-This Python script is designed to be used with the Qtile window manager for Arch Linux. Its primary functionality is to move the currently focused window to a specified group and automatically switch to that group based on user input.
+This script enhances your qtile window manager experience by providing shortcuts to move the current active window to the next or previous group. It utilizes the `InteractiveCommandClient` from the `libqtile.command.client` module to interact with qtile's commands and gather information about the current focused group.
 
-The script recognizes two command-line arguments:
-- `-n`: Moves the current window to the next group (cycling from group 6 back to group 1).
-- `-p`: Moves the current window to the previous group (cycling from group 1 back to group 6).
-
-If an argument other than `-n` or `-p` is provided, or if there are any issues executing the script, a notification will be displayed using `notify-send`, indicating an error occurred during execution.
+- **Flow of Execution**:
+  1. **Parsing Arguments**: The script checks the first command-line argument. It accepts either `-n` (next group) or `-p` (previous group).
+  2. **Identify Current Group**: It retrieves the index of the current group the active window belongs to.
+  3. **Calculate Target Group**: 
+     - For `-n`, it increments the group index, rolling over to 1 after the last group.
+     - For `-p`, it decrements the index, rolling over to the last group when reaching before the first.
+  4. **Move and Switch**: The active window is moved to the target group, and also switches the view to this group.
+  5. **Error Handling**: If any command besides `-n` or `-p` is provided, a notification is issued.
 
 ### Usage
 
-To use the script, you can invoke it directly from the terminal or bind it to a key combination in your Qtile configuration. Below are examples of how to run the script correctly:
+You can execute the script from the terminal with either of the options:
 
-1. To move and switch to the next group:
-   ```bash
-   python /home/matias/.scripts/qtile_window_to_group_and_switch.py -n
-   ```
-
-2. To move and switch to the previous group:
-   ```bash
-   python /home/matias/.scripts/qtile_window_to_group_and_switch.py -p
-   ```
-
-To bind these commands to key combinations in your Qtile configuration, you can add entries to your `config.py` like so:
-
-```python
-Key([mod], "n", lazy.spawn("/home/matias/.scripts/qtile_window_to_group_and_switch.py -n")),
-Key([mod], "p", lazy.spawn("/home/matias/.scripts/qtile_window_to_group_and_switch.py -p")),
+```bash
+python /home/matias/.scripts/bin/qtile_window_to_group_and_switch.py -n  # Move to the next group
+python /home/matias/.scripts/bin/qtile_window_to_group_and_switch.py -p  # Move to the previous group
 ```
+
+This script can be bound to keyboard shortcuts in your qtile configuration to facilitate rapid window management.
 
 ---
 
-> [!TIP] 
-> Consider adding error handling for cases where no window is currently focused, or the group number falls outside the expected range. Expanding the notification messages can also enhance user experience by providing clearer feedback on the error encountered.
+> [!NOTE]
+> Currently, the script assumes the existence of exactly six groups (1 to 6). If your qtile configuration has a different number of groups, you should adjust the modulo operation accordingly. Additional error handling could be implemented to gracefully handle cases where the script is run with no arguments or invalid options.

@@ -2,45 +2,50 @@
 
 ---
 
-**utils_update_symlinks.sh**: Script to create and manage symlinks in ~/.local/bin.
+**utils_update_symlinks.sh**: Automates symlink updates, logs activity, manages potential conflicts.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
-- `bat`: A cat(1) clone with wings, used for displaying files with syntax highlighting.
+- `fd`: A program to find files in the directory tree efficiently.
+- `bat`: A command-line tool to display file content with syntax highlighting.
+- `glow`: Command-line tool to render markdown files.
 
 ### Description
 
-This script is designed to facilitate the management of symlinks located in the `~/.local/bin` directory. It performs several key functions, including:
+The **utils_update_symlinks.sh** script is designed to manage the creation and maintenance of symbolic links for user scripts stored in a defined directory on an Arch Linux system using qtile as the window manager. It performs several tasks:
 
-1. **Logging**: Keeps a comprehensive log of actions taken and errors encountered in a specified log file.
-2. **Cleanup**: Removes broken symlinks to maintain a clean symlink environment.
-3. **Creation**: Creates new symlinks for all executable files found in the specified `SOURCE_DIR`.
-4. **CSV Management**: Maintains a CSV file that records all symlinks created, along with their target paths and associated command names.
+1. **Initialization**: Sets up and updates a CSV file used for tracking the original files and their respective symlinks. It retains historical data for reference.
+   
+2. **Error and Info Logging**: Provides logging functionality by capturing all logged information and errors with timestamps, directing them to a specified log file.
 
-The script starts by initializing the log file and a CSV data file, archiving previous data when applicable. It then removes any broken symlinks before creating new ones based on the contents of the defined source directory, logging conflicts when necessary. Finally, it updates the CSV file with current symlink details.
+3. **Broken Symlink Removal**: Identifies and removes broken symlinks in the designated target directory to maintain a clean environment.
+
+4. **Symlink Creation**: Efficiently generates symlinks for executable files present in the source directory. The script handles potential conflicts by identifying existing, conflicting symlinks and logging errors.
+
+5. **CSV Entry Addition**: After successfully creating or updating symlinks, it logs the details into a CSV file, allowing users to have an organized inventory of the symlinks.
+
+The process is broken down into functions for maintainability and clarity, utilizing tools like `fd` for file discovery and `bat` for improved CSV visualization.
 
 ### Usage
 
-To execute the script, simply run it from the terminal:
+To use this script, ensure all dependencies are installed:
 
 ```bash
-bash /home/matias/.scripts/sys/utils_update_symlinks.sh
+sudo pacman -S fd bat glow
 ```
 
-#### Typical Workflow
-
-1. **Execute the script**: This initiates the process of cleaning up and creating symlinks.
-2. **Review Log File**: Check `symlinking.log` for any errors or informational messages.
-3. **Inspect CSV**: The symlinks can be reviewed in the `symlink_data.csv` file; it is displayed using `bat` for convenience.
+Place your scripts in the directory referenced by the `$SCRIPTS` environment variable. Execute the script as follows:
 
 ```bash
-bat --no-pager $SCRIPTS/data/symlink_data.csv
+bash ~/scripts/meta/utils_update_symlinks.sh
 ```
+
+- The script runs non-interactively and can be linked to a qtile keybinding for quick execution.
+- Applies changes automatically with a logging mechanism for review and audit purposes.
 
 ---
 
-> [!TIP]  
-The script relies heavily on the `fd` and `bat` tools, which may need to be installed if not present on the system. Additionally, consider enhancing error handling, particularly around file I/O operations, to prevent unexpected script failures. Logging could also include severity levels and timestamps for better traceability.
+> [!TIP] 
+> Consider checking the existence and correctness of the `$SCRIPTS` environment variable before running the script to avoid unexpected behavior. Also, ensure that color commands like `glow` and ANSI color codes are supported in your terminal environment for improved output clarity.

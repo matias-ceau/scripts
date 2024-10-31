@@ -1,45 +1,45 @@
-# Floating Terminal Command Runner
+# Terminal with Command Launcher
 
 ---
 
-**terminal_with_command.sh**: Opens a floating terminal to run a command and see the output.
+**terminal_with_command.sh**: Opens a floating terminal window to execute a specified command.
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A modern terminal emulator that is required to display the floating terminal window.
-- `bash`: The shell in which the command is executed.
+- `alacritty`: A modern terminal emulator focusing on performance.
+- `setsid`: Utility that runs a program in a new session, detaching the process.
+- `bash`: The Bourne Again SHell, which is a default UNIX shell.
 
 ### Description
 
-The `terminal_with_command.sh` script allows users to open a floating terminal window that executes a specified command and displays its output. This can be particularly useful for running scripts or commands while maintaining visibility on other desktop applications, making multitasking efficient.
+The `terminal_with_command.sh` script is designed to enhance productivity in a desktop environment by launching a floating terminal window to execute a given command and remain open afterward. This is especially useful for quick monitoring of command outputs or when a command requires attention after execution.
 
-When the script is executed, it leverages the `which` command to locate the full path of the provided command argument. The script then utilizes `setsid` to start a new process group which helps in managing the terminal session independently. The terminal is launched using `alacritty`, with the title set to `term_w_cmd`, and categorized under the 'floating' class for appropriate window management.
+The script uses the `alacritty` terminal to maintain a lightweight and efficient user experience. Labels such as `-T term_w_cmd` and `--class 'floating'` are used to assign a specific title and window class to the terminal, allowing for easy window management, as seen in window managers like qtile.
 
-The command is executed in a bash shell, and after the command completes, it keeps the terminal open by executing `exec $SHELL`.
+The `cmd="$(which "$1")"` line ensures that the script resolves the absolute path of the intended command, minimizing errors due to misconfiguration of `$PATH`.
 
 ### Usage
 
-To use the script, you need to pass the command you want to run as an argument. Here's how you can do this:
+Below is an example of how to use this script:
 
-1. Make the script executable (if not already done):
-   ```bash
-   chmod +x /home/matias/.scripts/terminal_with_command.sh
-   ```
-   
-2. Run the script with the desired command:
-   ```bash
-   /home/matias/.scripts/terminal_with_command.sh <command>
-   ```
-   For example, to run the `htop` command in a floating terminal, you would use:
-   ```bash
-   /home/matias/.scripts/terminal_with_command.sh htop
-   ```
+```bash
+./terminal_with_command.sh ls
+```
 
-You can also bind this script to a key in your window manager (qtile) to access it more easily.
+This command will open an `alacritty` terminal window floating above other windows and execute the `ls` command.
+
+- **Keybinding:** Assigning this script to a keybinding in qtile can further streamline your workflow.
+- **Interactive Execution:** Run directly from a terminal if needed, simply by providing a desired command as an argument.
+
+```bash
+./terminal_with_command.sh htop
+```
+
+This would launch `htop` in a floating terminal session, allowing you to monitor system processes easily.
 
 ---
 
-> [!TIP]  
-> Consider including error handling in the script for cases when the command isn’t found or if `alacritty` isn't installed. This would greatly enhance user experience and prevent unexpected failures. Additionally, allowing multiple commands to be executed sequentially could provide more flexibility.
+> [!NOTE]  
+> While the script provides a handy tool for opening terminal windows with specific commands, it does not handle cases where the command is not found or invalid. Implementing error-checking for command existence or offering user-friendly feedback when an issue arises might enhance the usability of the script. Additionally, allowing for command arguments could make the script more versatile.

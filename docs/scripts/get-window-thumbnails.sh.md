@@ -1,43 +1,48 @@
-# Get Window Thumbnails
+# Get Window Thumbnails Script
 
 ---
 
-**get-window-thumbnails.sh**: Script to capture and resize screenshots of all open windows.
+**get-window-thumbnails.sh**: Creates thumbnails of currently open windows on your qtile environment.
 
 ---
 
 ### Dependencies
 
-- `wmctrl`: A command line tool to interact with an X Window Manager.
-- `xdotool`: Tool for simulating keyboard input and mouse activity, and for window management.
-- `ImageMagick`: A software suite to create, edit, and compose bitmap images, here used for resizing.
+- `wmctrl`: Utility for interacting with an EWMH/NetWM compatible X Window Manager.
+- `xwininfo`: Provides information about windows on an X server.
+- `xdotool`: Simulates keyboard input and manipulate windows.
+- `imagemagick` (`import` and `mogrify` tools): Used to capture screenshots and resize images respectively.
 
 ### Description
 
-This script automates the process of capturing thumbnails of all open windows on an Arch Linux system running the Qtile window manager. It does so by using a combination of tools that interact with the X Window System to display, capture, and manipulate window content.
+This script captures the thumbnails of all currently open windows in a qtile environment. The script does the following:
 
-1. **Directory Creation**: It starts by creating a directory (`$HOME/window_screenshots`) to store the screenshots.
-2. **Window Enumeration**: Retrieves all window IDs using `wmctrl`, which lists windows controlled by the window manager.
-3. **Window Management**:
-    - The script iterates over the list of window IDs.
-    - For each window:
-        - It unmapped (brings to the foreground) the window using `xdotool` to ensure it is visible on the screen.
-        - A brief pause (`sleep 0.2`) is introduced to allow the window to render completely before taking a screenshot.
-        - The `import` command from ImageMagick captures the window as a PNG and stores it in the previously created directory, appending the window name and ID to the filename.
-        - Finally, it remaps the window back to its original state (hides it).
-4. **Thumbnail Creation**: The captured images are then resized to 200x200 pixels using `mogrify` to create smaller thumbnails for quick access.
+1. **Setup the Output Directory:** It creates a directory `window_screenshots` in the user's home directory to store the output images.
+   
+2. **Enumerate Windows:** The script uses `wmctrl` to fetch a list of window IDs for all open windows.
+
+3. **Processing Each Window:**
+   - Fetches the window name using `xwininfo`.
+   - Uses `xdotool` to make the window visible on the screen.
+   - Delays to ensure the window is properly rendered.
+   - Utilizes `imagemagick's` `import` to capture the screenshot of the window.
+   - Uses `xdotool` to hide the window.
+   - Resizes the captured screenshot to a 200x200 pixels thumbnail using `imagemagick's` `mogrify`.
+
+Windows names are stripped down to alphanumeric, '.' and '_' characters to ensure valid filenames are created. The resulting thumbnails are stored in `$HOME/window_screenshots`.
 
 ### Usage
 
-To run the script, simply execute it in a terminal:
+To utilize this script, you can run it directly from a terminal. Ensure it has execute permission:
 
 ```bash
-bash /home/matias/.scripts/dev/get-window-thumbnails.sh
+chmod +x /home/matias/.scripts/dev/get-window-thumbnails.sh
+/home/matias/.scripts/dev/get-window-thumbnails.sh
 ```
 
-You can also bind this script to a key in your Qtile configuration file to quickly take screenshots whenever needed.
+Once executed, the thumbnails will appear in your `window_screenshots` directory. This script is suitable to be run as a cron job or attached to a hotkey within qtile, depending on how frequently you need window thumbnails.
 
 ---
 
 > [!TIP] 
-Consider adding error handling in the script. For instance, checking if the dependencies are installed before execution, or verifying if the screenshot was captured successfully. This will improve the robustness of your script and help you troubleshoot issues effectively.
+> Due to the use of `xdotool` for hiding and showing windows, the script may cause a slight flicker on the screen. Additionally, the script does not handle potential errors when `import` or `mogrify` fail, which could be improved with error checking. Lastly, adding an option to define the output directory or thumbnail size through command line arguments could make the script more flexible.

@@ -1,40 +1,41 @@
-# Open Obsidian Vaults Script
+# Obsidian Vault Opener
 
 ---
 
-**obsidian.xsh**: A script to open any Obsidian vault using `fzf`.
+**obsidian.xsh**: Quickly open an Obsidian vault using a menu-driven interface.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: An advanced shell that combines the best features of bash, Python, and other shells.
-- `fzf`: A command-line fuzzy finder which allows easy selection from the list of vaults.
-- `eza`: A modern replacement for `ls` with additional features and colorful output.
+- `xonsh`: A Python-powered shell for executing scripts.
+- `fzfmenu.sh`: Fuzzy finder script that provides interactive menus.
+- `eza`: An enhanced, modern replacement for `ls` that is used for previews in the menu.
+- `obsidian`: The Obsidian application that will be used to open the vaults.
+- `notify-send`: A utility to send notifications to the user.
 
 ### Description
 
-This script is designed to help users quickly open their Obsidian vaults without having to navigate through directories manually. It retrieves a list of vaults from a predefined directory (`$HOME/PKM`), processes this list through `fzf` to present an interactive selection menu, and ultimately opens the chosen vault in Obsidian.
-
-**Key Functions:**
-
-1. **Vault Discovery**: The script creates a list of vaults by checking each item's type in the `$HOME/PKM` directory. It filters these items to ensure only directories (vaults) are considered.
-  
-2. **User Interaction**: The `fzf` tool is used to display vault names, allowing users to select one easily. It presents a preview of the contents of the selected vault using `eza`.
-
-3. **Open Vault**: If a user selects a vault, the script constructs an Obsidian-specific URI to open it. If no vault is selected, it sends a desktop notification to inform the user.
+The `obsidian.xsh` script is a convenient utility for opening Obsidian vaults stored in a specific directory on your system. Written in `xonsh`, this script utilizes the `fzfmenu.sh` tool to present the user with a list of available vaults stored in the `~/PKM` directory. The vaults are displayed alongside a preview, which is generated using `eza` to show the directory structure sorted by the most recently modified files. Once a selection is made, if a valid vault is chosen, it opens in Obsidian via a URL scheme. If no vault is selected, a notification is sent to inform the user that no vault was chosen.
 
 ### Usage
 
-You can run this script directly from your terminal or bind it to a key in your window manager (Qtile). Ensure that the necessary dependencies are installed beforehand. Here's how to execute the script:
+To use this script, ensure it is executable and invoke it from the terminal:
 
-```bash
-/home/matias/.scripts/obsidian.xsh
+```sh
+$ xonsh ~/home/matias/.scripts/bin/obsidian.xsh
 ```
 
-When executed, the script will present an interactive list of your vaults. Simply navigate through the options and select one to open it in Obsidian.
+The script will display a menu of available vaults using `fzfmenu.sh`, where you can navigate and select a vault. Once selected, it will open in Obsidian. This script can also be integrated into your window manager's keybindings (such as Qtile), enabling quick access to your vaults:
+
+```python
+# Example Qtile keybinding
+Key([mod], "o", lazy.spawn("xonsh /home/matias/.scripts/bin/obsidian.xsh")),
+```
+
+Make sure all dependencies are installed and properly configured.
 
 ---
 
 > [!TIP]
-> The script could be improved by adding error handling for cases where the `$HOME/PKM` directory is empty or does not exist. Additionally, providing a way to manually input a vault name in case the selection fails could enhance user experience.
+> Consider refining the `vault search` functionality to improve usability by allowing filtered searches or preset listings. Additionally, the handling of dependencies should be verified to confirm they exist before execution. Lastly, ensure compatibility with any script changes in `fzfmenu.sh` or `eza` outputs as these might affect usability.

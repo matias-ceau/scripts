@@ -1,52 +1,39 @@
-# Help Pastel Script
+# Pastel Help and Preview Utility
 
 ---
 
-**help-pastel.sh**: A script to enhance the `pastel` command help display with capabilities for previewing.
+**help-pastel.sh**: Enhanced help command for `pastel` with preview features using `fzf`.
 
 ---
 
 ### Dependencies
 
-- `pastel`: A command-line tool for working with colors, required to access the help and subcommands.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory.
-- `cut`: A utility to remove sections from lines in files.
-- `bat`: A cat clone with syntax highlighting, used for pretty-printing.
-- `fzf`: A general-purpose command-line fuzzy finder, used for interactive selection.
-- `display_markdown.py`: A script to display markdown files, enhance the README preview.
+- `pastel`: A command-line tool for working with colors.
+- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `fzf`: A command-line fuzzy finder.
+- `display_markdown.py`: A script to display markdown content.
+- `curl`: Command-line tool for transferring data with URL syntax.
 
 ### Description
 
-The `help-pastel.sh` script is designed to provide an interactive help interface for the `pastel` command. The script works by extracting the relevant help information from `pastel -h`, identifying the relevant section that lists its subcommands, and then allows you to view it interactively.
+This script facilitates exploring the `pastel` command's subcommands and options by using a powerful combination of other command-line utilities. It begins by parsing the help output of `pastel` to identify subcommands using `ripgrep`. The output is piped through `bat`, formatted, and fed into `fzf` for an interactive selection. A key feature is the preview window in `fzf`, which provides detailed help on selected items by calling `pastel` with its subcommands or displaying the relevant section of the online README for `pastel`.
 
-Here’s a breakdown of the key functionality:
-
-1. **Line Extraction**: The script finds the line number in the `pastel` help output that marks the start of the subcommands section.
-2. **Displaying Help**: It displays a specific range of lines from the `pastel` help using `bat`, which enhances visibility with syntax highlighting.
-3. **README Integration**: It also integrates the `README.md` documentation into the display, allowing users to see supplementary information.
-4. **Interactive Selection**: By using `fzf`, users can interactively select a subcommand to view detailed help. The script employs a preview feature where if the selected command's help differs from the README, it shows the command's specific help information.
+The script essentially simplifies and enhances interaction with `pastel` by leveraging colorful output, syntax highlighting, and interactive selection.
 
 ### Usage
 
-To run the script, simply execute it in the terminal:
+To utilize this script, ensure it is executable and available in your system's `PATH`. Then, you can execute it directly in your terminal:
 
 ```bash
-bash /home/matias/.scripts/help-pastel.sh
+./help-pastel.sh
 ```
 
-You can also create a keybinding in your Window Manager (qtile) to execute this script quickly. For example, you might set it to `Mod + H` in your qtile configuration.
+The script does not require any command-line arguments. Upon execution, it displays an interactive menu of `pastel` subcommands and their options. Select a command to see its detailed help or refer to the README if required.
 
-```python
-# Example keybinding in qtile config.py
-from libqtile import qtile
-from libqtile.config import Key
-
-keys = [
-    Key([mod], 'h', lazy.spawn('/home/matias/.scripts/help-pastel.sh')),
-]
-```
+This script can be bound to a key combination in your qtile window manager for easier access, or you can just run it whenever required from the terminal.
 
 ---
 
-> [!TIP] 
-> Consider adding error handling to check if dependencies like `pastel` or `fzf` are installed before executing the script. Additionally, it could be helpful to add comments in the code for better maintainability, especially in the preview handling section. Furthermore, providing usage instructions directly inside the script as comments will greatly aid users who may not check the documentation.
+> [!NOTE] 
+> Consider local error handling to manage scenarios where dependencies are not installed, as there are several external tools. Additionally, you might want to explore offline support for cases where network access to the GitHub README could be problematic.

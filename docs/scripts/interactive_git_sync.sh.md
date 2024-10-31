@@ -1,47 +1,43 @@
-# Interactive Git Sync Script
+# Interactive Git Sync
 
 ---
 
-**interactive_git_sync.sh**: A script to synchronize multiple Git repositories interactively.
+**interactive_git_sync.sh**: Script to synchronize multiple repositories interactively using `fzf`.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder that allows for easy selection from a list.
-- `sync-repo.sh`: A custom synchronization script that handles the actual sync for each repository.
-
+- `bash`: The script is written for and requires `bash`.
+- `fzf`: A command-line fuzzy finder that allows selecting repositories interactively.
+- `awk`: Used to process and assemble the command line for each repository.
+- `sync-repo.sh`: A local script assumed to be located in `$SCRIPTS` that handles the actual synchronization process.
+  
 ### Description
 
-The `interactive_git_sync.sh` script is designed to streamline the process of syncing multiple Git repositories with a user-friendly interface. This script leverages `fzf` for interactive selection, allowing you to choose from a list of predefined repository paths. 
+The `interactive_git_sync.sh` is a Bash script designed to facilitate interactive synchronization across multiple Git repositories. It leverages the power of `fzf` for selecting repositories you want to sync. A list of repositories is presented using environment variables such as `$CHEZMOI`, `$SCRIPTS`, `$LOCALDATA`, `$PSYRIS`, and a specific Git repository path `$GIT_REPOS/matias-ceau/ondansetron`.
 
-The script begins by defining the paths of various repositories, stored in options variables such as `$CHEZMOI`, `$SCRIPTS`, `$LOCALDATA`, `$PSYRIS`, and a specific GitHub repository path. It constructs a command to execute the `sync-repo.sh` script with the selected repository path.
-
-It also includes a `--dry-run` option, which allows users to see what would happen if the command were executed without making any changes. This is handled through a condition that modifies the command accordingly.
+The script constructs a command for each repository using the underlying `sync-repo.sh` script, which is presumed to reside in the location indicated by the `$SCRIPTS` variable. By default, it provides the functionality to perform a dry run by including `--dry-run` as a command-line argument.
 
 ### Usage
 
-To use this script, simply run it in your terminal:
+To utilize this script, you need to:
 
-```bash
-~/ .scripts/interactive_git_sync.sh
-```
+1. Ensure all required environment variables (`$CHEZMOI`, `$SCRIPTS`, etc.) are properly set.
+2. Run the script in your terminal:
+    ```bash
+    $ /home/matias/.scripts/bin/interactive_git_sync.sh
+    ```
+3. Optionally use the `--dry-run` flag to see what changes would occur:
+    ```bash
+    $ /home/matias/.scripts/bin/interactive_git_sync.sh --dry-run
+    ```
+4. Use `fzf` interface to select the repository you wish to sync.
 
-You can also pass an optional argument to filter the list:
-
-```bash
-~/ .scripts/interactive_git_sync.sh <search-string>
-```
-
-To conduct a dry run simulation, use:
-
-```bash
-~/ .scripts/interactive_git_sync.sh --dry-run
-```
-
-This will display the options for synchronization without actual changes taking place.
+Ensure that the `sync-repo.sh` is executable and configured correctly to handle repository synchronization.
 
 ---
 
-> [!TIP]
-> Consider enhancing the script by adding error handling to manage potential issues when executing the sync command. For instance, if the specified repository does not exist or `sync-repo.sh` fails, the user should receive a clear message instead of silent failure. Additionally, documenting each variable's source (e.g., whether they are user-defined paths or default paths) can help in troubleshooting and usability.
+> [!CAUTION]
+> The script assumes that necessary environment variables are set up before being invoked, which might not be ideal for all users. Consider adding error handling for unspecified environment variables.
+> Furthermore, specifying the repository paths directly within the script might limit scalability. You might consider reading the repository paths from a configuration file or improving the script to scan for repositories automatically.

@@ -1,37 +1,45 @@
-# Select Script - Script Selector Using Rofi
+# Script Selector with Cache Integration
 
 ---
 
-**select_script**: C script that selects a chosen script using cached data.
+**select_script**: A tool to select and execute scripts from a cached list using `rofi`.
 
 ---
 
 ### Dependencies
 
-- `rofi`: A window switcher, application launcher, and dmenu replacement that is used for displaying the list of scripts.
+- `rofi`: A window switcher, run dialog, and dmenu replacement that helps in selecting scripts from a list.
+- `glibc`: Required for standard C library functions such as `printf` and `fopen`.
 
 ### Description
 
-The **select_script** utility is a C program designed to assist users in selecting and executing scripts from a predefined folder. It uses cached data from a CSV file to present available script options through the **rofi** interface. The program is structured around several core functions for loading cache data, displaying script options, and executing the chosen script.
+This script is designed to streamline the process of selecting and executing scripts from cached data. It uses a cache file located at `~/.cache/script_info.csv`, which holds information about various scripts, including filenames and descriptions.
 
-Key functions include:
+The script works in tandem with the `rofi` tool, which provides a user-friendly interface for script selection. By using the `rofi` dmenu, users can choose a script to run from a list, where each entry is displayed with a green-colored filename followed by its description.
 
-- **load_cache**: Reads the cache file `script_info.csv` and loads script information into memory.
-- **display_rofi**: Outputs the available scripts formatted with `rofi` for user selection.
-- **extract_choice**: Captures the user's selected script and prepares it for execution.
-- **execute_choice**: Executes the selected script using `execl`.
+Key functions implemented in the script include:
+
+- **load_cache**: Reads the cache file, parses each line, and stores script information in a dynamic array.
+- **display_rofi**: Formats and sends the script list to `rofi` to be displayed.
+- **extract_choice**: Retrieves the user's selection from `rofi`.
+- **execute_choice**: Launches the selected script.
 
 ### Usage
 
-To execute the script, simply run it in your terminal. Make sure that your environment is set up correctly and that the cache file exists.
+To use this script, ensure you have the cache file (`~/.cache/script_info.csv`) available and filled with appropriate script data. Then, by executing the `select_script`, `rofi` will present the list to choose from:
 
-```bash
-./select_script
+```shell
+~/path/to/select_script
 ```
 
-**Note**: The cache file is expected to be located at `~/.cache/script_info.csv`, and the scripts should be available in the `~/.scripts/` directory.
+A typical cache file entry is in CSV format like:
+```
+example_script,description,other,fields,are,ignored,"This is just a test script"
+```
+
+Ensure the script files are located in `~/.scripts/`.
 
 ---
 
-> [!TIP]  
-> This script currently does not handle cases where the user cancels the selection in rofi. Implementing an error check after extracting the user's choice could prevent the program from trying to execute an empty value. Additionally, consider adding more error handling for file operations to make the script more robust.
+> [!TIP]
+> This script assumes that `HOME` is set and directly uses paths relative to the user’s home directory. If using on a shared system or with a different home setup, be cautious of path assumptions. Additionally, error handling could be improved by checking if the script file exists before attempting to execute it. Consider using functions like `access` to validate file existence and permissions before execution.

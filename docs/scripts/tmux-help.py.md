@@ -1,80 +1,45 @@
-# Tmux Help Script
+# Tmux Help Assistant Script
 
 ---
 
-**tmux-help.py**: A script providing helpful guidance on tmux commands.
+**tmux-help.py**: A script to provide useful assistance and search functionalities for tmux commands and sections.
 
 ---
 
 ### Dependencies
 
-- `argparse`: Used for handling command-line arguments.
-- `configparser`: Used for managing configuration files (not actively used but might be useful in the future).
-- `fuzzywuzzy`: A library for string matching, required for fuzzy searching functionality.
-- `subprocess`: Utilized to run shell commands.
-- `os`, `re`, `sys`, `time`: Standard Python libraries for file handling, regular expression operations, system operations, and time management.
+- `fuzzywuzzy`: Python library for fuzzy string matching.
+- `argparse`: To handle command-line arguments.
+- `configparser`: To manage configuration file parsing.
+- Basic utilities like `os`, `sys`, `re`, and `subprocess`.
 
 ### Description
 
-This script is designed to assist users of the terminal multiplexer `tmux` by providing an easy way to list, search, and manage commands. The script performs several functions:
+This script assists Arch Linux users utilizing `qtile` WM in navigating the tmux manual, searching for commands, and managing keybindings efficiently. It provides functionalities to list tmux commands either in their original sequence or categorized into themes like navigation, editing, etc. It supports fuzzy and exact search modes for tmux commands using the term entered by the user. It can also fetch and organize manpage sections for easy browsing.
 
-- **Ensure Paths**: It checks for and creates necessary directories and files where tmux manpage data will be stored.
-- **Command Listing**: It lists tmux commands in categorized themes such as Navigation, Editing, File Management, System Control, and Application Launching.
-- **Searching Functionality**: It allows fuzzy and exact searching for commands, as well as searching based on key bindings.
-- **Updating Manpage**: The script can fetch the latest tmux manpage and sections from the command line using the `man` command, updating stored files.
-
-The management of theme-based command lists and sections aids in efficiently navigating tmux commands, promoting a better user experience.
+Crucially, the script checks and updates the tmux manpage and section data weekly (or manually upon request) from your system using `man` commands, storing these in a user-defined data directory.
 
 ### Usage
 
-The script runs in the command line with several options available for user interaction. Here's a quick guide on how to use it:
+The script can be run directly from a terminal with various options:
 
-```bash
-python3 /path/to/tmux-help.py [OPTIONS]
+```sh
+python tmux-help.py [-h] [-L] [-f ARG] [-F ARG] [-s KEY] [-u] [-S [SECTION]]
 ```
 
-#### Options
+- `-L, --list-tmux`: Lists tmux commands in the original order.
+- `-f, --find ARG`: Performs a fuzzy search for keyword descriptions.
+- `-F, --find-exact ARG`: Searches for an exact match (case insensitive).
+- `-s, --search KEY`: Searches for a specific key and returns the associated commands.
+- `-u, --update`: Updates the tmux manpage and sections files.
+- `-S, --section [SECTION]`: Lists or displays a specific manpage section by number or name.
 
-- `-L`, `--list-tmux`: List tmux commands in their original order.
-  
-```bash
-python3 /path/to/tmux-help.py --list-tmux
-```
-
-- `-f`, `--find ARG`: Perform a fuzzy search for commands related to the provided keyword.
-  
-```bash
-python3 /path/to/tmux-help.py --find split
-```
-
-- `-F`, `--find-exact ARG`: Search for an exact match (case insensitive).
-  
-```bash
-python3 /path/to/tmux-help.py --find-exact new-window
-```
-
-- `-s`, `--search KEY`: Search for commands related to the specified key.
-  
-```bash
-python3 /path/to/tmux-help.py --search C-b
-```
-
-- `-u`, `--update`: Update the tmux manpage and sections, fetching the latest content.
-
-```bash
-python3 /path/to/tmux-help.py --update
-```
-
-- `-S`, `--section [SECTION]`: List all sections or display a specific section by its number or name.
-
-```bash
-python3 /path/to/tmux-help.py --section 2
+**Example**: To perform a fuzzy search for "split" in tmux commands, run:
+```sh
+python tmux-help.py --find "split"
 ```
 
 ---
 
-> [!TIP] 
-> While the script is functional, there are areas for improvement. For instance:
-> - **Error Handling**: Some functions, especially file operations, could be enhanced with better error handling to make the script more robust.
-> - **Code Optimization**: The command listing functions may benefit from further optimization to prevent redundancy.
-> - **Documentation**: Additional inline comments and function docstrings would improve maintainability and clarity of the code for future modifications.
+> [!IMPORTANT]
+> The script assumes the `full_manpage_path` and `sections_path` are pre-populated with the tmux manual content. The `extract_keybindings` function is yet to be implemented, which means keybinding extraction from manpages is incomplete. Consider integrating this part for full functionality. Additionally, ensure that the `fuzzywuzzy` library is installed; on Arch Linux, you can install it using `pip`.

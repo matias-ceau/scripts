@@ -1,60 +1,54 @@
-# Color Palette Extractor
+# Extract Color Palettes from Config Files
 
 ---
 
-**colormap_from_text.sh**: Simple script that extracts color palettes from config files 
+**colormap_from_text.sh**: Extracts hex or RGB color codes from configuration files
 
 ---
 
 ### Dependencies
 
-- `bat`: A clone of `cat`, with syntax highlighting and Git integration that is used for pretty printing the usage message. Make sure it is installed for enhanced output.
+- `bash`: This script is written and executed in bash.
+- `grep`: Used for extracting color codes using regex.
+- `sort`: Sorts and removes duplicate color entries.
+- `bat`: Displays usage information with syntax highlighting (`-plhelp` indicates plain output for help).
 
 ### Description
 
-The `colormap_from_text.sh` script is designed to extract color palettes from various configuration files through standard input or specified file arguments. It identifies hex color codes in the format `#RRGGBB` and provides options to output these colors in different formats. The script can output colors in hex format, RGB format, or as colored blocks, depending on the provided command-line arguments.
+The script `colormap_from_text.sh` is designed to extract color palettes from configuration files or piped text input. It searches for hexadecimal color codes in the format `#RRGGBB` using regular expressions. The script can output these colors in either their hex format or as RGB values and has a neat feature to display the color using ANSI color codes.
 
-#### Key Features:
-- **Color Format Options**: Supports outputting colors in:
-  - Hex format (`-x` or `--hex-code`)
-  - RGB format (`-r` or `--rgb`)
-  - Color blocks in the terminal (`-c` or `--color`)
-- **Input Flexibility**: Can read color codes from piped input or from specified files.
-- **Error Handling**: Detects incompatible options and provides usage instructions.
+The main functionalities include:
+- Extracting unique color codes from input.
+- Converting hexadecimal codes into RGB values if requested.
+- Displaying swatches of colors in the terminal.
+
+Additionally, the script offers flexibility with command-line options:
+- `-x` or `--hex-code` for hex output.
+- `-r` or `--rgb` for RGB output.
+- `-c` or `--color` for displaying a visual color swatch.
 
 ### Usage
 
-To utilize the script, you can use it through standard input or pass files directly. 
+You can use the script with or without input redirection. For instance:
 
-#### Command-Line Syntax:
 ```bash
-<stdout> | ./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color]
-./colormap_from_text.sh [-x|--hex-code] [-r|--rgb] [-c|--color] <file(s)>
+cat your_config_file.conf | colormap_from_text.sh -x
 ```
 
-#### Examples:
+Or directly on files:
 
-1. **Extract colors from a file** and output in hex format:
-   ```bash
-   ./colormap_from_text.sh -x file.txt
-   ```
+```bash
+colormap_from_text.sh -r -c your_config_file1.conf your_config_file2.conf
+```
 
-2. **Pipe output from another command**:
-   ```bash
-   ls ~/.config | ./colormap_from_text.sh -c
-   ```
+Available options:
+- `-x` or `--hex-code`: Outputs color codes in `#RRGGBB` format.
+- `-r` or `--rgb`: Outputs colors in `rgb(R, G, B)` format.
+- `-c` or `--color`: Displays a terminal color swatch before the color code.
 
-3. **Output in RGB format**:
-   ```bash
-   cat colors.txt | ./colormap_from_text.sh -r
-   ```
-
-4. **Show colored blocks** directly in your terminal:
-   ```bash
-   ./colormap_from_text.sh -c theme.txt
-   ```
+If executed without appropriate options or input redirection, it will display usage information.
 
 ---
 
-> [!TIP]  
-> Consider adding additional options to support different color formats (like HSL) and improve error reporting for unsupported file types. A test suite could also be developed to ensure that the script handles a diverse range of use cases robustly.
+> [!TIP]
+> While the script provides useful functionalities, users on Arch Linux with utilities like `bat` may find it less portable across different environments. Consider handling the usage without format-dependent features, like displaying usage using plain text. Additionally, consider implementing checks for the presence of `bat`, or providing an alternative non-styled usage output.

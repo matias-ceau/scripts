@@ -1,52 +1,41 @@
-# Launch MegaCMD in Tmux Session
+# MegaCMD Tmux Launcher
 
 ---
 
-**megacmd_launch_tmux.sh**: Launches a new Tmux session for MegaCMD command line interface.
+**megacmd_launch_tmux.sh**: Launches MEGA CMD within a detached tmux session.
 
 ---
 
 ### Dependencies
 
-- `tmux`: A terminal multiplexer that allows for multiple terminal sessions to be accessed simultaneously.
-
-- `mega-cmd`: The command-line interface for MEGA, a cloud storage service. This utility enables users to manage files in their MEGA account directly from the terminal.
+- `tmux`: A terminal multiplexer that allows managing multiple terminal sessions simultaneously.
+- `mega-cmd`: A command-line tool for MEGA.nz, a cloud storage and file hosting service.
 
 ### Description
 
-This script is designed to facilitate the use of the MegaCMD application within a Tmux session. Tmux is particularly useful for managing multiple terminal sessions from a single window, allowing users to detach and reattach to these sessions as needed.
+This script is designed to automate the process of launching `mega-cmd` in a detached tmux session named "MEGA" with a window titled "megacmd". Utilizing tmux allows you to run `mega-cmd` in the background without occupying your terminal, enabling you to manage MEGA.nz tasks seamlessly without disruption to your workflow in Arch Linux with the qtile window manager.
 
-The script accomplishes this by executing a new Tmux session with the following parameters:
-
-- **-d**: Starts the session in detached mode, so the user doesn’t need to be present when the session starts.
-
-- **-s MEGA**: Names the session "MEGA", allowing for easy identification and management of the session later.
-
-- **-n megacmd**: Creates a new window named "megacmd" within the session for running the MegaCMD interface.
-
-In summary, once executed, this script will allow users to seamlessly access and utilize MegaCMD in a dedicated Tmux environment.
+The script uses the `tmux new-session` command to start a new background session. Here, `-d` specifies that the session should start detached from the terminal, allowing it to run independently. The options `-s MEGA` and `-n megacmd` define the session and window names, respectively, facilitating easy identification and management of the session.
 
 ### Usage
 
-To use this script, simply execute it in the terminal by running:
+To run this script, execute it directly from the terminal. Ensure that both `tmux` and `mega-cmd` are installed on your system. You can launch the script by executing the following command:
 
-```bash
-bash /home/matias/.scripts/megacmd_launch_tmux.sh
+```sh
+bash /home/matias/.scripts/bin/megacmd_launch_tmux.sh
 ```
 
-This command will create a new Tmux session called "MEGA" and launch the MegaCMD interface. 
+Alternatively, integrate the script into your qtile keybindings for quick access. You can also set the script to run automatically at startup by adding it to your `.xprofile` or other startup scripts you use with qtile.
 
-### Keybinding
+**Example:**
 
-For users of Qtile, you can assign this script to a keybinding in your configuration, allowing for quicker access. For example:
+To manually check the status or interact with the `mega-cmd` session, attach to the tmux session with:
 
-```python
-Key([mod], "m", lazy.spawn("/home/matias/.scripts/megacmd_launch_tmux.sh")),
+```sh
+tmux attach-session -t MEGA
 ```
-
-This example binds the script to the "mod + m" combination.
 
 ---
 
-> [!TIP]  
-> The script currently does not handle errors, such as if Tmux is not installed or if the MegaCMD command fails to execute. Consider adding error handling to improve robustness. Additionally, providing user feedback upon execution can enhance usability.
+> [!TIP]
+> Consider adding error handling for situations where `tmux` or `mega-cmd` might not be installed or when there's an existing tmux session with the same name to avoid conflicts. Additionally, providing a means to cleanly terminate the session or restart it could enhance usability.

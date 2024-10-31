@@ -1,50 +1,44 @@
-# Llama Script Describer
+# Script Describer using Llama 3.1
 
 ---
 
-**llama-all-scripts-describer.py**: Automatically generates GitHub documentation for scripts using Llama 3.1 model.
+**llama-all-scripts-describer.py**: Automate the generation of Markdown documentation for scripts using Llama 3.1.
 
 ---
 
 ### Dependencies
 
-- `argparse`: Provides a command-line argument parser.
-- `csv`: For handling CSV file reading.
-- `os`: For interacting with the operating system.
-- `subprocess`: To run external scripts and commands.
-- `sys`: Provides access to system-specific parameters and functions.
-- `colorama`: Enables colored output in terminal across platforms.
-- `ollama`: Client library to interact with the Llama model for generating text.
+- `argparse`: Standard Python module for argument parsing.
+- `csv`: Standard Python module for CSV file handling.
+- `os`: Standard Python module for OS interaction.
+- `subprocess`: Standard Python module for running shell commands.
+- `sys`: Standard Python module for system-specific parameters and functions.
+- `colorama`: For colored terminal text in a cross-platform manner.
+- `ollama`: Python client for interacting with AI models like Llama 3.1.
+- `fd`, `rg` (ripgrep): Utilities used to search for files.
+- `utils_update_symlinks.sh`: Custom user script for updating symlinks.
 
 ### Description
 
-This script automates the generation of helpful GitHub documentation for scripts present in a specified directory. It uses the Llama 3.1 model to describe each script's functionality based on its content. Major functionalities include:
-
-- **Colorful Console Output**: Utilizes `colorama` for color-coded terminal messages, improving the readability of outputs.
-- **Script Discovery**: Gathers script files from a specified directory while excluding markdown files.
-- **Orphaned Document Check**: Identifies any documentation files not linked to existing scripts, prompting the user to manage them.
-- **Source File Resolution**: When provided a binary file, the script attempts to find and read its source code from a specified directory.
-- **CSV Integration**: Processes scripts listed in a CSV file, allowing batch documentation generation.
+This script facilitates the generation of detailed GitHub-style Markdown documentation for user-created scripts located in a specified directory structure. It utilizes the Llama 3.1 model via the `ollama` package, generating descriptions automatically. The script checks for orphaned documentation files, detects binary files to find their corresponding source code, reads existing script files, generates Markdown documentation, and maintains an index of documented scripts. The script is primarily intended for users with an Arch Linux system and qtile window manager setup, utilizing a custom environment variable `$SCRIPTS` for locating script directories and the CSV file detailing scripts and symlinks.
 
 ### Usage
 
-To run the script, you must provide a path to a CSV file with script metadata. If no path is provided, it defaults to `$SCRIPTS/data/symlink_data.csv`. Here's how to use it:
+You can execute the script directly from the terminal. It can either take a CSV file as an argument or process the default CSV file specified in the environment variable.
 
 ```bash
-python /home/matias/.scripts/llama-all-scripts-describer.py /path/to/your/csv_file.csv
+python /home/matias/.scripts/bin/llama-all-scripts-describer.py [optional_csv_path]
 ```
 
-#### Key Command-Line Arguments:
+The script will interactively prompt to run `utils_update_symlinks.sh` optionally. It processes each script and generates corresponding markdown documentation in `$SCRIPTS/docs/scripts` directory. Additionally, updates are appended to an index file in `$SCRIPTS/docs/index.md`.
 
-- `csv_path`: Path to the CSV file containing script information (optional, defaults to `$SCRIPTS/data/symlink_data.csv`).
+**Example Command:**
 
-#### Typical Workflow:
-
-1. Run the script to generate documentation for all scripts defined in the CSV.
-2. The script will prompt whether to execute the `utils_update_symlinks.sh` script and then continue processing.
-3. It will create markdown documentation for each script and update an index file when completed.
+```bash
+python /home/matias/.scripts/bin/llama-all-scripts-describer.py /path/to/csv_file.csv
+```
 
 ---
 
-> [!TIP]  
-> The script currently lacks robust error handling for file reading operations which could lead to unstable behavior. Consider adding more exception handling to improve reliability, specifically around file I/O. Additionally, the script assumes that the CSV format is strictly followed; adding checks to validate entries could avoid potential runtime errors.
+> [!WARNING]  
+> Some potential improvements include converting shell subprocesses to native Python for better performance and error handling. Additionally, ensure all environment variables are correctly set, as the script heavily relies on them. Also, consider adding logging for easier debugging and tracking execution flow.

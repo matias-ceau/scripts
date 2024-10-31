@@ -1,51 +1,34 @@
-# Setting Up Syncs
+# Mega Sync Setup Script
 
 ---
 
-**setting-up-syncs.sh**: A script to synchronize directories with a MEGA cloud storage backup.
+**setting-up-syncs.sh**: Automate the setup of folder syncs with Mega based on hostname
 
 ---
 
 ### Dependencies
 
-- `mega-sync`: A command-line utility to synchronize files and folders with MEGA.nz cloud storage. Ensure it is installed and properly configured to use this script.
+- `mega-sync`: This script relies on the `mega-sync` command-line utility, which should be installed and configured on your system. It is used to synchronize local folders with Mega.nz cloud storage.
 
 ### Description
 
-This script automates the synchronization of important user directories to a specified backup location on your MEGA cloud storage. It identifies the hostname of the machine using `hostnamectl` and creates backup paths accordingly. 
+This Bash script automates the synchronization of several common user directories with corresponding backup locations on Mega.nz cloud storage. It determines the hostname of the machine using `hostnamectl` and sets up sync locations according to the specific hostname.
 
-The script starts by syncing the common XDG directories that typically include user data, such as:
+The script handles two specific hostnames, **karhu** and **karjala**, and sets up additional synchronization for these machines beyond standard directories like `Desktop`, `Documents`, and `Music`. These hosts have unique folders that are synchronized, such as `UnifiedLibrary` and `AUDIOVISUAL`.
 
-- Desktop
-- Downloads
-- Templates
-- Share
-- Documents
-- Music
-- Pictures
-- Videos
-
-In addition, it creates a dedicated synchronization for the "PKM" folder, which is likely a personal knowledge management folder.
-
-The script also includes conditional logic based on the hostname. If the hostname is `karhu`, it syncs additional directories such as `UnifiedLibrary`, a media sharing folder, and specific directories tied to the device. Similarly, for the hostname `karjala`, it syncs other significant folders including larger media files and various device access points.
+For the `karhu` hostname, additional sync points include specific shares like `xiaomi_mega` and a backup location for `karjala`. For `karjala`, it includes media files and access to other hosts within the `/mnt/HDD2/devices` directory. There are TODO comments suggesting further functionality for syncing huge data folders labeled `ARCHIVES`, `DATA`, and `LIMBO`.
 
 ### Usage
 
-To use this script, ensure it has executable permissions and run it in the terminal. Here are the steps to get it running:
+To use the script, simply run it from a terminal. It doesn't require any command-line arguments or options:
 
-1. Make the script executable:
-   ```bash
-   chmod +x /home/matias/.scripts/setting-up-syncs.sh
-   ```
+```sh
+bash /home/matias/.scripts/bin/setting-up-syncs.sh
+```
 
-2. Execute the script:
-   ```bash
-   /home/matias/.scripts/setting-up-syncs.sh
-   ```
-
-This script is best run periodically, either through a manual execution or scheduled with a cron job.
+You may choose to run this script manually when you want to update syncs or automate it using Cron or as part of a startup script in your Arch Linux configured with the `qtile` window manager.
 
 ---
 
-> [!TIP]  
-> The script assumes that the local directories exist. It would be beneficial to add checks to ensure directories are present before attempting to sync, which would prevent possible errors during execution. Additionally, you might consider logging the output of the sync operations for easier troubleshooting.
+> [!NOTE]
+> The script assumes the `mega-sync` command is installed and configured correctly, but does not check for its presence or any errors that may occur during synchronization, which could cause the script to fail silently. Additionally, commenting TODOs suggest areas of further development that could be implemented, such as syncing additional large data folders. For robustness, consider adding error handling and environment checks.

@@ -6,7 +6,7 @@
 SOURCE_DIR="$SCRIPTS"
 TARGET_DIR="$HOME/.local/bin"
 LOG_FILE="$SCRIPTS/log/symlinking.log"
-DATA_FILE="$SCRIPTS/data/symlink_data.csv"
+DATA_FILE="$SCRIPTS/symlink_data.csv"
 
 # Initialize the CSV file and backup last one
 if [ -f "$DATA_FILE" ]; then

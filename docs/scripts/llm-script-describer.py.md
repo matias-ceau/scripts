@@ -2,49 +2,44 @@
 
 ---
 
-**llm-script-describer.py**: Generates documentation for user scripts using OpenAI's API.
+**llm-script-describer.py**: Automates documentation generation for scripts, creating markdown files
 
 ---
 
 ### Dependencies
 
 - `argparse`: For parsing command-line arguments.
-- `csv`: For handling CSV files.
-- `hashlib`: For generating file hashes to detect changes.
-- `json`: For reading and writing JSON files.
-- `os`: For handling file paths and environment variables.
-- `subprocess`: For executing shell commands.
+- `csv`: To handle CSV file operations.
+- `hashlib`: To compute file hashes to detect changes.
+- `json`: For JSON operations to store script metadata.
+- `os`: For operating system related function calls.
+- `subprocess`: To run other script commands.
 - `sys`: For system-specific parameters and functions.
-- `colorama`: For producing colored terminal text.
-- `openai`: The OpenAI library to interact with the API.
+- `colorama`: For colored terminal text output.
+- `OpenAI`: Requires OpenAI API interactions.
 
 ### Description
 
-The `llm-script-describer.py` script is designed to automate the creation of documentation for scripts stored in a specified directory. It utilizes OpenAI's GPT to generate human-readable descriptions of the scripts based on their content. The script follows these primary functions:
+The `llm-script-describer.py` script is a comprehensive tool designed to automate the generation of GitHub documentation for user scripts, specifically tailored for a Linux-based environment using Arch Linux and the qtile window manager. It employs the OpenAI API to formulate markdown documentation for scripts that are listed in a CSV file.
 
-1. **Initialization** - Sets up paths for scripts, CSV files, and documentation directories.
-2. **Symlink Updates** - Ensures all relevant symlinks are updated before processing scripts.
-3. **Orphaned Documentation Cleaning** - Removes Markdown documentation files that no longer correspond to existing scripts.
-4. **Script Processing** - Reads each script, generates a description using a specified OpenAI language model, and saves it as a Markdown file. It also updates the index and README files to reflect the latest changes.
+The script performs several tasks:
+- **Symlink Update**: It runs a utility script `utils_update_symlinks.sh` to update script symlinks.
+- **File Management**: It identifies available script files and manages orphaned documentation files by removing them.
+- **Description Generation**: Using the OpenAI API, the script generates markdown documentation by analyzing the script's content.
+- **Documentation Storage**: It writes this documentation into a markdown file and updates a documentation index.
+- **README Update**: The script summarizes existing documentation and updates the README.md file accordingly, including a table of all documented scripts.
 
 ### Usage
 
-To run the script, use the command line with the following syntax:
+To execute this script, you must ensure you have an OpenAI API key accessible through an environment variable named `OPENAI_API_KEY`. Use the following command to run the script, specifying the desired OpenAI model if necessary:
 
-```bash
-python llm-script-describer.py [llm_model]
+```sh
+python ~/.scripts/meta/llm-script-describer.py gpt-4o
 ```
 
-- **llm_model** (optional): Specify the OpenAI model to use; defaults to `gpt-4o-mini`.
-
-#### Example:
-```bash
-python llm-script-describer.py gpt-4o-mini
-```
-
-This command reads scripts from a CSV file (`symlink_data.csv`), processes them to generate Markdown documentation, and updates a README file (`README.md`) with the generated summaries.
+This script primarily runs from the terminal and can be initiated directly or included as a part of a broader automated workflow. 
 
 ---
 
-> [!TIP] 
-> Consider adding error handling for scenarios where the API request might fail, or the CSV file is incorrectly formatted. This will make the script more robust and user-friendly. Additionally, documenting the expected format of the CSV file in the README could be beneficial for future users or collaborators.
+> [!TIP]
+> While the script efficiently handles text-based script files, it struggles with binary scripts lacking source code. Enhancing it to analyze compiled binaries directly could further broaden its utility. Additionally, handling potential file permissions issues, and better exception handling for subprocess calls could improve reliability. Also, ensuring secure and efficient management of the OpenAI API credentials is crucial to safeguard the API key from being accidentally exposed.

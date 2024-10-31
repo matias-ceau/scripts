@@ -2,42 +2,42 @@
 
 ---
 
-**pdfopener.sh**: A simple script to select and open PDF files from the home directory using Evince.
+**pdfopener.sh**: Open a PDF file from the home directory using `evince` with `dmenu` for selection
 
 ---
 
 ### Dependencies
 
-- `dmenu`: A dynamic menu for X11 can be used for selecting the PDF files.
-- `evince`: A GNOME document viewer used to open PDF files.
+- `find`: Used to search and list PDF files within the home directory.
+- `grep`: Filters the results to include only files ending with `.pdf`.
+- `dmenu`: An efficient and minimal looking menu for X, used here to select a PDF file.
+- `evince`: A document viewer for the GNOME desktop environment, used for opening PDF files.
 
 ### Description
 
-This script provides a straightforward way to open PDF files located in the user's home directory. Once executed, it performs the following steps:
-
-1. **Finding PDF Files**: It uses the `find` command to search for all files in the home directory and filters the results for files ending with the `.pdf` extension using `grep`.
-
-2. **User Selection**: The list of found PDF files is presented in a graphical menu powered by `dmenu`, allowing the user to select their desired file. The `dmenu` options include case-insensitive searching and a limit to 30 visible entries.
-
-3. **Opening the File**: After a selection is made, `evince`, the designated PDF viewer, is called to open the chosen PDF file.
+This script allows you to quickly and efficiently pick a PDF file from your home directory and open it using the `evince` PDF viewer. It leverages the `find` command to locate all PDF files, filters the paths using `grep` to keep only those ending with `.pdf`, and then presents them in an interactive menu using `dmenu`. Once a file is selected, the script opens it with `evince`. This combination offers a smooth way to search and open documents quickly without needing to navigate through directories manually.
 
 ### Usage
 
-To use this script, follow these simple steps:
+Ensure all dependencies are installed on your Arch Linux system. Place the script in a directory within your `PATH` or run it directly from its location. You can bind this script to a key combination within your window manager, like `qtile`, for easy access. 
 
-1. Open a terminal.
-2. Run the script directly:
+To use the script:
 
 ```bash
-sh /home/matias/.scripts/pdfopener.sh
+sh /home/matias/.scripts/bin/pdfopener.sh
 ```
 
-3. A `dmenu` prompt will appear, listing PDF files from your home directory. Use the arrow keys or type to highlight/select a PDF.
-4. Press `Enter` to open the selected file with Evince.
+- A menu will pop up (via `dmenu`), listing all PDF files in your home directory.
+- Use the keyboard to navigate and select the desired PDF file.
+- The selected PDF will open in `evince`.
 
-This script can also be assigned to a keybinding in your window manager for quicker access, enhancing your workflow.
+To bind this script to a keybinding in `qtile`, you can modify your qtile config file as follows:
+
+```python
+Key([mod], "p", lazy.spawn("sh /home/matias/.scripts/bin/pdfopener.sh")),
+```
 
 ---
 
-> [!TIP]  
-> Consider implementing error handling for scenarios where no PDF files are found or when Evince fails to open. You can add conditions to check if `$file` is empty and provide user feedback accordingly. Additionally, using `xdg-open` could allow for more flexibility, opening files with the default PDF viewer rather than being tied to Evince specifically.
+> [!IMPORTANT]
+> Currently, the script does not handle cases where no PDF file is selected or if `dmenu` is closed without selecting anything. Enhancing the script to check for an empty file path could improve user experience and prevent potential error messages. Additionally, integrating this script with desktop notifications could provide feedback if a selected file fails to open for any reason. Consider these improvements for robustness.

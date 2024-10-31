@@ -4,7 +4,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/ansi-cheatsheet.sh,/home/matias/.local/bin/ansi-cheatsheet.sh,ansi-cheatsheet.sh
 /home/matias/.scripts/bin/ardour-open.sh,/home/matias/.local/bin/ardour-open.sh,ardour-open.sh
 /home/matias/.scripts/archived/chatgpt-all-scripts-describer.py,/home/matias/.local/bin/chatgpt-all-scripts-describer.py,chatgpt-all-scripts-describer.py
-/home/matias/.scripts/sys/setup/chezmoi_on_a_new_system.sh,/home/matias/.local/bin/chezmoi_on_a_new_system.sh,chezmoi_on_a_new_system.sh
+/home/matias/.scripts/meta/run_once/chezmoi_on_a_new_system.sh,/home/matias/.local/bin/chezmoi_on_a_new_system.sh,chezmoi_on_a_new_system.sh
 /home/matias/.scripts/bin/citeboard.sh,/home/matias/.local/bin/citeboard.sh,citeboard.sh
 /home/matias/.scripts/bin/closest_colors.py,/home/matias/.local/bin/closest_colors.py,closest_colors.py
 /home/matias/.scripts/bin/colormap_from_text.sh,/home/matias/.local/bin/colormap_from_text.sh,colormap_from_text.sh
@@ -42,7 +42,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/launch_tmux_with_music_player.sh,/home/matias/.local/bin/launch_tmux_with_music_player.sh,launch_tmux_with_music_player.sh
 /home/matias/.scripts/bin/list_process.sh,/home/matias/.local/bin/list_process.sh,list_process.sh
 /home/matias/.scripts/bin/llama-all-scripts-describer.py,/home/matias/.local/bin/llama-all-scripts-describer.py,llama-all-scripts-describer.py
-/home/matias/.scripts/bin/llm-script-describer.py,/home/matias/.local/bin/llm-script-describer.py,llm-script-describer.py
+/home/matias/.scripts/meta/llm-script-describer.py,/home/matias/.local/bin/llm-script-describer.py,llm-script-describer.py
 /home/matias/.scripts/bin/m3u_creator.sh,/home/matias/.local/bin/m3u_creator.sh,m3u_creator.sh
 /home/matias/.scripts/bin/mechen_music_transfert.py,/home/matias/.local/bin/mechen_music_transfert.py,mechen_music_transfert.py
 /home/matias/.scripts/bin/megacmd_launch_tmux.sh,/home/matias/.local/bin/megacmd_launch_tmux.sh,megacmd_launch_tmux.sh
@@ -56,7 +56,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/obsidian.xsh,/home/matias/.local/bin/obsidian.xsh,obsidian.xsh
 /home/matias/.scripts/bin/open_url_in_instance.sh,/home/matias/.local/bin/open_url_in_instance.sh,open_url_in_instance.sh
 /home/matias/.scripts/bin/openwebui-launcher.sh,/home/matias/.local/bin/openwebui-launcher.sh,openwebui-launcher.sh
-/home/matias/.scripts/sys/ousse-update.sh,/home/matias/.local/bin/ousse-update.sh,ousse-update.sh
+/home/matias/.scripts/meta/ousse-update.sh,/home/matias/.local/bin/ousse-update.sh,ousse-update.sh
 /home/matias/.scripts/bin/pacman-fuzzy-search.sh,/home/matias/.local/bin/pacman-fuzzy-search.sh,pacman-fuzzy-search.sh
 /home/matias/.scripts/bin/pdfopener.sh,/home/matias/.local/bin/pdfopener.sh,pdfopener.sh
 /home/matias/.scripts/bin/playlist_player.xsh,/home/matias/.local/bin/playlist_player.xsh,playlist_player.xsh
@@ -91,7 +91,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/try_the_bat_suit.sh,/home/matias/.local/bin/try_the_bat_suit.sh,try_the_bat_suit.sh
 /home/matias/.scripts/bin/tui-gpt.py,/home/matias/.local/bin/tui-gpt.py,tui-gpt.py
 /home/matias/.scripts/bin/update_env.xsh,/home/matias/.local/bin/update_env.xsh,update_env.xsh
-/home/matias/.scripts/sys/utils_update_symlinks.sh,/home/matias/.local/bin/utils_update_symlinks.sh,utils_update_symlinks.sh
+/home/matias/.scripts/meta/utils_update_symlinks.sh,/home/matias/.local/bin/utils_update_symlinks.sh,utils_update_symlinks.sh
 /home/matias/.scripts/bin/vimwiki.sh,/home/matias/.local/bin/vimwiki.sh,vimwiki.sh
 /home/matias/.scripts/bin/vox.py,/home/matias/.local/bin/vox.py,vox.py
 /home/matias/.scripts/bin/wallpaper.sh,/home/matias/.local/bin/wallpaper.sh,wallpaper.sh

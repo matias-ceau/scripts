@@ -1,44 +1,45 @@
-# Fix Markdown Links
+# Fix Markdown Links Script
 
 ---
 
-**fix-markdown-links.sh**: Fixes markdown links to be relative based on a specified base directory.
+**fix-markdown-links.sh**: Adjust relative paths in markdown links to start from a base directory
 
 ---
 
 ### Dependencies
 
-- `sed`: A stream editor used for parsing and transforming text, essential for modifying markdown links.
+- `bash`: This script requires the Bash shell to execute.
+- `sed`: Utilized for modifying file content.
+- `find`: Used to locate markdown files within a directory.
 
 ### Description
 
-The `fix-markdown-links.sh` script is designed to adjust links in markdown files to ensure they are relative to a specified base directory. This is particularly useful when moving markdown files around or when setting up documentation for different directory structures. The key functionality of the script includes:
+The **fix-markdown-links.sh** script is designed to process markdown files and prepend a leading slash to relative links, ensuring they start from a specified base directory. This script will be particularly useful when restructuring projects where the markdown files are moved under a new directory hierarchy, or when you need uniform link formatting across multiple files.
 
-- **Link Processing**: It uses `sed` to identify links in the format `[text](url)` and ensures that URLs missing a leading slash are modified to include one. This helps maintain link integrity when working with relative paths.
+The script uses the `sed` command to search and replace link patterns without a leading slash, adding one where necessary. It takes two arguments: a base directory and either a markdown file or a directory containing markdown files.
 
-- **Directory Handling**: The script is flexible, allowing users to specify either a single markdown file or an entire directory containing multiple markdown files. If a directory is specified, the script will recursively find all `.md` files and process each one.
+Once executed, the script reads all markdown files, either directly or recursively through directories, adjusts the links, and confirms each processed file.
 
 ### Usage
 
-To use the script, you need to specify:
-1. A base directory with a leading slash.
-2. A target which can either be a markdown file or a directory.
-
-Here is how you can run the script from the terminal:
+To execute the script:
 
 ```bash
-./fix-markdown-links.sh /path/to/base_directory /path/to/markdown_file.md
+$ ./fix-markdown-links.sh /base/directory /path/to/markdown/file/or/directory
 ```
 
-Or for a directory of markdown files:
+- **\<base_dir\>**: The base directory to which markdown links should be relative.
+- **\<file or directory\>**: The markdown file or the directory containing markdown files. 
+
+For example, if you want to process all markdown files under `/home/matias/projects` and make the links relative to `/home/matias`:
 
 ```bash
-./fix-markdown-links.sh /path/to/base_directory /path/to/directory/
+./fix-markdown-links.sh /home/matias /home/matias/projects
 ```
 
-If the correct number of arguments is not provided, or if they are empty, the script will output an error message and display the correct usage.
+The script will adjust the links and confirm processing by outputting each file name.
 
 ---
 
-> [!TIP]  
-> The script currently only ensures that links without a leading slash are updated. It may be beneficial to create a backup of the markdown files before processing them to avoid accidental data loss. Additionally, consider adding functionality to handle links that might already have a leading slash or check for other types of problematic links.
+> [!NOTE]
+> The script assumes that links not starting with a slash are meant to be file-relative links, which may not always be the case. It is designed specifically for the scenario where markdown files need links adjusted to a new consistent base directory. Be cautious with different link types or structures that might not fit this assumption. Future improvements could include complex path restructuring or more flexible link pattern matching.

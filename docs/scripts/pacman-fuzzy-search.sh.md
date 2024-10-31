@@ -2,49 +2,46 @@
 
 ---
 
-**pacman-fuzzy-search.sh**: A fuzzy search script for Arch Linux's pacman and AUR packages.
+**pacman-fuzzy-search.sh**: A script for enhanced fuzzy searching of Arch Linux packages using `paru` and `fzf`.
 
 ---
 
 ### Dependencies
 
-- `bash`: The shell used to run the script.
-- `paru`: An AUR helper that simplifies package management from the AUR.
-- `fzf`: A command-line fuzzy finder that is utilized for the search interface.
-- `ripgrep (rg)`: A fast search tool that is used for regex-based searching.
-- `bat`: A `cat` clone with syntax highlighting and Git integration, used for previewing package information.
+- `paru`: An AUR helper designed to work seamlessly with pacman, used for performing package queries.
+- `rg` (ripgrep): A fast search tool used for string pattern matching within the script.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `fzf`: A general-purpose command-line fuzzy finder to enhance user interaction with search results.
+- `notify-send`: A utility to send notifications from the script to the Arch Linux desktop environment.
 
 ### Description
 
-The `pacman-fuzzy-search.sh` script is designed to enhance the package searching experience for Arch Linux users, leveraging the power of fuzzy searching provided by `fzf`. Here's how it works:
+This script is designed for Arch Linux users who want an interactive, fuzzy search experience for managing packages. It employs `fzf` for rendering a refined user interface with preview capabilities. The searching mechanism is based on `paru`, providing a mix of official repository and AUR package details.
 
-1. **Initialization**: It creates a cache directory to store any necessary files and initializes environment variables.
-2. **Utility Functions**:
-   - `preview_cmd()`: Prepares and formats detailed package information for display. It uses `paru` to fetch package data and `bat` for enhanced formatting.
-   - `paruSl()`: Lists installed packages with color highlighting.
-   - `search_cmd()`: Constructs a search criteria based on user options and displays notifications about repositories and installations.
-3. **Main Function**:
-   - `fzf_cmd()`: This is the main command that invokes `fzf` with custom bindings and options for user interaction.
+**Functions and Utilities**:
+- **preview_cmd**: Constructs a preview of package details using `paru` with formatting and styling by `bat`.
+- **paruSl**: Customizes the package list display with colors and removes 'unknown-version' anomalies.
+- **search_cmd**: Utilizes regex to filter packages based on repository or installation status, enhancing relevancy.
+- **fzf_cmd**: Invokes `fzf` for user interaction with multiple binding options for resizing windows or changing modes.
 
 ### Usage
 
-You can execute the script directly from the terminal using:
+To execute the script, run it from the terminal. You can integrate this script with a hotkey using a window manager like qtile or execute it manually:
 
 ```bash
-bash /home/matias/.scripts/pacman-fuzzy-search.sh
+bash /home/matias/.scripts/bin/pacman-fuzzy-search.sh
 ```
 
-The script executes a fuzzy search of the installed packages and AUR packages, allowing you to interactively select a package to perform actions such as installation. Here are some useful key bindings while using `fzf`:
+Keyboard shortcuts within `fzf`:
+- `Alt-w`: Modifies the preview window.
+- `Enter`: Installs the selected package with `paru`.
+- `Ctrl-r`: Reloads search results.
+- `Ctrl-s`: Refines the search term.
+- `Alt-m`, `Alt-p`, `Alt-o`, `Alt-c`: Toggles modes and sorting preferences for package searching.
 
-- `enter`: Install the selected package.
-- `ctrl-r`: Reload the search.
-- `alt-m`: Change search mode (e.g. AUR or repo).
-- `alt-o`: Sort the results by various criteria.
-- `alt-c`: Change the search criteria.
-
-You can adjust the search options on-the-fly by using the key bindings provided.
+The script can also be run periodically in the background to keep package data up to date within a specified cache directory located at `$HOME/.cache/pacman-fuzzy-search`.
 
 ---
 
-> [!TIP]
-> The script is well-structured, but it could benefit from modularizing by separating the utility functions into a different file for better readability and maintenance. Additionally, more error handling could improve the user experience, especially when no packages are found or if there’s an issue with `paru`.
+> [!IMPORTANT]
+> While the script is powerful, it assumes the presence of specific utilities (`paru`, `rg`, `bat`, `fzf`, etc.). Ensure these are installed for the script to function correctly. Additionally, environment-specific behavior like the use of `notify-send` for notifications might not work outside of a desktop environment session.

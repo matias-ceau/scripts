@@ -1,43 +1,34 @@
-# Update Environment Variables Script
+# Update Environment File Script
 
 ---
 
-**update_env.xsh**: A script to extract and update API keys in a .env file.
+**update_env.xsh**: Updates the environment file to store API keys automatically
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell that is an essential dependency for executing this script. Ensure it's installed and configured on your Arch Linux system.
+- `xonsh`: This script is written in the xonsh shell scripting language, you need to have xonsh installed to execute it.
 
 ### Description
 
-The `update_env.xsh` script is designed to streamline the management of API keys by automatically extracting any key-value pairs from your current environment variables that end with `API_KEY` and saving them into a `.env` file located in your home directory. This is particularly useful for developers who frequently need to manage API keys securely and efficiently.
+This script, `update_env.xsh`, is designed to automate the process of updating your local `.env` file with API keys that are currently stored in environment variables. The script iterates over all environment variables available in the shell session and filters out only those whose names end with `API_KEY`. These are assumed to be API keys. 
 
-#### How it Works
-
-1. **Environment Extraction**: The script leverages the Xonsh shell's capability to access environment variables. It filters these variables, retaining only those where the key's name concludes with `API_KEY`.
-2. **Formatting Keys and Values**: It constructs a formatted string that pairs each key with its corresponding value in the format required for `.env` files, which typically looks like `KEY=VALUE`.
-3. **Writing to File**: The script overwrites the existing `.env` file or creates it if it doesn't exist, ensuring that it always contains the most recent API keys.
+The extracted API keys are then written into a file located at `$HOME/.env` with the format: `KEY_NAME=key_value`, each on a new line. This approach keeps your `.env` file up-to-date with the necessary API keys without the need for manual editing.
 
 ### Usage
 
-To run the script, simply execute it in your terminal using:
+To use the script, run it inside a terminal that supports xonsh. Ensure that the necessary API keys are set as environment variables in your session. Here's a quick way to use the script:
 
 ```bash
-xonsh /home/matias/.scripts/update_env.xsh
+xonsh /home/matias/.scripts/bin/update_env.xsh
 ```
 
-You can also set up a keybinding in your qtile configuration to run this script conveniently:
-
-```python
-# Example keybinding in qtile's config.py
-Key([mod], "u", lazy.spawn("xonsh /home/matias/.scripts/update_env.xsh")),
-```
-
-This will allow you to press the mod key plus 'u' to trigger the update.
+You can also automate the script to run at startup or bind it to a key in your qtile configuration using a keybinding, depending on how frequently you update your API keys.
 
 ---
 
-> [!TIP]  
-> The current implementation overwrites the `.env` file every time the script runs, which may not be ideal if you want to keep certain keys unchanged. Consider enhancing the script to merge new keys with existing ones instead of overwriting the entire file. Additionally, implement error handling to manage potential file writing issues gracefully, ensuring the script runs reliably in various environments.
+> [!TIP]
+> - The script currently overwrites the `.env` file every time it is run. Consider adding a feature to append new API keys or confirm overwrites.
+> - For enhanced security, ensure that your `.env` file permissions restrict access to unauthorized users, especially if it contains sensitive API keys.
+> - Including error handling could make the script more robust, for instance checks for file write permissions or handling cases where no API keys are present.

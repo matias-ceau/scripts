@@ -2,38 +2,47 @@
 
 ---
 
-**playlist_player.xsh**: Plays a selected playlist using cmus from a predefined directory.
+**playlist_player.xsh**: Select and play a playlist using `cmus` and `dmenu` on Xonsh shell
 
 ---
 
 ### Dependencies
 
-- `cmus` - A lightweight music player that can be controlled via the command line.
-- `dmenu` - A dynamic menu for X, used to present options to the user.
+- `xonsh`: A Python-powered, Unix-gazing shell language and command prompt.
+- `cmus`: A small, fast and powerful console music player for Unix-like operating systems.
+- `dmenu`: A dynamic menu for X, originally designed for `dwm`.
 
 ### Description
 
-This script is designed to facilitate the selection and playback of music playlists stored in the user's `~/.playlists` directory using the command line music player `cmus`. The script makes use of the `xonsh` shell, which allows for both shell syntax and Python capabilities.
+This script allows you to select and play a music playlist formatted in `.m3u` using `cmus`, a console music player. The script is written in the `xonsh` shell, chosen for its Python-based scripting abilities. Here's a breakdown of what the script does:
 
-Upon execution, the script performs the following steps:
-
-1. **View Playlists**: It initially opens the playlist view in `cmus` by issuing the command `cmus-remote -C 'view 4'`.
-2. **Clears Existing Queue**: The command `cmus-remote -C clear` clears any existing tracks from the current play queue.
-3. **Gather Playlists**: The script then compiles a sorted list of all playlist files ending with `.m3u` in the configured playlist directory.
-4. **User Selection**: It uses `dmenu` to present the playlists in a menu format, allowing the user to make a selection.
-5. **Add and Play**: The selected playlist is then added to `cmus` using the command `cmus-remote -C add {PLAYLIST_PATH}/{choice}.m3u`, and playback is started with `cmus-remote -n` and `cmus-remote -p`.
+1. **Set Up Environment**: It sets a path to where your playlists are stored in the variable `PLAYLIST_PATH`.
+2. **Playlist Selection**: The script fetches all `.m3u` playlist files within the specified `PLAYLIST_PATH`, removes the file extension, and presents them as options using `dmenu`.
+3. **Cmus Operations**: 
+   - Switches to the fourth view in `cmus` using `cmus-remote -C 'view 4'`, which is typically playlists.
+   - Clears any currently queued tracks using `cmus-remote -C clear`.
+   - Adds the chosen playlist to `cmus` via `cmus-remote -C add`.
+   - Attempts to skip to the next track with `cmus-remote -n` and begins playback with `cmus-remote -p`.
 
 ### Usage
 
-1. Ensure your playlists are stored in your `~/.playlists` directory and are in `.m3u` format.
-2. Run the script in your terminal with the command:
-   ```bash
-   xonsh /home/matias/.scripts/playlist_player.xsh
-   ```
+Ensure all dependencies are installed on your Arch Linux system. You can run the script directly from a terminal or bind it to a key in your qtile window manager.
 
-3. A dmenu interface will appear where you can select the desired playlist.
+```bash
+~/.scripts/bin/playlist_player.xsh
+```
+
+### Configuration
+
+To bind this script to a key in `qtile`, add an entry to your `qtile` configuration file like so:
+
+```python
+Key([mod], "p", lazy.spawn('~/.scripts/bin/playlist_player.xsh')),
+```
+
+This setup allows you to press `mod+p` to launch the playlist player and choose your favorite music directly from `dmenu`.
 
 ---
 
-> [!TIP] 
-> The script could be enhanced by adding error handling to manage situations where the playlist directory is empty or when the user cancels the dmenu selection. Additionally, consider adding an option to create a new playlist or change the directory from which playlists are loaded to enhance flexibility.
+> [!TIP]
+> A potential improvement is to enhance error handling when playlist files are not found or `cmus` fails to start playback. Additionally, since `dmenu` is invoked here, ensure it is set to a visible and appropriate location/configuration proportionate to your screen size and resolution.
