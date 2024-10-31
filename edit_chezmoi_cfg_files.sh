@@ -49,16 +49,17 @@ selected=$(
     remove_icons
 )
 
-if [ -n "$selected" ]; then
-    path="$(chezmoi source-path "$HOME/$selected")" || exit 0
-fi
-
+# if [ -n "$selected" ]; then
+#     path="$(chezmoi source-path "$HOME/$selected")" || exit 0
+# fi
+path="$selected"
 # INITIAL_DIR="$(pwd)"
 
 if [ -f "$path" ]; then
-    cd "$CHEZMOI" && nvim "$path"
+    chezmoi edit "$path"
+    # cd "$CHEZMOI" && nvim "$path"
 elif [ -d "$path" ]; then
-    cd "$CHEZMOI" && nvim $(fd . -tf "$path")
+    chezmoi edit $(fd . -tf "$path")
 else
     exit 0
 fi
