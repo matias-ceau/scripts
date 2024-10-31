@@ -1,53 +1,53 @@
-# CiteBoard Script
+# Citeboard Script
 
 ---
 
-**citeboard.sh**: A script to select and manage paper citations from a local BibTeX database.
+**citeboard.sh**: A script to find and open a paper or copy its citation.
 
 ---
 
 ### Dependencies
 
-- `findutils`: Used for searching files in the filesystem.
-- `xsel`: A utility to interact with the X selection buffer (clipboard).
-- `dmenu`: A dynamic menu for X, used for creating interactive selections.
+- `findutils`: A set of utilities for file searching and processing.
+- `xsel`: Command-line interface to the X selection, allowing interaction with clipboard contents.
+- `dmenu`: Dynamic menu for X, useful for selection interfaces.
 
 ### Description
 
-The `citeboard.sh` script is designed to help users quickly find and manage paper citations stored in a BibTeX file format. This script allows you to either open the full PDF of a selected paper or copy its citation directly to the clipboard.
+The `citeboard.sh` script streamlines the process of accessing academic papers and their citations. It operates by searching for BibTeX entries in a specified directory, displaying them through `dmenu` for selection. After selecting a citation, the user can choose to either copy the citation to the clipboard or open the associated paper using the Evince document viewer.
 
-Here’s a breakdown of how the script functions:
+Here's a breakdown of how the script functions:
 
-1. **Citation Retrieval**: It uses `grep` to search through all BibTeX files in the `data/bib/` directory. It extracts entries that contain a comma, indicating they are citations, and formats them for display.
-2. **User Interface**: The formatted citations are then fed into `dmenu`, allowing users to select from a list of available references.
-3. **Action Selection**: After a citation is chosen, users can decide whether to copy it to the clipboard or open the associated PDF file. This is also done through `dmenu`, which presents the options.
-4. **Conditional Execution**: Depending on the user’s selection, the script either copies the citation using `xsel` or opens the PDF in `evince` by searching within the storage directory of Zotero.
+1. **Search BibTeX Files**: The script uses `grep` to scan through all BibTeX files located in the `data/bib/` directory for entries, filtering those lines that represent valid bibliographic references.
+2. **User Selection via dmenu**: The script pipes the filtered references into `dmenu`, allowing the user to visually select a reference from a displayed list of options.
+3. **Action Selection**: Following the selection of a citation, the user is prompted to choose whether to copy the citation to the clipboard or open the corresponding paper via another `dmenu` prompt.
+4. **Final Actions**: Depending on the user's choice, the script either copies the citation to the clipboard using `xsel` or opens the associated PDF file located in the Zotero storage directory using `evince`.
 
 ### Usage
 
-To utilize the `citeboard.sh` script, you can run it directly from the terminal or assign it to a keybinding in your window manager (qtile). 
-
-Example command to run in the terminal:
+To use the script, run it directly from your terminal:
 
 ```bash
-bash /home/matias/.scripts/citeboard.sh
+./citeboard.sh
 ```
 
-When executed, the script will display:
+From there, you will go through the following prompts:
 
-1. A list of paper citations to choose from.
-2. The option to either "open" or "clipboard" the selected citation.
+1. **Select a Citation**: A list of citations will appear. Navigate to the desired entry and select it.
+2. **Choose an Action**: You will then have the choice to either "open" the paper or "clipboard" to copy the citation.
 
-For example:
+Example interaction:
 
+1. Launch the script:
+
+```bash
+./citeboard.sh
 ```
-$ /home/matias/.scripts/citeboard.sh 
 
-# Select a citation in the dmenu list
-# After selection, choose to open in evince or copy to clipboard
-```
+2. Choose a reference from the `dmenu`.
+3. Select either "open" to view the paper or "clipboard" to copy the citation.
 
 ---
 
 > [!TIP] 
-> Review the paths to ensure `data/bib/` and `data/zotero/storage` are accurate for your file structure. Consider adding error handling for cases where no PDF is found or the BibTeX file is empty. Enhancing user feedback during execution could also improve the experience.
+> The script assumes specific file structures and external tools being installed. It might fail if the `data/bib/` directory is empty or if files are not organized correctly. Consider adding error handling to provide feedback when no significant matches or files are found. Additionally, support for other document viewers could expand its usability.

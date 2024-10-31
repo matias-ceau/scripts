@@ -4,23 +4,25 @@
 
 <!-- llm_generated_output_start -->
 
-The script repository contains a broad collection of utility scripts tailored for a variety of tasks on an Arch Linux system, particularly in a Qtile window manager environment. These scripts help streamline workflows, enhance productivity, and manage daily tasks with greater efficiency. The tools cover a wide array of functionalities including:
+The script repository features a diverse collection of utility scripts tailored for users on Arch Linux utilizing the Qtile window manager. Comprising scripts written in Bash and Python, these tools cater to various tasks, enhancing productivity and streamlining workflows.
 
-- **File Management**: Scripts like [fzf-file-manager.sh](docs/scripts/fzf-file-manager.sh.md) and [editor.sh](docs/scripts/editor.sh.md) enable users to navigate directories, find files, and edit them quickly via interactive, user-friendly interfaces powered by `fzf`. This allows for rapid file operations in a visually appealing manner.
+### Key Features:
 
-- **System Utilities**: Scripts such as [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) and [install_dependencies.sh](docs/scripts/install_dependencies.sh.md) assist in managing system applications and repositories. They help automate processes like listing Git repositories or installing essential packages efficiently.
+- **Git Management**: Scripts like [sync-repo.py](docs/scripts/sync-repo.md), [sync-repo-simple.py](docs/scripts/sync-repo-simple.md), and [interactive_git_sync.sh](docs/scripts/interactive_git_sync.md) automate the process of syncing local git repositories with their remote counterparts. Users benefit from error handling and user-friendly interfaces to manage merge conflicts effectively.
 
-- **Media Management**: Various multimedia scripts like [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) and [m3u_creator.sh](docs/scripts/m3u_creator.sh.md) cater to audio management through the use of a terminal-based player, allowing users to select playlists or create music files quickly.
+- **File and Directory Management**: The repository includes file management utilities such as [fzf-file-manager.sh](docs/scripts/fzf-file-manager.md) and [obsidian-vault-selector.sh](docs/scripts/obsidian-vault-selector.md), which allow users to easily navigate and manipulate files through a clean interface powered by `fzf`. 
 
-- **Scripting and Development**: The repository includes several tools aimed at developers, such as [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) which generates documentation for user scripts using AI models. Additionally, scripts like [git_clone_by_author-repo.sh](docs/scripts/git_clone_by_author-repo.sh.md) simplify cloning repositories from GitHub based on developer input.
+- **Music and Media Management**: Music-related scripts like [albumplayer.xsh](docs/scripts/albumplayer.md) and [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.md) facilitate quick access and management of music files, catering to users who want to streamline their listening experience.
 
-- **Customization and Configuration**: For users looking to personalize their setups, scripts like [toggle_picom.sh](docs/scripts/toggle_picom.sh.md) for managing the compositor or [update_env.xsh](docs/scripts/update_env.xsh.md) for managing environment variables can greatly enhance desktop customization.
+- **Markdown and File Handling**: Scripts for handling Markdown files, such as [display_markdown.py](docs/scripts/display_markdown.md) and [json_to_markdown.py](docs/scripts/json_to_markdown.md), provide ways to convert and view documents efficiently, enhancing text visibility and accessibility.
 
-- **Interactive and Visual Tools**: The variety of TUI (Terminal User Interface) scripts, including [tui-gpt.py](docs/scripts/tui-gpt.py.md), create engaging experiences by providing users with interfaces to interact with AI or browse through their scripts and tools. 
+- **Session and Configuration Management**: The repository contains tools for working with session management, as seen in scripts like [qtile_window_to_group_and_switch.py](docs/scripts/qtile_window_to_group_and_switch.md) and configuration managers such as [chezmoi_on_a_new_system.sh](docs/scripts/chezmoi_on_a_new_system.md), which help users manage their environment settings and configurations effectively.
 
-- **Backup and Sync**: Several scripts like [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) and [sync-repo-simple.py](docs/scripts/sync-repo-simple.py.md) streamline the process of backing up important directories and synchronizing Git repositories, greatly aiding in security and data management.
+### Usage Considerations:
 
-Through the comprehensive functionality offered by these scripts, they collectively serve as a robust toolkit designed to simplify tasks, enhance system management, and provide a seamless workflow within the Arch Linux ecosystem for users employing the Qtile window manager.
+All scripts are designed to be executed from the terminal, with many being suitable for binding to key combinations for quick access. Dependencies like `fzf`, `bat`, `xdotool`, and various Python libraries are frequently utilized to enhance the functionality and interactivity of the scripts, ensuring a polished and efficient user experience.
+
+With clear usage documentation, each script is accompanied by tips and potential enhancements that developers could consider, aiding in the ongoing improvement of the tools. Whether you are managing version control, organizing files, or customizing your media library, this script repository serves as a valuable resource for enhancing your workflow on Arch Linux with the Qtile environment.
 
 <!-- llm_generated_output_end -->
 
@@ -38,7 +40,7 @@ Through the comprehensive functionality offered by these scripts, they collectiv
 | [ardour-open.sh](docs/scripts/ardour-open.sh.md) | Script to open the most recent Ardour session |
 | [chatgpt-all-scripts-describer.py](docs/scripts/chatgpt-all-scripts-describer.py.md) | A script for generating GitHub documentation for local scripts utilizing the OpenAI API |
 | [chezmoi_on_a_new_system.sh](docs/scripts/chezmoi_on_a_new_system.sh.md) | Shell script to initialize and apply dotfiles with `chezmoi` |
-| [citeboard.sh](docs/scripts/citeboard.sh.md) | A script to find and handle research papers by opening or copying citations. |
+| [citeboard.sh](docs/scripts/citeboard.sh.md) | A script to find and open a paper or copy its citation. |
 | [closest_colors.py](docs/scripts/closest_colors.py.md) | Find the closest ANSI color to a set of target colors. |
 | [colormap_from_text.sh](docs/scripts/colormap_from_text.sh.md) | Simple script that extracts color palettes from text or configuration files in either hex or RGB format. |
 | [command_prompt.sh](docs/scripts/command_prompt.sh.md) | Launch a command with history suggestions for easier execution. |
@@ -47,7 +49,7 @@ Through the comprehensive functionality offered by these scripts, they collectiv
 | [desk_fzf.sh](docs/scripts/desk_fzf.sh.md) | Find and execute .desktop files with fzf selection. |
 | [display_markdown.py](docs/scripts/display_markdown.py.md) | Script to display markdown files using the Rich library with customizable styles and width. |
 | [dmenu_run_scripts.py](docs/scripts/dmenu_run_scripts.py.md) | A Python script to display executable scripts and run selected ones. |
-| [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) | A script to browse and edit Chezmoi-managed files with optional synchronization |
+| [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) | Script to search and edit Chezmoi managed configuration files and directories. |
 | [editor.sh](docs/scripts/editor.sh.md) | Script to rapidly edit files using `fzf` for search and `nvim` for editing, suitable for various directory contexts. |
 | [fix-markdown-links.sh](docs/scripts/fix-markdown-links.sh.md) | A script to ensure that markdown links have consistent leading slashes for relative paths. |
 | [flexoki_show.sh](docs/scripts/flexoki_show.sh.md) | Displays a table of colors with HEX, RGB, and descriptions |
@@ -107,7 +109,7 @@ Through the comprehensive functionality offered by these scripts, they collectiv
 | [rgfzf.sh](docs/scripts/rgfzf.sh.md) | Integrate `ripgrep` and `fzf` to search text and open files in `vim` |
 | [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md) | Transfers music files to a Sandisk media player while managing storage capacity and file formats. |
 | [script_launcher.sh](docs/scripts/script_launcher.sh.md) | Launch and manage scripts via an interactive fzf interface, with source and documentation preview capabilities. |
-| [select_script](docs/scripts/select_script.md) | Utility to select and execute scripts from cached data using `rofi` |
+| [select_script](docs/scripts/select_script.md) | C script that selects a chosen script using cached data. |
 | [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) | Automates syncing of various directories to a Mega backup location based on the hostname. |
 | [shell_history_info.sh](docs/scripts/shell_history_info.sh.md) | Analyzes shell history files to find frequent lines, words, or characters |
 | [show-all-qutebrowser-scripts.sh](docs/scripts/show-all-qutebrowser-scripts.sh.md) | Display the scripts associated with Qutebrowser |

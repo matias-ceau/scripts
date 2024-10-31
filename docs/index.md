@@ -4,7 +4,7 @@
 - [ardour-open.sh](scripts/ardour-open.sh.md) -- *Script to open the most recent Ardour session*
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *A script for generating GitHub documentation for local scripts utilizing the OpenAI API*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Shell script to initialize and apply dotfiles with `chezmoi`*
-- [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and handle research papers by opening or copying citations.*
+- [citeboard.sh](scripts/citeboard.sh.md) -- *A script to find and open a paper or copy its citation.*
 - [closest_colors.py](scripts/closest_colors.py.md) -- *Find the closest ANSI color to a set of target colors.*
 - [colormap_from_text.sh](scripts/colormap_from_text.sh.md) -- *Simple script that extracts color palettes from text or configuration files in either hex or RGB format.*
 - [command_prompt.sh](scripts/command_prompt.sh.md) -- *Launch a command with history suggestions for easier execution.*
@@ -14,8 +14,8 @@
 - [display_markdown.py](scripts/display_markdown.py.md) -- *Script to display markdown files using the Rich library with customizable styles and width.*
 - [dmenu_run_scripts.py](scripts/dmenu_run_scripts.py.md) -- *A Python script to display executable scripts and run selected ones.*
 - [dmenu_run_scripts.xsh](scripts/dmenu_run_scripts.xsh.md) -- *A script to run user scripts via dmenu or rofi.*
-- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *A script to browse and edit Chezmoi-managed files with optional synchronization*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to interactively edit and apply Chezmoi configuration files.*
+- [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to search and edit Chezmoi managed configuration files and directories.*
 - [editor.sh](scripts/editor.sh.md) -- *Script to rapidly edit files using `fzf` for search and `nvim` for editing, suitable for various directory contexts.*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *A script to ensure that markdown links have consistent leading slashes for relative paths.*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Displays a table of colors with HEX, RGB, and descriptions*
@@ -78,7 +78,7 @@
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Transfers music files to a Sandisk media player while managing storage capacity and file formats.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Launch and manage scripts via an interactive fzf interface, with source and documentation preview capabilities.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
-- [select_script](scripts/select_script.md) -- *Utility to select and execute scripts from cached data using `rofi`*
+- [select_script](scripts/select_script.md) -- *C script that selects a chosen script using cached data.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automates syncing of various directories to a Mega backup location based on the hostname.*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Analyzes shell history files to find frequent lines, words, or characters*
 - [show-all-qutebrowser-scripts.sh](scripts/show-all-qutebrowser-scripts.sh.md) -- *Display the scripts associated with Qutebrowser*

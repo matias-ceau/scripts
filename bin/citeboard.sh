@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 #INFO:#@RUN@ "Find a paper and either open the paper or copy the paper citation"
 #+needed+ findutils xsel dmenu
@@ -7,7 +7,7 @@ ref=$(grep -h "^@" data/bib/* | grep ,$ | sed 's/@.*{//g ; s/,$//g' | dmenu -l 3
 
 sel=$(echo -e "open\nclipboard" | dmenu)
 
-[ "$ref" = "" ] && exit 
+[ "$ref" = "" ] && exit
 [ "$sel" = "clipboard" ] && echo "$ref" | xsel -b
-[ "$sel" = "open" ] && 
-    find data/zotero/storage | grep "$ref" | xargs evince
+[ "$sel" = "open" ] &&
+find data/zotero/storage | grep "$ref" | xargs evince

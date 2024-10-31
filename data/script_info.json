@@ -43,10 +43,10 @@
   },
   "citeboard.sh": {
     "file": "citeboard.sh",
-    "path": "citeboard.sh",
-    "description": "A script to find and handle research papers by opening or copying citations.",
+    "path": "bin/citeboard.sh",
+    "description": "A script to find and open a paper or copy its citation.",
     "doc_path": "docs/scripts/citeboard.sh.md",
-    "hash": "ae03892e4d8c38702217154d1f804275c1ca1308be688f6a9f305d54411b5f03"
+    "hash": "7695f69cd23195f906c31844a63f55dff2a6036a51493f7724c65c1dfb84752c"
   },
   "closest_colors.py": {
     "file": "closest_colors.py",
@@ -99,10 +99,10 @@
   },
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
-    "path": "edit_chezmoi_cfg_files.sh",
-    "description": "A script to browse and edit Chezmoi-managed files with optional synchronization",
+    "path": "bin/edit_chezmoi_cfg_files.sh",
+    "description": "Script to search and edit Chezmoi managed configuration files and directories.",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
-    "hash": "22dc81567396a49342a470fcc7a2c4bbfacaeff2d36a373ce83a2fad7170e240"
+    "hash": "2a3cadcb5fb5df085ed2e72cdd07a83664fa626e728212d92fcaa8a6239030b6"
   },
   "editor.sh": {
     "file": "editor.sh",
@@ -471,7 +471,7 @@
   "select_script": {
     "file": "select_script",
     "path": "bin/select_script",
-    "description": "Utility to select and execute scripts from cached data using `rofi`",
+    "description": "C script that selects a chosen script using cached data.",
     "doc_path": "docs/scripts/select_script.md",
     "hash": "8118344df099ac6269278bee4ff4541cbc7640e1675d01d8be75274c1cb86d6b"
   },
