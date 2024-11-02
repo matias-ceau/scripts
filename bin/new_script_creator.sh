@@ -8,12 +8,14 @@ Usage:
     $(basename "$0") [script] | [-f <path>]
 
 Options:
-    -f, --from <filename> : change an eisting file into a user script
+    -f, --from <filename> : change an existing file into a user script
     '' (no args)          : get prompted for script name
     <filename>            : create this script (templating if ext)
     -h, --help            : show this help
 EOF
 }
+
+SCRIPT_PATH="$SCRIPTS/bin"
 
 templater() {
     echo "$1" | rg -q '\.sh$' && template="bash"
@@ -40,7 +42,7 @@ ensure_extension() {
 }
 
 script_creator() {
-    path="$SCRIPTS/$1"
+    path="$SCRIPT_PATH/$1"
     templater "$1" > "$path"
     nvim "$path"
     if [ "$(wc -m path)" -gt 22 ]; then
@@ -60,9 +62,9 @@ case "$1" in
         ;;
     --from | -f)
         chmod +x "$2"
-        mv "$2" "$SCRIPTS"
+        mv "$2" "$SCRIPT_PATH"
         utils_update_symlimks.sh
-        nvim "$SCRIPTS/$2"
+        nvim "$SCRIPT_PATH/$2"
         ;;
     "")
         read -p "Filename? " filename
