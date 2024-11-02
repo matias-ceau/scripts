@@ -86,6 +86,8 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/sync-repo-simple.sh,/home/matias/.local/bin/sync-repo-simple.sh,sync-repo-simple.sh
 /home/matias/.scripts/bin/terminal_with_command.sh,/home/matias/.local/bin/terminal_with_command.sh,terminal_with_command.sh
 /home/matias/.scripts/dev/tmux-help.py,/home/matias/.local/bin/tmux-help.py,tmux-help.py
+/home/matias/.scripts/bin/tmux_manager.py,/home/matias/.local/bin/tmux_manager.py,tmux_manager.py
+/home/matias/.scripts/bin/tmux_session.sh,/home/matias/.local/bin/tmux_session.sh,tmux_session.sh
 /home/matias/.scripts/bin/toggle_picom.sh,/home/matias/.local/bin/toggle_picom.sh,toggle_picom.sh
 /home/matias/.scripts/bin/transform_symlink.sh,/home/matias/.local/bin/transform_symlink.sh,transform_symlink.sh
 /home/matias/.scripts/bin/try_the_bat_suit.sh,/home/matias/.local/bin/try_the_bat_suit.sh,try_the_bat_suit.sh

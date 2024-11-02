@@ -45,7 +45,7 @@ script_creator() {
     path="$SCRIPT_PATH/$1"
     templater "$1" > "$path"
     nvim "$path"
-    if [ "$(wc -m path)" -gt 22 ]; then
+    if [ "$(wc -m $path)" -gt 22 ]; then
         chmod +x "$path"
         utils_update_symlimks.sh
         echo "Created script $1"
