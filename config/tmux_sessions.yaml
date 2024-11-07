@@ -1,14 +1,16 @@
-
-# Tmux Sessions Configuration
 sessions:
-  - name: MEGA
-    autostart: true
-    windows:
-      - name: megacmd
-        command: mega-cmd
-  
-  - name: MUSIC
-    autostart: true
-    windows:
-      - name: cmus
-        command: cmus
+- name: MEGA
+  autostart: true
+  windows:
+  - name: megacmd
+    command: mega-cmd
+- name: MUSIC
+  autostart: true
+  windows:
+  - name: cmus
+    command: cmus
+- name: OLLAMA
+  autostart: false
+  windows:
+  - name: ollama
+    command: ollama serve
