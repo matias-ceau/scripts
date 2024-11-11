@@ -1,39 +1,34 @@
-# Song Launcher with fzf
+# FZF Song Launcher
 
 ---
 
-**fzf_songlauncher.sh**: A simple script to play a song using `cmus`, filtered through `fzf`
+**fzf_songlauncher.sh**: Quickly play a song with cmus using fzf for selection
 
 ---
 
 ### Dependencies
 
-- `cmus`: A powerful CLI music player that is used to play the selected song.
-- `fzf`: A command-line fuzzy finder that lets you select songs interactively.
+- `cmus`: A fast and powerful command line music player.
+- `fzf`: A command-line fuzzy finder, used here for selecting the song.
+- `find`: A Unix command for searching files in a directory hierarchy.
 
 ### Description
 
-This script allows you to play a music file using `cmus` by selecting it with the `fzf` fuzzy finder. It leverages the power of `find`, `fzf`, and `cmus` to create a lightweight music launcher for your Arch Linux setup with the Qtile window manager. The script recursively searches for music files inside the `music` directory, utilizes `fzf` to present an interactive selection interface, and then commands `cmus-remote` to play the chosen file.
+This script integrates `cmus`, a versatile command-line music player, with `fzf`, a fuzzy finder, to create a quick and efficient way to select and play music files directly from your terminal. The script uses the `find` command to search through the 'music' directory and list all files, including those in subdirectories. The `-L` option in `find` allows symbolic links to be followed, while `-type f` specifies that only files should be listed.
 
 ### Usage
 
-To use this script, simply execute it in a terminal. Ensure that `cmus` is running in the background:
+To use this script, ensure you have `cmus` and `fzf` installed on your Arch Linux system. You can run the script directly from your terminal. It's designed to be executed in a shell environment and can be bound to a key combination in your qtile window manager for quick access.
 
-```bash
+#### Example:
+
+```sh
 /home/matias/.scripts/bin/fzf_songlauncher.sh
 ```
 
-The script will prompt you with a list of music files found in the `music` directory. Use the arrow keys or start typing to search for a song, and press `Enter` to play your choice using `cmus`.
-
-For automation or convenience, you can add this script to a keybinding in QTile like so:
-
-```python
-Key([mod], "m", lazy.spawn("/home/matias/.scripts/bin/fzf_songlauncher.sh")),
-```
-
-Ensure that the path to the script and the `music` directory are correctly specified.
+This command will open an `fzf` interface listing all music files in the 'music' directory. Use the fuzzy search capabilities of `fzf` to find the desired song. Once selected, the song will be played using `cmus`.
 
 ---
 
-> [!TIP]
-> The script currently assumes the `music` directory is a relative path to the current working directory. Consider specifying the full path to ensure it works from any location in your system. Additionally, error handling could be improved to handle cases where `cmus` is not running or if no music is found.
+> [!WARNING]
+> This script assumes the 'music' directory is located in the current working directory. Consider modifying the script to use an absolute path or adjust the working directory logic to fit your personal music library structure. Additionally, error handling for cases when the 'music' directory is inaccessible or empty could improve the robustness of this script.

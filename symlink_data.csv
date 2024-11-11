@@ -92,6 +92,7 @@ Original Path,Symlink,Command Name
 /home/matias/.scripts/bin/transform_symlink.sh,/home/matias/.local/bin/transform_symlink.sh,transform_symlink.sh
 /home/matias/.scripts/bin/try_the_bat_suit.sh,/home/matias/.local/bin/try_the_bat_suit.sh,try_the_bat_suit.sh
 /home/matias/.scripts/bin/tui-gpt.py,/home/matias/.local/bin/tui-gpt.py,tui-gpt.py
+/home/matias/.scripts/meta/update_birthdays.sh,/home/matias/.local/bin/update_birthdays.sh,update_birthdays.sh
 /home/matias/.scripts/bin/update_env.xsh,/home/matias/.local/bin/update_env.xsh,update_env.xsh
 /home/matias/.scripts/meta/utils_update_symlinks.sh,/home/matias/.local/bin/utils_update_symlinks.sh,utils_update_symlinks.sh
 /home/matias/.scripts/bin/vimwiki.sh,/home/matias/.local/bin/vimwiki.sh,vimwiki.sh

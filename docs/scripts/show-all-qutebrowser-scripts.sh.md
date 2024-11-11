@@ -2,42 +2,42 @@
 
 ---
 
-**show-all-qutebrowser-scripts.sh**: List and display scripts bundled with qutebrowser
+**show-all-qutebrowser-scripts.sh**: Display and colorize the last few scripts installed with qutebrowser
 
 ---
 
 ### Dependencies
 
-- `qutebrowser`: A keyboard-focused web browser with a minimal GUI. Used to fetch the list of scripts provided by the package.
-- `pacman`: The package manager for Arch Linux, used here to query the list of files installed by `qutebrowser`.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches directories for a regex pattern. Used to filter out directory entries.
-- `sed`: A stream editor for filtering and transforming text. Here, it is used to format the output.
-- `xargs`: Constructs argument list(s) and executes utility. Used to pass formatted file names to `bat`.
-- `bat`: A `cat` clone with syntax highlighting and Git integration to display the scripts.
+- `qutebrowser`: The browser whose scripts are queried.
+- `pacman`: Package manager for Arch Linux, used to list the contents of the qutebrowser package.
+- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
+- `sed`: Stream editor for filtering and transforming text.
+- `xargs`: Utility to build and execute command lines from standard input.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
 
 ### Description
 
-This script provides a convenient way to list and display the contents of scripts associated with the `qutebrowser` package on an Arch Linux system. The main operation consists of querying all files installed by `qutebrowser`, filtering to capture only script files, and displaying them in the terminal with enhanced syntax highlighting using `bat`.
-
-1. `pacman -Ql qutebrowser` fetches the list of files installed by the `qutebrowser` package.
-2. `tail -n 37` trims the output to capture the last 37 lines. The number appears arbitrary but means to limit selection, possibly approximating the script count.
-3. `rg -v '/$'` filters out directory entries to focus on files.
-4. `sed 's/^.*qutebrowser //'` refines the list by removing prefixed paths, isolating script filenames.
-5. `xargs bat` pipes the filenames to `bat`, which displays each file with syntax highlighting, enhancing readability.
+The script `show-all-qutebrowser-scripts.sh` is designed to extract and display a list of the most recent scripts that are part of the qutebrowser package on an Arch Linux system. It uses `pacman` to list all files within the qutebrowser package, and processes this list to show only non-directory files (presumably script files), while tailing the last 37 entries. These are then processed with `ripgrep` to filter out directory listings, and `sed` to parse the filepath, leaving just the script name. Finally, `bat` is used to display these scripts with syntax highlighting.
 
 ### Usage
 
-To use this script:
-1. Ensure all dependencies are installed (`pacman` already exists on Arch systems; others need to be installed as needed).
-2. Run the script directly in the terminal. No arguments are required.
+To run the script, you simply execute it from the terminal. Here's how you can use it:
 
 ```bash
-/home/matias/.scripts/bin/show-all-qutebrowser-scripts.sh
+~/.scripts/bin/show-all-qutebrowser-scripts.sh
 ```
 
-You can also bind this script to a key combination within `qtile` if desired, for quicker access to viewing script files.
+This script runs non-interactively, which means it doesn't require any user input after execution. It is perfect for being called from a terminal emulator but can also be integrated into a workflow via keybindings in qtile.
+
+Example usage could seamlessly integrate into a qtile keybinding as follows:
+
+```python
+Key([mod], "b", lazy.spawn("~/.scripts/bin/show-all-qutebrowser-scripts.sh")),
+```
+
+This will bind the script to `mod + b`, showing all the scripts directly in your terminal with syntax highlighting.
 
 ---
 
-> [!CAUTION]
-> The script currently defaults to showing the last 37 lines from `pacman -Ql qutebrowser`, which might exclude files if the package structure changes. Consider adjusting the line count dynamically or verifying the actual number of scripts to make this command resilient to updates in the `qutebrowser` package.
+> [!TIP]
+> Currently, the script assumes that the last 37 entries in the `pacman` listing of qutebrowser are scripts of interest, which may not always be the case. It might be beneficial to parameterize the number of entries you tail to make this more flexible. Additionally, if `bat` is not available, it might be useful to add a fallback to `cat` or allow user configuration for the output tool.

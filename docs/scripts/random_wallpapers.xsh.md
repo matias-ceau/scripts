@@ -1,41 +1,42 @@
-
 # Random Wallpaper Selector
 
 ---
 
-**random_wallpapers.xsh**: Selects a random wallpaper from a specified directory of images
+**random_wallpapers.xsh**: Selects and sets a random wallpaper from a specified directory.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell that executes the script.
-- `feh`: A lightweight and versatile image viewer used here to set the desktop wallpaper.
-- Images should be in `.jpg` or `.png` format, stored in the specified folder.
+- `xonsh`: A Python-powered, Unix-gazing shell language and command prompt.
+- `os`: A standard Python library module for interacting with the operating system.
+- `random`: A Python module providing functions to perform random operations.
+- `feh`: An image viewer and cataloguer often used for setting wallpapers.
+- `dmenu` *(commented out)*: A dynamic menu for X which may have been intended for user selection from a list.
 
 ### Description
 
-This script chooses a random image from a predefined directory and sets it as the desktop wallpaper. The directory is specified within the script as `/home/matias/.wallpapers`. Images with `.png` or `.jpg` extensions are considered for selection. `feh` is then used to apply the chosen image as the wallpaper with the `--bg-scale` option, ensuring it scales appropriately to fit the screen.
+This script picks a random image file with extensions `.png` or `.jpg` from the user's wallpaper directory (`/home/matias/.wallpapers`) and sets it as the desktop background using `feh`. The script originally included a commented-out section that utilized `dmenu` to allow for manual selection of a wallpaper from a list, but this functionality is currently bypassed to randomize the selection automatically.
 
-The script initially had a commented-out section using `dmenu`, a dynamic menu that fluently manages and selects screen elements. This suggests potential functionality for user interaction, although the current implementation does not include this feature.
+The function `os.listdir(folder)` is used to list all the files in the specified `folder`. A list comprehension filters this list to include only files with `.png` or `.jpg` extensions. The script then uses `random.choice(wallpapers)` to select one file at random. This file is set as the wallpaper using `feh` with the `--bg-scale` option, providing scaled background fitting.
 
 ### Usage
 
-The script is executed in a `xonsh` shell. Since it doesn’t take arguments, you can run it directly to change the wallpaper randomly. Here is how to use the script:
+The script is a simple command line application without any arguments. To use it, simply run the script in a terminal or set it as a task to be triggered (e.g., through a keybinding in `qtile` or a scheduled task). Here's how you can execute it from the terminal:
 
 ```bash
-xonsh /home/matias/.scripts/bin/random_wallpapers.xsh
+$ xonsh /home/matias/.scripts/bin/random_wallpapers.xsh
 ```
 
-For seamless wallpaper changing, you might consider setting a keybinding in `qtile` to run this script without opening a terminal:
+Alternatively, it can be invoked automatically by integrating it with a keybinding within `qtile`'s configuration or using a cron job for periodic changes.
+
+Example keybinding in `qtile` might be:
 
 ```python
-Key([mod], "w", lazy.spawn("xonsh /home/matias/.scripts/bin/random_wallpapers.xsh"))
+Key([mod], "r", lazy.spawn("xonsh /home/matias/.scripts/bin/random_wallpapers.xsh")),
 ```
-
-Moreover, you can incorporate this into `qtile` autostart for an automatic random wallpaper each login or explore cron jobs or other scheduling methods.
 
 ---
 
-> [!NOTE] 
-> The script currently relies on `feh` to set the wallpaper, which may not be available in all environments. Consider checking alternatives like `nitrogen` or `hsetroot`. Additionally, if many images are in the directory, pre-filtering files or improving the random selection mechanism for better randomness or performance might be beneficial. Including options or arguments for the user to select different folders or image types could enhance usability.
+> [!TIP]
+> Consider uncommenting and using `dmenu` to allow for user interaction if preferred over random selection. Additionally, you might want to include support for other image formats or enhance error handling to cover cases where no suitable image is found.

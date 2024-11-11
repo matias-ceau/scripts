@@ -1,45 +1,48 @@
-# Token Counter with TikToken
+# Token Counter with Tiktoken
 
 ---
 
-**count_tokens_with_tiktoken.py**: Script to count tokens in text using the TikToken library for specific NLP models.
+**count_tokens_with_tiktoken.py**: Script to count tokens using `tiktoken` with support for different models
 
 ---
 
 ### Dependencies
 
-- `tiktoken`: Library to handle tokenization for different language models.
-- `sys`: Used for handling command-line arguments and interacting with standard input.
+- `tiktoken`: A Python library for tokenization that supports various models used for language experiments and applications.
 
 ### Description
 
-This script is designed to count the number of tokens in a given piece of text, utilizing the `tiktoken` library. Tokens are fundamental elements of text that NLP models process, and this script provides a simple way to calculate them for different models, with a default to "gpt-4o".
+This script is designed for token counting, particularly useful for evaluating input size against language models like `gpt-4o`. Leveraging `tiktoken`, it determines how many tokens a given text contains by encoding the text according to the specified model's tokenization scheme. The script reads text either from a file or from standard input (stdin), defaulting to the model `gpt-4o` which can be overridden through the `-m` option.
 
-- **count_tokens(text, model)**: Encodes the input text into tokens for a specified model and returns the token count.
-- **get_options(arguments)**: Processes command-line arguments to determine the input text or file and the model to be used.
-- **usage(exit_code)**: Displays usage information and exits the script with the provided code.
+The core functionality is encapsulated in two functions:
+- `count_tokens(text, model)`: Encodes the given text to count its tokens.
+- `get_options(arguments)`: Parses command-line arguments to determine if text should be read from a file and which model should be used.
+
+The script also includes a `usage()` function to provide help and usage information.
 
 ### Usage
 
-You can use this script in two primary ways:
+This script can be used in two primary ways:
 
-1. **Pipe Input**: 
+1. **Pipeline with text input**:  
    ```bash
-   echo 'Sample text for token counting.' | ./count_tokens_with_tiktoken.py
+   <cmd> | ./count_tokens_with_tiktoken.py
    ```
+   Replace `<cmd>` with any command that outputs text to be tokenized.
 
-2. **File Input**: 
+2. **File input**:
    ```bash
-   ./count_tokens_with_tiktoken.py -f /path/to/textfile.txt
+   ./count_tokens_with_tiktoken.py -f <file_path> [-m <model_name>]
    ```
+   - `-f <file_path>`: Specify the path to a text file whose contents will be tokenized.
+   - `-m <model_name>`: Optional; specify a model other than the default `gpt-4o`.
 
-Options:
-- `-h`: Display help information.
-- `-m <model>`: Specify the NLP model to be used (default is "gpt-4o").
-
-Assign this script to a keybinding in your qtile window manager for quick access or run it in a terminal session to check token counts interactively.
+For help, use:
+```bash
+./count_tokens_with_tiktoken.py -h
+```
 
 ---
 
 > [!TIP]
-> The script currently defaults to the "gpt-4o" model. It would be beneficial to add checks to ensure the specified model is supported by `tiktoken` to avoid runtime errors. Additionally, improved error handling for cases where the specified file cannot be found could make the script more robust.
+> Consider clarifying the usage of models within the script, as users might need guidance on what model specifications are compatible. Also, ensure that when using `-f` and `-m`, there is proper error handling and informative error messages to guide users on incorrect inputs. Additionally, renaming `usage()` to `print_usage()` might enhance readability by making its purpose clearer.

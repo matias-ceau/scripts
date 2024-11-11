@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/bash
 
 #INFO:#@RUN@ "Play a song with cmus using dmenu"
 

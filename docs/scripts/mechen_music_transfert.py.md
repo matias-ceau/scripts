@@ -2,45 +2,44 @@
 
 ---
 
-**mechen_music_transfert.py**: Custom script to copy music to Mechen
+**mechen_music_transfert.py**: Custom script to manage music transfer to the MECHEN device.
 
 ---
 
 ### Dependencies
 
-- `python3`: Python version 3 is required to execute the script.
-- `beet`: Used to query unlistened albums from a collection managed by Beets.
-- `sudo`: Executes commands with root privileges.
-- `rsync`: Synchronizes files between the local directory and the player path.
-- `pandas`: Used for data manipulation and analysis in Python.
-- `getpass`: Safely handles password input without echoing.
+- `os`: Standard library for interacting with the operating system.
+- `random`: Standard library for generating random numbers.
+- `subprocess`: Standard library for running system commands via Python.
+- `getpass`: Standard library for securely handling password input.
+- `pandas`: Python library used for data manipulation and analysis.
+- `beet`: Command-line tool to query the music collection.
+- `du`: Unix utility to estimate file space usage.
+- `rsync`: Tool for efficiently transferring and synchronizing files.
 
 ### Description
 
-This script efficiently transfers music albums from a local music library to a connected music player device (Mechen) located at `/home/matias/MECHEN`. It selects albums that haven't been listened to, based on a Beets query, and ensures that the total size of these albums does not exceed a specified limit (`MAX_SPACE` of 50 MB). Albums already on the device that are not included in this transfer set are removed to make space for the new selections. 
+This script performs automated management of music albums, ensuring only unplayed albums are transferred to the MECHEN device, without exceeding storage limits. 
 
-The script performs the following tasks:
-
-- Queries unlistened albums using `beet ls -ap status:0`.
-- Removes albums from the selection until their total size fits within the storage limit.
-- Deletes non-required albums from the device.
-- Ensures empty folders are removed from the device.
-- Creates the necessary directories for new albums.
-- Utilizes `rsync` to transfer and synchronize the selected albums to the player, with the `--delete` option ensuring directory contents are accurately mirrored.
+The script achieves this through the following steps:
+1. **Password Prompt**: Asks for a sudo password to perform operations requiring elevated privileges.
+2. **Retrieve Album Data**: Uses `beet` to list albums not listened to (`status:0`), providing their paths, sizes, and artists.
+3. **Check and Adjust Size**: Ensures the total size of unplayed music does not exceed 50MB. If it does, it randomly excludes artists until the size is reduced under the limit.
+4. **Synchronize with Device**: Compares device content, deletes surplus albums, generates necessary folders, and uses `rsync` to update the MECHEN with chosen music collections, ensuring directories are mirrored accurately.
 
 ### Usage
 
-Run the script in a terminal. It requires root privileges for file operations, so you might want to run it using `sudo`:
-
-```bash
-sudo python3 /home/matias/.scripts/bin/mechen_music_transfert.py
-```
-
-**Note:** The script is interactive; it will prompt you to enter your password, which is critical for executing privileged commands.
+1. Ensure you have all dependencies installed (`pandas`, `beet`, `rsync`).
+2. Execute the script in the terminal:
+   ```bash
+   python3 /home/matias/.scripts/bin/mechen_music_transfert.py
+   ```
+3. You will be prompted to enter your sudo password to allow folder creation, deletion, and file transfer processes.
+4. The script will output the progress to the terminal, including the albums being synced.
 
 ---
 
-> [!IMPORTANT] 
-> - The script can be further optimized by parallelizing rsync operations to expedite the transfer process.
-> - Consider implementing a logging mechanism to better understand the script's actions and any encountered errors.
-> - Be cautious when using `sudo` with `Popen`; ensure password handling and command inputs do not expose sensitive information.
+> [!TIP]
+> - Consider handling exceptions for subprocess calls to manage errors gracefully.
+> - Instead of removing albums randomly, a user interface to prioritize or select albums could enhance usability.
+> - The reliance on `sudo` for every operation can be optimized to reduce multiple `sudo` prompts or vulnerabilities associated with passing the password around in the plaintext.

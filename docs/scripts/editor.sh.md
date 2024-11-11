@@ -1,49 +1,61 @@
-# fzf-based File Editor
+# Quick File Editor with fzf
 
 ---
 
-**editor.sh**: Quickly edit files by searching with `fzf`.
+**editor.sh**: A script for fast file editing using fzf with customizable search paths.
 
 ---
 
 ### Dependencies
 
-- `nvim`: Neovim text editor for opening files.
-- `fzf`: A command-line fuzzy finder to navigate file selections.
-- `fd`: A faster alternative to `find`, for listing file paths.
-- `bat`: A cat clone with syntax highlighting.
-- `chezmoi`: To manage personal configuration files.
-
+- `fzf`: A command-line fuzzy finder.
+- `nvim`: Neovim text editor.
+- `bat`: A cat clone with syntax highlighting and Git integration.
+- `fd`: A simple, fast, and user-friendly alternative to 'find'.
+- `chezmoi`: A tool to manage your dotfiles across multiple machines.
+  
 ### Description
 
-This script enhances your ability to edit files using `fzf` for fuzzy searching and `nvim` for editing. Depending on the options provided, it searches through directories, filtering non-editable files, in a concise manner to help you quickly find and edit the file you need. The script uses `fd` to locate files efficiently, respecting various modes such as `sudo`, `scripts`, `current working directory` (`cwd`), `config` (`chezmoi unmanaged`), or a user-specified directory. It excludes a comprehensive list of non-editable file extensions and directories.
+This script allows the user to quickly find and edit files using a fuzzy search interface provided by `fzf`. It utilizes `fd` to search for files, with various modes that specify different directories and permissions for file access. The script intelligently excludes non-editable file types, ensuring only suitable files are listed. The various modes include:
 
-When run, it opens a file selector dialog with `fzf` where you can press `<C-H>` to toggle searching hidden files and `<C-S>` to exclude them.
+- **Scripts Mode**: Searches within the user's scripts directory.
+- **Current Directory Mode**: Limits search to the current working directory.
+- **Config Mode**: Targets configuration files unmanaged by `chezmoi`.
+- **Custom Directory Mode**: Allows specification of any directory to search.
+- **Sudo Mode**: Enables editing files that require root permissions.
 
 ### Usage
 
-The script can be invoked from the terminal with the following options:
+The script is run from the terminal and accepts multiple options:
 
 ```bash
-./editor.sh [-s|--scripts] [-c|--cwd] [-C|--config]
-            [-d|--dir <dir>] [-S|--sudo] [-h|--help]
+editor.sh [OPTIONS]
 ```
 
-- `-s, --scripts`     : Search in the user's `$SCRIPTS` directory.
-- `-c, --cwd`         : Search within the current directory.
-- `-C, --config`      : Open configuration files managed by `chezmoi`.
-- `-d, --dir <dir>`   : Specify a directory to search in.
-- `-S, --sudo`        : Edit files with administrative privileges.
-- `-h, --help`        : Display usage help.
+**Options:**
 
-Example usage to find a file in the current directory:
+- `-s`, `--scripts`: Search and edit within the `SCRIPTS` directory.
+- `-c`, `--cwd`: Restrict search to the current working directory.
+- `-C`, `--config`: Search for config files outside `chezmoi` management.
+- `-d`, `--dir <dir>`: Specify a directory to search.
+- `-S`, `--sudo`: Execute with `sudo` for editing protected files.
+- `-h`, `--help`: Display the help message.
+
+**Examples:**
+
+Edit scripts with sudo:
+
 ```bash
-./editor.sh --cwd
+editor.sh --sudo
+```
+
+Find and edit files in `/home/user/docs`:
+
+```bash
+editor.sh --dir /home/user/docs
 ```
 
 ---
 
 > [!NOTE]
-> - The script includes many hardcoded directories and file types to exclude, which may not fit all user needs. Consider making these customizable via configuration files or command-line arguments.
-> - The reliance on `$SCRIPTS` and `$LOCALDATA` environment variables requires them to be set correctly in your shell.
-> - Using `sudo` with `nvim` through this script might not allow `nvim` to fully utilize all features. Consider using a configuration that enables full access in `sudo` mode.
+> This script excludes a broad range of file types, which may unintentionally exclude files a user might want to edit. Consider a finer-grained control over excluded files, perhaps via a configuration file. Additionally, checking existence of environment variables like `$SCRIPTS` and `$LOCALDATA` would prevent errors in execution.

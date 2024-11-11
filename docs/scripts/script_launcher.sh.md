@@ -1,47 +1,44 @@
-# Script Launcher with FZF Integration
+
+# Script Launcher
 
 ---
 
-**script_launcher.sh**: Interactive script launcher using `fzf` for elegant script execution.
+**script_launcher.sh**: Launch and manage scripts using fzf with preview and execute options
 
 ---
 
 ### Dependencies
 
-- `fzf`: Command-line fuzzy finder, serves as the core interaction tool.
-- `improved-fzfmenu.sh`: Custom user script for enhanced FZF menu capabilities.
-- `bat`: A `cat` clone with syntax highlighting and Git integration for file previews.
-- `pastel`: Color library in Rust used for converting HEX to ANSI color codes.
-- `fd`: Alternate to `find`, optimized for simplicity and performance.
+- `fzf`: A command-line fuzzy finder.
+- `bat`: A cat clone with syntax highlighting.
+- `fd`: A simple, fast, and user-friendly alternative to `find`.
+- `ripgrep (rg)`: A line-oriented search tool that recursively searches directories for a regex pattern.
+- `pastel`: A command-line tool to generate, analyze, convert and manipulate colors.
+- `improved-fzfmenu.sh`: A customized fzf script for enhanced visual navigation.
+- `nvim`: Neovim editor.
+- Environment variables (`FLEXOKI_*` colors, `SCRIPTS` path).
 
 ### Description
 
-This script provides a sophisticated command-line interface for launching scripts using the `fzf` fuzzy finder. Depending on the input flag, it switches between a basic `fzf` or a more advanced custom menu (`improved-fzfmenu.sh`). It enriches the user experience with syntax-colored previews using `bat`, allowing users to view either the documentation in markdown or the full script source code. The script uses color coding to categorize scripts based on their extension (e.g., `.sh`, `.py`, etc.), enhancing quick visual identification. The ability to convert and apply HEX colors using `pastel` allows for aesthetic personalization of the display.
+This script, `script_launcher.sh`, is designed to help manage and execute scripts through an interactive menu powered by `fzf`. Depending on the arguments, it uses either `fzf` directly or an improved version through `improved-fzfmenu.sh`. It previews script documentation or the script source itself using `bat`. The displayed scripts are color-coded based on their file extensions, enhancing visibility (`.xsh`, `.py`, `.sh`, etc.). The script defines several keybindings for quick actions, such as executing a script directly, editing it in `nvim`, or switching between viewing the script's documentation and source.
 
 ### Usage
 
-The script can be invoked with or without the `--embedded` argument depending on the desired `fzf` interface:
+The script should be executed from the terminal. Keybindings provided within `fzf` allow different actions, such as:
 
+- **Execute a script**: Press `Enter`.
+- **Edit script in Neovim**: `Ctrl-e`.
+- **Open in a new terminal for editing**: `Alt-e`.
+- **View documentation/source**: Toggle with `Alt-s` and `Alt-d`.
+  
 ```bash
-./script_launcher.sh
+# To run the script launcher
+bash script_launcher.sh
+
+# To run with the embedded fzf
+bash script_launcher.sh --embedded
 ```
-or
-```bash
-./script_launcher.sh --embedded
-```
-
-#### Key Bindings within FZF:
-
-- `Enter`: Execute the selected script directly.
-- `Alt+Enter`: Run the script in a new terminal.
-- `Ctrl+E`: Open the script in `nvim`.
-- `Alt+E`: Edit the script in a new terminal with `nvim`.
-- `Alt+S`: Toggle source code preview.
-- `Alt+D`: Toggle documentation preview.
-
-These features make the script an excellent tool to pair with a keybinding in your qtile window manager for quick access.
 
 ---
 
-> [!TIP]  
-> The script could include a feature to export documentation previews to PDF or HTML, providing offline access to formatted script documentation. Additionally, enhancing preview navigation with page up/down keys can improve user interaction. Also, consider enabling multiple script selections and additional toggle options for headers or verbose logs to expand functionality.
+> [!TIP] While feature-rich, the script can benefit from a graphical or textual guide during its use to enhance user understanding of its capabilities, especially for new users. Also, consider documenting or automating the setup for necessary environment variables such as `$FLEXOKI_*` colors and `$SCRIPTS`.

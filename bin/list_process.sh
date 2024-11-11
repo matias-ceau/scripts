@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 #INFO:#@CLI@=2024-07= "list running services"
 

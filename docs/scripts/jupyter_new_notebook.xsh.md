@@ -1,42 +1,46 @@
-# Jupyter Notebook Creation Script
+# Jupyter Notebook Creator
 
 ---
 
-**jupyter_new_notebook.xsh**: Script to create and open a Jupyter notebook in Chromium
+**jupyter_new_notebook.xsh**: Script to create and open a new Jupyter Notebook in Chromium
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered, cross-platform, Unix-gazing shell language and command prompt.
-- `dmenu`: A dynamic menu for X, used for input.
-- `notify-send`: A program to send desktop notifications.
-- `jupyter-notebook`: Used to initialize and run Jupyter notebooks.
-- `chromium`: The open-source web browser, used to open the newly created notebook.
+- `xonsh`: A Python-powered shell.
+- `dmenu`: A dynamic menu for X.
+- `jupyter-notebook`: To create and serve Jupyter Notebooks.
+- `chromium`: Utilized as the web browser to open the notebook.
+- `notify-send`: For sending desktop notifications for errors or confirmations.
 
 ### Description
 
-This script streamlines the process of creating and opening a new Jupyter notebook on your Arch Linux system running the qtile window manager. It utilizes the `dmenu` tool to prompt the user for a notebook name, then checks the existence of such a notebook within the specified `projects` directory. If the name is unique, a new Jupyter notebook file is created with a basic empty template and subsequently opened in the Chromium browser. The use of `notify-send` allows for immediate feedback on the success or failure of the operation, providing quick notifications on the desktop.
+This script automates the creation of a new Jupyter Notebook and opens it in the Chromium browser. It does this by first reading the project directory located in the user's home path (`$HOME/projects`) where it expects to manage the Jupyter Notebooks. It uses `dmenu` to prompt the user for a notebook name. If the specified name doesn't already exist in the directory, the script creates a new notebook with the basic Jupyter format and opens it directly. If the name already exists or no name is provided, the script issues a critical desktop notification to inform the user.
 
 ### Usage
 
-To use this script, run it from your terminal or integrate it with a keybinding or application launcher.
+To run this script:
 
-```sh
-xonsh /home/matias/.scripts/bin/jupyter_new_notebook.xsh
-```
+- Ensure all dependencies are installed.
+- Execute the script in a terminal:
 
-- You will be prompted via `dmenu` to enter a name for the new notebook.
-- If the notebook name is unique within your `projects` directory, it will be created and opened in Chromium.
-- If the notebook name exists or no name is provided, a notification will indicate the error.
+  ```bash
+  xonsh /home/matias/.scripts/bin/jupyter_new_notebook.xsh
+  ```
 
-#### Keybinding example for qtile (in `config.py`):
-
-```python
-Key([mod], "n", lazy.spawn("xonsh /home/matias/.scripts/bin/jupyter_new_notebook.xsh")),
-```
+- A `dmenu` prompt will appear. Enter the desired name for your notebook.
+- Upon successful creation, the new notebook will open in Chromium automatically.
+  
+> TL;DR:
+> ```bash
+> xonsh /home/matias/.scripts/bin/jupyter_new_notebook.xsh
+> ```
+> - When prompted, enter a unique name for the Jupyter Notebook.
 
 ---
 
 > [!NOTE]
-> Consider enhancing error handling by ensuring that the script checks for the existence of required software dependencies and advises the user accordingly if any are missing. Additionally, you may want to refine the user interface experience by considering an alternative to `dmenu` if needed for better integration with your current setup.
+> - Consider adding more robust error checking to handle edge cases, such as invalid characters for filenames.
+> - It may be beneficial to allow for customization of the `PROJECT_PATH` and default browser in a configuration file or to make them command-line arguments.
+> - Currently, it only notifies the user when there is no name or the name is a duplicate; more detailed user feedback might enhance usability.

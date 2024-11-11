@@ -1,46 +1,38 @@
-# CMUS Next Album Skipper
+# Next Album Skipper Script
 
 ---
 
-**next_album.xsh**: Skip to the next album in the CMUS music player
+**next_album.xsh**: Skip to the next album when playing music in cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell supporting the execution of Python and shell commands.
-- `cmus`: A small, fast, and powerful console music player.
-- `cmus-remote`: A tool provided by CMUS for remote control via command line.
+- `xonsh`: A Python-powered, cross-platform, Unix-gazing shell language and environment.
+- `cmus`: A small, fast and powerful console music player for Unix-like operating systems.
 
 ### Description
 
-This script allows the user to skip to the next album while playing music in CMUS. The process is as follows:
+This script is designed for use with the **cmus** music player, allowing the user to skip to the next album in their playlist. It is quite handy for those who enjoy listening to full albums sequentially and want to easily move to the next one while using cmus in a terminal environment.
 
-1. The script changes the view in CMUS to show playlists using the command `cmus-remote -C 'view 4'`.
-2. It saves the currently playing list to a temporary file located at `/home/matias/.temp/now_playing.m3u`.
-3. The script reads this file into a list of tracks (`now`), filtering out empty lines.
-4. It extracts album names from each track’s file path, assuming the directory structure contains albums.
-5. It retrieves the currently playing album.
-6. The script counts how many tracks from the current album have been played.
-7. It then skips to the next album using `cmus-remote -n` for each track in the current album.
+The script works as follows:
+1. It sets the view to library mode in cmus (`view 4`).
+2. It saves the current playlist to a temporary file named `now_playing.m3u` in your `.temp` directory.
+3. The script reads the tracks from this playlist, determining which album they belong to by analyzing the directory structure of the music files.
+4. It identifies the current album being played and calculates how many tracks to skip to reach the next album.
+5. It then executes the `cmus-remote -n` command repeatedly to skip the necessary number of tracks and thus start playing the next album.
 
 ### Usage
 
-To skip to the next album in CMUS, you can run this script from the terminal or bind it to a key in qtile. Here's how you can execute it directly in the terminal:
+The script should be executed in an `xonsh` compatible environment and can be integrated into your workflow using keybindings in `qtile` or executed directly from the terminal:
 
 ```shell
-xonsh /home/matias/.scripts/bin/next_album.xsh
+./next_album.xsh
 ```
 
-For more convenience, consider adding a keybinding in your qtile configuration like this:
-
-```python
-Key([mod], "n", lazy.spawn('xonsh /home/matias/.scripts/bin/next_album.xsh')),
-```
-
-This would bind the script to 'Mod+n', allowing you to skip albums without opening a terminal.
+Alternatively, you can set it as a shortcut in your `qtile` configuration to easily skip albums with a hotkey while enjoying your music.
 
 ---
 
-> [!WARNING] 
-> The current implementation assumes the album directory is directly preceding the track in the file path. Any changes to this directory structure will require adjustments. Also, if CMUS is handling a large library, saving the current playlist might affect performance. Storing temporary data should handle exceptions in case CMUS fails to output correctly.
+> [!TIP]
+> Consider adding error handling to this script. For instance, if no music is playing or if it cannot find the `now_playing.m3u` file, the script should gracefully notify the user rather than failing silently. Also, the script assumes a specific directory structure for music files; if the structure changes, it might not work correctly. You could enhance it to make these paths or assumptions configurable.

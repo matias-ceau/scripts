@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 #INFO:#@RUN@=2024-07= "Pick random wallpaper from wallpaper list"
 

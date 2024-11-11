@@ -1,13 +1,14 @@
-#! /usr/bin/python3
+#!/usr/bin/python
 
 #INFO:#@RUN@~KJL~ "Transfer music to Sandisk media player"
 
-import subprocess
-from subprocess import PIPE
 import os
-import pandas as pd
 import random
+import subprocess
 from getpass import getpass
+from subprocess import PIPE
+
+import pandas as pd
 
 #get pass
 #password = getpass('Password pliz: ')

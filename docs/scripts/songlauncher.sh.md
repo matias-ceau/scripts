@@ -1,40 +1,42 @@
-# cmus Song Launcher
+# CMUS Song Launcher
 
 ---
 
-**songlauncher.sh**: Play a song using `cmus` and `dmenu` for interactive selection
+**songlauncher.sh**: Launch and play songs with `cmus` using `dmenu` interface.
 
 ---
 
 ### Dependencies
 
-- `cmus`: A small, fast and powerful console music player.
-- `dmenu`: A dynamic menu for X, which is used to provide a graphical interface for song selection.
-- `find`: A command-line utility to search for files in a directory hierarchy.
+- `cmus`: A powerful and flexible music player for Unix-like systems.
+- `dmenu`: A dynamic menu for X11, used here for selecting songs.
+- `find`: A utility to search for files in a directory hierarchy.
+- **Music Directory**: The script assumes a directory named `music` exists and contains the music files you want to play.
 
 ### Description
 
-This script, `songlauncher.sh`, allows you to play a song using `cmus` by selecting it interactively through `dmenu`. It leverages the `find` command to search and list all files within the `music` directory, making them available for selection. The `dmenu` utility is then used to present these files in a vertical list format that supports interactive searching and selection. Once a user selects a song, `cmus-remote` is used to play the song in `cmus`. The script is lightweight and can effectively manage a large music collection, as it uses `dmenu` for a seamless user interface experience on your Arch Linux system with qtile.
+The script `songlauncher.sh` is a simple utility for playing music with `cmus`, leveraging the `dmenu` tool to provide a user-friendly file selection interface. When executed, it scans the `music` directory (and its subdirectories) for music files, which are then presented to you via `dmenu`. Once a file is selected, `cmus` plays it immediately using `cmus-remote`.
+
+The command `cmus-remote -f` is used to pass the path of the selected song to `cmus`, making it start playback of the track. The use of `-L` in `find` allows for following symbolic links, which helps ensure all music files in the directory are available for selection. The `-i` flag with `dmenu` enables case-insensitive matching, and `-l 30` specifies the number of lines to be displayed, making selection easier.
 
 ### Usage
 
-The script is straightforward to use:
+To use the script, ensure you have the necessary dependencies installed and a `music` directory with audio files:
 
-1. Ensure you have `cmus` and `dmenu` installed on your Arch Linux distribution.
-2. Place your music files inside a folder named `music` in your home directory or modify the script path to reflect your music directory.
-3. Execute the script from a terminal or bind it to a key in qtile:
-
-```sh
-sh /home/matias/.scripts/bin/songlauncher.sh
+```bash
+# Ensure you are in the correct directory or provide the full path to the script
+/home/matias/.scripts/bin/songlauncher.sh
 ```
 
-For qtile, you might bind this to a key combination by adding something like this to your config:
+Run the script in the terminal, and a `dmenu` prompt will appear, allowing you to type and search for the desired song. Once you press Enter, the selected song will immediately play in `cmus`. You can integrate this script into a qtile keybinding for quick access to your music library.
 
-```python
-Key([mod], "m", lazy.spawn("sh /home/matias/.scripts/bin/songlauncher.sh"))
+Example:
+```bash
+# Start the song launcher
+sh /home/matias/.scripts/bin/songlauncher.sh
 ```
 
 ---
 
-> [!TIP] 
-> The script currently searches for music within a hardcoded directory named `music` relative to the execution directory. It would be advantageous to make this path configurable or dynamically adjust based on user settings or environment variables. Furthermore, adding support for different file formats or integrating a notification system to confirm song selection could enhance user experience.
+> [!TIP]
+> Consider allowing the script to specify a custom directory path instead of assuming the `music` directory is in the current working directory. This improves flexibility and usability for users with various storage configurations. Additionally, error handling mechanisms for cases where `cmus` is not running or the `music` directory is empty could enhance the script's robustness.

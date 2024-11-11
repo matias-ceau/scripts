@@ -1,49 +1,40 @@
-# FZF Album Launcher
+# Fzf Album Launcher
 
 ---
 
-**fzf_albumlauncher.xsh**: Choose an album with `fzf` and play it with `cmus`.
+**fzf_albumlauncher.xsh**: Select and play an album using `fzf` and `cmus` on Arch Linux with qtile WM
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A shell scripting language, designed for use in a shell environment.
-- `beet`: Music library manager.
-- `sed`: Stream editor for filtering and transforming text.
-- `fzf`: Command-line fuzzy finder, used to select albums.
-- `cmus`: C* Music Player, a small, fast and powerful console music player.
-- `cmus-remote`: Remote control utility for cmus.
+- `xonsh`: A shell language that powers the script.
+- `beet`: Command-line music tagger and library organizer to retrieve album listings.
+- `cmus`: A small, fast, and powerful console music player for playing the albums.
+- `sed`: A stream editor used for transforming text in scripts.
+- `fzf`: A command-line fuzzy finder to select an album.
 
 ### Description
 
-This script is designed to work in an Arch Linux environment using the qtile window manager. It uses `fzf`, a fuzzy finder, to let users select an album from their music library, managed by `beet`. Once an album is selected, it will be played in `cmus`.
-
-The script utilizes `sed` to manipulate output by stripping unnecessary text and `cmus-remote` commands to control playback in `cmus`. It follows these general steps:
-1. Lists albums using `beet`.
-2. Uses `sed` to clean up the list format.
-3. Allows the user to choose an album using `fzf`.
-4. Controls `cmus` to play the selected album.
+The **fzf_albumlauncher.xsh** script allows you to choose an album from your music library and play it using the `cmus` music player. It utilizes `beet` to fetch a list of albums, processes it with `sed` to format the album names correctly, and then employs `fzf` for a user-friendly album selection. Once an album is selected, it interacts with `cmus` using `cmus-remote` commands to set up the album playlist, clear previous filters, and initiate playback. Finally, it saves the currently playing queue to a temporary file located at `/home/matias/.temp/nowplaying.m3u`.
 
 ### Usage
 
-To use this script, ensure that `xonsh`, `beet`, `sed`, `fzf`, `cmus`, and `cmus-remote` are installed. Run the script interactively in the terminal.
+To run the script, you need to have the necessary dependencies installed and configured properly. Execute the script in an interactive terminal:
 
 ```shell
-./fzf_albumlauncher.xsh
+xonsh /home/matias/.scripts/bin/fzf_albumlauncher.xsh
 ```
 
-Then, an interactive `fzf` search will be displayed where you can select an album.
+- The script does not require any command-line arguments.
+- Select an album interactively using `fzf`.
+- Upon selection, the script sets up and begins playback in `cmus`.
 
-Example:
-
-- Run the script and search for an album.
-- Select an album using the interface provided by `fzf`.
-- The album will then be automatically queued and played in `cmus`.
-
-You can also bind it to a key combination in `qtile` by specifying this script's path in your keybindings configuration.
+This script can be linked to a keybinding in a tiling window manager like qtile for convenience, allowing you to launch it quickly without having to locate and execute it from the terminal.
 
 ---
 
 > [!TIP]
-> Ensure that all dependencies are properly installed and configured, especially `beet`, which needs to be set up to manage your music library. Additionally, this script assumes a specific file path for saving playlists (`/home/matias/.temp/nowplaying.m3u`). Consider making the path configurable to increase flexibility.
+> - Ensure that `cmus` is running because the `cmus-remote` commands require an active session.
+> - The script assumes that your music library is already managed by `beet`. Ensure that `beet` functions correctly and that your library database is up-to-date for best results.
+> - Consider wrapping the execution in some error handling to manage cases when `cmus` is closed, or no album is selected, to improve robustness.

@@ -1,4 +1,4 @@
-#! /usr/bin/env xonsh
+#!/usr/bin/env xonsh
 
 #INFO:#@RUN@ "Skip to next album in cmus"
 

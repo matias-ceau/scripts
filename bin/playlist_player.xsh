@@ -1,4 +1,4 @@
-#! /usr/bin/env xonsh
+#!/usr/bin/env xonsh
 
 #INFO:#@RUN@ "Pick a playlist and play it"
 

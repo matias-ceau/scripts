@@ -1,4 +1,4 @@
-#! /usr/bin/env xonsh
+#!/usr/bin/env xonsh
 
 #INFO:#@RUN@ "Pick a playlist of albums and play in random order in cmus"
 

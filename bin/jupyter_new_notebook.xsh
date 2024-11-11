@@ -1,4 +1,4 @@
-#! /usr/bin/env xonsh
+#!/usr/bin/env xonsh
 
 #INFO:#@RUN@ "Create jupyter notebook and open it in chromium"
 

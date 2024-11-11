@@ -1,4 +1,4 @@
-#! /usr/bin/env xonsh
+#!/usr/bin/env xonsh
 
 #INFO:#@CLI@ "Choose an album with fzf and play it with cmus"
 

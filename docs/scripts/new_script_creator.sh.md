@@ -2,43 +2,41 @@
 
 ---
 
-**new_script_creator.sh**: Automates script creation with templating based on file extension
+**new_script_creator.sh**: A utility to create new user scripts with optional templating
 
 ---
 
 ### Dependencies
 
-- `bat`: A `cat` clone with syntax highlighting
-- `rg` (ripgrep): A line-oriented search tool that recursively searches directories for a regex pattern
-- `nvim`: Neovim, an extensible Vim-based text editor
-- `utils_update_symlimks.sh`: A user-defined script to update symbolic links
+- `bat`: Used for displaying usage instructions with syntax highlighting.
+- `rg` (`ripgrep`): Utilized for pattern matching in the script to determine file templates.
+- `nvim`: The script opens new or existing scripts in `neovim` for editing.
+- `utils_update_symlimks.sh`: A user script required for updating symlinks, presumably related to user's local script setup.
 
 ### Description
 
-The **new_script_creator.sh** script automates the creation of new scripts tailored to specific programming languages based on file extensions. It supports `.sh` for Bash, `.py` for Python, and `.xsh` for Xonsh, adding appropriate shebang lines. When executed, it prompts the user for a script name and uses `templater` to decide on the script's template based on its extension.
+This is a versatile script creator tool designed to streamline the creation and management of user scripts on a Linux system, particularly for users on a `qtile` window manager setup. The script offers several functionalities:
 
-The script handles file extensions with `ensure_extension`, suggesting `.sh`, `.py`, or `.xsh` based on user input. It supports converting existing files into user scripts with the `-f` or `--from` flag.
-
-The core function `script_creator` creates the script in a predefined `$SCRIPTS` directory, opens it in `nvim` for editing, and if the file size is larger than 22 characters, makes it executable and updates symlinks using `utils_update_symlimks.sh`.
+- **Script Creation**: Automatically adds a shebang line based on the file extension (`.sh`, `.py`, `.xsh`) or prompts for language preference if none is provided.
+- **File Conversion**: Converts existing files into user scripts by marking them executable and moving them to a specified directory.
+- **Interactive Use**: Allows users to either directly provide filenames or interactively input them when arguments are missing.
+- **Editor Integration**: Opens the newly created or modified script in `nvim` for immediate editing.
 
 ### Usage
 
+To effectively use the script, execute it in the terminal with one of the following options:
+
 ```bash
-# Display help
-new_script_creator.sh -h
-
-# Create a new script with a specific name
-new_script_creator.sh my_script.sh
-
-# Convert an existing file into a user script
-new_script_creator.sh -f /path/to/existing_file.sh
-
-# Run without arguments to be prompted for a filename
-new_script_creator.sh
+new_script_creator.sh            # Prompts for a script name and creates it
+new_script_creator.sh script.sh  # Creates a new script named script.sh
+new_script_creator.sh -f path/to/file  # Converts an existing file to a user script
+new_script_creator.sh -h         # Displays the help message
 ```
 
-Plugin the script into your Arch Linux environment, preferably assigning a keybinding in qtile for quick access.
+- Just run the script without arguments to get prompted for a filename.
+- Use the `-f` or `--from` option to move an existing file into the user's script directory, make it executable, and edit it.
 
 ---
 
-> [!TIP] Consider improving error handling within the script. Currently, the script assumes the presence of required tools like `bat`, `rg`, and `nvim`, which might not be available or configured correctly on every system. Incorporating checks would enhance robustness. Additionally, the symlink update script `utils_update_symlimks.sh` should be explicitly verified for existence and functionality. Connecting it to a version-controlled repository would provide version tracking and enable collaborative improvements.
+> [!NOTE]
+> Potential improvements could include directly handling scenarios where the `utils_update_symlimks.sh` script is not present or fails to execute, possibly with a defined error handling routine. Additionally, expanding on interactive prompts for templating beyond just script extensions could further enhance its usability.

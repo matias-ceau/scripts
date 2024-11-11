@@ -1,8 +1,8 @@
-#! /bin/bash
+#!/bin/bash
 
 #INFO:# "Run scripts with fzf"
 
-if [ "$1" = "--embedded" ]; then
+if [ "$1" = "--embedded" ] || [ "$1" = "-E" ] ; then
     fzf_cmd="fzf"
 else
     fzf_cmd="improved-fzfmenu.sh title_is_script_launcher"
@@ -27,8 +27,8 @@ cyan="$(hex2ansi $FLEXOKI_CYAN)"
 magenta="$(hex2ansi $FLEXOKI_MAGENTA)"
 blue="$(hex2ansi $FLEXOKI_BLUE)"
 green="$(hex2ansi $FLEXOKI_GREEN)"
-purple="$(hex2ansi $FLEXOKI_PURPLE)"
-red="$(hex2ansi $FLEXOKI_RED)"
+# purple="$(hex2ansi $FLEXOKI_PURPLE)"
+# red="$(hex2ansi $FLEXOKI_RED)"
 reset="\e[0m"
 
 header="$(echo -e "${orange}A-cr${reset} exec (W) \n\
@@ -37,9 +37,9 @@ header="$(echo -e "${orange}A-cr${reset} exec (W) \n\
 label_source="$(echo -e " ${yellow}SOURCE${reset} (${yellow}A-d${reset}: doc) ")"
 label_doc="$(echo -e " ${blue}DOC${reset} (${yellow}A-s${reset}: source) ")"
 
+
 format_shown_line() {
-    transformed_lines=""
-    while IFS= read -r line; do
+    fd . -tx --format '{/}' "$SCRIPTS" | while read -r line; do
         if echo "$line" | rg -q '\.xsh$'; then
             echo -e "${yellow}\U1f41a $line${reset}"
         elif echo "$line" | rg -q '\.py.*$'; then
@@ -52,21 +52,22 @@ format_shown_line() {
     done
 }
 
-fd_cmd() {
-    fd . -tx --format '{/}' "$SCRIPTS"
+cmd-full-path() {
+    expr='fd -tx $1 --absolute-path --search-path $SCRIPTS'
+    $(eval "$expr") "$2"
 }
+export -f cmd-full-path
 
-
-fd_cmd | format_shown_line |
+format_shown_line |
 $fzf_cmd \
     --ansi \
     --nth=2 \
     --preview "$preview_cmd_docs" \
     --preview-window='70%' \
     --bind "enter:become(bash -c {2})" \
-    --bind "alt-enter:execute($SCRIPTS/terminal_with_command.sh {2})" \
+    --bind "alt-enter:execute(cmd-full-path terminal_with_command.sh {2})" \
     --bind "ctrl-e:become(nvim \$(which {2}))" \
-    --bind "alt-e:execute($SCRIPTS/nvim_in_new_terminal.sh \$(which {2}))" \
+    --bind "alt-e:execute(cmd-full-path nvim_in_new_terminal.sh \$(which {2}))" \
     --header "$header" \
     --header-first \
     --preview-label "$label_doc" \

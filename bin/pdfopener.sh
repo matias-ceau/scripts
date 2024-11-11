@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 #INFO:#@RUN@ "Pick any pdf in home folder and open it with evince"
 

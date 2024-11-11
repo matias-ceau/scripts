@@ -1,42 +1,47 @@
-# Dmenu Run Scripts with Rofi
+
+# Dmenu-like Script Launcher
 
 ---
 
-**dmenu_run_scripts.py**: Launch scripts using `rofi` for selection, filtered by `xonsh`
+**dmenu_run_scripts.py**: Invoke user scripts via dmenu-like interface using `rofi`.
 
 ---
 
 ### Dependencies
 
-- `python`: The script is written in Python and requires Python to execute.
-- `xonsh`: A Python-powered, Unix-gazing shell used here to generate a list of script choices.
-- `rofi`: A window switcher, application launcher, and dmenu replacement, used to present and select from the list of script choices.
-- `script_identifier.xsh`: A custom script likely written in `xonsh`, utilized here to fetch the scripts based on certain criteria.
+- `xonsh`: A Python-powered, Unix-gazing shell for executing script identification logic.
+- `rofi`: A window switcher, application launcher, and dmenu replacement, for displaying script options.
 
 ### Description
 
-This script offers a user-friendly interface for selecting and running scripts on your Arch Linux system using the `rofi` tool as an interactive menu. The steps in the script flow as follows:
+This script acts as a dmenu-like application launcher specifically for user scripts. It follows these main steps:
 
-1. It utilizes `xonsh` to execute `script_identifier.xsh` with specific parameters, filtering scripts flagged as active and formatted in a certain style.
-2. The filtered list of scripts is then passed to `rofi`, which displays them in a selectable menu.
-3. Upon user's selection, the script extracts the choice from `rofi`'s output.
-4. Finally, it executes the selected script.
+1. **Script Identification**: It first uses a Xonsh script (`script_identifier.xsh`) to retrieve a list of available scripts filtered by certain criteria (`TYPE=RUN`, `STATUS=active`). The output is formatted with script filenames and descriptions.
 
-The approach allows dynamic, condition-based listing and execution of scripts, ideal for large collections of custom scripts needing quick access and execution.
+2. **Selection Interface**: The script leverages `rofi` to display these options in a menu, allowing you to choose which script to run with an easy-to-navigate interface.
+
+3. **Execution**: Once a choice is made, the selected script file is executed.
+
+This method provides a smooth user experience, blending the power of shell scripting with a graphical selection utility.
 
 ### Usage
 
-To use this script, ensure it is executable and run it like so:
+To utilize this script, follow these steps:
 
-```sh
-$ /home/matias/.scripts/bin/dmenu_run_scripts.py
-```
+1. **Prepare the Xonsh Script**: Ensure `script_identifier.xsh` is present and correctly configured to identify active scripts.
 
-`rofi` will then pop up with the list of available scripts fetched by `xonsh`. Navigate through the list, select the script you want to run, and press Enter.
+2. **Run the Script**:
+   Execute the script directly from the terminal. It can be bound to a keybinding for quick access in qtile or executed manually:
+   ```bash
+   python /home/matias/.scripts/bin/dmenu_run_scripts.py
+   ```
 
-This script can be assigned to a keybinding in your qtile configuration for even quicker access, enhancing your workflow efficiency.
+3. **Interacting with the Menu**:
+   Once executed, a `rofi` menu will appear listing active scripts. Select a script using the keyboard or mouse, and press enter to execute.
+
+This script is ideal for Arch Linux users with a qtile environment who want an efficient way to manage and launch custom scripts.
 
 ---
 
 > [!TIP]
-> One improvement could be to handle any exceptions, such as handling empty selections or errors in executing the selected script. This can enhance the robustness of the script against unexpected failures during script execution.
+> Ensure that the choices extracted by `rofi` are accurately captured and that scripts are executable without issues. The script assumes that `script_identifier.xsh` is correctly identifying and formatting active scripts. Errors in this script can lead to execution failure if file paths or identifiers are incorrect. Additionally, if no choices are available, `rofi` will not display any options, so make sure the Xonsh script returns valid results. Consider adding error handling to check if the choice is valid before attempting to execute it.

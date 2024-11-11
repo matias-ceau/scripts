@@ -1,42 +1,42 @@
-# Grub Tune to Audio Converter
+# GRUB Tune to Audio Converter
 
 ---
 
-**grub-tune-to-audio-python.py**: Converts GRUB tune strings into audio files.
+**grub-tune-to-audio-python.py**: Converts a GRUB_INIT_TUNE string into an MP3 audio file using Python
 
 ---
 
 ### Dependencies
 
-- `pydub`: A library for audio processing, used to generate and manipulate audio segments.
-- `pydub.generators`: Provides sound wave generation capabilities, like sine waves.
-- Recommended: `FFmpeg` or `libav` for handling MP3 exporting, as `pydub` leverages these tools for audio file format conversion. These should be installed on your Arch Linux system.
+- `pydub`: A Python library to work with audio segments. It is used here to generate audio tones and process them.
 
 ### Description
 
-The script takes a GRUB tune string and converts it into an audio file (MP3 format). The input string is expected to be in the format typically used by `GRUB_INIT_TUNE`, with the first number representing the tempo (in beats per minute), followed by pairs of numbers representing each note's frequency (in Hz) and its duration in beats.
+This script takes a GRUB_INIT_TUNE string as input and generates an audio file in MP3 format from it. The GRUB_INIT_TUNE string comprises a series of numbers where the first number is the tempo (beats per minute), and the subsequent pairs represent frequency (in Hz) and duration (in beats). The script uses these parameters to create a sequence of audio tones that can be played back as an audio file.
 
-It calculates the beat's duration in milliseconds, constructs audio segments for each note using sine wave generation, and then combines these into a single audio output.
+The function `grub_tune_to_audio(tune_string)` processes the input string, extracting the tempo and converting each frequency and duration pair into an audio segment using the `pydub` library's `Sine` wave generator. It then combines these segments into a complete audio track.
 
 ### Usage
 
-The script is designed to be run from the command line with the following syntax:
+The script is designed to be run from the terminal with a single argument representing the GRUB_INIT_TUNE string. Execute it as follows:
 
-```sh
+```bash
 python grub-tune-to-audio-python.py "<GRUB_INIT_TUNE string>"
 ```
 
-- **Example**: To convert a tune `390 440 1 460 2` (where `390` is the tempo, and subsequent pairs represent frequency and beats), use:
+#### Example:
 
-  ```sh
-  python grub-tune-to-audio-python.py "390 440 1 460 2"
-  ```
+```bash
+python grub-tune-to-audio-python.py "120 440 4 622 4 660 4"
+```
 
-Once executed, it produces an `output.mp3`, saved in the current working directory.
-
-This script can be run directly in the terminal or integrated into other larger scripts or tasks that require converting tune strings to audio, possibly assigning it to a keybinding in qtile for quick access.
+This command will create an MP3 file named `output.mp3` in the current directory. The example tune string "120 440 4 622 4 660 4" indicates a tempo of 120 BPM and notes of frequencies 440 Hz, 622 Hz, and 660 Hz for 4 beats each.
 
 ---
 
-> [!TIP]
-> Currently, the script only supports output in MP3 format. Consider implementing support for additional formats like WAV for more flexibility. Additionally, including error handling for non-integer values in the input string could enhance robustness.
+> [!NOTE]
+> The script requires `pydub` to be installed alongside `ffmpeg` or `libav` for handling audio conversion. On Arch Linux, ffmpeg can be installed via the package manager using `sudo pacman -S ffmpeg`.
+>
+> Additionally, it assumes the user has Python installed and configured properly in their environment, which, given the context (Arch Linux with qtile window manager), is likely but worth mentioning for completeness.
+>
+> An improvement could be handling more complex GRUB tune strings with pause or rest capability, enhancing the musicality of the generated audio output.

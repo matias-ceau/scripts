@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 #INFO:#@CLI@ "Play a song with cmus (chose it with fzf)"
 

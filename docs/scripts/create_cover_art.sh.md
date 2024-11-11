@@ -1,46 +1,39 @@
-# Create Spectrogram Cover Art
+# Generate Cover Art from Audio Spectrogram
 
 ---
 
-**create_cover_art.sh**: Generates a cover art from .wav file spectrogram with resizing.
+**create_cover_art.sh**: Automatically generates cover art from audio spectrograms using `.wav` files.
 
 ---
 
 ### Dependencies
 
-- `sox`: A tool used to process and convert audio files. Here, it's used to generate the spectrogram.
-- `dmenu`: A dynamic menu for X, used to select the .wav file from a list.
-- `imagemagick`: A suite to create, edit, or compose bitmap images, used here to resize the spectrogram image.
+- `sox`: A utility that is required for generating the spectrogram from audio files.
+- `dmenu`: A dynamic menu used for the selection of `.wav` files within the specified directory.
+- `imagemagick`: Provides the `convert` tool, which is necessary for image resizing.
 
 ### Description
 
-This script automates the creation of cover art by generating a spectrogram from a .wav audio file within the `~/audio/PROJECTS` directory. It uses `sox` to produce a spectrogram image from the audio file. Subsequently, this image is resized using `imagemagick`'s `convert` tool. The selection of the .wav file is made through `dmenu`, which lists all available .wav files for user selection.
+This script generates a visual cover art representation from the spectrogram of a chosen `.wav` file in the `/home/matias/audio/PROJECTS` directory. The cover art is then resized to the specified dimensions of 1600x900 pixels, ensuring consistency in resolution across different projects.
 
-- The script starts by finding all `.wav` files in the specified directory and presents them using `dmenu`.
-- Once a file is selected, it generates a spectrogram with dimensions of 1600x900 pixels.
-- The resultant spectrogram is then resized to a fixed 1600x900 resolution using `convert`.
+- **File Selection**: It uses `dmenu` to allow the user to interactively choose a file from a list of `.wav` files, offering an interface that displays up to 30 options at once.
+- **Spectrogram Creation**: Utilizes `sox` to create a spectrogram image (`.png`) of the chosen audio file, with predefined dimensions.
+- **Image Resizing**: Employs `imagemagick` to adjust the spectrogram image size to exactly 1600x900 pixels.
+- **Cleanup**: The original spectrogram image is removed after resizing, leaving only the final resized image.
 
 ### Usage
 
-To execute this script, run it in your terminal. Ensure that all dependencies are installed on your Arch Linux system. You may bind this script to a key or execute it directly via terminal:
+To run this script, ensure you have the necessary dependencies installed. You can execute the script directly from the terminal:
 
 ```bash
-~/.scripts/bin/create_cover_art.sh
+sh /home/matias/.scripts/bin/create_cover_art.sh
 ```
 
-1. When executed, a menu will appear listing all `.wav` files found in `~/audio/PROJECTS`.
-2. Select the desired file.
-3. The cover art will be created and saved in the same directory as the original file, with `_RESIZED` appended to the filename.
+Upon executing, `dmenu` will prompt you with a list of `.wav` files. Select the desired file, and the script will handle the spectrogram creation and resizing automatically.
 
-Example terminal command and expected file output:
-```bash
-sh ~/scripts/bin/create_cover_art.sh
-# e.g., for a selected file 'beat.wav', it produces 'beat_RESIZED.png'
-```
+If you wish to bind this script to a key combination in your `qtile` window manager, you can add it to your keybindings configuration.
 
 ---
 
-> [!CAUTION] 
-> - If there are any additional file types or sub-directory depths, consider enhancing the find command.
-> - Using absolute paths in scripts can be limiting; consider parameterization or relative paths for flexibility.
-> - The script assumes the presence of required directories and dependencies; a check for these would improve robustness.
+> [!NOTE]
+> Consider adding error handling to manage scenarios where the `find` command returns no files, or if `sox` or `imagemagick` fail to process the file. Additionally, allowing flexibility in selecting directories or adding options for specifying output dimensions could enhance usability.

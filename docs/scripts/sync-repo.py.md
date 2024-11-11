@@ -1,44 +1,39 @@
-# Git Repository Sync Script
+# Sync Repo Script
 
 ---
 
-**sync-repo.py**: A script to automate syncing of a local git repository with its remote counterpart, handling stashing, fetching, merging, and conflict resolution.
+**sync-repo.py**: Automates syncing of a git repository and handles conflicts
 
 ---
 
 ### Dependencies
 
-- `python3`: The script is written in Python and requires Python 3 to run.
-- `argparse`: This is part of the Python standard library for parsing command-line options.
-- `rich`: A Python library used for rich text and beautiful formatting in the terminal.
-- `git`: The script relies extensively on Git commands, which have to be installed on your system.
+- `python` with the `argparse` module: Utilized for parsing command-line arguments.
+- `rich`: A Python library for beautiful and flexible terminal output.
+- `git`: Essential for the repository synchronization operations.
 
 ### Description
 
-This Python script automates the process of keeping a local git repository synchronized with its remote. It fetches updates, applies stashed changes, and resolves potential conflicts. It is built using Python's `subprocess` to execute Git commands, and `rich` for colorful and user-friendly terminal outputs.
+This Python script, `sync-repo.py`, is designed to automate the synchronization of a git repository. It handles various complexities such as fetching updates, stashing, merging, resolving conflicts, committing, and pushing changes. The script utilizes the `rich` library to provide an enhanced terminal output with progress bars, panels, and syntax highlighting, helping users understand the operations taking place under the hood.
 
-Key features:
-- **Fetch and Pull:** It fetches all updates from the remote.
-- **Merge and Rebase:** If necessary, it performs a rebase or handles a merge conflict resolution via user interaction.
-- **Stash Conflicts:** Handles any stashed changes and resolves conflicts with options to choose remote or local versions.
-- **Commit and Push:** Automatically adds and commits any local changes and pushes them to the remote.
-- **Summary Display:** At the end, it provides a comprehensive summary of the repository status using a `rich` table.
+The script begins by parsing a single argument that specifies the directory of the git repository to be maintained. It then checks the validity of this directory and various prerequisites (such as git being initialized). The script employs subprocess calls to execute git commands and seamlessly manages merge conflicts and stash conflicts by prompting the user to make choices regarding file resolutions. Furthermore, if any changes are detected, the script constructs a commit message, adds all changes, and commits them. 
 
 ### Usage
 
-To use the script, it can be run directly from the terminal with the path to the local git repository as an argument. Here is a quick example:
+This script should be executed from the terminal. Here’s how you can run it:
 
 ```bash
-python3 /home/matias/.scripts/bin/sync-repo.py /path/to/your/repo
+python sync-repo.py /path/to/your/repository
 ```
 
-- **`repo_dir`:** The argument `repo_dir` is the path to the local git repository you want to sync. It defaults to the current directory if not specified.
+**Example Usage:**
 
-The script requires an environment where it can interact with the user for conflict resolution, best run via a terminal or console.
+```bash
+python sync-repo.py /home/matias/projects/my_project
+```
+
+The script can be integrated into a daily or regular synchronization process or assigned to a keybinding in your window manager (such as QTile for Arch Linux) for quick access.
 
 ---
 
-> [!NOTE]
-> - **Dependencies**: Consider explicitly checking for and installing the script's dependencies (`rich` and `git`) to minimize runtime errors.
-> - **Error Handling**: While user prompts for conflict resolution are helpful, logging detailed errors to a file could make troubleshooting easier.
-> - **Customization**: Consider adding an option for a dry-run to review changes without applying them. This could be beneficial for cautious users.
+> [!TIP] While the script handles merge conflicts and stash conflicts efficiently, consider adding more structured error handling for network-related issues (e.g., connection failures) during git fetch, pull, and push operations. Additionally, the script could improve user interaction by allowing all prompts to include a timeout fallback to a default action, useful for automated environments.

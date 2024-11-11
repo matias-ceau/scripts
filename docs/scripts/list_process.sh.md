@@ -2,44 +2,39 @@
 
 ---
 
-**list_process.sh**: Lists all running service units using `systemctl`
+**list_process.sh**: Displays a sorted list of all running services on your system.
 
 ---
 
 ### Dependencies
 
-- `systemctl`: Utilized to list service units. It is part of the `systemd` suite which is native to many Linux distributions, including Arch Linux.
-- `sort`: Used here to organize the output based on the fourth column.
+- `systemctl`: A command-line utility to examine and control the systemd system and service manager.
+- `sort`: Used to sort lines of text files.
 
 ### Description
 
-This script is a simple shell script designed to provide a sorted list of all service units on your machine. It leverages `systemctl`, which is the system and service manager for Linux operating systems that use `systemd`. The command used is:
+The `list_process.sh` script is a straightforward tool designed to list all the services managed by `systemctl` on your Arch Linux system and then sort them according to their state. 
 
-```bash
-systemctl list-units --type=service --all --no-pager --no-legend | sort -k4
-```
-
-Here’s a breakdown of the `systemctl` options used:
-- `--type=service`: Limits the output to service units.
-- `--all`: Shows all loaded units, regardless of their state.
-- `--no-pager`: Disables paging through results, so all output is listed directly.
-- `--no-legend`: Omits the legend, cleaning up the output for easier parsing or reading.
-
-The `sort -k4` part means the script sorts the listed services by the fourth column, which typically corresponds to the state of the service.
+- The command `systemctl list-units --type=service --all --no-pager --no-legend` provides a list of all service units. The `--type=service` flag ensures that only services are listed, while `--all` includes all services regardless of state. The `--no-pager` flag disables paging, preventing the output from being sent to a pager like `less`. The `--no-legend` flag removes the legend from the output, making it cleaner.
+- The output is piped to `sort -k4`, which sorts the services based on the fourth column, typically the status of each service, letting you easily see which services are active or inactive.
 
 ### Usage
 
-To use this script:
-1. Make sure you have the necessary permissions to execute it. You might need to run `chmod +x /home/matias/.scripts/bin/list_process.sh`.
-2. Execute the script by running:
+To execute this script:
 
-   ```bash
-   /home/matias/.scripts/bin/list_process.sh
-   ```
+```bash
+sh /home/matias/.scripts/bin/list_process.sh
+```
 
-This script can be run directly in the terminal or be bound to a shortcut key in your qtile configuration for quick access.
+This command will output a sorted list of all service units on your system. You may want to bind this script to a key combination in qtile to run it quickly without opening a terminal, or include it in a status script to keep track of service states.
+
+Example:
+
+```bash
+mod + shift + s # Bind this command in your qtile config to run the script and display output
+```
 
 ---
 
 > [!TIP]
-> One possible improvement is to add filtering based on specific statuses or unit names, allowing more refined searches. Additionally, consider adding headers or better formatting for easier readability when the script output is longer.
+> There is room for improvement in this script. If possible, consider adding options to filter output by service state (e.g., active, inactive). Also, capturing errors or providing user feedback within the script could improve its usability, especially when running it interactively.

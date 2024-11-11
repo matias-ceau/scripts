@@ -1,4 +1,4 @@
-#! /usr/bin/xonsh
+#!/usr/bin/xonsh
 
 #INFO:#+api+=2024-06= "Update env file for storing api keys"
 

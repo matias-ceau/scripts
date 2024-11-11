@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 #INFO:#@CLI@=2024-07= "Edit file quickly with fzf"
 

@@ -1,41 +1,47 @@
-# Playlist Randomizer
+# Playlist Randomizer Script
 
 ---
 
-**playlist_randomizer.xsh**: Pick a playlist of albums and play in random order using cmus
+**playlist_randomizer.xsh**: Shuffle and play albums from a playlist in a random order using cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A shell language that compiles to Python and supports running in interactive mode.
-- `pandas`: Open-source Python library for data manipulation and analysis.
-- `random`: Python built-in module to generate pseudo-random numbers.
-- `os`: Python built-in module to interact with the operating system.
-- `dmenu`: A dynamic menu for X11, used to select a playlist.
-- `cmus`: A small, fast and powerful console music player.
-- `cmus-remote`: Tool for controlling cmus via command line.
-
+- `xonsh`: Script is written in xonsh, ensure this shell is installed.
+- `pandas`: Required for handling and manipulating the playlist data.
+- `random`: This standard Python library is used for shuffling the order.
+- `dmenu`: Used for selecting the playlist from available options.
+- `ls`, `cat`: Standard Linux utilities used for listing and reading files.
+- `cmus`: A music player; the script interfaces with cmus to play music.
+   
 ### Description
 
-This script allows you to select a playlist of albums saved with the `.m3u` file extension and randomizes the order of album playback on `cmus`, a console music player. The script scans a designated playlists directory (`~/.playlists`), presents available playlists via `dmenu`, and reads the content of the selected playlist.
+This script allows you to select a playlist of music albums and randomizes the order in which the albums are played using `cmus`. It reads playlists from a specified directory (`~/.playlists`) and uses `dmenu` to present you with a selection of available `.m3u` playlist files. The script then extracts album and song information, shuffles the albums, sorts the songs accordingly, and constructs a new playlist. This new playlist is then played through `cmus`, with the albums in random order.
 
-Each album's tracks are gathered, and a randomized order is assigned before rearranging within albums. It then saves this new order into a temporary file, `randomized.m3u`, and queues them for playback in `cmus` using its remote control utility.
+The script utilizes a combination of Python libraries and Linux command-line tools to achieve its functionality. It strategically uses `pandas` to manage playlist data and `xonsh`, an alternative shell, for command execution. The `random` library helps in shuffling album order, ensuring that each playback sequence is unique.
 
 ### Usage
 
-This script is intended to be executed from the terminal or as part of an automated script or keybinding in your qtile environment. Below is a typical usage example:
+To execute this script:
 
-```bash
-xonsh /home/matias/.scripts/bin/playlist_randomizer.xsh
-```
+1. Make sure the script has executable permissions:
 
-- Ensure your playlists are stored in `~/.playlists`.
-- Run the script to choose a playlist and enjoy a shuffled sequence of albums.
+   ```bash
+   chmod +x /home/matias/.scripts/bin/playlist_randomizer.xsh
+   ```
 
-Incorporate it into a binding or script for quick access from your qtile window manager's interface.
+2. Run the script from the command line or set a keybinding in your qtile window manager for quick access:
+
+   ```bash
+   ./home/matias/.scripts/bin/playlist_randomizer.xsh
+   ```
+
+3. You will be prompted to select a playlist using `dmenu`. Navigate the list and make a selection.
+
+4. The script will then randomize the album order and begin playback in `cmus`.
 
 ---
 
-> [!CAUTION]
-> The script assumes all playlists have the `.m3u` extension and are stored in `~/.playlists`. Ensure these exist to avoid errors. Additionally, consider replacing the fixed paths with configuration variables to enhance portability. Using `os.path.join` instead of string concatenation for file paths can improve compatibility and code readability.
+> [!TIP]
+> While this script effectively randomizes albums, there is room for enhancement. For instance, integrating error handling for when `dmenu` does not return a valid selection would be beneficial. Additionally, checking if `pandas` and `xonsh` are installed prior to execution could improve user experience. Consider using environment variables or a configuration file for paths to increase flexibility.
