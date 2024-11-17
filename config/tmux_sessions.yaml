@@ -14,3 +14,8 @@ sessions:
   windows:
   - name: ollama
     command: ollama serve
+- name: JUPYTER
+  autostart: false
+  windows:
+  - name: lab
+    command: snekai.sh lab
