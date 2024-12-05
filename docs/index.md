@@ -41,6 +41,7 @@
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Displays keyboard layout using a Python script in a floating terminal*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called "music" and open cmus.*
 - [legacy-sync.repo.sh](scripts/legacy-sync.repo.sh.md) -- *A script to synchronize a Git repository while providing enhanced output formatting.*
+- [list-openai-models.sh](scripts/list-openai-models.sh.md) -- *List available OpenAI models, caching results for efficiency*
 - [list_process.sh](scripts/list_process.sh.md) -- *Displays a sorted list of all running services on your system.*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automate the generation of Markdown documentation for scripts using Llama 3.1.*
 - [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Automates documentation generation for scripts, creating markdown files*
@@ -60,7 +61,7 @@
 - [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *Script to launch and manage the Open WebUI with `qutebrowser`.*
 - [ousse-update.sh](scripts/ousse-update.sh.md) -- *Centralized update script for multiple database paths on a Linux system*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script for enhanced fuzzy searching of Arch Linux packages using `paru` and `fzf`.*
-- [pdfopener.sh](scripts/pdfopener.sh.md) -- *Select and open a PDF from your home directory using Evince and dmenu*
+- [pdfopener.sh](scripts/pdfopener.sh.md) -- *Open any PDF in the home directory using Evince or the default application*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing music playlists using `cmus`.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Shuffle and play albums from a playlist in a random order using cmus*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A script to reduce the color palette of a PPM image using a custom palette file.*
@@ -82,6 +83,7 @@
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Analyze and extract the most frequent lines, words, or characters from shell history files.*
 - [show-all-qutebrowser-scripts.sh](scripts/show-all-qutebrowser-scripts.sh.md) -- *Display and colorize the last few scripts installed with qutebrowser*
 - [show_keyboard_layout.py](scripts/show_keyboard_layout.py.md) -- *Simple script to display a custom keyboard layout design*
+- [snekai.sh](scripts/snekai.sh.md) -- *Script to manage Jupyter Lab, Jupyter Notebook, or IPython in a virtual environment*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Launch and play songs with `cmus` using `dmenu` interface.*
 - [speach-to-text.py](scripts/speach-to-text.py.md) -- *Record audio and transcribe it using OpenAI's Whisper model*
 - [sync-repo-simple.py](scripts/sync-repo-simple.py.md) -- *A script to automate synchronization of a local git repository with its remote counterpart*
@@ -102,5 +104,5 @@
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Automates symlink updates, logs activity, manages potential conflicts.*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in Vim using `fzf` for selection*
 - [vox.py](scripts/vox.py.md) -- *A script to list and describe Vox amplifier settings and modes.*
-- [wallpaper.sh](scripts/wallpaper.sh.md) -- *Script to pick and set wallpapers randomly, by selection, or by GUI.*
+- [wallpaper.sh](scripts/wallpaper.sh.md) -- *Script to manage and change wallpapers from a list*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *Identify scripts lacking inline documentation markers*

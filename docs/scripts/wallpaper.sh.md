@@ -1,51 +1,53 @@
-# Wallpaper Selection Script
+# Wallpaper Selector Script
 
 ---
 
-**wallpaper.sh**: Script to pick and set wallpapers randomly, by selection, or by GUI.
+**wallpaper.sh**: Script to manage and change wallpapers from a list
 
 ---
 
 ### Dependencies
 
-- `feh`: A lightweight image viewer to set wallpapers.
-- `notify-send`: To display notifications when wallpaper changes.
-- `fzfmenu.sh`: A script for fuzzy finding and selection.
-- `yad`: Graphical dialog tool for a GUI selection interface.
+- `feh`: An image viewer utilized here for setting wallpapers.
+- `notify-send`: Sends desktop notifications after changing wallpapers.
+- `shuf`: Used to randomly select a wallpaper.
+- `yad`: Provides a GUI for selecting wallpapers.
+- `awk`: Utility to process the cache file and remove duplicates.
+- `fzfmenu.sh` (optional): Script for interactive command-line fuzzing (part of plan to enhance the GUI).
 
 ### Description
 
-This script manages wallpaper changes by selecting random, previous, or user-selected wallpapers using a terminal or GUI interface. With options for random selection, manual selection via `fzf`, browsing history, or using a GUI, it adapts to different user workflows. By default, it uses a predefined wallpaper. The script uses a log to track wallpaper changes, ensuring you can revert to previous images easily.
+This script is designed to enhance your Arch Linux system with dynamic wallpaper management. It offers several functionalities:
 
-Functions utilized:
+- **Set Default Wallpaper**: If no options are provided, it sets a pre-configured default wallpaper.
+- **Random Wallpaper**: The `--random` flag picks a random wallpaper from the `~/.wallpapers/` directory.
+- **Select Wallpaper**: The `--select` flag allows manual selection using `fzfmenu.sh` (please ensure this script is installed and working correctly).
+- **Previous Wallpaper**: Use `--previous` followed by a number (e.g., `--previous 2`) to revert back to a previously set wallpaper.
+- **Graphical User Interface (GUI)**: The `--gui` flag opens a visual selection menu using `yad`, enabling you to view and choose wallpapers with previews.
 
-- `set_wallpaper`: Uses `feh` to change the wallpaper and logs this change. Sends notifications for every change.
-- The script handles input arguments for different selection methods and cleans the log by removing duplicate entries.
+The script also maintains a cache of previously set wallpapers in `~/.cache/wallpapers.log`, aiding the `--previous` functionality.
 
 ### Usage
 
-Run the script with the following options:
+To effectively use this script, insert it into your startup commands or link it to keybindings in your window manager. Below are command examples:
 
 ```bash
 # Set a random wallpaper
-./wallpaper.sh --random
+bash ~/scripts/bin/wallpaper.sh --random
 
-# Use a fuzzy finder to select wallpaper
-./wallpaper.sh --select
+# Select a wallpaper interactively
+bash ~/scripts/bin/wallpaper.sh --select
 
-# Revert to a previous wallpaper; option --previous with an argument allows specifying how many wallpapers to go back
-./wallpaper.sh --previous 2
+# Revert to the previous wallpaper
+bash ~/scripts/bin/wallpaper.sh --previous
 
-# Use a GUI to select wallpaper
-./wallpaper.sh --gui
+# Launch the GUI for wallpaper selection
+bash ~/scripts/bin/wallpaper.sh --gui
 
-# Set the default wallpaper in the absence of arguments
-./wallpaper.sh
+# Use default wallpaper
+bash ~/scripts/bin/wallpaper.sh
 ```
-
-To integrate this with your qtile setup, consider assigning keybindings for these commands in your qtile configuration.
-
 ---
 
-> [!CAUTION]
-> The `--gui` functionality might not execute perfectly due to a commented-out line with `fzfmenu.sh` and may need further fine-tuning. Ensure `yad` and `fzfmenu.sh` are properly installed and working. The default paths might need updating to match your specific directory structure. Improving the GUI could enhance the script's usability, potentially replacing `yad` with a more suitable tool if issues persist.
+> [!TIP]
+> Consider integrating `fzfmenu.sh` directly within the script to ensure seamless execution and enhance maintainability. Additionally, improving error handling, especially for missing dependencies or invalid directories, will fortify the script's reliability. If some binned wallpapers have large file sizes, consider displaying only filenames in the terminal selections to speed up execution.

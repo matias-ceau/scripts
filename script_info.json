@@ -415,9 +415,9 @@
   "pdfopener.sh": {
     "file": "pdfopener.sh",
     "path": "bin/pdfopener.sh",
-    "description": "Select and open a PDF from your home directory using Evince and dmenu",
+    "description": "Open any PDF in the home directory using Evince or the default application",
     "doc_path": "docs/scripts/pdfopener.sh.md",
-    "hash": "cf4ef1e2251709b19b8909900408075a9ffd90327bb4b71518ccabaefd57a2b1"
+    "hash": "4260c9aa577f4bba822acc8f9dd7530b2623f32776ad06bfad594823ef07b9e5"
   },
   "playlist_player.xsh": {
     "file": "playlist_player.xsh",
@@ -667,9 +667,9 @@
   "wallpaper.sh": {
     "file": "wallpaper.sh",
     "path": "bin/wallpaper.sh",
-    "description": "Script to pick and set wallpapers randomly, by selection, or by GUI.",
+    "description": "Script to manage and change wallpapers from a list",
     "doc_path": "docs/scripts/wallpaper.sh.md",
-    "hash": "7dc4faadb65c5d214aceb29fd0ed772ff8f13995b81ba04942dd8ebc6e16dfd1"
+    "hash": "4a5ad13e46ca83020685ee7fd809138f0848e6c12ec8b33de8c89e101daab946"
   },
   "you_are_not_documented.sh": {
     "file": "you_are_not_documented.sh",
@@ -698,5 +698,19 @@
     "description": "Updates a CSV file with the creation dates of files in a directory.",
     "doc_path": "docs/scripts/update_birthdays.sh.md",
     "hash": "a7cddd6a3800605709c26c7e35820eab3c4e277dd0b7788adb8d581979f32f34"
+  },
+  "list-openai-models.sh": {
+    "file": "list-openai-models.sh",
+    "path": "bin/list-openai-models.sh",
+    "description": "List available OpenAI models, caching results for efficiency",
+    "doc_path": "docs/scripts/list-openai-models.sh.md",
+    "hash": "54eb4fddf5a837e929961606033c924e553493bd4403a7f1c7c8e4679a5e2faf"
+  },
+  "snekai.sh": {
+    "file": "snekai.sh",
+    "path": "bin/snekai.sh",
+    "description": "Script to manage Jupyter Lab, Jupyter Notebook, or IPython in a virtual environment",
+    "doc_path": "docs/scripts/snekai.sh.md",
+    "hash": "17d24d17a5e9afe6681507b6c26e5dc1f422dcfc85c2522de14aefcca1e3f3ed"
   }
 }
