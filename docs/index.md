@@ -44,7 +44,7 @@
 - [list-openai-models.sh](scripts/list-openai-models.sh.md) -- *List available OpenAI models, caching results for efficiency*
 - [list_process.sh](scripts/list_process.sh.md) -- *Displays a sorted list of all running services on your system.*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automate the generation of Markdown documentation for scripts using Llama 3.1.*
-- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Automates documentation generation for scripts, creating markdown files*
+- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Automates documentation generation and updates for your scripts folder*
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Creates an M3U playlist file from all files in the current directory.*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to manage music transfer to the MECHEN device.*
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches MEGA CMD within a detached tmux session.*

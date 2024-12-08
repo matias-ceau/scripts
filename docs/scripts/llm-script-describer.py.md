@@ -2,44 +2,67 @@
 
 ---
 
-**llm-script-describer.py**: Automates documentation generation for scripts, creating markdown files
+**llm-script-describer.py**: Automates documentation generation and updates for your scripts folder
 
 ---
 
 ### Dependencies
 
-- `argparse`: For parsing command-line arguments.
-- `csv`: To handle CSV file operations.
-- `hashlib`: To compute file hashes to detect changes.
-- `json`: For JSON operations to store script metadata.
-- `os`: For operating system related function calls.
-- `subprocess`: To run other script commands.
-- `sys`: For system-specific parameters and functions.
-- `colorama`: For colored terminal text output.
-- `OpenAI`: Requires OpenAI API interactions.
+- `argparse`: Handles command-line arguments for script configuration.
+- `csv`: Reads and processes the CSV file containing scripts' paths.
+- `hashlib`: Used for computing file hashes to track changes.
+- `json`: Reads and writes metadata about the scripts in JSON format.
+- `os`: Manages file paths and environment variables.
+- `subprocess`: Executes shell commands to interact with the system.
+- `sys`: For system-specific functionalities like exiting on errors.
+- `colorama`: Enhances terminal output with colored text.
+- `openai`: Connects to OpenAI's API for generating script descriptions or summaries.
+
+External dependencies must be installed using `pip` (e.g., `pip install openai colorama`).
+
+---
 
 ### Description
 
-The `llm-script-describer.py` script is a comprehensive tool designed to automate the generation of GitHub documentation for user scripts, specifically tailored for a Linux-based environment using Arch Linux and the qtile window manager. It employs the OpenAI API to formulate markdown documentation for scripts that are listed in a CSV file.
+This Python script automates the process of documenting and organizing your scripts folder by integrating OpenAI's LLM to generate descriptions. It:
 
-The script performs several tasks:
-- **Symlink Update**: It runs a utility script `utils_update_symlinks.sh` to update script symlinks.
-- **File Management**: It identifies available script files and manages orphaned documentation files by removing them.
-- **Description Generation**: Using the OpenAI API, the script generates markdown documentation by analyzing the script's content.
-- **Documentation Storage**: It writes this documentation into a markdown file and updates a documentation index.
-- **README Update**: The script summarizes existing documentation and updates the README.md file accordingly, including a table of all documented scripts.
+1. **Updates symlinks**: Ensures symlinks in your scripts directory are up to date by executing `utils_update_symlinks.sh`.
+2. **Identifies files**: Finds all non-excluded files in the `$SCRIPTS` folder using commands like `fd` and `rg`.
+3. **Removes orphaned docs**: Deletes Markdown documentation for scripts no longer present in the folder.
+4. **Processes scripts**: Reads content or detects binary files. For binaries, it attempts to trace the source file by searching common source extensions (`.py`, `.sh`, `.cpp`, etc.). 
+5. **Generates Markdown documentation**: Uses an OpenAI model (default: `gpt-4o-mini`) to write a detailed file-specific documentation.
+6. **Maintains a JSON mapping**: Tracks script metadata (hash, description, related Markdown file, etc.).
+7. **Updates README.md**: Summarizes documentation and updates both a generated output section and a file description table.
+
+Its modularized functions make it capable of managing each aspect of script tracking and documentation efficiently.
+
+---
 
 ### Usage
 
-To execute this script, you must ensure you have an OpenAI API key accessible through an environment variable named `OPENAI_API_KEY`. Use the following command to run the script, specifying the desired OpenAI model if necessary:
+Run the script in your terminal:
 
-```sh
-python ~/.scripts/meta/llm-script-describer.py gpt-4o
+```bash
+python llm-script-describer.py [llm_model]
 ```
 
-This script primarily runs from the terminal and can be initiated directly or included as a part of a broader automated workflow. 
+- `llm_model` is optional, defaulting to `"gpt-4o-2024-11-20"` (changeable via command-line argument).
+
+Example:
+
+```bash
+python llm-script-describer.py "gpt-4.0-turbo"
+```
+
+### Key Integration Points:
+- To define the `$SCRIPTS` folder, export it in your `.bashrc`/`.zshrc`:
+  ```bash
+  export SCRIPTS=/home/matias/.scripts
+  ```
+
+You can assign this script to a keybinding in qtile or schedule it via cron for periodic updates.
 
 ---
 
 > [!TIP]
-> While the script efficiently handles text-based script files, it struggles with binary scripts lacking source code. Enhancing it to analyze compiled binaries directly could further broaden its utility. Additionally, handling potential file permissions issues, and better exception handling for subprocess calls could improve reliability. Also, ensuring secure and efficient management of the OpenAI API credentials is crucial to safeguard the API key from being accidentally exposed.
+> **Error Handling and Enhancements**: While robust, this script lacks thorough exception handling for certain subprocess commands (e.g., failure when `fd` or `rg` isn't installed). Adding a dependency check would enhance usability. Introducing multithreading could also improve performance for larger directories.

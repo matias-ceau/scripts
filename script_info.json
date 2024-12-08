@@ -303,9 +303,9 @@
   "llm-script-describer.py": {
     "file": "llm-script-describer.py",
     "path": "meta/llm-script-describer.py",
-    "description": "Automates documentation generation for scripts, creating markdown files",
+    "description": "Automates documentation generation and updates for your scripts folder",
     "doc_path": "docs/scripts/llm-script-describer.py.md",
-    "hash": "e02f985e6b36d57f7b4301b03ab232ffa41b2b5c822d1ae517d8052f9f826d9a"
+    "hash": "36439430d1a703f460f517e6637a0abf9675329d20deaaf1830c73e1033ae8fb"
   },
   "m3u_creator.sh": {
     "file": "m3u_creator.sh",

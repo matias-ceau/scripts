@@ -425,7 +425,7 @@ def main():
     parser.add_argument(
         "llm_model",
         nargs="?",
-        default="gpt-4o",
+        default="gpt-4o-2024-11-20",
         help="OpenAI LLM model",
     )
     args = parser.parse_args()
