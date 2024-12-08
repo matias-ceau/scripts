@@ -1,4 +1,4 @@
-__pycache__/
-log/*
-!log/
+__pycache__
+meta/log/**
+!meta/log/
 symlink_data.csv
