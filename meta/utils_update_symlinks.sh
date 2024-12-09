@@ -5,12 +5,13 @@
 # Directories
 SOURCE_DIR="$SCRIPTS"
 TARGET_DIR="$HOME/.local/bin"
-LOG_FILE="$SCRIPTS/log/symlinking.log"
+LOG_FILE="$SCRIPTS/meta/log/symlinking.log"
+LOG_CSV="$SCRIPTS/meta/log/symlinking.log.csv"
 DATA_FILE="$SCRIPTS/symlink_data.csv"
 
 # Initialize the CSV file and backup last one
 if [ -f "$DATA_FILE" ]; then
-    tail -n +2 "$DATA_FILE" >>"$SCRIPTS/log/symlinking.log.csv"
+    tail -n +2 "$DATA_FILE" >> "$LOG_CSV"
 fi
 echo "Original Path,Symlink,Command Name" >"$DATA_FILE"
 

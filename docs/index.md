@@ -101,7 +101,7 @@
 - [tui-gpt.py](scripts/tui-gpt.py.md) -- *A terminal-based GPT chat interface resembling 'Mother' from the Aliens movies.*
 - [update_birthdays.sh](scripts/update_birthdays.sh.md) -- *Updates a CSV file with the creation dates of files in a directory.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *Updates the `.env` file for storing API keys from environment variables*
-- [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Automates symlink updates, logs activity, manages potential conflicts.*
+- [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Script to create symlinks in `~/.local/bin` and manage old/broken ones.*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in Vim using `fzf` for selection*
 - [vox.py](scripts/vox.py.md) -- *A script to list and describe Vox amplifier settings and modes.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Script to manage and change wallpapers from a list*

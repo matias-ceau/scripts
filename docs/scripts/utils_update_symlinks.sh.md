@@ -1,51 +1,72 @@
-# Symlink Manager
+# Meta Script for Managing Symlinks
 
 ---
 
-**utils_update_symlinks.sh**: Automates symlink updates, logs activity, manages potential conflicts.
+**meta/utils_update_symlinks.sh**: Script to create symlinks in `~/.local/bin` and manage old/broken ones.
 
 ---
 
 ### Dependencies
 
-- `fd`: A program to find files in the directory tree efficiently.
-- `bat`: A command-line tool to display file content with syntax highlighting.
-- `glow`: Command-line tool to render markdown files.
-
-### Description
-
-The **utils_update_symlinks.sh** script is designed to manage the creation and maintenance of symbolic links for user scripts stored in a defined directory on an Arch Linux system using qtile as the window manager. It performs several tasks:
-
-1. **Initialization**: Sets up and updates a CSV file used for tracking the original files and their respective symlinks. It retains historical data for reference.
-   
-2. **Error and Info Logging**: Provides logging functionality by capturing all logged information and errors with timestamps, directing them to a specified log file.
-
-3. **Broken Symlink Removal**: Identifies and removes broken symlinks in the designated target directory to maintain a clean environment.
-
-4. **Symlink Creation**: Efficiently generates symlinks for executable files present in the source directory. The script handles potential conflicts by identifying existing, conflicting symlinks and logging errors.
-
-5. **CSV Entry Addition**: After successfully creating or updating symlinks, it logs the details into a CSV file, allowing users to have an organized inventory of the symlinks.
-
-The process is broken down into functions for maintainability and clarity, utilizing tools like `fd` for file discovery and `bat` for improved CSV visualization.
-
-### Usage
-
-To use this script, ensure all dependencies are installed:
-
-```bash
-sudo pacman -S fd bat glow
-```
-
-Place your scripts in the directory referenced by the `$SCRIPTS` environment variable. Execute the script as follows:
-
-```bash
-bash ~/scripts/meta/utils_update_symlinks.sh
-```
-
-- The script runs non-interactively and can be linked to a qtile keybinding for quick execution.
-- Applies changes automatically with a logging mechanism for review and audit purposes.
+- `fd` - A simple, fast, and user-friendly alternative to `find`. Used to locate executable files in the `SOURCE_DIR` directory.
+- `bat` - A `cat` clone with syntax highlighting and other features. Used to display the contents of the symlink CSV file.
+- `glow` - A markdown reader for the terminal. Used to display colored headings in the output.
+- Custom variables:
+  - `$SCRIPTS` - Must define the directory where scripts are stored.
+  - `$HOME` - User's home directory as required to define `~/.local/bin`.
 
 ---
 
-> [!TIP] 
-> Consider checking the existence and correctness of the `$SCRIPTS` environment variable before running the script to avoid unexpected behavior. Also, ensure that color commands like `glow` and ANSI color codes are supported in your terminal environment for improved output clarity.
+### Description
+
+This script automates the management of symbolic links in the `~/.local/bin` directory, ensuring a clean environment by removing redundant or broken links, adding relevant symlinks, and logging the operations for future reference. Here's an overview of the script's functionality:
+
+1. **Log Management**:
+    - Logs activities (e.g., removed broken symlinks, conflicts with existing symlinks) into `symlinking.log` for debugging and history.
+    - Maintains a CSV file (`symlink_data.csv`) to store details about created symlinks, including the original path, symlink path, and command name.
+
+2. **Broken Symlink Cleanup**:
+    - Checks all symlinks in the `~/.local/bin` directory and removes broken ones, logging the operation.
+
+3. **Symlink Creation**:
+    - Uses the `fd` command to find executable files in the source directory (`$SCRIPTS`).
+    - Creates symlinks for these files in `~/.local/bin`.
+    - Resolves conflicts by logging errors for existing or conflicting symlinks.
+
+4. **CSV Metadata**:
+    - Records all valid symlinks pointing to `$SCRIPTS` in CSV format for record-keeping purposes.
+
+---
+
+### Usage
+
+To run the script:
+
+1. Ensure the variables `$SCRIPTS` and `$HOME` are properly defined in your environment.
+2. Execute the script directly:
+   ```bash
+   bash /home/matias/.scripts/meta/utils_update_symlinks.sh
+   ```
+3. Optional: Schedule it with `cron` or bind it to a shortcut with `qtile`.
+
+**Key Actions Performed**:
+- Cleaning:
+  ```bash
+  ./utils_update_symlinks.sh
+  ```
+  Outputs: Removes broken symlinks and logs changes.
+
+- Symlinking:
+  The script scans for executables with `fd` and creates links.
+
+- CSV update:
+  Appends details about symlinks pointing to `$SCRIPTS`.
+
+---
+
+> [!IMPORTANT]
+> - The script heavily relies on `fd`, `bat`, and `glow`. Ensure these utilities are installed on your Arch Linux setup (`sudo pacman -S fd bat glow`).
+> - Potential improvements:
+>   1. Implement better handling of `$SOURCE_DIR` and `$TARGET_DIR` in the script — ensure variables are checked if unset.
+>   2. Add handling for permissions or missing directory creation (`mkdir -p ~/.local/bin`).
+>   3. Consider using `set -e` to exit immediately on errors instead of silent failures during commands like `ln -s`.

@@ -646,9 +646,9 @@
   "utils_update_symlinks.sh": {
     "file": "utils_update_symlinks.sh",
     "path": "meta/utils_update_symlinks.sh",
-    "description": "Automates symlink updates, logs activity, manages potential conflicts.",
+    "description": "Script to create symlinks in `~/.local/bin` and manage old/broken ones.",
     "doc_path": "docs/scripts/utils_update_symlinks.sh.md",
-    "hash": "c262d6d8f16d66c2e9e5ed7d8460f710ca6bcc68a9d54004a156c396a396578b"
+    "hash": "627aa63335f2ef392472a4da765a06cb819f43db4393e0898692f4883a615da2"
   },
   "vimwiki.sh": {
     "file": "vimwiki.sh",
