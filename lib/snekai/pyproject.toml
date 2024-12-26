@@ -1,0 +1,54 @@
+[project]
+name = "snekai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Matias Ceau", email = "matias@ceau.net" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic",
+    "google-generativeai",
+    "gpt4all",
+    "httpx",
+    "huggingface-hub",
+    "ipykernel",
+    "ipython",
+    "ipywidgets",
+    "isoduration",
+    "jedi",
+    "jupyter-ai",
+    "jupyter-client",
+    "jupyter-core",
+    "jupyter-events",
+    "jupyter-lsp",
+    "jupyter-server",
+    "jupyter-server-terminals",
+    "jupyterhub",
+    "jupyterlab",
+    "jupyterlab-pygments",
+    "jupyterlab-server",
+    "jupyterlab-widgets",
+    "langchain",
+    "langchain-anthropic",
+    "langchain-aws",
+    "langchain-cohere",
+    "langchain-community",
+    "langchain-core",
+    "langchain-experimental",
+    "langchain-google-genai",
+    "langchain-mistralai",
+    "langchain-nvidia-ai-endpoints",
+    "langchain-ollama",
+    "langchain-openai",
+    "langchain-text-splitters",
+    "nbclient",
+    "nbconvert",
+    "nbformat",
+    "notebook",
+    "notebook-shim",
+    "ollama",
+    "openai",
+    "rich",
+]

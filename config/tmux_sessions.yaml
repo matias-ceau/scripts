@@ -1,14 +1,21 @@
 sessions:
-- name: MEGA
+- name: SYSTEM
   autostart: true
   windows:
   - name: megacmd
     command: mega-cmd
+  - name: syteminfo
+    command: btop
 - name: MUSIC
   autostart: true
   windows:
   - name: cmus
     command: cmus
+- name: DEFAULT
+  autostart: true
+  windows:
+  - name: shell
+    command: bash
 - name: OLLAMA
   autostart: false
   windows:
