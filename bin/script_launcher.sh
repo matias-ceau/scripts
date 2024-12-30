@@ -8,13 +8,13 @@ else
     fzf_cmd="improved-fzfmenu.sh title_is_script_launcher"
 fi
 
-preview_cmd_docs='bat \
+preview_docs='bat \
     -lmd $SCRIPTS/docs/scripts/{2}.md \
     --wrap=auto \
     --terminal-width=$FZF_PREVIEW_COLUMNS \
     --color=always \
     --style=grid'
-preview_cmd_source='bat \
+preview_src='bat \
     --style=full \
     --wrap=auto \
     --terminal-width=$FZF_PREVIEW_COLUMNS \
@@ -62,7 +62,7 @@ format_shown_line |
 $fzf_cmd \
     --ansi \
     --nth=2 \
-    --preview "$preview_cmd_docs" \
+    --preview "$preview_src" \
     --preview-window='70%' \
     --bind "enter:become(bash -c {2})" \
     --bind "alt-enter:execute(cmd-full-path terminal_with_command.sh {2})" \
@@ -71,8 +71,8 @@ $fzf_cmd \
     --header "$header" \
     --header-first \
     --preview-label "$label_doc" \
-    --bind "alt-s:change-preview@$preview_cmd_source@+change-preview-label($label_source)" \
-    --bind "alt-d:change-preview@$preview_cmd_docs@+change-preview-label($label_doc)" \
+    --bind "alt-s:change-preview@$preview_docs@+change-preview-label($label_source)" \
+    --bind "alt-d:change-preview@$preview_src@+change-preview-label($label_doc)" \
     --bind "resize:refresh-preview"
 
 #TODO: option to render a pdf/html of the documentation
