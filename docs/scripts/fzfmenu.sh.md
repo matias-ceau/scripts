@@ -1,41 +1,53 @@
-# FZF Menu Helper Script
+# Fzfmenu Script
 
 ---
 
-**fzfmenu.sh**: A helper script to replicate `dmenu` functionality using `fzf` and `xterm`.
+**fzfmenu.sh**: A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `xterm`: A standard terminal emulator for the X Window System.
-- `bash`: The GNU Bourne Again SHell, required for script execution.
+- `fzf`: A command-line fuzzy finder for efficiently filtering and selecting text.
+- `xterm`: A terminal emulator for running command-line applications within a window.
+- `/proc/$$/fd/*`: Usage of file descriptors to handle input and output streams.
 
 ### Description
 
-The `fzfmenu.sh` script serves as a helper function that provides a `dmenu`-like experience through `fzf` and `xterm`. It activates an `xterm` window titled "fzfmenu", which allows you to apply `fzf` arguments for customized fuzzy finding directly within the terminal interface. This approach can be more visually appealing or intuitive for users accustomed to terminal-based environments on Arch Linux with qtile window manager.
+The **fzfmenu.sh** script is a lightweight, helper utility that combines the power of `fzf` with `xterm`. Designed to emulate the behavior of `dmenu`, it provides a fuzzy search interface using `fzf` displayed in an `xterm` window. This script escapes all input arguments to ensure safe handling and pipelines the interactions via standard input/output streams using the `/proc` file system.
 
-The implementation does the following:
-- Escapes each positional argument passed to the script using `printf %q` to handle special characters and whitespaces adequately.
-- Creates a new string `fzf_args` containing all the properly escaped arguments.
-- Launches `xterm` with `fzf` and passes the arguments, ensuring input from standard input and output is redirected appropriately.
+Key functionalities:
+- Takes any parameters passed via the command line, escapes them safely, and forwards them to `fzf` as arguments.
+- Runs `fzf` inside an `xterm` window titled "fzfmenu".
+- Redirects input and output streams through `/proc/$$/fd/` for seamless data handling.
+
+This makes the script highly flexible, allowing you to pipe text into it and retrieve the user's selection without additional setup.
 
 ### Usage
 
-This script is primarily used to replace or supplement `dmenu` by providing a similar feature set with the `fzf` tool. You can easily integrate it into your keybindings or use it directly from the terminal. Below is a simple example of how you might invoke the script:
+To use this script, you need to pass the necessary arguments for `fzf`. For example:
 
 ```bash
-~/.scripts/bin/fzfmenu.sh --height 40% --reverse
+echo -e "option1\noption2\noption3" | /home/matias/.scripts/bin/fzfmenu.sh --height=10 --reverse
 ```
 
-In this example:
-- `--height 40%`: Sets the height of the `fzf` interface.
-- `--reverse`: Displays the selection area at the bottom of the terminal.
+**Explanation**:
+- The script displays "option1", "option2", and "option3" in a vertical fuzzy search menu.
+- The `--height=10` argument sets the height of the menu to 10 lines.
+- The `--reverse` option makes the menu display at the top.
 
-The script should accommodate any additional `fzf` flags or options seamlessly.
+You can also bind it to a keybinding via `qtile` or execute it directly from the terminal.
+
+#### Example Integration with `qtile`
+To bind this script to a key in `qtile`:
+```python
+Key([mod], "m", lazy.spawn("/home/matias/.scripts/bin/fzfmenu.sh --height=15"))
+```
 
 ---
 
-> [!NOTE]
-> This script could benefit from enhanced error handling, especially regarding user inputs or if dependencies fail to load properly. Additionally, specifying default `fzf` options when none are provided might improve user experience out-of-the-box.
+> [!TIP]
+> - The script currently hardcodes the title for the `xterm` window ("fzfmenu"). Consider making this configurable for flexibility.
+> - It would be beneficial to allow users to pass environment variables or settings like font size or colors for `xterm`.
+> - The script assumes that input is always piped into it (`stdin`). Adding a fallback or default behavior for no input (e.g., reading from a default file) could enhance usability.
+> - Using `/proc/$$/fd/` for redirection is clever but might have compatibility issues on non-Linux systems or certain shells. Documenting this caveat might be useful.

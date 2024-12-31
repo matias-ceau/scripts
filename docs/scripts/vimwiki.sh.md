@@ -1,43 +1,62 @@
-# Vimwiki Note Opener
+# VimWiki Note Opener
 
 ---
 
-**vimwiki.sh**: Open a note in Vim using `fzf` for selection
+**vimwiki.sh**: Open a note in vim with fzf
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is executed within the Bash shell environment.
-- `vim`: A highly configurable text editor used for efficient text editing.
-- `fzf`: A command-line fuzzy finder that helps you locate and open files with ease.
+- `fd`: A simple, fast, and user-friendly alternative to `find`. This script uses `fd` to search for markdown files (`.md`) within the `~/notes` directory.
+- `fzf`: A command-line fuzzy finder. Used here to provide an interactive interface for selecting notes.
+- `bat`: A cat clone with syntax highlighting and Git integration. It provides the formatted and highlighted preview of the selected note.
+- `nvim` (or `vim`): Enhanced editor used to open the selected file.
 
-### Description
-
-This script provides a straightforward way to open notes stored in the `~/notes` directory using Vim. It leverages the power of `fzf`, a fuzzy finder tool, to allow you to quickly search and select which note you'd like to open. Once a note is selected, it's opened in Vim for editing or viewing.
-
-The script first lists all files in the `~/notes` directory and pipes this list to `fzf`. The user can then interactively search through the list and choose a file. The selected filename is captured and Vim is launched to open the corresponding note.
-
-### Usage
-
-To use this script, ensure it is executable and run it from the terminal. Here is a simple way to use and bind this script in your Arch Linux environment, potentially in combination with the qtile window manager:
-
-1. **Run Script Manually:**
-   ```
-   /home/matias/.scripts/bin/vimwiki.sh
-   ```
-
-2. **Bind to a Key in Qtile:**
-   Modify your qtile config to include a keybinding for the script. Here's an example snippet:
-   ```python
-   Key([mod], "n", lazy.spawn("/home/matias/.scripts/bin/vimwiki.sh")),
-   ```
-   This binds "mod + n" to open the vimwiki note selector.
-
-3. **Automation:**
-   If you wish to run this script regularly (e.g., upon startup), you can add it to your shell's startup script, such as in `.bashrc` or a qtile autostart script.
+Make sure these tools are installed on your Arch Linux system. You can use `pacman` for official packages and `yay` for AUR packages if needed.
 
 ---
 
-> [!TIP]
-> Consider adding error handling for empty selections or verifying that the `~/notes` directory exists. This can make the script more robust in face of unforeseen situations or misconfigurations.
+### Description
+
+This script is designed to streamline the process of opening markdown notes stored in the `~/notes` directory using the `nvim` editor. It leverages the power of `fd` to search for markdown files, `fzf` to allow interactive selection of the files, and `bat` to display a preview of the files' contents before opening them.
+
+Here’s how it works:
+1. The `fd` command filters and lists all `.md` files in the `~/notes` directory.
+2. The list is piped into `fzf`, which presents the user with a list of options in a TUI (text-based user interface). 
+3. `fzf` also includes a preview feature that highlights the selected note using `bat`.
+4. Once a selection is made, the script opens the note immediately in `nvim`.
+
+This script makes note management efficient and smooth by combining powerful CLI tools.
+
+---
+
+### Usage
+
+1. Save the script to a convenient location (e.g., `~/.scripts/bin/vimwiki.sh`).
+2. Make it executable:
+   ```bash
+   chmod +x ~/.scripts/bin/vimwiki.sh
+   ```
+3. Run it directly from the terminal:
+   ```bash
+   ~/.scripts/bin/vimwiki.sh
+   ```
+4. To enhance convenience, you can create an alias in your shell configuration (e.g., `.bashrc` or `.zshrc`):
+   ```bash
+   alias vimwiki="~/.scripts/bin/vimwiki.sh"
+   ```
+   Then, simply use the alias to invoke the script:
+   ```bash
+   vimwiki
+   ```
+
+You can also bind this script to a keybinding in your Window Manager (e.g., Qtile) to launch it with a keyboard shortcut. Make sure the path to `vimwiki.sh` is correctly referenced when configuring the key binding.
+
+---
+
+> [!NOTE]
+> - The script currently assumes that the `~/notes/` directory is pre-existing. If it doesn't exist, you'll need to create it manually or modify the script accordingly.
+> - Instead of hardcoding the `~/notes` directory, consider allowing users to pass the directory as an environment variable or an argument to make the script more flexible.
+> - The `become` binding in `fzf` is great for this use case but ensure that your system's `fzf` version supports it.
+> - Using `nvim` here is hardcoded. It might be a good idea to allow users to specify their preferred editor.

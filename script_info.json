@@ -156,9 +156,9 @@
   "fzfmenu.sh": {
     "file": "fzfmenu.sh",
     "path": "bin/fzfmenu.sh",
-    "description": "A helper script to replicate `dmenu` functionality using `fzf` and `xterm`.",
+    "description": "A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.",
     "doc_path": "docs/scripts/fzfmenu.sh.md",
-    "hash": "183e791947e3e39cf2f564708652a76628507e1a9f940836252bd04d45bdea40"
+    "hash": "83128a1ffc9de6f85053b7d7a96cac612e728625e2931756a440cf0d196adbd3"
   },
   "fzf_songlauncher.sh": {
     "file": "fzf_songlauncher.sh",
@@ -513,9 +513,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "bin/script_launcher.sh",
-    "description": "Launch and manage scripts using fzf with preview and execute options",
+    "description": "A script that uses `fzf` for selecting and executing other scripts with preview and additional utilities.",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "7cf61b430cf942ba61a2e7679c95cc9adb1e3bc6fdc01878f391ff1d041472de"
+    "hash": "8d0eb841595bcfb9e40739a4585e47ffdd2e6f9f955799f975f6a552a0f98dec"
   },
   "select_script": {
     "file": "select_script",
@@ -653,9 +653,9 @@
   "vimwiki.sh": {
     "file": "vimwiki.sh",
     "path": "bin/vimwiki.sh",
-    "description": "Open a note in Vim using `fzf` for selection",
+    "description": "Open a note in vim with fzf",
     "doc_path": "docs/scripts/vimwiki.sh.md",
-    "hash": "cb9480a3ccf9a0d430afd41f57cfbfa15f5397a1d631d6efe065e658aea6ea9a"
+    "hash": "65d8890a40436337d033371be359624667889ffa5c1d5e2c8ee3d4ac16335f7f"
   },
   "vox.py": {
     "file": "vox.py",
@@ -712,5 +712,12 @@
     "description": "Script to manage Jupyter Lab, Jupyter Notebook, or IPython in a virtual environment",
     "doc_path": "docs/scripts/snekai.sh.md",
     "hash": "17d24d17a5e9afe6681507b6c26e5dc1f422dcfc85c2522de14aefcca1e3f3ed"
+  },
+  "send_email.py": {
+    "file": "send_email.py",
+    "path": "bin/send_email.py",
+    "description": "A Python script to send emails using `smtplib` with support for fetching email credentials securely via the `pass` utility.",
+    "doc_path": "docs/scripts/send_email.py.md",
+    "hash": "b21bd0f754a10f3bd69209812a4c259fc7a0c1d4ba335f3061c76ecf65cda45b"
   }
 }

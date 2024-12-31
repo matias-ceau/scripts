@@ -11,4 +11,4 @@ done
 # Join the escaped arguments
 fzf_args="${args[*]}"
 
-xterm -T 'fzfmenu' -e bash -c "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"
+xterm -T 'fzfmenu' -e "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"

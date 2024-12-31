@@ -21,7 +21,7 @@
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Display script for a custom color scheme in terminal using Bash.*
 - [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *Interactive file manager using fzf with advanced features.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Select and play an album using `fzf` and `cmus` on Arch Linux with qtile WM*
-- [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script to replicate `dmenu` functionality using `fzf` and `xterm`.*
+- [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A replacement for Dmenu using `fzf` with floating `xterm` for commands.*
 - [generate_commit_message.sh](scripts/generate_commit_message.sh.md) -- *Script to generate commit messages using OpenAI's GPT-4o-mini*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Creates thumbnails of currently open windows on your qtile environment.*
@@ -33,7 +33,6 @@
 - [git_update_all_other_repos.sh](scripts/git_update_all_other_repos.sh.md) -- *Automatically updates all git repositories found under a specified directory using HTTPS.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Converts a GRUB_INIT_TUNE string into an MP3 audio file using Python*
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *Enhanced help command for `pastel` with preview features using `fzf`.*
-- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *Enhanced fzf integration with Alacritty, supports piping output*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs a list of necessary packages using `paru`*
 - [interactive_git_sync.sh](scripts/interactive_git_sync.sh.md) -- *Script to synchronize multiple repositories interactively using `fzf`.*
 - [json_to_markdown.py](scripts/json_to_markdown.py.md) -- *Convert JSON content to a formatted markdown file.*
@@ -76,9 +75,10 @@
 - [rgfzf.sh](scripts/rgfzf.sh.md) -- *A script combining ripgrep and fzf to search files and open results in Vim.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *A script to transfer and manage music files to a Sandisk media player*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Transfers music files to a Sandisk media player while managing storage capacity and file formats.*
-- [script_launcher.sh](scripts/script_launcher.sh.md) -- *Launch and manage scripts using fzf with preview and execute options*
+- [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script that uses `fzf` for selecting and executing other scripts with preview and additional utilities.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
 - [select_script](scripts/select_script.md) -- *A tool to select and execute scripts from a cached list using `rofi`.*
+- [send_email.py](scripts/send_email.py.md) -- *A Python script to send emails using `smtplib` with support for fetching email credentials securely via the `pass` utility.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automate the setup of folder syncs with Mega based on hostname*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Analyze and extract the most frequent lines, words, or characters from shell history files.*
 - [show-all-qutebrowser-scripts.sh](scripts/show-all-qutebrowser-scripts.sh.md) -- *Display and colorize the last few scripts installed with qutebrowser*
@@ -102,7 +102,7 @@
 - [update_birthdays.sh](scripts/update_birthdays.sh.md) -- *Updates a CSV file with the creation dates of files in a directory.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *Updates the `.env` file for storing API keys from environment variables*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Script to create symlinks in `~/.local/bin` and manage old/broken ones.*
-- [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in Vim using `fzf` for selection*
+- [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in vim with fzf*
 - [vox.py](scripts/vox.py.md) -- *A script to list and describe Vox amplifier settings and modes.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Script to manage and change wallpapers from a list*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *Identify scripts lacking inline documentation markers*

@@ -1,44 +1,68 @@
-
-# Script Launcher
+# Script Launcher with FZF Integration
 
 ---
 
-**script_launcher.sh**: Launch and manage scripts using fzf with preview and execute options
+**script_launcher.sh**: A script that uses `fzf` for selecting and executing other scripts with preview and additional utilities.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder.
-- `bat`: A cat clone with syntax highlighting.
-- `fd`: A simple, fast, and user-friendly alternative to `find`.
-- `ripgrep (rg)`: A line-oriented search tool that recursively searches directories for a regex pattern.
-- `pastel`: A command-line tool to generate, analyze, convert and manipulate colors.
-- `improved-fzfmenu.sh`: A customized fzf script for enhanced visual navigation.
-- `nvim`: Neovim editor.
-- Environment variables (`FLEXOKI_*` colors, `SCRIPTS` path).
-
-### Description
-
-This script, `script_launcher.sh`, is designed to help manage and execute scripts through an interactive menu powered by `fzf`. Depending on the arguments, it uses either `fzf` directly or an improved version through `improved-fzfmenu.sh`. It previews script documentation or the script source itself using `bat`. The displayed scripts are color-coded based on their file extensions, enhancing visibility (`.xsh`, `.py`, `.sh`, etc.). The script defines several keybindings for quick actions, such as executing a script directly, editing it in `nvim`, or switching between viewing the script's documentation and source.
-
-### Usage
-
-The script should be executed from the terminal. Keybindings provided within `fzf` allow different actions, such as:
-
-- **Execute a script**: Press `Enter`.
-- **Edit script in Neovim**: `Ctrl-e`.
-- **Open in a new terminal for editing**: `Alt-e`.
-- **View documentation/source**: Toggle with `Alt-s` and `Alt-d`.
-  
-```bash
-# To run the script launcher
-bash script_launcher.sh
-
-# To run with the embedded fzf
-bash script_launcher.sh --embedded
-```
+- `fzf`: A command-line fuzzy finder used for script selection and interaction.
+- `fd`: A fast and user-friendly alternative to `find`, required for locating scripts.
+- `bat`: A syntax-highlighting pager, used for previewing documentation and source code.
+- `rg` (ripgrep): Efficient recursive search for matching patterns in files.
+- `pastel`: For color handling and ANSI formatting.
+- User scripts:
+  - `improved-fzfmenu.sh`: An enhanced wrapper around `fzf`.
+  - `terminal_with_command.sh`: Opens a terminal with the specified command.
+  - `nvim_in_new_terminal.sh`: Opens `nvim` in a new terminal with the specified command.
 
 ---
 
-> [!TIP] While feature-rich, the script can benefit from a graphical or textual guide during its use to enhance user understanding of its capabilities, especially for new users. Also, consider documenting or automating the setup for necessary environment variables such as `$FLEXOKI_*` colors and `$SCRIPTS`.
+### Description
+
+This script is a utility to launch and manage scripts interactively via a fuzzy finder (`fzf`). Depending on the mode, it either uses `fzf` directly (`--embedded` / `-E`) or an extended custom interface (`improved-fzfmenu.sh`).
+
+Key features:
+- **Script filtering**: Uses `fd` to locate files/scripts by extension (`.sh`, `.py`, `.xsh`), with colored labels.
+- **Preview integration**:
+  - Source code preview via `bat` with syntax highlighting.
+  - Markdown documentation preview for related `.md` files in the `$SCRIPTS` directory.
+- **Key bindings**:
+  - `Enter`: Execute the selected script directly.
+  - `Alt-Enter`: Launch the script in a new terminal via `terminal_with_command.sh`.
+  - `Ctrl-E`: Open the script for editing in `nvim`.
+  - `Alt-E`: Edit the script in a new terminal window.
+  - `Alt-S / Alt-D`: Toggle previews between documentation and source code.
+
+It also dynamically generates labels, headers, and color-coded indicators using `pastel` for better user experience.
+
+---
+
+### Usage
+
+```bash
+script_launcher.sh [OPTION]
+```
+
+Options:
+- `--embedded` / `-E`: Runs the script with the standard `fzf` behavior instead of extended mode.
+
+Example command:
+```bash
+script_launcher.sh
+```
+
+When launched:
+- Use the fuzzy finder (`fzf`) interface to search and select a script.
+- CTRL-E, ALT-E, ALT-S, Alt-D bindings enhance the functionality for interaction and previewing.
+
+Environment variables such as `$SCRIPTS` and `$FLEXOKI_*` (for colors) must be defined for correct functionality.
+
+---
+
+> [!NOTE]
+> - The script assumes the presence of specific user scripts (e.g., `terminal_with_command.sh`) and settings (e.g., `$SCRIPTS` path). Consider making it more robust with error checks for potentially undefined environment variables or missing dependencies.
+> - Adding the ability to toggle multiple-selection mode in `fzf` or process additional arguments to functions could improve flexibility.
+> - The TODO section suggests potential enhancements, like rendering documentation as PDF/HTML or logging functionality, which could significantly improve usability.
