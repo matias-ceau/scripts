@@ -29,7 +29,7 @@ test_terminal() {
     echo -e "${terminal}$(date '+%s')${total}" >> "$TMPFILE"
 }
 
-kitty --title floating -e fzf
+kitty -1 --title floating -e fzf
 test_terminal "Kitty" "kitty --title floating -e ls"
 alacritty --title floating -e fzf
 test_terminal "Alacritty" "alacritty --title floating -e ls"
