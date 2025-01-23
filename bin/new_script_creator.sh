@@ -41,18 +41,22 @@ ensure_extension() {
     fi
 }
 
-script_creator() {
-    path="$SCRIPT_PATH/$1"
-    templater "$1" > "$path"
-    nvim "$path"
-    if [ "$(wc -m $path)" -gt 22 ]; then
-        chmod +x "$path"
+validate_script() {
+    if [ "$(wc -m "$1")" -gt 22 ]; then
+        chmod +x "$1"
         utils_update_symlimks.sh
-        echo "Created script $1"
-        bat "$path"
+        echo "Created script $2"
+        bat "$1"
     else
         echo "No script created!"
     fi
+}
+
+
+script_creator() {
+    path="$SCRIPT_PATH/$1"
+    templater "$1" > "$path"
+    nvim "$path" && validate_script "$path" "$1"
 }
 
 case "$1" in

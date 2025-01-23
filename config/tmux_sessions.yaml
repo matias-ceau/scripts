@@ -26,3 +26,8 @@ sessions:
   windows:
   - name: lab
     command: snekai.sh lab
+- name: SSH
+  autostart: true
+  windows:
+  - name: ssh_fzf
+    command: ssh-fzf.sh
