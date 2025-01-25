@@ -1,0 +1,62 @@
+Tryptamines	
+===========
+- 4-ACO-DMT	
+- 4-HO-MET	
+- 4-HO-MIPT	
+- 5-MEO-AMT	
+- 5-MEO-DALT	
+- 5-MEO-DIPT	
+- 5-MEO-DMT	
+- 5-OH-MET	
+- AL-LAD		
+- ALD-52		
+- AMT		
+- AYAHUASCA WHOLE	
+- BUFOTENINE	
+- CHAMPIGNON HALLUCINOGENE (SANS AUTRE INFO)	
+- DET		
+- DMT		
+- ETH-LAD		
+- ETRYPTAMINE	
+- PSILACETIN	
+- PSILOCINE	
+- PSILOCYBE	
+- PSILOCYBINE	
+ 
+Phényléthylamines
+=================
+- 25B-NBOH
+- 25B-NBOMe
+- 25C-NBOH
+- 25C-NBOMe
+- 25D-NBOMe
+- 25E-NBOMe
+- 25F-BOMe
+- 25I-NBF
+- 25I-NBOH
+- 25I-NBOMe
+- 25P-NBOMe
+- 2C-B
+- 2C-C
+- 2C-D
+- 2C-E
+- 2C-F
+- 2C-I
+- 2C-N
+- 2C-P
+- 2C-T-19
+- 2C-T-2
+- 2C-T-21
+- 2C-T-4
+- 2C-T-7
+- 2C-T-8
+- ALPHA-METHYLMESCALINE
+- DOB
+- DOC
+- DOI
+- DOM
+- DON
+- MESCALINE
+- Mescaline
+- PEYOTL
+- βk-2C-B
