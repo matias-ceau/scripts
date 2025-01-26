@@ -50,5 +50,6 @@ dependencies = [
     "notebook-shim",
     "ollama",
     "openai",
+    "pydantic-ai[examples]>=0.0.20",
     "rich",
 ]

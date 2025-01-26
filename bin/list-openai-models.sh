@@ -15,8 +15,7 @@ gen-model-list() {
     done |
     tr '\n' '\t' |
     sed 's/"\t/"\n/g' |
-    sort |
-    cat models > "$CACHE"
+    sort > "$CACHE"
 }
 
 if [[ "$DONTUPDATE" ]]; then
