@@ -19,6 +19,7 @@
 - [editor.sh](scripts/editor.sh.md) -- *A script for fast file editing using fzf with customizable search paths.*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *Adjust relative paths in markdown links to start from a base directory*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Display script for a custom color scheme in terminal using Bash.*
+- [ftp-data-mount.sh](scripts/ftp-data-mount.sh.md) -- *Mounts a specific folder from Mega's FTP service to a local destination.*
 - [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *Interactive file manager using fzf with advanced features.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Select and play an album using `fzf` and `cmus` on Arch Linux with qtile WM*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.*
@@ -40,7 +41,7 @@
 - [keyboard-help.sh](scripts/keyboard-help.sh.md) -- *Displays keyboard layout using a Python script in a floating terminal*
 - [launch_tmux_with_music_player.sh](scripts/launch_tmux_with_music_player.sh.md) -- *Script to create a new tmux session called "music" and open cmus.*
 - [legacy-sync.repo.sh](scripts/legacy-sync.repo.sh.md) -- *A script to synchronize a Git repository while providing enhanced output formatting.*
-- [list-openai-models.sh](scripts/list-openai-models.sh.md) -- *List available OpenAI models, caching results for efficiency*
+- [list-openai-models.sh](scripts/list-openai-models.sh.md) -- *Caches and displays a list of OpenAI models, sorted by creation date.*
 - [list_process.sh](scripts/list_process.sh.md) -- *Displays a sorted list of all running services on your system.*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automate the generation of Markdown documentation for scripts using Llama 3.1.*
 - [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Automates documentation generation and updates for your scripts folder*
@@ -50,7 +51,7 @@
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard or script launcher for Arch Linux*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
 - [minimal-browser.py](scripts/minimal-browser.py.md) -- *A simple Python-based browser for rendering local HTML files*
-- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A utility to create new user scripts with optional templating*
+- [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A utility to create or convert scripts with templating for specific extensions (Bash, Python, Xonsh).*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *Automates script creation with templating based on file extension*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album when playing music in cmus*
 - [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with Neovim*
@@ -78,7 +79,7 @@
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script that uses `fzf` for selecting and executing other scripts with preview and additional utilities.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
 - [select_script](scripts/select_script.md) -- *A tool to select and execute scripts from a cached list using `rofi`.*
-- [send_email.py](scripts/send_email.py.md) -- *A Python script to send emails using `smtplib` with support for fetching email credentials securely via the `pass` utility.*
+- [send_email.py](scripts/send_email.py.md) -- *Script to send emails automatically through Python and the Gmail SMTP server.*
 - [setting-up-syncs.sh](scripts/setting-up-syncs.sh.md) -- *Automate the setup of folder syncs with Mega based on hostname*
 - [shell_history_info.sh](scripts/shell_history_info.sh.md) -- *Analyze and extract the most frequent lines, words, or characters from shell history files.*
 - [show-all-qutebrowser-scripts.sh](scripts/show-all-qutebrowser-scripts.sh.md) -- *Display and colorize the last few scripts installed with qutebrowser*
@@ -86,11 +87,13 @@
 - [snekai.sh](scripts/snekai.sh.md) -- *Script to manage Jupyter Lab, Jupyter Notebook, or IPython in a virtual environment*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Launch and play songs with `cmus` using `dmenu` interface.*
 - [speach-to-text.py](scripts/speach-to-text.py.md) -- *Record audio and transcribe it using OpenAI's Whisper model*
+- [ssh-fzf.sh](scripts/ssh-fzf.sh.md) -- *Quickly select and connect to an SSH destination using `fzf`.*
 - [sync-repo-simple.py](scripts/sync-repo-simple.py.md) -- *A script to automate synchronization of a local git repository with its remote counterpart*
 - [sync-repo-simple.sh](scripts/sync-repo-simple.sh.md) -- *Automates syncing a git repository, handling conflicts, and providing sync summaries.*
 - [sync-repo.py](scripts/sync-repo.py.md) -- *Automates syncing of a git repository and handles conflicts*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *Automates synchronization of a Git repository with support for conflict handling.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal window to execute a specified command.*
+- [test.sh](scripts/test.sh.md) -- *A script to handle input from standard input (stdin) or provide a default message if no input is given.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *A script to provide useful assistance and search functionalities for tmux commands and sections.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*
 - [tmux_manager.py](scripts/tmux_manager.py.md) -- *Manage and automate tmux sessions using a configuration file*
@@ -99,10 +102,13 @@
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *Convert symbolic links to copies of their targets.*
 - [try_the_bat_suit.sh](scripts/try_the_bat_suit.sh.md) -- *Dynamic file previewer using `bat` and `fzf` for code files with syntax highlighting.*
 - [tui-gpt.py](scripts/tui-gpt.py.md) -- *A terminal-based GPT chat interface resembling 'Mother' from the Aliens movies.*
+- [ugc-python.py](scripts/ugc-python.py.md) -- *Extracts movie titles from a specific HTML structure using Beautiful Soup.*
 - [update_birthdays.sh](scripts/update_birthdays.sh.md) -- *Updates a CSV file with the creation dates of files in a directory.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *Updates the `.env` file for storing API keys from environment variables*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Script to create symlinks in `~/.local/bin` and manage old/broken ones.*
+- [utopia.sh](scripts/utopia.sh.md) -- *Fetches film data from the Utopia Cinema Bordeaux website and saves it locally.*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Open a note in vim with fzf*
 - [vox.py](scripts/vox.py.md) -- *A script to list and describe Vox amplifier settings and modes.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Script to manage and change wallpapers from a list*
+- [wrapper.sh](scripts/wrapper.sh.md) -- *A simple script to execute a command and log its execution with a timestamp.*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *Identify scripts lacking inline documentation markers*

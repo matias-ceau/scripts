@@ -1,42 +1,64 @@
-# OpenAI Models Listing Script
+# list-openai-models.sh
 
 ---
 
-**list-openai-models.sh**: List available OpenAI models, caching results for efficiency
+**list-openai-models.sh**: Caches and displays a list of OpenAI models, sorted by creation date.
 
 ---
 
 ### Dependencies
 
-- `openai`: OpenAI CLI tool for interacting with OpenAI's API.
-- `jq`: A lightweight and flexible command-line JSON processor.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `sed` and `tr`: Standard Unix utilities for text processing.
+This script requires the following dependencies to function correctly:
+
+- `openai`: OpenAI CLI tool, used to fetch model details from OpenAI's API.  
+- `jq`: Command-line JSON processor, for parsing API responses.   
+- `date`: A GNU core utility to handle timestamps effectively.  
+- `tr`, `sed`, `sort`: Standard Unix tools for text processing.  
+- `bat`: A utility for syntax highlighting and displaying files.  
+- Environment variable `XDG_CACHE_HOME`: For specifying cache file location.  
+  
+Ensure all of these are installed and configured correctly on your Arch Linux system.
 
 ### Description
 
-This script fetches and lists available models from the OpenAI API, storing the results in a cache to avoid fetching data unnecessarily. It uses `openai api models.list` to retrieve a list of models, with their creation date and ID. The results are processed by `jq` to extract the necessary fields, converted into a TSV format, and then sorted and cached.
+This script fetches and displays the list of OpenAI models using the OpenAI API. To reduce repeated API calls, it implements a caching mechanism where the list is stored in `$XDG_CACHE_HOME/openai-model-list.tsv`. If the cache file exists and is less than 24 hours old, it retrieves the list directly from the cache. Otherwise, it fetches the information from the API, processes it, and updates the cache.
 
-The cache file, `openai-model-list.tsv`, is stored in the directory specified by the `XDG_CACHE_HOME` environment variable. If the cache file is less than 24 hours old, the script displays the cached list using `bat`, otherwise, it updates the cache by calling `gen-model-list`.
+Key steps within the script:
+
+- Using `openai api models.list` to fetch model data.
+- Parsing JSON results with `jq` and formatting timestamps using `date`.
+- Caching processed data into a tab-separated value file.
+- Displaying the generated list with syntax highlighting via `bat`.
 
 ### Usage
 
-To use this script, make sure the `openai`, `jq`, and `bat` utilities are installed and the OpenAI API key is correctly configured through the OpenAI CLI.
-
-Run the script from the terminal:
+To use this script, simply execute it in the terminal:
 
 ```bash
-bash /home/matias/.scripts/bin/list-openai-models.sh
+~/.scripts/bin/list-openai-models.sh
 ```
 
-The script can be used interactively and outputs the list of models in a formatted TSV, highlighting through `bat`.
+This will:
 
-For integration with qtile or keybindings, consider assigning a hotkey to execute this script directly, adapting your configuration setup to suit frequent queries.
+1. Check if a cache file exists and is valid (less than 24 hours old).
+2. If valid, display the cached data.
+3. Otherwise, refresh the list by calling the OpenAI API, process the data, update the cache, and display the results.
+
+The output will be formatted neatly due to `bat`.
+
+#### Example Output:
+
+```
+2023-10-12	model-davinci
+2023-09-30	model-curie
+...
+```
+
+You can also bind this script to a shortcut in qtile or include it in an automated task.
 
 ---
 
-> [!NOTE]
-> - The script assumes the presence of a valid API key and proper configuration of the OpenAI CLI.
-> - Using `jq -c '.["created", "id"]'` is incorrect syntax. Instead, it should properly map to the JSON data structure. Similarly, be aware of potential errors in generation processing. Double-check the JSON keys and adapt any transformations.
-> - The cache creation logic should consider using `mktemp` or ensuring the directory exists.
-> - The use of `tr` and `sed` is a bit complex, simplifying this processing segment can improve maintenance. Consider testing with edge cases or adding verbose output for troubleshooting.
+> [!NOTE]  
+> - The script lacks error handling for cases when the `openai` CLI command or `bat` are unavailable, leading to probable failures. Adding checks for dependency availability before execution could be a valuable enhancement.
+> - The cache refresh logic is overly reliant on correct timestamps. Ensure time configurations on your system are accurate.  
+> - There is no handling for API rate limits—consider adding a fallback in case the OpenAI API blocks requests.

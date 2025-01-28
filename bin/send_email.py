@@ -2,11 +2,11 @@
 
 # INFO:#@CLI@ "Script to send emails"
 
+import argparse
 import smtplib
 import ssl
-from email.message import EmailMessage
 import subprocess
-import argparse
+from email.message import EmailMessage
 
 
 def get_password(sender):
@@ -27,9 +27,9 @@ def argument_parser():
     parser = argparse.ArgumentParser(description="Send an email")
     parser.add_argument("--email-sender", default="matiasylinenceau@gmail.com")
     parser.add_argument("--email-receiver", default="matias@ceau.net")
-    parser.add_argument("--subject", default="automatic")
+    parser.add_argument("-s", "--subject", default="automatic")
     parser.add_argument("--display-name", default="self")
-    parser.add_argument("--content", default="Testing")
+    parser.add_argument("-c", "--content", default="Testing")
     return parser.parse_args()
 
 

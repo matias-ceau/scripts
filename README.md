@@ -4,25 +4,25 @@
 
 <!-- llm_generated_output_start -->
 
-This repository contains a collection of versatile scripts designed to enhance productivity for users operating within an Arch Linux environment with the Qtile window manager. The scripts focus on diverse functionalities ranging from file manipulation and documentation generation to multimedia handling and system management.
+This repository contains a collection of diverse scripts primarily designed for use on an Arch Linux system with the **Qtile** window manager. These scripts serve a variety of utility purposes, ranging from automation of tasks to enhancing usability in managing system resources, audio, multimedia, and personal productivity applications.
 
-Notable categories of scripts included in this collection are:
+The scripts are crafted to streamline workflows, manage files, or enhance graphical sessions. Here’s an overview of the types of scripts included in this repository:
 
-- **File and Directory Management**: Scripts like [fix-markdown-links.sh](docs/scripts/fix-markdown-links.md) help standardize markdown link formats, while [m3u_creator.sh](docs/scripts/m3u_creator.sh.md) generates playlists for music files found in specified directories.
+- **Documentation and Management Tools**: Scripts like the [llm-script-describer.py](docs/scripts/llm-script-describer.md) and [update_env.xsh](docs/scripts/update_env.xsh.md) automate the generation of documentation for user scripts, ensuring they are properly organized and maintained. Other scripts focus on specific functionalities like managing symlinks and creating or updating configuration files dynamically.
 
-- **Documentation and Script Management**: The utility of tools like the [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) automates the process of generating and updating documentation for installed scripts using OpenAI's models. Similarly, scripts like [json_to_markdown.py](docs/scripts/json_to_markdown.py.md) facilitate the conversion of JSON files into formatted markdown documents.
+- **Interactive File and Music Management**: Several scripts such as [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) and [playlist_player.xsh](docs/scripts/playlist_player.xsh.md) leverage interactive command-line tools like `fzf` and `dmenu` to allow users to quickly select playlists or albums and control playback in **cmus**. Additionally, scripts like [random_album.xsh](docs/scripts/random_album.xsh.md) enhance the music listening experience by randomizing playback.
 
-- **Media Handling**: Several scripts cater to media file management, such as [create_cover_art.sh](docs/scripts/create_cover_art.sh.md), which generates spectrogram images from audio files, and [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) which lets users quickly select and play albums with their favorite music player.
+- **Web and Document Interaction**: Utility scripts such as [openwebui-launcher.sh](docs/scripts/openwebui-launcher.md) and [pdfopener.sh](docs/scripts/pdfopener.md) automate the opening of web applications or documents, streamlining access to frequently used content.
 
-- **Interactive Interfaces and Utilities**: Many scripts leverage fuzzy finding capabilities using tools like `fzf` and `dmenu`, enabling users to select from lists interactively. For instance, [fzf_file_manager.sh](docs/scripts/fzf_file_manager.sh.md) provides an interactive file manager within the terminal, while [keyboard-help.sh](docs/scripts/keyboard-help.sh.md) displays the current keyboard layout.
+- **Git Management**: Scripts like [sync-repo-simple.sh](docs/scripts/sync-repo-simple.md) and [git_clone_by_author-repo.sh](docs/scripts/git_clone_by_author-repo.md) facilitate the management of Git repositories, providing functionalities for cloning, synchronizing, and automatically handling various Git operations with ease.
 
-- **Simplifying System Operations**: Scripts like [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) and [git_update_all_other_repos.sh](docs/scripts/git_update_all_other_repos.sh.md) help automate the management of git repositories, ensuring users can efficiently update and organize their projects.
+- **Terminal and Environment Management**: Various scripts help manage the terminal environment or enhance usability within **Qtile**, like the [tmux_session.sh](docs/scripts/tmux_session.sh.md), which creates named tmux sessions, and the [fzfmenu_run.sh](docs/scripts/fzfmenu_run.md), which integrates `fzf` for managing executable scripts interactively.
 
-- **Custom Automation and Integration**: The repository includes tailor-made scripts like [obsidian.xsh](docs/scripts/obsidian.xsh.md) and [playmusic.xsh](docs/scripts/playmusic.xsh.md), designed for handling personal workflows related to note-taking applications and music playing, respectively, employing eco-friendly command structures and frequency management.
+- **System Configuration and Maintenance**: Scripts such as [you_are_not_documented.sh](docs/scripts/you_are_not_documented.md) maintain code quality by checking for documentation in shell scripts. Meanwhile, the [install_dependencies.sh](docs/scripts/install_dependencies.md) provides a convenient way to set up a development environment.
 
-- **Development Tools and Test Utilities**: Various scripts, from [command_prompt.sh](docs/scripts/command_prompt.sh.md) that suggest commands from history to [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) that manage configuration files, provide essential functions for developers and power users.
+For ease of use and to make the most out of this collection of utilities, it is highly recommended to ensure that all dependencies (like `fzf`, `cmus`, `jq`, etc.) are installed and properly configured on your system. The scripts can also be integrated into your **Qtile** configurations for quick access via keybindings, streamlining your workflow to maximize efficiency.
 
-Overall, each script enhances the experience by allowing users to script their workflows efficiently, manage their files, and automate repetitive tasks seamlessly within their system. The integration of utilities allows for a tailored user experience, making this repository a valuable asset for users looking to streamline their daily tasks and improve efficiency on Arch Linux.
+By employing these scripts, users can enhance their Arch Linux experience, automate mundane tasks, manage multimedia more effectively, and maintain a clean and efficient working environment tailored to individual preferences and workflows.
 
 <!-- llm_generated_output_end -->
 
@@ -53,6 +53,7 @@ Overall, each script enhances the experience by allowing users to script their w
 | [editor.sh](docs/scripts/editor.sh.md) | A script for fast file editing using fzf with customizable search paths. |
 | [fix-markdown-links.sh](docs/scripts/fix-markdown-links.sh.md) | Adjust relative paths in markdown links to start from a base directory |
 | [flexoki_show.sh](docs/scripts/flexoki_show.sh.md) | Display script for a custom color scheme in terminal using Bash. |
+| [ftp-data-mount.sh](docs/scripts/ftp-data-mount.sh.md) | Mounts a specific folder from Mega's FTP service to a local destination. |
 | [fzf-file-manager.sh](docs/scripts/fzf-file-manager.sh.md) | Interactive file manager using fzf with advanced features. |
 | [fzf_albumlauncher.xsh](docs/scripts/fzf_albumlauncher.xsh.md) | Select and play an album using `fzf` and `cmus` on Arch Linux with qtile WM |
 | [fzf_songlauncher.sh](docs/scripts/fzf_songlauncher.sh.md) | Quickly play a song with cmus using fzf for selection |
@@ -75,7 +76,7 @@ Overall, each script enhances the experience by allowing users to script their w
 | [jupyter_new_notebook.xsh](docs/scripts/jupyter_new_notebook.xsh.md) | Script to create and open a new Jupyter Notebook in Chromium |
 | [keyboard-help.sh](docs/scripts/keyboard-help.sh.md) | Displays keyboard layout using a Python script in a floating terminal |
 | [launch_tmux_with_music_player.sh](docs/scripts/launch_tmux_with_music_player.sh.md) | Script to create a new tmux session called "music" and open cmus. |
-| [list-openai-models.sh](docs/scripts/list-openai-models.sh.md) | List available OpenAI models, caching results for efficiency |
+| [list-openai-models.sh](docs/scripts/list-openai-models.sh.md) | Caches and displays a list of OpenAI models, sorted by creation date. |
 | [list_process.sh](docs/scripts/list_process.sh.md) | Displays a sorted list of all running services on your system. |
 | [llama-all-scripts-describer.py](docs/scripts/llama-all-scripts-describer.py.md) | Automate the generation of Markdown documentation for scripts using Llama 3.1. |
 | [llm-script-describer.py](docs/scripts/llm-script-describer.py.md) | Automates documentation generation and updates for your scripts folder |
@@ -85,7 +86,7 @@ Overall, each script enhances the experience by allowing users to script their w
 | [megaignore_editor.sh](docs/scripts/megaignore_editor.sh.md) | Interactive editor for .megaignore files using `fzf` and `nvim`. |
 | [midi2arch.xsh](docs/scripts/midi2arch.xsh.md) | Transform a MIDI controller into a keyboard or script launcher for Arch Linux |
 | [minimal-browser.py](docs/scripts/minimal-browser.py.md) | A simple Python-based browser for rendering local HTML files |
-| [new_script_creator.sh](docs/scripts/new_script_creator.sh.md) | A utility to create new user scripts with optional templating |
+| [new_script_creator.sh](docs/scripts/new_script_creator.sh.md) | A utility to create or convert scripts with templating for specific extensions (Bash, Python, Xonsh). |
 | [next_album.xsh](docs/scripts/next_album.xsh.md) | Skip to the next album when playing music in cmus |
 | [nvim_in_new_terminal.sh](docs/scripts/nvim_in_new_terminal.sh.md) | Opens a floating terminal to edit a file with Neovim |
 | [obsidian-vault-selector.sh](docs/scripts/obsidian-vault-selector.sh.md) | Opens and previews Obsidian vaults using improved FZF menu |
@@ -110,7 +111,7 @@ Overall, each script enhances the experience by allowing users to script their w
 | [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md) | A script to transfer and manage music files to a Sandisk media player |
 | [script_launcher.sh](docs/scripts/script_launcher.sh.md) | A script that uses `fzf` for selecting and executing other scripts with preview and additional utilities. |
 | [select_script](docs/scripts/select_script.md) | A tool to select and execute scripts from a cached list using `rofi`. |
-| [send_email.py](docs/scripts/send_email.py.md) | A Python script to send emails using `smtplib` with support for fetching email credentials securely via the `pass` utility. |
+| [send_email.py](docs/scripts/send_email.py.md) | Script to send emails automatically through Python and the Gmail SMTP server. |
 | [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) | Automate the setup of folder syncs with Mega based on hostname |
 | [shell_history_info.sh](docs/scripts/shell_history_info.sh.md) | Analyze and extract the most frequent lines, words, or characters from shell history files. |
 | [show-all-qutebrowser-scripts.sh](docs/scripts/show-all-qutebrowser-scripts.sh.md) | Display and colorize the last few scripts installed with qutebrowser |
@@ -118,11 +119,13 @@ Overall, each script enhances the experience by allowing users to script their w
 | [snekai.sh](docs/scripts/snekai.sh.md) | Script to manage Jupyter Lab, Jupyter Notebook, or IPython in a virtual environment |
 | [songlauncher.sh](docs/scripts/songlauncher.sh.md) | Launch and play songs with `cmus` using `dmenu` interface. |
 | [speach-to-text.py](docs/scripts/speach-to-text.py.md) | Record audio and transcribe it using OpenAI's Whisper model |
+| [ssh-fzf.sh](docs/scripts/ssh-fzf.sh.md) | Quickly select and connect to an SSH destination using `fzf`. |
 | [sync-repo-simple.py](docs/scripts/sync-repo-simple.py.md) | A script to automate synchronization of a local git repository with its remote counterpart |
 | [sync-repo-simple.sh](docs/scripts/sync-repo-simple.sh.md) | Automates syncing a git repository, handling conflicts, and providing sync summaries. |
 | [sync-repo.py](docs/scripts/sync-repo.py.md) | Automates syncing of a git repository and handles conflicts |
 | [sync-repo.sh](docs/scripts/sync-repo.sh.md) | Automates synchronization of a Git repository with support for conflict handling. |
 | [terminal_with_command.sh](docs/scripts/terminal_with_command.sh.md) | Opens a floating terminal window to execute a specified command. |
+| [test.sh](docs/scripts/test.sh.md) | A script to handle input from standard input (stdin) or provide a default message if no input is given. |
 | [tmux-help.py](docs/scripts/tmux-help.py.md) | A script to provide useful assistance and search functionalities for tmux commands and sections. |
 | [tmux_manager.py](docs/scripts/tmux_manager.py.md) | Manage and automate tmux sessions using a configuration file |
 | [tmux_session.sh](docs/scripts/tmux_session.sh.md) | Script to create a new tmux session with a specified session name, window name, and command. |
@@ -130,12 +133,15 @@ Overall, each script enhances the experience by allowing users to script their w
 | [transform_symlink.sh](docs/scripts/transform_symlink.sh.md) | Convert symbolic links to copies of their targets. |
 | [try_the_bat_suit.sh](docs/scripts/try_the_bat_suit.sh.md) | Dynamic file previewer using `bat` and `fzf` for code files with syntax highlighting. |
 | [tui-gpt.py](docs/scripts/tui-gpt.py.md) | A terminal-based GPT chat interface resembling 'Mother' from the Aliens movies. |
+| [ugc-python.py](docs/scripts/ugc-python.py.md) | Extracts movie titles from a specific HTML structure using Beautiful Soup. |
 | [update_birthdays.sh](docs/scripts/update_birthdays.sh.md) | Updates a CSV file with the creation dates of files in a directory. |
 | [update_env.xsh](docs/scripts/update_env.xsh.md) | Updates the `.env` file for storing API keys from environment variables |
 | [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md) | Script to create symlinks in `~/.local/bin` and manage old/broken ones. |
+| [utopia.sh](docs/scripts/utopia.sh.md) | Fetches film data from the Utopia Cinema Bordeaux website and saves it locally. |
 | [vimwiki.sh](docs/scripts/vimwiki.sh.md) | Open a note in vim with fzf |
 | [vox.py](docs/scripts/vox.py.md) | A script to list and describe Vox amplifier settings and modes. |
 | [wallpaper.sh](docs/scripts/wallpaper.sh.md) | Script to manage and change wallpapers from a list |
+| [wrapper.sh](docs/scripts/wrapper.sh.md) | A simple script to execute a command and log its execution with a timestamp. |
 | [you_are_not_documented.sh](docs/scripts/you_are_not_documented.sh.md) | Identify scripts lacking inline documentation markers |
 
 <!-- table_end -->

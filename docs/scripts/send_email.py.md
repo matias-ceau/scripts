@@ -1,62 +1,62 @@
-# send_email.py - Script to Send Emails
+# Email Sending Script
 
 ---
 
-**send_email.py**: A Python script to send emails using `smtplib` with support for fetching email credentials securely via the `pass` utility.
+**send_email.py**: Script to send emails automatically through Python and the Gmail SMTP server.
 
 ---
 
 ### Dependencies
 
-- `python` (version >= 3.6): Required to run the script.
-- `pass`: A command-line password manager to retrieve the email sender's password.
-  - The password must be stored in `pass` under the sender's email key. For example:
-    ```
-    pass insert matiasylinenceau@gmail.com
-    ```
-- A Gmail account or another mail host supporting SMTP over SSL (adjust the code if using a non-Gmail SMTP server).
+- `argparse`: Standard library module used for parsing command-line arguments.
+- `smtplib`: Standard library module for SMTP (email sending).
+- `ssl`: Standard library module for secure SSL/TLS connections.
+- `subprocess`: Standard library module for interacting with system commands.
+- `email.message.EmailMessage`: To create and format email messages.
+- `pass`: External CLI tool for securely storing and retrieving passwords ([Password Store](https://www.passwordstore.org/)).
 
-### Description
-
-This script is designed to send emails via SMTP using Gmail's SMTP server. The script:
-1. Parses command-line arguments for email details, such as sender, receiver, subject, and content.
-2. Retrieves the sender email's password securely using `pass`, ensuring no plain-text passwords in the script.
-3. Generates an email object containing all provided information.
-4. Logs into Gmail's SMTP server using the SSL protocol and sends the email.
-
-**Key Functions**:
-- `get_password(sender)`: Retrieves the password for the sender email using the `pass` utility.
-- `generate_mail(display_name, email_receiver, subject, content)`: Creates an `EmailMessage` instance with the provided details.
-- `argument_parser()`: Handles and parses command-line arguments, allowing the script to receive customization inputs at runtime.
-
-### Usage
-
-You can run the script via terminal with optional arguments to customize the email parameters. By default, it uses pre-defined settings.
-
-#### **Basic Example**:
-```bash
-python /home/matias/.scripts/bin/send_email.py
-```
-This sends an email with the following defaults:
-- Sender: `matiasylinenceau@gmail.com`
-- Receiver: `matias@ceau.net`
-- Subject: `automatic`
-- Content: `Testing`
-
-#### **Custom Email Example**:
-```bash
-python /home/matias/.scripts/bin/send_email.py --email-sender "user1@gmail.com" --email-receiver "user2@example.com" --subject "Hello there!" --content "This is a test email." --display-name "User1"
-```
-
-#### **Keybinding Example in Qtile**:
-Bind the script to a keybinding in your Qtile configuration:
-```python
-Key([mod], "e", lazy.spawn("python /home/matias/.scripts/bin/send_email.py"))
-```
+**Note**: Ensure that the `pass` tool is installed and your Gmail passwords are saved correctly within `pass`.
 
 ---
 
-> [!TIP] 
-> - Use environment variables or a configuration file alternative to hardcode sensitive default values like `email-sender` for better security.
-> - Improve error handling for `subprocess.run` when retrieving password with `pass`, as the script currently doesn't validate if the password fetching command fails.
-> - Consider adding text formatting or attachments support to enhance email functionality.
+### Description
+
+This script allows sending emails programmatically. It constructs the email using the `email` library, retrieves the sender email's password securely via the `pass` utility, and sends the email using Gmail's SMTP server over an SSL connection.
+
+Key functions:
+1. **`get_password(sender)`**: Uses the `pass` utility to fetch the password for the email account (sender). Assumes passwords are stored in `pass` under the name corresponding to the sender email.
+2. **`generate_mail(...)`**: Creates an `EmailMessage` object with the appropriate headers and content.
+3. **`argument_parser()`**: Parses command-line arguments like sender, recipient, subject, etc. Default values are preconfigured.
+4. **`main()`**: Combines all the above to retrieve the password, format the email, and send it using Gmail's SMTP server.
+
+---
+
+### Usage
+
+Run the script in a terminal with the appropriate arguments:
+
+```bash
+python send_email.py --email-sender <sender_email> --email-receiver <receiver_email> -s <subject> -c <content>
+```
+
+#### Example:
+```bash
+python send_email.py --email-sender matiasylinenceau@gmail.com --email-receiver matias@ceau.net -s "Hello there!" -c "This is a test message sent via Python."
+```
+
+**Command-Line Options**:
+- `--email-sender` (default: "matiasylinenceau@gmail.com"): Sender email address.
+- `--email-receiver` (default: "matias@ceau.net"): Receiver email address.
+- `-s, --subject` (default: "automatic"): Email subject line.
+- `--display-name` (default: "self"): Display name of sender.
+- `-c, --content` (default: "Testing"): Email body content.
+
+This script can be tied to keybindings in qtile for quick email dispatching.
+
+---
+
+> [!TIP]
+> - The script tightly couples with the Gmail SMTP server (`smtp.gmail.com`) and assumes the password is managed by `pass`. Make this configurable in case of non-Gmail emails or alternate password managers.
+> - Remember to use [App Passwords](https://support.google.com/accounts/answer/185833?hl=en) for Gmail to meet their recent security policies.
+> - Error handling can be added, e.g., for cases where `pass` outputs errors or if SMTP fails to connect.
+> - Consider logging the success or failure of each email dispatch for debugging purposes.

@@ -352,9 +352,9 @@
   "new_script_creator.sh": {
     "file": "new_script_creator.sh",
     "path": "bin/new_script_creator.sh",
-    "description": "A utility to create new user scripts with optional templating",
+    "description": "A utility to create or convert scripts with templating for specific extensions (Bash, Python, Xonsh).",
     "doc_path": "docs/scripts/new_script_creator.sh.md",
-    "hash": "de4c9de76ed9a0c617c6ddcf6737f709294271f00ee94ceff259ba50a52b7827"
+    "hash": "31a002266658af01789843a97c12dc5567d376d8e9d54a6e42e81fa9f88309ea"
   },
   "next_album.xsh": {
     "file": "next_album.xsh",
@@ -702,9 +702,9 @@
   "list-openai-models.sh": {
     "file": "list-openai-models.sh",
     "path": "bin/list-openai-models.sh",
-    "description": "List available OpenAI models, caching results for efficiency",
+    "description": "Caches and displays a list of OpenAI models, sorted by creation date.",
     "doc_path": "docs/scripts/list-openai-models.sh.md",
-    "hash": "54eb4fddf5a837e929961606033c924e553493bd4403a7f1c7c8e4679a5e2faf"
+    "hash": "34a1817d48e953302a1948a47f9b55118e0be39fc5e8003890866060ae6baef8"
   },
   "snekai.sh": {
     "file": "snekai.sh",
@@ -716,8 +716,50 @@
   "send_email.py": {
     "file": "send_email.py",
     "path": "bin/send_email.py",
-    "description": "A Python script to send emails using `smtplib` with support for fetching email credentials securely via the `pass` utility.",
+    "description": "Script to send emails automatically through Python and the Gmail SMTP server.",
     "doc_path": "docs/scripts/send_email.py.md",
-    "hash": "b21bd0f754a10f3bd69209812a4c259fc7a0c1d4ba335f3061c76ecf65cda45b"
+    "hash": "0ef7394851b12999f8a8d8a3b14bbecfdb2ca1762d93442c1077a36c704a4030"
+  },
+  "ftp-data-mount.sh": {
+    "file": "ftp-data-mount.sh",
+    "path": "bin/ftp-data-mount.sh",
+    "description": "Mounts a specific folder from Mega's FTP service to a local destination.",
+    "doc_path": "docs/scripts/ftp-data-mount.sh.md",
+    "hash": "57cbb6b2cfe9e74f7db675a20c783fe3672ee53c89ab07382502f100adbe5786"
+  },
+  "ssh-fzf.sh": {
+    "file": "ssh-fzf.sh",
+    "path": "bin/ssh-fzf.sh",
+    "description": "Quickly select and connect to an SSH destination using `fzf`.",
+    "doc_path": "docs/scripts/ssh-fzf.sh.md",
+    "hash": "32e8f67b383f33fc7c642af6abfc93f1155193620648b132e3bde8a8b558a8ca"
+  },
+  "test.sh": {
+    "file": "test.sh",
+    "path": "dev/test.sh",
+    "description": "A script to handle input from standard input (stdin) or provide a default message if no input is given.",
+    "doc_path": "docs/scripts/test.sh.md",
+    "hash": "e63874219e86a4dc26221ac25abb4963e12b60a5f6c8d2a59aa6b6f8147ed8ef"
+  },
+  "ugc-python.py": {
+    "file": "ugc-python.py",
+    "path": "dev/ugc-python.py",
+    "description": "Extracts movie titles from a specific HTML structure using Beautiful Soup.",
+    "doc_path": "docs/scripts/ugc-python.py.md",
+    "hash": "b5263c0fab4cd2eb00954b92a9d44446866573228eebac4732a991f97e146007"
+  },
+  "utopia.sh": {
+    "file": "utopia.sh",
+    "path": "dev/utopia.sh",
+    "description": "Fetches film data from the Utopia Cinema Bordeaux website and saves it locally.",
+    "doc_path": "docs/scripts/utopia.sh.md",
+    "hash": "980f8456a8f84f3efb5e61726dbc2b26139b040f63b537c3d16206e6ff5e2201"
+  },
+  "wrapper.sh": {
+    "file": "wrapper.sh",
+    "path": "dev/wrapper.sh",
+    "description": "A simple script to execute a command and log its execution with a timestamp.",
+    "doc_path": "docs/scripts/wrapper.sh.md",
+    "hash": "5a78482062da94105aa6a31e71ea725a49d5a8814f3e2d1e2276ec2aa8f08e11"
   }
 }
