@@ -55,6 +55,7 @@
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *Automates script creation with templating based on file extension*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album when playing music in cmus*
 - [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Opens a floating terminal to edit a file with Neovim*
+- [nvpn-tui-help.sh](scripts/nvpn-tui-help.sh.md) -- *Interactive TUI to navigate `nordvpn` commands (and other supported programs) with `fzf`.*
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Opens and previews Obsidian vaults using improved FZF menu*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Quickly open an Obsidian vault using a menu-driven interface.*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Opens a URL in an existing Qutebrowser instance or starts a new one.*

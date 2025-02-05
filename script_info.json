@@ -761,5 +761,12 @@
     "description": "A simple script to execute a command and log its execution with a timestamp.",
     "doc_path": "docs/scripts/wrapper.sh.md",
     "hash": "5a78482062da94105aa6a31e71ea725a49d5a8814f3e2d1e2276ec2aa8f08e11"
+  },
+  "nvpn-tui-help.sh": {
+    "file": "nvpn-tui-help.sh",
+    "path": "bin/nvpn-tui-help.sh",
+    "description": "Interactive TUI to navigate `nordvpn` commands (and other supported programs) with `fzf`.",
+    "doc_path": "docs/scripts/nvpn-tui-help.sh.md",
+    "hash": "31e857f5bdd4ced0b0dee87ca7b4d46351557f525ea84a39c0cbb09ce7267d0c"
   }
 }
