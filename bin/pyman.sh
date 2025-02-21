@@ -2,7 +2,7 @@
 
 SHELL='/usr/bin/bash'
 VERS="$(python -V | sed -E 's/^[Pa-z]+ ([0-9]\.[0-9]{2})\..*/\1/')"
-SEARCH_PATH="/usr/lib/python${VERS}/site-packages/"
+SEARCH_PATH="/usr/lib/python${VERS}/"
 export VERS
 export SHELL
 export SEARCH_PATH
