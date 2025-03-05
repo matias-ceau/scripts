@@ -66,7 +66,7 @@
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *A script for selecting and playing music playlists using `cmus`.*
 - [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Shuffle and play albums from a playlist in a random order using cmus*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *A script to reduce the color palette of a PPM image using a custom palette file.*
-- [pyman.sh](scripts/pyman.sh.md) -- *A script to browse Python documentation topics, keywords, built-in functions, and site-packages using `fzf`.*
+- [pyman.sh](scripts/pyman.sh.md) -- *A utility script to browse Python documentation, keywords, topics, and packages.*
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *Swiftly switches between complementary screen groups in Qtile.*
 - [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Move the current window to the next or previous group and switch to it.*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Interactive script to quickly search and manage passwords with `pass`*

@@ -443,9 +443,9 @@
   "pyman.sh": {
     "file": "pyman.sh",
     "path": "bin/pyman.sh",
-    "description": "A script to browse Python documentation topics, keywords, built-in functions, and site-packages using `fzf`.",
+    "description": "A utility script to browse Python documentation, keywords, topics, and packages.",
     "doc_path": "docs/scripts/pyman.sh.md",
-    "hash": "a2406993d16ebb62db3180277e352791a7ed495af7e794ebc9a57f084def0cf5"
+    "hash": "5a09f668349f0dc019f369cfb93a964e54e5aa4aa84641583bfc5f1901338303"
   },
   "qtile_dice_group.py": {
     "file": "qtile_dice_group.py",
