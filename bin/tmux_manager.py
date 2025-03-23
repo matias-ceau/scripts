@@ -43,7 +43,7 @@ sessions:
 
 class TmuxSession:
     def __init__(self, name: str, autostart: bool, windows: List[Dict[str, str]]):
-        self.name = name
+        self.name = name.upper()
         self.autostart = autostart
         self.windows = windows
 
@@ -154,7 +154,7 @@ def add_new_session() -> None:
         command = input(
             f"{Fore.GREEN}Enter command for this window:{Style.RESET_ALL} "
         ).strip()
-        windows.append({"name": window_name, "command": command})
+        windows.append({"name": window_name.upper(), "command": command})
 
         if not windows:
             print(
