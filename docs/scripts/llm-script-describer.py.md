@@ -2,67 +2,25 @@
 
 ---
 
-**llm-script-describer.py**: Automates documentation generation and updates for your scripts folder
+**llm-script-describer.py**: Generates documentation for user scripts using LLM
 
 ---
 
 ### Dependencies
 
-- `argparse`: Handles command-line arguments for script configuration.
-- `csv`: Reads and processes the CSV file containing scripts' paths.
-- `hashlib`: Used for computing file hashes to track changes.
-- `json`: Reads and writes metadata about the scripts in JSON format.
-- `os`: Manages file paths and environment variables.
-- `subprocess`: Executes shell commands to interact with the system.
-- `sys`: For system-specific functionalities like exiting on errors.
-- `colorama`: Enhances terminal output with colored text.
-- `openai`: Connects to OpenAI's API for generating script descriptions or summaries.
-
-External dependencies must be installed using `pip` (e.g., `pip install openai colorama`).
-
----
+- `colorama`: Used for cross-platform colored terminal output.
+- `openai`: Enables LLM interactions to generate descriptive markdown.
+- Python (>=3.13): Necessary to run the script.
 
 ### Description
 
-This Python script automates the process of documenting and organizing your scripts folder by integrating OpenAI's LLM to generate descriptions. It:
+This script automates the generation of GitHub-friendly markdown documentation for your collection of user scripts in an Arch Linux environment using qtile as your window manager. Its primary role is to analyze, update, and document scripts by reading their content or, for binary files, by locating the associated source file using predefined extensions (e.g., .py, .sh, .c). The script begins by updating symlinks via an external helper script, ensuring that your scripts are correctly linked, then uses utilities like `fd` and `rg` to scan your designated SCRIPTS directory for files to process.
 
-1. **Updates symlinks**: Ensures symlinks in your scripts directory are up to date by executing `utils_update_symlinks.sh`.
-2. **Identifies files**: Finds all non-excluded files in the `$SCRIPTS` folder using commands like `fd` and `rg`.
-3. **Removes orphaned docs**: Deletes Markdown documentation for scripts no longer present in the folder.
-4. **Processes scripts**: Reads content or detects binary files. For binaries, it attempts to trace the source file by searching common source extensions (`.py`, `.sh`, `.cpp`, etc.). 
-5. **Generates Markdown documentation**: Uses an OpenAI model (default: `gpt-4o-mini`) to write a detailed file-specific documentation.
-6. **Maintains a JSON mapping**: Tracks script metadata (hash, description, related Markdown file, etc.).
-7. **Updates README.md**: Summarizes documentation and updates both a generated output section and a file description table.
+Once a file is identified, it computes a SHA256 hash to determine if the script has been modified since the last documentation update. If changes are detected or it’s a new script, its content is either directly read or, in case of binary files, derived from the associated source file, before being sent to an OpenAI LLM model for description generation. The resulting markdown is written to the docs folder, and the index is updated to reflect new entries. Moreover, the script consolidates the individual markdown files into a comprehensive summary that is embedded within your main README.md, complete with an updated table of scripts, ensuring that your repository stays organized and up-to-date.
 
-Its modularized functions make it capable of managing each aspect of script tracking and documentation efficiently.
-
----
-
-### Usage
-
-Run the script in your terminal:
-
-```bash
-python llm-script-describer.py [llm_model]
-```
-
-- `llm_model` is optional, defaulting to `"gpt-4o-2024-11-20"` (changeable via command-line argument).
-
-Example:
-
-```bash
-python llm-script-describer.py "gpt-4.0-turbo"
-```
-
-### Key Integration Points:
-- To define the `$SCRIPTS` folder, export it in your `.bashrc`/`.zshrc`:
-  ```bash
-  export SCRIPTS=/home/matias/.scripts
-  ```
-
-You can assign this script to a keybinding in qtile or schedule it via cron for periodic updates.
+The script is designed to be run interactively or automatically, integrating seamlessly with your workflow—be it a qtile keybinding or a scheduled cron job. Configuration is achieved via environment variables such as SCRIPTS (for the scripts directory) and OPENAI_API_KEY (for authenticating LLM requests).
 
 ---
 
 > [!TIP]
-> **Error Handling and Enhancements**: While robust, this script lacks thorough exception handling for certain subprocess commands (e.g., failure when `fd` or `rg` isn't installed). Adding a dependency check would enhance usability. Introducing multithreading could also improve performance for larger directories.
+> Consider enhancing exception handling in scenarios where external commands may fail, and verify that dependencies like `fd` and `rg` are installed on your system. Additionally, refining log messages and user prompts can lead to a more robust and user-friendly experience. This modular design offers great flexibility, but regular maintenance of external dependency paths and source file associations is recommended for long-term reliability.

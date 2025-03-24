@@ -1,63 +1,31 @@
-# ugc-python.py: Extract Movie Titles from HTML
+# UGC Python Movie Extractor
 
 ---
 
-**ugc-python.py**: Extracts movie titles from a specific HTML structure using Beautiful Soup.
+**/home/matias/.scripts/dev/ugc-python.py**: Extracts movie titles from HTML content by parsing a designated div
 
 ---
 
 ### Dependencies
 
-- `python` (>=3.6): Required for running the script.
-- `bs4` (`beautifulsoup4`): A Python library for parsing HTML and XML. Install it via `pip install beautifulsoup4`.
+- `beautifulsoup4` – Python library used for parsing HTML content
 
 ### Description
 
-This script is designed to parse an HTML file, extract movie titles from a specific `div` element with the class `info-wrapper`, and output the titles in a numbered list. It is particularly useful when working with websites or web-scraped data formatted in an `info-wrapper` class containing textual movie titles.
+This script is designed to extract movie titles from HTML input. It reads HTML data from standard input, parses it using the `BeautifulSoup` library with the `"html.parser"` backend, and searches for a div with the class `info-wrapper`. Upon locating this specific section, the script retrieves its text content, splitting it by line breaks to separate individual movie titles.
 
-#### How it works:
-1. Reads the HTML content from `stdin`.
-2. Uses the `BeautifulSoup` library to parse the input.
-3. Searches for a `div` with the class name `info-wrapper`.
-4. Extracts the text within the `div` and processes it line by line:
-   - Strips out leading/trailing whitespace.
-   - Filters out lines with irrelevant content (e.g., lines starting with "Films avec de l'audio description" or "Rappel").
-5. Outputs the cleaned list of titles, numbered sequentially.
+To ensure it only extracts relevant movie titles, the script applies filters by ignoring lines that start with specific phrases, such as "Films avec de l'audio description" and "Rappel". The valid movie titles are then enumerated and printed to the standard output with a simple numbered list format.
+
+This utility is particularly useful when you have HTML output or saved files that contain a list of movies, and you want to quickly extract and format them for further processing or logging. The script’s design aligns with typical Arch Linux setups and can be integrated into workflows using the qtile window manager, where piping commands or capturing output is common practice.
 
 ### Usage
 
-The script must be provided HTML content via `stdin`. It can be used as part of a larger pipeline or with a direct command.
+To run the script, make sure you have installed required dependencies like `beautifulsoup4`. You can execute it directly from the command line by piping in your HTML content, for example:
 
-**Basic Example:**
-```bash
-cat path/to/your/htmlfile.html | python /home/matias/.scripts/dev/ugc-python.py
-```
+    cat somefile.html | /home/matias/.scripts/dev/ugc-python.py
 
-**Expected Output:**
-If the HTML file contains a structure like:
-```html
-<div class="info-wrapper">
-    Film 1
-    <br>Film 2
-    <br>Rappel: Some note
-    <br>Films avec de l'audio description
-</div>
-```
-The output will be:
-```plaintext
-1. Film 1
-2. Film 2
-```
-
-You can redirect the output to a file if needed:
-```bash
-cat path/to/your/htmlfile.html | python /home/matias/.scripts/dev/ugc-python.py > movies.txt
-```
+This script is set up to be run non-interactively by reading from standard input. It can be bound to a key in qtile if you need to extract movie titles from web snippets on the fly.
 
 ---
 
-> [!TIP]
-> - **Edge Case Handling:** If the `info-wrapper` div is absent, the script silently prints nothing. Consider adding an error or warning message for better clarity.
-> - **Dynamic Filters:** Currently hardcoded to filter specific types of lines ("Rappel" or "Films avec de l'audio description"). Consider making these filters configurable via command-line arguments or a configuration file.
-> - **Input Source:** The script only reads `stdin`. Adding a fallback to accept a file path as an argument (e.g., `python ugc-python.py file.html`) could make the tool more versatile.
-> - **Performance:** For large HTML files, optimize parser actions or restrict parsing to relevant areas of the document.
+> [!TIP] One potential improvement is to add error handling for cases where the HTML structure does not match expectations (e.g., missing div elements or changes in class names). Also, consider modularizing the filtering logic so it can be easily adapted if different or additional criteria need to be applied to the extracted text.

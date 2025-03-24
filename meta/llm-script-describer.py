@@ -1,4 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "colorama",
+#     "openai",
+# ]
+# ///
 
 import argparse
 import csv

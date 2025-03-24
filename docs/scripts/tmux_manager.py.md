@@ -2,51 +2,61 @@
 
 ---
 
-**tmux_manager.py**: Manage and automate tmux sessions using a configuration file
+**/home/matias/.scripts/bin/tmux_manager.py**: Control and manage tmux sessions via YAML config
 
 ---
 
 ### Dependencies
 
-- `colorama`: For colored terminal text output.
-- `pyyaml`: For parsing and writing YAML configuration files.
+- `colorama`: Provides cross-platform support for colored terminal output.
+- `pyyaml`: Used to parse and serialize the YAML configuration file.
+- `tmux`: The terminal multiplexer that the script controls.
+- Python >= 3.12: Required for running the script.
+- `uv`: Utilized in the shebang declaration for a streamlined script execution.
 
 ### Description
 
-`tmux_manager.py` is a script designed to streamline the management of tmux sessions with defined configurations on your Arch Linux setup with qtile. This script utilizes a YAML configuration file (`tmux_sessions.yaml`) to define sessions, auto-start settings, and associated windows and commands. If the configuration file doesn't exist, a default one is created.
+This script serves as a comprehensive manager for tmux sessions on Arch Linux, tailored for qtile users. It reads a YAML configuration file from a predefined environment variable `SCRIPTS` (expected at `$SCRIPTS/config/tmux_sessions.yaml`) to automate the creation, listing, and managing of tmux sessions and their windows. When the configuration file is absent, it auto-generates one with default sessions such as "MEGA" and "MUSIC". 
 
-The main components are:
-- `TmuxSession`: A class that encapsulates a tmux session's state, including checking if it's running.
-- **Configuration Management**: Load and edit session configurations interactively.
-- **Session Operations**: Launch sessions, including specific or all configured ones and auto-start those marked for it.
+Functions include:
+- **load_config()**: Loads and parses the YAML file, and creates it with defaults if missing.
+- **launch_session()**: Launches a tmux session based on configuration. It smartly checks if the session already exists and can force relaunch if required.
+- **add_new_session()**: Provides an interactive prompt to add new session configurations by asking for session name, autostart preference, and window details.
+- **list_sessions()**: Displays a formatted list of all configured sessions along with their status, using color codes for readability.
+
+The script uses argparse for command-line argument parsing. It supports various modes such as launching all sessions (`-a`), a specific session (`-s`), only autostart sessions (`-u`), listing sessions (`-l`), or interactively adding a new session (`--add`). Additionally, a force relaunch flag (`-r`) ensures that even running sessions can be restarted.
 
 ### Usage
 
-You can execute the script with various options to manage tmux sessions:
+To launch a specific session:
+    
+    tmux_manager.py --session SESSION_NAME
 
-```shell
-# List all configured sessions
-./tmux_manager.py -l
+To launch all sessions:
 
-# Add a new session interactively
-./tmux_manager.py --add
+    tmux_manager.py --all
 
-# Launch a specific session
-./tmux_manager.py -s SESSION_NAME
+To launch sessions marked for autostart:
 
-# Launch all sessions
-./tmux_manager.py -a
+    tmux_manager.py --auto
 
-# Launch all sessions marked as autostart
-./tmux_manager.py -u
+To list all sessions:
 
-# Force relaunch a session if already running
-./tmux_manager.py -s SESSION_NAME -r
-```
+    tmux_manager.py --list
 
-You can bind this script to a qtile keybinding or execute it manually from the terminal as needed.
+To add a new session interactively:
+
+    tmux_manager.py --add
+
+For force relaunching a session:
+
+    tmux_manager.py --session SESSION_NAME --relaunch
 
 ---
 
-> [!NOTE]
-> The script handles both the absence of the configuration file by creating a default one, and running sessions with the `force_relaunch` parameter. However, it would be optimal to add logging functionality for detailed session operations and error tracking. Also, consider encapsulating more functionality within the `TmuxSession` class for better object-oriented design practices.
+> [!TIP] Considerations for Improvement:
+> - Further modularize the code by splitting configuration management, session control, and CLI parsing into separate modules.
+> - Implement robust error handling and logging rather than relying solely on console prints.
+> - Validate user inputs during interactive session addition to prevent configuration errors.
+> - Ensure compatibility with environments where the `tmux` command might not be present or the environment variable `SCRIPTS` is incorrectly set.
+> - Review the shebang usage (`uv run`) to ensure consistency across different deployment setups.

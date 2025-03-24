@@ -1,0 +1,30 @@
+
+mkdir -p "$XDG_DATA_HOME/ousse"
+
+#home.db
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/home.db" -U $HOME --prune-bind-mounts 0 --prunenames "" --prunepaths "/tmp"
+
+#dots.db
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/dots.db" -U $HOME --prune-bind-mounts 0 --prunenames "$(fd '^[^.]' -tl -td --search-path=$HOME --exact-depth=1 --format '{/}' | rg -v ' ' | tr \\n ' ')" --prunepaths "$(fd '^[^.]' -td -u --max-depth=1 --search-path="$HOME" | sed 's#/$##' | tr \\n ' ')"
+
+#data.db
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/data.db" -U /mnt --prune-bind-mounts 0 --prunenames "vids" --prunepaths "$(fd . -td -u --search-path /mnt/HDD2 --search-path /mnt/SSD --search-path /mnt --exact-depth=1 | rg -v 'DATA|HDD2/$|SSD/$' | sed 's#/$##' | tr \\n ' ')"
+
+#root.db
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/root.db" -U / --prune-bind-mounts 0 --prunenames '' --prunepaths "/afs /efi /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp"
+
+#mega.db
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/mega.db" -U $(dirname "$(realpath $HOME/UnifiedLibrary)") --prune-bind-mounts 0 --prunenames "" --prunepaths "/tmp"
+#limbo
+
+# devices.db
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/devices.db" -U $(dirname "$(mega-sync | rg BACKUPS | rg devices | head -n 1 | cut -d' ' -f2)") --prune-bind-mounts 0 --prunenames "" --prunepaths "/tmp"
+
+# limbo
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/limbo.db" -U $(fd -td '^LIMBO$' /mnt --max-depth=4 | sed 's#/$##') --prune-bind-mounts 0 --prunenames "" --prunepaths "/tmp"
+
+#hdd2
+updatedb -l 0 -o "$XDG_DATA_HOME/ousse/hdd2.db" -U /mnt/HDD2 --prune-bind-mounts 1 --prunenames "" --prunepaths ""
+
+
+

@@ -303,9 +303,9 @@
   "llm-script-describer.py": {
     "file": "llm-script-describer.py",
     "path": "meta/llm-script-describer.py",
-    "description": "Automates documentation generation and updates for your scripts folder",
+    "description": "Generates documentation for user scripts using LLM",
     "doc_path": "docs/scripts/llm-script-describer.py.md",
-    "hash": "36439430d1a703f460f517e6637a0abf9675329d20deaaf1830c73e1033ae8fb"
+    "hash": "f403aabc9c63e60e13c74a1db8b1fd716d21723412344da715591095e091fc06"
   },
   "m3u_creator.sh": {
     "file": "m3u_creator.sh",
@@ -681,9 +681,9 @@
   "tmux_manager.py": {
     "file": "tmux_manager.py",
     "path": "bin/tmux_manager.py",
-    "description": "Manage and automate tmux sessions using a configuration file",
+    "description": "Control and manage tmux sessions via YAML config",
     "doc_path": "docs/scripts/tmux_manager.py.md",
-    "hash": "1c14a59b47a5af734b6d93fdae995757e582bb86738645054c2ab87bde2d292b"
+    "hash": "5f8fb37b6afd506279cca7bc5fa42463e791b1834c9359e82a827269944b76c6"
   },
   "tmux_session.sh": {
     "file": "tmux_session.sh",
@@ -730,9 +730,9 @@
   "ssh-fzf.sh": {
     "file": "ssh-fzf.sh",
     "path": "bin/ssh-fzf.sh",
-    "description": "Quickly select and connect to an SSH destination using `fzf`.",
+    "description": "Select and execute an SSH command from a list",
     "doc_path": "docs/scripts/ssh-fzf.sh.md",
-    "hash": "32e8f67b383f33fc7c642af6abfc93f1155193620648b132e3bde8a8b558a8ca"
+    "hash": "11f19f60408dab1b6577b068516b9a37ae5fec72d21fae325b5eb45fad8c43f4"
   },
   "test.sh": {
     "file": "test.sh",
@@ -744,9 +744,9 @@
   "ugc-python.py": {
     "file": "ugc-python.py",
     "path": "dev/ugc-python.py",
-    "description": "Extracts movie titles from a specific HTML structure using Beautiful Soup.",
+    "description": "Extracts movie titles from HTML content by parsing a designated div",
     "doc_path": "docs/scripts/ugc-python.py.md",
-    "hash": "b5263c0fab4cd2eb00954b92a9d44446866573228eebac4732a991f97e146007"
+    "hash": "52f0ce0cf8733d6432c3669391a1a52730144c3829695c42c5cf0019ebbc6d34"
   },
   "utopia.sh": {
     "file": "utopia.sh",
@@ -768,5 +768,110 @@
     "description": "Interactive TUI to navigate `nordvpn` commands (and other supported programs) with `fzf`.",
     "doc_path": "docs/scripts/nvpn-tui-help.sh.md",
     "hash": "31e857f5bdd4ced0b0dee87ca7b4d46351557f525ea84a39c0cbb09ce7267d0c"
+  },
+  "color_restrict.py": {
+    "file": "color_restrict.py",
+    "path": "dev/color_restrict.py",
+    "description": "Processes an image by restricting its colors to a fixed palette",
+    "doc_path": "docs/scripts/color_restrict.py.md",
+    "hash": "dca94c26b8331b212d3b2265541b45807d304c92a250752aab9a27c5b18c8fc3"
+  },
+  "fzfpreview.sh": {
+    "file": "fzfpreview.sh",
+    "path": "dev/fzfpreview.sh",
+    "description": "A script to preview text or images in the fzf preview window",
+    "doc_path": "docs/scripts/fzfpreview.sh.md",
+    "hash": "78a00c33461e9a42b4176632417f391379958252d2104eccadcb583d3a5e4601"
+  },
+  "get_scripts_relations.xsh": {
+    "file": "get_scripts_relations.xsh",
+    "path": "dev/get_scripts_relations.xsh",
+    "description": "Visualizes inter-script dependencies based on file content scanning",
+    "doc_path": "docs/scripts/get_scripts_relations.xsh.md",
+    "hash": "562ef3baaf152f5a955516819c08c5cc52c311349488b2da6ff821df1cf02f7c"
+  },
+  "get-windows.sh": {
+    "file": "get-windows.sh",
+    "path": "dev/get-windows.sh",
+    "description": "Retrieves and formats window details from qtile",
+    "doc_path": "docs/scripts/get-windows.sh.md",
+    "hash": "cd55bcd4b094cd9a715625803dbe460e727d40f3e178f4ac3b2f4c4044bd593b"
+  },
+  "gsi.sh": {
+    "file": "gsi.sh",
+    "path": "dev/gsi.sh",
+    "description": "improved sync git repository",
+    "doc_path": "docs/scripts/gsi.sh.md",
+    "hash": "a0cc3ae05222d55c00a409702a781477e6529ee99c8f921234f268a54b07a578"
+  },
+  "help_pwcli.sh": {
+    "file": "help_pwcli.sh",
+    "path": "dev/help_pwcli.sh",
+    "description": "Interactive tool to display help for various pw-cli utilities",
+    "doc_path": "docs/scripts/help_pwcli.sh.md",
+    "hash": "356edce4bb6072023a2b3ffb03367b5a7ddd1d8935d0fb80992758f945fd4036"
+  },
+  "html_viewer.py": {
+    "file": "html_viewer.py",
+    "path": "bin/html_viewer.py",
+    "description": "Simple HTML viewer with support for Markdown conversion",
+    "doc_path": "docs/scripts/html_viewer.py.md",
+    "hash": "fa2c3d3559b92720d0b99768cf92540c8cdebee5ad7e8c54fc5e46d32eee2f9f"
+  },
+  "megasync.sh": {
+    "file": "megasync.sh",
+    "path": "dev/megasync.sh",
+    "description": "Launches MegaSync with preserved Qt settings",
+    "doc_path": "docs/scripts/megasync.sh.md",
+    "hash": "7449cbad4dfde0287a298219859cefa96dd0328bfe992e39d48a8f4817f460e1"
+  },
+  "midi2cmd.py": {
+    "file": "midi2cmd.py",
+    "path": "bin/midi2cmd.py",
+    "description": "Transforms MIDI controller input into keyboard/script commands",
+    "doc_path": "docs/scripts/midi2cmd.py.md",
+    "hash": "3cc21d49131d3f132cf0c550f2ab3fc9eba9920d4270d55163aa87c2c5409b6b"
+  },
+  "minimal_gpt_call.py": {
+    "file": "minimal_gpt_call.py",
+    "path": "dev/minimal_gpt_call.py",
+    "description": "Python script to generate training data CSV for cow jugglers",
+    "doc_path": "docs/scripts/minimal_gpt_call.py.md",
+    "hash": "100c9f17e34d885385903cb245cee614b7c65f285837dccc3498c5628d80827e"
+  },
+  "old-ousse": {
+    "file": "old-ousse",
+    "path": "dev/old-ousse",
+    "description": "Creates and updates multiple locate databases for various parts of the system",
+    "doc_path": "docs/scripts/old-ousse.md",
+    "hash": "c5ab77549d504623e78aa88ee751a2564e07572c08951fb1b13674c753c52288"
+  },
+  "ousse-locate.sh": {
+    "file": "ousse-locate.sh",
+    "path": "dev/ousse-locate.sh",
+    "description": "File locator tool leveraging eza and custom AWK calculations",
+    "doc_path": "docs/scripts/ousse-locate.sh.md",
+    "hash": "1c2bdf87acccb84d512b3376a8c91da7da99fc3d4ee27ab3dfff2642c4c6e83f"
+  },
+  "script.sh": {
+    "file": "script.sh",
+    "path": "dev/script.sh",
+    "description": "Opens a fzf menu in an xterm window to type the selection using xdotool",
+    "doc_path": "docs/scripts/script.sh.md",
+    "hash": "2dc7e7cfd3474559d06ada59ffa6ff1b23ffe33dfc04c2091ea7f9ccaea22657"
+  },
+  "text_spectrogram.py": {
+    "file": "text_spectrogram.py",
+    "path": "dev/text_spectrogram.py",
+    "description": "Show a text-mode spectrogram using live microphone data",
+    "doc_path": "docs/scripts/text_spectrogram.py.md",
+    "hash": "8841ed8e201a0de863a79eec70a45a64964f2a9865e99f25ab6e1d95910f4390"
+  },
+  "xephyr.sh": {
+    "file": "xephyr.sh",
+    "path": "dev/xephyr.sh",
+    "description": "Launch a Xephyr instance to run a nested qtile session",
+    "doc_path": "docs/scripts/xephyr.sh.md",
+    "hash": "2dce10ffc89ad3b84dad83cad853c3c7bcff865c7efe97395ca1cd71491cca86"
   }
 }

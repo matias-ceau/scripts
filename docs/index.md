@@ -6,6 +6,7 @@
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Script to initialize and apply Chezmoi configuration for user 'matias-ceau'.*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *Script to find a paper and either open it or copy its citation.*
 - [closest_colors.py](scripts/closest_colors.py.md) -- *A script to find and display the closest ANSI color matches to a list of provided hex colors*
+- [color_restrict.py](scripts/color_restrict.py.md) -- *Processes an image by restricting its colors to a fixed palette*
 - [colormap_from_text.sh](scripts/colormap_from_text.sh.md) -- *Extracts hex or RGB color codes from configuration files*
 - [command_prompt.sh](scripts/command_prompt.sh.md) -- *Script to launch a command with history suggestions using `fzf`*
 - [count_tokens_with_tiktoken.py](scripts/count_tokens_with_tiktoken.py.md) -- *Script to count tokens using `tiktoken` with support for different models*
@@ -24,16 +25,22 @@
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Select and play an album using `fzf` and `cmus` on Arch Linux with qtile WM*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A replacement for Dmenu using `fzf` with floating `xterm` for commands.*
+- [fzfpreview.sh](scripts/fzfpreview.sh.md) -- *A script to preview text or images in the fzf preview window*
 - [generate_commit_message.sh](scripts/generate_commit_message.sh.md) -- *Script to generate commit messages using OpenAI's GPT-4o-mini*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Creates thumbnails of currently open windows on your qtile environment.*
+- [get-windows.sh](scripts/get-windows.sh.md) -- *Retrieves and formats window details from qtile*
 - [get_hyperlinks_in_folder.py](scripts/get_hyperlinks_in_folder.py.md) -- *Extract and visualize internal hyperlinks from Markdown files in a folder*
 - [get_repos_present_on_host.sh](scripts/get_repos_present_on_host.sh.md) -- *Script to list Git repositories present on the current host.*
 - [get_scripts_relations.py](scripts/get_scripts_relations.py.md) -- *Visualizes dependencies among scripts in a directory*
+- [get_scripts_relations.xsh](scripts/get_scripts_relations.xsh.md) -- *Visualizes inter-script dependencies based on file content scanning*
 - [git_cd.sh](scripts/git_cd.sh.md) -- *Script to quickly change directories to a Git repository.*
 - [git_clone_by_author-repo.sh](scripts/git_clone_by_author-repo.sh.md) -- *Clone a Git repository by specifying the developer/package format.*
 - [git_update_all_other_repos.sh](scripts/git_update_all_other_repos.sh.md) -- *Automatically updates all git repositories found under a specified directory using HTTPS.*
 - [grub-tune-to-audio-python.py](scripts/grub-tune-to-audio-python.py.md) -- *Converts a GRUB_INIT_TUNE string into an MP3 audio file using Python*
+- [gsi.sh](scripts/gsi.sh.md) -- *improved sync git repository*
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *Enhanced help command for `pastel` with preview features using `fzf`.*
+- [help_pwcli.sh](scripts/help_pwcli.sh.md) -- *Interactive tool to display help for various pw-cli utilities*
+- [html_viewer.py](scripts/html_viewer.py.md) -- *Simple HTML viewer with support for Markdown conversion*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs a list of necessary packages using `paru`*
 - [interactive_git_sync.sh](scripts/interactive_git_sync.sh.md) -- *Script to synchronize multiple repositories interactively using `fzf`.*
 - [json_to_markdown.py](scripts/json_to_markdown.py.md) -- *Convert JSON content to a formatted markdown file.*
@@ -44,13 +51,16 @@
 - [list-openai-models.sh](scripts/list-openai-models.sh.md) -- *Caches and displays a list of OpenAI models, sorted by creation date.*
 - [list_process.sh](scripts/list_process.sh.md) -- *Displays a sorted list of all running services on your system.*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automate the generation of Markdown documentation for scripts using Llama 3.1.*
-- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Automates documentation generation and updates for your scripts folder*
+- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Generates documentation for user scripts using LLM*
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Creates an M3U playlist file from all files in the current directory.*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Custom script to manage music transfer to the MECHEN device.*
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches MEGA CMD within a detached tmux session.*
+- [megasync.sh](scripts/megasync.sh.md) -- *Launches MegaSync with preserved Qt settings*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard or script launcher for Arch Linux*
 - [midi2arch.xsh](scripts/midi2arch.xsh.md) -- *Transform a MIDI controller into a keyboard/script launcher.*
+- [midi2cmd.py](scripts/midi2cmd.py.md) -- *Transforms MIDI controller input into keyboard/script commands*
 - [minimal-browser.py](scripts/minimal-browser.py.md) -- *A simple Python-based browser for rendering local HTML files*
+- [minimal_gpt_call.py](scripts/minimal_gpt_call.py.md) -- *Python script to generate training data CSV for cow jugglers*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *A utility to create or convert scripts with templating for specific extensions (Bash, Python, Xonsh).*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *Automates script creation with templating based on file extension*
 - [next_album.xsh](scripts/next_album.xsh.md) -- *Skip to the next album when playing music in cmus*
@@ -58,8 +68,10 @@
 - [nvpn-tui-help.sh](scripts/nvpn-tui-help.sh.md) -- *Interactive TUI to navigate `nordvpn` commands (and other supported programs) with `fzf`.*
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Opens and previews Obsidian vaults using improved FZF menu*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Quickly open an Obsidian vault using a menu-driven interface.*
+- [old-ousse](scripts/old-ousse.md) -- *Creates and updates multiple locate databases for various parts of the system*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Opens a URL in an existing Qutebrowser instance or starts a new one.*
 - [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *Script to launch and manage the Open WebUI with `qutebrowser`.*
+- [ousse-locate.sh](scripts/ousse-locate.sh.md) -- *File locator tool leveraging eza and custom AWK calculations*
 - [ousse-update.sh](scripts/ousse-update.sh.md) -- *Centralized update script for multiple database paths on a Linux system*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script for enhanced fuzzy searching of Arch Linux packages using `paru` and `fzf`.*
 - [pdfopener.sh](scripts/pdfopener.sh.md) -- *Open any PDF in the home directory using Evince or the default application*
@@ -77,6 +89,7 @@
 - [rgfzf.sh](scripts/rgfzf.sh.md) -- *A script combining ripgrep and fzf to search files and open results in Vim.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *A script to transfer and manage music files to a Sandisk media player*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Transfers music files to a Sandisk media player while managing storage capacity and file formats.*
+- [script.sh](scripts/script.sh.md) -- *Opens a fzf menu in an xterm window to type the selection using xdotool*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script that uses `fzf` for selecting and executing other scripts with preview and additional utilities.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*
 - [select_script](scripts/select_script.md) -- *A tool to select and execute scripts from a cached list using `rofi`.*
@@ -88,22 +101,23 @@
 - [snekai.sh](scripts/snekai.sh.md) -- *Script to manage Jupyter Lab, Jupyter Notebook, or IPython in a virtual environment*
 - [songlauncher.sh](scripts/songlauncher.sh.md) -- *Launch and play songs with `cmus` using `dmenu` interface.*
 - [speach-to-text.py](scripts/speach-to-text.py.md) -- *Record audio and transcribe it using OpenAI's Whisper model*
-- [ssh-fzf.sh](scripts/ssh-fzf.sh.md) -- *Quickly select and connect to an SSH destination using `fzf`.*
+- [ssh-fzf.sh](scripts/ssh-fzf.sh.md) -- *Select and execute an SSH command from a list*
 - [sync-repo-simple.py](scripts/sync-repo-simple.py.md) -- *A script to automate synchronization of a local git repository with its remote counterpart*
 - [sync-repo-simple.sh](scripts/sync-repo-simple.sh.md) -- *Automates syncing a git repository, handling conflicts, and providing sync summaries.*
 - [sync-repo.py](scripts/sync-repo.py.md) -- *Automates syncing of a git repository and handles conflicts*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *Automates synchronization of a Git repository with support for conflict handling.*
 - [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal window to execute a specified command.*
 - [test.sh](scripts/test.sh.md) -- *A script to handle input from standard input (stdin) or provide a default message if no input is given.*
+- [text_spectrogram.py](scripts/text_spectrogram.py.md) -- *Show a text-mode spectrogram using live microphone data*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *A script to provide useful assistance and search functionalities for tmux commands and sections.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*
-- [tmux_manager.py](scripts/tmux_manager.py.md) -- *Manage and automate tmux sessions using a configuration file*
+- [tmux_manager.py](scripts/tmux_manager.py.md) -- *Control and manage tmux sessions via YAML config*
 - [tmux_session.sh](scripts/tmux_session.sh.md) -- *Script to create a new tmux session with a specified session name, window name, and command.*
 - [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Toggles the `picom` compositor on or off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *Convert symbolic links to copies of their targets.*
 - [try_the_bat_suit.sh](scripts/try_the_bat_suit.sh.md) -- *Dynamic file previewer using `bat` and `fzf` for code files with syntax highlighting.*
 - [tui-gpt.py](scripts/tui-gpt.py.md) -- *A terminal-based GPT chat interface resembling 'Mother' from the Aliens movies.*
-- [ugc-python.py](scripts/ugc-python.py.md) -- *Extracts movie titles from a specific HTML structure using Beautiful Soup.*
+- [ugc-python.py](scripts/ugc-python.py.md) -- *Extracts movie titles from HTML content by parsing a designated div*
 - [update_birthdays.sh](scripts/update_birthdays.sh.md) -- *Updates a CSV file with the creation dates of files in a directory.*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *Updates the `.env` file for storing API keys from environment variables*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Script to create symlinks in `~/.local/bin` and manage old/broken ones.*
@@ -112,4 +126,5 @@
 - [vox.py](scripts/vox.py.md) -- *A script to list and describe Vox amplifier settings and modes.*
 - [wallpaper.sh](scripts/wallpaper.sh.md) -- *Script to manage and change wallpapers from a list*
 - [wrapper.sh](scripts/wrapper.sh.md) -- *A simple script to execute a command and log its execution with a timestamp.*
+- [xephyr.sh](scripts/xephyr.sh.md) -- *Launch a Xephyr instance to run a nested qtile session*
 - [you_are_not_documented.sh](scripts/you_are_not_documented.sh.md) -- *Identify scripts lacking inline documentation markers*
