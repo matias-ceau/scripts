@@ -1,53 +1,62 @@
-# Fzfmenu Script
+# FZF Menu Helper
 
 ---
 
-**fzfmenu.sh**: A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.
+**fzfmenu.sh**: Helper script to replicate `dmenu` functionality using `fzf` and terminal emulator (`alacritty`).
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder for efficiently filtering and selecting text.
-- `xterm`: A terminal emulator for running command-line applications within a window.
-- `/proc/$$/fd/*`: Usage of file descriptors to handle input and output streams.
+- `fzf`: A command-line fuzzy finder to filter input text interactively.
+- `alacritty`: Terminal emulator to display the `fzf` interface in this script.
+- `/proc`: Requires Linux `/proc` filesystem to handle file descriptors for input/output streams.
+- Arch Linux-based configuration with `bash`.
 
 ### Description
 
-The **fzfmenu.sh** script is a lightweight, helper utility that combines the power of `fzf` with `xterm`. Designed to emulate the behavior of `dmenu`, it provides a fuzzy search interface using `fzf` displayed in an `xterm` window. This script escapes all input arguments to ensure safe handling and pipelines the interactions via standard input/output streams using the `/proc` file system.
+This script acts as a helper function for creating an `fzf`-based menu system akin to `dmenu`. Instead of overlaying text on the screen, it opens a new terminal window running `fzf` inside it. Highlights include:
 
-Key functionalities:
-- Takes any parameters passed via the command line, escapes them safely, and forwards them to `fzf` as arguments.
-- Runs `fzf` inside an `xterm` window titled "fzfmenu".
-- Redirects input and output streams through `/proc/$$/fd/` for seamless data handling.
+1. Escaping all arguments passed to the script to avoid parsing issues with special characters using `printf`.
+2. Joining processed, escaped arguments into a single string (`fzf_args`).
+3. Opening a new `alacritty` terminal (titled `fzfmenu`) to execute `fzf` with the specified arguments (`$fzf_args`).
+4. Using the process ID (`$$`) to manage input/output redirection via the `/proc` pseudo-filesystem, ensuring seamless input and output with the parent shell.
 
-This makes the script highly flexible, allowing you to pipe text into it and retrieve the user's selection without additional setup.
+The script relies on the Arch Linux environment and `alacritty` terminal, ensuring visual interaction during command searching or execution.
 
 ### Usage
 
-To use this script, you need to pass the necessary arguments for `fzf`. For example:
+This script is best utilized as part of larger workflows to present fuzzy filtering options within your window manager (e.g., `qtile`). Examples:
 
-```bash
-echo -e "option1\noption2\noption3" | /home/matias/.scripts/bin/fzfmenu.sh --height=10 --reverse
-```
+#### Interactive Testing
+1. Save the script to a file, e.g., `/home/matias/.scripts/bin/fzfmenu.sh`.
+2. Make it executable:
+   ```bash
+   chmod +x /home/matias/.scripts/bin/fzfmenu.sh
+   ```
+3. Run it with input piped via the terminal:
+   ```bash
+   echo -e "Option1\nOption2\nOption3" | /home/matias/.scripts/bin/fzfmenu.sh
+   ```
 
-**Explanation**:
-- The script displays "option1", "option2", and "option3" in a vertical fuzzy search menu.
-- The `--height=10` argument sets the height of the menu to 10 lines.
-- The `--reverse` option makes the menu display at the top.
-
-You can also bind it to a keybinding via `qtile` or execute it directly from the terminal.
-
-#### Example Integration with `qtile`
-To bind this script to a key in `qtile`:
+#### Qtile Keybinding
+Assign this script to a key in your `qtile` configuration to quickly invoke fuzzy menus:
 ```python
-Key([mod], "m", lazy.spawn("/home/matias/.scripts/bin/fzfmenu.sh --height=15"))
+Key([mod], "m", lazy.spawn("~/.scripts/bin/fzfmenu.sh"))
 ```
+
+#### Custom Arguments
+Pass additional options to `fzf`, for example:
+```bash
+echo -e "One\nTwo\nThree" | /home/matias/.scripts/bin/fzfmenu.sh --reverse
+```
+This would enable reverse sorting for the `fzf` menu.
 
 ---
 
 > [!TIP]
-> - The script currently hardcodes the title for the `xterm` window ("fzfmenu"). Consider making this configurable for flexibility.
-> - It would be beneficial to allow users to pass environment variables or settings like font size or colors for `xterm`.
-> - The script assumes that input is always piped into it (`stdin`). Adding a fallback or default behavior for no input (e.g., reading from a default file) could enhance usability.
-> - Using `/proc/$$/fd/` for redirection is clever but might have compatibility issues on non-Linux systems or certain shells. Documenting this caveat might be useful.
+> - Replace `alacritty` with your preferred terminal emulator, like `xterm` or `st`.
+> - Add conditions to ensure `fzf` executes correctly even if arguments are improperly escaped.
+> - Consider additional error handling for scenarios where `/proc` is unavailable or file descriptors fail to open. A fallback method might enhance script robustness.
+> - Adding usage comments or help flags (`-h` or `--help`) for clarity could improve usability.
+> - Note that capturing additional environment-specific parameters might make the script more portable.

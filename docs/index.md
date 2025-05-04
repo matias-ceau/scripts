@@ -23,8 +23,9 @@
 - [ftp-data-mount.sh](scripts/ftp-data-mount.sh.md) -- *Mounts a specific folder from Mega's FTP service to a local destination.*
 - [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *Interactive file manager using fzf with advanced features.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Select and play an album using `fzf` and `cmus` on Arch Linux with qtile WM*
-- [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.*
-- [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A replacement for Dmenu using `fzf` with floating `xterm` for commands.*
+- [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *Helper script to replicate `dmenu` functionality using `fzf` and terminal emulator (`alacritty`).*
+- [fzfmenu_cache.sh](scripts/fzfmenu_cache.sh.md) -- *Generates and caches a list of executables in your `PATH` for fast access.*
+- [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A dmenu replacement script utilizing `fzf` for application selection within a floating terminal.*
 - [fzfpreview.sh](scripts/fzfpreview.sh.md) -- *A script to preview text or images in the fzf preview window*
 - [generate_commit_message.sh](scripts/generate_commit_message.sh.md) -- *Script to generate commit messages using OpenAI's GPT-4o-mini*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Creates thumbnails of currently open windows on your qtile environment.*
@@ -41,6 +42,7 @@
 - [help-pastel.sh](scripts/help-pastel.sh.md) -- *Enhanced help command for `pastel` with preview features using `fzf`.*
 - [help_pwcli.sh](scripts/help_pwcli.sh.md) -- *Interactive tool to display help for various pw-cli utilities*
 - [html_viewer.py](scripts/html_viewer.py.md) -- *Simple HTML viewer with support for Markdown conversion*
+- [improved-fzfmenu.sh](scripts/improved-fzfmenu.sh.md) -- *Fzfmenu integration with `alacritty`, capable of piping output and customizable through arguments.*
 - [install_dependencies.sh](scripts/install_dependencies.sh.md) -- *Installs a list of necessary packages using `paru`*
 - [interactive_git_sync.sh](scripts/interactive_git_sync.sh.md) -- *Script to synchronize multiple repositories interactively using `fzf`.*
 - [json_to_markdown.py](scripts/json_to_markdown.py.md) -- *Convert JSON content to a formatted markdown file.*
@@ -70,7 +72,7 @@
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Quickly open an Obsidian vault using a menu-driven interface.*
 - [old-ousse](scripts/old-ousse.md) -- *Creates and updates multiple locate databases for various parts of the system*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Opens a URL in an existing Qutebrowser instance or starts a new one.*
-- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *Script to launch and manage the Open WebUI with `qutebrowser`.*
+- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *Script to launch and interact with an Open WebUI instance.*
 - [ousse-locate.sh](scripts/ousse-locate.sh.md) -- *File locator tool leveraging eza and custom AWK calculations*
 - [ousse-update.sh](scripts/ousse-update.sh.md) -- *Centralized update script for multiple database paths on a Linux system*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *A script for enhanced fuzzy searching of Arch Linux packages using `paru` and `fzf`.*
@@ -106,12 +108,12 @@
 - [sync-repo-simple.sh](scripts/sync-repo-simple.sh.md) -- *Automates syncing a git repository, handling conflicts, and providing sync summaries.*
 - [sync-repo.py](scripts/sync-repo.py.md) -- *Automates syncing of a git repository and handles conflicts*
 - [sync-repo.sh](scripts/sync-repo.sh.md) -- *Automates synchronization of a Git repository with support for conflict handling.*
-- [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal window to execute a specified command.*
+- [terminal_with_command.sh](scripts/terminal_with_command.sh.md) -- *Opens a floating terminal to run a command and see its output.*
 - [test.sh](scripts/test.sh.md) -- *A script to handle input from standard input (stdin) or provide a default message if no input is given.*
 - [text_spectrogram.py](scripts/text_spectrogram.py.md) -- *Show a text-mode spectrogram using live microphone data*
 - [tmux-help.py](scripts/tmux-help.py.md) -- *A script to provide useful assistance and search functionalities for tmux commands and sections.*
 - [tmux-help.py](scripts/tmux-help.py.md) -- A script providing helpful utilities and search capabilities for tmux commands.*
-- [tmux_manager.py](scripts/tmux_manager.py.md) -- *Control and manage tmux sessions via YAML config*
+- [tmux_manager.py](scripts/tmux_manager.py.md) -- *A Python script to manage your Tmux session configurations, simplifying the creation, management, and launching of Tmux sessions.*
 - [tmux_session.sh](scripts/tmux_session.sh.md) -- *Script to create a new tmux session with a specified session name, window name, and command.*
 - [toggle_picom.sh](scripts/toggle_picom.sh.md) -- *Toggles the `picom` compositor on or off.*
 - [transform_symlink.sh](scripts/transform_symlink.sh.md) -- *Convert symbolic links to copies of their targets.*

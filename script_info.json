@@ -149,16 +149,16 @@
   "fzfmenu_run.sh": {
     "file": "fzfmenu_run.sh",
     "path": "bin/fzfmenu_run.sh",
-    "description": "A replacement for Dmenu using `fzf` with floating `xterm` for commands.",
+    "description": "A dmenu replacement script utilizing `fzf` for application selection within a floating terminal.",
     "doc_path": "docs/scripts/fzfmenu_run.sh.md",
-    "hash": "c28bfb7be9d671fa4724acf70fcecb62c5811eefbbed9f85b3d023d06e835ac5"
+    "hash": "d5074009c8b6d1111854b2da15fa54a9438db0ea15c1ed1122a53158e19802ed"
   },
   "fzfmenu.sh": {
     "file": "fzfmenu.sh",
     "path": "bin/fzfmenu.sh",
-    "description": "A helper script leveraging `fzf` and `xterm`, similar in functionality to `dmenu`.",
+    "description": "Helper script to replicate `dmenu` functionality using `fzf` and terminal emulator (`alacritty`).",
     "doc_path": "docs/scripts/fzfmenu.sh.md",
-    "hash": "83128a1ffc9de6f85053b7d7a96cac612e728625e2931756a440cf0d196adbd3"
+    "hash": "8faa1b71d17d3ff17e954d33d7e3cc8e4e79821ba776498f9e2881c8f27be649"
   },
   "fzf_songlauncher.sh": {
     "file": "fzf_songlauncher.sh",
@@ -240,9 +240,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "bin/improved-fzfmenu.sh",
-    "description": "Enhanced fzf integration with Alacritty, supports piping output",
+    "description": "Fzfmenu integration with `alacritty`, capable of piping output and customizable through arguments.",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "70c619945d8af3fb09611eb8e622a24b22809274743d0da850d4b76eb2a01c49"
+    "hash": "22df00fbdd4fc18de85ce9518a53a49705623d80a0e096177e5939de2416a932"
   },
   "install_dependencies.sh": {
     "file": "install_dependencies.sh",
@@ -394,9 +394,9 @@
   "openwebui-launcher.sh": {
     "file": "openwebui-launcher.sh",
     "path": "bin/openwebui-launcher.sh",
-    "description": "Script to launch and manage the Open WebUI with `qutebrowser`.",
+    "description": "Script to launch and interact with an Open WebUI instance.",
     "doc_path": "docs/scripts/openwebui-launcher.sh.md",
-    "hash": "54c4412d410f23d42e416eab156da7bb041fcb988b72096751e8f4dabfeb4265"
+    "hash": "ed5f25a71bb2500d94b9b57da90356c1c22033450926468833092c3a255ea3d0"
   },
   "ousse-update.sh": {
     "file": "ousse-update.sh",
@@ -597,9 +597,9 @@
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
     "path": "bin/terminal_with_command.sh",
-    "description": "Opens a floating terminal window to execute a specified command.",
+    "description": "Opens a floating terminal to run a command and see its output.",
     "doc_path": "docs/scripts/terminal_with_command.sh.md",
-    "hash": "579297c532d02382ee7f59fdb900d70f4291137739a59067b3d8da063752de08"
+    "hash": "1b3d05c8db46c3a8ad339197d1f87a97f7332f8ff8e2777ed8e1b8e022fdc7a6"
   },
   "tmux-help.py": {
     "file": "tmux-help.py",
@@ -681,9 +681,9 @@
   "tmux_manager.py": {
     "file": "tmux_manager.py",
     "path": "bin/tmux_manager.py",
-    "description": "Control and manage tmux sessions via YAML config",
+    "description": "A Python script to manage your Tmux session configurations, simplifying the creation, management, and launching of Tmux sessions.",
     "doc_path": "docs/scripts/tmux_manager.py.md",
-    "hash": "5f8fb37b6afd506279cca7bc5fa42463e791b1834c9359e82a827269944b76c6"
+    "hash": "565f9f51b18bec72792785e0ae02c850770bc987666ff477e8312b9579195110"
   },
   "tmux_session.sh": {
     "file": "tmux_session.sh",
@@ -873,5 +873,12 @@
     "description": "Launch a Xephyr instance to run a nested qtile session",
     "doc_path": "docs/scripts/xephyr.sh.md",
     "hash": "2dce10ffc89ad3b84dad83cad853c3c7bcff865c7efe97395ca1cd71491cca86"
+  },
+  "fzfmenu_cache.sh": {
+    "file": "fzfmenu_cache.sh",
+    "path": "bin/fzfmenu_cache.sh",
+    "description": "Generates and caches a list of executables in your `PATH` for fast access.",
+    "doc_path": "docs/scripts/fzfmenu_cache.sh.md",
+    "hash": "a1934aaa1a012ddc995ddd9c4a31b853fd9aa344fb8cbb0628edc23438fc2153"
   }
 }

@@ -1,53 +1,66 @@
-# OpenWebUI Launcher
+# openwebui-launcher.sh
 
 ---
 
-**openwebui-launcher.sh**: Script to launch and manage the Open WebUI with `qutebrowser`.
+**openwebui-launcher.sh**: Script to launch and interact with an Open WebUI instance.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script shell.
-- `tmux`: To manage the Open WebUI process in the background.
-- `notify-send`: For sending desktop notifications.
-- `curl`: To check if the server is up.
-- `qutebrowser`: A keyboard-focused browser using QtWebEngine.
-- `rg` (ripgrep): Utilized to check if the Open WebUI process is already running.
+- `tmux`: Terminal multiplexer used to manage background processes.
+- `curl`: For verifying the availability of the web server.
+- `minimal-browser.py`: A lightweight browser (ensure it is in your PATH).
+- `notify-send`: For desktop notifications (part of `libnotify` package).
+- `rg` (ripgrep): Utilized for process matching (ensure it's installed and in PATH).
+- `open-webui`: Required for serving the web interface. This must be installed (e.g., via `uvx` or equivalent).
+
+---
 
 ### Description
 
-The `openwebui-launcher.sh` script facilitates the automated launching and management of the Open WebUI on your local machine. By using `tmux`, it starts an Open WebUI server in a detached session and ensures that it is accessible by continuously polling its address. It defaults to `localhost` on port `8080`, but you can modify these with command-line arguments. Once the server is running, it opens `qutebrowser` with the specified configuration file and data directory, directly pointing to the server's URL.
+This script is designed to automate the launching of an Open WebUI instance alongside a web browser for frontend interaction. It allows specifying hosts and ports for serving the web interface and has an initialization option (`init`). It checks if the required web interface is already running, and, if not, starts it in a new `tmux` session. 
 
-#### Key Functions:
+The web interface will be served locally (defaulting to `localhost:8080`) unless overridden via the relevant script arguments. The script makes use of the `curl` command to ensure the server is reachable, retrying for up to 30 seconds before timing out.
 
-- **Parameter Handling**: Accepts options like `-D|--database`, `-H|--host`, and `-p|--port` to configure data directories and URL settings.
-- **Server Check & Launch**: Starts the Open WebUI server in a `tmux` session if it is not already running.
-- **Timeout Mechanism**: Ensures the server comes online within a 30-second window; otherwise, it exits.
-- **Browser Launch**: Opens the URL using `qutebrowser`.
+Finally, the specified browser (in this case, `minimal-browser.py`) is opened to the URL hosting the web UI.
+
+---
 
 ### Usage
 
-Run the script from the command line, potentially with the following optional arguments:
+Run the script either interactively in a terminal or integrate it with your tiling window manager (e.g., qtile).
+
+#### Options
+
+- `init`: Initializes the web UI data directory and serves the Open-WebUI instance (`uvx` usage shown, adapt based on your setup).
+- `-H` or `--host [HOST]`: Specify the host address (default is `localhost`).
+- `-p` or `--port [PORT]`: Specify the port number (default is `8080`).
+
+#### Example Usage
 
 ```bash
-openwebui-launcher.sh [OPTIONS]
+# Launch the script with default settings
+bash openwebui-launcher.sh
 
-Options:
-  -D, --database     Specify the data directory for qutebrowser.
-  -H, --host         Set the host for the server (default: localhost).
-  -p, --port         Specify the port (default: 8080).
+# Specify a custom host and port
+bash openwebui-launcher.sh --host 127.0.0.1 --port 9090
+
+# Initialize environment and launch the server
+bash openwebui-launcher.sh init
 ```
 
-**Example:**
-
-```bash
-./openwebui-launcher.sh -D "$HOME/mydata" -H "127.0.0.1" -p 8000
+#### Integration Example (qtile)
+You can assign this script to a keybinding in qtile:
+```python
+Key([mod], "w", lazy.spawn("~/.scripts/bin/openwebui-launcher.sh"))
 ```
-
-This example sets the data directory to `$HOME/mydata`, the host to `127.0.0.1`, and port to `8000`.
 
 ---
 
 > [!TIP]
-> Ensure that your environment variables, especially `XDG_CONFIG_HOME`, are set correctly to avoid issues with file path resolutions. Additionally, consider adding error handling for missing dependencies like `qutebrowser` and `tmux`, or provide feedback to users in case configurations such as `OWCFG` are incomplete or incorrect.
+> **Improvement Suggestions:**
+> 1. **Portability:** This script depends on certain tools (`ripgrep`, `tmux`, `curl`, etc.). Add checks to ensure these tools are installed before execution to avoid failures.
+> 2. **Error Handling:** There is limited error handling for invalid arguments or missing prerequisites (e.g., the `minimal-browser.py` path not found).
+> 3. **Environment Flexibility:** Consider supporting alternative browsers if `minimal-browser.py` is not installed.
+> 4. **Timeout Configuration:** Timeout is hardcoded (30 seconds). Making this configurable could enhance flexibility.

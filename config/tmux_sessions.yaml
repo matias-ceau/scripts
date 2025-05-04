@@ -26,3 +26,8 @@ sessions:
   windows:
   - name: lab
     command: snekai.sh lab
+- name: OPENWEBUI
+  autostart: false
+  windows:
+      - name: openwebui
+        command: openwebui-launcher.sh init

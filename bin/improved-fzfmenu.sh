@@ -22,20 +22,28 @@ for arg in "$@"; do
     fi
 done
 
-# Join the escaped arguments
-#fzf_args="${args[*]}"
+# if [ "$pipe" -eq 0 ]; then
+#     $term \
+#         -T "$title" \
+#         --class "$class" \
+#         -e bash -c "fzf $fzf_args < /proc/$$/fd/0"
+# else
+#     $term \
+#         -T "$title" \
+#         --class "$class" \
+#         -e bash -c "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"
+# fi
 
-if [ "$pipe" -eq 0 ]; then
-    $term \
-        -T "$title" \
-        --class "$class" \
-        -e bash -c "fzf $fzf_args < /proc/$$/fd/0"
-else
-    $term \
-        -T "$title" \
-        --class "$class" \
-        -e bash -c "fzf $fzf_args < /proc/$$/fd/0 > /proc/$$/fd/1"
+fzfcmd="fzf $fzf_args < /proc/$$/fd/0"
+if [ "$pipe" -eq 1 ]; then
+    fzfcmd="$fzfcmd > /proc/$$/fd/1"
 fi
+
+exec systemd-run --user --scope --quiet \
+    $term \
+        -T "$title" \
+        --class "$class" \
+        -e bash -c "$fzfcmd"
 
 #
 #TODO:

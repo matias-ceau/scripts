@@ -1,45 +1,54 @@
-# Terminal with Command Launcher
+# Terminal with Command
 
 ---
 
-**terminal_with_command.sh**: Opens a floating terminal window to execute a specified command.
+**terminal_with_command.sh**: Opens a floating terminal to run a command and see its output.
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A modern terminal emulator focusing on performance.
-- `setsid`: Utility that runs a program in a new session, detaching the process.
-- `bash`: The Bourne Again SHell, which is a default UNIX shell.
+This script requires the following dependencies:
+
+- `alacritty`: A GPU-accelerated terminal emulator.
+- `bash`: Ensures the script executes commands within an interactive bash shell.
 
 ### Description
 
-The `terminal_with_command.sh` script is designed to enhance productivity in a desktop environment by launching a floating terminal window to execute a given command and remain open afterward. This is especially useful for quick monitoring of command outputs or when a command requires attention after execution.
+This script is designed for users running the `qtile` window manager on Arch Linux and allows for opening a floating terminal window to run a specific command. By using `alacritty`, it creates a visually isolated and resizable floating terminal with the class name `floating` and the title `term_w_cmd`.
 
-The script uses the `alacritty` terminal to maintain a lightweight and efficient user experience. Labels such as `-T term_w_cmd` and `--class 'floating'` are used to assign a specific title and window class to the terminal, allowing for easy window management, as seen in window managers like qtile.
+The executed command is passed as an argument to the script. The script makes use of the following key features:
 
-The `cmd="$(which "$1")"` line ensures that the script resolves the absolute path of the intended command, minimizing errors due to misconfiguration of `$PATH`.
+- `"$@"`: This expands all arguments supplied in the script call.
+- `exec "$SHELL"`: Ensures the shell stays open after the command finishes executing, allowing you to review the output.
+  
+The commented-out section in the script provides an alternative way to execute a command by determining its exact path using `which`. This has been replaced for flexibility.
 
 ### Usage
 
-Below is an example of how to use this script:
+To use the script:
 
-```bash
-./terminal_with_command.sh ls
-```
+1. **Run the script with a specific command as an argument:**
+   ```bash
+   /home/matias/.scripts/bin/terminal_with_command.sh <command>
+   ```
 
-This command will open an `alacritty` terminal window floating above other windows and execute the `ls` command.
+   For example, to check your IP address using `ip`:
+   ```bash
+   /home/matias/.scripts/bin/terminal_with_command.sh ip a
+   ```
 
-- **Keybinding:** Assigning this script to a keybinding in qtile can further streamline your workflow.
-- **Interactive Execution:** Run directly from a terminal if needed, simply by providing a desired command as an argument.
+   The above command would open a floating `alacritty` window, execute `ip a`, and retain the terminal open for further exploration.
 
-```bash
-./terminal_with_command.sh htop
-```
-
-This would launch `htop` in a floating terminal session, allowing you to monitor system processes easily.
+2. **Integration with Qtile Keybindings:**
+   To enhance productivity, you can assign this script to a keybinding in your Qtile `config.py`. For instance:
+   ```python
+   Key([mod], "t", lazy.spawn(["/home/matias/.scripts/bin/terminal_with_command.sh", "htop"]), desc="Open floating terminal with htop")
+   ```
 
 ---
 
-> [!NOTE]  
-> While the script provides a handy tool for opening terminal windows with specific commands, it does not handle cases where the command is not found or invalid. Implementing error-checking for command existence or offering user-friendly feedback when an issue arises might enhance the usability of the script. Additionally, allowing for command arguments could make the script more versatile.
+> [!TIP]
+> - The `$SHELL` variable resolves to the user's default shell. If you always want to use `bash`, consider replacing `exec "$SHELL"` with `exec /bin/bash`.
+> - The commented-out lines could add value if commands provided as arguments need their full path; consider reintroducing them if necessary.
+> - If using this script with commands that include special characters (like `&` or `|`), wrapping arguments in quotes or using stricter escaping may prevent parsing errors.

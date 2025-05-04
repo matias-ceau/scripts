@@ -320,12 +320,12 @@ def list_sessions(sessions: List[TmuxSession]) -> None:
     print(f"{Fore.CYAN}" + "-" * 60)
 
     # Table header
-    print(f"{'NAME':<20} {'STATUS':<10} {'STARTUP':<10} {'WINDOWS':<10}")
+    print(f"{'NAME (• window)':<20} {'STATUS':<10} {'STARTUP':<10}")
     print(f"{Fore.CYAN}" + "-" * 60)
 
     for session in sessions:
-        status = f"{Fore.GREEN}RUNNING" if session.is_running else f"{Fore.RED}STOPPED"
-        autostart = f"{Fore.BLUE}AUTO" if session.autostart else f"{Fore.YELLOW}MANUAL"
+        status = f"{Fore.GREEN}RUNNING    " if session.is_running else f"{Fore.RED}STOPPED    "
+        autostart = f"{Fore.BLUE}AUTO       " if session.autostart else f"{Fore.YELLOW}MANUAL     "
 
         print(
             f"{session.name:<20} {status:<10} {autostart:<10} {len(session.windows):<10}"
