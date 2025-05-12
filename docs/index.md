@@ -24,9 +24,10 @@
 - [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *Interactive file manager using fzf with advanced features.*
 - [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Select and play an album using `fzf` and `cmus` on Arch Linux with qtile WM*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *Helper script to replicate `dmenu` functionality using `fzf` and terminal emulator (`alacritty`).*
-- [fzfmenu_cache.sh](scripts/fzfmenu_cache.sh.md) -- *Generates and caches a list of executables in your `PATH` for fast access.*
-- [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *A dmenu replacement script utilizing `fzf` for application selection within a floating terminal.*
+- [fzfmenu_cache.sh](scripts/fzfmenu_cache.sh.md) -- *Efficiently creates and utilizes a cached list of executable files within frequently used directories.*
+- [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *Dmenu run replacement using fzf in a floating xterm terminal*
 - [fzfpreview.sh](scripts/fzfpreview.sh.md) -- *A script to preview text or images in the fzf preview window*
+- [generate_commit_message.py](scripts/generate_commit_message.py.md) -- *Automates the creation of git commit messages based on staged changes using OpenAI's GPT model.*
 - [generate_commit_message.sh](scripts/generate_commit_message.sh.md) -- *Script to generate commit messages using OpenAI's GPT-4o-mini*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Creates thumbnails of currently open windows on your qtile environment.*
 - [get-windows.sh](scripts/get-windows.sh.md) -- *Retrieves and formats window details from qtile*
@@ -91,6 +92,7 @@
 - [rgfzf.sh](scripts/rgfzf.sh.md) -- *A script combining ripgrep and fzf to search files and open results in Vim.*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *A script to transfer and manage music files to a Sandisk media player*
 - [sandisk_music_transfert.py](scripts/sandisk_music_transfert.py.md) -- *Transfers music files to a Sandisk media player while managing storage capacity and file formats.*
+- [screenshot.sh](scripts/screenshot.sh.md) -- *A script to take full-screen or region-based screenshots using `grim` and `slurp`.*
 - [script.sh](scripts/script.sh.md) -- *Opens a fzf menu in an xterm window to type the selection using xdotool*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *A script that uses `fzf` for selecting and executing other scripts with preview and additional utilities.*
 - [script_launcher.sh](scripts/script_launcher.sh.md) -- *Run scripts with fzf*

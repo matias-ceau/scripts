@@ -1,63 +1,59 @@
-# fzfmenu_cache.sh: Command Cache Script
+# FZF Menu Cache Script
 
 ---
 
-**fzfmenu_cache.sh**: Generates and caches a list of executables in your `PATH` for fast access.
+**fzfmenu_cache.sh**: Efficiently creates and utilizes a cached list of executable files within frequently used directories.
 
 ---
 
 ### Dependencies
 
-- `bash`: Script is written for Bash.
-- `find`: Finds executable files in directories.
-- `sort`: Removes duplicate entries by sorting output uniquely.
-- `tee`: Writes output to both standard output and a file.
-- Shared Memory (`/dev/shm`): The script utilizes shared memory (`/dev/shm`) for faster caching. Ensure your system has this mounted.
-  
+- `bash`: A Unix shell and command processor.
+- `fd`: A fast and user-friendly alternative to `find`; used here to search for files.
+- `sort`: Unix utility to sort lines in text files.
+- `/dev/shm`: A temporary filesystem to store the cache in shared memory for speed.
+
 ### Description
 
-The **fzfmenu_cache.sh** script generates a list of all executables available in the system `PATH` environment variable and caches them at `/dev/shm/fzfmenu_path_cache` for quick access. 
+This script efficiently generates and uses a cache file containing a list of executable files found in the user's `$PATH` directory. By leveraging this cache, it can provide faster results for command or file selection workflows (e.g., integrating with `fzf`, a fuzzy finder). Here's how the script works:
 
-#### Key Features:
-- **Caching**: On first run, it generates a cache of executables and keeps it in shared memory for faster subsequent retrievals.
-- **Background Cache Update**: The script always updates the cache in the background, ensuring that it remains up-to-date while keeping the output instant.
-- **De-duplication**: Ensures no duplicates are present in the cached list of executables by sorting uniquely.
+1. **Cache Management**: 
+   - Checks if the cache (`/dev/shm/fzfmenu_path_cache`) exists.
+   - If the cache exists, its content is immediately displayed.
+   - If the cache does not exist, it invokes `build_cache` to create the list and saves it to the cache file.
 
-The cache is stored in a temporary and fast memory (`/dev/shm`) to provide instant reads on subsequent runs.
+2. **Cache Building**:
+   - The function `build_cache` iterates through each directory in `$PATH`.
+   - For each directory, it uses `fd` to find executable files (`-tx`), symbolic links (`-tl`), and applies options like `--maxdepth=1` to keep it shallow and fast.
+   - Results are sorted and duplicates are removed using `sort -u`.
+
+3. **Background Rebuilding**:
+   - The cache is asynchronously rebuilt every time the script runs, ensuring an always up-to-date cache with minimal delay for the user.
 
 ### Usage
 
-The script can be executed in a terminal or as part of another script/tool. 
-It is especially useful for integration with tools like `fzf` for command selection.
+This script is primarily a helper for workflows where a real-time, updated cache of executable files is needed. Below are some examples:
 
-Example:
-
+#### Example 1: Running the script to output cache
 ```bash
-# Running the Script
-bash /home/matias/.scripts/bin/fzfmenu_cache.sh
-
-# Sample Output (if cache already exists)
-ls
-grep
-find
-bash
+~/.scripts/bin/fzfmenu_cache.sh
 ```
 
-#### Common Scenarios:
-1. **Direct Command**: Run the script directly to list available executables.
-2. **fzf Integration**: Pair it with `fzf` to select an executable interactively:
-    ```bash
-    selected_command=$(bash /home/matias/.scripts/bin/fzfmenu_cache.sh | fzf)
-    $selected_command
-    ```
+If the cache exists, it outputs the cached list. If not, it generates the cache and simultaneously displays the new list.
 
-3. **Set to Keybinding** (in qtile or other WMs).
-   Add a keybinding to run this script with `fzf`, allowing quick command execution.
+#### Example 2: Piping into `fzf`
+```bash
+~/.scripts/bin/fzfmenu_cache.sh | fzf
+```
+
+This example allows using the cache to search interactively (fuzzy search) with `fzf`.
+
+#### Example 3: Assigning to a keybinding in qtile
+The script can be launched by binding it to a key in your `qtile` configuration, combined with utilities like `fzf` or custom prompts.
 
 ---
 
-> [!TIP]
-> - The script does not handle invalid entries in the `PATH` variable. Consider adding checks for malformed or non-existing directories in `PATH`.
-> - If `/dev/shm` is unavailable (or mounted with improper permissions within your environment), the script will fail to cache data. It may be useful to provide fallback storage, such as `/tmp/`.
-> - Using `find` across large directories might slow down the cache rebuild, particularly on low-powered systems. Consider implementing smarter exclusion rules for paths like `/usr/bin` if needed.
-> - Since cache refreshes run in the background, use caution if multiple instances of the script are run simultaneously, as they might overwrite the cache mid-execution.
+> [!TIP]  
+> - The path for the cache (`/dev/shm/fzfmenu_path_cache`) is hardcoded to `/dev/shm`. If `/dev/shm` is unavailable on another machine, the script would fail. Consider adding a fallback mechanism.  
+> - Instead of hardcoding `$HOME/.local/bin:/usr/bin`, consider dynamically appending all paths from the user's environment (`$PATH`) for broader application.  
+> - Potential improvements include adding a verbosity flag or debugging option to control script output, and support more interactive command-line arguments.

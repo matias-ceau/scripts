@@ -40,7 +40,7 @@ def generate_commit_message(diff):
     response = openai.chat.completions.create(
         model="gpt-4.1-mini",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=60,
+        max_tokens=600,
         temperature=0.2,
     )
     # Extract the message (depends on OpenAI lib version)

@@ -1,57 +1,56 @@
-# fzfmenu_run.sh: Fuzzy Finder Application Launcher
+# fzfmenu_run.sh
 
 ---
 
-**fzfmenu_run.sh**: A dmenu replacement script utilizing `fzf` for application selection within a floating terminal.
+**fzfmenu_run.sh**: Dmenu run replacement using fzf in a floating xterm terminal
 
 ---
 
 ### Dependencies
 
-This script requires the following dependencies to function properly:
-- `fzfmenu_cache.sh`: **Local script dependency**—Expected to provide a list of cached or available applications.
-- `improved-fzfmenu.sh`: **Local script dependency**—Enhances the functionality of `fzf` for menu-based selection.
-- `fzf`: A command-line fuzzy finder.
-- `systemd-run`: Used to run the selected application under the current user scope.
+This script requires the following dependencies:
 
-_Please ensure that the above scripts (`fzfmenu_cache.sh` and `improved-fzfmenu.sh`) are available in your `$PATH` or modify the script to reference their absolute paths._
-
----
+- `fzfmenu_cache.sh`: A required script to feed options into the fzf pipeline.
+- `improved-fzfmenu.sh`: A script that processes the fzf pipeline and contributes additional features like ANSI formatting.
+- `fzf`: A general-purpose command-line fuzzy finder.
+- `systemd`: Utilized for creating a user-level scope to run the selected command.
+- A floating terminal setup compatible with your Arch Linux environment. On qtile, this might be configured through keybindings or specific terminal properties.
 
 ### Description
 
-This script replaces `dmenu_run` functionality by integrating `fzf` for fuzzy searching and launching applications. It streams a list of commands (provided by `fzfmenu_cache.sh`) through `improved-fzfmenu.sh` to filter and select the desired program interactively.
+This script acts as an alternative to the conventional `dmenu_run`, offering a more interactive experience via `fzf`. It utilizes cached application paths or commands as input to `fzf`, where you can fuzzy search for specific applications or scripts. Once an item is selected:
 
-Key features:
-- **Nested script processing**: `fzfmenu_cache.sh` provides a list of potential applications, piped into `improved-fzfmenu.sh` for menu enhancement.
-- **Floating terminal experience**: Designed to run within a floating `xterm` (though the terminal aspect is implied and not explicitly managed here).
-- **Systemd scope**: Applications are launched in a separate user scope through `systemd-run`, which ensures clean process management.
+1. It checks if anything was selected. If not, the script exits silently.
+2. If a selection exists, it executes the chosen command using `systemd-run` under a new user scope. This ensures the execution does not block other operations.
 
----
+Additionally, the script offers convenience features such as processing cached inputs and additional display formatting, thanks to `fzfmenu_cache.sh` and `improved-fzfmenu.sh`.
 
 ### Usage
 
-This script can be used as follows:
+To use the script, ensure it is executable:
+```bash
+chmod +x /home/matias/.scripts/bin/fzfmenu_run.sh
+```
 
-#### Interactive Execution
-Run the script directly from a terminal:
+Execute the script directly:
 ```bash
 ~/.scripts/bin/fzfmenu_run.sh
 ```
 
-You will be presented with a fuzzy search menu powered by `fzf`. Choose an application or command to execute it. The script automatically exits if no selection is made.
-
-#### Qtile Integration
-Bind the script to a keybinding within your Qtile configuration:
+Alternatively, you can bind the script to a key combination in qtile. For instance, you can add this to your `~/.config/qtile/config.py`:
 ```python
-Key([mod], "r", lazy.spawn("~/.scripts/bin/fzfmenu_run.sh")),
+Key([mod], "r", lazy.spawn("~/.scripts/bin/fzfmenu_run.sh"), desc="Run fzf launcher")
 ```
-Pressing `Mod+r` launches the search menu for application selection.
+
+Sample Input/Output interaction:
+- The script shows a fuzzy-search interface with the available binaries, scripts, or commands.
+- Example: Typing `fire` might show `firefox`, `firewalld`, etc.
+- After selecting `firefox`, it will launch the browser in a new window.
 
 ---
 
-> [!TIP]
-> - **Hardcoded Dependencies**: The script assumes `fzfmenu_cache.sh` and `improved-fzfmenu.sh` are in the `$PATH`. Consider making these dependencies configurable with an environmental variable or an initial check.
-> - **Terminal Management**: If this script is meant for a floating `xterm`, specify it explicitly for clarity and usability.
-> - **Error Handling**: Enhance handling of exceptional cases, such as missing dependencies or improper configurations. Warnings or fallback behavior could improve user experience.
-> - **Documentation of User Scripts**: Include brief documentation or reference for `fzfmenu_cache.sh` and `improved-fzfmenu.sh`, as their functionality is key to this script’s behavior.
+> [!NOTE]
+> - This script assumes `fzfmenu_cache.sh` and `improved-fzfmenu.sh` are present and functional. If they are missing or have bugs, the script will fail entirely.
+> - Consider adding error handling. For example, verify that dependencies like `fzf` or the required scripts are available before running the main logic.
+> - While systemd-run adds robustness, it might not be ideal in all use cases, such as environments where systemd isn't available. Consider adding fallbacks.
+> - Provide further customization for users to configure the floating terminal setup if not predefined in their environment.

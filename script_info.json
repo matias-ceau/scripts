@@ -149,9 +149,9 @@
   "fzfmenu_run.sh": {
     "file": "fzfmenu_run.sh",
     "path": "bin/fzfmenu_run.sh",
-    "description": "A dmenu replacement script utilizing `fzf` for application selection within a floating terminal.",
+    "description": "Dmenu run replacement using fzf in a floating xterm terminal",
     "doc_path": "docs/scripts/fzfmenu_run.sh.md",
-    "hash": "d5074009c8b6d1111854b2da15fa54a9438db0ea15c1ed1122a53158e19802ed"
+    "hash": "3b9c3b8415cc209a411cf4fad84a11bdd1788c5b91a2cdd0030b8b996ecea583"
   },
   "fzfmenu.sh": {
     "file": "fzfmenu.sh",
@@ -877,8 +877,22 @@
   "fzfmenu_cache.sh": {
     "file": "fzfmenu_cache.sh",
     "path": "bin/fzfmenu_cache.sh",
-    "description": "Generates and caches a list of executables in your `PATH` for fast access.",
+    "description": "Efficiently creates and utilizes a cached list of executable files within frequently used directories.",
     "doc_path": "docs/scripts/fzfmenu_cache.sh.md",
-    "hash": "a1934aaa1a012ddc995ddd9c4a31b853fd9aa344fb8cbb0628edc23438fc2153"
+    "hash": "2c3674f5d9b6b863c337a821a9045324f5cb5a08276d3c1960fae27f0572ccf0"
+  },
+  "generate_commit_message.py": {
+    "file": "generate_commit_message.py",
+    "path": "bin/generate_commit_message.py",
+    "description": "Automates the creation of git commit messages based on staged changes using OpenAI's GPT model.",
+    "doc_path": "docs/scripts/generate_commit_message.py.md",
+    "hash": "15326b9176200d8322ac2885b85b41b5285e314f4701680a30f02ff3f0089bcb"
+  },
+  "screenshot.sh": {
+    "file": "screenshot.sh",
+    "path": "bin/screenshot.sh",
+    "description": "A script to take full-screen or region-based screenshots using `grim` and `slurp`.",
+    "doc_path": "docs/scripts/screenshot.sh.md",
+    "hash": "b6d456b8f8e68bcc0a065e7a5d3afec4a57c3ca09b07d50651765d919965461f"
   }
 }
