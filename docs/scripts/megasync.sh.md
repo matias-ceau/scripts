@@ -1,42 +1,57 @@
-# MegaSync Launcher
+# Megasync Arch/Qtile Launcher
 
 ---
 
-**megasync.sh**: Launches MegaSync with preserved Qt settings
+**megasync.sh**: Launches MEGAsync with specific environment variables set for Qtile/Arch environments
 
 ---
 
 ### Dependencies
 
-- `bash` – The Bourne Again SHell providing a standard shell interpreter.
-- `megasync` – The MegaSync client, required for syncing files with Mega.
-
----
+- `megasync`: Official MEGA desktop sync client for Linux.
+- `bash`: Standard GNU Bourne Again SHell interpreter.
 
 ### Description
 
-This script serves as a simple launcher for the MegaSync application. It ensures that certain environment variables set in relation to Qt are preserved when launching MegaSync. Specifically, it assigns the values for:
+This launcher script starts the `megasync` client, but ensures two key environment variables are set for compatibility in non-standard desktop environments (like Qtile):
 
-- DO_NOT_UNSET_QT_QPA_PLATFORMTHEME: Prevents Qt-related platform theme settings from being unset.
-- DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE: Inhibits modifications to desktop settings that might interfere with the user’s environment.
+- `DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1`: Prevents MEGAsync from unsetting the `QT_QPA_PLATFORMTHEME` variable, which can be crucial for consistent theming and font rendering under Qtile or non-GNOME/KDE WMs.
+- `DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1`: Tells MEGAsync not to mark itself as "unaware" of desktop environment settings, improving appearance and possibly notification behavior on Arch/Qtile setups.
 
-Both variables help maintain the intended behavior of the application's GUI by preventing automatic adjustments that could potentially disrupt the user interface on a custom desktop environment like qtile in Arch Linux. The script is minimalistic and direct; it simply sets these variables inline before invoking the `megasync` command, leveraging shell variable assignment for a single command execution context.
+This script is especially useful if you experience MEGAsync theming glitches or settings issues with your custom window manager.
 
----
+The script is written for Arch Linux with the Qtile WM, but will work on any system (primarily X11) where these issues occur.
 
 ### Usage
 
-To use this script, first ensure that it has executable permissions. You can set the proper permissions by running:
+#### TL;DR
 
-chmod +x /home/matias/.scripts/dev/megasync.sh
+```shell
+~/.scripts/dev/megasync.sh
+```
 
-This script can be executed from a terminal or can be bound to a key combination within qtile. For instance, to run it from the terminal, use:
+- You can run this directly in your terminal, or assign it to a key binding in Qtile (see below).
 
-/home/matias/.scripts/dev/megasync.sh
+#### Qtile Keybinding Example
 
-Alternatively, if you use a keybinding manager in qtile, bind the key combination to execute this script. The inline assignment of environment variables allows you to keep your Qt application consistent with your desktop theme and settings without affecting the global environment.
+Add to your `~/.config/qtile/config.py`:
+```python
+Key([mod], "m", lazy.spawn("~/.scripts/dev/megasync.sh"), desc="Launch MEGAsync with env fixes")
+```
+
+#### Autostart Example
+
+Add to your Qtile autostart script (e.g. in `~/.config/qtile/autostart.sh`):
+```bash
+~/.scripts/dev/megasync.sh &
+```
 
 ---
 
 > [!TIP]
-> Consider adding logging or error handling in case `megasync` is not installed or fails to launch properly, which could improve troubleshooting. Additionally, maintaining a configuration file for such environment variables might offer greater flexibility than hardcoding them into the script.
+> **Critique & Suggestions:**  
+> - This script is minimal and does its job, but it lacks error checking (e.g., if `megasync` is not installed, it will just fail silently).  
+> - Inline export of variables is clear, but if you add more variables or logic, consider using the `export` command for better readability and maintainability.  
+> - For logging or troubleshooting, you might want to redirect stdout/stderr to a simple log file.  
+> - Consider a shebang portability tweak (`#!/usr/bin/env bash`) for improved robustness across systems.  
+> - If you have other apps with similar needs, generalizing this script to wrap arbitrary commands with custom environment variables may be useful.  

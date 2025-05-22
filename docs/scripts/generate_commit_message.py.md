@@ -1,72 +1,81 @@
-# Generate Commit Message Script
+# generate_commit_message.py
 
 ---
 
-**generate_commit_message.py**: Automates the creation of git commit messages based on staged changes using OpenAI's GPT model.
+**generate_commit_message.py**: Generate an AI-powered git commit message from staged changes.
 
 ---
 
 ### Dependencies
 
-- `python >= 3.12` : Required for script execution.
-- `openai` : A Python client for interacting with OpenAI's API. Must be installed via pip (`pip install openai`).
-- `git` : Used to fetch staged changes (`git diff --cached` must be available).
-- Environment Variable:
-  - `OPENAI_API_KEY` : This must be set with your OpenAI API key for authentication.
+- `openai`  
+  → Required for interacting with the OpenAI GPT API to generate the commit message.
+- `git`  
+  → Script expects to be run inside a git repository with staged changes.
+- `uv`  
+  → This script uses `uv run` as the shebang interpreter for Python dependency and environment management.
+- `python >= 3.12`  
+  → As specified in the script header for compatibility.
+
+---
 
 ### Description
 
-This script automates the creation of descriptive and concise git commit messages by leveraging OpenAI's GPT model. The script performs the following tasks:
-1. Executes `git diff --cached` to fetch the current staged changes.
-2. Constructs a prompt tailored for generating a meaningful commit message.
-3. Sends the prompt to OpenAI's API (using a GPT model, in this case `gpt-4.1-mini`) and retrieves the suggested commit message.
-4. Outputs the generated commit message to the terminal.
+This script automates the process of generating concise and relevant git commit messages using OpenAI's GPT-4 model. It inspects the current staged changes in your git repository (via `git diff --cached`), formats them into a prompt, and sends them to the OpenAI API to obtain a summary commit message.
 
-#### Key Functions:
-- **`get_staged_diff()`**:
-  - Runs `git diff --cached` to get the diff of staged changes.
-  - Handles errors gracefully if `git` execution fails.
-- **`generate_commit_message(diff)`**:
-  - Constructs a prompt using the provided `diff`.
-  - Sends the prompt to OpenAI's Chat API and extracts the resulting commit message.
-- **`main()`**:
-  - Coordinates fetching the diff, generating a commit message, and printing it.
+**Key Functions & Flow:**
+- `get_staged_diff()`: Executes `git diff --cached` to retrieve the current staged changes. Exits with an error if git fails.
+- `generate_commit_message(diff)`: Uses the OpenAI API, authenticating via the `OPENAI_API_KEY` environment variable. It sends the staged diff as context and requests a concise commit message.
+- The output is printed directly to standard output, making it easy to copy, pipe, or use in pre-commit hooks.
+
+**Notes:**
+- The script must be run in an environment where the `OPENAI_API_KEY` environment variable is set.
+- Communication with OpenAI is via their official Python library.
+
+---
 
 ### Usage
 
-#### Prerequisites:
-1. Ensure you have `python >= 3.12` installed.
-2. Install required Python dependencies:
-   ```bash
-   pip install openai
-   ```
-3. Set the `OPENAI_API_KEY` environment variable:
-   ```bash
-   export OPENAI_API_KEY="your_openai_key_here"
-   ```
+#### Basic Usage
 
-#### Running the Script:
-- The script must be executed from the terminal:
-   ```bash
-   python /home/matias/.scripts/bin/generate_commit_message.py
-   ```
-- Ensure you have staged changes in your git repository before running the script. If no changes are staged, the script will exit with a warning.
-
-#### Example Output:
-```bash
-$ python /home/matias/.scripts/bin/generate_commit_message.py
-Fix bug in user authentication flow
+```sh
+uv run --script --quiet /home/matias/.scripts/bin/generate_commit_message.py
+```
+Or, if you have it in your `$PATH`:
+```sh
+generate_commit_message.py
 ```
 
-This output is the generated commit message based on your staged changes.
+#### Step-by-Step
 
-#### Additional Notes:
-You can integrate this script with your qtile keybindings to trigger it via a shortcut, streamlining your development workflow.
+1. Stage your changes:
+    ```sh
+    git add <files>
+    ```
+2. Run the script:
+    ```sh
+    generate_commit_message.py
+    ```
+3. The generated commit message will be printed. You can pipe it into `git commit`:
+    ```sh
+    git commit -m "$(generate_commit_message.py)"
+    ```
+
+#### Tips for qtile
+- Consider mapping this script to a keybinding in your terminal launcher for extra productivity on Arch with qtile.
 
 ---
 
 > [!TIP]
-> - **Error Handling**: There's a lack of fallback behavior if the OpenAI API fails or returns an unexpected result. Consider adding error checks and providing a user-friendly fallback.
-> - **Hardcoded Model**: The GPT model (`gpt-4.1-mini`) is hardcoded. You could allow flexible model selection via a command-line argument or environment variable.
-> - **Commit Automation**: The script only generates a commit message. Adding functionality to automatically commit the staged changes (with user confirmation) could enhance usability further.
-> - **Verbose Output**: When an error occurs (e.g., missing OpenAI key or failed git diff), providing clear instructions to resolve the issue would improve the user experience.
+>
+> - **Dependency on OpenAI API**: While powerful, this script will fail if the API key is absent or invalid, or if there are network issues. Consider adding a more comprehensive error message, and possibly a local fallback (e.g., generate a basic summary using `git` itself) for offline usage.
+>
+> - **Handling Large Diffs**: If your staged diff is large, the OpenAI API may truncate input or increase latency. A warning or diff size check might be helpful.
+>
+> - **Model Hardcoding**: Model name `gpt-4.1-mini` is hardcoded; allowing this as a parameter or via envvar would increase flexibility.
+>
+> - **Custom Prompt**: For specialized commit message formats (e.g. Conventional Commits), consider making the prompt customizable.
+>
+> - **Testing**: There is no formal test or dry-run mode. Adding a test flag could be handy to check API connectivity, etc.
+>
+> Overall, for a daily workflow on Arch/qtile, this is both ergonomic and quite powerful!

@@ -1,44 +1,87 @@
-# Script Describer using Llama 3.1
+# Llama-powered Script Documentation Generator
 
 ---
 
-**llama-all-scripts-describer.py**: Automate the generation of Markdown documentation for scripts using Llama 3.1.
+**llama-all-scripts-describer.py**: Automated Github-style markdown documentation for scripts using Llama 3.1
 
 ---
 
 ### Dependencies
 
-- `argparse`: Standard Python module for argument parsing.
-- `csv`: Standard Python module for CSV file handling.
-- `os`: Standard Python module for OS interaction.
-- `subprocess`: Standard Python module for running shell commands.
-- `sys`: Standard Python module for system-specific parameters and functions.
-- `colorama`: For colored terminal text in a cross-platform manner.
-- `ollama`: Python client for interacting with AI models like Llama 3.1.
-- `fd`, `rg` (ripgrep): Utilities used to search for files.
-- `utils_update_symlinks.sh`: Custom user script for updating symlinks.
-
-### Description
-
-This script facilitates the generation of detailed GitHub-style Markdown documentation for user-created scripts located in a specified directory structure. It utilizes the Llama 3.1 model via the `ollama` package, generating descriptions automatically. The script checks for orphaned documentation files, detects binary files to find their corresponding source code, reads existing script files, generates Markdown documentation, and maintains an index of documented scripts. The script is primarily intended for users with an Arch Linux system and qtile window manager setup, utilizing a custom environment variable `$SCRIPTS` for locating script directories and the CSV file detailing scripts and symlinks.
-
-### Usage
-
-You can execute the script directly from the terminal. It can either take a CSV file as an argument or process the default CSV file specified in the environment variable.
-
-```bash
-python /home/matias/.scripts/bin/llama-all-scripts-describer.py [optional_csv_path]
-```
-
-The script will interactively prompt to run `utils_update_symlinks.sh` optionally. It processes each script and generates corresponding markdown documentation in `$SCRIPTS/docs/scripts` directory. Additionally, updates are appended to an index file in `$SCRIPTS/docs/index.md`.
-
-**Example Command:**
-
-```bash
-python /home/matias/.scripts/bin/llama-all-scripts-describer.py /path/to/csv_file.csv
-```
+- `python` (3.8+ recommended)  
+- `colorama` – For colored terminal output ([PyPI link](https://pypi.org/project/colorama/))
+- `ollama` – Python client for interfacing with local Llama model API
+- `fd` – Fast file finding utility (available on Arch as `fd`)
+- `ripgrep` (rg) – Fast grep alternative
+- `xargs` – For passing arguments from stdin
+- `csv` (Python stdlib)  
+- `subprocess`, `os`, `sys`, `argparse` (Python stdlib)
+- Custom user script: `utils_update_symlinks.sh` (Ensures symlinks are up-to-date before doc generation)
+- Local Llama 3.1 model accessible via `ollama`  
 
 ---
 
-> [!WARNING]  
-> Some potential improvements include converting shell subprocesses to native Python for better performance and error handling. Additionally, ensure all environment variables are correctly set, as the script heavily relies on them. Also, consider adding logging for easier debugging and tracking execution flow.
+### Description
+
+This script automates the generation (and maintenance) of markdown documentation for your personal script collection, leveraging Llama 3.1 as an AI-powered doc writer. Its workflow is as follows:
+
+- **Symlink Update Prompt:**  
+  Before working, it asks to run your `utils_update_symlinks.sh` to ensure the symlink state matches your scripts.
+
+- **Script Enumeration:**  
+  It lists all files within `$SCRIPTS`, filters out markdown files, and builds a set of known script files.
+
+- **Orphaned Doc Detection:**  
+  After processing, it points out markdown docs that no longer correspond to any actual script (i.e., orphans).
+
+- **Binary/Script Differentiation:**  
+  If it finds a binary file, it attempts to locate the source in `$SCRIPTS/src` using common source extensions. If found, it documents that source; if not, it warns and skips.
+
+- **Script Description:**  
+  For each script (from your CSV, typically symlink structure), it:
+    - Reads the script (or source)
+    - Calls out to the Llama 3.1 Ollama endpoint to generate GitHub-flavored markdown documentation
+    - Writes this documentation to `$SCRIPTS/docs/scripts/<scriptname>.md`
+    - Updates `$SCRIPTS/docs/index.md` with a link to the new doc
+
+- **Index Updating:**  
+  The index file is maintained for easy navigation.
+
+---
+
+### Usage
+
+Typical scenario on your qtile + Arch system:
+
+```sh
+llama-all-scripts-describer.py [optional/path/to/symlink_data.csv]
+```
+
+If you do not provide a CSV path, it assumes:
+```
+$SCRIPTS/data/symlink_data.csv
+```
+with environment variable `SCRIPTS` pointing to your scripts directory.
+
+#### Example Workflows
+
+- **Simply run:**
+  ```
+  llama-all-scripts-describer.py
+  ```
+- **Specify an alternate symlink data file:**
+  ```
+  llama-all-scripts-describer.py /path/to/custom_symlink_data.csv
+  ```
+
+> **Best used from a terminal or bound to a key in your qtile workflow.**
+
+---
+
+> [!CAUTION]
+> - The script assumes a specific directory structure governed by your `$SCRIPTS` env variable - this isn't portable unless others mimic your setup.
+> - The binary/source pairing mechanism is extension-based and could miss custom extensions or source locations.  
+> - Docs are only generated if `.md` does not already exist; no updating of existing docs unless you remove them.
+> - `ollama` setup (especially model name `llama3.1`) must be correct and available, or the script will silently skip doc generation.
+> - The CSV parser skips the header but assumes full three-column CSV conformity (`original_path, symlink, command_name`); mismatches could cause runtime errors.
+> - For robust automation, additional logging/reporting and error handling would be helpful, as errors (for instance, permission issues or subprocess failures) currently cause abrupt exits in some places.

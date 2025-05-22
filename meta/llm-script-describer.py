@@ -432,7 +432,7 @@ def main():
     parser.add_argument(
         "llm_model",
         nargs="?",
-        default="gpt-4o-2024-11-20",
+        default="gpt-4.1",
         help="OpenAI LLM model",
     )
     args = parser.parse_args()
@@ -443,7 +443,7 @@ def main():
     run_update_symlinks()
     rm_orphaned_docs(get_script_files())
     process_csv(client=C, llm_model=L)
-    update_readme(client=C, llm_model="gpt-4o-mini")
+    update_readme(client=C, llm_model=L)
 
     print_colored("Script processing completed successfully.", kind="victory")
 

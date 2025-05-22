@@ -1,62 +1,66 @@
-# FZF Menu Helper
+# fzfmenu Helper (fzfmenu.sh)
 
 ---
 
-**fzfmenu.sh**: Helper script to replicate `dmenu` functionality using `fzf` and terminal emulator (`alacritty`).
+**fzfmenu.sh**: Helper script that runs `fzf` inside an `alacritty` terminal instance.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder to filter input text interactively.
-- `alacritty`: Terminal emulator to display the `fzf` interface in this script.
-- `/proc`: Requires Linux `/proc` filesystem to handle file descriptors for input/output streams.
-- Arch Linux-based configuration with `bash`.
+- `alacritty`  
+  GPU-accelerated terminal emulator used to spawn a floating window for menu interaction.
+- `fzf`  
+  Command-line fuzzy finder; provides interactive filtering UX.
+- Bash  
+  Standard shell interpreter (`#!/bin/bash`).
+- (Optional) External scripts or programs whose output is piped into this script.
+
+---
 
 ### Description
 
-This script acts as a helper function for creating an `fzf`-based menu system akin to `dmenu`. Instead of overlaying text on the screen, it opens a new terminal window running `fzf` inside it. Highlights include:
+This script emulates the role of a "rofi" or "dmenu" prompt using `alacritty` and `fzf` for a more extensible, powerful selection interface. It acts as a drop-in interactive menu system, especially suitable for workflows in tiling WMs such as Qtile under Arch Linux.
 
-1. Escaping all arguments passed to the script to avoid parsing issues with special characters using `printf`.
-2. Joining processed, escaped arguments into a single string (`fzf_args`).
-3. Opening a new `alacritty` terminal (titled `fzfmenu`) to execute `fzf` with the specified arguments (`$fzf_args`).
-4. Using the process ID (`$$`) to manage input/output redirection via the `/proc` pseudo-filesystem, ensuring seamless input and output with the parent shell.
+**Functionality breakdown:**
+- Receives arguments meant for `fzf` (such as options to customize prompt, layout, preview, etc.).
+- Securely escapes all provided arguments to ensure safe command parsing.
+- Spawns an `alacritty` terminal with the window title `fzfmenu`, executes `fzf` with the provided arguments, and connects its input and output directly to the parent process' standard input/output using `/proc/$$/fd/{0,1}`.
 
-The script relies on the Arch Linux environment and `alacritty` terminal, ensuring visual interaction during command searching or execution.
+This function is best invoked by other scripts as a helper to display selections in a floating/centered `alacritty` window.
+
+---
 
 ### Usage
 
-This script is best utilized as part of larger workflows to present fuzzy filtering options within your window manager (e.g., `qtile`). Examples:
+You usually don't call this script directly, but as part of a larger menu script or from within keybindings in Qtile. However, standalone usage is possible for debugging.
 
-#### Interactive Testing
-1. Save the script to a file, e.g., `/home/matias/.scripts/bin/fzfmenu.sh`.
-2. Make it executable:
-   ```bash
-   chmod +x /home/matias/.scripts/bin/fzfmenu.sh
-   ```
-3. Run it with input piped via the terminal:
-   ```bash
-   echo -e "Option1\nOption2\nOption3" | /home/matias/.scripts/bin/fzfmenu.sh
-   ```
-
-#### Qtile Keybinding
-Assign this script to a key in your `qtile` configuration to quickly invoke fuzzy menus:
-```python
-Key([mod], "m", lazy.spawn("~/.scripts/bin/fzfmenu.sh"))
-```
-
-#### Custom Arguments
-Pass additional options to `fzf`, for example:
+**Example (Basic File Picker):**
 ```bash
-echo -e "One\nTwo\nThree" | /home/matias/.scripts/bin/fzfmenu.sh --reverse
+ls | ~/.scripts/bin/fzfmenu.sh --prompt="Pick a file: "
 ```
-This would enable reverse sorting for the `fzf` menu.
+
+**With Custom Preview Window:**
+```bash
+find ~/Documents -type f | ~/.scripts/bin/fzfmenu.sh --preview='head -20 {}' --height=40%
+```
+
+**Integration in a Script (Pseudocode):**
+```bash
+choices=$(some_command_producing_list | ~/.scripts/bin/fzfmenu.sh [fzf options])
+```
+
+**Qtile Keybinding (Python fragment):**
+```python
+Key([mod], "p", lazy.spawn("my-launcher-script.sh"))
+```
+_Each script that needs a selection/launcher menu can use `fzfmenu.sh` as the backend._
 
 ---
 
 > [!TIP]
-> - Replace `alacritty` with your preferred terminal emulator, like `xterm` or `st`.
-> - Add conditions to ensure `fzf` executes correctly even if arguments are improperly escaped.
-> - Consider additional error handling for scenarios where `/proc` is unavailable or file descriptors fail to open. A fallback method might enhance script robustness.
-> - Adding usage comments or help flags (`-h` or `--help`) for clarity could improve usability.
-> - Note that capturing additional environment-specific parameters might make the script more portable.
+> While this script securely escapes and forwards options to fzf (improving safety compared to naive wrappers), several considerations could improve robustness:
+> - **No input checking**: The script assumes that stdin, stdout, and `/proc/$$/fd/{0,1}` are available and properly connected. Not all terminals/shell invocations will provide these; a check and fallback for non-Linux/pseudo-terminal use would increase portability.
+> - **No error handling**: If `alacritty` or `fzf` are missing, the script fails silently. Consider adding checks for dependencies or descriptive error messages for easier debugging.
+> - **Window management**: By default, `alacritty` will open in a standard size; integrating options to open as a floating/centered window (using `--class`, `--geometry`, or external WM rules) might better emulate dmenu-like UX in Qtile.
+> - **Performance**: For very large input lists, piping directly through the script may be slower than using `fzf` async sources. Consider allowing additional fzf features for large/remote datasets.

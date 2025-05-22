@@ -1,54 +1,48 @@
-# Terminal with Command
+# terminal_with_command.sh
 
 ---
 
-**terminal_with_command.sh**: Opens a floating terminal to run a command and see its output.
+**terminal_with_command.sh**: Opens a floating Alacritty terminal to execute a given command, showing output and staying open.
 
 ---
 
 ### Dependencies
 
-This script requires the following dependencies:
-
-- `alacritty`: A GPU-accelerated terminal emulator.
-- `bash`: Ensures the script executes commands within an interactive bash shell.
-
-### Description
-
-This script is designed for users running the `qtile` window manager on Arch Linux and allows for opening a floating terminal window to run a specific command. By using `alacritty`, it creates a visually isolated and resizable floating terminal with the class name `floating` and the title `term_w_cmd`.
-
-The executed command is passed as an argument to the script. The script makes use of the following key features:
-
-- `"$@"`: This expands all arguments supplied in the script call.
-- `exec "$SHELL"`: Ensures the shell stays open after the command finishes executing, allowing you to review the output.
-  
-The commented-out section in the script provides an alternative way to execute a command by determining its exact path using `which`. This has been replaced for flexibility.
-
-### Usage
-
-To use the script:
-
-1. **Run the script with a specific command as an argument:**
-   ```bash
-   /home/matias/.scripts/bin/terminal_with_command.sh <command>
-   ```
-
-   For example, to check your IP address using `ip`:
-   ```bash
-   /home/matias/.scripts/bin/terminal_with_command.sh ip a
-   ```
-
-   The above command would open a floating `alacritty` window, execute `ip a`, and retain the terminal open for further exploration.
-
-2. **Integration with Qtile Keybindings:**
-   To enhance productivity, you can assign this script to a keybinding in your Qtile `config.py`. For instance:
-   ```python
-   Key([mod], "t", lazy.spawn(["/home/matias/.scripts/bin/terminal_with_command.sh", "htop"]), desc="Open floating terminal with htop")
-   ```
+- `alacritty` — GPU-accelerated terminal emulator (required for window class and title support).
+- `bash` — The default shell for command execution.
+- `qtile` (environment context) — Floating window support configured within your qtile setup.
+- (Optional) Any command you wish to run in the floating terminal.
 
 ---
 
-> [!TIP]
-> - The `$SHELL` variable resolves to the user's default shell. If you always want to use `bash`, consider replacing `exec "$SHELL"` with `exec /bin/bash`.
-> - The commented-out lines could add value if commands provided as arguments need their full path; consider reintroducing them if necessary.
-> - If using this script with commands that include special characters (like `&` or `|`), wrapping arguments in quotes or using stricter escaping may prevent parsing errors.
+### Description
+
+This script is designed to launch a floating terminal window under the `qtile` window manager on Arch Linux, immediately executing the command(s) you pass as arguments. It utilizes `alacritty`, setting the window title to `term_w_cmd` and the window class to `floating`, making it easy to manage its floating behavior via qtile rules. After executing the provided command, the script keeps the shell open (`exec "$SHELL"`), allowing you to inspect output or run further commands interactively.
+
+By leveraging `-e bash -i -c`, the script ensures commands run in an interactive session, so aliases and functions are available and the environment is set up as in a normal shell. Passing `"$@"` ensures all arguments are interpreted as a single command with arguments, preserving quoting.
+
+---
+
+### Usage
+
+You can invoke the script from anywhere, e.g. within keybindings, scripts, or directly from a terminal.
+
+**Basic usage:**
+```
+terminal_with_command.sh <command> [arguments]
+```
+**Examples:**
+```
+terminal_with_command.sh htop
+terminal_with_command.sh nvim ~/notes/todo.md
+terminal_with_command.sh bash -c "echo Hello && sleep 5"
+```
+_Note:_ You can assign this script to a keybinding in your qtile config to rapidly run diagnostics, editors, or monitoring tools in a floating terminal.
+
+---
+
+> [!NOTE]
+> - The script does not validate command existence, so typos or missing commands will simply result in an error message inside the terminal window.
+> - The script assumes `alacritty` is installed and in the PATH; this won’t work with other terminal emulators unless modified.
+> - If you want more flexibility (e.g. alternate terminal emulators or improved error handling), you could parameterize the terminal command and include checks for the command’s existence.
+> - Using `"$@"` with a leading `_` as `$1` inside the script (`"$@"` after `_`) is a bash pattern to preserve all original arguments exactly, but if no command is given, the terminal will open to a shell prompt. If you would prefer to display a usage message or error, add a command presence check at the beginning.

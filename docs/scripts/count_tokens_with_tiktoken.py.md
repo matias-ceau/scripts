@@ -1,48 +1,58 @@
-# Token Counter with Tiktoken
+# Count Tokens with tiktoken
 
 ---
 
-**count_tokens_with_tiktoken.py**: Script to count tokens using `tiktoken` with support for different models
+**count_tokens_with_tiktoken.py**: Count token usage for a text file or stdin using OpenAI `tiktoken`.
 
 ---
 
 ### Dependencies
 
-- `tiktoken`: A Python library for tokenization that supports various models used for language experiments and applications.
+- `tiktoken`  
+  Python package for OpenAI tokenizer encoding/decoding.  
+- Python 3.x (interpreter)
 
 ### Description
 
-This script is designed for token counting, particularly useful for evaluating input size against language models like `gpt-4o`. Leveraging `tiktoken`, it determines how many tokens a given text contains by encoding the text according to the specified model's tokenization scheme. The script reads text either from a file or from standard input (stdin), defaulting to the model `gpt-4o` which can be overridden through the `-m` option.
+This script counts the number of tokens (as understood by OpenAI's tokenization schemes) in a given text.  
+It's designed to be used in two ways:
 
-The core functionality is encapsulated in two functions:
-- `count_tokens(text, model)`: Encodes the given text to count its tokens.
-- `get_options(arguments)`: Parses command-line arguments to determine if text should be read from a file and which model should be used.
+1. **Through a command line file argument**: supply a file with the `-f` flag to count tokens in its contents.
+2. **Via stdin**: you can pipe text directly to it for interactive or scripted workflows.
 
-The script also includes a `usage()` function to provide help and usage information.
+The script defaults to the `gpt-4o` model for tokenization if no model is specified. The model can be changed using the `-m` flag.  
+It parses arguments manually and gracefully provides usage help.
+
+**Key Functions:**
+- `count_tokens(text, model)`: returns token count using the specified model.
+- `get_options(arguments)`: CLI argument parser, fetches file contents or reads from stdin, and selects the model.
+- `usage()`: prints usage help and exits.
 
 ### Usage
 
-This script can be used in two primary ways:
+Examples for Arch Linux + qtile environment:
 
-1. **Pipeline with text input**:  
-   ```bash
-   <cmd> | ./count_tokens_with_tiktoken.py
-   ```
-   Replace `<cmd>` with any command that outputs text to be tokenized.
+```sh
+# Pipe text and count tokens with default model (gpt-4o)
+echo "Hello world!" | ~/.scripts/bin/count_tokens_with_tiktoken.py
 
-2. **File input**:
-   ```bash
-   ./count_tokens_with_tiktoken.py -f <file_path> [-m <model_name>]
-   ```
-   - `-f <file_path>`: Specify the path to a text file whose contents will be tokenized.
-   - `-m <model_name>`: Optional; specify a model other than the default `gpt-4o`.
+# Count tokens in a file
+~/.scripts/bin/count_tokens_with_tiktoken.py -f ~/long_document.txt
 
-For help, use:
-```bash
-./count_tokens_with_tiktoken.py -h
+# Specify a different OpenAI model (e.g. gpt-3.5-turbo)
+~/.scripts/bin/count_tokens_with_tiktoken.py -f ~/text.txt -m gpt-3.5-turbo
+
+# Get help
+~/.scripts/bin/count_tokens_with_tiktoken.py -h
 ```
+
+You can assign this script to a keybinding in your qtile config, especially to process clipboard contents or selected files.
 
 ---
 
 > [!TIP]
-> Consider clarifying the usage of models within the script, as users might need guidance on what model specifications are compatible. Also, ensure that when using `-f` and `-m`, there is proper error handling and informative error messages to guide users on incorrect inputs. Additionally, renaming `usage()` to `print_usage()` might enhance readability by making its purpose clearer.
+> - The argument parsing is simplistic and may break for input with overlapping or reordered flags, e.g. if `-m` is used before `-f`.
+> - The usage string could show the full script name for clarity in help output.
+> - There is no error handling for model names that are not recognized by `tiktoken`.
+> - Consider using a standard argument parser like `argparse` or `click` for more robustness and flexibility.
+> - Reading stdin is blocking; if nothing is piped, the script will wait for user input. An explicit prompt or timeout could improve interactivity.

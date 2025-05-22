@@ -4,7 +4,7 @@
 
 get_history() {
 	cat "$XDG_STATE_HOME/zsh/history"\
-	    "$XDG_STATE_HOME/bash/history" |
+	    "$XDG_STATE_HOME/bash/history" 2>/dev/null |
 	    sed -E 's/^: [0-9]+:[0-9];//' # remove extra zsh indications
 }
 

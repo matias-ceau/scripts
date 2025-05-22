@@ -1,75 +1,87 @@
-# pyman.sh: Python Manual Navigation Script
+# PyMan: Interactive Python Manual Navigator
 
 ---
 
-**pyman.sh**: A utility script to browse Python documentation, keywords, topics, and packages.
+**pyman.sh**: Interactive fuzzy finder for Python topics, keywords, builtins, and installed modules/packages.
 
 ---
 
 ### Dependencies
 
-- `python`: Required for obtaining version information, documentation, and built-in modules.
-- `pydoc`: For fetching Python documentation and associated data.
-- `bat`: Used to colorize and preview outputs.
-- `sed`: Text stream editor for parsing and replacements.
-- `tr`: To transform strings.
-- `sort`, `uniq`, `cut`: Core Linux utilities used for text processing.
-- `fd`: A fast alternative to `find` for directory traversal.
-- `rg` (ripgrep): For fast pattern searching.
-- `fzf`: Fuzzy finder for interactive navigation.
-- `ranger`: (Optional) For browsing directories once selected.
+- `python` _(with pydoc utility)_: For module info, builtins, keywords, topics extraction
+- `fzf` _(fuzzy-finder)_: UI for interactive searching and navigation
+- `bat` _(cat clone with syntax highlighting)_: For previewing python/manual text nicely
+- `fd` _(find alternative)_: For fast filesystem searching within site-packages
+- `rg` _(ripgrep)_: For filtering/searching, used extensively in subcommands
+- `ranger` _(file manager, optional)_: Opens directories inside site-packages
+- `notify-send`: For quick-notification popups (feedback when navigating to source)
+- `$XDG_CACHE_HOME` (recommended set)
+  
+> _You may want to install these via your package manager if they're missing:_
+>
+> ```sh
+> sudo pacman -S python fzf bat fd ripgrep ranger libnotify
+> ```
 
 ---
 
 ### Description
 
-`pyman.sh` is a powerful script designed for Python developers on Arch Linux with `qtile` setup to navigate Python documentation and inspect Python libraries dynamically. Here's what the script does:
+This script is designed to serve as a "manual browser" for Python within your terminal, leveraging `fzf` for live, interactive exploration of:
 
-- Detects the installed Python version and configures the correct `site-packages` path for library inspection.
-- Provides functions to:
-  - List Python *topics* via `get_topics()`
-  - Show Python *keywords* using `get_keywords()`
-  - Inspect libraries in `site-packages` with `get_site_packages()`
-  - Explore *submodules* within selected libraries using `get_submodules()`
-  - View Python *built-in functions* and objects using `get_builtins()`
-- Integrates a robust preview mechanism using `bat` to view details of selected items (documentation or code), dynamically adapting language for `rst`, `man`, or Python files.
-- Utilizes `fzf` for an interactive UI, offering keybindings to switch between:
-  - *Built-ins* - ALT+B
-  - *Keywords* - ALT+K
-  - *Topics* - ALT+T
-  - *Libraries* (site-packages) - ALT+L
-  - *Modules* - ALT+M (within a library)
-- Offers multiple utilities for better code exploration:
-  - Preview source files (`bat`)
-  - Open directories in `ranger` if selected.
-  - Dynamic prompts and labels to track the current context.
+- Installed site-packages and their modules
+- Module submodules (recursively)
+- Python builtins, keywords, help topics
+
+**Functionality Highlights:**
+- Custom functions (`get_topics`, `get_keywords`, `get_builtins`, `get_site_packages`, `get_submodules`) dynamically query and format results from your system's Python install.
+- `bat` provides syntax-highlighted previews of module source or documentation.
+- `fzf` is extensively customized with keybinds (see Usage) for switching between "libraries, builtins, keywords, topics", entering submodules, and showing previews.
+- When you choose a file, you get a preview, and can open source with `bat`, or enter directories with `ranger`.
+
+**Custom Keybinds (fzf):**
+- `Alt+l`: List all installed site-packages ("Libs")
+- `Alt+b`: Python builtins list
+- `Alt+k`: Python keywords
+- `Alt+t`: Python help topics
+- `Alt+m`: Drill into submodules (contextual to selection in "Libs")
+- `Enter`: Show source file with `bat` or open directory in `ranger`
+- `Alt+p`: Toggle preview pane
+
+Python version is auto-detected; everything runs in your shell context (Qtile/Arch-friendly: *no X dependencies except notify-send*).
 
 ---
 
 ### Usage
 
-Run the script interactively for navigation:
-
-```bash
-bash /home/matias/.scripts/bin/pyman.sh
+To launch the browser:
+```sh
+~/.scripts/bin/pyman.sh
 ```
+It will automatically display installed `site-packages` in an interactive fzf prompt:
 
-Keybindings for `fzf`:
+- **Navigate** with arrow keys, fuzzy-search by typing
+- **Preview docs/source** in the right pane (auto-wrap to terminal width)
+- **Switch modes** (libs, builtins, topics, keywords) using Alt+key as described above
+- **Enter** on an item to view source (or open directory in ranger if it's a package)
+- **Submodules** can be browsed with Alt+m while on a package
+- **Notifications** will indicate file/dir opened
 
-- **ALT + L**: Load `site-packages` libraries.
-- **ALT + B**: Show built-in Python functions or objects.
-- **ALT + T**: Explore Python topics.
-- **ALT + K**: List Python keywords.
-- **ALT + M**: View submodules (within selected library-category).
-- **CR (Enter)**: Open the corresponding source/document in `bat` or `ranger`.
-- **ALT + P**: Enable/Disable Preview.
-
-The script auto-refreshes library content as you switch contexts.
+> **tldr:** Launch in terminal and start exploring Python from all angles—docs, source, and more—using only your keyboard.
 
 ---
 
-> [!TIP]
-> - **Optimization**: The script generates cache files on every run unnecessarily when they are not used later—consider removing or using them.
-> - **Error Handling**: Add better error handling; for example, provide warnings for missing dependencies (e.g., `fd`, `bat`, `fzf`, `rg`).
-> - **Customization**: Configuration can be made modular by externalizing keybindings, colors, or paths as parameters to avoid hardcoding.
-> - **Performance**: Multiple `sed` and `rg` calls could be optimized for faster processing.
+> [!NOTE]
+> **Strengths:**  
+> - Highly interactive and leverages your terminal environment.
+> - Great use of shell/Python tools and colors for readability.
+> 
+> **Potential Issues & Improvements:**  
+> - Assumes `python` points to the desired interpreter and uses nonstandard regex for `python -V`; might not work for Python 3.10+.  
+> - Some tools (`bat`/`fd`/`ranger`) are optional, yet script will fail if missing—should ideally check for these and degrade gracefully.  
+> - The recursive submodule exploration (Alt+m) could confuse users with large or nested modules; might benefit from limiting depth or adding indicators.  
+> - Some functions produce lots of subshells. Could refactor heavy pipelines for efficiency and reproducibility.
+> - `$XDG_CACHE_HOME` must be set or script will fail to create cache directories.
+> 
+> **Overall:**  
+> Superb utility for Python power users! Robust and highly hackable; just needs a bit more polish and portability if you want to share it outside your own setup.

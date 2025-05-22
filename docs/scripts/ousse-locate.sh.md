@@ -1,35 +1,69 @@
-# Ousse Locate Utility Script
+# ousse-locate: a database/search helper for Ousse data
 
 ---
 
-**/home/matias/.scripts/dev/ousse-locate.sh**: File locator tool leveraging eza and custom AWK calculations
+**ousse-locate.sh**: Experimental script for managing and searching local `.db` databases with preview support.
 
 ---
 
 ### Dependencies
 
-- `bash` – The script interpreter.
-- `du` – Used for calculating the total size of the target directory.
-- `eza` – An enhanced replacement for ls; formats and sorts file listings.
-- `awk` – Processes and computes file size ratios and time differences.
-- `date` – Provides current timestamp for time computations.
+- `eza`: Modern replacement for `ls`, used for directory listing and info.
+- `awk`: Text processing.
+- `du`: Disk usage estimator.
+- `cut`, `tr`, `sed`, `echo`, `date`: Standard Unix text and file manipulation utilities.
+- `fzf` *(optional, WIP)*: Fuzzy finder for interactive selection.
+- `bat` *(optional, WIP)*: Cat clone with syntax highlighting for previews.
+- `plocate` *(optional, commented)*: Fast file locator, used for searching patterns in database files.
+- `rg` *(optional, commented)*: ripgrep, for regex-driven file search.
 
 ---
 
 ### Description
 
-This script is designed to generate a detailed overview of the files within the .local/share/ousse directory. Primarily tailored for an Arch Linux environment running the qtile window manager, it computes key information by first determining the total byte size of the directory with the `du` command. The output is then formatted using `eza` with parameters such as sorting by size, modification time, and absolute paths.
+`ousse-locate.sh` is a user-space helper script for inspecting and searching local databases located at `.local/share/ousse/`. It's designed to assist in visualizing, assessing, and searching `.db` files collected within that folder. The script currently demonstrates several commands (some commented as TODOs for future integration):
 
-After fetching the complete list of files, the script performs a series of calculations with `awk`. The first calculation normalizes individual file sizes by scaling them relative to the total size and adapting the output to the current terminal width (using the `$COLUMNS` variable) to potentially display a progress-like bar. The second calculation computes the difference between each file's timestamp and the current epoch time, possibly for age-based filtering or updates. Finally, a third AWK command extracts a specific field that is reprocessed by eza for further styled output.
+- Computes total bytes used by all `.db` files in `.local/share/ousse`.
+- Produces a detailed listing with sizes, modification times, and absolute paths via `eza`.
+- Performs some numerical calculations (relative widths, time differences), potentially for TUI displays.
+- Provides an example block for constructing a pipeline with `dust` (space analyzer), `sed`, `bat` (highlighted preview), and `fzf` (fuzzy selection).
+- Includes a detailed snippet of supported `plocate` search options and a sample chain to preview matches or open found files in `nvim` via `fzf`.
 
-The script also contains commented sections hinting at future enhancements:
-- Implementation of an fzf-like file selector.
-- Piping support to tools like `bat` and `rg` for a more interactive search experience.
-- A potential integration of basic plocate search parameters.
+The script is experimental and full interactive capability or fuzzy selection is not yet fully implemented—it mainly demonstrates various info gathering via `awk`, `eza`, and shell arithmetic. The TODOs note intentions for further development, particularly age-aware database checks and more direct fuzzy selection/search integration.
 
-These additions suggest a roadmap for a more comprehensive and interactive file location and selection tool.
+---
+
+### Usage
+
+For now, invoke the script directly to display information on your `.db` files:
+
+```
+~/.scripts/dev/ousse-locate.sh
+```
+
+This prints:
+
+- The total size in bytes of `.local/share/ousse`.
+- A line with column-wise proportional info (potential TUI progress bar).
+- A line with time-deltas between now and each file's modification time.
+- A re-listing of files for further inspection.
+
+**Note:** There is no direct argument parsing at this stage; most interactivity or filtering is left as future development per the TODO section. If you want basic interactive search, refer to the commented `fzf`/`plocate`/`rg` blocks as starting points:
+
+```sh
+plocate -d .local/share/ousse/mydb.db 'PATTERN'
+# or try ripgrep/fzf manually:
+rg --color=always "pattern" | fzf --ansi --preview 'bat --color=always {1} --highlight-line {2}'
+```
 
 ---
 
 > [!TIP]
-> Consider handling edge cases such as missing dependencies or empty directories, and validating file paths before performing operations. Refining the commented-out sections into modular functions could simplify maintenance and improve readability. Additionally, integrating error handling and user feedback (like notifying when the database is outdated) would enhance the overall robustness of the script. Future improvements might also include a more interactive preview system for file selection.
+>
+> This script is still very much a prototype, more a "notebook" than a finished utility:
+> - It presently does not process arguments or perform actual database searching—it only outputs info about `.db` files.
+> - Several features are commented (e.g., `fzf`, `bat`, `plocate` usage) but not connected.
+> - Output is difficult to interpret without further formatting; it also assumes existence of `.local/share/ousse` and compatible environment.
+> - Consider modularizing feature blocks into functions as the script grows, and adding proper CLI argument handling.
+> - You may want to add error handling for missing directories/deps, and use absolute paths for robustness. 
+> - Great starting point for a richer fuzzy-locate explorer tailored for your data!

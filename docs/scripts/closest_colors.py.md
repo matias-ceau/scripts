@@ -1,53 +1,67 @@
-# Closest Colors Finder
+# Closest Terminal Colors Utility
 
 ---
 
-**closest_colors.py**: A script to find and display the closest ANSI color matches to a list of provided hex colors
+**closest_colors.py**: Find the closest matching terminal color for a list of color hex codes.
 
 ---
 
 ### Dependencies
 
-- `Python 3`: Required to run the script as it uses Python's standard libraries.
+- `python` (standard library; no external packages required)
 
 ### Description
 
-The `closest_colors.py` script is designed to map a list of given hex colors to their closest counterparts in an ANSI 8bit color palette. This tool could be particularly useful for developers working in terminal environments where specific colors need to be converted to available ANSI colors.
+This script is designed to help you match arbitrary hex color codes to their closest equivalent from a palette of terminal colors (by default, the 8-bit ANSI palette). It's particularly useful when customizing color schemes for terminal emulators, status bars (like in qtile), or anywhere color fidelity matters but you are limited to discrete color options.
 
-The script uses several functions:
-- **`hex_to_rgb`**: Converts a hex color value to an RGB tuple.
-- **`color_distance`**: Calculates the Euclidean distance between two RGB color tuples.
-- **`find_closest_color`**: Finds the nearest color in the provided palette to a given hex color using the RGB distance metric.
+The script operates by:
+- Accepting an input file (`file1`) that contains the hex codes of colors you care about (one per line).
+- Optionally accepting a second file (`file2`) which defines the color palette to compare against, in `name HEX` format separated by whitespace (default: the internal 256-color ANSI palette).
+- Calculating the Euclidean distance between each requested color and all palette entries to find the closest match.
+- Printing a visually rich output with:
+  - Original and closest color blocks shown via terminal ANSI escape codes.
+  - Both color hex codes and the palette "name" for the closest match.
 
-The script processes input from two files:
-- **`file1`**: Contains the list of hex colors.
-- **`file2`** (optional): Specifies the list of possible colors. If not provided, a default ANSI palette is used.
-  
-For each target color, the script calculates the closest color from the possible palette and prints a visual comparison using ANSI escape sequences to show the original and closest colors.
+**Key Functions:**
+- `hex_to_rgb(hex_color)`: Converts a `#RRGGBB` string to an (R, G, B) tuple.
+- `color_distance(c1, c2)`: Standard Euclidean distance in 3D RGB space.
+- `find_closest_color(target_color, possible_colors)`: Finds the closest palette color (by RGB) to `target_color`.
 
 ### Usage
 
-The script is run via the command line and has the capability to visualize the results directly in the terminal:
+**Run from the terminal:**
 
-```bash
-python closest_colors.py <file1> <file2>
+```
+python closest_colors.py <file1> [<file2>]
 ```
 
-- **`file1`**: Mandatory, a file containing a list of target hex colors, one color per line.
-- **`file2`**: Optional, a file containing possible hex color matches, one per line. If not provided, the script uses a pre-defined ANSI 8bit color set.
+- `<file1>`: Path to a file with your desired hex colors, one per line. Example:
+  ```
+  #ff8800
+  #CAFE00
+  #222233
+  ```
+- `<file2>` (optional): Custom palette file with lines like:
+  ```
+  cyan   #00ffff
+  red    #ff0000
+  green  #00ff00
+  ```
 
-#### Example
-
-```bash
-# With a file containing desired hex codes
-python closest_colors.py colors.txt
-
-# With a file containing desired hex codes and another specifying the color palette
-python closest_colors.py colors.txt palette.txt
+**Example:**
 ```
+python closest_colors.py ~/mycolors.txt
+python closest_colors.py ~/mycolors.txt ~/custom_palette.txt
+```
+
+This works seamlessly with your qtile/Arch Linux setup. You can also bind this script to a key or call it from other scripts as needed.
 
 ---
 
-> [!NOTE] 
-> The script currently reads directly from files and does not support standard input or interactive color input, which could be beneficial for more dynamic uses. Additionally, including a feature that prints available color names instead of just codes might improve usability.
-Also, it might be beneficial to optimize the color distance calculation for larger color palettes to improve performance.
+> [!TIP]
+>
+> - The script expects the input and palette files to be formatted strictly (one hex code per line in `file1`; `<name><tab><hex>` or `<name> <hex>` in `file2`).
+> - The internal ANSI palette is embedded as a single (very long) string. Consider externalizing this to a file both for maintainability and performance.
+> - The output uses ANSI escape codes, so usage outside a true terminal (e.g., some logging systems or editors) may not display color blocks correctly.
+> - Error handling is minimal; malformed lines or missing files will cause uncaught exceptions. Input validation could be improved for robustness.
+> - You might want options for different color distance heuristics (perceptual distances, for example).

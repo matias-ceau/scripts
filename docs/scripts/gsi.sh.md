@@ -1,48 +1,76 @@
-# gsi.sh - Git Repository Synchronizer
+# Git Repository Sync and Info Utility
 
 ---
 
-**/home/matias/.scripts/dev/gsi.sh**: improved sync git repository
+**gsi.sh**: Interactive, robust script for syncing a local Git repository with its remote, handling merges, conflicts, and summary display.
 
 ---
 
 ### Dependencies
 
-- `bash` – Core shell interpreter for running the script.
-- `git` – Version control system used for repository operations.
-- `bat` – Optional tool for enhanced syntax-highlighted output.
-- `glow` – Optional Markdown renderer for prettifying messages.
-- `sed` – Text processing utility used for stripping ANSI colors.
+- `git`: Core functionality for all sync operations.
+- `bat`: Pretty-prints command lines and outputs for improved readability.
+- `glow`: Markdown rendering for information and summaries in the terminal.
+- `realpath`, `sed`, `awk`, `date`, `wc`, etc.: Standard GNU/Linux utilities for bash scripting.
+- Optionally uses `${EDITOR:-vim}` for conflict resolution.
+- Expects `bash` as the interpreter.
+
+---
 
 ### Description
 
-This script automates the synchronization of your Git repository by fetching changes from remotes, performing fast-forward merges or rebases, handling local modifications through stashing, and finally pushing any new commits back to the repository. It is tailored for Arch Linux environments and integrates well with the qtile window manager.
+This script provides an enhanced, interactive command-line tool for keeping a local Git repository in sync with its remote, with a particular focus on visual clarity and safe automation. Features include:
 
-Key features include:
+- **Colorized, bat-highlighted command outputs** for easier tracking of actions.
+- **Markdown rendering** (via `glow`) for readable summaries.
+- **Intelligent handling of local changes:**
+  - Warns about and stashes local modifications before pulling.
+  - Attempts fast-forward merges, followed by rebase if necessary.
+  - Can handle merge conflicts interactively: opens your $EDITOR, allows aborting/skipping, or manual resolution.
+- **Dry-run support** to preview actions without making changes (via `--dry-run`).
+- **Convenient push/commit logic:** if local changes are detected, automatically adds, commits (with informative message), and pushes.
+- **Repository maintenance:** runs `git maintenance run` post-sync.
+- **Human-friendly summary** printed using Markdown and glow.
+- **Robust error handling**: colored messages and immediate exit on errors.
+- **Usage and example display** when not enough arguments are given.
 
-- **Enhanced Output:** Uses `bat` for beautifully formatted command previews and `glow` for rendering markdown-styled messages if they are available. The script provides warnings if these tools are not installed.
-- **Dry Run Mode:** Run the script with the `--dry-run` flag to simulate git operations without making any changes, which is useful for auditing operations before proceeding.
-- **Interactive Conflict Resolution:** In cases of merge conflicts, the script presents a menu allowing you to choose between opening your editor, aborting the merge, or skipping the commit.
-- **Repository Maintenance:** Post-synchronization, the script executes `git maintenance run` to ensure the repository remains clean and optimized.
-- **Detailed Logging:** Before and after significant git operations, the script prints formatted versions of commands and outputs, offering a clear view of the repository’s state.
+This script is particularly well-suited for workflow automation (e.g., bound to a key with Qtile), but is equally useful interactively. It's designed for fast switching between multiple Git repos, such as dotfiles or script collections.
+
+---
 
 ### Usage
 
-To use the script, simply run:
+Basic usage from the terminal:
+```
+./gsi.sh <repository_path> [--dry-run]
+```
+#### Arguments:
+- `<repository_path>`: (Required) Path to the git repository you want to sync.
+- `--dry-run`: (Optional) Show what would happen, but make no changes.
 
-    ./gsi.sh <repository_path>
+#### Examples:
+```
+./gsi.sh ~/.scripts
+./gsi.sh $SCRIPTS
+./gsi.sh $HOME/repos/dots --dry-run
+```
+You can also alias in your shell or bind to a key in Qtile for rapid access.
 
-For example:
-
-    ./gsi.sh ~/.scripts
-
-To perform a dry run:
-
-    ./gsi.sh ~/.scripts --dry-run
-
-This script must be executed on a valid Git repository directory. It checks for the presence of a `.git` folder and exits with an error if the directory does not qualify. Preferably, integrate it as a keybinding in your qtile configuration for rapid access.
+#### On merge conflicts:
+The script will prompt you for:
+- `e`: Open $EDITOR to resolve conflicts (or default to vim)
+- `a`: Abort
+- `s`: Skip this commit
 
 ---
 
 > [!TIP]
-> Consider enhancing the script by adding a verbose mode for more detailed output, and possibly integrating logging functionality to track synchronization events over time. Additionally, validating the repository state more robustly before operations can prevent unintended errors in complex workflows.
+> - The script is functionally robust, but a few improvements are possible:
+>   - No check for untracked files or dirty state pre-stash (could prompt the user or show a diff).
+>   - Usage of `eval` for command execution in `run_command()` can be dangerous if input data is not well-controlled.
+>   - For multi-remote repositories or detached HEAD state, remote/branch detection may not always yield the intended targets.
+>   - The conflict handler covers only merge conflicts, but fails for non-merge-related errors (e.g., rebase problems).
+>   - Some external tools (`bat`, `glow`) are optional, but script behavior might be less readable without them.
+>   - Error messages could be enhanced to offer remediation advice directly.
+>
+> Overall, this script is very powerful for personal workflow on Arch Linux + Qtile!

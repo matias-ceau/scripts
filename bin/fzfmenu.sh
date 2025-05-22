@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#INFO:#=2024-06= "Similar to dmenu but with fzf and xterm (this is only the helper function)"
+#INFO:#=2024-06= "Similar to dmenu but with fzf and alacritty (this is only the helper function)"
 
 # Escape each argument
 args=()

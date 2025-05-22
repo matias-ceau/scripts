@@ -1,38 +1,50 @@
-# Script Documentation Finder
+# you_are_not_documented.sh
 
 ---
 
-**you_are_not_documented.sh**: Identify scripts lacking inline documentation markers
+**you_are_not_documented.sh**: Finds scripts lacking specific inline documentation tags
 
 ---
 
 ### Dependencies
 
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern. It is similar to other command-line search tools like `grep`, `ack`, and `the_silver_searcher`, but typically faster and with additional features.
+- `rg`: ripgrep, required for fast file searching and text matching.
+- Environment variable: `$SCRIPTS`, should point to the directory containing your scripts.
 
 ### Description
 
-This script is aimed at maintaining code quality by locating scripts, within a specified directory, that do not contain a specific inline documentation marker, namely `#INFO:#`. Inline documentation markers are crucial for keeping track of script functionality and maintenance history.
+This script helps you manage inline documentation in your script repository by finding Bash (or other) scripts that do **not** contain a documentation marker of the form `#INFO:#`. It uses `ripgrep` (`rg`) for efficient text searching.
 
-The script performs two primary actions using `rg` (ripgrep):
-1. It searches for files in the `$SCRIPTS` directory that do not contain any line starting with the marker `#INFO:#`. 
-2. It excludes files located in directories named `docs`, `config`, and files with extensions `.csv` or `.md` to avoid unnecessary noise.
+The steps are:
+1. `rg '#INFO:#' --files-without-match "$SCRIPTS"`  
+   Searches the `$SCRIPTS` directory for all files **without** the `#INFO:#` tag.
+2. The results are piped through `rg -v '/docs/|/config/|\.csv|\.md'`  
+   This excludes any matches that are:
+   - In `/docs/` or `/config/` subdirectories
+   - Files ending with `.csv` or `.md`
 
-This makes it a useful utility when trying to enforce documentation standards across a repository.
+This is particularly useful for enforcing documentation standards in a self-maintained script library (like your dotfiles or personal utilities), especially when evolving a large or shared codebase under `qtile` on Arch Linux.
 
 ### Usage
 
-1. Set the `$SCRIPTS` environment variable to the directory containing your scripts:
-   ```bash
-   export SCRIPTS="/path/to/your/scripts"
-   ```
-2. Run the script in your terminal:
-   ```bash
-   /home/matias/.scripts/bin/you_are_not_documented.sh
-   ```
+Make sure:
+- `ripgrep` is installed (`pacman -S ripgrep`).
+- The environment variable `$SCRIPTS` is set correctly (i.e., points to the directory containing your scripts).
 
-This will output a list of script files in the provided directory that do not contain the `#INFO:#` documentation marker.
+**Example Usage:**
+```sh
+export SCRIPTS="$HOME/.scripts/bin"
+~/.scripts/bin/you_are_not_documented.sh
+```
+
+You can bind this command to a key in your `qtile` config or run it manually in the terminal to audit script documentation.
 
 ---
 
-> [!TIP] While the script efficiently identifies undocumented files, it assumes `$SCRIPTS` is always correctly set. You might want to add error handling to check if this variable is empty or undefined. Additionally, providing optional command-line arguments to specify directories on the fly could enhance the versatility of the script.
+> [!TIP]
+>
+> - The script depends on the `$SCRIPTS` environment variable, but doesn't check if it's set or valid; adding a check with a friendly error could be helpful.
+> - Currently, it only looks for the single tag `#INFO:#`. If your documentation scheme changes or adds extra markers, you'll need to update the script.
+> - Excludes are hardcoded; you might want to make those configurable.
+> - Only works for single-level excludes and extensions; if your structure grows more complex, consider allowing .gitignore-style rules.
+> - No shebang checks: the script will match all files, not just scripts. Filtering by file extension or executable bit could improve accuracy.

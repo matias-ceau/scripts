@@ -1,40 +1,77 @@
-# Command Prompt
+# Command Prompt With History Suggestions
 
 ---
 
-**command_prompt.sh**: Script to launch a command with history suggestions using `fzf`
+**command_prompt.sh**: Launches a command prompt with shell history suggestions using fuzzy search
 
 ---
 
 ### Dependencies
 
-- `shell_history_info.sh`: A script that lists the shell history.
-- `improved-fzfmenu.sh`: An enhanced `fzf` menu script which supports additional features such as titles and text coloring. 
+- `shell_history_info.sh` : Outputs shell command history in a tabular format.  
+- `improved-fzfmenu.sh` : Wrapper around fzf, with support for custom prompts, titles, and display options.  
+- `cut` (coreutils) : Used to process the output (`cut -f2`)  
+- `fzf` : Underlying fuzzy finder (presumed used by improved-fzfmenu.sh)  
+- Bash (standard shell interpreter)
+
+---
 
 ### Description
 
-This script assists users in running commands by providing an interactive menu with suggestions based on their command history. The command history is first filtered and presented via an enhanced `fzf` interface to allow users to select a previously executed command easily.
+This script provides an interactive command launcher by leveraging your shell history and fuzzy search. It's particularly useful in environments like Arch Linux under Qtile, where customizable and efficient workflows are paramount.
 
-The `get_cmd` function calls the `shell_history_info.sh -l` script, which retrieves the history of commands executed in the shell and pipes the output through `cut -f2` to extract only the second field, presumably containing the actual command.
+#### How It Works
 
-The `fzf_cmd` then uses `improved-fzfmenu.sh` with options like `--tac` (to reverse the order of lines) and `--ansi` (for colored output) to present these commands in a user-friendly interface.
+1. **Command Extraction:**  
+   The script relies on `shell_history_info.sh -l`, which seems to output the shell history in a tabular format. `cut -f2` is used to extract the actual command column (field 2).
+
+2. **Fuzzy Selection:**  
+   The processed list is piped to `improved-fzfmenu.sh`, which appears to be a wrapper for `fzf` with enhanced options:
+   - `title_is_cmd_prompt` (sets window/prompt title)
+   - `--tac` (lists items bottom-to-top, so most recent at bottom/top)
+   - `--ansi` (preserve output formatting/colors)
+
+3. **User Prompt:**  
+   The user is presented with the fuzzy finder interface, allowing them to quickly search and select a command from their history.
+
+#### (Presumed) Output
+
+The selected command is printed to stdout. Currently, the script does not execute the command—it merely outputs it, making it suitable for piping, scripting, or further keybinding automation.
+
+---
 
 ### Usage
 
-To use this script, you can simply run it from the terminal. This can be done either by directly executing the script or by assigning it to a keybinding in a window manager like qtile:
+You can run the script directly or bind it to a keyboard shortcut from Qtile (recommended for workflow integration):
 
 ```bash
 ~/.scripts/bin/command_prompt.sh
 ```
 
-Alternatively, for quick access, you may want to bind it to a key combination in your qtile configuration. For example:
+#### Example (In Terminal):
 
-```python
-Key([], "p", lazy.spawn("/home/matias/.scripts/bin/command_prompt.sh")),
+```bash
+$ ~/.scripts/bin/command_prompt.sh
 ```
 
-This allows you to press a specific key combination that opens the prompt with previous command suggestions.
+#### Example (Qtile Keybinding):
+Add to your `~/.config/qtile/config.py`:
+```python
+Key([mod], "p", lazy.spawn("~/.scripts/bin/command_prompt.sh"))
+```
+
+#### To run and execute immediately (with eval/exec):
+
+You could pipe its output to `bash` (although not currently included, see critique):
+```bash
+eval "$(~/.scripts/bin/command_prompt.sh)"
+```
 
 ---
 
-> [!TIP] While this script is useful for suggesting commands from history, it appears quite dependent on other user-specific scripts (`shell_history_info.sh` and `improved-fzfmenu.sh`). Documenting and including those dependencies would enhance its portability. Additionally, providing more information about the expected behavior of these helper scripts within this documentation could help in understanding their function and ensuring the script operates correctly.
+> [!TIP]
+> - The script does not actually run the selected command—it only outputs it to stdout. You might want to wrap it or extend the script to automatically execute the selected history command (for example, by appending `| xargs -r bash -c`).
+> - There is no error handling if the dependencies (`shell_history_info.sh`, `improved-fzfmenu.sh`) are missing or fail.
+> - Consider supporting direct command entry (not just history selection) by adding an "enter custom command" feature.
+> - A small TODO is present but not specified; consider clarifying your next planned feature.
+> - For better integration, the script could also notify the user if the history is empty or if no command is selected.

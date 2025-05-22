@@ -1,41 +1,61 @@
-# Playlist Player Script
+# Playlist Player (cmus Edition)
 
 ---
 
-**playlist_player.xsh**: A script for selecting and playing music playlists using `cmus`.
+**playlist_player.xsh**: Select and play a saved `.m3u` playlist in cmus via dmenu
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered, Unix-gazing shell language and command prompt.
-- `cmus`: A small, fast and powerful console music player for Unix-like operating systems.
-- `dmenu`: A dynamic menu for X, useful for selecting items from a list.
+- `xonsh`: Shell interpreter used to run this script (shebang: `#!/usr/bin/env xonsh`)
+- `cmus-remote`: Command-line remote control for cmus music player
+- `dmenu`: Dynamic menu for X; used to select playlists
+- Playlist directory: Assumes playlists are stored as `.m3u` files in `~/.playlists`
 
 ### Description
 
-The `playlist_player.xsh` script automates the task of playing music playlists through cmus, which is a command-line based media player. The script is implemented using `xonsh`, a shell that combines Python and bash capabilities.
+This script provides an interactive way to select and play a playlist in `cmus` on your Arch Linux system. Here's a breakdown of its functionality:
 
-Upon execution, the script performs the following actions:
-1. Switches `cmus` to the playlist view to ensure the playlists are displayed properly.
-2. Clears the current queue of songs in `cmus`.
-3. Retrieves a list of `.m3u` playlist files from the directory `~/.playlists`. It removes file extensions for cleaner display.
-4. Displays these playlists using `dmenu`, which allows you to choose one interactively.
-5. Once a playlist is chosen, it's added to the `cmus` queue, starting with the first track.
+1. **Playlist Discovery:** The script looks for `.m3u` files in your `~/.playlists` directory, collecting each filename (without extension).
+2. **dmenu Interface:** All discovered playlists are presented in a dmenu prompt, allowing you to select the one you wish to play.
+3. **cmus Control:**
+   - Switches to cmus library view #4 (presumably playlist view).
+   - Clears the current cmus queue.
+   - Adds the selected playlist to the cmus queue.
+   - Skips to the next track (to trigger the playlist load properly).
+   - Starts playback in cmus.
+
+The workflow is linear and interacts with the user only via `dmenu`, making it a fast and distraction-free playlist launcher suitable for keybindings or scripting within your qtile Window Manager environment.
 
 ### Usage
 
-To use this script:
-- Ensure it has execution permissions: `chmod +x /home/matias/.scripts/bin/playlist_player.xsh`
-- Run it from the terminal:
-  ```bash
-  ./home/matias/.scripts/bin/playlist_player.xsh
-  ```
-- Choose a playlist from the menu that appears. `cmus` will start playing the selected playlist.
+You can run this script from your terminal or bind it to a key combination (recommended for qtile users):
 
-This script can be assigned to a keybinding in your window manager (qtile) for quick access, or executed manually from the terminal.
+```sh
+playlist_player.xsh
+```
+
+#### Example workflow:
+
+1. Script runs and opens dmenu listing all `.m3u` playlists in `~/.playlists`:
+    ```
+    +----------------------------+
+    | my_rock_playlist           |
+    | relaxing_sounds            |
+    | synthwave_collection       |
+    +----------------------------+
+    ```
+2. Select one (e.g., `synthwave_collection`), press Enter.
+3. That playlist is instantly loaded and playback starts in cmus.
+
+**For qtile users:**  
+Bind the script to a convenient key combination in your qtile config for seamless use.
 
 ---
 
 > [!TIP]
-> Consider adding error handling to manage cases where the playlist directory does not exist or is empty. Additionally, using `os.path.join()` instead of direct string concatenation improves platform independence. However, as you're on `Arch Linux`, this isn't a current concern but keeps the script cleaner and follows best practices.
+> - The script assumes all `.m3u` files are directly under `~/.playlists`. It does not handle nested directories or non-`.m3u` playlist formats.
+> - There is no error checking for the existence of cmus, dmenu, or the playlist directory; running it without these in place will fail without clear error messages.
+> - If two playlists have the same prefix before `.m3u` (e.g., `foo.m3u`, `foo.bak.m3u`), both will appear as `foo` and may cause confusion.
+> - You might want to add logic to detect and report when no playlists are found, or when the user cancels dmenu (currently tries to add a `.m3u` with an empty name if nothing is selected).

@@ -1,60 +1,84 @@
-# new_script_creator.sh - User Script Creator
+# User Script Generator
 
 ---
 
-**new_script_creator.sh**: A utility to create or convert scripts with templating for specific extensions (Bash, Python, Xonsh).
+**new_script_creator.sh**: Quickly create or adapt user scripts with templating and permissions in `$SCRIPTS/bin`.
 
 ---
 
 ### Dependencies
 
-The script relies on the following dependencies:
-- `bat`: A syntax-highlighting tool for command-line output.
-- `rg (ripgrep)`: A high-performance text search tool used to identify file extensions.
-- `nvim`: Neovim, a Vim-based text editor, is used to edit generated scripts.
-- `utils_update_symlimks.sh`: Custom script (assumed to manage symlinks for user scripts).
-  
-Additionally, the script assumes that scripts are stored in `$SCRIPTS/bin`.
+- `bat`: Command-line file viewer with syntax highlighting (also for help text here).
+- `rg` (ripgrep): Used for extension matching.
+- `nvim`: For opening/creating scripts with your default editor.
+- `utils_update_symlimks.sh`: Your local script to update symlinks after script creation/move.
+- `wc` (coreutils): To count characters for validation.
+
+---
 
 ### Description
 
-This Bash script simplifies script creation and conversion by:
-1. Accepting a filename as input to create a new script file or modify an existing file into an executable script.
-2. Including a basic templating system that predefines shebang lines based on file extensions (`.sh`, `.py`, `.xsh`).
-3. Allowing interactive input for filenames and scripting languages if no arguments are supplied by the user.
-4. Ensuring proper executable permissions and automatic symlink updates via `utils_update_symlimks.sh`.
+This script is a user script "scaffolder" designed to simplify and standardize script creation under your personal Arch Linux setup. It's especially convenient when you work heavily with `$SCRIPTS/bin` and want new scripts to be ready-to-edit, executable, and conveniently symlinked for use in your environment (e.g., with qtile keybindings).
 
-The `ensure_extension` function adds relevant extensions interactively if the supplied filename lacks one. The template for supported extensions is injected into the script via the `templater` function, allowing for quick scaffolding. After creation, the script opens the file in Neovim for editing.
+**Key Features:**
+- **Templating:** Determines script type (`bash`, `python`, or `xonsh`) from filename extension, or prompts if ambiguous.
+- **Safe creation:** Prevents empty scripts; validates by minimal character count.
+- **Symlinks:** Automatically runs your symlink updater.
+- **Integration:** Opens scripts directly in `nvim`.
+- **Existing scripts:** Supports "importing" (making executable & moving) existing files into the user scripts directory.
 
-The additional option `--from` enables converting an existing file into a script by moving it to `$SCRIPTS/bin`.
+**Functions:**
+- `templater <filename>`: Outputs a shebang for supported script extensions.
+- `ensure_extension <filename>`: Appends/asks for appropriate extension if missing.
+- `validate_script <path> <name>`: Ensures script isn't trivially empty and applies permissions and symlinks.
+- `script_creator <filename>`: Orchestrates the template, editor, and validation steps.
+
+---
 
 ### Usage
 
-This script can be used in multiple ways:
-
-```bash
-# Show help message
-./new_script_creator.sh -h
-
-# Create a script directly
-./new_script_creator.sh my_script.sh
-
-# Create a script and auto-select template based on provided extension
-./new_script_creator.sh new_script.py
-
-# Interactive mode for filename and extension selection
-./new_script_creator.sh
-
-# Convert an existing file into a user script
-./new_script_creator.sh -f existing_file
+General form:
+```
+new_script_creator.sh [script_file_name] | [-f <path>]
 ```
 
-For more direct invocation, it can be set as a keybinding in Qtile, or integrated into your workflow.
+#### TLDR Examples
+
+**Interactive (prompt for filename, choose language):**
+```
+new_script_creator.sh
+# Prompts: Filename? my_tool
+# Prompts: [S]hell/[p]ython/[x]onsh? s
+```
+
+**Direct creation (uses .sh template):**
+```
+new_script_creator.sh hello_world.sh
+```
+
+**Direct creation with extension prompt:**
+```
+new_script_creator.sh my_utility
+# Prompts for preferred extension/language
+```
+
+**Convert and import an existing script:**
+```
+new_script_creator.sh -f /tmp/old_script.sh
+```
+
+**Help:**
+```
+new_script_creator.sh -h
+```
+
+**Post-creation, the file is opened for editing in `nvim`. If saved with more than trivial content, it is automatically made executable and symlinks updated.**
 
 ---
 
 > [!TIP]
-> - The `ensure_extension` logic requires the user to select the language interactively if the filename lacks an extension. This could be optimized by defaulting to Bash or a user-set preference.
-> - The script does not validate the input filename string for special or illegal characters, which may cause unintentional errors.
-> - `utils_update_symlimks.sh` is called several times but isn't documented within the script; consider integrating its functionality or ensuring documentation exists elsewhere.
-> - For improved safety, a warning could be added before overwriting files.
+> - The script assumes `$SCRIPTS/bin` is a valid location and `utils_update_symlimks.sh` is globally available and properly updates all relevant symlinks.
+> - A minor usability/protection enhancement would be to check if a file with the same name already exists and prompt before overwriting.
+> - User prompts use `read` which can occasionally break under non-interactive launches (e.g., from rofi-scripts or hotkeys); consider fallback defaults or error messages in such contexts.
+> - The minimal size check (`wc -m "$1" > 22`) could be made more robust or skipped for certain scripts.
+> - The script does not currently support more advanced templating or header generation, which could be beneficial if you desire uniform documentation/footer inserts.

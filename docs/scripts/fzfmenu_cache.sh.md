@@ -1,59 +1,53 @@
-# FZF Menu Cache Script
+# fzfmenu Cache Launcher
 
 ---
 
-**fzfmenu_cache.sh**: Efficiently creates and utilizes a cached list of executable files within frequently used directories.
+**fzfmenu_cache.sh**: Caches and lists executables in PATH instantaneously for fzfmenu launcher
 
 ---
 
 ### Dependencies
 
-- `bash`: A Unix shell and command processor.
-- `fd`: A fast and user-friendly alternative to `find`; used here to search for files.
-- `sort`: Unix utility to sort lines in text files.
-- `/dev/shm`: A temporary filesystem to store the cache in shared memory for speed.
+- `fd` — Modern alternative to `find` for fast file searches. Used here for listing executables quickly.
+- `/dev/shm` — System memory-backed temporary storage (usually available on modern Linux).
+- `bash` — Script uses Bash-specific syntax.
+- `sort`, `tee`, `mv` — Basic coreutils, standard on Arch Linux.
 
 ### Description
 
-This script efficiently generates and uses a cache file containing a list of executable files found in the user's `$PATH` directory. By leveraging this cache, it can provide faster results for command or file selection workflows (e.g., integrating with `fzf`, a fuzzy finder). Here's how the script works:
+This script speeds up the execution time for any menu or launcher script (such as your custom `fzfmenu`) that needs to list all executables in your `$PATH`. It achieves this by building and caching an up-to-date list of all executable files found in `$HOME/.local/bin` and `/usr/bin` (plus any other directories in the user's `$PATH`) using `fd`.
 
-1. **Cache Management**: 
-   - Checks if the cache (`/dev/shm/fzfmenu_path_cache`) exists.
-   - If the cache exists, its content is immediately displayed.
-   - If the cache does not exist, it invokes `build_cache` to create the list and saves it to the cache file.
-
-2. **Cache Building**:
-   - The function `build_cache` iterates through each directory in `$PATH`.
-   - For each directory, it uses `fd` to find executable files (`-tx`), symbolic links (`-tl`), and applies options like `--maxdepth=1` to keep it shallow and fast.
-   - Results are sorted and duplicates are removed using `sort -u`.
-
-3. **Background Rebuilding**:
-   - The cache is asynchronously rebuilt every time the script runs, ensuring an always up-to-date cache with minimal delay for the user.
+- **Cache Location**: The cache file is placed in `/dev/shm/fzfmenu_path_cache` — this is a RAM-disk location, guaranteeing very fast reads and ephemeral storage (reset at boot).
+- **Cache Strategy**: 
+    - If the cache exists, its contents are output immediately (providing nearly instant results).
+    - Meanwhile, a new cache is built in the background for the next script invocation, keeping the list fresh with minimal launch delay.
+    - The cache is saved atomically using a `.tmp` file then moved over the old cache.
+- **Environment Manipulation**: Checks in `$HOME/.local/bin` first, so custom user scripts and binaries are always found.
 
 ### Usage
 
-This script is primarily a helper for workflows where a real-time, updated cache of executable files is needed. Below are some examples:
+Typically, you'd use this script as input for an `fzf`-based program launcher. It’s designed to be piped into another script or command:
 
-#### Example 1: Running the script to output cache
-```bash
-~/.scripts/bin/fzfmenu_cache.sh
+```
+/home/matias/.scripts/bin/fzfmenu_cache.sh | fzf --ansi
 ```
 
-If the cache exists, it outputs the cached list. If not, it generates the cache and simultaneously displays the new list.
-
-#### Example 2: Piping into `fzf`
-```bash
-~/.scripts/bin/fzfmenu_cache.sh | fzf
+**Stand-alone execution:**
+```sh
+/home/matias/.scripts/bin/fzfmenu_cache.sh
+# Outputs a sorted, colored, unique list of all “executables” in $PATH directories
 ```
 
-This example allows using the cache to search interactively (fuzzy search) with `fzf`.
-
-#### Example 3: Assigning to a keybinding in qtile
-The script can be launched by binding it to a key in your `qtile` configuration, combined with utilities like `fzf` or custom prompts.
+**In a keybinding (Qtile config example):**
+```python
+Key([mod], "p", lazy.spawn("sh ~/.scripts/bin/fzfmenu_cache.sh | fzf --ansi | xargs -r $SHELL -ic"))
+```
 
 ---
 
-> [!TIP]  
-> - The path for the cache (`/dev/shm/fzfmenu_path_cache`) is hardcoded to `/dev/shm`. If `/dev/shm` is unavailable on another machine, the script would fail. Consider adding a fallback mechanism.  
-> - Instead of hardcoding `$HOME/.local/bin:/usr/bin`, consider dynamically appending all paths from the user's environment (`$PATH`) for broader application.  
-> - Potential improvements include adding a verbosity flag or debugging option to control script output, and support more interactive command-line arguments.
+> [!TIP]
+> - While this design makes menu launches almost instantaneous, it has a *race condition*: the cache is always being rebuilt in the background, but it's possible for a menu to show slightly outdated data after you’ve just installed or removed programs.
+> - It’s not cross-platform (somewhat Arch-centric: assumes existence of `/dev/shm`, GNU coreutils, `fd`) and hardcodes `$HOME/.local/bin` and `/usr/bin`.
+> - You may consider error-handling if `$CACHE` is not writable, or abstracting `$PATH` handling for more flexibility.
+> - If you have a rapidly changing `$PATH`, consider mechanisms for an explicit cache refresh.
+> - To sort strictly by file name (not including full path), adjust the `sort -u` or post-process output.

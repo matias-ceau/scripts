@@ -1,45 +1,63 @@
-# Visualizing Script Dependencies
+# Script Relations Visualizer
 
 ---
 
-**get_scripts_relations.py**: Visualizes dependencies among scripts in a directory
+**get_scripts_relations.py**: Scans user scripts to detect and visualize script dependencies.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to 'find', used to list executable scripts.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `matplotlib`: A plotting library for Python, used to visualize the graph.
-- `networkx`: A Python package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks.
-
-### Description
-
-This script is designed to visualize relationships and dependencies between your executable scripts within a specified directory. The script primarily utilizes `fd` to find scripts and `ripgrep` to identify dependency relations among them. Dependencies are visualized using `networkx` and `matplotlib`, which render a directed graph representing these relationships.
-
-The script first sets a directory (`SCRIPTS` environment variable or current directory) to search for scripts, identified by their executable status. For each script found, the script checks for other scripts it depends on by searching for filenames in the content of each script within the directory. It organizes these dependencies into a directed graph, which is both saved in GraphGML format to `/tmp/get_scripts_relations.gml` and visualized using a plot.
-
-### Usage
-
-To execute this script, ensure the required dependencies are installed. Then, run the script from the terminal:
-
-```bash
-python /home/matias/.scripts/bin/get_scripts_relations.py
-```
-
-Ensure that the `SCRIPTS` environment variable is set to the directory containing your scripts, or the script will default to the current directory.
-
-- **Example**: Setting the `SCRIPTS` directory and then executing the script:
-  ```bash
-  export SCRIPTS="/path/to/your/scripts"
-  python /home/matias/.scripts/bin/get_scripts_relations.py
-  ```
-
-- The output is a visual representation as a pop-up window showing nodes (scripts) and directed edges (dependencies).
+- `python` (Python 3.x)
+- `matplotlib` (`matplotlib` Python module; used for graph plotting)
+- `networkx` (`networkx` Python module; used for network analysis and visualization)
+- `fd` (Rust-based alternative to `find`; used for fast file discovery)
+- `rg` (`ripgrep`; used for quickly searching file content)
+- `SCRIPTS` environment variable (optional; defines base scripts directory—defaults to current dir)
 
 ---
 
-> [!TIP] 
-> - The script assumes that scripts are found using their executable status, which might not always identify all potential script files unless they are marked as executable.
-> - Including error handling for `subprocess` calls can help catch and debug potential command-line issues.
-> - Consider adding command-line arguments to dynamically specify output paths or filter criteria for more flexibility.
+### Description
+
+This script analyzes script files (presumed to be in your `${SCRIPTS}` directory or current working directory if the variable is unset) to determine relationships based on inclusion or call patterns inferred via filename matching. Dependencies between scripts are mapped using the following steps:
+
+1. **File Discovery:** Lists all executable files using `fd`.
+2. **Dependency Mapping:** For each script, uses `ripgrep` (`rg`) to find references (by filename) in other scripts, implying a dependency or inclusion.
+3. **Network Construction:** Builds a directed dependency graph using `networkx`.
+4. **Visualization:** Visualizes the graph using `matplotlib` with nodes as scripts and directed edges as dependencies.
+5. **Export:** Saves the dependency network in GraphGML format at `/tmp/get_scripts_relations.gml` for use with Cytoscape or other tools.
+
+The script is particularly useful for understanding and maintaining a growing collection of user scripts, especially in complex or organically grown Arch setups.
+
+---
+
+### Usage
+
+This script is intended to be run from a terminal and is most useful when pointed at your scripts repository:
+
+```sh
+# Ensure dependencies are installed
+pip install matplotlib networkx
+sudo pacman -S fd ripgrep
+
+# Option 1: Run using the SCRIPTS env variable
+export SCRIPTS="$HOME/.scripts/bin"
+python /home/matias/.scripts/bin/get_scripts_relations.py
+
+# Option 2: Run with current directory as script base
+cd ~/.scripts/bin
+python get_scripts_relations.py
+```
+
+Once run, a matplotlib window will appear visualizing the dependencies. The graph is also exported as `/tmp/get_scripts_relations.gml`.
+
+---
+
+> [!TIP]
+> **Potential Improvements & Considerations**  
+> - **Accuracy:** The script assumes any mention of a script filename in another script is a dependency, which may produce false positives or miss script-sourced dependencies (e.g., variable usage or indirect calls).
+> - **Scalability:** With a large number of scripts or large scripts, visualization could become cluttered and slow; consider filtering or grouping in the analysis.
+> - **Customization:** Hardcodes export location (`/tmp/get_scripts_relations.gml`)—making this configurable would improve usability.
+> - **Cross-Platform Note:** Designed for UNIX-like environments; will not work natively on Windows.  
+> - **Visualization:** Consider using Cytoscape for larger graphs, as matplotlib-based layouts can become unreadable for bigger script collections.  
+> - **Refinement:** If scripts reference others with relative paths or sourced includes (`. filename`), these may not be detected; further static analysis or parsing might yield more precise results.

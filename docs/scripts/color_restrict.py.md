@@ -1,31 +1,61 @@
-# Color Restrictor for Images
+# Color Restrict Script
 
 ---
 
-**color_restrict.py**: Processes an image by restricting its colors to a fixed palette
+**color_restrict.py**: Restricts image colors to those in a custom palette with optional resizing.
 
 ---
 
 ### Dependencies
 
-- `pillow`: For handling image file input/output and transformations.
-- `numpy`: For efficient numerical operations and array manipulation.
-
-### Description
-
-This script is designed to process image files by limiting their color range to a predefined palette. It is ideal for environments like Arch Linux with qtile where visual consistency or specific color themes are desired. The script defines a color palette as a NumPy array, containing several RGB tuples. The core functionality is provided by the function find_closest_colors, which calculates the Euclidean distance between each pixel’s RGB value and each color in the palette. Pixels are then replaced by the nearest matching palette color, ensuring that the output image uses only the specified colors.
-
-Another key function, process_image, handles reading the image using Pillow, converting it to RGB if necessary, and resizing it if its dimensions exceed a defined maximum (default 4000 pixels on the larger side). This permits safe processing of large images by reducing computational load while preserving quality through the use of the LANCZOS resampling filter. Finally, the processed NumPy array is converted back to a Pillow image and saved to an output path. The main() function manages command-line argument validation and exception handling to ensure smooth operation.
-
-### Usage
-
-To use the script, run it with Python through your terminal. The script expects two arguments: the input image file and the output file name. For example:
-
-   $ ./color_restrict.py input_image.jpg output_image.jpg
-
-This command will convert "input_image.jpg" into a palette-restricted version and save it as "output_image.jpg". You can integrate this into your qtile environment as a keybinding or automate it via shell scripts.
+- `pillow` (PIL): Required for image loading, conversion, and saving.
+- `numpy`: Used for efficient pixel array manipulation and color matching.
+- Python 3.13+ (uses some modern type annotations and possibly new features)
+- `uv` (for running with `uv run` as per shebang, a Python package/dependency runner)
 
 ---
 
-> [!TIP]
-> Consider improving the usability by adding more detailed error messages or logging. Additionally, you might extend palette options or provide command-line arguments to customize the maximum image size dynamically. Another improvement could be to allow batch processing of multiple images to further automate your workflow on Arch Linux.
+### Description
+
+This script restricts the colors of any given image to a fixed, hardcoded palette. The palette is defined in the `PALETTE` numpy array and covers a variety of earthy and neutral tones, suitable for stylized effects or palette-limited graphics.
+
+#### Core Workflow:
+- **Input:** Takes an image file as input.
+- **Resize:** If the image's largest dimension exceeds 4000px, it is proportionally resized using high-quality Lanczos resampling, helpful for processing very large images without running out of RAM.
+- **Palette Reduction:** All pixels in the image are mapped to the closest color in the specified palette using efficient numpy broadcasting and vectorized operations (see `find_closest_colors` function).
+- **Output:** The resultant image (palette-reduced) is saved to the given output path.
+
+#### Functions:
+- `find_closest_colors`: Finds, for each pixel, the palette color with the minimum Euclidean distance in RGB space.
+- `process_image`: Handles image loading, optional resizing, applying the palette conversion, and saving.
+- `main`: Validates arguments and manages the program flow.
+
+---
+
+### Usage
+
+You can run this script from the command line or assign it to a Qtile keybinding or launcher. It is not interactive; explicit file paths are required. Example usage:
+
+```sh
+uv run color_restrict.py input_image.jpg output_image.jpg
+```
+
+**Arguments:**
+- `input_image.jpg`: Path to source image.
+- `output_image.jpg`: Path to save the palette-converted image.
+
+You might want to bind this to a key in Qtile or use with a file manager custom action.
+
+**tldr:**
+```
+color_restrict.py <input> <output>
+```
+
+---
+
+> [!NOTE]
+> - The script is performant for reasonably-sized images thanks to vectorized numpy operations, but processing very large images may still require considerable RAM.
+> - The color palette is hardcoded; consider adding a command-line switch to load custom palettes if needed for flexibility.
+> - The maximum image dimension (4000px) is also hardcoded. Making this a user-supplied argument would improve the script's general utility.
+> - The output is always in JPEG or PNG format (determined by extension), but the format is not otherwise checked; you may wish to add error handling to verify format support and output path validity.
+> - The use of Python >=3.13 and the `uv` runner may limit compatibility on some systems. Ensure `uv` is installed (`pip install uv`) and available in your `$PATH`.

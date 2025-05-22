@@ -1,4 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/env -S uv run --script --quiet
+
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "openai",
+#     "scipy",
+#     "sounddevice",
+# ]
+# ///
 
 import time
 

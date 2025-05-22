@@ -1,44 +1,63 @@
-# Simple Git Repository Synchronization Script
+# Simple Git Repo Sync Script
 
 ---
 
-**sync-repo-simple.py**: A script to automate synchronization of a local git repository with its remote counterpart
+**sync-repo-simple.py**: Automates syncing a git repository, handling conflicts, stashing, and summary output.
 
 ---
 
 ### Dependencies
 
-- `python3`: Required to run the script.
-- `git`: Required for executing git commands.
-- `argparse`: Built-in python library for parsing command line arguments.
-- `subprocess`: Built-in python library for executing shell commands.
+- `python3` - The script runs as a Python 3 interpreter.
+- `git` - All operations use Git CLI commands.
+- `awk`, `sed`, `grep` - Used in parsing remote URLs (ensure these standard POSIX tools are available, typically present on Arch Linux).
+- ENV variables: `EDITOR` or falls back to `vim`/`nvim` for manual conflict resolution.
 
 ### Description
 
-This script is designed to automate the process of synchronizing a local git repository with its remote. It manages fetching, pulling changes, and handling commit conflicts using merge or rebase strategies. Key functionalities include:
-- **Merge & Stash Conflict Handling:** Offers options to resolve conflicts manually or by choosing between local and remote changes.
-- **Commit Message Generation:** Dynamically generates commit messages based on changes and user environment variables.
-- **Status Display & Summary:** Provides a detailed overview of the sync process including changes, commit history, and timestamps.
+This script efficiently automates the process of synchronizing a git repository. It is specifically geared for day-to-day command-line workflow, such as on an Arch Linux system managed by qtile. The core functionality includes:
 
-It intelligently uses `subprocess` to execute shell commands and capture their output, allowing for dynamic interaction with the git workflow. 
+- **Fetching and pulling (with rebase fallback):** Detects local/remote divergence; if a fast-forward is not possible, a rebase is attempted.
+- **Conflict Handling:** Handles both merge and stash conflicts, prompting for user intervention when required. It leverages your `$EDITOR` (default `vim` or `nvim`) to resolve merge or stash conflicts interactively.
+- **Stashing:** If local changes are present before pulling, they're automatically stashed and re-applied after remote updates, with dedicated handling for conflicted files.
+- **Automatic Commit and Push:** If changes are detected in the repository, the script adds, commits (with an auto-generated message describing user and host), and pushes them.
+- **Summary Output:** At the end of the sync, prints a contextual summary showing commit times and a diffstat of the recent change.
+
+The script is designed to be robust, stopping on errors for manual intervention, and aiming for minimal interaction except in cases of conflicts.
 
 ### Usage
 
-To use the script, it must be executed from a terminal session. Here's a quick guide:
+You can run this script directly from the terminal or integrate it into a keybinding or shortcut within qtile or your shell. Example usage:
 
-```sh
-./sync-repo-simple.py /path/to/your/repo
+```bash
+sync-repo-simple.py /path/to/your/repo
 ```
 
-Ensure you have provided the path to your local git repository as an argument. The script automates the following processes:
-1. **Fetching and Pulling:** It fetches all remote branches and attempts to fast-forward or rebase if necessary.
-2. **Conflict Management:** If conflicts arise, it offers interactive options for resolution.
-3. **Committing & Pushing:** Checks for local changes, stages them, and pushes to the remote.
-4. **Summary Display:** Concludes with a brief summary of the operations performed.
+**Arguments:**
+- `repo_dir` (*required*): Path to the git repository you wish to sync.
+  
+**Example:**
+```bash
+sync-repo-simple.py ~/projects/mydotfiles
+```
 
-You can bind this script to a key combination in your qtile configuration for quick access.
+- The script prints diagnostic and status information throughout the process.
+- On conflicts, you'll be prompted interactively in the terminal to resolve them.
+
+**Editor for Conflicts:** Set your preferred editor in your environment:
+```bash
+export EDITOR=nvim
+```
+or let it default to `vim`/`nvim`.
 
 ---
 
-> [!WARNING]
-> The script currently uses basic input() calls for handling user decisions during conflict resolution. This does not support non-interactive environments. Consider replacing these with environment-specific solutions or flags for better automation and error handling in scripts without user presence.
+> [!TIP]
+> **Critique:**  
+> - The script assumes only one remote; in multi-remote setups, its behavior may not be as intended.
+> - Command-line parsing is minimal; no verbosity flags or dry-run mode.
+> - Using `shell=True` with user data in commands introduces potential security issues; safer subprocess argument handling is recommended.
+> - Uses repeated subprocess calls (`git status -s` is run several times), which could be minimized for performance.
+> - Error messages are printed to stderr, but exit codes are inconsistent (for example, unsuccessful pushes try again but don't alert if the retry fails).
+> - The script’s remote URL parsing is a bit brittle, relying on shell command composition; using pure python (e.g., `gitpython`) would be more robust.
+> - Good scripting discipline overall; could benefit from modularization or adapting a library like `GitPython` for advanced setups.

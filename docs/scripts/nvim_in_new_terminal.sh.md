@@ -1,43 +1,71 @@
-# Open Neovim in Floating Terminal
+# nvim in Floating Terminal
 
 ---
 
-**nvim_in_new_terminal.sh**: Opens a floating terminal to edit a file with Neovim
+**nvim_in_new_terminal.sh**: Open a file in `nvim` inside a floating Alacritty terminal window
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A fast, cross-platform, OpenGL terminal emulator.
-- `nvim`: Neovim, a hyperextensible Vim-based text editor.
-- `setsid`: Runs a program in a new session, used here to launch `alacritty` independently.
-
-### Description
-
-This script is designed to open a specified file in Neovim inside a new, floating terminal window. Leveraging the power of `alacritty` to provide a graphical terminal, the script ensures that your editing session is visually distinct by running `alacritty` with a custom title (`nvim-term`) and class name ('floating'). This allows you to utilize window management features in qtile specific to windows with the 'floating' class. The script uses `setsid` to detach the process from the terminal, allowing the script to exit without closing the terminal window.
-
-### Usage
-
-To use this script, pass the file you want to edit as an argument. The script can be executed directly from the terminal or bound to a key combination in your qtile configuration for quick access.
-
-```bash
-~/.scripts/bin/nvim_in_new_terminal.sh /path/to/file.txt
-```
-
-Example of running the script:
-
-```bash
-~/.scripts/bin/nvim_in_new_terminal.sh ~/Documents/notes.txt
-```
-
-For integration with qtile, you might bind the script to a key combination by editing your qtile configuration file (`config.py`) with something like:
-
-```python
-Key(["mod4"], "e", lazy.spawn("~/.scripts/bin/nvim_in_new_terminal.sh '/path/to/file.txt'")),
-```
-
-Replace `/path/to/file.txt` with your desired default file or modify as per your workflow.
+- `alacritty`: GPU-accelerated terminal emulator for X11/Wayland.
+- `nvim` (Neovim): Modern Vim-based text editor, used for file editing.
+- `setsid`: Run a program in a new session (standard GNU tool).
+- A window manager (e.g., `qtile`) with rules for the `"floating"` window class.  
+  → Requires custom window rules for `"floating"` to ensure desired appearance.
 
 ---
 
-> [!TIP] This script assumes that `alacritty` and `nvim` are installed and located in your `$PATH`. Ensure that these dependencies are met before using the script. Additionally, consider enhancing the script to check if the file specified exists before attempting to open it, or to handle multiple file arguments to increase its versatility.
+### Description
+
+This script provides a convenient way to open any file in `nvim` within a floating terminal window by leveraging `alacritty` and qtile's window management. The key components are:
+
+- **setsid**: Guarantees the spawned terminal runs in a new session, preventing it from being tied to the parent shell or session.
+- **alacritty**: Launched with the title `nvim-term` and a custom X11/WM class of `floating`. The `-e` flag starts `nvim` on the file specified by the first argument ($1).
+    - The `"floating"` class allows qtile to apply dedicated rules (e.g., always start as floating, centered), providing optimal integration.
+
+Typical uses:
+- Launch from a keybinding to quickly edit configuration files, scripts, etc., in a distraction-free floating terminal.
+- Easily adaptable for use by other scripts that need floating editing functionality.
+
+---
+
+### Usage
+
+The script can be executed directly from a terminal or integrated into qtile or other WM keybindings.
+
+**Command-line:**
+```
+nvim_in_new_terminal.sh <path/to/file>
+```
+
+**Examples:**
+```
+nvim_in_new_terminal.sh ~/.config/qtile/config.py
+nvim_in_new_terminal.sh /tmp/notes.txt
+```
+
+**Qtile Keybinding Example**:
+In your qtile `config.py` (after ensuring the script is executable and on your PATH):
+```python
+Key([mod], "e", lazy.spawn("nvim_in_new_terminal.sh ~/.local/todo.txt")),
+```
+
+*Note:* For best results, ensure qtile floating rules are set for the 'floating' class, e.g.:
+```python
+@hook.subscribe.client_new
+def set_floating(window):
+    if window.window.get_wm_class() and 'floating' in window.window.get_wm_class():
+        window.floating = True
+```
+
+---
+
+> [!TIP]
+> **Potential Issues & Suggestions:**
+>
+> - The script will silently do nothing if no file argument is given. Consider adding input validation to check for an argument and display a usage message if missing.
+> - It assumes both `alacritty` and `nvim` are in the PATH and available. Adding checks for dependencies could improve robustness.
+> - The `"floating"` class requires a matching window rule in `qtile`. If this is missing or misconfigured, the terminal may not float as expected.
+> - Does not handle the case where multiple words/spaces are present in the filename; quoting is correct but further validation could be helpful.  
+> - For improvement: Allow passing additional arguments to `nvim`.

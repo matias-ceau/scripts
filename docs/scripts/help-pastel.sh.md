@@ -1,39 +1,63 @@
-# Pastel Help and Preview Utility
+# Pastel Command Helper
 
 ---
 
-**help-pastel.sh**: Enhanced help command for `pastel` with preview features using `fzf`.
+**help-pastel.sh**: Enhanced interactive subcommand and help browser for `pastel` CLI.
 
 ---
 
 ### Dependencies
 
-- `pastel`: A command-line tool for working with colors.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `fzf`: A command-line fuzzy finder.
-- `display_markdown.py`: A script to display markdown content.
-- `curl`: Command-line tool for transferring data with URL syntax.
-
-### Description
-
-This script facilitates exploring the `pastel` command's subcommands and options by using a powerful combination of other command-line utilities. It begins by parsing the help output of `pastel` to identify subcommands using `ripgrep`. The output is piped through `bat`, formatted, and fed into `fzf` for an interactive selection. A key feature is the preview window in `fzf`, which provides detailed help on selected items by calling `pastel` with its subcommands or displaying the relevant section of the online README for `pastel`.
-
-The script essentially simplifies and enhances interaction with `pastel` by leveraging colorful output, syntax highlighting, and interactive selection.
-
-### Usage
-
-To utilize this script, ensure it is executable and available in your system's `PATH`. Then, you can execute it directly in your terminal:
-
-```bash
-./help-pastel.sh
-```
-
-The script does not require any command-line arguments. Upon execution, it displays an interactive menu of `pastel` subcommands and their options. Select a command to see its detailed help or refer to the README if required.
-
-This script can be bound to a key combination in your qtile window manager for easier access, or you can just run it whenever required from the terminal.
+- `pastel` - CLI tool for color manipulation.
+- `bat` - A cat clone with syntax highlighting and Git integration.
+- `fzf` - Fuzzy finder for the terminal.
+- `rg` - ripgrep, for fast text searching.
+- `cat` - Used for concatenating files.
+- `curl` - To fetch the remote README.
+- `display_markdown.py` - Script for markdown preview in terminal (likely a user script).
+- `bash` - Script interpreter.
 
 ---
 
-> [!NOTE] 
-> Consider local error handling to manage scenarios where dependencies are not installed, as there are several external tools. Additionally, you might want to explore offline support for cases where network access to the GitHub README could be problematic.
+### Description
+
+`help-pastel.sh` is an interactive script designed to make exploring the `pastel` command-line color tool more efficient.
+
+**Main features:**
+- Lists all `pastel` subcommands and a README option in a fuzzy interface.
+- For any subcommand: pressing enter previews its detailed help, syntax-highlighted.
+- For the "README.md" line: fetches and previews the official pastel README from GitHub, rendered as markdown in your terminal.
+- Internally, the script:
+  - Locates the subcommands section of `pastel -h` using ripgrep.
+  - Streams the remaining help lines starting from this section using `bat`.
+  - Appends a README.md entry as an extra option.
+  - Filters out redundant 'help' lines.
+  - Presents a colorized, preview-powered list in `fzf`.
+
+---
+
+### Usage
+
+**Run directly in your terminal:**
+```
+$ help-pastel.sh
+```
+Or assign to a keybinding in qtile for quick access!
+
+#### Usage Flow
+
+1. A list of `pastel` subcommands (plus "README.md") will appear in an fzf prompt.
+2. You can:
+   - Type to fuzzy search/filter subcommands.
+   - Use arrow keys, then press `Enter` on a selection.
+   - See a live help preview for each command.
+   - Select "README.md" to view the official spherical documentation.
+
+---
+
+> [!TIP]
+> - `help-pastel.sh` is very handy but relies on several external tools. Consider making error-handling more robust for missing dependencies, or check/install them if not found.
+> - The preview logic for the README is tied to a custom script (`display_markdown.py`). If it is missing or incompatible, the README preview will fail.
+> - Appending "README.md" as a selectable line is clever, but if the format of `pastel -h` changes, or the README structure changes upstream, parts of the script may need updating.
+> - The fuzzy list can get quite wide – you might want to limit line lengths or columns if terminal real estate becomes a problem.
+> - For even more seamless integration, consider extracting the markdown render into its own stable utility (for reuse elsewhere).

@@ -1,61 +1,68 @@
-# fzf Enhanced File Manager
+# Fuzzy File Manager with fzf
 
 ---
 
-**fzf-file-manager.sh**: Interactive file manager using fzf with advanced features.
+**fzf-file-manager.sh**: Interactive terminal-based file manager leveraging `fzf` and `eza` for rapid navigation.
 
 ---
 
 ### Dependencies
 
-- `fzf`: A command-line fuzzy finder for interactive filtering.
-- `bash`: Required for running the script.
-- `eza`: A modern replacement for 'ls', with additional features like icons and colors.
-- `bat`: A cat clone with syntax highlighting.
-- `rg` (ripgrep): High-performance search tool, works like ag but faster.
-- `kitty`: For image previews (via `kitty icat`).
-- `pastel`: For color formatting in ANSI codes.
-
-### Description
-
-This script provides a robust terminal-based file manager using `fzf`, enriched with features like colored output, directory navigation, and file preview capabilities. Utilizing `eza` for listing directory contents allows for more visually appealing and informative outputs. The `get_color` function leverages environment variables specific to your setup (`FLEXOKI`) to format colors using `pastel`. Files are previewed using `bat` or `kitty icat` for images, offering an intuitive interface for browsing files.
-
-The script offers enhanced `fzf` bindings:
-- Preview listing with `alt-p`
-- Full file preview with `alt-space`
-- Directory navigation shortcuts (`ctrl-h` to go back, `ctrl-l` to forward)
-
-It effectively maintains a current directory state (`CUR_DIR`) and modifies it based on the user's navigation actions (directories and files).
-
-### Usage
-
-Run the script in a terminal to start navigating:
-
-```bash
-# Make sure the script is executable
-chmod +x /home/matias/.scripts/bin/fzf-file-manager.sh
-
-# Execute the file manager
-/home/matias/.scripts/bin/fzf-file-manager.sh
-```
-
-Navigate through directories or view files interactively. Use the provided key bindings to enhance productivity.
-
-Examples:
-
-- Navigate directories:
-  ```text
-  ctrl-l: move forward into selected directory
-  ctrl-h: move backward to previous directory
-  ```
-
-- Preview file content:
-  ```text
-  alt-p: toggle the preview pane
-  alt-space: view full-screen preview
-  ```
+- `fzf` : Fuzzy finder for the terminal, provides search and selection UI.
+- `eza` : Enhanced `ls` replacement, used for directory listings and preview formatting.
+- `bat` : Syntax-highlighting cat clone, renders content previews.
+- `rg` (ripgrep): Rapid grep tool, used for environment variable searching and file content matching.
+- `pastel` : Command-line color manipulation tool, formats color for previews.
+- `kitten icat` : For inline image previews in compatible terminals.
+- `awk`, `sed`, `file` : Standard command-line tools for processing outputs.
+- `notify-send` : Sends desktop notifications, used for debug/informational purposes.
 
 ---
 
-> [!TIP]
-> While this script is comprehensive, the `get_color` function might be too specific to customized environment variables (`FLEXOKI`). Consider abstracting color assignments to more generic or configurable methods to enhance portability. Similarly, confirm the presence and compatibility of all dependencies to avoid runtime issues in other environments.
+### Description
+
+This script implements a robust, interactive file manager for your terminal window manager (like qtile), utilizing a rich set of tools for both navigation and file previewing. The workflow pivots around the powerful fuzzy searching provided by `fzf`, which is deeply integrated with `eza`'s colorful and featureful directory listings. 
+
+Key Features:
+- **Directory Navigation**: Navigate up and down the directory tree using fuzzy search results, with support for both 'forward' and 'backward' movement via line selection.
+- **File Preview**: Inline preview for:
+  - Directories (tree with `eza`)
+  - Text files (syntax highlighting with `bat`)
+  - Image files (shown inline using `kitten icat` when supported)
+  - File and directory metadata (via `file`, `eza_def`, and labels)
+- **Custom Theming**: Color extraction from the environment (expecting `FLEXOKI*` variables) for fine-tuned appearance.
+- **Interactive Controls**: Keybindings within `fzf` for toggling preview, changing prompt, jumping, directional navigation, and refreshing preview.
+- **Continuous Navigation Loop**: Loops until an entry is selected or quit, updating the current directory based on selection logic.
+
+---
+
+### Usage
+
+#### Run Directly in Terminal
+```sh
+bash ~/.scripts/bin/fzf-file-manager.sh
+```
+
+#### Assign to a Keybinding (qtile example)
+Add to your `.config/qtile/config.py`:
+```python
+Key([mod], "e", lazy.spawn("bash ~/.scripts/bin/fzf-file-manager.sh")),
+```
+
+#### Key Interactions While Running
+Within the `fzf` interface:
+- `Alt+P`: Toggle preview window.
+- `Alt+Space`: Execute a fresh preview of the selection.
+- `Alt+H`: Toggle prompt label and reload listing (shows hidden files).
+- Directional navigation is embedded based on the "forward" or "backward" lines in the file details.
+- `Ctrl+H` / `Ctrl+L`: Move backward/forward in navigation.
+
+**Note**: The script expects your terminal to support truecolor and the Kitty graphics protocol for image preview.
+
+---
+
+> [!WARNING]
+> - The script is quite monolithic and complex; breaking functionality into smaller scripts (e.g., dedicated preview/render helpers) could improve readability and maintenance.
+> - Error handling is minimal: if dependencies (like `kitten icat`) are missing, previews silently fail or produce odd behavior.
+> - Certain features seem experimental or commented out, and some bindings are not fully documented—adding an in-script help display would enhance usability.
+> - Assumes a specific environment with color variables set (`FLEXOKI*`), which could cause issues on other setups; fallback defaults or checks for these would improve portability.

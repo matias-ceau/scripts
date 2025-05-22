@@ -1,50 +1,60 @@
-# Album Player Script
+# Album Player for cmus
 
 ---
 
-**albumplayer.xsh**: Play an album using cmus and dmenu integration
+**albumplayer.xsh**: Selects and plays a full album (with extras queued) via cmus and dmenu
 
 ---
 
 ### Dependencies
 
-- `cmus`: A small, fast and powerful console music player.
-- `dmenu`: A dynamic menu for X, typically used as a quick application launcher and selection tool.
-- `xonsh`: A Python-powered shell, script is written specifically for this environment.
-
-### Description
-
-This script allows you to play a selected album using the `cmus` music player. It starts by reading a library file located at `~/.config/cmus/lib.pl`, which is expected to contain a list of music file paths. It extracts album names from these paths and presents them through `dmenu` for selection.
-
-Once an album is selected, the script generates a playlist file at `~/.config/cmus/.temp.m3u` containing songs from the selected album, as well as a random selection of songs from other albums. This playlist is loaded and played in `cmus`.
-
-Key script operations include:
-- Reading and parsing the music library file.
-- Using set and dictionary operations to deduplicate and format album names for display.
-- Incorporating `dmenu` for album selection.
-- Managing playlist creation and cleanup of `cmus` state, using several `cmus-remote` commands for interaction.
-
-### Usage
-
-To use this script:
-
-1. Ensure you have Xonsh, CMUS, and Dmenu installed on your Arch Linux system.
-2. Optionally bind this script to a key combination in your qtile configuration. Here's an example in Python for qtile:
-
-    ```python
-    from libqtile.lazy import lazy
-    from libqtile.config import Key
-
-    keys = [
-        Key(["mod1"], "p", lazy.spawn("xonsh /home/matias/.scripts/bin/albumplayer.xsh")),
-    ]
-    ```
-
-3. Run the script from your terminal by executing `xonsh /home/matias/.scripts/bin/albumplayer.xsh`.
-4. Select an album from the `dmenu` list that appears, and enjoy your music session.
+- `xonsh` &nbsp;– Required shell for running the script.
+- `cmus` &nbsp;– Console music player backend.
+- `dmenu` &nbsp;– Dynamic menu for fuzzy album selection.
+- `cat` &nbsp;– Used to read the cmus library playlist.
+- `random` (Python module) &nbsp;– Used to shuffle extra albums.
+- Library file: `~/.config/cmus/lib.pl` &nbsp;– Assumes this is maintained and up-to-date with cmus library.
 
 ---
 
-> [!NOTE] 
-> The script assumes the existence of a properly formatted `~/.config/cmus/lib.pl` file. 
-> Consider adding error handling for scenarios where files do not exist to improve robustness. The selection from `dmenu` could be enhanced to handle cases where selection is cancelled or invalid inputs are provided. Additionally, it would be beneficial to document how the `.temp.m3u` file affects `cmus` behavior if it is used by other scripts or processes.
+### Description
+
+This script provides a quick way to select and play an album from your cmus library using `dmenu`. It parses your cmus library at `~/.config/cmus/lib.pl` and extracts unique album entries.  
+You are presented with a dmenu-powered prompt, showing "artist — album" entries, for easy album selection. The chosen album's tracks are written to a temporary playlist file, and ten additional random albums are shuffled and appended to create a longer playback queue.  
+cmus is then manipulated using its `cmus-remote` command to:
+
+- Clear, reload, and repopulate the queue with the new album-based playlist.
+- Start playback automatically.
+
+Paths and album names are truncated and aligned for readable selection. No arguments are required; interaction is via dmenu.
+
+---
+
+### Usage
+
+**Interactive selection (launch from shell or bind to key):**
+
+```
+albumplayer.xsh
+```
+
+#### TL;DR
+
+- Maintains a temp playlist at `~/.config/cmus/.temp.m3u`
+- Use dmenu to pick the album.
+- Automatically loads ten additional random albums after your selection.
+
+#### Keybinding Example for Qtile (in your qtile config):
+
+```python
+Key([mod], 'F11', lazy.spawn('~/.scripts/bin/albumplayer.xsh'))
+```
+
+---
+
+> [!TIP]
+> - The script relies on the presence and format of `~/.config/cmus/lib.pl`. If this file is missing or out-of-date, the script will not show all albums or may fail silently.
+> - Extra dmenu options like `-l 300` could cause UI issues with too many or too few albums (adjust as needed).
+> - String slicing and manual formatting for fancy alignment can break with unusual folder or artist names; consider using a more robust parsing method.
+> - No explicit error handling: if `dmenu` selection is cancelled, or no match is found, cmus could be left in a cleared (empty) state.
+> - Script may be improved by allowing configuration (playlist size, fallback if file missing, etc.) and better error feedback.

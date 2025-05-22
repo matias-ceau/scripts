@@ -1,59 +1,56 @@
-# Utopia Film Fetcher
+# Utopia Film Pages Downloader
 
 ---
 
-**utopia.sh**: Fetches film data from the Utopia Cinema Bordeaux website and saves it locally.
+**utopia.sh**: Download selected Utopia Bordeaux film pages to HTML files
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash, which is available by default on Arch Linux.
-- `curl`: A command-line tool used for making HTTP requests. Install it with `sudo pacman -S curl` if not already installed.
-
+- `bash`: Required as the script interpreter.
+- `curl`: Used to fetch web content via HTTP.
+  
 ### Description
 
-This script automates the task of downloading specific film data from the Utopia Cinema Bordeaux website. It uses a base URL combined with unique film IDs to dynamically generate URLs, then fetches the corresponding HTML content using `curl`. The fetched data is saved locally as separate `.html` files named `film_<ID>.html`, where `<ID>` matches the film's unique identifier.
+This script automates the process of fetching and saving several film information pages from the Utopia Bordeaux cinema website. The script defines a set of film IDs and downloads each corresponding web page, saving each as a separate HTML file (`film_<ID>.html`). Each download is announced in the terminal for progress tracking.
 
-Key features:
-- The `base_url` variable holds the root website URL.
-- The `ids` array contains all the film IDs to be fetched.
-- A `for` loop iterates through each ID, constructs the full URL, and downloads the webpage.
+Key Details:
 
-This script is particularly useful if you’re trying to scrape or archive film details locally.
+- **Base URL**: The script targets pages under `https://www.cinemas-utopia.org/bordeaux/index.php`.
+- **ID Array**: Edit the `ids` array to fetch different films without modifying core logic.
+- Each HTML page is saved using its film ID for easy reference.
+- Status messages provide feedback on progress.
 
 ### Usage
 
-To run the script, ensure it is executable and execute it in a terminal. You can make the script executable via:
+You can execute this script from a terminal window or map it to a qtile keybinding if you routinely fetch such pages.
 
 ```bash
-chmod +x /home/matias/.scripts/dev/utopia.sh
+bash /home/matias/.scripts/dev/utopia.sh
 ```
 
-Then run it using:
-
-```bash
-/home/matias/.scripts/dev/utopia.sh
+Output will look like:
 ```
-
-The HTML content for each film will be saved in the directory where the script is executed. The filenames will be in the format: `film_<ID>.html`.
-
-Example output in the terminal:
-
-```plaintext
 Fetched content for film ID: 7767
 Fetched content for film ID: 7860
-Fetched content for film ID: 7861
-Fetched content for film ID: 7865
-Fetched content for film ID: 7866
-Fetched content for film ID: 7867
+...
 All content fetched.
+```
+
+To customize which films are fetched, simply edit the `ids` array:
+
+```bash
+ids=("1234" "5678")  # Replace with your desired film IDs
 ```
 
 ---
 
 > [!TIP]
-> - **Parameterization**: The script could allow the user to input a custom list of IDs or specify the output directory.
-> - **Error Handling**: Consider adding error handling for `curl` (e.g., using the `--fail` flag) to report if any of the requests fail.
-> - **Documentation**: It would be helpful to include inline comments explaining key functionality for easier modification or reuse.
-> - **Dynamic Input**: For flexibility, you could allow the user to dynamically pass film IDs as command-line arguments.
+> - **Improvements**: The script does not handle errors from `curl` (e.g., network issues, missing pages), meaning if a fetch fails, you'll end up with an empty or invalid HTML file but still get a “Fetched...” message. Add `|| echo "Failed to fetch..."` after the curl command or use `set -e` at the top with error checks for greater robustness.
+>
+> - **Enhancement**: Consider creating an output directory for fetched files (e.g., `./utopia-films/film_$id.html`) to prevent cluttering your working directory. Support for command-line parameters to override IDs or the base URL would also add flexibility.
+>
+> - **Arch-specific advice**: Ensure `curl` is installed (`sudo pacman -S curl`). No Arch-specific changes required otherwise.
+>
+> - **Qtile integration**: The script is suitable for a keybinding in qtile; however, since it produces multiple files, you may want notifications or a summary at the end if run from a GUI context.

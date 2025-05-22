@@ -1,66 +1,65 @@
-# openwebui-launcher.sh
+# Open WebUI Launcher
 
 ---
 
-**openwebui-launcher.sh**: Script to launch and interact with an Open WebUI instance.
+**openwebui-launcher.sh**: Bash script to launch Open WebUI and open it in a minimal browser.
 
 ---
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer used to manage background processes.
-- `curl`: For verifying the availability of the web server.
-- `minimal-browser.py`: A lightweight browser (ensure it is in your PATH).
-- `notify-send`: For desktop notifications (part of `libnotify` package).
-- `rg` (ripgrep): Utilized for process matching (ensure it's installed and in PATH).
-- `open-webui`: Required for serving the web interface. This must be installed (e.g., via `uvx` or equivalent).
+- `uvx`: A Python virtual environment tool for launching Python apps.
+- `open-webui`: The actual Web UI Python application (`open-webui serve` command).
+- `tmux`: Used to daemonize the Open WebUI backend.
+- `notify-send`: For desktop notifications.
+- `curl`: To poll server readiness.
+- `rg` (ripgrep): Used for efficient process search.
+- `minimal-browser.py`: Custom/user-defined lightweight browser script. Must be available in `$PATH`.
 
 ---
 
 ### Description
 
-This script is designed to automate the launching of an Open WebUI instance alongside a web browser for frontend interaction. It allows specifying hosts and ports for serving the web interface and has an initialization option (`init`). It checks if the required web interface is already running, and, if not, starts it in a new `tmux` session. 
+This script streamlines the process of starting the Open WebUI server and launching it in a minimal web browser, designed with integration into an Arch Linux + qtile environment.
 
-The web interface will be served locally (defaulting to `localhost:8080`) unless overridden via the relevant script arguments. The script makes use of the `curl` command to ensure the server is reachable, retrying for up to 30 seconds before timing out.
-
-Finally, the specified browser (in this case, `minimal-browser.py`) is opened to the URL hosting the web UI.
+**Core functionalities:**
+- Server Initialization: Optionally, with `init`, uses `uvx` to provision the latest `open-webui` package in a Python 3.12 environment and serve it.
+- Host/Port Customization: Overrides default host/port with `-H/--host` and `-p/--port` flags.
+- Idempotent Launch: Prevents duplicate `open-webui` instances by scanning running processes.
+- Timeout-wrapped readiness checks: Waits (up to 30s) for the web UI to become responsive before launching the browser.
+- Desktop Notifications: Notifies status at major steps for UX clarity.
+- Browser Launch: Starts the `minimal-browser.py` pointing at the running Web UI once it is live.
 
 ---
 
 ### Usage
 
-Run the script either interactively in a terminal or integrate it with your tiling window manager (e.g., qtile).
+```sh
+# Launch with default localhost:8080, or customize:
+openwebui-launcher.sh
+openwebui-launcher.sh --host 0.0.0.0 --port 9000
 
-#### Options
+# To initialize Open WebUI using uvx for a fresh Python env:
+openwebui-launcher.sh init
 
-- `init`: Initializes the web UI data directory and serves the Open-WebUI instance (`uvx` usage shown, adapt based on your setup).
-- `-H` or `--host [HOST]`: Specify the host address (default is `localhost`).
-- `-p` or `--port [PORT]`: Specify the port number (default is `8080`).
-
-#### Example Usage
-
-```bash
-# Launch the script with default settings
-bash openwebui-launcher.sh
-
-# Specify a custom host and port
-bash openwebui-launcher.sh --host 127.0.0.1 --port 9090
-
-# Initialize environment and launch the server
-bash openwebui-launcher.sh init
+# Full example, custom host/port, initializing:
+openwebui-launcher.sh init -H 127.0.0.1 -p 8181
 ```
 
-#### Integration Example (qtile)
-You can assign this script to a keybinding in qtile:
+This script can be effectively connected to a qtile keybinding, e.g.:
 ```python
-Key([mod], "w", lazy.spawn("~/.scripts/bin/openwebui-launcher.sh"))
+Key([mod], "F12", lazy.spawn("openwebui-launcher.sh"))
 ```
+Or, run from dmenu/rofi using the script path.
 
 ---
 
-> [!TIP]
-> **Improvement Suggestions:**
-> 1. **Portability:** This script depends on certain tools (`ripgrep`, `tmux`, `curl`, etc.). Add checks to ensure these tools are installed before execution to avoid failures.
-> 2. **Error Handling:** There is limited error handling for invalid arguments or missing prerequisites (e.g., the `minimal-browser.py` path not found).
-> 3. **Environment Flexibility:** Consider supporting alternative browsers if `minimal-browser.py` is not installed.
-> 4. **Timeout Configuration:** Timeout is hardcoded (30 seconds). Making this configurable could enhance flexibility.
+> [!NOTE]
+> The script is functional but could be improved for robustness:
+> - Error handling is minimal (e.g. no checks for missing dependencies or for invalid/not found `open-webui` executable).
+> - The process check (`rg 'open-webui serve' | rg '8080'`) is brittle if running on a custom port or if `rg` is unavailable.
+> - If `minimal-browser.py` isn't available, the script exits silently.
+> - Notification text is basic—consider including more diagnostics for failures, or use more dynamic, user-friendly notifications.
+> - The `eval` on the browser line may be unnecessary and slightly risky; directly invoking the browser may be safer.
+> - The `init` argument may unintentionally discard host/port overrides (since `shift 2` skips the next argument).
+> - Consider using a CLI parsing library (e.g., `getopts` or even Python's `argparse` for more maintainable options handling).

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env -S uv run --quiet --script
 
 # /// script
 # requires-python = ">=3.12"
@@ -17,7 +17,7 @@ from textual.containers import VerticalScroll
 from textual.reactive import Reactive
 from textual.widgets import Footer, Header, Input, Markdown
 
-SYSTEM = """Formulate all responses as if you where the sentient AI named Mother from the Aliens movies."""
+SYSTEM = """Formulate all responses as if you gave a shit."""
 MODEL = "gpt-4o-2024-08-06"
 
 

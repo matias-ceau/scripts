@@ -1,42 +1,61 @@
-# CMUS Song Launcher
+# Song Launcher – Play Songs in cmus via dmenu
 
 ---
 
-**songlauncher.sh**: Launch and play songs with `cmus` using `dmenu` interface.
+**songlauncher.sh**: Quickly search and play music files via dmenu and cmus
 
 ---
 
 ### Dependencies
 
-- `cmus`: A powerful and flexible music player for Unix-like systems.
-- `dmenu`: A dynamic menu for X11, used here for selecting songs.
-- `find`: A utility to search for files in a directory hierarchy.
-- **Music Directory**: The script assumes a directory named `music` exists and contains the music files you want to play.
+- `cmus-remote`  
+  Command-line client for the cmus music player, allows remote control of cmus (must be running).
+- `find`  
+  Standard Unix utility for recursively searching directories.
+- `dmenu`  
+  Dynamic menu utility; displays a list of items and outputs the user's choice.
+- Your `music` directory  
+  Assumes you have a folder named `music` in your working directory containing music files.
 
 ### Description
 
-The script `songlauncher.sh` is a simple utility for playing music with `cmus`, leveraging the `dmenu` tool to provide a user-friendly file selection interface. When executed, it scans the `music` directory (and its subdirectories) for music files, which are then presented to you via `dmenu`. Once a file is selected, `cmus` plays it immediately using `cmus-remote`.
+This script enables rapid fuzzy searching and playback of songs with your Arch Linux and qtile setup.  
+It leverages the `find` command to recursively list all files in (or beneath) the `music` directory, then pipes this list to `dmenu -i -l 30`. The `-i` flag makes dmenu case-insensitive, and `-l 30` displays up to 30 choices.
 
-The command `cmus-remote -f` is used to pass the path of the selected song to `cmus`, making it start playback of the track. The use of `-L` in `find` allows for following symbolic links, which helps ensure all music files in the directory are available for selection. The `-i` flag with `dmenu` enables case-insensitive matching, and `-l 30` specifies the number of lines to be displayed, making selection easier.
+Once you select a file in dmenu, it is fed as an argument to `cmus-remote -f`, which tells cmus to load and play the selected song file immediately.
+
+- Assumes `cmus` is running in the background (or in another terminal).
+- Designed to be lightning-fast and minimal; perfect for integration as a keybinding or launcher in qtile.
+- The music path is relative; best used from your home directory or adjust as needed.
 
 ### Usage
 
-To use the script, ensure you have the necessary dependencies installed and a `music` directory with audio files:
+To use the script:
 
-```bash
-# Ensure you are in the correct directory or provide the full path to the script
-/home/matias/.scripts/bin/songlauncher.sh
+1. Ensure you have `cmus` running.
+2. Launch the script from your shell, a launcher, or assign to a qtile keybinding.
+
+Basic invocation example:
+
+```
+$ ~/scripts/bin/songlauncher.sh
 ```
 
-Run the script in the terminal, and a `dmenu` prompt will appear, allowing you to type and search for the desired song. Once you press Enter, the selected song will immediately play in `cmus`. You can integrate this script into a qtile keybinding for quick access to your music library.
+**Typical keybinding integration:**
 
-Example:
-```bash
-# Start the song launcher
-sh /home/matias/.scripts/bin/songlauncher.sh
+In your qtile config:
+```python
+Key([mod], 's', lazy.spawn('~/.scripts/bin/songlauncher.sh'))
 ```
+
+> Running the script will present a searchable (case-insensitive) list of all files in your `music` directory. Select one, press Enter, and playback will start in cmus.
 
 ---
 
-> [!TIP]
-> Consider allowing the script to specify a custom directory path instead of assuming the `music` directory is in the current working directory. This improves flexibility and usability for users with various storage configurations. Additionally, error handling mechanisms for cases where `cmus` is not running or the `music` directory is empty could enhance the script's robustness.
+> [!IMPORTANT]
+> - The script assumes the current working directory contains the `music` folder. Consider using an absolute path (e.g., `~/music`) to avoid confusion or breakage if run from elsewhere.
+> - No file-type filtering is in place; if you have non-audio files in `music`, they will also appear.
+> - To improve, you might:
+>    - Add filtering for audio file extensions (like `.mp3`, `.flac`, etc.).
+>    - Check if `cmus` is running, and optionally launch it if not.
+>    - Support for configurable music directories via an environment variable or command-line argument.

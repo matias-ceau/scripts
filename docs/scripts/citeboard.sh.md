@@ -1,42 +1,57 @@
-# Citeboard: Paper Finder and Citation Manager
+# Citeboard: Quick Paper Citation and Access
 
 ---
 
-**citeboard.sh**: Script to find a paper and either open it or copy its citation.
+**citeboard.sh**: Find academic references by citation key, copy their identifier, or open associated PDFs.
 
 ---
 
 ### Dependencies
 
-- `findutils`: Used to search for files in directories.
-- `xsel`: A command-line tool to manipulate the X selection, allowing clipboard operations.
-- `dmenu`: A dynamic menu for X, used to make selections. 
+- `findutils`  
+  Used for file and directory searching (find).
+- `xsel`  
+  For copying citation keys to the X clipboard.
+- `dmenu`  
+  Dynamic menu for rofi-style selection in a graphical environment.
+- `evince`  
+  PDF viewer for opening matched papers.
+- `grep`, `sed`  
+  Basic text processing utilities (should be pre-installed on Arch).
 
 ### Description
 
-The **citeboard.sh** script is a simple utility tailored for Arch Linux users with the qtile window manager, aiming to streamline the process of either opening a paper or copying its citation to the clipboard. The script pulls from a bibliography database located in `data/bib/*`, using the BibTeX citation format. 
+This script allows you to quickly search your Zotero BibTeX library for a paper reference, using `dmenu` to select a citation key. Once a reference is selected, you choose whether to **copy** its citation key to the clipboard or **open** its associated PDF document (if available).
 
-- It starts by extracting references from the BibTeX files, using `grep` to identify lines beginning with `@` and removing unwanted characters through `sed`.
-- It then presents a menu using `dmenu` to allow the user to select which reference to use.
-- Depending on the subsequent choice (open the paper or copy the citation), it either copies the reference to the clipboard using `xsel` or finds and opens the corresponding paper in the `data/zotero/storage` directory using `evince`.
+- **Reference extraction**: It parses all BibTeX files under `data/bib/`, extracting citation keys.
+- **Interactive menu**: Presents a searchable menu of keys with `dmenu`.
+- **Output action**: Lets you copy the citation key (`clipboard`) or open the paper's PDF (`open`), using either `xsel` or `evince`.
 
 ### Usage
 
-To use the script, follow these steps:
+Assign to keybindings in Qtile or launch directly from terminal:
 
-1. Execute the script from the terminal:
-   ```bash
-   ~/.scripts/bin/citeboard.sh
-   ```
-2. Upon execution, a menu appears listing all available references (based on your BibTeX files). 
-3. Select the desired reference and another menu pops up asking to either `open` the file or copy to `clipboard`.
-4. Depending on your choice:
-   - If `clipboard` is selected, the reference is copied and ready to be pasted.
-   - If `open` is selected, the paper is opened using Evince.
+```sh
+~/.scripts/bin/citeboard.sh
+```
 
-This script can also be bound to a keybinding in qtile for quicker access.
+Selection workflow:
+1. **A dmenu prompt appears** with available citation keys. Type to filter, press Enter to select.
+2. **A second menu ("open" or "clipboard") appears**.
+    - If you pick **clipboard**, the citation key is copied (`xsel -b`).
+    - If you pick **open**, the script looks under `data/zotero/storage` for files matching the citation key and opens them with `evince`.
+
+#### Example with dmenu input:
+
+- Press Super+Shift+C (example Qtile binding) to launch.
+- Type part of a citation key, Enter.
+- Choose `open` or `clipboard`.
 
 ---
 
-> [!NOTE]
-> One potential improvement could be handling non-existent or improperly indexed papers more gracefully. Additionally, consider extending the script to support other PDF viewers or reference managers. Integrating error handling such as notifying the user if a paper cannot be found when 'open' is selected would enhance user experience.
+> [!TIP]
+> - **Relies on directory structure:** The script assumes you have a `data/bib/` with BibTeX files and a corresponding `data/zotero/storage/` with PDFs named after citation keys. If the file naming or structure doesn't match this, "open" may silently do nothing.
+> - **No input validation:** If your BibTeX citation keys contain spaces or unusual characters, extraction with `sed` might not work reliably.
+> - **No error feedback if PDF not found:** The script will pass nothing to `evince` if no match is found, potentially causing confusion.
+> - **Minor inefficiency:** Always pipes to `find` and `grep` even for clipboard-only actions. This could be optimized.
+> - **You may want to add notifications (e.g. via `notify-send`) to confirm clipboard copies or alert on missing PDFs for improved feedback.**

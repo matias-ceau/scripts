@@ -1,40 +1,64 @@
-# List Running Services Script
+# list_process.sh
 
 ---
 
-**list_process.sh**: Displays a sorted list of all running services on your system.
+**list_process.sh**: Lists all systemd services, showing their statuses sorted by type
 
 ---
 
 ### Dependencies
 
-- `systemctl`: A command-line utility to examine and control the systemd system and service manager.
-- `sort`: Used to sort lines of text files.
+- `systemctl` – The system and service manager used by systemd; core in Arch Linux.
+- `sort` – Standard Unix sort utility; sorts output alphabetically by specified column.
+
+---
 
 ### Description
 
-The `list_process.sh` script is a straightforward tool designed to list all the services managed by `systemctl` on your Arch Linux system and then sort them according to their state. 
+This script rapidly lists all available systemd services (units of type `service`), including both active and inactive ones. The output is formatted with:
 
-- The command `systemctl list-units --type=service --all --no-pager --no-legend` provides a list of all service units. The `--type=service` flag ensures that only services are listed, while `--all` includes all services regardless of state. The `--no-pager` flag disables paging, preventing the output from being sent to a pager like `less`. The `--no-legend` flag removes the legend from the output, making it cleaner.
-- The output is piped to `sort -k4`, which sorts the services based on the fourth column, typically the status of each service, letting you easily see which services are active or inactive.
+- No pager, so results display entirely in one go (helpful for scripting or redirecting output).
+- No legend or heading, giving you a raw, parsable list.
+- The results are piped into `sort -k4`, which sorts the lines based on the fourth whitespace-delimited field (status, typically: enabled, disabled, static, etc.).
+
+This is useful if you want to quickly review the current state of service units without needing to interactively scroll, especially when working in minimal terminal environments inside your Arch + qtile setup.
+
+---
 
 ### Usage
 
-To execute this script:
+You can run this script from any terminal. It does not require arguments.
 
-```bash
-sh /home/matias/.scripts/bin/list_process.sh
+#### Example:
+
+```sh
+~/.scripts/bin/list_process.sh
 ```
 
-This command will output a sorted list of all service units on your system. You may want to bind this script to a key combination in qtile to run it quickly without opening a terminal, or include it in a status script to keep track of service states.
+You can also bind this to a key combination in your qtile configuration for quick access, or pipe the results for further processing:
 
-Example:
+```sh
+~/.scripts/bin/list_process.sh | grep running
+```
 
-```bash
-mod + shift + s # Bind this command in your qtile config to run the script and display output
+If you want to inspect only enabled services:
+
+```sh
+~/.scripts/bin/list_process.sh | grep enabled
+```
+
+To save the list to a file:
+
+```sh
+~/.scripts/bin/list_process.sh > ~/service_list.txt
 ```
 
 ---
 
-> [!TIP]
-> There is room for improvement in this script. If possible, consider adding options to filter output by service state (e.g., active, inactive). Also, capturing errors or providing user feedback within the script could improve its usability, especially when running it interactively.
+> [!NOTE]
+> While the script is functional and minimalist, there are a few points for possible improvement:
+> - Sorting by the **fourth column** (`-k4`) might not reflect the most important attribute for all users. Sometimes sorting by unit name (`-k1`) or state (`-k3`) may be more insightful.
+> - The script could accept a custom sort key as an argument for flexibility.
+> - Consider renaming the file to avoid confusion: the current name (`list_process.sh`) suggests listing running processes, while it strictly lists **systemd services**.
+> - A brief help section or usage hint for command-line arguments could be useful if expanded.
+> - No color or highlighting is used. If visual clarity is needed, tools like `column` or `grep --color=auto` could be added.

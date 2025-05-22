@@ -1,43 +1,64 @@
-# Update Birthdays Script
+# Update File Birthdays Utility
 
 ---
 
-**update_birthdays.sh**: Updates a CSV file with the creation dates of files in a directory.
+**update_birthdays.sh**: Extracts and records the creation date ("birthday") of all files in your scripts directory using git history.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written for the Bash shell.
-- `fd`: A simple and fast general-purpose file search tool.
-- `git`: Used to retrieve the history of file modifications.
-- `sed`: A stream editor for filtering and transforming text.
-- `cut`: Utility to extract sections from lines of files.
-- `sort`: Used to sort lines of text files.
+- `fd`: A simple, fast and user-friendly alternative to `find`. Required for efficient file discovery.
+- `git`: Used to determine the historical creation date of files.
+- `sed`: For line manipulation and text substitution.
+- `basename`: Extracts the filename from a path.
+- `sort`, `cut`, `tail`, `cat`, `rm`: Standard UNIX utilities.
+- Assumes `$SCRIPTS` environment variable is set, pointing to your scripts directory.
+- Files must be tracked by `git` for the birthdays to be accurate.
 
 ### Description
 
-The script `update_birthdays.sh` is designed to track the "birthdates" of files. These "birthdates" are retrieved as the first commit dates in a git repository for each file in the specified directory (`$SCRIPTS`).
+This script populates a CSV file (`bdays.csv` in your `$SCRIPTS` directory) with the creation ("birthday") dates for every tracked file under `$SCRIPTS`. For each file found, it analyzes its git log using:
 
-Here's how it works: 
-1. It initializes an empty temporary file (`bdays.csv.temp`).
-2. It uses `fd` to find files in the `$SCRIPTS` directory and processes each file to determine the date of the initial git commit.
-3. This date along with the filename is written to the temporary file.
-4. After processing all files, it replaces any empty "birthdate" entry with the current date and sorts the file.
-5. The sorted results are saved to `bdays.csv`, and the temporary file is deleted.
+```
+git log --follow --format=%ai <file> | tail -n 1
+```
+
+This pipeline ensures the script finds the earliest commit date associated with each file (including across renames). The output lines contain `YYYY-MM-DD, filename`.
+
+After constructing an intermediate `.temp` file, the script substitutes any empty date fields (which could occur if a file is untracked by git) with today's date. It then sorts the CSV for better readability and reference.
+
+This is especially useful for tracking when scripts were first committed in a long-running dotfiles or scripts repository.
 
 ### Usage
 
-To use this script, ensure you have the required dependencies installed and the correct environment variables set. The script reads files from the `$SCRIPTS` directory:
+You can run this script at any time to update your birthday records:
 
-```bash
-export SCRIPTS="/path/to/your/scripts"
-bash /home/matias/.scripts/meta/update_birthdays.sh
+```
+bash ~/.scripts/meta/update_birthdays.sh
 ```
 
-This script is non-interactive and can be run directly from the terminal. You can also automate its execution using `cron` jobs or integrate it into your window manager's configuration (like a keybinding in qtile).
+If you often edit or add new scripts, consider binding this script to a key sequence in your `qtile` config or having a cron or systemd timer trigger it periodically.
+
+**Sample `$bdays.csv` output:**
+
+```
+2022-03-01, launch_steam.sh
+2023-02-16, get_wifi_info.sh
+2024-05-02, update_birthdays.sh
+```
+
+Just ensure that `$SCRIPTS` is set in your environment (e.g., in your `.bashrc`):
+
+```
+export SCRIPTS="$HOME/.scripts"
+```
 
 ---
 
 > [!TIP]
-> Ensure that every file in your `$SCRIPTS` directory is part of a git repository; otherwise, the script won't find any commit history. As an improvement, consider adding error handling for cases where a file isn't part of a git repo. Additionally, using absolute paths for `$SCRIPTS` and handling cases where `fd`, `git`, or other commands aren't available would make the script more robust.
+> - Files not tracked by git will have today's date as their "birthday", which may not reflect their true age.
+> - All `basename` calls strip directory paths; if multiple files have identical names in different directories, you'll lose location context.
+> - Using `echo > "$BDAYS.temp"` truncates the file but leaves an empty line at the top of the CSV. Consider using `: > "$BDAYS.temp"` and filtering out empty lines.
+> - To improve efficiency, process substitution or parallelization might help with large numbers of files.
+> - Consider adding error handling (e.g., if `$SCRIPTS` isn't set, or if `fd`/`git` aren't available).

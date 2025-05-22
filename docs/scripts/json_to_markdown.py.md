@@ -2,40 +2,60 @@
 
 ---
 
-**json_to_markdown.py**: Convert JSON content to a formatted markdown file.
+**json_to_markdown.py**: Converts a simple JSON file (list of dicts with "role" and "content") to a styled Markdown file.
 
 ---
 
 ### Dependencies
 
-- `python`: The script is written in Python and requires a Python interpreter to run.
-- `json`: A built-in Python module for JSON parsing.
-- `os` and `sys`: Python modules used for file path management and accessing command-line arguments.
-
-### Description
-
-This script reads a JSON file and converts its contents into a markdown formatted document. The JSON is expected to have entries with `"role"` and `"content"` keys. Each entry becomes a section in the markdown file, where the `"role"` is capitalized and used as a heading and the `"content"` is included under it. The sections in the markdown are separated by lines of underscores.
-
-Key parts of the script:
-- The `json_to_markdown` function handles the conversion from JSON to markdown format.
-- It reads the JSON file, interprets the data, and compiles it into a markdown string, structuring each JSON entry into separate markdown sections.
-- In the main block, the script takes a file path as a command-line argument, converts the file, and writes the output to a new markdown file with a `.md` extension.
-
-### Usage
-
-To use this script, execute it from the command line with the path to the JSON file as an argument:
-
-```bash
-python /home/matias/.scripts/bin/json_to_markdown.py /path/to/input.json
-```
-
-This will generate a new file, replacing the `.json` extension with `.md` (if the file has a `.json` extension), or appending `.md` otherwise, in the same directory:
-
-```bash
-# Output example:
-# /path/to/input.md
-```
+- `python` (tested on Python 3)
+- Standard library modules only: `json`, `os`, `sys`
 
 ---
 
-> [!TIP] It's important to check the JSON file format before running the script, ensuring each entry contains "role" and "content". Additionally, the script lacks error-handling mechanisms for potential file reading/writing issues or JSON parsing errors. Implementing exception handling would improve its robustness, especially in scenarios where the file does not exist or doesn't comply with the expected JSON structure.
+### Description
+
+This script enables rapid conversion of structured dialogue data (stored in JSON files) into readable Markdown, using a minimal and direct approach. The expected JSON file format is a list of dictionaries, each with the keys `"role"` and `"content"`:
+```json
+[
+  {"role": "user", "content": "Hello!"},
+  {"role": "assistant", "content": "Hi there!"}
+]
+```
+
+The script:
+- Takes a path to a JSON file as a command-line argument.
+- Reads the file and parses the content.
+- Iterates over each entry, formatting it in Markdown:
+    - Displays the role (capitalized) as a header in bold and prefixed with hashes.
+    - Follows with an underline and the content.
+    - Delimits entries with horizontal rules (___).
+- Writes the Markdown output to a file in the same directory, with the same basename and `.md` extension.
+
+---
+
+### Usage
+
+**Basic usage from terminal:**
+```sh
+python /home/matias/.scripts/bin/json_to_markdown.py <path_to_json_file>
+```
+
+**Example:**
+```sh
+python ~/.scripts/bin/json_to_markdown.py ~/my_dialogue.json
+```
+- If the input is `~/my_dialogue.json`, the result will be `~/my_dialogue.md`.
+
+**Tip:**
+- This script can be run from a qtile keybinding, or any launcher, as long as you pass the JSON file as the first argument.
+
+---
+
+> [!TIP]
+> 
+> - The script assumes that every entry in the JSON is a dictionary with `"role"` and `"content"` keys. If any item is missing these keys, it will crash with a `KeyError`. Consider adding a try-except block to handle malformed inputs gracefully.
+> - There’s no command-line help (`-h`) or usage display, so running without arguments will throw an IndexError. Adding a usage message for missing/invalid arguments would improve robustness.
+> - Activity is silent: no console output or progress. For complex jobs or scripting integration, consider printing the output filename or a completion message.
+> - Scripts writes over existing `.md` files with the same name without warning.
+> - The MarkDown format is simple but could be enhanced with optional arguments (e.g. custom templates, append mode, etc.) for future iterations.

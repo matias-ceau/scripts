@@ -1,31 +1,68 @@
-# UGC Python Movie Extractor
+# UGC HTML Movie Titles Extractor
 
 ---
 
-**/home/matias/.scripts/dev/ugc-python.py**: Extracts movie titles from HTML content by parsing a designated div
+**ugc-python.py**: Extracts and lists movie titles from HTML input piped via stdin.
 
 ---
 
 ### Dependencies
 
-- `beautifulsoup4` – Python library used for parsing HTML content
-
-### Description
-
-This script is designed to extract movie titles from HTML input. It reads HTML data from standard input, parses it using the `BeautifulSoup` library with the `"html.parser"` backend, and searches for a div with the class `info-wrapper`. Upon locating this specific section, the script retrieves its text content, splitting it by line breaks to separate individual movie titles.
-
-To ensure it only extracts relevant movie titles, the script applies filters by ignoring lines that start with specific phrases, such as "Films avec de l'audio description" and "Rappel". The valid movie titles are then enumerated and printed to the standard output with a simple numbered list format.
-
-This utility is particularly useful when you have HTML output or saved files that contain a list of movies, and you want to quickly extract and format them for further processing or logging. The script’s design aligns with typical Arch Linux setups and can be integrated into workflows using the qtile window manager, where piping commands or capturing output is common practice.
-
-### Usage
-
-To run the script, make sure you have installed required dependencies like `beautifulsoup4`. You can execute it directly from the command line by piping in your HTML content, for example:
-
-    cat somefile.html | /home/matias/.scripts/dev/ugc-python.py
-
-This script is set up to be run non-interactively by reading from standard input. It can be bound to a key in qtile if you need to extract movie titles from web snippets on the fly.
+- `uv`  
+  _Alternative Python runner/virtual env manager, used to execute the script with dependencies resolved._
+- `beautifulsoup4`  
+  _HTML/XML parser; required for extracting movie titles from given HTML._
+- `python >= 3.13`  
+  _Script is intended for newer Python (adjust if using an older version)._
 
 ---
 
-> [!TIP] One potential improvement is to add error handling for cases where the HTML structure does not match expectations (e.g., missing div elements or changes in class names). Also, consider modularizing the filtering logic so it can be easily adapted if different or additional criteria need to be applied to the extracted text.
+### Description
+
+This script reads HTML from standard input, parses it, and extracts a clean list of movie titles from the first `<div class="info-wrapper">`.  
+It trims lines and filters out non-movie text blocks (like those starting with "Films avec de l'audio description" or "Rappel"), then prints each movie on a new line with a numeric index.
+
+**Main steps:**
+- Read the HTML content from stdin.
+- Parse with `BeautifulSoup` (`html.parser`).
+- Find the `<div>` with class `info-wrapper`.
+- Split and clean lines from the div's text.
+- Ignore irrelevant header/notification lines.
+- Output a numbered list to stdout.
+
+---
+
+### Usage
+
+**Pipe HTML to the script:**
+
+```sh
+cat page.html | uv run --script --quiet /home/matias/.scripts/dev/ugc-python.py 
+```
+or (if executable):
+```sh
+chmod +x /home/matias/.scripts/dev/ugc-python.py
+cat page.html | /home/matias/.scripts/dev/ugc-python.py
+```
+
+**Within Qtile:**
+- You can bind this script to a keybinding or use it in combination with a web scraping or clipboard utility.
+
+**Typical output:**
+```
+1. The Godfather
+2. Pulp Fiction
+3. Interstellar
+...
+```
+
+---
+
+> [!CAUTION]
+>
+> - The script assumes only a single relevant `<div class="info-wrapper">`. If the HTML structure changes or multiple such divs are present, some movies could be missed or repeated.
+> - No error is raised for missing dependencies; script will simply fail. Consider adding dependency checks.
+> - The shebang redundantly appears twice in the script. The second one (`#!/usr/bin/env python`) is ignored due to placement.
+> - Filtering logic is hardcoded for specific phrases (in French). If site notification text changes, false positives may appear.
+> - Would benefit from command-line options (for input file path or custom selectors).
+> - Adding optional output formats (CSV, JSON) could be useful for scripting.

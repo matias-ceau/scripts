@@ -1,39 +1,82 @@
-# Sync Repo Script
+# Python Git Repository Synchronizer
 
 ---
 
-**sync-repo.py**: Automates syncing of a git repository and handles conflicts
+**sync-repo.py**: Python utility for automating git repository synchronization with rich terminal UI, local/remote conflict handling, and progress feedback.
 
 ---
 
 ### Dependencies
 
-- `python` with the `argparse` module: Utilized for parsing command-line arguments.
-- `rich`: A Python library for beautiful and flexible terminal output.
-- `git`: Essential for the repository synchronization operations.
-
-### Description
-
-This Python script, `sync-repo.py`, is designed to automate the synchronization of a git repository. It handles various complexities such as fetching updates, stashing, merging, resolving conflicts, committing, and pushing changes. The script utilizes the `rich` library to provide an enhanced terminal output with progress bars, panels, and syntax highlighting, helping users understand the operations taking place under the hood.
-
-The script begins by parsing a single argument that specifies the directory of the git repository to be maintained. It then checks the validity of this directory and various prerequisites (such as git being initialized). The script employs subprocess calls to execute git commands and seamlessly manages merge conflicts and stash conflicts by prompting the user to make choices regarding file resolutions. Furthermore, if any changes are detected, the script constructs a commit message, adds all changes, and commits them. 
-
-### Usage
-
-This script should be executed from the terminal. Here’s how you can run it:
-
-```bash
-python sync-repo.py /path/to/your/repository
-```
-
-**Example Usage:**
-
-```bash
-python sync-repo.py /home/matias/projects/my_project
-```
-
-The script can be integrated into a daily or regular synchronization process or assigned to a keybinding in your window manager (such as QTile for Arch Linux) for quick access.
+- `python` (>=3.7): Required for script execution.
+- `rich`: For terminal UI components (progress bars, tables, syntax highlighting, etc.).  
+  > Install via: `pip install rich`
+- `git`: Used for command-line git operations.
+- User Environment:
+  - Editor: Uses `$EDITOR` (defaults to `vim`/`nvim` in some flows).
+  - Runs best in an interactive terminal.
+- Other tools: (used via subprocess in subshells, typically already installed)
+  - `awk`, `grep`, `sed` (for repo name extraction)
 
 ---
 
-> [!TIP] While the script handles merge conflicts and stash conflicts efficiently, consider adding more structured error handling for network-related issues (e.g., connection failures) during git fetch, pull, and push operations. Additionally, the script could improve user interaction by allowing all prompts to include a timeout fallback to a default action, useful for automated environments.
+### Description
+
+This script provides a streamlined workflow for synchronizing a git repository with its remote, automating fetch, pull, stash, add, commit, push, and handling both merge and stash conflicts interactively with concise feedback in a colorful Rich-style interface.
+
+#### Core features:
+- **Automatic Syncing:** Runs `git fetch`, handles fast-forwards, and rebases automatically. Attempts to keep the workflow non-blocking unless manual intervention is strictly required.
+- **Stash/Conflict Handling:** If you have uncommitted local changes, they're stashed and later re-applied. Any conflicts are detected, and the script offers clear options for manual resolution, keeping local/remote, or opening your `$EDITOR` for both merge or stash conflict resolution.
+- **Status and Summaries:** Summarizes repository state before and after sync, includes commit, time, and diff statistics in a tabular view.
+- **Commit Automation:** Automatically creates messages indicating the number of changes and basic user/host info.
+
+#### Functions breakdown:
+- `run_command`: Prints, runs, and syntax-highlights git commands.
+- `handle_merge_pull_conflicts` & `handle_stash_conflict`: User-friendly handling for git conflicts (merge or stash).
+- `display_summary`: Shows key commit/diff info in a table.
+- The script expects a git repo path, checks its validity, and runs in the selected folder.
+
+---
+
+### Usage
+
+Simple usage example (Arch, qtile, terminal):
+
+```
+python /home/matias/.scripts/bin/sync-repo.py ~/dev/my_project
+```
+
+Or for use as a keybinding (with qtile or similar WM):
+
+- Assign the script to a key shortcut, optionally with a dmenu prompt to select the repo path.
+
+**Behavior summary:**
+- If everything is clean: fetch/pull/commit/push quietly.
+- If changes/conflicts: prompts you, guides you through resolution.
+
+**Interactive resolution:**
+
+- During merge conflicts:  
+  - `[e]` open `$EDITOR`,  
+  - `[a]` abort merge,  
+  - `[s]` skip commit.
+- During stash conflicts:  
+  - `[r]` use remote,  
+  - `[l]` keep local,  
+  - `[m]` manual edit.
+
+---
+
+> [!TIP]
+>
+> - **Robustness:** Script mostly assumes origin/main structure. It could break for more complex remote configs or bare repos.
+> - **Hardcoded flows:** It assumes command-line tools like `awk`/`sed` in your shell, and some git commands are not cross-repo/branch robust.
+> - **Environment reliance:** Relies on `$EDITOR`, `$USER`, `$HOSTNAME` being set.
+> - **Potential improvements:**
+>   - Add thorough exception handling for subprocesses.
+>   - Make prompts/commands more configurable (select both branch and remote explicitly).
+>   - Use proper git plumbing over shell-grade command parsing for increased reliability.
+>   - Support dry-run mode or add logging.
+>   - Allow non-interactive operation for automation (e.g., pass options via args for CI).
+>
+> Despite being highly functional for daily CLI-driven syncing and conflict handling, be mindful of repo-specific edge cases and multi-remote/branch workflows!

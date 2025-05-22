@@ -1,42 +1,57 @@
-# Random Wallpaper Selector
+# Random Wallpaper Chooser
 
 ---
 
-**random_wallpapers.xsh**: Selects and sets a random wallpaper from a specified directory.
+**random_wallpapers.xsh**: Script to set a random wallpaper from the `~/.wallpapers` directory.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered, Unix-gazing shell language and command prompt.
-- `os`: A standard Python library module for interacting with the operating system.
-- `random`: A Python module providing functions to perform random operations.
-- `feh`: An image viewer and cataloguer often used for setting wallpapers.
-- `dmenu` *(commented out)*: A dynamic menu for X which may have been intended for user selection from a list.
+- `xonsh`: Python-powered shell language; required to interpret this script.
+- `feh`: Lightweight image viewer and wallpaper setter.
+- `dmenu` (commented-out): Fast, dynamic menu for X, useful for selecting wallpapers interactively ([currently not used in the script]).
 
 ### Description
 
-This script picks a random image file with extensions `.png` or `.jpg` from the user's wallpaper directory (`/home/matias/.wallpapers`) and sets it as the desktop background using `feh`. The script originally included a commented-out section that utilized `dmenu` to allow for manual selection of a wallpaper from a list, but this functionality is currently bypassed to randomize the selection automatically.
+This Xonsh script, intended for use on Arch Linux (with qtile as the Window Manager), selects a random PNG or JPG image from your `~/.wallpapers` directory and sets it as the desktop wallpaper using `feh` with the `--bg-scale` option.
 
-The function `os.listdir(folder)` is used to list all the files in the specified `folder`. A list comprehension filters this list to include only files with `.png` or `.jpg` extensions. The script then uses `random.choice(wallpapers)` to select one file at random. This file is set as the wallpaper using `feh` with the `--bg-scale` option, providing scaled background fitting.
+How it works:
+- Lists all files in your wallpaper folder.
+- Filters for files with `.png` or `.jpg` extensions.
+- Randomly picks one.
+- Sets it as your wallpaper.
+- Includes a commented-out section for using `dmenu` to interactively pick a wallpaper, but this code path is currently disabled.
 
 ### Usage
 
-The script is a simple command line application without any arguments. To use it, simply run the script in a terminal or set it as a task to be triggered (e.g., through a keybinding in `qtile` or a scheduled task). Here's how you can execute it from the terminal:
+Default usage is to run from your preferred shell or keybinding—no arguments required.
 
-```bash
-$ xonsh /home/matias/.scripts/bin/random_wallpapers.xsh
+```sh
+xonsh /home/matias/.scripts/bin/random_wallpapers.xsh
 ```
 
-Alternatively, it can be invoked automatically by integrating it with a keybinding within `qtile`'s configuration or using a cron job for periodic changes.
+#### As a qtile keybinding
 
-Example keybinding in `qtile` might be:
+Example (in your `config.py`):
 
 ```python
-Key([mod], "r", lazy.spawn("xonsh /home/matias/.scripts/bin/random_wallpapers.xsh")),
+Key([mod], "w", lazy.spawn("xonsh /home/matias/.scripts/bin/random_wallpapers.xsh"), desc="Set random wallpaper"),
 ```
+
+#### TL;DR
+
+- Place images (`.png`, `.jpg`) in `~/.wallpapers`.
+- Run the script:  
+  `xonsh /home/matias/.scripts/bin/random_wallpapers.xsh`
+- Enjoy a new random desktop background!
 
 ---
 
-> [!TIP]
-> Consider uncommenting and using `dmenu` to allow for user interaction if preferred over random selection. Additionally, you might want to include support for other image formats or enhance error handling to cover cases where no suitable image is found.
+> [!NOTE]
+> **Critique & Suggestions:**  
+> - If `~/.wallpapers` contains files with uppercase extensions (`.JPG`, `.PNG`), they will not be recognized. You could use `.lower()` to handle case-insensitive matches.
+> - No check for empty wallpaper directory; consider adding a condition to handle this gracefully.
+> - For a larger or more dynamic collection of wallpapers (nested folders), a recursive approach using `os.walk()` might be useful.
+> - The commented-out `dmenu` functionality could be toggled via a command-line flag for interactive vs. random selecting.  
+> - Using `feh --bg-scale ...` works well for most cases but may stretch or compress wallpapers; consider `--bg-fill` or others depending on your preference.

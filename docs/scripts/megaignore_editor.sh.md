@@ -1,45 +1,64 @@
-# Megaignore Editor
+# MegaIgnore File Editor
 
 ---
 
-**megaignore_editor.sh**: Interactive editor for .megaignore files using `fzf` and `nvim`.
+**megaignore_editor.sh**: Fuzzy finder interface for searching, editing, and deleting `.megaignore` files.
 
 ---
 
 ### Dependencies
 
-- `fd`: Finds files with specified patterns; used here to locate `.megaignore` files.
-- `fzf`: A command-line fuzzy finder; used for selecting files and integrating previews.
-- `bat`: A `cat` clone with syntax highlighting; used for file preview.
-- `nvim`: The hyperextensible Vim-based text editor; used to edit selected files.
-- `rm`: Standard Unix command for removing files; used here to delete files interactively.
+- `fd`: Fast and user-friendly alternative to `find`, used for locating `.megaignore` files.
+- `fzf`: Command-line fuzzy finder to interactively select files.
+- `bat`: A `cat` clone with syntax highlighting in the preview pane.
+- `nvim`: Neovim editor, for opening selected files.
+- `rm`: Standard UNIX tool for removing files.
+- Bash shell.
+- (Optionally) runs best under a terminal in Arch Linux with qtile window manager.
 
 ### Description
 
-The `megaignore_editor.sh` script aids in managing `.megaignore` files scattered throughout your home (`$HOME`) and mounted (`/mnt`) directories. It leverages `fd` to locate these specific files and present them in an interactive selection interface powered by `fzf`.
+This script provides an interactive tool for managing your `.megaignore` files scattered throughout your home and `/mnt` directories. It continuously presents you with a fuzzy finder list (via `fzf`) of all `.megaignore` files found by `fd`. 
 
-- The script uses `fd` to search recursively for `.megaignore` files. 
-- `fzf` presents these files, allowing you quick access to view and edit them using `nvim`. By default, a file preview is shown using `bat`.
-- You can press `Enter` to open a selected file in `nvim` for editing.
-- `Ctrl-d` allows for the deletion of the selected `.megaignore` file permanently.
-- After each action, you are prompted if you want to continue or quit the script.
+Key functions:
+- **Preview**: When browsing, the contents of each file are previewed with syntax highlighting by `bat`.
+- **Edit**: Pressing `Enter` opens the selected file in `nvim` for editing.
+- **Delete**: Pressing `Ctrl-D` deletes the selected file using `rm`.
+
+After each fuzzy finder session, you're asked if you want to continue; typing `n` exits the script, hitting Enter or any other key starts a new search cycle.
 
 ### Usage
 
-This script is intended to be executed interactively in a terminal. 
+The script is designed to be run in a terminal session:
 
-```bash
-# Navigate to the directory containing megaignore_editor.sh or add it to your PATH
-./megaignore_editor.sh
+```sh
+~/.scripts/bin/megaignore_editor.sh
 ```
 
-- **To edit a file:** Use arrow keys to navigate, press `Enter` to open the file in `nvim`.
-- **To delete a file:** Navigate and press `Ctrl-d`.
-- **To exit:** When prompted, type `n` and press Enter to stop the loop.
+- Upon running, you'll be presented a list of all `.megaignore` files.
+- Use the interactive fuzzy search to filter files.
+- **Preview** content: Automatically shown on selecting any file.
+- **Edit file**: Press `Enter`—opens in Neovim.
+- **Delete file**: Press `Ctrl-D`.
+- After exiting the fzf window, confirm if you'd like to continue.
 
-This utility can be optionally set to run with a hotkey in `qtile`, automating the execution from your window manager environment.
+#### Example session
+
+1. Run the script:
+    ```sh
+    ~/.scripts/bin/megaignore_editor.sh
+    ```
+2. Use fzf to select and preview `.megaignore` files.
+3. Hit `Enter` to edit, or `Ctrl-D` to delete.
+4. Respond to the prompt to repeat or exit.
 
 ---
 
 > [!TIP]
-> This script is robust for its basic functionality, but there are potential enhancements. You could add logging for file edits and deletions, improve user prompts for more informed decisions, or incorporate error handling for cases where dependencies aren't met. Additionally, confirming deletions more explicitly could prevent accidental data loss.
+> 
+> - There’s no confirmation for `rm`, which could lead to accidental file loss; consider adding a confirmation step.
+> - The script assumes all dependencies (`fd`, `fzf`, `bat`, `nvim`) are installed and available in your `PATH`.
+> - Users not running Neovim should adjust the editor to preference.
+> - If you have many `.megaignore` files or filesystem access is slow, there might be a short delay while running `fd`.
+> - Handling file names with spaces could be improved (e.g., quoting `{}` parameters more carefully).
+> - Long-running in an infinite loop; user can only exit cleanly by entering `n` at the prompt. Optional early exit (e.g., by pressing `q` in `fzf`) could be a nice feature.

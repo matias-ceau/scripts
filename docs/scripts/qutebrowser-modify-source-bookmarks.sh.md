@@ -1,34 +1,74 @@
-# Qutebrowser Bookmark Synchronization Script
+# qutebrowser Bookmark & Session Sync Script
 
 ---
 
-**qutebrowser-modify-source-bookmarks.sh**: Script to sync Qutebrowser bookmarks and sessions with Chezmoi
+**qutebrowser-modify-source-bookmarks.sh**: Synchronizes qutebrowser bookmarks, quickmarks, and sessions with chezmoi dotfiles.
 
 ---
 
 ### Dependencies
 
-- `qutebrowser`: A keyboard-focused browser with vim-like bindings.
-- `chezmoi`: A tool to manage your dotfiles securely and across multiple machines.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
+- `qutebrowser`  
+  *Web browser—must have bookmarks and quickmarks functionality enabled.*
+
+- `chezmoi`  
+  *A dotfiles manager, used here to track changes and source control your config files.*
+
+- `fd`  
+  *Simple, fast file search utility used for finding `.yml` session files.*
+
+- `git` (commented out in script)  
+  *For version control of synced files within chezmoi repository.*
+
+- **Environment variables required:**  
+  - `$XDG_CONFIG_HOME`
+  - `$XDG_DATA_HOME`
+  - `$CHEZMOI`
+  - `$LOCALDATA`
+
+---
 
 ### Description
 
-The `qutebrowser-modify-source-bookmarks.sh` script is designed for maintaining synchronization between local Qutebrowser bookmarks, quickmarks, and session files with their respective remote counterparts managed through Chezmoi. This script utilizes environmental variables such as `$XDG_CONFIG_HOME`, `$CHEZMOI`, `$XDG_DATA_HOME`, and a custom `$LOCALDATA` to determine file paths.
+This script is intended to be used on an Arch Linux system, specifically by users managing `qutebrowser` bookmarks, quickmarks, and session files with `chezmoi`. It synchronizes your current browser data (from local qutebrowser config locations) to your chezmoi-managed dotfiles directory. 
 
-It primarily copies bookmark and quickmark files to your Chezmoi directory to ensure these are backed up and potentially versioned. Additionally, the script iterates over Qutebrowser session files, identifies new or modified `.yml` session files, and adds them to Chezmoi for tracking. Although commented out, the script contains placeholders for automating the addition and commit process using `git` after modifying the bookmarks.
+Key actions:
+
+- Waits 20 seconds to ensure new quickmarks are written (e.g., after adding via qutebrowser).
+- Copies local bookmarks and quickmarks files to your chezmoi repository.
+- Finds all `.yml` session files and ensures they're tracked in chezmoi. If not already under chezmoi control, adds them with `chezmoi add`.
+- Copies updated session files to a parallel session storage directory (`$LOCALDATA/qutebrowser/sessions`).
+- Contains optional (commented out) steps for automatically committing and pushing changes to a git repository within the chezmoi directory.
+
+---
 
 ### Usage
 
-To execute this script, simply run it from the terminal. Ensure that all dependencies are installed and that the necessary environment variables (`$XDG_CONFIG_HOME`, `$CHEZMOI`, etc.) are correctly set up in your environment.
+**Basic usage:**
 
 ```bash
-bash /home/matias/.scripts/bin/qutebrowser-modify-source-bookmarks.sh
+~/.scripts/bin/qutebrowser-modify-source-bookmarks.sh
 ```
 
-For automated backups and syncing, you might consider scheduling this script using a cron job or integrating it with a qtile keybinding if you wish to run it manually.
+**Practical integration:**
+
+- Run this script after making changes to your bookmarks or quickmarks in qutebrowser.
+- For smoother workflow, consider binding it to a qtile key or running it via a custom menu, e.g.:
+  ```python
+  # in your qtile config
+  Key([mod], "F8", lazy.spawn("~/.scripts/bin/qutebrowser-modify-source-bookmarks.sh"))
+  ```
+
+**Example cronjob (if you want periodic syncs):**
+```
+*/30 * * * * /home/matias/.scripts/bin/qutebrowser-modify-source-bookmarks.sh
+```
 
 ---
 
 > [!TIP]
-> The script contains a 20-second `sleep` command which could lead to unnecessary delays. Consider checking if this is essential, and if not, reduce or remove it for faster execution. Additionally, the git automation part is commented out. If version control with git is intended, it would be beneficial to enable and test this functionality.
+> - The script assumes all relevant environment variables are set and directories exist. If not, it will fail silently or produce confusing errors.
+> - The 20 second sleep before copying quickmarks could be optimized (e.g., watching file change instead of a fixed sleep).
+> - Consider uncommenting and robustifying the git commit/push section for automatic version control.
+> - You might want to add error handling for missing files or unset variables for robustness.
+> - For performance, using `rsync` instead of `cat`/file copying could be considered, especially when large session files are involved.

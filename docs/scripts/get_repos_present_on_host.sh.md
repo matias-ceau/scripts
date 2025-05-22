@@ -1,47 +1,68 @@
-# Repository List Generator
+# get_repos_present_on_host.sh
 
 ---
 
-**get_repos_present_on_host.sh**: Script to list Git repositories present on the current host.
+**get_repos_present_on_host.sh**: List and register two-level git repos present under `$GIT_REPOS` for this host.
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in bash and requires it to be executed.
-- `hostnamectl`: Utilized to fetch the current hostname.
-- `find`, `sed`, `awk`, `sort`, `mkdir`, `echo`: Standard Unix tools used to process and manage file paths.
+- `bash`: Required to run the script.
+- `find`: Used to recursively locate `.git` folders.
+- `sed`, `awk`, `sort`, `cat`, `mkdir`: Standard GNU core utilities for stream editing, text processing, sorting, file concatenation, and directory management.
+- **Environment variables (required):**
+  - `$GIT_REPOS`: Root path where git repositories are stored.
+  - `$LOCALDATA`: Root data directory where results are written.
 
 ### Description
 
-This script is designed to scan through a specified directory to locate Git repositories that are present on the host machine. It's an efficient tool for organizing and documenting your local repositories based on the host identity.
+This script catalogs git repositories under a set location on your Arch Linux system. It determines all repositories present under the `$GIT_REPOS` directory which are exactly two directory levels deep (`org/repo/.git`), formats their paths, and records them in a host-specific file as well as a central index of all repositories.
 
-- **Environment Variables**:
-  - `GIT_REPOS`: The base directory where all Git repositories are stored.
-  - `LOCALDATA`: The base directory where output files should be saved.
+**Main Steps:**
+- Checks for the existence of the required environment variables.
+- Dynamically builds output paths, segregated per host using the output of `hostnamectl hostname`.
+- Uses `find` to gather all `.git` directories under `$GIT_REPOS`, `sed` to convert them to `org/repo` format, and `awk` to filter for two-level deep results only.
+- Writes results to a host-specific file, deduplicates it, and appends/sorts into an `all-repos.txt` containing all discovered repositories across hosts.
+- Ensures output directories exist before use.
 
-The script performs the following tasks:
-1. Fetches the current hostname using `hostnamectl`.
-2. Constructs paths for output files based on the hostname.
-3. Ensures the output directory exists.
-4. Locates and lists all Git repositories under the `GIT_REPOS` directory with specific structure.
-5. Outputs this list to a file named after the host in the `LOCALDATA/docs/git_repos/` directory.
-6. Appends this list to a file `all-repos.txt` to maintain a comprehensive record.
-7. Sorts and removes duplicates in both output files to ensure uniqueness.
+**Utility:**  
+Ideal for syncing or auditing repositories per-machine, especially useful for dotfile management, multi-host setups, or scripting hooks within your qtile environment.
 
 ### Usage
 
-To use the script, make sure the environment variables `GIT_REPOS` and `LOCALDATA` are set. You can execute the script directly from the terminal. Here is a typical usage pattern:
+Before running, you must ensure the two environment variables are set:
 
-```bash
-export GIT_REPOS=/path/to/your/repositories
-export LOCALDATA=/path/to/save/data
-/home/matias/.scripts/bin/get_repos_present_on_host.sh
+```shell
+export GIT_REPOS="$HOME/repos"
+export LOCALDATA="$HOME/.local/share"
 ```
 
-This will produce text files in the format `/path/to/save/data/docs/git_repos/[HOSTNAME]-repos.txt` listing all unique repositories for the current host.
+To run interactively or in scripts:
+
+```shell
+~/.scripts/bin/get_repos_present_on_host.sh
+```
+
+**Typical output files:**
+- `$LOCALDATA/docs/git_repos/$(hostname)-repos.txt` : Repos for this host.
+- `$LOCALDATA/docs/git_repos/all-repos.txt`         : Master list of all repos.
+
+**Examples**
+
+```shell
+# Standard execution
+GIT_REPOS=~/repos LOCALDATA=~/.local/share ~/.scripts/bin/get_repos_present_on_host.sh
+
+# Manually set and run in one line
+GIT_REPOS=/mnt/store/git LOCALDATA=/data ~/.scripts/bin/get_repos_present_on_host.sh
+```
 
 ---
 
-> [!TIP]
-> The script assumes that repositories have a specific directory depth (two directories from the base `GIT_REPOS` path). If your repository structure varies, consider modifying the `awk` command accordingly. Additionally, error handling can be enhanced by checking for failure cases after critical operations like `mkdir` or `find`.
+> [!NOTE]
+> - Only repositories at two directory levels (like `org/repo/.git`) are counted; deeper or shallower structures are ignored.
+> - The script appends to `all-repos.txt` before deduplication, so historical order is not strictly preserved.
+> - There is no check for writable permissions; if the script fails, ensure both directories specified by `$LOCALDATA` exist and are writable.
+> - If run frequently on large directory trees, consider limiting depth in the `find` call for performance, or moving deduplication outside append loop for efficiency.
+> - Hostname extraction assumes nothing unusual about your hostname (no special chars, embedded slashes, etc).

@@ -2,38 +2,62 @@
 
 ---
 
-**keyboard-help.sh**: Displays keyboard layout using a Python script in a floating terminal
+**keyboard-help.sh**: Displays keyboard layout help in a floating terminal with syntax highlighting
 
 ---
 
 ### Dependencies
 
-- `show_keyboard_layout.py`: A Python script to display the keyboard layout.
-- `xterm`: A terminal emulator for the X Window System.
-- `bat`: A cat clone with syntax highlighting and Git integration.
-- `setsid`: Utility to run a program in a new session.
+- `show_keyboard_layout.py` — Script providing a list or visual of the system's keyboard layout(s).
+- `xterm` — Terminal emulator used to display the output.
+- `setsid` — Utility to run a command in a new session.
+- `bat` — A `cat` clone with syntax highlighting and paging, improves readability.
+- `bash` — The shell used to execute the command.
+
+---
 
 ### Description
 
-This script is designed for Arch Linux users utilizing the qtile window manager to help display their current keyboard layout. It uses a previously defined Python script `show_keyboard_layout.py` which is supposed to generate the layout information. The script opens this information in a floating `xterm` window with the title `KB_layout_floating` and a font size of 20. The `bat` command is used to provide nice syntax highlighting and paging. The whole command is wrapped in a `setsid` call to ensure it runs in a separate process, detaching it from the current terminal.
+This script is designed to quickly display your keyboard layout documentation in a floating terminal window—making it useful for reference or learning custom keybindings. Here’s how it works step by step:
+
+1. **Finds the Keyboard Script:**  
+   It locates `show_keyboard_layout.py` with `which` to ensure it picks the correct script file.
+
+2. **Floating Terminal**:  
+   It then runs the script in `xterm`, forcing a custom title (`KB_layout_floating`) and a large 20-point font for clarity.  
+   The `setsid` command ensures the terminal is launched as an independent session (preventing it from being closed if the calling session closes).
+
+3. **Syntax Highlighting with `bat`:**  
+   Output from your keyboard layout script is piped into `bat`, turning the terminal window into a scrollable, well-formatted display.
+
+---
 
 ### Usage
 
-This script can be run directly from the terminal or bound to a keybinding in qtile for quick access. Here’s an example of how you might use it:
+You can run this script directly from the command line or map it to a keybinding in qtile for quick access.
 
-```bash
+**Command-line:**
+```
 ~/.scripts/bin/keyboard-help.sh
 ```
 
-To bind it to a key in qtile, include a similar keybinding in your qtile configuration:
-
+**Qtile keybinding example (in your `config.py`):**
 ```python
-Key([mod], "k", lazy.spawn("~/.scripts/bin/keyboard-help.sh")),
+Key([mod], "F1", lazy.spawn("~/.scripts/bin/keyboard-help.sh"))
 ```
+> Replace `[mod]` with your mod key (e.g., "mod4" for the Super/Windows key).
 
-This binds the Mod key and 'k' to running the script.
+**What you'll see:**  
+A floating `xterm` window titled `KB_layout_floating` that displays your current keyboard layout in a readable, scrollable format.  
+Use arrow keys to scroll, `q` to quit (`bat`'s navigation).
 
 ---
 
 > [!TIP]
-> Ensure that the `show_keyboard_layout.py` script is executable and correctly returns the desired keyboard layout. Additionally, consider whether `bat` is necessary if paging output isn't required; using plain `cat` may simplify the script. If `xterm` customization is extensive, you could directly specify any needed xterm configurations in the script rather than relying only on command line options.
+> 
+> *Potential improvements and critique*:
+> - The script assumes `show_keyboard_layout.py` is in your `$PATH` and executable; you may wish to check this explicitly and print a friendly error if missing.
+> - If `bat` or `xterm` are not installed, the script will fail silently. Adding dependency checks and error messages can make debugging easier.
+> - Consider supporting other terminal emulators (like `alacritty` or `urxvt`) if you swap away from `xterm` in the future.
+> - The terminal is not forced to float; if your qtile rules don’t float windows with the given title/class, you may wish to set up a rule or call `wmctrl`/Qtile hooks to do so.
+> - If you frequently need this, consider caching the keyboard layout if generation is slow.

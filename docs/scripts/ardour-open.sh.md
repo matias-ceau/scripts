@@ -2,44 +2,76 @@
 
 ---
 
-**ardour-open.sh**: Opens the most recently modified Ardour session with a preview option through `fzf`.
+**ardour-open.sh**: Interactive picker for Ardour sessions with formatted preview and recent-first sort
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is implemented as a Bash script.
-- `fd`: Used to search for files with the `.ardour` extension.
-- `xargs`: Utilized to format the file paths.
-- `stat`: Extracts modification time of files.
-- `sed`: For text manipulation to format paths and output.
-- `improved-fzfmenu.sh`: A custom script that acts as an input selector using `fzf`.
-- `bat`: A code highlighter used to display XML contents with proper syntax highlighting.
-- `ardour`: The audio workstation opened by the script.
+- `fd`: Fast, user-friendly alternative to `find`, used to locate `.ardour` files in your audio projects directory.
+- `stat`: Retrieves modification timestamps, required for sorting sessions by recency.
+- `xargs`, `sed`, `sort`: Standard Unix tools for manipulating file lists and formatting.
+- `bat`: Syntax-highlighted preview for `.ardour` project files in FZF preview pane.
+- `improved-fzfmenu.sh`: Custom script or wrapper (user-supplied); used to invoke `fzf` with enhanced options.
+- `fzf`: Fuzzy finder for interactive selection.
+- `ardour`: The DAW itself, to open the selected session.
+
+---
 
 ### Description
 
-This script aids in managing Ardour sessions by offering a way to open the most recently modified `.ardour` file within a certain directory hierarchy. It utilizes `fd` to find `.ardour` files within the `AUDIO_PROJECTS` directory, lists them by modification time using `stat`, sorts them with `sort`, and formats the output with `sed`. The use of ANSI color codes enhances readability in the terminal as it shows navigational paths in distinct colors.
+This script provides an interactive way to open Ardour sessions from your `~/audio/PROJECTS` directory.
 
-The script employs a custom `improved-fzfmenu.sh` for interactive selection, allowing the user to preview the session file's XML structure through `bat` before opening it with Ardour. This ensures that users have a clear and colorful view of their session metadata during selection, enhancing the usability of this script especially within terminal environments.
+#### How it works:
+
+- It uses `fd` to search for all `.ardour` session files under your `AUDIO_PROJECTS` root.
+- Outputs are sorted by modification time (most recent first), via `stat` and `sort`.
+- The session list is color-formatted to distinguish paths, then shown in an FZF-based menu using the user script `improved-fzfmenu.sh`.
+- A syntax-highlighted preview of each `.ardour` XML file is available (using `bat`) in the FZF preview window.
+- When a session is selected, the script opens it with Ardour, stripping color escape sequences as needed.
+
+Functions are modular:
+- `search_cmd`: Gathers, sorts, and formats available sessions.
+- `strip_ansi`: Removes ANSI color codes (internal use).
+- `get_path`: Resolves selected session to its absolute, uncolored path.
+- `preview_cmd`: Provides text preview for the FZF pane.
+- The main workflow (bottom of script) orchestrates calling these utilities.
+
+---
 
 ### Usage
 
-To use the script, make sure all dependencies are installed and the necessary environment variables are set, specifically `AUDIO_PROJECTS`, which should point to your Ardour project directory:
+You can run this script in your terminal:
 
-```bash
-export AUDIO_PROJECTS="$HOME/audio/PROJECTS"
-```
-
-Run the script from the terminal:
-
-```bash
+```sh
 ~/.scripts/bin/ardour-open.sh
 ```
 
-This will produce a list of sessions in the terminal where you can use the interactive menu to select and preview the session you want to open. The selected session will then open with Ardour.
+Or, assign it to a keybinding in your Qtile config for quick access.
+
+#### Example (tldr):
+
+```sh
+ardour-open.sh
+```
+_Select session interactively → see colored list + preview → press ENTER to open in Ardour_
+
+**Arguments:**  
+No command-line arguments required; all configuration is by convention (`$HOME/audio/PROJECTS`).
+
+**Key Integration Tip:**  
+For fastest workflow on Qtile, bind to a convenient key (e.g., Mod4+a).
 
 ---
 
 > [!NOTE]
-> The script requires the `improved-fzfmenu.sh`, which wasn't detailed or included. Ensure this script is available in your path. Additionally, improving error handling and ensuring paths are not assumed could make the script more robust. Allow customization for users with different directory configurations or on systems other than Arch Linux.
+>
+> - **Hardcoded paths:** The project directory is set via `export AUDIO_PROJECTS="$HOME/audio/PROJECTS"`. Hardcoding may be inflexible if you change machines/locations. Consider moving this to a config file or supporting command-line overrides.
+>
+> - **Reliance on user script:** `improved-fzfmenu.sh` is not standard; ensure it’s robust and maintained.
+>
+> - **Color formatting:** The color escape codes in search results look nice but could cause problems if the script is ever used outside FZF (since it relies on “--ansi”). Ensure `strip_ansi` covers all edge cases.
+>
+> - **Potential performance:** For very large audio project trees, the stat + sort step might add noticeable delay. For now, it should be fine for typical project counts.
+>
+> - **Preview width/behavior:** Preview window width is hardcoded; if you have small terminals, tweak the `--preview-window` parameter.

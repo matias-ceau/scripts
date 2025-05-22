@@ -1,71 +1,68 @@
-# Manual Search History Analyzer
+# RTMF: Read The Fucking Manual History Query Tool
 
 ---
 
-**read_the_fucking_manual.sh**: Lists and analyzes the most searched manual entries.
+**read_the_fucking_manual.sh**: Query and analyze your `man`/`batman` usage history for most searched entries.
 
 ---
 
 ### Dependencies
 
-- `bash`: Required to execute the script.
-- `rg` (ripgrep): Utilized for searching and filtering manual search entries.
-- `sed`: Used for parsing history entries.
-- `awk`: Employed for formatting and threshold filtering.
-- `bat`: Used for enhanced help display.
-
-### Description
-
-This script analyzes the shell history from both `zsh` and `bash`, extracting and listing the most frequently searched manual entries. Its primary function is to display which commands have had their manuals queried the most – using either `man` or `batman`. 
-
-The script fetches command names from the history files located at paths defined by the `XDG_STATE_HOME` environment variable. It processes these entries to reflect on the command popularity by performing several operations:
-- Filtering out manual command invocations such as `man` and `batman`.
-- Counting unique entries to display frequency.
-- Sorting for easy viewing by frequency.
-
-### Usage
-
-Run the script from a terminal. It supports several options for customizing the output, as outlined below:
-
-```sh
-./read_the_fucking_manual.sh # Display the top 10 most searched manual entries
-```
-
-#### Options
-
-- **Default (no arguments):** Displays the top 10 most frequently searched manual entries.
-  
-- `-h`, `--help`: Displays a help message detailing usage options.
-  
-  ```sh
-  ./read_the_fucking_manual.sh -h
-  ```
-
-- `-n`, `--number <nb>`: Specify the number of top entries to display.
-  
-  ```sh
-  ./read_the_fucking_manual.sh -n 5 # Top 5 searches
-  ```
-
-- `-m`, `--more-than [<nb>]`: Displays entries searched more than the specified number of times (default is 1).
-  
-  ```sh
-  ./read_the_fucking_manual.sh -m 2 # Entries searched more than twice
-  ```
-
-- `-a`, `--all`: Displays all entries regardless of search frequency.
-
-  ```sh
-  ./read_the_fucking_manual.sh -a
-  ```
-
-- `[<rg_arguments>]`: Pass any arguments directly to `ripgrep` to perform a search across all search entries.
-
-  ```sh
-  ./read_the_fucking_manual.sh "grep"
-  ```
+- `bat` — Enhanced `cat` clone, used here to pretty print help.
+- `ripgrep` (`rg`) — Fast, recursive search tool for filtering and searching entries.
+- `sed`, `awk`, `cut`, `sort`, `uniq` — Standard Unix command-line tools for parsing and analyzing your shell history.
+- Your shell (`bash` and/or `zsh`) must store history files at `$XDG_STATE_HOME/bash/history` and `$XDG_STATE_HOME/zsh/history`.  
+- Optional: `batman` (`bat` + `man`), if you also use that for reading manuals.
 
 ---
 
-> [!NOTE]
-> The script could benefit from additional error handling, particularly for cases where dependencies might be missing or when the requested history files do not exist. Additionally, it may be useful to check if `XDG_STATE_HOME` is set and provide a default if not, enhancing portability across different environments.
+### Description
+
+This script aggregates and analyzes your usage of `man` and `batman`, helping you identify which manuals you check the most. It parses your history files (both Bash and Zsh), extracts invocations of `man` and `batman`, and summarizes how often each manual page is looked up.
+
+Key features:
+- **Top searches**: Displays your most frequently referenced manual pages.
+- **Threshold filtering**: Show only entries above a certain number of searches.
+- **Flexible search**: Pass any arguments, and they are sent to `ripgrep` for powerful filtering.
+- **Customizable count**: Show as many (or as few) results as you want.
+
+#### How it works
+- Combines history from Bash and Zsh.
+- Pulls out all manual lookups (`man` or `batman` commands), ignoring options and only capturing the main entry/page.
+- Counts and sorts entries, so you immediately see which tools you reference the most.
+
+---
+
+### Usage
+
+```
+$ read_the_fucking_manual.sh
+# Show the 10 most searched manual entries
+
+$ read_the_fucking_manual.sh -n 20
+# Show the top 20 most searched
+
+$ read_the_fucking_manual.sh --all
+# Show all searched manual pages sorted by frequency
+
+$ read_the_fucking_manual.sh --more-than 2
+# Show all entries searched more than twice
+
+$ read_the_fucking_manual.sh ls
+# Search for entries matching "ls" pattern (uses ripgrep)
+
+$ read_the_fucking_manual.sh -h
+# Show help text in a pretty way (via bat)
+```
+
+You can run this script interactively in a terminal or bind it to a key in Qtile for quick access.
+
+---
+
+> [!TIP]
+> 
+> - The script assumes your Bash and Zsh history files are located at `$XDG_STATE_HOME/bash/history` and `$XDG_STATE_HOME/zsh/history`, which may not match your current setup (default is usually `$HOME/.bash_history`/`.zsh_history`). Consider making this configurable or more autodetecting.
+> - Filtering out arguments after man/batman may sometimes drop intended multi-word lookups (like `man git log`), so the counting is on the first word after `man`.
+> - No colored output except for the help section; you might want to add color to the frequency column for clarity.
+> - Edge case: If `$2` isn't set for some options, the script might misbehave. Add input validation for safer argument parsing.
+> - Consider supporting other shells or making the history path override via env variable or script argument.

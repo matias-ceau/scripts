@@ -1,48 +1,80 @@
-# SSH Command Selector
+# ssh-fzf — Fuzzy SSH Command Launcher
 
 ---
 
-**ssh-fzf.sh**: Select and execute an SSH command from a list
+**ssh-fzf.sh**: Fuzzy-find and execute ssh commands from `pass` using `fzf`.
 
 ---
 
 ### Dependencies
 
-- `pass` – A password management tool used here to retrieve saved SSH commands.
-- `fzf` – An interactive command-line fuzzy finder that allows quick selection of a command.
-- `bash` – The script relies on Bash for execution, particularly using a login shell (`bash -l`).
-
-### Description
-
-This script facilitates the selection and execution of SSH commands stored in your password manager database (managed by `pass`). It retrieves a list of commands labeled under "ssh_cmds" from `pass` and pipes them into `fzf` for interactive selection.
-
-The workflow is straightforward:
-1. The script calls `pass ssh_cmds` to retrieve a set of SSH command entries.
-2. These commands are fed to `fzf`, allowing you to swiftly search and choose one.
-3. If a command is selected (i.e., the variable `_chosen` is non-empty), the script spawns a new Bash login shell (`bash -l -c`) to execute the chosen command.
-
-This design efficiently integrates secure storage, fuzzy search, and command execution, letting you quickly initiate SSH sessions with minimal keystrokes—ideal for environments like Arch Linux running a window manager like qtile.
-
-### Usage
-
-To use this script:
-- Ensure you have `pass`, `fzf`, and Bash installed on your Arch Linux system.
-- Populate your `pass` database with SSH commands under the "ssh_cmds" entry.
-- Make the script executable if it isn’t already:
-
-  chmod +x /home/matias/.scripts/bin/ssh-fzf.sh
-
-- Execute the script from a terminal:
-
-  /home/matias/.scripts/bin/ssh-fzf.sh
-
-- Alternatively, you can bind the script to a key in your qtile configuration for quick access.
-
-Example (in a terminal):
-
-  $ /home/matias/.scripts/bin/ssh-fzf.sh
+- `pass`: Secure password manager storing and retrieving passwords, ssh commands here.
+- `fzf`: Command-line fuzzy finder for interactive selection.
+- `bash`: Ensures commands are run in a login shell.
+- Entry in `pass` (by convention: `ssh_cmds`): Should store a newline-separated list of SSH commands.
 
 ---
 
-> [!TIP]  
-> The script assumes that SSH commands are properly stored in your `pass` database under "ssh_cmds". Consider adding error handling for situations where the command might not be valid or if `pass` returns no results. Additionally, be cautious with commands that require specific environment variables; executing them in a new login shell may have unexpected behaviors if your login profiles are not set up accordingly.
+### Description
+
+This script is designed to quickly launch SSH connections using commands securely stored and organized in your `pass` password store. The SSH commands must be saved as entries under `ssh_cmds` within `pass`—each command on a separate line.
+
+**What it does:**
+
+1. Retrieves SSH command entries using `pass ssh_cmds`.
+2. Presents them in `fzf` so you can fuzzy search and pick one interactively.
+3. If a choice is made, it runs it in a login shell to ensure shell config is sourced.
+
+This integration is useful for users who manage multiple SSH hosts and want an ergonomic CLI workflow leveraging security and efficiency. Designed for minimal user interaction and intended as a quick-launch tool—ideal for workflow integration in qtile keybindings or simply from a terminal prompt.
+
+---
+
+### Usage
+
+#### Interactive Terminal
+
+Just run:
+
+```
+~/.scripts/bin/ssh-fzf.sh
+```
+
+#### From qtile Keybinding
+
+Add a keybinding in your qtile config, for example:
+
+```python
+Key([mod], "s", lazy.spawn("~/.scripts/bin/ssh-fzf.sh"))
+```
+
+#### How to populate your `pass` entry
+
+Store your SSH commands under `ssh_cmds` (newline-separated):
+
+```
+pass insert ssh_cmds
+```
+For example (paste one per line):
+```
+ssh matias@server1
+ssh otheruser@backup-host
+ssh -p 2222 me@myspecialbox
+```
+
+**Tldr:**
+
+```
+# Populate ssh_cmds in pass
+pass insert ssh_cmds
+
+# Invoke the script (choose host interactively)
+~/.scripts/bin/ssh-fzf.sh
+```
+
+---
+
+> [!TIP]
+> - If the `ssh_cmds` entry is missing in `pass`, the script will fail silently—consider adding error handling for missing or empty entries.
+> - The script assumes each line in `ssh_cmds` is a safe, valid SSH command. There's a potential risk if any line is not an SSH command or contains malicious shell code.
+> - You may want to refresh your `pass` store or `fzf` index if changes aren't being picked up immediately.
+> - For more complex workflows, consider also copying other connection information (like passwords/keys) or extending the script to manage multiple categories of remote hosts.

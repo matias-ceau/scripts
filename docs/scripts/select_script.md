@@ -1,45 +1,62 @@
-# Script Selector with Cache Integration
+# Script Selector Utility
 
 ---
 
-**select_script**: A tool to select and execute scripts from a cached list using `rofi`.
+**select_script**: Interactively select and execute a script from cached metadata using Rofi
 
 ---
 
 ### Dependencies
 
-- `rofi`: A window switcher, run dialog, and dmenu replacement that helps in selecting scripts from a list.
-- `glibc`: Required for standard C library functions such as `printf` and `fopen`.
+- `rofi`: Pop-up menu for selection; must support `-markup-rows`.
+- `~/.cache/script_info.csv`: CSV file containing script metadata (must exist and be regularly updated).
+- Scripts located in `~/.scripts/`: The script target directory; selected scripts must be executable and present here.
+- Standard C library (`stdio`, `stdlib`, `string`, `unistd`).
+
+---
 
 ### Description
 
-This script is designed to streamline the process of selecting and executing scripts from cached data. It uses a cache file located at `~/.cache/script_info.csv`, which holds information about various scripts, including filenames and descriptions.
+This **select_script** C application provides an interactive graphical menu for quickly selecting and executing scripts stored under `~/.scripts/`, relying on cached metadata for speed and context.
 
-The script works in tandem with the `rofi` tool, which provides a user-friendly interface for script selection. By using the `rofi` dmenu, users can choose a script to run from a list, where each entry is displayed with a green-colored filename followed by its description.
+**How it works:**
+- Reads **~/.cache/script_info.csv** which should have rows describing script files and their metadata. The exact CSV format expects at least a filename in the first column and a quoted description in the seventh.
+- Presents the list of scripts using `rofi`, displaying each filename in green alongside its description.
+- Captures the user’s selection and parses out the script name.
+- Launches the selected script by calling it with `execl()`.
 
-Key functions implemented in the script include:
+**Main Utilities and Functions:**
+- `load_cache()`: Loads script info from CSV, filling an array of `ScriptInfo` (file + description).
+- `display_rofi()`: Sends all scripts as menu entries to a `rofi` process for user selection.
+- `extract_choice()`: Runs another `rofi` as a dmenu, and parses out the chosen filename from the user's selection.
+- `execute_choice()`: Runs the chosen script directly by absolute path.
 
-- **load_cache**: Reads the cache file, parses each line, and stores script information in a dynamic array.
-- **display_rofi**: Formats and sends the script list to `rofi` to be displayed.
-- **extract_choice**: Retrieves the user's selection from `rofi`.
-- **execute_choice**: Launches the selected script.
+---
 
 ### Usage
 
-To use this script, ensure you have the cache file (`~/.cache/script_info.csv`) available and filled with appropriate script data. Then, by executing the `select_script`, `rofi` will present the list to choose from:
+You can run this utility from a terminal, keybinding, or dmenu/rofi runner:
 
-```shell
-~/path/to/select_script
+```
+$ ~/.scripts/bin/select_script
 ```
 
-A typical cache file entry is in CSV format like:
-```
-example_script,description,other,fields,are,ignored,"This is just a test script"
-```
-
-Ensure the script files are located in `~/.scripts/`.
+**tldr; Quick setup:**
+1. Ensure scripts you wish to select are executable and exist under `~/.scripts/`.
+2. Ensure `~/.cache/script_info.csv` exists and is up-to-date.
+3. Make sure `rofi` is installed.
+4. Run the script as above. A rofi menu will appear with all scripts and their descriptions.
+5. Select an entry; the corresponding script will immediately execute.
 
 ---
 
 > [!TIP]
-> This script assumes that `HOME` is set and directly uses paths relative to the user’s home directory. If using on a shared system or with a different home setup, be cautious of path assumptions. Additionally, error handling could be improved by checking if the script file exists before attempting to execute it. Consider using functions like `access` to validate file existence and permissions before execution.
+>
+> - **Critique:**  
+> The current implementation launches two separate `rofi` processes: one to display options, and one to extract user choice. This is inefficient—ideally, all should be handled in a single `rofi` session by writing and reading through the same pipe.  
+> - The CSV `sscanf` parsing is fragile and dependent on the exact input format; more robust CSV parsing is advised if the schema changes.  
+> - There is no error checking for script existence/executability before attempting to run. Adding those would prevent silent failures.  
+> - The script does not handle the possibility of no selection (user-escape or enter on empty).  
+> - The executable environment is not preserved; scripts relying on parent env vars might fail.
+>
+> Consider providing a brief usage/help display if executed with `-h` or `--help`, and improving the rofi integration for speed and user experience.

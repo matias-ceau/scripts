@@ -1,44 +1,57 @@
-# ANSI Escape Code Cheatsheet
+# ANSI Escape Code Cheatsheet Viewer
 
 ---
 
-**ansi-cheatsheet.sh**: Generates a cheatsheet for ANSI escape codes
+**ansi-cheatsheet.sh**: Quickly displays a cheatsheet of ANSI escape codes in a syntax-highlighted view
 
 ---
 
 ### Dependencies
 
-- `bat`: A cat clone with wings, providing syntax highlighting. Please ensure it is installed on Arch Linux via the AUR or your preferred package manager.
+- `bat`: A (cat-compatible) syntax highlighting viewer for the terminal.
+  - Needed to render the cheatsheet in a more readable and visually appealing format.
+- Shell: Assumes `/usr/bin/bash` as the shell interpreter.
 
 ### Description
 
-This script provides a comprehensive cheatsheet for ANSI escape codes. ANSI escape codes are sequences used to control cursor location, color, and formatting in terminal emulators. The provided information covers a wide range of codes including text formatting, text colors, cursor movement, and miscellaneous cursor operations.
+This script provides a concise, formatted reference to common ANSI escape codes for text formatting, coloring, and cursor control in terminal environments. It leverages `bat` with the options `-p` (plain output), `-l md` (language: markdown), and displays a hardcoded markdown cheatsheet covering:
 
-The script leverages the `bat` command to display the cheatsheet with markdown formatting. It employs a here document (`<< EOF ... EOF`) to embed the markdown content directly within the script, which `bat` then renders with syntax highlighting.
+- **Text formatting** (reset, bold, underline, etc.)
+- **Foreground and background colors** (standard and "bright" variants)
+- **Cursor movements** (positioning, clearing, saving/restoring)
+- **Miscellaneous** codes (cursor visibility, screen clearing)
+
+The use of a markdown-formatted here-document (`<< EOF ... EOF`) ensures the cheatsheet is always up to date with no external file dependencies.
 
 ### Usage
 
-To view the ANSI Escape Code Cheatsheet, run the following command in your terminal:
+This script is intended to be run in any terminal:
 
 ```bash
+ansi-cheatsheet.sh
+```
+
+- No arguments are required (or processed).
+- You can bind it to a key in your `qtile` configuration for quick access, e.g., to open a new terminal with the cheatsheet.
+
+#### Example: Running as a command
+```sh
 ~/.scripts/bin/ansi-cheatsheet.sh
 ```
 
-Make sure the script is executable. You can set the executable permission by running:
-
-```bash
-chmod +x ~/.scripts/bin/ansi-cheatsheet.sh
-```
-
-This script can be run from any terminal. It is particularly useful when assigned to a shortcut key within qtile for quick access. Use the following qtile keybinding snippet for reference:
-
+#### Example: Qtile keybinding (assuming `xterm`)
 ```python
-Key([mod, "shift"], "c", lazy.spawn("~/.scripts/bin/ansi-cheatsheet.sh")),
+Key([], "F12", lazy.spawn("xterm -e ~/.scripts/bin/ansi-cheatsheet.sh")),
 ```
-
-This example assumes that the modifier key is stored in a variable named `mod`.
 
 ---
 
 > [!TIP]
-> Consider adding command-line options to filter specific sections of the cheatsheet, allowing users to target exactly what they need. Additionally, you might include a brief explanation of the history and usage scenarios of ANSI codes to enrich the script's educational value.
+> The script is simple and effective, but there are a few things to consider:
+> - The script will fail with a confusing message if `bat` is not installed. You could add a simple check:
+>   ```bash
+>   command -v bat >/dev/null 2>&1 || { echo "bat is required but not installed. Aborting."; exit 1; }
+>   ```
+> - Consider making the markdown cheatsheet an external file for easier updates if the content grows.
+> - Add command-line options for output format (plain, markdown, etc.), or a `--help` flag to improve usability.
+> - Some escape code examples (`\x1b[31mBlack\x1b[0m`) are not actually rendered (the color is lost when using `bat` for markdown), so you may want to clarify which are literal versus rendered.

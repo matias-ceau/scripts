@@ -1,51 +1,73 @@
-# Transform Symlinks
+# transform_symlink.sh
 
 ---
 
-**transform_symlink.sh**: Convert symbolic links to copies of their targets.
+**transform_symlink.sh**: Convert symlinks into copies of their targets (both files and directories).
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is written in Bash.
-- `fd`: A simple, fast and user-friendly alternative to `find`.
-- `fzf`: A command-line fuzzy finder used for interactive selection.
-- `bat`: A command-line tool for displaying file contents with syntax highlighting (used in fzf preview).
+- `fd`: A fast, user-friendly alternative to `find`. Used here to discover symlinks recursively.
+- `fzf`: Command-line fuzzy finder. Provides an interactive menu to select symlinks for transformation.
+- `bat`: (Optional but used in the preview) For pretty-print file previews within `fzf`.
+- Standard GNU utils: `readlink`, `cp`, `rm`.
+
+---
 
 ### Description
 
-The **transform_symlink.sh** script is designed to convert symbolic links into physical copies of their targets. This utility can be especially useful when you need to remove symlinks but retain the content pointed to by the symlinks, either for backup purposes or to alter file structures while maintaining data integrity.
+This script's core purpose is to **"unsymlink"**: it takes symlinks (files or directories that point elsewhere) and replaces each with a copy of the data they point to, deleting the link in the process.
 
-Here’s a broad overview of how the script functions:
+Key logic/features:
 
-- Validates if provided arguments are symbolic links.
-- If no arguments are given, it uses `fd` to locate symlinks up to five levels deep within the current directory. These are then displayed via an `fzf` selection interface for the user to choose from.
-- The `transform_symlink` function checks if the provided path is a symlink and verifies the existence of the symlink's target. If valid, it removes the symlink and copies its target in its place.
+- If run **without arguments**, it uses `fd` to list all symlinks (depth 5 by default) below `$PWD`, filters the selection via `fzf`, and transforms the selected symlink.
+- If run **with one or more arguments**, each argument is handled as a symlink path and processed in turn.
+- Helpful `usage` function with colored terminal output details available options, synopsis, and examples.
+- Handles basic error situations: not a symlink, or target does not exist.
+- Symlink transformation is performed by:
+    1. Validating the symlink and its target.
+    2. Removing the symlink.
+    3. Copying the target (using `cp -r`) into the original symlink's path.
 
-This script does not modify anything if the specified path is not a symlink or if the symlink target is unavailable.
+---
 
 ### Usage
 
-To use this script, it can either run in interactive mode or accept direct arguments:
+Run without arguments for interactive selection (uses `fzf`):
 
-```bash
-# Interactive mode using fzf
-/home/matias/.scripts/bin/transform_symlink.sh
-
-# Transform a specified symlink
-/home/matias/.scripts/bin/transform_symlink.sh /path/to/symlink
-
-# Transform multiple symlinks
-/home/matias/.scripts/bin/transform_symlink.sh link1 link2 link3
+```
+transform_symlink.sh
 ```
 
-To display the help and usage information:
+Run with explicit paths to transform:
 
-```bash
-/home/matias/.scripts/bin/transform_symlink.sh --help
+```
+transform_symlink.sh /path/to/link1 /path/to/link2
+```
+
+Print help:
+
+```
+transform_symlink.sh --help
+```
+
+**In your Qtile config:**  
+You can bind a key to run this script (e.g., in a terminal):
+
+```python
+Key([mod], "F7", lazy.spawn("alacritty -e ~/.scripts/bin/transform_symlink.sh"))
 ```
 
 ---
 
-> [!NOTE] While this script handles basic conditions well, users should ensure that they have a backup of their data before transformation, especially if the process fails or is interrupted. Additionally, consider implementing a dry-run mode to preview actions before execution, which would enhance reliability and user confidence.
+> [!TIP]
+> The script is very useful for “materializing” data that might otherwise be lost if a symlink’s target is deleted. Here are some potential enhancements:
+>
+> - **Relative Symlink Targets:** The script assumes `readlink` outputs an absolute path. If the symlink uses a relative target, `cp` could fail or act unpredictably. Consider resolving to an absolute path first.
+> - **Overwrite Warnings:** The script always replaces the symlink, destroying any data present at that path if a copy fails midway. Adding a backup or prompt would be safer.
+> - **Multiple Selection:** In interactive mode, only one symlink can be selected. Consider allowing multi-select via `fzf`’s `--multi`.
+> - **Robustness:** Better handling of symlink edge cases (e.g., broken symlinks, links with spaces/newlines).
+> - **Preview Dependency:** If `bat` is missing, the preview in `fzf` fails silently; consider fallback to `cat`.
+> 
+> Otherwise, the script achieves its purpose efficiently and fits well into your Arch + Qtile workflow!

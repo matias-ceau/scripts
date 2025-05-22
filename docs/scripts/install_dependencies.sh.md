@@ -1,47 +1,63 @@
-# Install Dependencies Script
+# Install Core Utilities and Apps
 
 ---
 
-**install_dependencies.sh**: Installs a list of necessary packages using `paru`
+**install_dependencies.sh**: Bash script to bulk-install essential terminal and desktop utilities.
 
 ---
 
 ### Dependencies
 
-- `paru`: AUR helper used for installing packages on Arch Linux. `paru` is required for this script as it automates package installation from the Arch User Repository (AUR).
+- `paru`: An AUR helper for Arch Linux, used for package management.
+- The script also installs the following packages (listed for reference, as they are dependencies of the script use-case, not the script execution):
+
+  - `git` (version control)
+  - `fd` (faster `find`)
+  - `bat` (cat clone with syntax highlighting)
+  - `fzf` (fuzzy finder)
+  - `ripgrep` (fast search)
+  - `neovim` (text editor)
+  - `chezmoi` (dotfiles manager)
+  - `dmenu` (launcher menu)
+  - `findutils` (modern find/xargs)
+  - `rofi` (powermenu/launcher)
+  - `dunst` (notification daemon)
+  - `python-pandas` (data manipulation)
+  - `python-colorama` (terminal coloring)
+  - `light` (screen backlight control)
+  - `xdotool` (simulate keyboard/mouse input)
 
 ### Description
 
-This script automates the installation of several useful packages for development and daily operations. It uses `paru`, an AUR helper, to install packages if they are not already present on the system. The packages are listed in a here document, which allows for easy readability and maintenance.
+This script is a straightforward tool for quickly provisioning a new or existing Arch Linux system (in your case optimized for a qtile-based setup) with a suite of essential desktop, editor, launcher, and utility tools.
 
-Packages included:
-- `git`: Version control system
-- `fd`: Simple, fast, and user-friendly alternative to `find`
-- `bat`: Clone of `cat` with syntax highlighting and Git integration
-- `fzf`: Command-line fuzzy finder
-- `ripgrep`: Fast search tool written in Rust 
-- `neovim`: Hyperextensible Vim-based text editor
-- `chezmoi`: Manage your dotfiles across multiple diverse machines
-- `dmenu`: Dynamic menu for X
-- `findutils`: Tools for finding files and searching within them
-- `rofi`: A window switcher, run dialog, and dmenu replacement
-- `dunst`: Customizable and lightweight notification daemon
-- `python-pandas`: Data analysis library for Python
-- `python-colorama`: Simple cross-platform colored terminal text in Python
-- `light`: Program to control backlight controllers
-- `xdotool`: Command-line X11 automation tool
+It works by passing a list of key packages via a Bash here-document directly into `paru`, which will install only those not already present (`--needed`). Using process substitution, the list is assembled and piped persistently and efficiently into `paru`.
+
+The approach lets you easily update the set of "must have" packages for your workflow by simply adding or removing lines from the here-document.
 
 ### Usage
 
-To execute the script, simply run it in a terminal session. You can run this script directly by navigating to its directory and executing:
+Run the script with:
 
 ```bash
-bash install_dependencies.sh
+~/.scripts/bin/install_dependencies.sh
 ```
 
-Alternatively, integrate it as part of your system setup routine or run it whenever you configure a new system.
+- **Interactive:** The script can be run in a terminal and will prompt for password if required by `paru`.
+- **Automating dotfiles:** It pairs well with dotfiles bootstrapping (e.g., as part of a chezmoi setup or post-install routine).
+
+#### Adding more packages
+
+Simply add new lines in the `cat <<EOF` block before `EOF`.
+
+#### Example tldr
+
+```sh
+# To ensure you've got all tools for your qtile+Arch setup:
+bash ~/.scripts/bin/install_dependencies.sh
+```
 
 ---
 
-> [!TIP]
-> Consider adding error handling to the script to manage cases where `paru` is not installed or if any of the package installations fail. Additionally, integrating a confirmation step before beginning the installation could help prevent unintended package installations. Defining variables for the executables rather than embedding commands directly improves maintainability.
+> [!TIP]  
+> The script is effective but assumes `paru` is already installed—perhaps document or check for this explicitly. Error handling and reporting could also be improved (e.g., warn about missing `paru` or failed installs). Finally, for greater flexibility, consider accepting package names as arguments or allowing for grouped lists (e.g., "minimal"/"full").

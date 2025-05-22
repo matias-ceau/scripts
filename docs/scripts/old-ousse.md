@@ -1,44 +1,65 @@
-# old-ousse: Multi-Database Index Builder
+# Ousse Indexing Database Generator
 
 ---
 
-**/home/matias/.scripts/dev/old-ousse**: Creates and updates multiple locate databases for various parts of the system
+**old-ousse**: Generates a collection of custom mlocate databases for various areas of your filesystem
 
 ---
 
 ### Dependencies
 
-- `updatedb` – Used to build databases for the locate command
-- `fd` – A fast alternative to find, used to list directories
-- `rg` – Ripgrep for efficient text filtering
-- `dirname`, `realpath`, `cut` – Standard utilities for path manipulation
-- `mega-sync` – A utility used here for identifying specific backup paths
-
----
+- `updatedb`  
+  *Core binary used to create the locate databases (typically from `mlocate` or `plocate`).*
+- `fd`  
+  *Efficient file finder used for directory selection and filtering.*
+- `rg`  
+  *Ripgrep: used for fast pattern filtering.*
+- `sed`, `tr`, `cut`, `dirname`, `realpath`  
+  *Standard UNIX utilities for string and file path manipulation.*
+- `mega-sync`  
+  *Used specifically for Mega cloud folder location.*
+- Environment variable: `$XDG_DATA_HOME`
 
 ### Description
 
-This script is designed to generate and update several locate databases for different segments of the system. It primarily uses the `updatedb` command, which is part of the mlocate package, to index directories according to customizable parameters. The script begins by ensuring a target directory exists in `$XDG_DATA_HOME/ousse` before creating separate databases:
+This script is designed for Arch Linux (with qtile or other WMs), and builds multiple custom mlocate-compatible databases targeting specific folders and data types:
 
-- **home.db:** Indexes the user's home directory while excluding common irrelevant paths.
-- **dots.db:** Focuses on the user’s home-level hidden files, utilizing `fd` to filter directories that are not starting with a dot and using `rg` to eliminate whitespace issues.
-- **data.db:** Indexes directories under `/mnt` (for multiple mount points such as HDD2, SSD, and others) while excluding certain high-level directories (e.g., DATA and HDD2/$).
-- **root.db:** Indexes the system root `/` with many system-specific paths pruned.
-- **mega.db:** Targets directories based on the location of a unified library determined via `realpath`.
-- **devices.db:** Uses `mega-sync` to determine the backup device path before indexing.
-- **limbo.db:** Looks for a specific directory (named LIMBO) across mounted devices.
-- **hdd2.db:** Directly indexes the `/mnt/HDD2` path with minimal pruning.
+- **home.db** — Indexes the home directory, skipping `/tmp`.
+- **dots.db** — Home directory minus most "dot" folders (dynamic exclusion based on folder listing).
+- **data.db** — `/mnt` hierarchy, with complex `prunenames` and `prunepaths` for precise control (mainly excludes specific non-data directories).
+- **root.db** — The entire root filesystem with many system and temp directories pruned, to reduce noise.
+- **mega.db** — Index for a UnifiedLibrary in Mega, automatically determines path.
+- **devices.db** — Index of 'devices' folder within Mega backups, determined dynamically.
+- **limbo.db** — Custom “LIMBO” folder under `/mnt`, auto-located.
+- **hdd2.db** — Indexes entire `/mnt/HDD2`; skips bind mounts.
 
-The script leverages shell variable substitution and command substitution techniques to dynamically set database paths and pruning parameters, making it adaptable to changes in system configuration.
+Each `.db` file ends up in `$XDG_DATA_HOME/ousse/<name>.db`. Many prunenames/prunepaths are dynamically constructed for flexibility, especially for personal folder layouts.
 
 ### Usage
 
-To manually run the script, simply execute it from your terminal:
+Run the script without arguments, ideally in a terminal:
 
-   $ bash /home/matias/.scripts/dev/old-ousse
+```sh
+~/.scripts/dev/old-ousse
+```
 
-This script is well-suited for integration into your qtile keybindings or automation routines in Arch Linux environments. Running it periodically will ensure that all locate databases remain current.
+You may want to set up a keybinding or automated timer in qtile to run it periodically.
+
+- To inspect a created database, use:
+  ```
+  locate -d $XDG_DATA_HOME/ousse/home.db somefile
+  ```
+- Schedule in cron or systemd for regular updates.
 
 ---
 
-> [!TIP] Consider adding more robust error handling in case commands like `fd` or `rg` fail. Ensuring that environment variables, such as `$XDG_DATA_HOME` or paths provided by `mega-sync`, are set correctly before execution would improve reliability. Additionally, using shell functions for repetitive command patterns may enhance maintainability and reduce redundancy.
+> [!TIP]
+> **Critique:**  
+> - Script is powerful but brittle: directory/folder names are tightly coupled to your layout (e.g., `$HOME/UnifiedLibrary`, `/mnt/HDD2`, presence of Mega/cloud folders).
+> - Some commands (like `fd`, `rg`, and others) could fail silently if a folder is renamed, missing, or if packages are not installed.
+> - Error handling is absent; failures may go unnoticed. Consider adding `set -e`, and some `echo` statements for progress and debugging.
+> - Using `mlocate`/`updatedb` as a regular user for indexing system paths (`/`) could miss files with restricted permissions.
+> - The reliance on environment variables (`$XDG_DATA_HOME`) and Mega backend assumes these are properly initialized.
+> - Refactoring into functions would greatly improve readability and maintainability.  
+>
+> For your use case, this is an extremely effective and highly customizable approach, but keep in mind these caveats if system structure changes.

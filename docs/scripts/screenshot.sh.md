@@ -1,58 +1,66 @@
-# Screenshot Script
+# screenshot.sh – Screenshot Utility Script
 
 ---
 
-**screenshot.sh**: A script to take full-screen or region-based screenshots using `grim` and `slurp`.
+**screenshot.sh**: Simple utility for taking fullscreen or user-selected screenshots using `grim`.
 
 ---
 
 ### Dependencies
 
-- `grim`: A lightweight Wayland screen capture utility.
-- `slurp`: A utility for selecting screen regions interactively.
-- `notify-send`: A tool for sending user notifications (part of `libnotify`).
+- `grim`  
+  Wayland screenshot utility used to capture the screen or region.
+
+- `slurp`  
+  Region selector for Wayland; used to draw a selection box.
+
+- `notify-send`  
+  Desktop notification tool to show messages after saving screenshots.
 
 ### Description
 
-This script provides an automated way to take screenshots on a Wayland session. It uses the tools `grim` and `slurp` for capturing the screen or a user-selected region, respectively. All screenshots are saved in the `$HOME/Pictures` directory with a timestamped filename such as `2023-10-11-screenshot-1697069601.png`. Upon capturing, the script also sends a desktop notification using `notify-send` to inform you of the screenshot's success.
+This script streamlines taking screenshots under a Wayland environment (such as Sway or river). Screenshots are saved in your `$HOME/Pictures` folder with a timestamped filename for easy organization.
 
-Here’s a breakdown of its functionality:
-- If executed with the `--select` argument, it allows the user to select a specific region of the screen using `slurp` and only captures that region.
-- When run without arguments, it saves a full-screen snapshot.
+**Functionality:**
+- **Fullscreen screenshot:**  
+  By default (`no arguments`), the entire display is captured.
+- **Area selection screenshot:**  
+  When called with `--select`, allows interactive selection of a screen region.  
+  Uses `slurp` to let you define a region with the mouse, then captures it via `grim`.
+
+**Notifications:**  
+Every time a screenshot is taken, the script sends a desktop notification showing the saved filename using `notify-send`.
 
 ### Usage
 
-This script can be run directly from the terminal, or it can be mapped to a keybinding in your qtile configuration for fast access.
+The script can be run directly in the terminal, bound to a keybinding in `qtile`, or called from a script/shortcut.
 
-#### Examples:
-- **Capture the full screen**:
-  ```bash
-  /home/matias/.scripts/bin/screenshot.sh
-  ```
-  This will save the screenshot of the entire screen.
+Examples:
 
-- **Capture a specific region**:
-  ```bash
-  /home/matias/.scripts/bin/screenshot.sh --select
-  ```
-  This allows you to interactively select a screen region.
+```sh
+# Fullscreen screenshot
+~/.scripts/bin/screenshot.sh
 
-To integrate with qtile:
-- Add a keybinding in `~/.config/qtile/config.py`, for instance:
-  ```python
-  from libqtile.lazy import lazy
-  from libqtile.config import Key
-  
-  keys = [
-      Key([], "Print", lazy.spawn("/home/matias/.scripts/bin/screenshot.sh")),
-      Key(["shift"], "Print", lazy.spawn("/home/matias/.scripts/bin/screenshot.sh --select")),
-  ]
-  ```
+# Interactive area selection
+~/.scripts/bin/screenshot.sh --select
+```
+
+You can set this up as a keybinding in your `qtile` config. Example:
+
+```python
+Key([mod], "Print", lazy.spawn("~/.scripts/bin/screenshot.sh")),
+Key([mod, "shift"], "Print", lazy.spawn("~/.scripts/bin/screenshot.sh --select")),
+```
+
+**Output:**  
+- All screenshots are saved to `~/Pictures` with a format like `2024-06-30-screenshot-1719758632.png`.
 
 ---
 
-> [!TIP] 
-> - Consider adding checks to verify that `grim`, `slurp`, and `notify-send` are installed before running the main logic, and provide a user-friendly error message if they are missing.
-> - The script could benefit from an environment variable for the output directory, allowing users to customize the save location more easily.
-> - A feature to copy the image to the clipboard using `wl-copy` could enhance its usability further.
-> - There is a minor oversight in the notification message for non-selection mode: it mentions "Selection saved" instead of "Screenshot saved".
+> [!TIP]
+>
+> - If `$HOME/Pictures` does not exist, the script will fail to save the screenshot. Consider adding a check to create the directory if missing (`mkdir -p "$_OUTPUT_DIR"`).
+> - There’s no error handling: if `grim`, `slurp`, or `notify-send` are missing or fail, you won’t get any warning.
+> - The notification message is always "Selection saved as ..." even for fullscreen shots—consider customizing the message for clarity.
+> - Minor: Script could use `local` for variables to restrict scope, though in this context it's not critical.
+> - For further flexibility, you might want to allow custom output directory or filename prefix via command-line arguments.

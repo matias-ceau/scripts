@@ -1,62 +1,60 @@
-# VimWiki Note Opener
+# Vimwiki FZF Launcher
 
 ---
 
-**vimwiki.sh**: Open a note in vim with fzf
+**vimwiki.sh**: Fuzzy search and open Markdown notes in Vim from your notes directory.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`. This script uses `fd` to search for markdown files (`.md`) within the `~/notes` directory.
-- `fzf`: A command-line fuzzy finder. Used here to provide an interactive interface for selecting notes.
-- `bat`: A cat clone with syntax highlighting and Git integration. It provides the formatted and highlighted preview of the selected note.
-- `nvim` (or `vim`): Enhanced editor used to open the selected file.
-
-Make sure these tools are installed on your Arch Linux system. You can use `pacman` for official packages and `yay` for AUR packages if needed.
-
----
+- `fd` – fast/friendly alternative to `find`, used for finding Markdown files  
+- `fzf` – command-line interactive fuzzy finder  
+- `bat` – cat clone with syntax highlighting, used for file preview  
+- `nvim` – Neovim text editor (can be replaced with `vim` if neovim isn't preferred)  
+- Markdown notes stored in `$HOME/notes` (directory must exist)
 
 ### Description
 
-This script is designed to streamline the process of opening markdown notes stored in the `~/notes` directory using the `nvim` editor. It leverages the power of `fd` to search for markdown files, `fzf` to allow interactive selection of the files, and `bat` to display a preview of the files' contents before opening them.
+This script streamlines the process of opening Markdown notes with `nvim`, acting as a minimal yet powerful "vimwiki" dedicated to your `$HOME/notes` directory. Here's a breakdown of its workflow:
 
-Here’s how it works:
-1. The `fd` command filters and lists all `.md` files in the `~/notes` directory.
-2. The list is piped into `fzf`, which presents the user with a list of options in a TUI (text-based user interface). 
-3. `fzf` also includes a preview feature that highlights the selected note using `bat`.
-4. Once a selection is made, the script opens the note immediately in `nvim`.
+1. **fd** lists all `.md` files directly under `~/notes` (no recursion by default), outputting colored names.
+2. Output is piped to **fzf** for fuzzy selection.  
+   - `--ansi` allows colored output.
+   - The preview pane uses **bat** to display the currently selected Markdown file with syntax highlighting.
+   - Pressing `<Enter>` opens the selected note in `nvim`.
 
-This script makes note management efficient and smooth by combining powerful CLI tools.
-
----
+The process is interactive and efficient, making navigating and editing your Markdown personal wiki blazingly fast within a terminal session.
 
 ### Usage
 
-1. Save the script to a convenient location (e.g., `~/.scripts/bin/vimwiki.sh`).
-2. Make it executable:
-   ```bash
-   chmod +x ~/.scripts/bin/vimwiki.sh
-   ```
-3. Run it directly from the terminal:
-   ```bash
-   ~/.scripts/bin/vimwiki.sh
-   ```
-4. To enhance convenience, you can create an alias in your shell configuration (e.g., `.bashrc` or `.zshrc`):
-   ```bash
-   alias vimwiki="~/.scripts/bin/vimwiki.sh"
-   ```
-   Then, simply use the alias to invoke the script:
-   ```bash
-   vimwiki
-   ```
+Just run the script from anywhere:
 
-You can also bind this script to a keybinding in your Window Manager (e.g., Qtile) to launch it with a keyboard shortcut. Make sure the path to `vimwiki.sh` is correctly referenced when configuring the key binding.
+```sh
+~/.scripts/bin/vimwiki.sh
+```
+
+A fuzzy picker window will appear showcasing the files in `~/notes`. Use type-to-filter to find your note.
+
+- **Up/Down, Type** – Navigate/filter notes
+- **Preview Pane** – See content instantly highlighted
+- **<Enter>** – Open the note in `nvim`
+
+#### Example tldr
+
+```sh
+$ ~/.scripts/bin/vimwiki.sh
+# Fuzzy-search your notes; Enter opens in Neovim.
+```
+
+**Pro-Tip:**  
+Assign a keybinding in qtile to run this script for one-keypress access to your notes.
 
 ---
 
-> [!NOTE]
-> - The script currently assumes that the `~/notes/` directory is pre-existing. If it doesn't exist, you'll need to create it manually or modify the script accordingly.
-> - Instead of hardcoding the `~/notes` directory, consider allowing users to pass the directory as an environment variable or an argument to make the script more flexible.
-> - The `become` binding in `fzf` is great for this use case but ensure that your system's `fzf` version supports it.
-> - Using `nvim` here is hardcoded. It might be a good idea to allow users to specify their preferred editor.
+> [!TIP]
+> - If you want recursive search inside subdirectories, add the `-a` flag to `fd`.
+> - The script currently hardcodes `$HOME/notes` and `.md` files only; making these configurable (via env vars or args) would improve flexibility.
+> - The obsolete commented-out line at the end (`vim ~/notes/"$( ls ~/notes | fzf )"`) can be removed for clarity.
+> - Consider handling the case where `fd`, `fzf`, or `bat` aren't installed; a check could inform the user gracefully instead of failing silently.
+> - Using `nvim` instead of `vim` may not match all setups—let the user choose via a variable or fallback mechanism.

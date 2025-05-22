@@ -1,42 +1,66 @@
-# Flexoki Color Scheme Display
+# Flexoki Color Palette Preview
 
 ---
 
-**flexoki_show.sh**: Display script for a custom color scheme in terminal using Bash.
+**flexoki_show.sh**: Script to visually display the Flexoki color palette and roles in your terminal
 
 ---
 
 ### Dependencies
 
-- `bash`: This script requires the Bash shell to execute.
-- Escape sequences for colors are used extensively, so ensure your terminal supports ANSI color codes.
+- `bash` – Standard shell for script execution.
+- A truecolor-compatible terminal (e.g., `alacritty`, `kitty`, `gnome-terminal`, etc.)  
+  *Required to properly display 24-bit colors with ANSI escape codes.*
+- (Optional) `echo` with `-e` support – Most modern shells complete this requirement.
 
 ### Description
 
-The `flexoki_show.sh` script is designed to display a comprehensive list of colors in both hexadecimal and RGB formats, alongside their representative names, abbreviations, and usage contexts. The script utilizes a combination of ANSI escape codes to render this list with attractive color blocks directly in the terminal, providing users with a visual reference for a predefined set of color scheme elements. Each color displays in a formatted line showing its HEX value, RGB equivalent, a small block of the actual color, and descriptions for easy identification.
+This script, `flexoki_show.sh`, prints a formatted table to your terminal that visually previews the Flexoki palette (HEX/RGB values), associated color roles, and UI/syntax information.
 
-The structure of the table presented by the script follows a consistent pattern:
-- **HEX**: The hexadecimal color code.
-- **RGB**: RGB values to give a sense of the color's appearance in the RGB spectrum.
-- **NAME**: The descriptive name aligned with its shade and intensity.
-- **SHORT**: A short abbreviated form for quick reference in configurations.
-- **UI/SYNTAX**: Descriptions of the color's potential usage in user interfaces and coding syntax.
+- **Each line** defines a Flexoki color (e.g., reds, oranges, base colors, etc.).
+- **ANSI escape sequences (`\e[38;2;R;G;Bm`)** are used for truecolor output, allowing you to view **real color swatches** directly within your terminal.
+- **Columns include:**  
+    - HEX code  
+    - RGB value  
+    - Color name and "short" alias  
+    - UI mapping and syntax hint  
+    - A colored block visually representing the color  
+- Italics and reversed backgrounds/style are also used for visual cues, e.g., to mark certain color roles.
+
+Typical use cases:
+- Quick reference for Flexoki color assignment when theming Qtile, status bars, or Neovim.
+- Visual confirmation of color mapping for custom scripts or theme development.
 
 ### Usage
 
-This script can be executed directly from your terminal. Here are the steps and an example of how you might use it:
+You can:
+- Run it directly from your terminal:
+    ```
+    ~/.scripts/bin/flexoki_show.sh
+    ```
+    or (if not exported to `$PATH`):
+    ```
+    bash /home/matias/.scripts/bin/flexoki_show.sh
+    ```
 
-1. Open a terminal session.
-2. Navigate to the directory containing the script (for example, `/home/matias/.scripts/bin`).
-3. Execute the script using:
+- **Bind to a Qtile key:**
+    In your `~/.config/qtile/config.py`, add a keybinding such as:
+    ```python
+    Key([mod], "F7", lazy.spawn("alacritty -e ~/.scripts/bin/flexoki_show.sh"))
+    ```
+    Replace `alacritty` with your preferred terminal.
 
-```bash
-./flexoki_show.sh
-```
-
-You can integrate this script with your workflow in qtile, possibly assigning it to a specific keybinding to quickly display colors whenever necessary.
+- Pipe or redirect output if you want a raw text (though you’ll lose color formatting):
+    ```
+    ~/.scripts/bin/flexoki_show.sh > colors.txt
+    ```
 
 ---
 
 > [!TIP]
-> While the script efficiently renders the intended color table, maintaining or updating the color list can be cumbersome due to hard-coded values and escape sequences. Consider abstracting color definitions into a separate configuration file for better maintainability. Also, providing command-line options to filter colors or display only a subset might improve usability.
+> - The script is robust for its intended visual role with Bash, but:
+>   - **Readability**: Column alignment is unequal because the formatted color blocks and escape codes cause uneven spacing in different terminals. For best results, use a monospace font and ensure your terminal supports full ANSI/UTF-8 rendering.
+>   - **Portability**: Use of `echo -e` with ANSI and Unicode blocks works on modern shells but can be inconsistent across older systems or with different versions of `echo`. For maximum portability and alignment, consider using `printf` instead of `echo -e`.
+>   - **Enhancement**: If you plan on scripting or theming more, you may want to add flags (e.g., `--short`, `--ui`, `--hex-only`) or allow export in JSON/CSV/YAML formats for tooling and automation.
+>   - **Performance**: Not an issue here due to the static nature of the script.
+>   - **Documentation**: The on-screen legend is helpful, but adding in-script comments or usage (`--help` output) could be considered.

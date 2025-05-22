@@ -1,48 +1,69 @@
-# Git Update All Other Repositories
+# Git: Update All Other Repos
 
 ---
 
-**git_update_all_other_repos.sh**: Automatically updates all git repositories found under a specified directory using HTTPS.
+**git_update_all_other_repos.sh**: Batch-pulls all git repositories (with HTTPS remote) at exact depth 3 under `$GIT_REPOS`
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast, and user-friendly alternative to `find`, used here to locate git directories.
-- `git`: The version control system for pulling updates from remote repositories.
-- `rg` (ripgrep): A fast search tool to filter out repositories with HTTPS fetch URLs.
-- `bat`: A cat clone with syntax highlighting, used to display repository information in a visually appealing format.
-- `sed`: A stream editor for filtering and transforming text, used here to format the output.
-- Environment Variable: `$GIT_REPOS` should be set to the base directory containing your git repositories.
+- `fd`: Fast alternative to find; used here for directory searching at specific depth.
+- `git`: Distributed version control; required for repo operations.
+- `ripgrep` (`rg`): Fast search tool; used to filter remote URLs.
+- `bat`: Cat clone with syntax highlighting.
+- `sed`: Stream editor, for formatting repository info.
+- Environment Variable: `GIT_REPOS`  
+  The root path where your repositories are located. Must be set before running the script.
+
+---
 
 ### Description
 
-This script is designed to iterate through each git repository located within a specified directory, identified by `$GIT_REPOS`. It uses `fd` to scan for `.git` directories that are exactly three levels deep. For each discovered repository, it checks if the remote URL is of the type HTTPS using `rg`. If the condition is met, it outputs the repository name in a highlighted format with `bat` and attempts a `git pull` to update the repository. In case of a pull failure, it outputs an error message indicating which repository failed.
+This script scans a directory tree (set via the environment variable `$GIT_REPOS`) at an exact depth of 3 for `.git` directories, identifying all potential git repositories at that level.  
+For each repo found:
+
+1. It checks if the repo has a "fetch" remote configured with an HTTPS URL.
+2. If so, it prints formatted info about the repo using `sed` and pretty-prints it with `bat` using TOML highlighting.
+3. Then, it attempts to do a `git pull` for that repo.
+4. If the pull fails, an error message is displayed in highlighted color.
+
+This setup is ideal for batch-updating multiple project repositories arranged neatly under a common directory hierarchy, e.g. `$GIT_REPOS/org/project/.git`.
+
+---
 
 ### Usage
 
-To use the script:
-
-1. Ensure that all dependencies are installed on your system.
-2. Set the `GIT_REPOS` environment variable to point to your base directory containing git repositories.
-3. Run the script from a terminal:
-
-   ```sh
-   /home/matias/.scripts/bin/git_update_all_other_repos.sh
-   ```
-
-The script can be assigned to a keybinding in your qtile configuration for easy access.
-
-**Example:**
-
-```sh
-export GIT_REPOS=~/projects
-/home/matias/.scripts/bin/git_update_all_other_repos.sh
+**1. Set the `$GIT_REPOS` environment variable to your main git repositories folder:**
+```bash
+export GIT_REPOS="$HOME/projects"
 ```
 
-This will update all repositories under the `~/projects` directory tree.
+**2. Run the script:**
+```bash
+~/.scripts/bin/git_update_all_other_repos.sh
+```
+
+- Can be run interactively in a terminal.
+- The script prints each repo before pulling, highlighting line 2 for visibility.
+- Only repositories with HTTPS remotes under the specified directory are touched.
+- Suitable to assign to a keybinding from within qtile, or execute on demand.
+
+#### Example Run Output
+```toml
+[my-repo] #org/my-repo
+```
+```
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100%...
+...
+```
 
 ---
 
 > [!TIP]
-> Consider integrating logging to capture pull failures in a separate file for easier debugging and tracking. Further, you might want to add checks to handle repositories with network errors or those requiring authentication, as the current script assumes all remote URLs are accessible and do not require additional credentials.
+> - The script expects your repositories to all reside at exactly depth 3 under `$GIT_REPOS` (e.g., `$GIT_REPOS/org/project/.git`). If your layout differs, you may need to adjust the `--exact-depth` parameter.
+> - The search is limited to HTTPS remotes; SSH remotes are excluded. You may want to support both in some cases.
+> - The invocation of `bat` for highlighting is a nice touch, but using `--highlight-line 2` may not always have the intended effect if the output of `sed` varies.
+> - Failed pulls are shown with a red-background message, but you might want to log errors to a file for later review.
+> - If any dependency is missing (such as `fd`, `bat`, or `ripgrep`), the script will fail—consider adding a check or a short dependency note at runtime.

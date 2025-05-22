@@ -1,65 +1,56 @@
-# Wrapper Script
+# Simple Bash Command Wrapper
 
 ---
 
-**wrapper.sh**: A simple script to execute a command and log its execution with a timestamp.
+**wrapper.sh**: Wraps execution of any command, logs invocation with timestamp.
 
 ---
 
 ### Dependencies
 
-- ``bash``: Required to run this script as it uses Bash-specific syntax.
-- Write access to `/data/data/com.termux/files/home/log.txt`: The log file location should be writable; ensure the directory exists.
-
----
+- `bash`: Required to run the script.
+- Any command you wish to wrap.
+- The path `/data/data/com.termux/files/home/log.txt` must be writable.[footnote:On typical Arch Linux systems, this path is used by Termux on Android. Make sure it is adjusted for your environment.]
+- `date`: Used to generate timestamps.
+- `sleep`: Used for a 1-second delay at the end of the script.
 
 ### Description
 
-The **wrapper.sh** script is a minimal utility to execute a command while logging its execution. The workflow is straightforward: 
-1. It takes a command (with its arguments) as input.
-2. Executes the command.
-3. Logs the command and its UNIX timestamp into a predefined file: `/data/data/com.termux/files/home/log.txt`.
+This script serves as a transparent wrapper around any command you wish to run. It performs the following steps:
 
-It’s particularly useful for debugging or tracking usage patterns of commands. Also, it enforces a 1-second delay after execution using a `sleep` command.
+1. Executes the provided command line exactly as given.
+2. After completion, logs the current UNIX timestamp along with the invoked command to a log file at `/data/data/com.termux/files/home/log.txt`.
+3. Pauses for one second (`sleep 1`) before exiting.
 
-**Note:** In its current form, the script assumes that the log file path `/data/data/com.termux/files/home/log.txt` exists and is writable.
+It is particularly useful if you want a simple way to trace or audit temporary command executions (for development, debugging, or learning purposes). 
 
----
+#### Structure
+
+- `$@` : Expands to all arguments given to the script—this means it will directly run whatever full command you provide.
+- `echo "$(date '+%s') - $@" >> /data/data/com.termux/files/home/log.txt"` : Appends a log entry with the current date (as epoch seconds) and the command.
+- `sleep 1` : Waits for one second at the end. This gives you a moment to see command output (helpful if run in a terminal window that closes quickly).
 
 ### Usage
 
-This script needs to be executed via the terminal. To use it:
+The script can be run directly, given executable permissions, or called from other scripts, wrappers, or keybindings. You can use it with any command, passing the wrapped command as arguments.
+
+**Examples:**
 
 ```bash
-bash /home/matias/.scripts/dev/wrapper.sh <command> [arguments]
+# Make the script executable (once only)
+chmod +x /home/matias/.scripts/dev/wrapper.sh
+
+# Run 'ls -l' and log the invocation
+/home/matias/.scripts/dev/wrapper.sh ls -l
+
+# Run an editor, e.g., nano on a file
+/home/matias/.scripts/dev/wrapper.sh nano test.txt
 ```
 
-For example:
-
-```bash
-bash /home/matias/.scripts/dev/wrapper.sh ls -la
-```
-
-This will:
-1. Execute `ls -la`.
-2. Append its execution log (with the current timestamp in seconds) to the log file at `/data/data/com.termux/files/home/log.txt`.
-3. Sleep for 1 second.
-
-If you intend to use this script frequently, you can set it up as an alias in your `.bashrc`:
-
-```bash
-alias wrapper='/home/matias/.scripts/dev/wrapper.sh'
-```
-
-Then, use it directly:
-
-```bash
-wrapper ls -la
-```
+**Tip:**  
+Integrate with Qtile keybindings by calling this script from your configuration — especially for any command whose calls you want to audit!
 
 ---
 
-> [!CAUTION]
-> - The script does no error handling. If the directory `/data/data/com.termux/files/home/` or the log file does not exist, or the script lacks write permissions, it will fail silently. Consider adding checks to ensure the log file exists and is writable.
-> - As it directly executes any passed command using `$@`, there is a potential risk when input is not sanitized, leading to unintended execution (e.g., malicious command injection). Input validation might be worth considering.
-> - Hardcoded paths like `/data/data/com.termux/files/home/log.txt` lower flexibility and portability. Parameterizing the log file path would enhance usability.
+> [!WARNING]  
+> The script hardcodes the log file path to a Termux-specific location (`/data/data/com.termux/files/home/log.txt`). On Arch Linux or a desktop environment, this path likely doesn’t exist and may cause errors or fail silently. Consider parameterizing the log file location to make this script portable across devices and environments. Also, this script does not handle any errors from the wrapped commands—it will only execute and log regardless of success or failure; capturing exit status might make logs more informative. Finally, be cautious when running commands with sensitive data, as everything is logged in plain text.

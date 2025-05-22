@@ -1,37 +1,71 @@
-# Environment API Key Updater
+# Update Environment File with API Keys
 
 ---
 
-**update_env.xsh**: Updates the `.env` file for storing API keys from environment variables
+**update_env.xsh**: Extracts current environment API keys and writes them to a `.env` file.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered, shell language that is used to run this script. Ensure it's installed on your Arch Linux system, as this script requires it to be executed.
-
-### Description
-
-The `update_env.xsh` script is designed to automatically update your `.env` file with all the environment variables that are API keys. It filters out environment variables ending with `API_KEY` and writes them to a file called `.env` in your home directory.
-
-- It uses a dictionary comprehension to iterate over all current environment variables (`${...}`) and selects those whose names end with `API_KEY`.
-- It then constructs a string (`apikeys_content`) where each line is formatted as `KEY=VALUE`.
-- Finally, it writes this string into the `.env` file located in your home directory, overwriting any existing content.
-
-This script is useful for managing API keys simply and ensures that your keys are encapsulated in a single file, making it easy to manage secrets for development and deployment.
-
-### Usage
-
-To use this script, simply run it directly from your terminal as it doesn't take any command-line arguments. Make sure to have execute permissions set for the file:
-
-```bash
-chmod +x /home/matias/.scripts/bin/update_env.xsh
-/home/matias/.scripts/bin/update_env.xsh
-```
-
-For more convenience, you can also add this script to your `.xonshrc` file to run automatically when starting a new shell session or bind it to a keystroke in your qtile setup if frequent updates are common in your workflow.
+- `xonsh`: Python-powered shell; needed to run `.xsh` scripts.
+- Environment variables: The script expects all API keys to be present as environment variables ending with `API_KEY`.
 
 ---
 
-> [!WARNING]
-> While this script facilitates storing API keys, ensure the `.env` file's permissions are appropriately set to prevent unauthorized access. Consider supplementing this script with security measures such as encryption or using a secrets manager for sensitive information. Also, hardcoding the `.env` path can limit the flexibility of using the script across different environments or users—passing this as an argument could be a beneficial enhancement.
+### Description
+
+This script is designed to help you manage your API keys on your Arch Linux system (WM: qtile). It scans all your environment variables for keys whose names end with `API_KEY`, then creates (or overwrites) the file `$HOME/.env` containing these key-value pairs in standard dotenv format.
+
+#### Main Steps:
+
+1. Collect all environment variables ending with `API_KEY` using a dictionary comprehension.
+2. Format each `KEY=VALUE` pair, joined by newlines.
+3. Write this content to `$HOME/.env`.
+
+**Example entry in `.env` after running:**
+```
+OPENAI_API_KEY=sk-XXXXX
+GITHUB_API_KEY=ghp-YYYYY
+```
+
+---
+
+### Usage
+
+You can run this script directly in any terminal where `xonsh` is available:
+
+```
+xonsh /home/matias/.scripts/bin/update_env.xsh
+```
+
+Or, if it's executable:
+```
+~/.scripts/bin/update_env.xsh
+```
+
+If you want to automate or bind it to a key (for example in qtile or sxhkd), simply add the above command.
+
+**Typical workflow:**
+1. Export your API keys in your shell session:
+    ```
+    export OPENAI_API_KEY=sk-XXXXX
+    export GITHUB_API_KEY=ghp-YYYYY
+    ```
+2. Run the script to update `.env`:
+    ```
+    update_env.xsh
+    ```
+
+---
+
+> [!TIP]
+>
+> - **Security note:** The script will overwrite your `.env` every time; make sure this is intended, especially if you store additional values in `.env` manually.
+> - **Improvements:** Consider adding:
+>    - A warning or backup of previous `.env` before overwriting.
+>    - Filtering or support for other secrets (not just `API_KEY` suffixes).
+>    - Option to append instead of overwrite.
+>    - Logging/echo output for feedback.
+>
+> Also, note that this script pulls variables from the current environment—not from files or shells other than the one running the script. If running from a graphical launcher that doesn't inherit your terminal env, you might not get all keys.

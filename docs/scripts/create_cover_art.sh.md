@@ -1,39 +1,62 @@
-# Generate Cover Art from Audio Spectrogram
+# Create Cover Art from Audio Spectrogram
 
 ---
 
-**create_cover_art.sh**: Automatically generates cover art from audio spectrograms using `.wav` files.
+**create_cover_art.sh**: generates a cover image by creating a spectrogram from a selected `.wav` file.
 
 ---
 
 ### Dependencies
 
-- `sox`: A utility that is required for generating the spectrogram from audio files.
-- `dmenu`: A dynamic menu used for the selection of `.wav` files within the specified directory.
-- `imagemagick`: Provides the `convert` tool, which is necessary for image resizing.
-
-### Description
-
-This script generates a visual cover art representation from the spectrogram of a chosen `.wav` file in the `/home/matias/audio/PROJECTS` directory. The cover art is then resized to the specified dimensions of 1600x900 pixels, ensuring consistency in resolution across different projects.
-
-- **File Selection**: It uses `dmenu` to allow the user to interactively choose a file from a list of `.wav` files, offering an interface that displays up to 30 options at once.
-- **Spectrogram Creation**: Utilizes `sox` to create a spectrogram image (`.png`) of the chosen audio file, with predefined dimensions.
-- **Image Resizing**: Employs `imagemagick` to adjust the spectrogram image size to exactly 1600x900 pixels.
-- **Cleanup**: The original spectrogram image is removed after resizing, leaving only the final resized image.
-
-### Usage
-
-To run this script, ensure you have the necessary dependencies installed. You can execute the script directly from the terminal:
-
-```bash
-sh /home/matias/.scripts/bin/create_cover_art.sh
-```
-
-Upon executing, `dmenu` will prompt you with a list of `.wav` files. Select the desired file, and the script will handle the spectrogram creation and resizing automatically.
-
-If you wish to bind this script to a key combination in your `qtile` window manager, you can add it to your keybindings configuration.
+- `sox`  
+  Audio processing tool; used to generate spectrograms from audio files.
+- `dmenu`  
+  Dynamic menu for X; provides an interactive way to pick a `.wav` file.
+- `imagemagick` (`convert`)  
+  Suite for image processing; used to resize the generated spectrogram.
 
 ---
 
-> [!NOTE]
-> Consider adding error handling to manage scenarios where the `find` command returns no files, or if `sox` or `imagemagick` fail to process the file. Additionally, allowing flexibility in selecting directories or adding options for specifying output dimensions could enhance usability.
+### Description
+
+This script is designed to quickly produce a visual cover (art) for an audio file by generating and resizing the spectrogram of a selected `.wav` file. Intended for workflows where visual art for audio projects is needed, it leverages:
+
+- **sox**: to create a high-resolution (1600x900) PNG spectrogram of the `.wav` source selected by the user.
+- **dmenu**: to interactively present all `.wav` files under `/home/matias/audio/PROJECTS` for easy selection within a X session (works seamlessly under qtile).
+- **ImageMagick**: to force the spectrogram image into the desired 1600x900 resolution, ensuring uniform cover sizes.
+- Intermediate files are managed efficiently: the original spectrogram is deleted after resizing, keeping only the final `_RESIZED.png` image.
+
+The script maintains a simple pipeline and expects the user to be at least minimally familiar with the terminal and X-based app launching.
+
+---
+
+### Usage
+
+tldr:
+
+```sh
+/home/matias/.scripts/bin/create_cover_art.sh
+```
+
+**What happens:**
+
+1. A `dmenu` menu appears listing all `.wav` files in `/home/matias/audio/PROJECTS`.
+2. You choose one file (via keyboard navigation/typing).
+3. The script:
+    - Creates a spectrogram image (`file.png`).
+    - Resizes it to 1600x900 pixels (`file_RESIZED.png`).
+    - Deletes the unresized temporary image.
+4. The final result is `file_RESIZED.png` next to your original `.wav` file.
+
+**You can:**
+- Assign the script to a qtile keybinding for even faster access.
+- Chain it with further artwork automation scripts if desired.
+
+---
+
+> [!TIP]
+> - The script has no checking for user cancellation in `dmenu` (empty selection).
+> - It does not escape spaces or special characters in filenames; files with such names may cause errors.
+> - All operations are done in-place in the same directory as the selected `.wav`, which could clutter your project folder with image files.
+> - Consider adding error handling and filename quoting (e.g. `"$file"`, `"$name"`) to improve robustness.
+> - If multiple files with the same base name (but different extensions) exist, overwriting is possible.

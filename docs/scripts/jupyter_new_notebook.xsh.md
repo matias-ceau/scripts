@@ -1,46 +1,65 @@
-# Jupyter Notebook Creator
+# Jupyter New Notebook Launcher
 
 ---
 
-**jupyter_new_notebook.xsh**: Script to create and open a new Jupyter Notebook in Chromium
+**jupyter_new_notebook.xsh**: Quickly create and open a blank Jupyter notebook in Chromium via dmenu.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A Python-powered shell.
-- `dmenu`: A dynamic menu for X.
-- `jupyter-notebook`: To create and serve Jupyter Notebooks.
-- `chromium`: Utilized as the web browser to open the notebook.
-- `notify-send`: For sending desktop notifications for errors or confirmations.
-
-### Description
-
-This script automates the creation of a new Jupyter Notebook and opens it in the Chromium browser. It does this by first reading the project directory located in the user's home path (`$HOME/projects`) where it expects to manage the Jupyter Notebooks. It uses `dmenu` to prompt the user for a notebook name. If the specified name doesn't already exist in the directory, the script creates a new notebook with the basic Jupyter format and opens it directly. If the name already exists or no name is provided, the script issues a critical desktop notification to inform the user.
-
-### Usage
-
-To run this script:
-
-- Ensure all dependencies are installed.
-- Execute the script in a terminal:
-
-  ```bash
-  xonsh /home/matias/.scripts/bin/jupyter_new_notebook.xsh
-  ```
-
-- A `dmenu` prompt will appear. Enter the desired name for your notebook.
-- Upon successful creation, the new notebook will open in Chromium automatically.
-  
-> TL;DR:
-> ```bash
-> xonsh /home/matias/.scripts/bin/jupyter_new_notebook.xsh
-> ```
-> - When prompted, enter a unique name for the Jupyter Notebook.
+- `xonsh`: Python-powered shell, required to run `.xsh` scripts.
+- `jupyter-notebook`: Launches and serves Jupyter notebooks.
+- `chromium`: Browser used to open the notebook.
+- `dmenu`: Dynamic menu for interactive notebook naming.
+- `notify-send`: Sends system notifications (for errors and prompts).
+- `ls`, `echo`: Standard UNIX utilities.
 
 ---
 
-> [!NOTE]
-> - Consider adding more robust error checking to handle edge cases, such as invalid characters for filenames.
-> - It may be beneficial to allow for customization of the `PROJECT_PATH` and default browser in a configuration file or to make them command-line arguments.
-> - Currently, it only notifies the user when there is no name or the name is a duplicate; more detailed user feedback might enhance usability.
+### Description
+
+This script streamlines the creation of new Jupyter notebooks within your `~/projects` directory:
+
+- Prompts for a notebook name via `dmenu`.
+- Appends ".ipynb" to the chosen name.
+- Checks if a notebook with that name already exists in `~/projects`.
+    - If not, it creates an empty notebook file (with standard Jupyter JSON boilerplate) and opens it in Chromium via Jupyter Notebook.
+    - If the file exists, or no name is provided, an error notification is shown.
+
+The script is ideal for rapidly spawning new notebook workspaces and integrating them into your qtile workflow, especially when paired with a custom keybinding for fast access.
+
+---
+
+### Usage
+
+Simple, interactive usage:
+
+```bash
+jupyter_new_notebook.xsh
+```
+
+**Typical workflow:**
+1. Run the script (bind to a key in qtile for maximum efficiency).
+2. A `dmenu` prompt appears—type a name for your new notebook.
+3. If the name is unique, a blank notebook is created and automatically opened in Chromium.
+4. If it already exists or no name is entered, a desktop notification displays the error.
+
+**Example (terminal):**
+```bash
+~/.scripts/bin/jupyter_new_notebook.xsh
+```
+
+**Example (qtile config):**
+```python
+Key([mod], "n", lazy.spawn("~/.scripts/bin/jupyter_new_notebook.xsh"), desc="New Jupyter Notebook")
+```
+
+---
+
+> [!TIP]
+> - The script does not sanitize input thoroughly; entering file-unfriendly characters in `dmenu` (such as slashes or other specials) may create unusable files.
+> - Error checking on the `PROJECT_PATH` directory is absent; ensure it exists, or the script will fail.
+> - Consider adding further validation for notebook names and improving messaging (e.g., support for spaces, automatic trimming, or handling `.ipynb` suffixes).
+> - Optionally, allow creation within subfolders or expose more notebook metadata (like kernel selection), for more flexibility.
+> - The script always opens the notebook in Chromium; you might want to make the browser configurable.

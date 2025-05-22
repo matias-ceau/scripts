@@ -1,62 +1,69 @@
-# Email Sending Script
+# Send Email Script
 
 ---
 
-**send_email.py**: Script to send emails automatically through Python and the Gmail SMTP server.
+**send_email.py**: Script to send an email from the command line with argparse and `smtplib`
 
 ---
 
 ### Dependencies
 
-- `argparse`: Standard library module used for parsing command-line arguments.
-- `smtplib`: Standard library module for SMTP (email sending).
-- `ssl`: Standard library module for secure SSL/TLS connections.
-- `subprocess`: Standard library module for interacting with system commands.
-- `email.message.EmailMessage`: To create and format email messages.
-- `pass`: External CLI tool for securely storing and retrieving passwords ([Password Store](https://www.passwordstore.org/)).
-
-**Note**: Ensure that the `pass` tool is installed and your Gmail passwords are saved correctly within `pass`.
-
----
+- `python` (>=3.6) — The script is written in Python.
+- `argparse` (builtin) — For parsing command-line arguments.
+- `smtplib` (builtin) — To send mail via SMTP.
+- `ssl` (builtin) — For secure SMTP connection.
+- `subprocess` (builtin) — To securely fetch passwords.
+- `email` (builtin) — Constructs MIME email messages.
+- `pass` — Password manager; retrieves email account passwords securely from your password store.
 
 ### Description
 
-This script allows sending emails programmatically. It constructs the email using the `email` library, retrieves the sender email's password securely via the `pass` utility, and sends the email using Gmail's SMTP server over an SSL connection.
+This script provides a CLI utility for quickly sending emails from your terminal, leveraging your existing password store for authentication:
 
-Key functions:
-1. **`get_password(sender)`**: Uses the `pass` utility to fetch the password for the email account (sender). Assumes passwords are stored in `pass` under the name corresponding to the sender email.
-2. **`generate_mail(...)`**: Creates an `EmailMessage` object with the appropriate headers and content.
-3. **`argument_parser()`**: Parses command-line arguments like sender, recipient, subject, etc. Default values are preconfigured.
-4. **`main()`**: Combines all the above to retrieve the password, format the email, and send it using Gmail's SMTP server.
-
----
+- It uses `argparse` to accept sender, receiver, subject, display name, and content as flags/arguments.
+- Emails are structured using the `EmailMessage` class for clean formatting.
+- The `get_password()` function fetches your email account password from the `pass` password manager, assuming you keep the plain password on the second line of the pass file for the sender's email.
+- It uses `smtplib.SMTP_SSL` to securely connect to Gmail's SMTP server on port 465 and send your message.
 
 ### Usage
 
-Run the script in a terminal with the appropriate arguments:
+You can run this script directly from the terminal or bind it to a launcher/shortcut in qtile. 
 
-```bash
-python send_email.py --email-sender <sender_email> --email-receiver <receiver_email> -s <subject> -c <content>
+Basic example:
+
+```
+$ ~/.scripts/bin/send_email.py \
+    --email-sender matiasylinenceau@gmail.com \
+    --email-receiver someone@example.com \
+    -s "Subject Line" \
+    -c "Body of the email"
 ```
 
-#### Example:
-```bash
-python send_email.py --email-sender matiasylinenceau@gmail.com --email-receiver matias@ceau.net -s "Hello there!" -c "This is a test message sent via Python."
+With minimal arguments (uses script defaults):
+
+```
+$ ~/.scripts/bin/send_email.py
 ```
 
-**Command-Line Options**:
-- `--email-sender` (default: "matiasylinenceau@gmail.com"): Sender email address.
-- `--email-receiver` (default: "matias@ceau.net"): Receiver email address.
-- `-s, --subject` (default: "automatic"): Email subject line.
-- `--display-name` (default: "self"): Display name of sender.
-- `-c, --content` (default: "Testing"): Email body content.
+**Arguments:**
 
-This script can be tied to keybindings in qtile for quick email dispatching.
+| Flag                | Default                        | Description                    |
+|---------------------|--------------------------------|--------------------------------|
+| --email-sender      | matiasylinenceau@gmail.com     | Gmail address to send from     |
+| --email-receiver    | matias@ceau.net                | Address to send mail to        |
+| -s, --subject       | automatic                      | Email subject                  |
+| --display-name      | self                           | Name shown as sender           |
+| -c, --content       | Testing                        | Email body                     |
+
+*Ensure that your password is correctly stored in `pass` under the label that matches your sender's email address, with the password on the second line.*
 
 ---
 
-> [!TIP]
-> - The script tightly couples with the Gmail SMTP server (`smtp.gmail.com`) and assumes the password is managed by `pass`. Make this configurable in case of non-Gmail emails or alternate password managers.
-> - Remember to use [App Passwords](https://support.google.com/accounts/answer/185833?hl=en) for Gmail to meet their recent security policies.
-> - Error handling can be added, e.g., for cases where `pass` outputs errors or if SMTP fails to connect.
-> - Consider logging the success or failure of each email dispatch for debugging purposes.
+> [!CAUTION]
+> - The script directly fetches the second line from your `pass` entry for the sender's email, assuming your password is configured on that line. This could fail if your password is located elsewhere or your `pass` entry structure differs.
+> - Password retrieval isn't very flexible. If you use GPG comments or extra metadata in your password store, you might need to adjust the line indexing.
+> - `"From"` header uses the display name only, which may cause the message to appear malformed in some email clients that expect "Display Name <email@address>" format.
+> - SMTP server details are hardcoded for Gmail; this won't work with other providers as-is.
+> - No error handling for failed authentication, mail delivery errors, or password retrieval.
+> - Sending HTML or attachments is not supported—content is plain text only.
+> - Consider switching to environment variables (or a secrets manager) for more portable authentication if you ever migrate from `pass`.

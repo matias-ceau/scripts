@@ -2,42 +2,65 @@
 
 ---
 
-**show-all-qutebrowser-scripts.sh**: Display and colorize the last few scripts installed with qutebrowser
+**show-all-qutebrowser-scripts.sh**: Display the content of Qutebrowser's bundled scripts using `bat` for preview
 
 ---
 
 ### Dependencies
 
-- `qutebrowser`: The browser whose scripts are queried.
-- `pacman`: Package manager for Arch Linux, used to list the contents of the qutebrowser package.
-- `rg` (ripgrep): A line-oriented search tool that recursively searches your current directory for a regex pattern.
-- `sed`: Stream editor for filtering and transforming text.
-- `xargs`: Utility to build and execute command lines from standard input.
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-
-### Description
-
-The script `show-all-qutebrowser-scripts.sh` is designed to extract and display a list of the most recent scripts that are part of the qutebrowser package on an Arch Linux system. It uses `pacman` to list all files within the qutebrowser package, and processes this list to show only non-directory files (presumably script files), while tailing the last 37 entries. These are then processed with `ripgrep` to filter out directory listings, and `sed` to parse the filepath, leaving just the script name. Finally, `bat` is used to display these scripts with syntax highlighting.
-
-### Usage
-
-To run the script, you simply execute it from the terminal. Here's how you can use it:
-
-```bash
-~/.scripts/bin/show-all-qutebrowser-scripts.sh
-```
-
-This script runs non-interactively, which means it doesn't require any user input after execution. It is perfect for being called from a terminal emulator but can also be integrated into a workflow via keybindings in qtile.
-
-Example usage could seamlessly integrate into a qtile keybinding as follows:
-
-```python
-Key([mod], "b", lazy.spawn("~/.scripts/bin/show-all-qutebrowser-scripts.sh")),
-```
-
-This will bind the script to `mod + b`, showing all the scripts directly in your terminal with syntax highlighting.
+- `qutebrowser`: The package from which scripts are listed.
+- `pacman`: Used for querying files installed by qutebrowser (Arch Linux package manager).
+- `ripgrep` (`rg`): Filters out directories from the listing.
+- `sed`: For text substitution, to format paths.
+- `xargs`: Executes `bat` on each listed file.
+- `bat`: Syntax-highlighting cat clone, used to preview file content.
 
 ---
 
-> [!TIP]
-> Currently, the script assumes that the last 37 entries in the `pacman` listing of qutebrowser are scripts of interest, which may not always be the case. It might be beneficial to parameterize the number of entries you tail to make this more flexible. Additionally, if `bat` is not available, it might be useful to add a fallback to `cat` or allow user configuration for the output tool.
+### Description
+
+This script lists and displays all non-directory files provided by the `qutebrowser` package (likely helper scripts or utilities shipped in its `/usr/bin` or `/usr/share` directories). 
+
+Core steps:
+
+1. `pacman -Ql qutebrowser` lists all files installed by the package.
+2. `tail -n 37` takes the last 37 lines, assuming these correspond to the actual scripts (might need tweaking if upstream packaging changes).
+3. `rg -v '/$'` filters out directories, only keeping files.
+4. `sed 's/^.*qutebrowser //'` strips the leading package/file info, resulting in just paths relative to the root.
+5. `xargs bat` sequentially displays the content of these files using `bat` for pretty-printing.
+
+This process produces a quick audit/glance at all Qutebrowser-related scripts, helpful for quickly reviewing helpers, wrappers, or plugin code.
+
+---
+
+### Usage
+
+You can run this script in a terminal:
+
+```
+~/.scripts/bin/show-all-qutebrowser-scripts.sh
+```
+
+Or assign it to a custom keybinding in Qtile, for example in your `~/.config/qtile/config.py`:
+
+```python
+Key([mod], "F12", lazy.spawn("~/.scripts/bin/show-all-qutebrowser-scripts.sh"))
+```
+
+#### Example TLDR
+
+```
+Show the scripts in the terminal:
+$ ~/.scripts/bin/show-all-qutebrowser-scripts.sh
+
+Send output to a file for later viewing:
+$ ~/.scripts/bin/show-all-qutebrowser-scripts.sh > qtb_scripts.txt
+```
+
+---
+
+> [!NOTE]
+> - The use of `tail -n 37` is brittle. If Qutebrowser's packaging changes, this might omit some scripts or include non-scripts. Consider using `awk` or filtering directly for `.sh` or relevant script paths instead.
+> - This script only works on Arch (or Arch-like) systems where `pacman` is available.
+> - `bat` will error on binary or un-readable files. Adding safeguards for file type could improve robustness.
+> - For distribution or portability, checking whether all dependencies are present would be helpful.

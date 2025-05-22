@@ -1,42 +1,67 @@
-# Speech to Text Script
+# Speech to Text Audio Transcriber
 
 ---
 
-**speach-to-text.py**: Record audio and transcribe it using OpenAI's Whisper model
+**speach-to-text.py**:  
+Python script for recording audio via a selected device and transcribing it to text using OpenAI Whisper.
 
 ---
 
 ### Dependencies
 
-- `sounddevice`: Used for audio recording.
-- `openai`: Accesses OpenAI API for transcription.
-- `scipy.io.wavfile`: Writes the recorded audio to a WAV file.
+- `openai`  
+  Python package to access the OpenAI API (used for sending audio to Whisper).
+- `scipy`  
+  For writing WAV files to disk.
+- `sounddevice`  
+  For capturing audio from microphone/audio input.
+- `uv`  
+  Used as the fast Python package runner (see shebang).
+- Python >= 3.13
 
 ### Description
 
-This script is designed for users looking to transcribe spoken audio into text using OpenAI's Whisper model. The script records audio using the `sounddevice` library, saving temporary `WAV` files using `scipy.io.wavfile`, and then transcribes them with OpenAI's `Whisper` model via the `openai` library.
+This script offers a minimal, interactive solution to record your speech (or any audio) through a selected audio device, and get it transcribed using the OpenAI Whisper API.
 
-- **Audio Device Selection:** It checks if a preferred device (`UMC202HD 192k: USB`) is available, defaulting to manual selection if not.
-- **Recording:** It captures audio for a maximum of 30 seconds. Recording can be manually stopped by pressing the **Enter** key.
-- **File Handling & Transcription:** Once recorded, the file is saved and sent to OpenAI for transcription. The transcription is then printed to the standard output.
+#### Main Features:
+- Defaults to the device "UMC202HD 192k: USB", or prompts you to choose an input device.
+- Records up to 30 seconds of mono audio, sample rate at 48 kHz.
+- Recording stops when you press Enter (`<CR>`).
+- Audio is saved temporarily as `temp.wav`.
+- Uses the OpenAI Python SDK to transcribe the wav file with the `whisper-1` model and prints the result to stdout.
+
+#### Functions:
+- **record_or_abort()**: Handles live, interactive recording and writes to disk.
+- **transcribe()**: Uploads the file and outputs the transcription.
 
 ### Usage
 
-To use this script, ensure you have configured API access for OpenAI.
+**tldr:**
 
-```bash
-python /home/matias/.scripts/bin/speach-to-text.py
+```sh
+# You probably want to run this interactively from your default terminal:
+~/.scripts/bin/speach-to-text.py
+
+# Or bind it in your qtile config to a keypress, using:
+lazy.spawn("~/.scripts/bin/speach-to-text.py")
 ```
 
-1. The script will check for the preferred audio device or prompt for selection.
-2. Audio will be recorded for up to 30 seconds, or until the **Enter** key is pressed.
-3. The recorded audio is saved as `temp.wav`.
-4. Transcription is automatically performed and displayed in the terminal.
+#### Steps:
+1. If your audio device is not "UMC202HD 192k: USB", you'll be prompted to select a device by index.
+2. Speak/record after the prompt. Press Enter to stop before 30s.
+3. Wait for transcription to print (network connection required for OpenAI API).
+4. Check the prompt for your recognized speech.
+
+*Requires your OpenAI API key to be configured in your environment* (see OpenAI Python SDK docs).
 
 ---
 
-> [!TIP]
-> - **Error Handling:** The script assumes the preferred device name is always accurate. Adding error handling for invalid device names or indices can make selection more robust.
-> - **Device Querying:** This process could be improved with a custom function to verify connected devices and return more user-friendly messages.
-> - **Transcription Validation:** Consider implementing checks to handle API errors or empty transcriptions, ensuring they don't unduly interfere.
-> - **Default File Handling:** Utilize a unique naming strategy for temporary files to avoid potential overwrites and conflicts.
+> [!NOTE]
+> - Typo in script name (`speach-to-text.py` → `speech-to-text.py` recommended).
+> - Device selection logic could be improved for robustness (e.g., safe integer parsing and device validation).
+> - No automatic deletion of `temp.wav`, so temp files may accumulate.
+> - No error handling if OpenAI API fails, or if network is absent.
+> - Consider making duration/config parameters customizable by CLI arguments.
+> - Prompt is minimal (`<CR> to stop`), but could be more user-friendly.
+> - Would benefit from a notification about where to set the OpenAI API key.
+> - For qtile integration, check that the script does not require terminal input if assigning to a keybinding.

@@ -1,44 +1,73 @@
-# TUI GPT Interface
+# Mother: Terminal TUI Chat with GPT
 
 ---
 
-**tui-gpt.py**: A terminal-based GPT chat interface resembling 'Mother' from the Aliens movies.
+**tui-gpt.py**: Interactive TUI chat application for GPT models themed as "Mother" from Aliens.
 
 ---
 
 ### Dependencies
 
-- `python (>=3.12)`: The script requires Python version 3.12 or higher to run.
-- `llm`: A library for handling large language models.
-- `textual`: A library for creating TUI (Text User Interface) applications.
-- `rich`: Provides the `MONOKAI` theme used for text styling.
-
-### Description
-
-The `tui-gpt.py` script creates a TUI application that acts as a conversational interface with OpenAI's GPT models, specifically the "gpt-4o-2024-08-06" model. It provides a retro feel, simulating the persona of "Mother" from the Aliens franchise. The user inputs prompts which are sent to the model, and the responses are displayed in the terminal application.
-
-The main class `MotherApp` uses `textual` to build a UI layout with thematic styling provided by `rich`. It consists of a header, a scrollable chat view, an input field where users type their prompts, and a footer. The script utilizes asynchronous handling to ensure the application remains responsive during interactions with the GPT API. The script is pre-configured to respond in a specific mode, by setting the `SYSTEM` variable, which guides the character of the responses.
-
-### Usage
-
-To use the script, ensure all dependencies are installed and you have an OpenAI API key set in your environment variables as `OPENAI_API_KEY`.
-
-1. **Run in terminal**: 
-   ```bash
-   python /home/matias/.scripts/bin/tui-gpt.py
-   ```
-
-2. **Input a prompt** into the console's input field.
-
-3. **View response**: The script will process and render the response from the GPT model in the chat view area.
-
-```bash
-API_KEY=your_openai_api_key python /home/matias/.scripts/bin/tui-gpt.py
-```
-
-Note: Replace `your_openai_api_key` with your actual OpenAI API key.
+- `python >=3.12` – Minimum Python version required.
+- `openai` – Official OpenAI Python client for API queries.
+- `textual` – For building terminal GUI apps.
+- `rich` – Used by textual for colors and themes.
+- (Optional, commented out but referenced) `llm` – Alternative model interface (not actively used in this script).
+- Environment variable: `OPENAI_API_KEY` must be set for authentication.
 
 ---
 
-> [!TIP]
-> The provided prompt handling is synchronous for text input, which might lead to a delay if the API response is large or slow. Consider implementing a more robust error-handling mechanism if the OpenAI service is unavailable or the API key is invalid. Also, improve the user experience by adding more customization options for the UI, such as color themes or model selections.
+### Description
+
+This script launches a terminal-based chat interface styled after "Mother", the AI from the Alien movies. It uses the [Textual](https://www.textualize.io/) library for a modern terminal UI, showing chat prompts and model responses with custom colors and borders for clarity.
+
+Key features:
+
+- **Prompt/Response distinction**: Your input is styled differently from AI replies.
+- **Continuous streaming**: AI responses appear in real time as they are received from OpenAI's GPT API (`gpt-4o-2024-08-06`).
+- **Alien lore flavor**: All model output is instructively themed as if spoken by "Mother" from Alien.
+- **Persistent vertical scroll**: See previous chat history, auto-scroll enabled.
+
+Key components:
+
+- `MotherApp` class: Main Textual app, handles UI layout and interactions.
+- `Prompt` and `Response`: Widgets for displaying user questions and AI answers.
+- Upon each input, the script creates a new API chat session and renders the stream live, suitable for direct interactive use in a terminal.
+
+---
+
+### Usage
+
+Set up your API key (one-time, or in your shell config):
+
+```
+export OPENAI_API_KEY="sk-..."
+```
+
+Run the script directly from your terminal:
+
+```
+python /home/matias/.scripts/bin/tui-gpt.py
+```
+
+#### TL;DR
+
+- Start chat:  
+  ```bash
+  python tui-gpt.py
+  ```
+- Type your query, press `Enter`.
+- Responses stream in real time.
+- Exit with `Ctrl+C` or standard Textual quit sequences.
+
+Tip: Assign this script to a qtile keybinding for instant access from your Arch setup!
+
+---
+
+> [!NOTE]
+> - No error handling for missing or invalid `OPENAI_API_KEY`—fails with an exception if not set.
+> - Script depends on a recent version of Textual; older Python packages might not render the interface as intended.
+> - Code for the optional `llm` backend is present but commented, which could be cleaned up or made configurable.
+> - API key is read directly from the environment; consider adding better secrets management.
+> - Consider adding input history navigation and multi-turn chat context for a richer experience.  
+> - Currently, the system prompt is hardcoded; making it configurable at runtime could improve utility.

@@ -1,46 +1,65 @@
-# Qutebrowser URL Opener
+# Open URL in Existing Qutebrowser Instance
 
 ---
 
-**open_url_in_instance.sh**: Opens a URL in an existing Qutebrowser instance or starts a new one.
+**open_url_in_instance.sh**: Open a URL in an already running qutebrowser session, or start a new one if needed
 
 ---
 
 ### Dependencies
 
-- `qutebrowser`: Minimalistic keyboard-driven web browser. Make sure it is installed at `/usr/bin/qutebrowser`.
-- `socat`: Utility used for data transfer between two endpoints.
-- `md5sum`: Utility to calculate the MD5 hash, used here for generating a socket identifier.
+- `qutebrowser` — Minimal browser driven by keyboard.
+- `socat` — Utility for bidirectional data transfer via sockets.
+- `md5sum` — Used for generating hashed socket names.
+- `sh` — Compatible POSIX shell.
+
+All dependencies should be available from the standard Arch Linux repositories.
+
+---
 
 ### Description
 
-The script is designed to open a given URL in an existing instance of Qutebrowser or launch a new one if needed. This is done by utilizing Inter-Process Communication (IPC) through a socket file designated by `XDG_RUNTIME_DIR`. The script constructs a JSON message with details such as the URL, Qutebrowser version, protocol version, and current working directory, then sends it to Qutebrowser via the socket. If this IPC communication fails (when no instance is running), the script launches a new Qutebrowser session with the provided URL.
+This script is designed to send a URL (or any qutebrowser argument list) to an already running instance of `qutebrowser` using its IPC socket. If no session is detected, it falls back to starting a new instance of qutebrowser with the provided arguments.
 
-Behind the scenes, the script utilizes several key components:
-- Variables like `_url`, `_qb_version`, `_proto_version`, and `_ipc_socket` are initialized to store essential information.
-- The `printf` command constructs the JSON message.
-- `socat` is employed to attempt connection to the existing Qutebrowser IPC socket.
-- If `socat` fails, Qutebrowser is called directly to open the URL, thereby starting a new instance.
+#### Key Ideas:
+- Determines the IPC socket based on the current user's `XDG_RUNTIME_DIR` and a hashed username.
+- Prepares a JSON object with URL, qutebrowser version, protocol information, and working directory.
+- Uses `socat` to transmit the JSON to the qutebrowser IPC socket, following the qutebrowser's remote command protocol.
+- If IPC connection fails (socket unavailable or qutebrowser not running), the script launches qutebrowser directly with the supplied arguments.
+
+#### Script Flow:
+1. Parses the first argument as the URL to open.
+2. Constructs the socket path and command using environment and qutebrowser version details.
+3. Tries sending the open command via IPC; if unsuccessful, runs `qutebrowser` in the background.
+
+---
 
 ### Usage
 
-This script is designed to take one argument, the URL to open, and can be executed as follows:
-
+**Basic example:**
 ```sh
-open_url_in_instance.sh https://example.com
+open_url_in_instance.sh https://archlinux.org/
 ```
 
-You can run this script from a terminal or bind it to a key combination in your window manager (qtile), using a custom keybinding setup.
-
-For example, you can utilize qtile’s key bindings feature in your `config.py`:
-
-```python
-Key([mod], "u", lazy.spawn("/home/matias/.scripts/bin/open_url_in_instance.sh")),
+**With other arguments:**
+```sh
+open_url_in_instance.sh --target window https://wiki.archlinux.org/
 ```
 
-Replace `mod` and `u` with your preferred modifier key and key combination.
+**Integration:**
+- Assign to a keybinding in qtile for "send URL to browser".
+- Use as a drop-in replacement for usual browser opener commands, ensuring URLs always open in one consistent qutebrowser session.
+
+This script can be executed from the terminal or hooked into application launchers (like rofi), scripts, or qtile keybindings.
+
+#### TL;DR
+```sh
+# Always open new URL in existing qutebrowser window/session if possible
+open_url_in_instance.sh <your-url>
+```
 
 ---
 
 > [!TIP]
-> The script could be expanded to include more robust error handling, such as catching exceptions when `socat` is unavailable. Also, adding support for handling URLs without a protocol (e.g., adding `http://` if missing) would improve user experience.
+>
+> The script relies on `md5sum` to generate a user-specific socket name, which is convenient and adequate, but if $USER contains unexpected/unusual characters, checks for edge cases may be warranted. Moreover, error handling is minimal: if socat fails for any reason other than "qutebrowser not running," the fallback might inadvertently launch unwanted browser instances. Consider extending the script to handle more nuanced failure conditions, possibly with user-facing error messages or logging for troubleshooting. Also, the version and protocol variables are hardcoded—if you update qutebrowser, compatibility may break. Reading these dynamically, or providing an explanation in the script's comments, would improve maintainability.

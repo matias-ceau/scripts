@@ -1,36 +1,72 @@
-# M3U Playlist Creator
+# m3u Creator Script
 
 ---
 
-**m3u_creator.sh**: Creates an M3U playlist file from all files in the current directory.
+**m3u_creator.sh**: Quickly generate an m3u playlist file from all files in the current directory
 
 ---
 
 ### Dependencies
 
-- `bash`: The script is a Bash shell script and requires the Bash shell to run.
-- `ls`: Utilized to list files in the current directory.
+- `bash`  
+  Standard GNU Bourne Again Shell.
+- `ls`  
+  Coreutils tool to list directory contents.
 
 ### Description
 
-This script, `m3u_creator.sh`, is a simple utility designed to generate an M3U playlist from the current directory's files. Here's a breakdown of its functionality:
+This script automates the creation of an `.m3u` playlist file containing all files (one per line) in the current directory. The generated playlist is named after the directory itself, following this pattern:
 
-- It determines the name of the current directory using `basename "$PWD"`, which captures only the last part of your current working directory path.
-- An M3U playlist file is created using this directory name, appended with a `.m3u` extension.
-- The script uses the `ls -1` command to list all files in the directory one per line, which is redirected into the playlist file, effectively populating the M3U file with entries corresponding to each file in the directory.
+```
+<directory-name>.m3u
+```
+
+For example, if you're in a directory called `MyMusic`, running this script will create a file called `MyMusic.m3u` that lists every file in that directory.
+
+**How it works:**
+
+- Retrieves the base name of your current working directory (`$PWD`).
+- Runs `ls -1` to list all files (non-recursively) in the directory, one per line.
+- Writes this file list into a new `.m3u` file whose name matches your current directory name.
+
+This is useful for quickly generating simple playlist files compatible with music players that support the M3U format.
 
 ### Usage
 
-To use the `m3u_creator.sh` script, simply navigate to the directory containing the files you wish to include in your playlist and execute the script. Here’s how:
+You can run the script in any directory to create a playlist from the files in that directory.
 
+#### Direct Terminal execution:
 ```bash
-cd /path/to/your/music/directory
-/home/matias/.scripts/bin/m3u_creator.sh
+cd ~/Music/Albums/SomeAlbum
+~/.scripts/bin/m3u_creator.sh
 ```
 
-This will create a file named `your_directory_name.m3u` which contains an entry for each file in your current directory.
+This creates `SomeAlbum.m3u` in the current directory, containing a list of all files found there.
+
+#### Assigning to qtile keybinding:
+To map the script to a keybinding in your qtile config:
+
+```python
+Key([mod], "F10", lazy.spawn("~/.scripts/bin/m3u_creator.sh"))
+```
+*(Replace `[mod]` and `"F10"` with your preferred modifier and key)*
+
+#### TL;DR
+
+```sh
+# From within any folder:
+m3u_creator.sh
+# A playlist .m3u appears with the same name as the directory, listing all files inside.
+```
 
 ---
 
-> [!NOTE]
-> One issue with the script is that it includes all files in the current directory without filtering for specific types (e.g., audio files). Consider adding functionality to filter files based on extensions (like `.mp3`, `.wav`), as this would result in a more useful M3U playlist. Additionally, it might be worth adding a check to ensure the playlist file is not unintentionally overwritten if it exists.
+> [!TIP]
+>
+> - The script lists **all files**, regardless of file type. Consider filtering for music files (e.g., `.mp3`, `.flac`) if you want your playlist to include only relevant formats.
+> - Files are listed in alphabetical order and not recursively. Subfolders and their contents are not included.  
+> - Filenames containing newlines or special characters could cause issues with some players.  
+> - If re-run, the script overwrites any existing `.m3u` with the same name, which might lead to data loss if your playlist was edited manually.  
+> - For a more robust solution, use `find` and filtering, e.g.  
+>   `find . -maxdepth 1 -type f -iname "*.mp3" | sort > "$playlist_file"`  
+>   This way, only music files are included in the playlist.

@@ -1,56 +1,63 @@
-# fzfmenu_run.sh
+# FZF Menu Runner
 
 ---
 
-**fzfmenu_run.sh**: Dmenu run replacement using fzf in a floating xterm terminal
+**fzfmenu_run.sh**: Launches app selection using fzf in a floating terminal, as a `dmenu_run` replacement.
 
 ---
 
 ### Dependencies
 
-This script requires the following dependencies:
-
-- `fzfmenu_cache.sh`: A required script to feed options into the fzf pipeline.
-- `improved-fzfmenu.sh`: A script that processes the fzf pipeline and contributes additional features like ANSI formatting.
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `systemd`: Utilized for creating a user-level scope to run the selected command.
-- A floating terminal setup compatible with your Arch Linux environment. On qtile, this might be configured through keybindings or specific terminal properties.
-
-### Description
-
-This script acts as an alternative to the conventional `dmenu_run`, offering a more interactive experience via `fzf`. It utilizes cached application paths or commands as input to `fzf`, where you can fuzzy search for specific applications or scripts. Once an item is selected:
-
-1. It checks if anything was selected. If not, the script exits silently.
-2. If a selection exists, it executes the chosen command using `systemd-run` under a new user scope. This ensures the execution does not block other operations.
-
-Additionally, the script offers convenience features such as processing cached inputs and additional display formatting, thanks to `fzfmenu_cache.sh` and `improved-fzfmenu.sh`.
-
-### Usage
-
-To use the script, ensure it is executable:
-```bash
-chmod +x /home/matias/.scripts/bin/fzfmenu_run.sh
-```
-
-Execute the script directly:
-```bash
-~/.scripts/bin/fzfmenu_run.sh
-```
-
-Alternatively, you can bind the script to a key combination in qtile. For instance, you can add this to your `~/.config/qtile/config.py`:
-```python
-Key([mod], "r", lazy.spawn("~/.scripts/bin/fzfmenu_run.sh"), desc="Run fzf launcher")
-```
-
-Sample Input/Output interaction:
-- The script shows a fuzzy-search interface with the available binaries, scripts, or commands.
-- Example: Typing `fire` might show `firefox`, `firewalld`, etc.
-- After selecting `firefox`, it will launch the browser in a new window.
+- `fzfmenu_cache.sh`  
+  – Script to retrieve/caches a list of executable commands.
+- `improved-fzfmenu.sh`  
+  – Wrapper to present the list through `fzf` in an improved (highlighted/ansi) way.
+- `fzf`  
+  – Command-line fuzzy finder.
+- `systemd-run`  
+  – Run a process in a user-scoped transient systemd unit.
+- `bash`  
+  – Standard bash shell.
+- `xterm` or alternative configured backend  
+  – Floating terminal is implied; if using with qtile, proper floating behavior must be configured.
 
 ---
 
-> [!NOTE]
-> - This script assumes `fzfmenu_cache.sh` and `improved-fzfmenu.sh` are present and functional. If they are missing or have bugs, the script will fail entirely.
-> - Consider adding error handling. For example, verify that dependencies like `fzf` or the required scripts are available before running the main logic.
-> - While systemd-run adds robustness, it might not be ideal in all use cases, such as environments where systemd isn't available. Consider adding fallbacks.
-> - Provide further customization for users to configure the floating terminal setup if not predefined in their environment.
+### Description
+
+This script is intended as a modern, more powerful drop-in replacement for `dmenu_run` on a system using `fzf` (fuzzy finder) for interactive app launching. It is especially well-suited for advanced window managers like Qtile.
+
+**Workflow**:
+1. Gathers available command entries via `fzfmenu_cache.sh`.
+2. Pipes them into `improved-fzfmenu.sh` to display and select using `fzf`.
+3. Captures the selected command; if none, simply exits.
+4. Runs your selection in the background using `systemd-run` for resource isolation, invoking the command under `bash`.
+
+This pattern is robust for use under custom keybindings or as a modular launcher for frequently used programs in the Qtile environment.
+
+---
+
+### Usage
+
+**Run directly in a floating terminal:**
+```sh
+~/.scripts/bin/fzfmenu_run.sh
+```
+**Recommended: map to a qtile keybinding (for example, mod+p):**
+```python
+Key([mod], "p", lazy.spawn("xterm -e ~/.scripts/bin/fzfmenu_run.sh"))
+```
+Depending on your usual terminal setup or launcher, you may want to ensure that the terminal opens in floating mode for best experience.
+
+**tldr**
+- Launch the script to choose and run any command interactively.
+- Nothing is executed if you don't make a selection.
+- Runs safely in its own systemd scope for stability.
+
+---
+
+> [!TIP]  
+> - This script is tightly coupled to custom helpers: `fzfmenu_cache.sh` and `improved-fzfmenu.sh`. These should be version-locked or managed carefully to avoid future breakage.
+> - Consider handling multi-word/argument applications more explicitly (e.g., quoted entries) if not already handled downstream.
+> - There is no error feedback if a selected program fails to launch; integrating simple notifications (e.g., `notify-send` on failure) could improve UX.
+> - For maximum flexibility, you could allow overriding the terminal or make systemd-run optional via flags.  

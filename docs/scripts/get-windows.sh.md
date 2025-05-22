@@ -1,35 +1,66 @@
-# QTile Window Extractor
+# qtile: Get Windows Script
 
 ---
 
-**get-windows.sh**: Retrieves and formats window details from qtile
+**get-windows.sh**: Outputs information about currently open windows in qtile (ID, group, name, wm_class)
 
 ---
 
 ### Dependencies
 
-- `qtile`: The window manager from which the script retrieves window data.
-- `uv`: A command runner used here to execute an embedded Python snippet.
-- `bash`: The shell used to execute the script.
+- `qtile`  
+  Used to query the current state of windows via the `cmd-obj` command.
+- `uv`  
+  Runs the script using the uv Python runtime environment.
+- `bash`  
+  Script is written for the Bash shell.
 
 ### Description
 
-This script is designed to extract window information from your running qtile session on Arch Linux. The script leverages qtile's command object interface by running "qtile cmd-obj -o root -f windows" to fetch details about each window. It then passes this output to an embedded Python script via `uv run -`, which processes the data.
+This script retrieves a list of all windows managed by your current qtile session and prints out essential information for each window in a tab-separated format. Specifically, it uses the following workflow:
 
-Inside the Python snippet, the script defines a list called `keylist` consisting of window attributes: `id`, `group`, `name`, and `wm_class`. The snippet iterates over every window entry from the qtile output (stored in the variable `win`), and for each entry, it extracts only the key-value pairs where the key exists in the `keylist`. The values are then converted to strings and aggregated into sublists. Finally, the script outputs each window's details as a tab-separated line, making it easier to read or use in other command-line utilities.
+1. Calls qtile's `cmd-obj -o root -f windows` to retrieve structured data about each window.
+2. Embeds this data into a Python snippet executed under `uv run`.
+3. Extracts and displays per-window:
+   - X11 window ID
+   - Associated group
+   - Window name (title)
+   - Window class (`wm_class`)
 
-This approach is particularly useful when you want to quickly list and inspect open windows within a qtile session from a command-line interface. By filtering only the essential attributes, you avoid clutter and focus on identifying windows based on their grouping, identifier, class, or name.
+The main script block manipulates the response from qtile, extracting only relevant fields into a simplified tabular output, which can be useful for debugging window/group assignments, scripting, external status bars, or custom workflows within your Arch/qtile environment.
 
 ### Usage
 
-To execute the script, simply run it from your terminal:
+You can run this script directly in a shell, or bind it to a key or invoke it from other scripts. For instance:
 
-  $ /home/matias/.scripts/dev/get-windows.sh
+```bash
+~/.scripts/dev/get-windows.sh
+```
 
-You can also bind this script to a key in your qtile configuration. For example, add an entry in your qtile keybindings to run the script with a terminal command. The output will be printed directly to the terminal, showing each window on a new line with relevant details separated by tabs.
+**Example output:**
+```
+50331658	2	Alacritty	alacritty
+65011718	3	Fox	Firefox
+...
+```
+
+#### Typical ways to use:
+- Run interactively in a terminal to quickly inspect windows.
+- Pipe output to other scripts or utilities for automation/parsing:
+
+```bash
+~/.scripts/dev/get-windows.sh | grep Alacritty
+```
+
+- Bind to a key in your qtile configuration to show window info on demand.
 
 ---
 
 > [!TIP]
-> Consider checking whether the `uv` command is installed and properly configured in your environment.
-> You might also want to add error handling in case the `qtile` command fails or returns unexpected data. This would improve the script's resilience and make debugging easier if future changes occur in the qtile API.
+>
+> There are a few aspects to consider for improvement:
+> - The direct shell interpolation of `$(qtile cmd-obj ...)` into the Python `win = ...` statement is potentially brittle if the output is very large or contains characters that confuse bash or Python parsing (e.g. quotes).
+> - It may be more robust to run the qtile command directly in Python using subprocess or through the qtile IPC API, especially for handling the structured outputs without Bash mediation.
+> - The script assumes all dependencies are available in the environment; consider adding checks or error handling for missing utilities.
+> - Consider adding a header row to the output for clarity, or making the output format configurable (e.g., CSV for further integrations).
+> - To avoid `uv run` dependency if not strictly needed, a pure `python` executable would increase portability.

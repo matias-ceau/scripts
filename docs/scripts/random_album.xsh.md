@@ -1,45 +1,58 @@
-# Random Album Player
+# Random Album Player for cmus
 
 ---
 
-**random_album.xsh**: Selects and plays a random album using cmus.
+**random_album.xsh**: Selects 10 random albums from your cmus library and plays them.
 
 ---
 
 ### Dependencies
 
-- `xonsh`: A shell that combines Python and Bash.
-- `cmus`: A small, fast, and powerful console music player.
-- `cmus-remote`: Part of cmus, used to interact with a running cmus instance.
-- `os`: A module providing a way of using operating system dependent functionality.
-- `random`: A module for generating random numbers.
+- `xonsh`: The shell interpreter required to run this script.
+- `cmus`: Console music player. `cmus-remote` is used for playback control.
+- `.config/cmus/lib.pl`: Plain text file used as a library index (full file paths, one per line).
+- Standard Python modules: `random`, `os`.
+
+---
 
 ### Description
 
-The script `random_album.xsh` is designed to enhance your music experience by randomly selecting an album from your cmus library and playing it. The script does this by:
+This script automates the process of selecting and playing a random set of albums in `cmus` on your Arch Linux system running qtile. It does the following:
 
-1. Clearing the current cmus playlist and navigating to the library view.
-2. Extracting album paths from your cmus library (`lib.pl` file).
-3. Randomizing the list of albums and selecting the first 10 to create a temporary playlist.
-4. Saving these tracks to a temporary `.m3u` playlist file.
-5. Utilizing `cmus-remote` to enqueue the songs and play them.
+1. Clears the current cmus playlist and moves to the library view.
+2. Reads all track paths from `.config/cmus/lib.pl`, which is expected to contain one file path per line.
+3. Identifies unique albums by joining the last two directory components of each path (assumes a structure like `/path/to/music/Artist/Album/Track`).
+4. Randomly picks 10 unique albums and gathers all their tracks.
+5. Writes the resulting track list to a temporary playlist file at `~/.config/cmus/.temp.m3u`.
+6. Loads this playlist into cmus and starts playback from the first track.
 
-This script is particularly useful for music enthusiasts using cmus who wish to explore their collection randomly without manually selecting albums.
+This script is particularly useful for quickly shuffling through your music collection by album, providing a fresh listening experience each time.
+
+---
 
 ### Usage
 
-To use this script, ensure you have cmus running, then simply execute the script:
+You can run this script directly from the terminal:
 
-```shell
+```
 xonsh /home/matias/.scripts/bin/random_album.xsh
 ```
 
-Alternatively, you can map this script to a keybinding in your qtile configuration for quick access. The script assumes your cmus library is defined in `~/.config/cmus/lib.pl` and outputs a temporary playlist to `~/.config/cmus/.temp.m3u`.
+Or add it to your PATH and execute:
+
+```
+random_album.xsh
+```
+
+For integration with qtile keybindings, you can add a custom shortcut in your qtile config to execute this script.
+
+**No arguments are required. The script operates automatically on execution.**
 
 ---
 
 > [!TIP]
-> While the script effectively selects and plays random albums, there are potential improvements:
-> - The script might fail if less than 10 unique albums are available; consider adding a condition to handle such cases.
-> - Absolute paths for files and directories would make the script more robust, where possible.
-> - Using `beet` for album selection is partially implemented but commented out; consider finalizing or removing this feature for clarity.
+> - Assumes your `.config/cmus/lib.pl` is always up-to-date and follows a directory structure where the album is identifiable by the last two components of the path. If your music is organized differently, results may be inaccurate.
+> - The script does not check if there are at least 10 albums in your library, which may result in `IndexError` if you have fewer.
+> - Temporary playlist is always overwritten—be cautious if you use `.temp.m3u` for other purposes.
+> - Old commented code (using `beet ls -a`) can be removed for clarity.
+> - Consider wrapping the main logic in a function for better readability and error handling, especially to manage exceptions from malformed paths or missing files.

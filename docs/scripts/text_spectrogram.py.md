@@ -1,68 +1,80 @@
-# text_spectrogram.py Spectrogram Viewer
+# Text-Mode Spectrogram (Live Microphone Viewer)
 
 ---
 
-**text_spectrogram.py**: Show a text-mode spectrogram using live microphone data
+**text_spectrogram.py**: Live real-time text-based spectrogram using microphone input and ANSI colors.
 
 ---
 
 ### Dependencies
 
-- `python3` – The Python interpreter.
-- `numpy` – Provides array operations and FFT computations.
-- `sounddevice` – For accessing the microphone and handling audio streams.
-- `argparse` – For command-line argument parsing.
-- `shutil` – To determine current terminal size.
-- `math` – For various mathematical calculations.
+- `numpy`: Fast numeric array and FFT operations.
+- `sounddevice`: Real-time microphone data acquisition.
+- `shutil`: Terminal size detection.
+- Standard Python modules: `math`, `argparse`.
+- ALSA or PulseAudio (system dependency) support for audio input on Linux.
+- Terminal with ANSI color support (most modern terminals, including those in Arch Linux environments).
+- (Optional) qtile: Can be bound to a keybinding for quick access.
+
+---
 
 ### Description
 
-This Python script creates an interactive text-mode spectrogram by capturing live microphone input. It employs the Fast Fourier Transform (FFT) from the `numpy` library to compute frequency magnitudes in real time, displaying the results as colored text output in the terminal. The script sets up an audio input stream with `sounddevice` and continually processes incoming data in chunks, calculating the relevant frequency bins based on user-defined low and high frequency limits.
+This script visualizes real-time audio frequencies from the default (or user-specified) microphone device as a colorful spectrogram directly in your terminal. 
 
-The spectrogram is rendered using ANSI escape sequences to create a colorful gradient, which visually enhances the frequency intensity display. An initial gain factor can be set to scale the magnitude of the FFT output. The script uses a callback function to process each block of audio data, transforming the samples into a line of gradient characters that represent the audio spectrum. Additionally, it supports interactive adjustments: pressing "+" or "-" (followed by Enter) will double or halve the gain, respectively, while pressing Enter or "q" quits the application. It also contains a command-line option to list available audio devices, making it easier to select the proper input source.
+**How it works:**
+- Uses `sounddevice` to capture live audio data.
+- Applies FFT (Fast Fourier Transform, via `numpy`) to obtain frequency/amplitude information.
+- Draws the amplitude spectrum per block as a colored horizontal line using gradients of ANSI terminal color escapes (“heatmap” style).
+- Configurable parameters let you:
+    - Change frequency range (`--range`)
+    - Adjust gain interactively (`+` to increase, `-` to decrease)
+    - Set spectrogram width
+    - Choose block duration (responsiveness vs. latency)
+    - Select microphone device
+    - List available input devices
+
+The UI is minimalist, relying on “press <enter> to quit,” and responds to `+` and `-` for scaling.
+
+---
 
 ### Usage
 
-Run the script from a terminal in your Arch Linux environment with qtile:
+General usage in terminal:
+```
+python3 ~/.scripts/dev/text_spectrogram.py [options]
+```
+List audio devices first if needed:
+```
+python3 ~/.scripts/dev/text_spectrogram.py --list-devices
+```
+Set device by index or substring, and adjust frequency range:
+```
+python3 ~/.scripts/dev/text_spectrogram.py --device 2 --range 300 3500
+```
+Start with custom gain, width, or block duration:
+```
+python3 ~/.scripts/dev/text_spectrogram.py --gain 20 --columns 100 --block-duration 40
+```
+**During Execution:**
+- `+` (then <enter>): Double gain/contrast.
+- `-` (then <enter>): Halve gain/contrast.
+- `<Enter>` or `q/Q`: Quit.
 
-  
-  ./text_spectrogram.py
-
-  
-Interactive commands within the script:
-  
-  - Press <Enter> or type "q" followed by <Enter> to quit.
-  - Use "+" or "-" keys (with <Enter>) to adjust gain.
-
-  
-Common command-line arguments include:
-
-  
-  - List audio devices:
-    
-      ./text_spectrogram.py --list-devices
-  
-  - Set custom block duration (in milliseconds):
-  
-      ./text_spectrogram.py --block-duration 100
-  
-  - Define the spectrogram width:
-  
-      ./text_spectrogram.py --columns 120
-  
-  - Select the input device (ID or substring):
-  
-      ./text_spectrogram.py --device 1
-  
-  - Adjust initial gain:
-  
-      ./text_spectrogram.py --gain 20
-  
-  - Specify a frequency range:
-  
-      ./text_spectrogram.py --range 50 3000
+Example (good for qtile keybinding):
+```
+alacritty --class="SpectroTerm" -e python3 ~/.scripts/dev/text_spectrogram.py --range 200 4000
+```
 
 ---
 
 > [!TIP]
-> Consider enhancing error handling for cases when terminal size cannot be determined or when the selected audio device is invalid. Further customizations, such as additional color schemes or more flexible keybindings, could improve user experience. Additionally, a more detailed help message could be beneficial for users unfamiliar with spectrogram terminology.  
+> - **User Experience:** Requires frequent keypresses for UI interaction, and printing to input blocks ongoing visualization (single-threaded: input() pauses spectrogram updates).
+> - **Improvements:**
+>   - Replace `input()` with non-blocking key listening (e.g., `curses` or `readchar`) for smooth, uninterrupted display.
+>   - Optionally support stereo or more channels.
+>   - Consider dynamic resizing based on terminal dimension changes (SIGWINCH).
+>   - Add a persistent info/header/status bar.
+> - **Performance:** Might experience lag on slow terminals or with large FFT sizes.
+> - **Portability:** Hard requirement for color and Unicode support; basic shell or tmux sessions may render colors poorly.
+> - **Exception Handling:** Good coverage, but consider graceful restart of the stream if device disconnects.

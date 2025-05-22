@@ -1,37 +1,72 @@
-# Desktop Launcher with FZF
+# Fuzzy .desktop Launcher
 
 ---
 
-**desk_fzf.sh**: Script to find and launch `.desktop` files using `fzf`.
+**desk_fzf.sh**: Quickly search and launch `.desktop` applications using `fzf` and a cached file listing.
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to 'find'. Used to search for `.desktop` files.
-- `fzf`: A command-line fuzzy finder, allowing easy selection of files.
-- `bat`: A cat clone with syntax highlighting and Git integration, used for previews.
-- `bash`: The Bourne Again SHell, the language used for the scripting.
+- `fd` — For fast file searches (`fd` is a fast alternative to `find`).
+- `fzf` — Terminal fuzzy finder for interactive selection.
+- `bat` — Syntax highlighting for file previews in `fzf`.
+- Bash — Script is written for bash.
+- XDG compatible environment (`$XDG_CACHE_HOME` should be set).
+- `.desktop` files on your system (standard in most Linux desktop environments).
+
+---
 
 ### Description
 
-This script is designed to locate and launch `.desktop` files on your Arch Linux system using `fzf` for fuzzy finding. It maintains a cache of `.desktop` files for performance, refreshing this cache if it is over two hours old. The cache file, `desktop-script.txt`, is stored in the `$XDG_CACHE_HOME` directory.
+This script streamlines application launching by searching for `.desktop` files system-wide and presenting them via an `fzf`-powered fuzzy selector. Its core logic is as follows:
 
-Upon execution, it uses `fd` to search for `.desktop` files and updates the cache when necessary. `fzf` is then leveraged to interactively select a `.desktop` file, previewing its contents with `bat`. Upon selection, the script extracts the command from the `Exec` line within the `.desktop` file and executes it.
+1. **Caching:**  
+   - `.desktop` file paths are indexed using `fd` and stored in a cache file under `$XDG_CACHE_HOME/desktop-script.txt`, along with a timestamp (UNIX epoch seconds).
+   - The cache is refreshed if older than 2 hours (7200 seconds), or by forcibly running with the `--update` flag.
+
+2. **Selection UI:**  
+   - Uses `bat` to display relative paths to `.desktop` files with line highlighting, piped into `fzf` for interactive selection.
+   - An `fzf` preview window (with `bat`) displays the full content of each `.desktop` file.
+
+3. **Launching:**  
+   - Parses the selected `.desktop` file for its `Exec=` line―the application execution command.
+   - Executes this application command using `eval`.
+
+This script suits an Arch Linux user with qtile as WM, providing a minimal and fast alternative application launcher.
+
+---
 
 ### Usage
 
-To run this script, you can execute it directly in a terminal. To ensure the cache is freshly updated, use the `--update` flag:
+You can either run from a terminal or bind it to a key in qtile.
 
-```sh
-bash /home/matias/.scripts/bin/desk_fzf.sh --update
+#### Basic:  
+```bash
+~/.scripts/bin/desk_fzf.sh
 ```
 
-Upon running, you'll be presented with a list of available `.desktop` files. Use the `fzf` interface to select one.
+#### Force update the cache:
+```bash
+~/.scripts/bin/desk_fzf.sh --update
+```
 
-If desired, you can assign a keyboard shortcut to run the script within your window manager, `qtile`.
+#### Sample Qtile Keybinding:
+Add in your `config.py`:
+```python
+Key([mod], "d", lazy.spawn("~/.scripts/bin/desk_fzf.sh"))
+```
+This binds `Mod+d` to the launcher.
 
 ---
 
 > [!TIP]
-> Consider adding error handling if `fd`, `fzf`, or `bat` are not installed, or if the `XDG_CACHE_HOME` is not set. Moreover, handle scenarios where no `.desktop` files are found, perhaps by prompting further actions or notifying the user.
+> The caching logic is simple and fast, but some improvements are possible:
+> - The script assumes `.desktop` files are readable and have an `Exec` line, but ignores entries with `Exec=` containing desktop environment specific variables or substitution fields (see [freedesktop.org spec](https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html)). If the `Exec` command contains `%`-codes (like `%u`), these are not handled and may cause unexpected behavior.
+> - The preview command (`bat --color=always {}`) might fail if `bat` isn't installed or if the file path includes problematic characters.
+> - No filtering for only user-accessible `.desktop` files, nor filtering out duplicates or broken symlinks.
+> - Running `eval` directly can have security implications if untrusted `.desktop` files exist on your system.
+> - For privacy or performance, you may wish to scope `fd` to known application directories (like `/usr/share/applications` and `~/.local/share/applications`) rather than searching from root (`/`).
+> - The script does not parse or respect the `TryExec` or terminal options within `.desktop` files.
+> 
+> For daily use on a personalized system these may not matter, but keep them in mind if you adapt or share the script.

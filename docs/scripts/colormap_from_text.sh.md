@@ -1,54 +1,71 @@
-# Extract Color Palettes from Config Files
+# Colormap Extractor from Text Files
 
 ---
 
-**colormap_from_text.sh**: Extracts hex or RGB color codes from configuration files
+**colormap_from_text.sh**: Extracts and displays unique color codes from text or config files in various formats
 
 ---
 
 ### Dependencies
 
-- `bash`: This script is written and executed in bash.
-- `grep`: Used for extracting color codes using regex.
-- `sort`: Sorts and removes duplicate color entries.
-- `bat`: Displays usage information with syntax highlighting (`-plhelp` indicates plain output for help).
+- `bash` — Shell interpreter for execution.
+- `grep` — For extracting hex color codes from text.
+- `sort` — For finding unique color codes.
+- `bat` — For colored help output; will fail if not installed.
+- `cat` — For reading files to stdin.
+- (Optional) `qtile` — Not directly required, but can be integrated with keybindings in your setup.
+
+---
 
 ### Description
 
-The script `colormap_from_text.sh` is designed to extract color palettes from configuration files or piped text input. It searches for hexadecimal color codes in the format `#RRGGBB` using regular expressions. The script can output these colors in either their hex format or as RGB values and has a neat feature to display the color using ANSI color codes.
+This script extracts all unique hexadecimal color codes (`#RRGGBB` format, case-insensitive) from standard input or one or more text files. It is particularly useful for parsing configuration files to quickly generate palettes (for example, from your qtile, gtk, or neovim configs).
 
-The main functionalities include:
-- Extracting unique color codes from input.
-- Converting hexadecimal codes into RGB values if requested.
-- Displaying swatches of colors in the terminal.
+Depending on the flag, it outputs the palette as:
+- Hex codes (`#RRGGBB`)
+- RGB tuples (`rgb(r, g, b)`)
+- CSV (`r, g, b`)
+- Optionally, colors are previewed visually in the terminal with a background swatch.
 
-Additionally, the script offers flexibility with command-line options:
-- `-x` or `--hex-code` for hex output.
-- `-r` or `--rgb` for RGB output.
-- `-c` or `--color` for displaying a visual color swatch.
+**Features:**
+- Reads from stdin (pipe) or file arguments.
+- Use `-x/--hex-code` for hex output, `-r/--rgb` for `rgb(r,g,b)` output, `-c/--color` for terminal color preview.
+- Formats are mutually exclusive for hex and rgb.
+- Quick visualization of color palettes from any text/config file.
+
+---
 
 ### Usage
 
-You can use the script with or without input redirection. For instance:
-
-```bash
-cat your_config_file.conf | colormap_from_text.sh -x
+**From command line with file(s):**
+```
+colormap_from_text.sh -x -c ~/.config/qtile/config.py
 ```
 
-Or directly on files:
-
-```bash
-colormap_from_text.sh -r -c your_config_file1.conf your_config_file2.conf
+**From a pipeline:**
+```
+cat ~/.config/gtk-3.0/settings.ini | colormap_from_text.sh -r
 ```
 
-Available options:
-- `-x` or `--hex-code`: Outputs color codes in `#RRGGBB` format.
-- `-r` or `--rgb`: Outputs colors in `rgb(R, G, B)` format.
-- `-c` or `--color`: Displays a terminal color swatch before the color code.
+**Examples:**
+```sh
+colormap_from_text.sh -x       # (with stdin) Outputs only hex codes
+colormap_from_text.sh -r       # (with stdin) Outputs only `rgb(r, g, b)`
+colormap_from_text.sh -c       # (with stdin) Outputs color blocks and csv values
+colormap_from_text.sh -x -c my_colors.conf
+cat myfile | colormap_from_text.sh -r -c
+```
 
-If executed without appropriate options or input redirection, it will display usage information.
+- **Invalid usage** (e.g., both -x and -r):  
+  Script displays an error and usage message.
 
 ---
 
 > [!TIP]
-> While the script provides useful functionalities, users on Arch Linux with utilities like `bat` may find it less portable across different environments. Consider handling the usage without format-dependent features, like displaying usage using plain text. Additionally, consider implementing checks for the presence of `bat`, or providing an alternative non-styled usage output.
+> **Critique:**  
+> - The script assumes all color codes are in `#RRGGBB` format (no support for shorthand `#RGB` or alpha channels).
+> - Dependency on `bat` for help output may cause failure if `bat` is not installed; suggest a fallback to standard echo/cat if `bat` is missing.
+> - Only the first six digits after `#` are parsed, so malformed or extended color codes could sneak in without warning.
+> - The option parsing does not allow you to mix files and stdin conveniently; if both are detected, priority is not clear.
+> - It could be made more robust by accepting multiple files directly with correct POSIX argument handling.
+> - You might consider supporting inline comments (to filter out pseudo-colors), or supporting output in other formats (like JSON for script consumption).

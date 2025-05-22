@@ -1,37 +1,64 @@
-# get_scripts_relations.xsh - Script Relationship Visualizer
+# Script Relations Visualizer
 
 ---
 
-**/home/matias/.scripts/dev/get_scripts_relations.xsh**: Visualizes inter-script dependencies based on file content scanning
+**get_scripts_relations.xsh**: Scans `$SCRIPTS` directory for scripts and visualizes intra-folder dependencies as a directed graph
 
 ---
 
 ### Dependencies
 
-- `xonsh`: The shell environment used to execute the script.
-- `fd`: A fast alternative to find for listing files within the scripts directory.
-- `ripgrep (rg)`: For searching file content to detect references among scripts.
-- `basename`: Utility used to extract the filename from a file path.
-- `networkx`: A Python package for creating and manipulating complex networks.
-- `matplotlib`: A Python library for plotting and visualizing graphs.
+- `xonsh`: Shell to run `.xsh` scripts, blends Python and shell
+- `fd`: Fast alternative to `find`, used for listing scripts in `$SCRIPTS`
+- `basename`: CLI utility to get the filename, used to simplify paths
+- `rg` (ripgrep): Fast text searching tool to find dependencies/uses
+- `python` (with modules: `json`, `networkx`, `matplotlib`): For graph generation and visualization
+
+**Python packages:**
+- `networkx`: For graph representation
+- `matplotlib`: For plotting the graph
 
 ### Description
 
-This script is designed to map the relationships between various scripts located within a designated directory (referenced by the `$SCRIPTS` variable). It works by first listing all script files using `fd` and then iteratively scanning each script file for any references to other scripts using `rg` (ripgrep). The logic filters the search results to only include files present in the original script list, ensuring accurate detection of inter-dependencies.
+This script collects the relations between scripts inside your `$SCRIPTS` directory by:
+- Listing all scripts in `$SCRIPTS` (using `fd`)
+- For each script, searching for references to its basename within the script directory (using `rg`)
+- Building a dictionary mapping each script to those in which it appears to be referenced
+- Using Python (via xonsh) to construct a directed graph (with NetworkX) that shows which scripts depend on which others
+- Rendering and displaying a dependency graph via `matplotlib`
 
-After gathering relationship data, the script builds a directed graph with `networkx`. Each script is represented as a node, and an edge is drawn from one script to another if a dependency (or reference) is detected. The script employs a spring layout algorithm to position the nodes aesthetically, and then it uses `matplotlib` to render the graph visually. In the final visualization, nodes are colored light blue, and arrowed edges denote the dependency direction. The plot window is displayed interactively, allowing for manual inspection of the dependencies.
+Key variables/functions:
+- **dic**: Dictionary mapping script basenames to lists of scripts importing/calling them
+- **networkx**: Handles the construction of the dependency graph (nodes = scripts, edges = dependency links)
+- **matplotlib**: Visualizes the dependency network as a directed graph
+
+**Note:** Only scripts whose names are referenced (by basename match) are considered as dependencies.
 
 ### Usage
 
-Before running the script, ensure the environment variable `$SCRIPTS` is set to the correct directory containing your scripts. To run the script, make it executable and then execute it from a terminal:
+Typically, set your `$SCRIPTS` to the directory you want to analyze:
 
-$ chmod +x /home/matias/.scripts/dev/get_scripts_relations.xsh  
-$ /home/matias/.scripts/dev/get_scripts_relations.xsh
+```xonsh
+$SCRIPTS = ~/scripts/
+./get_scripts_relations.xsh
+```
 
-Alternatively, run it directly with xonsh:
+#### Quick Example
 
-$ xonsh /home/matias/.scripts/dev/get_scripts_relations.xsh
+```xonsh
+export SCRIPTS=~/scripts
+xonsh /home/matias/.scripts/dev/get_scripts_relations.xsh
+```
 
-The script will open a matplotlib window with the graph visualization. The script is well-suited for integration with keybindings in qtile, automating dependency visualization tasks on Arch Linux.
+- Run this either in a terminal or bind the command to a key in Qtile to quickly visualize your scripts' interconnections.
+- The script opens a Matplotlib window with an interactive plot of the relations (no files are written).
 
-> [!TIP] Consider improving the script by adding error handling for cases where `$SCRIPTS` is not defined or empty. Also, including command-line options to filter or customize graph attributes (e.g., node colors and sizes) could enhance its usability for larger projects.
+---
+
+> [!TIP]
+>
+> - The script's dependency detection is based purely on a basename match, so it may generate false positives/negatives if script names are generic or commonly referenced in other contexts.
+> - There's no exclusion for comments or string matches, so the presence of a script name anywhere in a file is treated as a dependency.
+> - Consider outputting the graph to a file for integration into documentation or scripts!
+> - Error handling is minimal — missing dependencies or unset `$SCRIPTS` will cause the script to fail.
+> - For large script directories, the graph layout may be cluttered. Adding options for filtering or subgraphing could help.

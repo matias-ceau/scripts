@@ -1,71 +1,78 @@
-# Improved Fzfmenu with Alacritty
+# Improved FZF Alacritty Menu
 
 ---
 
-**improved-fzfmenu.sh**: Fzfmenu integration with `alacritty`, capable of piping output and customizable through arguments.
+**improved-fzfmenu.sh**: Launches an `fzf` session in an Alacritty floating terminal; flexible output piping.
 
 ---
 
 ### Dependencies
 
-- `alacritty`: A fast, cross-platform, OpenGL terminal emulator.
-- `fzf`: A general-purpose command-line fuzzy finder necessary for the script's core functionality.
-- `systemd-run`: Required to run the terminal as a systemd user scope for better process handling.
+- `alacritty` — GPU-accelerated terminal emulator (used as the default terminal).
+- `fzf` — Command-line fuzzy finder, which powers the selection UI.
+- `systemd-run` — Runs the terminal as a transient systemd user service (better resource control).
+- `bash` — Used as the shell interpreter.
+- `procfs` (`/proc/$$/fd/0`, etc.) — Used to precisely control the input and output for the spawned `fzf`.
+- Custom keybindings (suggested, if using with qtile or in scripts).
+
+---
 
 ### Description
 
-This script provides a more featureful integration between the `fzf` fuzzy finder and the `alacritty` terminal. It allows for customizations such as:
+This script, **improved-fzfmenu.sh**, provides a highly flexible way to launch `fzf` (a powerful fuzzy finder) inside an Alacritty terminal window set to a floating class. Some features and internal details:
 
-1. Specifying a custom terminal window title (`title` option, via `title_is_TITLE_NAME`).
-2. Assigning a pipe mode via the `--pipe` argument, which redirects the output of `fzf`.
-3. Custom `fzf` arguments, enabling advanced functionalities like filtering or previewing files.
+- **Floating Terminal:** Sets the X11 class to `floating`, which your qtile configuration can use to automatically float the window.
+- **Custom Window Title:** Use `title_is_MYTITLE` as an argument to set a custom window title (useful for qtile hooks and window rules).
+- **Flexible Arguments:** Any arguments not interpreted as control (like `--pipe` or `title_is_*`) are forwarded (properly quoted) to `fzf`.
+- **Output Piping:** Pass `--pipe` as an argument to enable output from `fzf` to be piped through the terminal process (useful for capturing results or scripts that consume the output).
+- **Process Isolation:** Uses `systemd-run --user --scope` for improved process management, which can help especially in more complex script environments.
+- **Input Redirection:** Feeds `fzf` its input directly from the calling shell for maximal flexibility.
 
-**Key Features:**
-- **Pipe Mode (`--pipe`)**: Activates output redirection.
-- **Custom Titles (`title_is_`)**: Dynamically updates terminal titles.
-- **Systemd Scope**: Makes use of `systemd-run --user --scope` for better isolation and resource management.
-
-The script parses its arguments to determine its behavior, and it constructs an `fzf` command accordingly. It then spawns the `alacritty` terminal to execute this dynamic command within the user systemd scope. This improves script portability and enhances process control.
+---
 
 ### Usage
 
-To execute the script, run it from the terminal and provide arguments as needed:
+You can run this script either from a terminal, or trigger it as part of a keybinding in your qtile configuration:
 
-```bash
-improved-fzfmenu.sh <fzf_arguments> [--pipe] [title_is_<custom_title>]
+```sh
+improved-fzfmenu.sh [--pipe] [title_is_MYTITLE] [fzf options...]
 ```
 
 **Examples:**
-1. **Basic Usage**:  
-   Open `fzf` within `alacritty` with no pipes or custom title:
-   ```bash
-   ./improved-fzfmenu.sh
-   ```
-   
-2. **Custom Title**:  
-   Set a terminal window title:
-   ```bash
-   ./improved-fzfmenu.sh title_is_MyFzfMenu
-   ```
 
-3. **With Pipe Mode**:  
-   Enable pipe mode for redirecting `fzf`'s output:
-   ```bash
-   ./improved-fzfmenu.sh --pipe
-   ```
+- Basic invocation (floating fzf terminal):
+  ```sh
+  improved-fzfmenu.sh
+  ```
 
-4. **Custom Fzf Arguments**:  
-   Pass specific filtering or preview arguments to `fzf`:
-   ```bash
-   ./improved-fzfmenu.sh --reverse --preview "bat --style=numbers --color=always {}"
-   ```
+- Set a custom window title (helpful for qtile rules):
+  ```sh
+  improved-fzfmenu.sh title_is_myMenu
+  ```
+
+- Pipe output from `fzf` to your script:
+  ```sh
+  improved-fzfmenu.sh --pipe
+  ```
+
+- Use a specific fzf option (e.g., preview):
+  ```sh
+  improved-fzfmenu.sh --preview "cat {}"
+  ```
+
+**Typical keybinding in qtile's config.py:**
+```python
+Key([mod], "p", lazy.spawn("~/.scripts/bin/improved-fzfmenu.sh title_is_launcher"))
+```
 
 ---
 
 > [!TIP]
-> - The script could benefit from a configurable terminal option, as noted in the TODO section (e.g., supporting `kitty` for graphical previews).
-> - Adding argument for sizing (e.g., setting terminal dimensions or position) could enhance flexibility, especially in floating environments like `qtile`.
-> - Consider including error checking for cases where `alacritty` or `fzf` might not be installed, to guide users effectively. For instance, a simple dependency check at the beginning:  
->   ```bash
->   command -v alacritty &>/dev/null || { echo "Error: alacritty is not installed."; exit 1; }
->   ```
+> - **Potential Improvements:**  
+>   - Add an option to specify the terminal (e.g., allow `kitty` for image previews).
+>   - Add sizing/configuration options for better adaptability.
+>   - Argument quoting could be improved if extremely complex arguments are needed.
+>   - Consider error checks for missing dependencies or arguments, and provide helpful feedback if they're absent.
+>   - For X11/Wayland class or title matching, ensure your qtile rules are set accordingly!
+>
+> Overall, the script is modular and very handy for integrating `fzf` into your window manager workflows!

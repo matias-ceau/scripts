@@ -1,42 +1,65 @@
-# GRUB Tune to Audio Converter
+# Convert GRUB Tune to Audio (Python)
 
 ---
 
-**grub-tune-to-audio-python.py**: Converts a GRUB_INIT_TUNE string into an MP3 audio file using Python
+**grub-tune-to-audio-python.py**: Converts a GRUB_INIT_TUNE string into an MP3 audio file
 
 ---
 
 ### Dependencies
 
-- `pydub`: A Python library to work with audio segments. It is used here to generate audio tones and process them.
+- `python` (3.x): Interpreter for running the script
+- `pydub`: Python library for audio manipulation and synthesis (`pip install pydub`)
+- `ffmpeg` or `libav`: Required backend for `pydub` to handle MP3 export (install via `pacman -S ffmpeg` on Arch Linux)
 
 ### Description
 
-This script takes a GRUB_INIT_TUNE string as input and generates an audio file in MP3 format from it. The GRUB_INIT_TUNE string comprises a series of numbers where the first number is the tempo (beats per minute), and the subsequent pairs represent frequency (in Hz) and duration (in beats). The script uses these parameters to create a sequence of audio tones that can be played back as an audio file.
+This script translates a GRUB/GRUB2-style `GRUB_INIT_TUNE` string into an audio file. GRUB allows specifying a boot-time tune using the format:  
+```
+TEMPO [FREQ1 DURATION1 FREQ2 DURATION2 ...]
+```
+Where:
+- **TEMPO** is measured in beats per minute (BPM)
+- **FREQ** is the frequency of the note in Hz
+- **DURATION** is the relative length of the note, in beats
 
-The function `grub_tune_to_audio(tune_string)` processes the input string, extracting the tempo and converting each frequency and duration pair into an audio segment using the `pydub` library's `Sine` wave generator. It then combines these segments into a complete audio track.
+The script parses this string, individually generates each tone using the frequency and duration specified, and concatenates them to form the full sequence. The final result is saved as `output.mp3` in the current directory.
+
+#### Core Functions
+
+- `grub_tune_to_audio(tune_string)`:  
+  - Parses the input string
+  - Calculates duration per beat
+  - Iteratively constructs tones for each note with the correct frequency and duration
+  - Concatenates tones into a single `AudioSegment`
 
 ### Usage
 
-The script is designed to be run from the terminal with a single argument representing the GRUB_INIT_TUNE string. Execute it as follows:
+Example (you can run directly in the terminal):
 
 ```bash
-python grub-tune-to-audio-python.py "<GRUB_INIT_TUNE string>"
+python /home/matias/.scripts/bin/grub-tune-to-audio-python.py "480 880 2 988 2 1047 4"
 ```
 
-#### Example:
+This would produce a tune at 480 BPM, playing 880Hz for 2 beats, 988Hz for 2 beats, and 1047Hz for 4 beats.  
+Output is always an MP3 named `output.mp3` in the script's working directory.
 
-```bash
-python grub-tune-to-audio-python.py "120 440 4 622 4 660 4"
-```
+**TL;DR**
+1. Supply a GRUB tune string as a single quoted argument.
+2. The resulting tune is saved as `output.mp3`.
 
-This command will create an MP3 file named `output.mp3` in the current directory. The example tune string "120 440 4 622 4 660 4" indicates a tempo of 120 BPM and notes of frequencies 440 Hz, 622 Hz, and 660 Hz for 4 beats each.
+### Integration with Qtile or automation
+
+- You can bind this script to a key or menu in Qtile to quickly generate audio for GRUB tunes.
+- Since there's no GUI, it is suitable for CLI/terminal usage or quick keybind execution.
 
 ---
 
-> [!NOTE]
-> The script requires `pydub` to be installed alongside `ffmpeg` or `libav` for handling audio conversion. On Arch Linux, ffmpeg can be installed via the package manager using `sudo pacman -S ffmpeg`.
+> [!TIP]
 >
-> Additionally, it assumes the user has Python installed and configured properly in their environment, which, given the context (Arch Linux with qtile window manager), is likely but worth mentioning for completeness.
->
-> An improvement could be handling more complex GRUB tune strings with pause or rest capability, enhancing the musicality of the generated audio output.
+> - The script lacks error checking for malformed GRUB tune strings (e.g., missing or extra values, invalid numbers).  
+> - Output filename is always `output.mp3` and will be overwritten with each use—consider adding an option to set the output name.  
+> - Only MP3 is supported, dependent on `ffmpeg` or `libav`. If those are missing or misconfigured, the script will fail.  
+> - No playback functionality—consider adding an option to automatically play the generated audio for immediate feedback.  
+> - Parameter parsing could be extended to support more complex `GRUB_INIT_TUNE` syntaxes or validation.  
+> - For frequent use, a shell wrapper or integration with your existing workflow (Qtile dmenu, rofi script, etc.) may speed things up.

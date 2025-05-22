@@ -1,45 +1,67 @@
-# Tmux Session Creator
+# tmux Session Launcher
 
 ---
 
-**tmux_session.sh**: Script to create a new tmux session with a specified session name, window name, and command.
+**tmux_session.sh**: Minimal script to launch a detached tmux session with a specified window and command
 
 ---
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer for managing multiple terminal sessions. Ensure tmux is installed on your Arch Linux system.
+- `tmux`: Terminal multiplexer. Required to create, attach, and manage terminal sessions.
+- `/usr/bin/bash`: The script is written for bash and uses basic shell features.
+- `getopts`: Shell builtin used for parsing options.
 
 ### Description
 
-This script initializes a new tmux session, assigning a designated session name, window name, and executing a specified command within that window. The script requires all three options to be specified: session name, window name, and command. The script is particularly useful when you want to automate the management of multiple terminal sessions, enhancing efficiency and organization in your workflow when using terminal emulators within the qtile window manager.
+This script provides a simplified interface for launching new `tmux` sessions on your Arch Linux environment, especially useful if you often automate terminal multiplexer setups (e.g., for development or testing environments from qtile keybindings). It ensures you specify:
 
-The script does this by:
+- a tmux session name (`-s`),
+- a window name within that session (`-w`),
+- and a command to run inside the new window (`-c`).
 
-- Parsing command-line arguments using the `getopts` builtin.
-- Validating that all required options are provided and displaying usage information if not.
-- Executing the `tmux` command with provided arguments to establish a new session in detached mode.
-- Confirming the creation of the session by echoing the details.
+**Key features:**
+- Enforces all options as mandatory, avoiding ambiguous or partial session creation.
+- Useful as both an interactive tool or within scripts and window manager hooks.
+- Output echoes all parameters for quick verification.
+
+#### How it works:
+- Parses options with `getopts`. Exits with usage info if any required option is missing.
+- Launches a new detached (`-d`) tmux session with the assigned session/window name and command.
+- Prints the resulting configuration for transparency.
+
+---
 
 ### Usage
 
-To use the script, execute it from the terminal with the following mandatory options:
+To run the script directly from a terminal:
 
-- `-s <session-name>`: The name of the tmux session.
-- `-w <window-name>`: The name of the tmux window.
-- `-c <command>`: The command to execute in the tmux session.
-
-Example usage:
-
-```bash
-~/.scripts/bin/tmux_session.sh -s mySession -w myWindow -c "htop"
+```
+~/.scripts/bin/tmux_session.sh -s dev_session -w editor -c "nvim"
 ```
 
-The command above creates a tmux session named `mySession` with a window `myWindow` running `htop`.
+**Example use cases:**
+- Starting a new Python REPL in a tmux session called `py`:
+  ```
+  ~/.scripts/bin/tmux_session.sh -s py -w repl -c "python"
+  ```
+- Running a long process in its own session:
+  ```
+  ~/.scripts/bin/tmux_session.sh -s downloads -w aria -c "aria2c http://example.com/file"
+  ```
 
-This script can be run interactively from the terminal or could be adapted to bind to a keyboard shortcut within qtile if frequent session creation is desirable.
+**Integration with qtile:**
+
+You can bind this script to a key or group launch:
+```python
+# Example (add to qtile config):
+Key([mod], "F10", lazy.spawn("~/.scripts/bin/tmux_session.sh -s scratchpad -w sysmon -c 'htop'"))
+```
 
 ---
 
 > [!TIP]
-> One potential improvement involves adding error handling to check the success of the tmux command for session creation. Additionally, consider adding an option for attaching to the session automatically after creation or checking if a session with the same name already exists to avoid conflicts.
+> - This script doesn't check for existing sessions/windows with the same names, which may result in errors or duplicate sessions if you run the script with the same parameters multiple times. It would be beneficial to add a check to prevent accidental overwrite or to attach to existing sessions.
+> - The command runs only in the first window; additional window management must be done manually.
+> - Optionally, support for attaching to the session after creation, or making options optional (with sensible defaults), could improve usability.
+> - Lastly, a `-h|--help` option for cleaner CLI usage would be handy.
