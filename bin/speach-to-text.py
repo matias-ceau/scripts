@@ -22,7 +22,7 @@ DEVICE = (
     if PREFERED_DEVICE in str(sd.query_devices())
     else int(input(f"{sd.query_devices()}\n Choose device by index: "))
 )
-MAX_RECORD_TIME = 30
+MAX_RECORD_TIME = 3000
 CHANNELS = 1
 
 WHISPER_MODEL = "whisper-1"
