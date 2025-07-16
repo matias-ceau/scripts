@@ -3,7 +3,7 @@
 #INFO:# "Run scripts with fzf"
 
 # Load environment
-source "$(dirname "$0")/../lib/env.sh"
+source "$(dirname "$(realpath "$0")")/../lib/env.sh"
 load_env "colors"
 
 if [ "$1" = "--embedded" ] || [ "$1" = "-E" ] ; then

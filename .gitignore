@@ -1,6 +1,7 @@
 __pycache__
 meta/log/**
 !meta/log/
-symlink_data.csv
+**/symlink_data.csv
+**/env.sh
 *.code-workspace
 .venv

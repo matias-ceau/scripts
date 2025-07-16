@@ -50,7 +50,8 @@ SRC_FILE_EXTENSIONS = [
     ".java",
     ".cs",
 ]
-
+PER_FILE_LLM = "gpt-4.1"
+SUMMARY_LLM = "gpt-4.1"
 
 system_prompt_1 = """\
 1) You are a helpful assistant that generates GitHub documentation in markdown format for user scripts. Your audience is mainly the creator of the scripts themselves so provide information adapted to his context (OS : Arch linux, WM : qtile).
@@ -427,12 +428,12 @@ def process_csv(client, llm_model):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Describe scripts from a CSV file using gpt-4o-mini model."
+        description=f"Describe scripts from a CSV file using an llm (defaults to {PER_FILE_LLM} (and {SUMMARY_LLM}) model."
     )
     parser.add_argument(
         "llm_model",
         nargs="?",
-        default="gpt-4.1",
+        default=PER_FILE_LLM,
         help="OpenAI LLM model",
     )
     args = parser.parse_args()
@@ -442,8 +443,8 @@ def main():
 
     run_update_symlinks()
     rm_orphaned_docs(get_script_files())
-    process_csv(client=C, llm_model=L)
-    update_readme(client=C, llm_model=L)
+    process_csv(client=C, llm_model=PER_FILE_LLM)
+    update_readme(client=C, llm_model=SUMMARY_LLM)
 
     print_colored("Script processing completed successfully.", kind="victory")
 
