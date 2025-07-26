@@ -2,6 +2,10 @@ sessions:
 - name: SYSTEM
   autostart: true
   windows:
+  - name: footserver
+    command: foot -s
+  - name: syncthing
+    command: syncthing serve
   - name: megacmd
     command: mega-cmd
   - name: syteminfo
@@ -16,18 +20,15 @@ sessions:
   windows:
   - name: shell
     command: bash
-- name: OLLAMA
-  autostart: false
-  windows:
-  - name: ollama
-    command: ollama serve
 - name: JUPYTER
   autostart: false
   windows:
   - name: lab
     command: snekai.sh lab
-- name: OPENWEBUI
+- name: LLM
   autostart: false
   windows:
-      - name: openwebui
-        command: openwebui-launcher.sh init
+  - name: ollama
+    command: ollama serve
+  - name: openwebui
+    command: openwebui-launcher.sh init
