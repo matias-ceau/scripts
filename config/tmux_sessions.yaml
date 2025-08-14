@@ -4,8 +4,6 @@ sessions:
   windows:
   - name: footserver
     command: foot -s
-  - name: syncthing
-    command: syncthing serve
   - name: megacmd
     command: mega-cmd
   - name: syteminfo
@@ -28,7 +26,5 @@ sessions:
 - name: LLM
   autostart: false
   windows:
-  - name: ollama
-    command: ollama serve
   - name: openwebui
     command: openwebui-launcher.sh init
