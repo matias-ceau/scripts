@@ -1,58 +1,68 @@
-# Random Album Player for cmus
+# Random CMUS Album Shuffle
 
 ---
 
-**random_album.xsh**: Selects 10 random albums from your cmus library and plays them.
+**random_album.xsh**: Select 10 random albums from cmus and start playback
 
 ---
 
 ### Dependencies
 
-- `xonsh`: The shell interpreter required to run this script.
-- `cmus`: Console music player. `cmus-remote` is used for playback control.
-- `.config/cmus/lib.pl`: Plain text file used as a library index (full file paths, one per line).
-- Standard Python modules: `random`, `os`.
-
----
+- `xonsh` — shell interpreter used to run the script
+- `cmus` — console music player
+- `cmus-remote` — remote control CLI for cmus
+- `~/.config/cmus/lib.pl` — cmus library index used to list all tracks
 
 ### Description
 
-This script automates the process of selecting and playing a random set of albums in `cmus` on your Arch Linux system running qtile. It does the following:
+This Xonsh script builds a temporary M3U playlist from 10 randomly selected albums in your cmus library and starts playback.
 
-1. Clears the current cmus playlist and moves to the library view.
-2. Reads all track paths from `.config/cmus/lib.pl`, which is expected to contain one file path per line.
-3. Identifies unique albums by joining the last two directory components of each path (assumes a structure like `/path/to/music/Artist/Album/Track`).
-4. Randomly picks 10 unique albums and gathers all their tracks.
-5. Writes the resulting track list to a temporary playlist file at `~/.config/cmus/.temp.m3u`.
-6. Loads this playlist into cmus and starts playback from the first track.
+How it works:
+- Clears the current cmus playlist and switches to the playlist view.
+- Reads track paths from your cmus library file (`~/.config/cmus/lib.pl`).
+- Extracts album identifiers as “Artist/Album” from each track path.
+- Shuffles the album list, picks the first 10, then gathers all tracks belonging to those albums.
+- Writes the resulting track list to `/tmp/tmp.m3u`, queues it in cmus, and starts playing.
 
-This script is particularly useful for quickly shuffling through your music collection by album, providing a fresh listening experience each time.
-
----
+It uses Xonsh’s command capture `$(...)` to read the library file and Python’s `random` to shuffle. Paths are matched by checking if “Artist/Album/” appears in the full track path, which is a lightweight way to group tracks by album when the library is path-structured.
 
 ### Usage
 
-You can run this script directly from the terminal:
-
+Run directly from a terminal:
 ```
-xonsh /home/matias/.scripts/bin/random_album.xsh
-```
-
-Or add it to your PATH and execute:
-
-```
-random_album.xsh
+~/.scripts/bin/random_album.xsh
 ```
 
-For integration with qtile keybindings, you can add a custom shortcut in your qtile config to execute this script.
+Bind to a Qtile key (Arch Linux):
+```
+# in ~/.config/qtile/config.py
+from libqtile.config import Key
+from libqtile.lazy import lazy
 
-**No arguments are required. The script operates automatically on execution.**
+keys += [
+    Key([mod], "F9", lazy.spawn("xonsh ~/.scripts/bin/random_album.xsh")),
+]
+```
+
+Run periodically (systemd user timer example snippet):
+```
+systemctl --user start random-album.service
+```
+Then implement ExecStart in the service as:
+```
+ExecStart=/usr/bin/xonsh /home/matias/.scripts/bin/random_album.xsh
+```
+
+tldr:
+- Refill cmus with 10 random albums and play: run the script.
+- Rerun anytime to reshuffle.
 
 ---
 
 > [!TIP]
-> - Assumes your `.config/cmus/lib.pl` is always up-to-date and follows a directory structure where the album is identifiable by the last two components of the path. If your music is organized differently, results may be inaccurate.
-> - The script does not check if there are at least 10 albums in your library, which may result in `IndexError` if you have fewer.
-> - Temporary playlist is always overwritten—be cautious if you use `.temp.m3u` for other purposes.
-> - Old commented code (using `beet ls -a`) can be removed for clarity.
-> - Consider wrapping the main logic in a function for better readability and error handling, especially to manage exceptions from malformed paths or missing files.
+> - Path bug: `$(cat .config/cmus/lib.pl)` is relative; use `~/.config/cmus/lib.pl` via `os.path.expanduser` to avoid failures outside $HOME.
+> - Fragile count: `range(10)` will crash if less than 10 albums exist; prefer `random.sample(albums, k=min(10, len(albums)))`.
+> - Temp file clobbering: `/tmp/tmp.m3u` may collide; use a unique file (`tempfile.NamedTemporaryFile`) and remove after use.
+> - Matching robustness: string “in” matching can misfire on similar names; consider grouping by parsed path components for exact artist/album directories.
+> - Performance: avoid external `cat`; read the file with Python for speed and fewer dependencies.
+> - Behavior: `cmus-remote -n` skips the first track; remove if you want to start from track 1.

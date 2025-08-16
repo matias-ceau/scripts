@@ -1,69 +1,75 @@
-# LLM-Assisted Script Documenter
+# LLM Script Describer & Repo Doc Generator
 
 ---
 
-**llm-script-describer.py**: Automates documentation generation for user scripts using OpenAI's LLMs
+**llm-script-describer.py**: Generate per-script docs and a README summary for your scripts repo
 
 ---
 
 ### Dependencies
 
-- `python >=3.13` — The script is written using modern Python features.
-- `colorama` — For colored terminal output, improving readability.
-- `openai` — Required for interaction with OpenAI LLM APIs.
-- `fd` (external utility)[^1] — For efficient file searching in the script directory.
-- `ripgrep` (`rg`) — Used for pattern-based filtering of files.
-- `utils_update_symlinks.sh` — User-created shell script, updates symbolic links for scripts.
-- `jq` (if used elsewhere for JSON processing on shell scripts, not directly in this Python script).
-
----
+- `python>=3.13` — runtime for the script
+- `uv` — runs the script from the shebang (`uv run --script`)
+- `colorama` — colored terminal output
+- `openai` — OpenAI API client
+- `fd` — fast file discovery (fd-rs)
+- `ripgrep` — used as `rg` to filter files
+- `coreutils` — `rm` used to delete orphaned docs
+- `utils_update_symlinks.sh` — your helper that populates/refreshes symlinks and CSV
+- `OPENAI_API_KEY` — env var for OpenAI access
 
 ### Description
 
-This script is designed to automate the process of documenting your user scripts in a GitHub-compatible format, integrating deeply with your `$SCRIPTS` directory structure. Its goal is to generate, update, and maintain Markdown documentation for each script, using OpenAI models for content generation. This dramatically streamlines documentation, ensuring it stays up-to-date as scripts change.
+This tool scans your `$SCRIPTS` tree to automatically generate GitHub-friendly documentation for each script and an overall README summary. The flow:
 
-Key features:
-- **Symlink maintenance**: Calls `utils_update_symlinks.sh` to ensure all scripts are properly symlinked.
-- **Script discovery**: Uses `fd` and `ripgrep` to enumerate all scripts, excluding non-script/archived/config/docs/log/data files.
-- **Markdown generation**: Reads (or finds source for) script files, feeds them into an OpenAI LLM, and outputs a structured Markdown file (using a customizable template/prompt for consistency).
-- **Orphaned doc removal**: Deletes documentation for scripts that no longer exist.
-- **Centralized index and README updating**: Keeps a global index and injects an AI-generated summary and a table of scripts into your `README.md`.
-- **Change detection**: Keeps a hash-based log of all scripts (`script_info.json`), re-documenting only changed or new scripts.
-- **Binary/source handling**: For binary executables, attempts to find their corresponding source code for meaningful documentation.
-- **Rich, color-coded terminal output**: All operations use colorama for quick visual parsing of status, errors, and progress.
+- Refresh symlinks with `utils_update_symlinks.sh`.
+- Enumerate candidate files with `fd`, excluding non-relevant dirs and file types.
+- For each script listed in `symlink_data.csv`, compute a hash and skip unchanged files via `script_info.json`.
+- Detect binaries (NUL byte heuristic); if binary, try to read a matching source in `$SCRIPTS/src` with common extensions.
+- Call OpenAI Chat Completions with a structured system prompt to produce per-script docs; write them to `docs/scripts/<filename>.md`.
+- Maintain an alphabetical `docs/index.md` pointing to each doc.
+- Generate a repository-level summary and a docs table inside README.md between:
+  - `<!-- llm_generated_output_start --> ... <!-- llm_generated_output_end -->`
+  - `<!-- table_start --> ... <!-- table_end -->`
 
----
+Models: per-file docs default to `gpt-5`, summary to `o4-mini-high`.
 
 ### Usage
 
-Typical workflow:
-
-```bash
-export SCRIPTS="/path/to/your/scripts"
-export OPENAI_API_KEY="sk-..."
-python ~/.scripts/meta/llm-script-describer.py [gpt-4-1]
-```
-
-- If `llm_model` is omitted, it defaults to `gpt-4.1`.
-- You must have all dependencies installed in your Python environment.
-- Can be run interactively or bound to a key/chord in qtile using a lazy.spawn.
-- To regenerate docs after modifying or adding scripts, simply re-run the script. It will only update docs for scripts that have changed.
-
-tldr:
-```
-Edit script → Run llm-script-describer.py → Docs auto-rebuilt!
-```
+- Prepare environment (Arch + qtile):
+  ```
+  export SCRIPTS="$HOME/.scripts"
+  export OPENAI_API_KEY="sk-..."
+  pacman -S fd ripgrep
+  uv pip install colorama openai
+  ```
+- Ensure structure and markers:
+  ```
+  mkdir -p "$SCRIPTS/docs/scripts" "$SCRIPTS/src"
+  # README.md must contain the llm_generated_output_* and table_* markers
+  ```
+- Provide CSV of scripts to document (first row is treated as header and skipped):
+  ```
+  cat > "$SCRIPTS/symlink_data.csv" <<EOF
+  path
+  /home/matias/.scripts/meta/llm-script-describer.py
+  /home/matias/.scripts/foo.sh
+  EOF
+  ```
+- Run:
+  ```
+  ~/.scripts/meta/llm-script-describer.py
+  # or explicitly with uv
+  uv run --script ~/.scripts/meta/llm-script-describer.py
+  ```
+- Optional: Bind a qtile key to spawn this script for quick refreshes, but beware API usage.
 
 ---
 
 > [!TIP]
-> - This script is highly modular and robust for maintaining up-to-date documentation, but it assumes a specific directory layout and naming conventions (e.g., for binaries and sources).
-> - Error handling is pragmatic but doesn't do much for failed API requests except print an error.
-> - The use of an LLM for doc-generation is powerful, but also a bottleneck: it incurs API costs and may occasionally create hallucinated or verbose documentation—review crucial docs for accuracy.
-> - Consider adding CLI switches to process/filter specific sections or to run in "draft" mode with simulated outputs for dev/testing without spending tokens.
-> - Some hard-coded paths and environment reliance (`$SCRIPTS`, reliance on `utils_update_symlinks.sh`) could be parameterized for portability or for sharing with others.
-> - The markdown index update is simple and could be made more robust against file corruption/race conditions in multi-user environments.
-
----
-
-[^1]: The script expects `fd` and `rg` to be installed; these can be installed from the official Arch packages (`fd` and `ripgrep`).
+> - The CLI argument for `llm_model` is parsed but not actually used; `PER_FILE_LLM` and `SUMMARY_LLM` constants are enforced. Consider passing `args.llm_model` to `process_csv`.
+> - `rm_orphaned_docs` assumes `docs/scripts` exists; create it before listing to avoid `FileNotFoundError`.
+> - Binary detection via NUL-byte is heuristic; consider `file --mime` for robustness.
+> - Hardcoded external calls (`rm` via shell=True) could be replaced with `os.remove` for safety.
+> - Add retries/backoff for OpenAI errors and guard against missing README markers.
+> - Costs/rate limits: cache LLM outputs more aggressively or support dry-run mode.

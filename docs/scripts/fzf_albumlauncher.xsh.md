@@ -1,56 +1,71 @@
-# fzf Album Launcher
+# FZF album launcher for cmus
 
 ---
 
-**fzf_albumlauncher.xsh**: Quickly search for and play an album in cmus using fzf and beets.
+**fzf_albumlauncher.xsh**: Choose an album with fzf and play it in cmus, saving a playlist
 
 ---
 
 ### Dependencies
 
-- `xonsh`: This script must be run in the xonsh shell.
-- `fzf`: Command-line fuzzy finder for selecting your album.
-- `beet` (`beets`): Used to list albums in your music library.
-- `cmus-remote`: Controls the cmus music player from the command line.
-- `sed`: Used here for string manipulation in the album list.
-- `cmus`: (as a backend for `cmus-remote`).
-- (Optionally) `/home/matias/.temp/` folder: for storing `nowplaying.m3u` playlist.
+- `xonsh` — shell interpreter used to run the script.
+- `beets` — music library manager; `beet ls -a` lists albums.
+- `fzf` — interactive fuzzy finder for album selection.
+- `cmus-remote` — controls a running cmus instance.
+- `sed` — used to strip the “Artist - ” prefix from beets output.
+- `qtile` — optional, for binding the script to a key.
 
 ### Description
 
-This script provides a fast way to pick an album and queue it for playback in `cmus`. It uses `beet ls -a` to list all albums, then `sed` to clean up the display format, followed by `fzf` for fuzzy-search and selection.
+This xonsh script lets you interactively choose an album from your beets library and immediately queue/play it in cmus.
 
-Upon selection:
-- Switches cmus to album view for clean state.
-- Clears cmus' current queue.
-- Sets the view, applies a filter to match the selected album, marks and adds the tracks to the queue.
-- Resets the filter, returns to the library view, limits queue to 100 songs, advances track, starts playback.
-- Saves the now playing queue to `nowplaying.m3u` for persistent or external use.
+Flow:
+- Builds an album list via `beet ls -a`, strips the “Artist - ” prefix with `sed`, and pipes to `fzf` for selection.
+- If a selection is made, it:
+  - Switches cmus views, clears the current queue, and applies a filter for the chosen album.
+  - Marks results, adds up to 100 tracks to the queue (`lqueue 100`), clears the filter, then starts playback (next + play).
+  - Saves the session playlist to `/tmp/nowplaying.m3u`.
 
-Scripted efficiently to be called from a hotkey or a terminal.
+This integrates well on Arch Linux with qtile: trigger it via a keybinding or the terminal. It assumes cmus is running and reachable by `cmus-remote`.
 
 ### Usage
 
-You can run this in a terminal or bind it to a key combination in qtile for instant access to album-queued playback.
+TL;DR
+- Prepare cmus and beets; ensure your library is scanned.
+- Run the script and pick an album.
 
-```sh
-xonsh /home/matias/.scripts/bin/fzf_albumlauncher.xsh
+Terminal:
+```
+~/.scripts/bin/fzf_albumlauncher.xsh
 ```
 
-Or, if this script is in your `$PATH` and executable:
+Qtile keybinding (in config.py):
+```
+from libqtile.config import Key
+from libqtile.lazy import lazy
 
-```sh
-fzf_albumlauncher.xsh
+keys += [
+    Key([], "F9", lazy.spawn("/home/matias/.scripts/bin/fzf_albumlauncher.xsh")),
+]
 ```
 
-**tldr:**
+Arch install (if needed):
 ```
-# Fuzzy-search and play a full album instantly
-fzf_albumlauncher.xsh
+sudo pacman -S xonsh beets cmus fzf sed
 ```
-No arguments required. Select your album interactively via `fzf`, and playback/queue happens automatically in `cmus`.
+
+Tips:
+- For more precise album names (no sed needed), change the selection line to:
+  - `beet ls -a -f '$album' | fzf`
+- To preview before play, add fzf options (e.g., `--height 40% --reverse`).
 
 ---
 
 > [!TIP]
-> This script works reliably if your album metadata is good and the `beet` index is synced. However, error handling is minimal: if you cancel the selection in `fzf`, or if an album name includes problematic characters, you might see failures or unexpected behavior. Consider adding checks for empty selection, and possibly escaping quotes in album names for the `filter` command. Additionally, hardcoding the `.temp` path and output filename may result in errors if the directory does not exist—make sure `/home/matias/.temp/` is present.
+> Improvements:
+> - Quote safety: album names with quotes may break the filter. Escape `selection` (e.g., use a format from beets that avoids quotes or escape with Python).
+> - Robust beets output: prefer `beet ls -a -f '$album'` instead of `sed`, which can fail if album names contain “ - ”.
+> - Handle empty/aborted selection explicitly and exit cleanly.
+> - Ensure cmus is running; otherwise start it or detect errors from `cmus-remote`.
+> - Consider batching cmus commands or using a here-string for fewer calls.
+> - Make `lqueue` count configurable via an env var or CLI arg.

@@ -1,59 +1,64 @@
-# Next Album Skipper for cmus
+# Next Album (cmus) — skip to the next album quickly
 
 ---
 
-**next_album.xsh**: Skips playback to the first track of the next album in cmus.
+**next_album.xsh**: Skip remaining tracks to start of next album in cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh`: Required shell interpreter for running this script.
-- `cmus-remote`: Command-line control tool for the cmus music player.
-- `cmus`: Music player daemon, required for playback management.
-- `cat`: For reading playlist files (coreutils, likely already installed).
-- Playlist location: Relies on `/home/matias/.temp/now_playing.m3u` being writable.
+- `xonsh` — shell used to run the script
+- `cmus` — console music player
+- `cmus-remote` — control cmus from the command line
+- `coreutils` — for `cat` (used via xonsh subprocess)
 
 ### Description
 
-This script advances playback in cmus to the next album within the current queue. It does so by:
+This xonsh script fast-forwards cmus to the first track of the next album in your current play context.
 
-1. **Switching View**: Sets cmus view to "Playlist" mode using `cmus-remote -C 'view 4'`.
-2. **Saving Playlist**: Exports the currently enqueued playlist to a temporary `.m3u` file.
-3. **Parsing Playlist**: Reads the lines of this playlist, filtering out empty lines, and extracts album names (assumes directory structure: `.../Artist/Album/Track`).
-4. **Getting Current Album**: Determines which album is currently playing by asking cmus for the current file and extracting the parent directory.
-5. **Skipping Logic**: It iterates through the playlist as long as the album matches the current album, then skips (`cmus-remote -n`) once for each track in the current album until the next album starts.
+How it works:
+- Switches cmus to a specific view (`view 4`) that should reflect your current playback list (playlist/queue/library depending on your setup).
+- Saves that view to `/tmp/now_playing.m3u`.
+- Parses the m3u lines, extracts album names from the directory structure (second-to-last path component).
+- Obtains the current album (also via path parsing from `cmus-remote -Q`).
+- Counts how many consecutive entries at the start of the saved list belong to the current album.
+- Sends `cmus-remote -n` repeatedly to skip those tracks and land at the beginning of the next album.
 
-This script is practical for large, ordered playlists (e.g., an entire discography) and when you want to quickly jump ahead to the next album boundary rather than just the next track.
+This approach is filesystem-hierarchy based (album = folder), which fits a typical organized library on Arch. It does not use tags.
 
 ### Usage
 
-You can execute the script directly from your terminal:
-
-```
-xonsh /home/matias/.scripts/bin/next_album.xsh
-```
-
-Or make it executable and run it:
-
+- Make the script executable and run it when cmus is playing:
 ```
 chmod +x ~/.scripts/bin/next_album.xsh
 ~/.scripts/bin/next_album.xsh
 ```
 
-#### Qtile Integration
-
-For fast access, add a keybinding in your Qtile config:
-
-```python
-Key([mod], "period", lazy.spawn("xonsh /home/matias/.scripts/bin/next_album.xsh"), desc="Skip to next album in cmus")
+- Bind to a qtile key (recommended):
 ```
+# in ~/.config/qtile/config.py
+from libqtile.config import Key
+from libqtile.lazy import lazy
+
+keys += [
+    Key([], "XF86AudioNext", lazy.spawn("~/.scripts/bin/next_album.xsh")),  # next album
+]
+```
+
+- Trigger from a terminal or a dmenu/rofi launcher:
+```
+next_album.xsh
+```
+
+Tip: If you already use XF86AudioNext for next track, consider another key or a chord to avoid conflicts.
 
 ---
 
-> [!TIP]
-> - The script assumes music directory structures with `/Artist/Album/Track`—if your library layout is different, album detection may not be accurate.
-> - There is no error handling for missing or empty playlist files, or for when cmus isn't running.
-> - Consider using `os.path` utilities for more robust path parsing in Xonsh instead of raw string splitting.
-> - Adds a dependency on a hardcoded temp file; using `/tmp` is safer and avoids potential permission issues.
-> - For larger playlists, repeated skipping via `cmus-remote -n` can be slow. If cmus gains better album skip support in future, update this logic.
+> [!WARNING]
+> Potential issues and improvements:
+> - Off-by-one risk: `counter` starts at 1; if your current album appears N times at the start of the saved list, the loop may skip N+1 tracks, potentially jumping past the first track of the next album. Consider initializing `counter = 0`.
+> - Fragility in parsing: `current_album` relies on splitting the path in `cmus-remote -Q`. Prefer parsing the `tag album` line from `-Q` or using `%a` via `format_print`.
+> - View dependency: `view 4` must correspond to your “upcoming tracks” view. If it doesn’t, adapt the view number to your workflow.
+> - Temp file collisions: use a unique temp file (e.g., `mktemp`) instead of a fixed `/tmp/now_playing.m3u`.
+> - No error handling if cmus isn’t running; add guards for better robustness.

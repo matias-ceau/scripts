@@ -1,60 +1,61 @@
-# Album Player for cmus
+# Album Player for cmus (dmenu + xonsh)
 
 ---
 
-**albumplayer.xsh**: Selects and plays a full album (with extras queued) via cmus and dmenu
+**albumplayer.xsh**: Pick an album via dmenu and queue it (plus random albums) in cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh` &nbsp;– Required shell for running the script.
-- `cmus` &nbsp;– Console music player backend.
-- `dmenu` &nbsp;– Dynamic menu for fuzzy album selection.
-- `cat` &nbsp;– Used to read the cmus library playlist.
-- `random` (Python module) &nbsp;– Used to shuffle extra albums.
-- Library file: `~/.config/cmus/lib.pl` &nbsp;– Assumes this is maintained and up-to-date with cmus library.
-
----
+- `xonsh` — script interpreter
+- `cmus` — console music player
+- `cmus-remote` — control cmus from the shell
+- `dmenu` — fuzzy picker for selecting the album
+- `~/.config/cmus/lib.pl` — cmus library listing used to build the album index
 
 ### Description
 
-This script provides a quick way to select and play an album from your cmus library using `dmenu`. It parses your cmus library at `~/.config/cmus/lib.pl` and extracts unique album entries.  
-You are presented with a dmenu-powered prompt, showing "artist — album" entries, for easy album selection. The chosen album's tracks are written to a temporary playlist file, and ten additional random albums are shuffled and appended to create a longer playback queue.  
-cmus is then manipulated using its `cmus-remote` command to:
+This script lets you browse your cmus library via dmenu and start playing an album instantly. It parses your cmus library file (lib.pl), infers albums as Artist/Album by taking the last two path components of each track, and presents a padded, right-aligned list “Artist — Album” for easier scanning.
 
-- Clear, reload, and repopulate the queue with the new album-based playlist.
-- Start playback automatically.
+After you select one album, it:
+- Builds a temporary m3u at /tmp/temp.m3u containing all tracks from the chosen album.
+- Appends tracks from 10 random other albums to keep playback flowing.
+- Tells cmus to switch to the playlist view, clear any existing playlist, load the new m3u, start playback, and jump to the next track.
 
-Paths and album names are truncated and aligned for readable selection. No arguments are required; interaction is via dmenu.
-
----
+The script assumes your lib.pl reflects your current library. If needed, refresh it from cmus before use.
 
 ### Usage
 
-**Interactive selection (launch from shell or bind to key):**
+- Ensure lib.pl exists/updated:
+  ```
+  cmus-remote -C 'save -l ~/.config/cmus/lib.pl'
+  ```
 
-```
-albumplayer.xsh
-```
+- Run interactively:
+  ```
+  albumplayer.xsh
+  ```
+  A dmenu window appears. Type to filter, hit Enter to confirm. cmus will start the selected album and queue 10 random albums.
 
-#### TL;DR
+- Bind to a qtile key:
+  ```
+  Key([mod], "a", lazy.spawn("~/.scripts/bin/albumplayer.xsh")),
+  ```
 
-- Maintains a temp playlist at `~/.config/cmus/.temp.m3u`
-- Use dmenu to pick the album.
-- Automatically loads ten additional random albums after your selection.
-
-#### Keybinding Example for Qtile (in your qtile config):
-
-```python
-Key([mod], 'F11', lazy.spawn('~/.scripts/bin/albumplayer.xsh'))
-```
+- Make executable and on PATH (Arch, zsh/xonsh):
+  ```
+  chmod +x ~/.scripts/bin/albumplayer.xsh
+  echo 'export PATH="$HOME/.scripts/bin:$PATH"' >> ~/.zshrc
+  ```
 
 ---
 
 > [!TIP]
-> - The script relies on the presence and format of `~/.config/cmus/lib.pl`. If this file is missing or out-of-date, the script will not show all albums or may fail silently.
-> - Extra dmenu options like `-l 300` could cause UI issues with too many or too few albums (adjust as needed).
-> - String slicing and manual formatting for fancy alignment can break with unusual folder or artist names; consider using a more robust parsing method.
-> - No explicit error handling: if `dmenu` selection is cancelled, or no match is found, cmus could be left in a cleared (empty) state.
-> - Script may be improved by allowing configuration (playlist size, fallback if file missing, etc.) and better error feedback.
+> - Use an absolute path for the library: read ~/.config/cmus/lib.pl instead of the current directory to avoid failures when launched from qtile.
+> - Handle empty dmenu selections and missing files to prevent IndexError/file errors.
+> - Matching by substring can collide (e.g., similar album names). Use a stable ID (index the list or store a map key alongside the display text) to resolve the selection.
+> - Make dmenu flags configurable (e.g., environment var) instead of hardcoded -l 300.
+> - Consider a CLI arg for the number of random albums (default 10) and the output m3u path (use mktemp).
+> - Remove the debug print inside the random-album loop.
+> - Chain cmus-remote calls minimally and check exit codes for robustness.

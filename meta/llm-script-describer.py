@@ -50,8 +50,8 @@ SRC_FILE_EXTENSIONS = [
     ".java",
     ".cs",
 ]
-PER_FILE_LLM = "gpt-4.1"
-SUMMARY_LLM = "gpt-4.1"
+PER_FILE_LLM = "gpt-5"
+SUMMARY_LLM = "o4-mini-high"
 
 system_prompt_1 = """\
 1) You are a helpful assistant that generates GitHub documentation in markdown format for user scripts. Your audience is mainly the creator of the scripts themselves so provide information adapted to his context (OS : Arch linux, WM : qtile).

@@ -1,58 +1,57 @@
-# PDF Opener Script
+# Fuzzy PDF Opener for Evince
 
 ---
 
-**pdfopener.sh**: Pick and open any PDF file in your home directory with evince (or fallback).
+**pdfopener.sh**: Fuzzy-pick a PDF from $HOME and open with Evince (fallback xdg-open)
 
 ---
 
 ### Dependencies
 
-- `fd`: Fast and user-friendly alternative to `find` for listing files.
-- `fzfmenu.sh`: User script for fzf-based menu selection (must be present in your `$PATH`).
-- `evince`: Lightweight PDF viewer (GTK).
-- `xdg-open`: Open files with default applications (fallback if not a regular file).
-- (Optional) `dmenu`: Older menu script, commented out.
-
----
+- `fd` — fast file finder; used to list PDFs under $HOME
+- `improved-fzfmenu.sh` — your fzf-based menu wrapper (supports ANSI colors)
+- `evince` — primary PDF viewer
+- `xdg-open` — fallback opener if Evince fails (uses default system handler)
+- `fzf` — indirectly required by `improved-fzfmenu.sh` (if it uses fzf)
 
 ### Description
 
-This script enables you to efficiently browse and open PDF files located anywhere within your home directory. It leverages the fast `fd` utility to recursively search for `.pdf` files, reducing latency compared to traditional `find`. The list is piped into a custom menu selection utility, `fzfmenu.sh`, which provides an interactive (and possibly colorized) file chooser powered by `fzf`.
+This script provides a quick fuzzy-search UI to open any PDF located under your home directory. It uses `fd` to efficiently scan for files matching the regex `\.pdf$` (fd is case-insensitive by default, so it also matches .PDF, .Pdf, etc.). Results are piped to `improved-fzfmenu.sh` with ANSI coloring enabled (`fd --color=always` and `--ansi` on the menu), letting you interactively filter and pick a file.
 
-After making a selection, the script checks if your choice is a regular file:
-- If yes, it launches `evince` to view the PDF file.
-- If not (for example, if a symbolic link or something unexpected is chosen), it falls back to opening with `xdg-open` to handle atypical files robustly.
-
-The script begins with an old alternative (commented out) using `find`, `grep`, and `dmenu`, but the main, active logic is faster and more ergonomic.
-
----
+If you cancel the selection, the script cleanly exits with no side effects. If you pick a file, it tries to open it with Evince; if Evince is unavailable or errors out, it falls back to `xdg-open`, ensuring the PDF still opens with your system’s default viewer.
 
 ### Usage
 
-#### Run Directly in a Terminal:
-
-```sh
-sh /home/matias/.scripts/bin/pdfopener.sh
+Run from a terminal:
 ```
-or if made executable:
-```sh
-/home/matias/.scripts/bin/pdfopener.sh
+~/.scripts/bin/pdfopener.sh
 ```
 
-#### Assign to a Keybinding in qtile:
+Suggested qtile keybinding (Arch, qtile):
+```
+# in ~/.config/qtile/config.py
+from libqtile.config import Key
+from libqtile.lazy import lazy
 
-```python
-Key([mod], "p", lazy.spawn("/home/matias/.scripts/bin/pdfopener.sh"), desc="PDF Opener")
+keys += [
+    Key(["mod4"], "p", lazy.spawn("~/.scripts/bin/pdfopener.sh"), desc="Open a PDF from HOME"),
+]
 ```
 
-> **tldr**  
-> Launch the script, interactively pick any PDF under `$HOME` from the fuzzy menu, and it will open instantly in Evince.
+Tips:
+- To limit the search (for speed), edit the path: replace "$HOME" with "$HOME/Documents".
+- If your menu doesn’t need colors, remove `--color=always` from `fd` and `--ansi` from the menu.
+- Prefer a different viewer? Define an alias or modify the last line to use `$PDFVIEWER`:
+```
+${PDFVIEWER:-evince} "$file" || xdg-open "$file"
+```
 
 ---
 
-> [!NOTE]
-> - `fzfmenu.sh` must be accessible and functioning correctly since it is critical for selection; if missing the script will fail silently.
-> - Consider handling cases where no PDF is selected at all—currently, if `fzfmenu.sh` returns an empty value, the script may try to open an empty string.
-> - Output from `fd` uses `--color=always` for colorized entries, which may interfere with the selection if `fzfmenu.sh` or subsequent scripts/commands do not handle ANSI codes correctly.
-> - You may wish to customize the search folder, add the ability to search other extensions, or display a notification if no PDFs are found.
+> [!TIP]
+> Possible improvements:
+> - Simpler, more robust match: use `fd -t f -e pdf "$HOME"` instead of a regex.
+> - Launch the viewer non-blocking: `evince "$file" >/dev/null 2>&1 & disown`.
+> - Consider including hidden/ignored files when needed: add `-H` (hidden) or `-uu` (all) to `fd`.
+> - Add error messaging if `fd` or `improved-fzfmenu.sh` are missing.
+> - Allow multi-select with your menu (if supported) and open all selections.

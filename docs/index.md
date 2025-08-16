@@ -1,7 +1,8 @@
-- [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Selects and plays a full album (with extras queued) via cmus and dmenu*
+- [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Pick an album via dmenu and queue it (plus random albums) in cmus*
 - [ansi-cheatsheet.sh](scripts/ansi-cheatsheet.sh.md) -- *Quickly displays a cheatsheet of ANSI escape codes in a syntax-highlighted view*
 - [ansi8bit2rgb_hex.py](scripts/ansi8bit2rgb_hex.py.md) -- *Converts 8-bit ANSI color codes to RGB or HEX representations with optional colorized output and names*
 - [ardour-open.sh](scripts/ardour-open.sh.md) -- *Interactive picker for Ardour sessions with formatted preview and recent-first sort*
+- [build_and_link.sh](scripts/build_and_link.sh.md) -- *Build C/C++ or uv-installed Python app and symlink into repo*
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *A Python script to generate documentation for other scripts using OpenAI's GPT API.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Script to initialize and apply Chezmoi configuration for user 'matias-ceau'.*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *Find academic references by citation key, copy their identifier, or open associated PDFs.*
@@ -18,16 +19,17 @@
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Fuzzy-find and edit dotfiles managed by chezmoi, with preview and optional sync/apply.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to search and edit Chezmoi managed configuration files and directories.*
 - [editor.sh](scripts/editor.sh.md) -- *Quickly edit files using fzf, with smart search modes and exclusions.*
+- [env.sh](scripts/env.sh.md) -- *core, paths, colors, fzf, git, debug*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *Adjust relative paths in markdown links to start from a base directory*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Script to visually display the Flexoki color palette and roles in your terminal*
 - [ftp-data-mount.sh](scripts/ftp-data-mount.sh.md) -- *Mounts a remote DATA folder from Mega via FTP to /mnt/ftp/DATA*
 - [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *Interactive terminal-based file manager leveraging `fzf` and `eza` for rapid navigation.*
-- [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Quickly search for and play an album in cmus using fzf and beets.*
+- [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose an album with fzf and play it in cmus, saving a playlist*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *Helper script that runs `fzf` inside an `alacritty` terminal instance.*
 - [fzfmenu_cache.sh](scripts/fzfmenu_cache.sh.md) -- *Caches and lists executables in PATH instantaneously for fzfmenu launcher*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *Launches app selection using fzf in a floating terminal, as a `dmenu_run` replacement.*
 - [fzfpreview.sh](scripts/fzfpreview.sh.md) -- *Display file or image contents in fzf preview window using various tools and fallback logic*
-- [generate_commit_message.py](scripts/generate_commit_message.py.md) -- *Generate an AI-powered git commit message from staged changes.*
+- [generate_commit_message.py](scripts/generate_commit_message.py.md) -- *Generate concise AI commit messages from staged git diffs*
 - [generate_commit_message.sh](scripts/generate_commit_message.sh.md) -- *Script to generate commit messages using OpenAI's GPT-4o-mini*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Creates thumbnails of currently open windows on your qtile environment.*
 - [get-windows.sh](scripts/get-windows.sh.md) -- *Outputs information about currently open windows in qtile (ID, group, name, wm_class)*
@@ -54,7 +56,7 @@
 - [list-openai-models.sh](scripts/list-openai-models.sh.md) -- *Lists and caches available OpenAI API models with creation dates*
 - [list_process.sh](scripts/list_process.sh.md) -- *Lists all systemd services, showing their statuses sorted by type*
 - [llama-all-scripts-describer.py](scripts/llama-all-scripts-describer.py.md) -- *Automated Github-style markdown documentation for scripts using Llama 3.1*
-- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Automates documentation generation for user scripts using OpenAI's LLMs*
+- [llm-script-describer.py](scripts/llm-script-describer.py.md) -- *Generate per-script docs and a README summary for your scripts repo*
 - [m3u_creator.sh](scripts/m3u_creator.sh.md) -- *Quickly generate an m3u playlist file from all files in the current directory*
 - [mechen_music_transfert.py](scripts/mechen_music_transfert.py.md) -- *Syncs a subset of unlistened music albums to the MECHEN MP3 player, fitting within a max size.*
 - [megacmd_launch_tmux.sh](scripts/megacmd_launch_tmux.sh.md) -- *Launches `mega-cmd` inside a new detached tmux session.*
@@ -67,27 +69,29 @@
 - [minimal_gpt_call.py](scripts/minimal_gpt_call.py.md) -- *Simple script to interact with OpenAI GPT-4o-mini for CSV sample generation.*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *Automates script creation with templating based on file extension*
 - [new_script_creator.sh](scripts/new_script_creator.sh.md) -- *Quickly create or adapt user scripts with templating and permissions in `$SCRIPTS/bin`.*
-- [next_album.xsh](scripts/next_album.xsh.md) -- *Skips playback to the first track of the next album in cmus.*
+- [next_album.xsh](scripts/next_album.xsh.md) -- *Skip remaining tracks to start of next album in cmus*
 - [nvim_in_new_terminal.sh](scripts/nvim_in_new_terminal.sh.md) -- *Open a file in `nvim` inside a floating Alacritty terminal window*
 - [nvpn-tui-help.sh](scripts/nvpn-tui-help.sh.md) -- *Interactive terminal UI for navigating nordvpn (or other CLI programs) commands and help.*
 - [obsidian-vault-selector.sh](scripts/obsidian-vault-selector.sh.md) -- *Select and open an Obsidian vault from all available vaults using an interactive fuzzy finder.*
 - [obsidian.xsh](scripts/obsidian.xsh.md) -- *Quickly select and open an Obsidian vault via a fuzzy menu*
 - [old-ousse](scripts/old-ousse.md) -- *Generates a collection of custom mlocate databases for various areas of your filesystem*
+- [ollama-list.sh](scripts/ollama-list.sh.md) -- *Build and cache a readable list of Ollama Library models*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Open a URL in an already running qutebrowser session, or start a new one if needed*
 - [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *Bash script to launch Open WebUI and open it in a minimal browser.*
+- [openwebui_serve.sh](scripts/openwebui_serve.sh.md) -- *Start Open WebUI via uvx with XDG-compliant data dir*
 - [ousse-locate.sh](scripts/ousse-locate.sh.md) -- *Experimental script for managing and searching local `.db` databases with preview support.*
 - [ousse-update.sh](scripts/ousse-update.sh.md) -- *Custom script to update various `mlocate` databases with personal folder scopes.*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *Fuzzy search and install Arch Linux packages (repo/AUR) using paru and fzf*
-- [pdfopener.sh](scripts/pdfopener.sh.md) -- *Pick and open any PDF file in your home directory with evince (or fallback).*
+- [pdfopener.sh](scripts/pdfopener.sh.md) -- *Fuzzy-pick a PDF from $HOME and open with Evince (fallback xdg-open)*
 - [playlist_player.xsh](scripts/playlist_player.xsh.md) -- *Select and play a saved `.m3u` playlist in cmus via dmenu*
-- [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Picks a playlist of albums and plays them in random album order with cmus*
+- [playlist_randomizer.xsh](scripts/playlist_randomizer.xsh.md) -- *Randomizes album order from an m3u playlist and plays it in cmus*
 - [ppm-color-reducer](scripts/ppm-color-reducer.md) -- *Reduce colors in a P6 PPM image to a user-defined palette*
 - [pyman.sh](scripts/pyman.sh.md) -- *Interactive fuzzy finder for Python topics, keywords, builtins, and installed modules/packages.*
 - [qtile_dice_group.py](scripts/qtile_dice_group.py.md) -- *Instantly switches to the workspace ("group") with a number summing to 7 with the current one.*
 - [qtile_window_to_group_and_switch.py](scripts/qtile_window_to_group_and_switch.py.md) -- *Moves the current focused window to the next or previous qtile group and switches focus to that group*
 - [quick-pass.sh](scripts/quick-pass.sh.md) -- *Fuzzy-find and copy your pass(1) passwords using `fzf` with one-click paste/edit support.*
 - [qutebrowser-modify-source-bookmarks.sh](scripts/qutebrowser-modify-source-bookmarks.sh.md) -- *Synchronizes qutebrowser bookmarks, quickmarks, and sessions with chezmoi dotfiles.*
-- [random_album.xsh](scripts/random_album.xsh.md) -- *Selects 10 random albums from your cmus library and plays them.*
+- [random_album.xsh](scripts/random_album.xsh.md) -- *Select 10 random albums from cmus and start playback*
 - [random_wallpapers.xsh](scripts/random_wallpapers.xsh.md) -- *Script to set a random wallpaper from the `~/.wallpapers` directory.*
 - [read_the_fucking_manual.sh](scripts/read_the_fucking_manual.sh.md) -- *Query and analyze your `man`/`batman` usage history for most searched entries.*
 - [rgfzf.sh](scripts/rgfzf.sh.md) -- *Search for text using ripgrep + fuzzy finder, preview with bat, open in neovim.*

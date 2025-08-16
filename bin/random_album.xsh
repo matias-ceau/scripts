@@ -5,7 +5,7 @@
 import random
 import os
 
-temp_path = os.path.expanduser('~/.config/cmus/.temp.m3u') 
+temp_path = os.path.expanduser('/tmp/tmp.m3u') 
 
 cmus-remote -U
 cmus-remote -C "view 4"

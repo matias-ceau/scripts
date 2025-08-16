@@ -3,8 +3,10 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
+#     "build",
 #     "colorama",
 #     "pyyaml",
+#     "setuptools",
 # ]
 # ///
 

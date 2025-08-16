@@ -16,5 +16,5 @@ if selection:
     cmus-remote -C "lqueue 100"
     cmus-remote -n
     cmus-remote -p
-    cmus-remote -C "save /home/matias/.temp/nowplaying.m3u"
+    cmus-remote -C "save /tmp/nowplaying.m3u"
 

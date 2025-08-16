@@ -25,11 +25,11 @@ mapping = {k:v for v,k in enumerate(indiv_albums)}
 df['order'] = [mapping[i] for i in df.albums]
 df = df.sort_values(['order', 'songs'])
 random_pl = '\n'.join(df.content.tolist())
-echo @(random_pl) > /home/matias/.temp/randomized.m3u
+echo @(random_pl) > /tmp/randomized.m3u
 
 cmus-remote -C 'view 4'
 cmus-remote -C clear
-cmus-remote -C 'add /home/matias/.temp/randomized.m3u'
+cmus-remote -C 'add /tmp/randomized.m3u'
 cmus-remote -n
 cmus-remote -p
 

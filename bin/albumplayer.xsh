@@ -6,7 +6,7 @@
 import os
 import random
 
-temp_path = os.path.expanduser('~/.config/cmus/.temp.m3u') 
+temp_path = os.path.expanduser('/tmp/temp.m3u') 
 
 paths = $(cat .config/cmus/lib.pl).splitlines()
 albums = list(set(['/'.join(i.split('/')[-3:-1]) for i in paths]))
