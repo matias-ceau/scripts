@@ -1,4 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run --script --quiet
+#
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "rich",
+# ]
+# ///
+
 
 import argparse
 import datetime
