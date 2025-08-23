@@ -1,72 +1,72 @@
-# Build and link sources into $SCRIPTS/bin
+# Build & Link Helper
 
 ---
 
-**build_and_link.sh**: Build C/C++ or uv-installed Python app and symlink into repo
+**build_and_link.sh**: Build C/C++ or Python app into $SCRIPTS/bin and symlink into repo root
 
 ---
 
 ### Dependencies
 
-- `bash` – required shell
-- `gcc` – build C sources
-- `g++` – build C++ sources
-- `uv` – install Python apps from a pyproject (Astral’s uv)
-- `ln` – create/update symlinks
-- `SCRIPTS` – env var pointing to your scripts root (expects `$SCRIPTS/bin`)
+- `bash` — script interpreter
+- `coreutils` — for `ln`, `mkdir`, `basename`
+- `gcc` — compiles `.c` (also provides `g++`)
+- `g++` — compiles `.cpp`
+- `python` — for Python projects (when using `uv`)
+- `uv` — fast Python package/app installer (uses `pyproject.toml`)
+- `SCRIPTS` env var — points to your scripts root (e.g. `/home/matias/.scripts`)
 
 ### Description
 
-This helper compiles or installs a single source file and places the resulting binary/app under `$SCRIPTS/bin`, then creates a symlink in the current repository directory for convenient local invocation.
+This small builder streamlines turning source files into runnable artifacts under `$SCRIPTS/bin` and then creates a repo-local symlink to the built target.
 
-Behavior by extension:
-- .c → compiled with `gcc` to `$SCRIPTS/bin/<base>`
-- .cpp → compiled with `g++` to `$SCRIPTS/bin/<base>`
-- .py → if `pyproject.toml` is present in the current dir, installs the app with `uv pip install --app . --target "$SCRIPTS/bin/<base>"`; otherwise it aborts with guidance
+Flow:
+- Validates `SCRIPTS` and the provided source file.
+- Derives `base` from the filename (without extension).
+- Ensures `$SCRIPTS/bin` exists.
+- Per filetype:
+  - `.c` → `gcc <src> -o $SCRIPTS/bin/<base>`
+  - `.cpp` → `g++ <src> -o $SCRIPTS/bin/<base>`
+  - `.py` → requires a `pyproject.toml` in the current directory, then runs:
+    - `uv pip install --app . --target "$SCRIPTS/bin/<base>"`
+    - This creates an isolated app install; the target is typically a directory containing `bin/` entry points.
+- Finally symlinks the built artifact back into the repo root as `./<base>`.
 
-Finally, it runs `ln -sf "$SCRIPTS/bin/<base>" "$PWD/<base>"`, so `./<base>` in your repo resolves to the built artifact. The script exits on first error (`set -e`) and validates inputs early (env var, file existence).
-
-Intended layout on Arch + qtile:
-- Keep `$SCRIPTS` (e.g. `/home/matias/.scripts`) exported in your shell profile
-- Ensure `$SCRIPTS/bin` is on PATH for direct execution anywhere
+Designed for Arch Linux and easy integration with qtile keybindings or editor workflows.
 
 ### Usage
 
-Basic setup:
-```bash
-export SCRIPTS="$HOME/.scripts"
-mkdir -p "$SCRIPTS/bin"
-```
+TL;DR:
+- Export your scripts root once (e.g. in shell profile):
+  ```
+  export SCRIPTS="$HOME/.scripts"
+  ```
+- From any repo directory:
+  ```
+  /home/matias/.scripts/meta/build_and_link.sh path/to/main.c
+  /home/matias/.scripts/meta/build_and_link.sh src/tool.cpp
+  ```
+- For Python (project must have pyproject.toml in CWD):
+  ```
+  cd /path/to/python-project
+  /home/matias/.scripts/meta/build_and_link.sh app/__main__.py
+  ```
+- Result:
+  - Built artifact at: `$SCRIPTS/bin/<base>`
+  - Symlink at repo root: `./<base>` pointing to the built artifact (or app dir)
 
-Build a C file:
-```bash
-cd ~/code/mytool
-~/.scripts/meta/build_and_link.sh src/mytool.c
-./mytool  # uses repo-local symlink to $SCRIPTS/bin/mytool
+Qtile example (bind to compile current file from terminal):
 ```
-
-Build a C++ file:
-```bash
-cd ~/code/mycpp
-~/.scripts/meta/build_and_link.sh src/runner.cpp
-./runner
+lazy.spawn("$HOME/.scripts/meta/build_and_link.sh $FILE")
 ```
-
-Install a Python app (requires pyproject.toml in repo root):
-```bash
-cd ~/code/mypyapp
-~/.scripts/meta/build_and_link.sh src/cli.py
-./cli
-```
-
-qtile tip: bind a key to spawn a terminal running the command above for the currently focused project, or integrate with your editor to pass the active file path.
 
 ---
 
 > [!TIP]
-> - Consider adding compiler flags (e.g., `CFLAGS`, `CXXFLAGS`, `-O2 -pipe -march=native`, `-Wall -Wextra`) and a debug/release switch.
-> - Check for missing tools (`command -v gcc`, `g++`, `uv`) with clear errors.
-> - For Python, `uv --app --target "$BIN/$base"` may produce a directory; you might want to symlink the generated launcher inside it instead of the directory itself.
-> - Allow out-of-tree building and configurable output name/path.
-> - Optional: detect `pyproject.toml` relative to `src_file` rather than only `$PWD`.
-> - Add support for `clang++/clang` or a default toolchain fallback.
+> - `SRC` is defined but unused; remove or repurpose.
+> - Consider adding `-O2 -pipe -march=native -Wall -Wextra` via `CFLAGS/CXXFLAGS`, and accept optional flags.
+> - Detect and warn if `uv` is missing; suggest `sudo pacman -S uv`.
+> - For Python, `uv pip install --app` creates a directory; you may want to symlink its `bin/<entrypoint>` instead of the whole dir.
+> - Use absolute paths via `realpath` to make symlinks robust when invoked from elsewhere.
+> - Add support for more languages (`cargo`, `go build`, `zig`, `make`/`meson`) and a help message (`-h/--help`).
+> - Guard against clobbering an existing file named `<base>` in the repo.

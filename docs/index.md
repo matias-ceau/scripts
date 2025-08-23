@@ -1,8 +1,8 @@
-- [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Pick an album via dmenu and queue it (plus random albums) in cmus*
+- [albumplayer.xsh](scripts/albumplayer.xsh.md) -- *Select an album via dmenu and queue it in cmus, plus random extras*
 - [ansi-cheatsheet.sh](scripts/ansi-cheatsheet.sh.md) -- *Quickly displays a cheatsheet of ANSI escape codes in a syntax-highlighted view*
 - [ansi8bit2rgb_hex.py](scripts/ansi8bit2rgb_hex.py.md) -- *Converts 8-bit ANSI color codes to RGB or HEX representations with optional colorized output and names*
 - [ardour-open.sh](scripts/ardour-open.sh.md) -- *Interactive picker for Ardour sessions with formatted preview and recent-first sort*
-- [build_and_link.sh](scripts/build_and_link.sh.md) -- *Build C/C++ or uv-installed Python app and symlink into repo*
+- [build_and_link.sh](scripts/build_and_link.sh.md) -- *Build C/C++ or Python app into $SCRIPTS/bin and symlink into repo root*
 - [chatgpt-all-scripts-describer.py](scripts/chatgpt-all-scripts-describer.py.md) -- *A Python script to generate documentation for other scripts using OpenAI's GPT API.*
 - [chezmoi_on_a_new_system.sh](scripts/chezmoi_on_a_new_system.sh.md) -- *Script to initialize and apply Chezmoi configuration for user 'matias-ceau'.*
 - [citeboard.sh](scripts/citeboard.sh.md) -- *Find academic references by citation key, copy their identifier, or open associated PDFs.*
@@ -19,17 +19,17 @@
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Fuzzy-find and edit dotfiles managed by chezmoi, with preview and optional sync/apply.*
 - [edit_chezmoi_cfg_files.sh](scripts/edit_chezmoi_cfg_files.sh.md) -- *Script to search and edit Chezmoi managed configuration files and directories.*
 - [editor.sh](scripts/editor.sh.md) -- *Quickly edit files using fzf, with smart search modes and exclusions.*
-- [env.sh](scripts/env.sh.md) -- *core, paths, colors, fzf, git, debug*
+- [env.sh](scripts/env.sh.md) -- *core paths, Flexoki colors, fzf, git, debug*
 - [fix-markdown-links.sh](scripts/fix-markdown-links.sh.md) -- *Adjust relative paths in markdown links to start from a base directory*
 - [flexoki_show.sh](scripts/flexoki_show.sh.md) -- *Script to visually display the Flexoki color palette and roles in your terminal*
 - [ftp-data-mount.sh](scripts/ftp-data-mount.sh.md) -- *Mounts a remote DATA folder from Mega via FTP to /mnt/ftp/DATA*
 - [fzf-file-manager.sh](scripts/fzf-file-manager.sh.md) -- *Interactive terminal-based file manager leveraging `fzf` and `eza` for rapid navigation.*
-- [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Choose an album with fzf and play it in cmus, saving a playlist*
+- [fzf_albumlauncher.xsh](scripts/fzf_albumlauncher.xsh.md) -- *Pick an album via fzf (beets) and queue/play it in cmus*
 - [fzfmenu.sh](scripts/fzfmenu.sh.md) -- *Helper script that runs `fzf` inside an `alacritty` terminal instance.*
 - [fzfmenu_cache.sh](scripts/fzfmenu_cache.sh.md) -- *Caches and lists executables in PATH instantaneously for fzfmenu launcher*
 - [fzfmenu_run.sh](scripts/fzfmenu_run.sh.md) -- *Launches app selection using fzf in a floating terminal, as a `dmenu_run` replacement.*
 - [fzfpreview.sh](scripts/fzfpreview.sh.md) -- *Display file or image contents in fzf preview window using various tools and fallback logic*
-- [generate_commit_message.py](scripts/generate_commit_message.py.md) -- *Generate concise AI commit messages from staged git diffs*
+- [generate_commit_message.py](scripts/generate_commit_message.py.md) -- *Generate concise commit messages from staged diffs via OpenRouter or fallback*
 - [generate_commit_message.sh](scripts/generate_commit_message.sh.md) -- *Script to generate commit messages using OpenAI's GPT-4o-mini*
 - [get-window-thumbnails.sh](scripts/get-window-thumbnails.sh.md) -- *Creates thumbnails of currently open windows on your qtile environment.*
 - [get-windows.sh](scripts/get-windows.sh.md) -- *Outputs information about currently open windows in qtile (ID, group, name, wm_class)*

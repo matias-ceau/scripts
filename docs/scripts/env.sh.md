@@ -1,77 +1,52 @@
-# env.sh — Modular environment loader
+# Modular environment loader (Flexoki + fzf) for your scripts
 
 ---
 
-**env.sh**: Load modular environment: core, paths, colors, fzf, git, debug
+**env.sh**: Modular env loader for scripts: core paths, Flexoki colors, fzf, git, debug
 
 ---
 
 ### Dependencies
 
-- `bash` — required to source and export functions
-- `coreutils` — provides `readlink`, `dirname` used to resolve SCRIPTS root
-- `fd` — used by `FZF_DEFAULT_COMMAND` for fast file listing
-- `fzf` — fuzzy finder, styled/configured by this script
-- `bat` — used by `FZF_PREVIEW_COMMAND` for syntax-highlighted previews
-- `git` — optional; only referenced via `GIT_REPOS` var for your scripts
+- `bash` — required (uses BASH_SOURCE, export -f)
+- `coreutils` — for `readlink` and `dirname`
+- `fzf` — optional; only needed when loading the `fzf` module
+- `fd` — optional; used by `FZF_DEFAULT_COMMAND` when `fzf` module is loaded
+- `bat` — optional; used by `FZF_PREVIEW_COMMAND` when `fzf` module is loaded
 
 ### Description
 
-This library centralizes environment setup for your script collection on Arch/Qtile. Call `load_env "<modules>"` to initialize modules:
+This library centralizes environment setup for your Arch + qtile script collection. It exposes a single entrypoint, `load_env`, that activates targeted “modules”:
 
-- core/paths: Sets `SCRIPTS` to the repo root (two dirs above this file), ensures `~/.local/bin` and `$SCRIPTS/bin` are in `PATH`. Idempotent via `SCRIPTS_ENV_LOADED`.
-- colors: Exposes the Flexoki palette via `FLEXOKI_*` and semantic aliases (`PRIMARY_COLOR`, `ERROR_COLOR`, etc.).
-- fzf: Configures `FZF_DEFAULT_COMMAND` (via `fd`), Flexoki-driven `FZF_DEFAULT_OPTS` (keybinds: Ctrl-/, Ctrl-u/d), and `FZF_PREVIEW_COMMAND` using `bat`.
-- git: Defines `GIT_REPOS` and `LOCALDATA` defaults for your tooling.
-- debug: Emits a summary to stderr.
+- core/paths: Sets `SCRIPTS` to the repository root (detected from this file path), ensures `$SCRIPTS/bin` and `$HOME/.local/bin` are in `PATH`. Loaded by default when no argument is passed. Flags: `SCRIPTS_ENV_LOADED=1`.
+- colors: Loads the Flexoki palette as exported variables (`FLEXOKI_*`) and convenience aliases like `PRIMARY_COLOR`, `SUCCESS_COLOR`, etc. Flag: `FLEXOKI_LOADED=1`.
+- fzf: Applies opinionated `FZF_DEFAULT_COMMAND` (via `fd`), Flexoki-themed `FZF_DEFAULT_OPTS` when colors are loaded, and a `bat`-based preview. Flag: `FZF_ENV_LOADED=1`.
+- git: Sets data locations (`GIT_REPOS`, `LOCALDATA`) without shelling out to git.
+- debug: Prints what got loaded to stderr to help during development.
 
-Convenience wrappers: `load_env_minimal` (core), `load_env_colors`, `load_env_fzf`, `load_env_full`.
+Convenience functions are exported for common sets: `load_env_minimal`, `load_env_colors`, `load_env_fzf`, `load_env_full`.
 
 ### Usage
 
-Source from any Bash script:
+- In another script (recommended): add at the top  
+  `source "$HOME/.scripts/lib/env.sh"; load_env_fzf`
+- Minimal path setup only:  
+  `source "$HOME/.scripts/lib/env.sh"; load_env_minimal`
+- Colors + fzf with themed UI:  
+  `source "$HOME/.scripts/lib/env.sh"; load_env "core,colors,fzf"`
+- Full stack (paths, colors, fzf, git):  
+  `source "$HOME/.scripts/lib/env.sh"; load_env_full`
+- Ad-hoc in a terminal for testing:  
+  `source ~/.scripts/lib/env.sh; load_env_full; env | grep -E 'FZF_|FLEXOKI_|SCRIPTS'`
+- qtile binding: point your keybinding to a script that sources this file and calls one of the helpers before running its logic. No need to preload it in qtile itself.
 
-```bash
-# In your script
-source "$HOME/.scripts/lib/env.sh"
-load_env "core,colors,fzf"
-# ...your code
-```
-
-Use convenience functions:
-
-```bash
-source "$HOME/.scripts/lib/env.sh"
-load_env_fzf
-```
-
-Bootstrapping in interactive shells:
-
-```bash
-# ~/.bashrc (Arch default) or ~/.profile
-source "$HOME/.scripts/lib/env.sh"
-load_env_minimal
-```
-
-Qtile keybinding spawning a script with this env:
-
-```python
-# ~/.config/qtile/config.py
-from libqtile.lazy import lazy
-Key([mod], "p", lazy.spawn("/bin/bash -lc 'source ~/.scripts/lib/env.sh; ~/.scripts/bin/your-script'"))
-```
-
-Install helper tools on Arch:
-
-```bash
-sudo pacman -S fd fzf bat
-```
+On Arch, install optional tools as needed: `pacman -S fzf fd bat`.
 
 ---
 
 > [!TIP]
-> - Module parsing uses substring matching; consider splitting on commas and matching whole tokens to avoid false positives.
-> - `SCRIPT_PATHS` includes `/usr/local/bin` but it’s not added to `PATH`; either add it or drop the variable.
-> - Multi-line `FZF_DEFAULT_OPTS` may introduce leading whitespace/newlines; use a here-doc or single-line to be safe.
-> - `export -f` is Bash-specific; if you move to zsh, source the file and call functions without relying on exported functions.
-> - Add fallbacks if `fd`/`bat` are missing (e.g., default `find` and `less`) to make the fzf module more robust.
+> Improvements:
+> - Module matching is substring-based; current comma-separated style works, but `[[ "$modules" == *"core"* ]]` will also match unexpected strings containing `core`. Consider splitting on commas into an array and matching exact tokens.
+> - `FZF_DEFAULT_OPTS` is multi-line; it works, but trimming indentation would be cleaner. You could build it incrementally or via an array for readability.
+> - Add soft checks for `fd`, `fzf`, and `bat` to avoid confusing errors when they’re missing (e.g., set sane fallbacks).
+> - Consider a `paths`-only mode that doesn’t piggyback on `core`, to clarify intent.
