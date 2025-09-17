@@ -43,7 +43,7 @@ export -f plabel_cmd
 
 vault="$(search_cmd |
     improved-fzfmenu.sh  \
-        title_is_obsidian-open-vault \
+        --terminal-title=obsidian-open-vault \
         --pipe \
         --with-nth -1 \
         --delimiter / \

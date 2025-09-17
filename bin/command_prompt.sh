@@ -9,7 +9,7 @@ get_cmd() {
 
 fzf_cmd() {
     improved-fzfmenu.sh \
-        title_is_cmd_prompt \
+        --terminal-title=cmd_prompt \
         --tac \
         --ansi
 }

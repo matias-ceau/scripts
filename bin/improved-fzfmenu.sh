@@ -6,7 +6,7 @@
 #args=()
 term=alacritty
 title=i_fzfmenu
-title_prefix=title_is_
+title_prefix=--terminal-title=
 class=floating
 pipe=0
 fzf_args=""

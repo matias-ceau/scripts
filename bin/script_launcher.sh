@@ -9,7 +9,7 @@ load_env "colors"
 if [ "$1" = "--embedded" ] || [ "$1" = "-E" ] ; then
     fzf_cmd="fzf"
 else
-    fzf_cmd="improved-fzfmenu.sh title_is_script_launcher"
+    fzf_cmd="improved-fzfmenu.sh --terminal-title=script_launcher"
 fi
 
 preview_docs='bat \
