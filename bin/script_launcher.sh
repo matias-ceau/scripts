@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 #INFO:# "Run scripts with fzf"
 
 # Load environment
-source "$(dirname "$(realpath "$0")")/../lib/env.sh"
+source "$(dirname "$(realpath "$0")")/../lib/env.sh" 
 load_env "colors"
+
 
 if [ "$1" = "--embedded" ] || [ "$1" = "-E" ] ; then
     fzf_cmd="fzf"
@@ -63,21 +64,21 @@ cmd-full-path() {
 export -f cmd-full-path
 
 format_shown_line |
-$fzf_cmd \
-    --ansi \
-    --nth=2 \
-    --preview "$preview_src" \
-    --preview-window='70%' \
-    --bind "enter:become(bash -c {2})" \
-    --bind "alt-enter:execute(cmd-full-path terminal_with_command.sh {2})" \
-    --bind "ctrl-e:become(nvim \$(which {2}))" \
-    --bind "alt-e:execute(cmd-full-path nvim_in_new_terminal.sh \$(which {2}))" \
-    --header "$header" \
-    --header-first \
-    --preview-label "$label_doc" \
-    --bind "alt-s:change-preview@$preview_docs@+change-preview-label($label_source)" \
-    --bind "alt-d:change-preview@$preview_src@+change-preview-label($label_doc)" \
-    --bind "resize:refresh-preview"
+    $fzf_cmd \
+        --ansi \
+        --nth=2 \
+        --preview "$preview_src" \
+        --preview-window='70%' \
+        --bind "enter:become(bash -c {2})" \
+        --bind "alt-enter:execute(cmd-full-path terminal_with_command.sh {2})" \
+        --bind "ctrl-e:become(nvim \$(which {2}))" \
+        --bind "alt-e:execute(cmd-full-path nvim_in_new_terminal.sh \$(which {2}))" \
+        --header "$header" \
+        --header-first \
+        --preview-label "$label_doc" \
+        --bind "alt-s:change-preview@$preview_docs@+change-preview-label($label_source)" \
+        --bind "alt-d:change-preview@$preview_src@+change-preview-label($label_doc)" \
+        --bind "resize:refresh-preview"
 
 #TODO: option to render a pdf/html of the documentation
 # page up and down for preview

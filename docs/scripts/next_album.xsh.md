@@ -1,64 +1,70 @@
-# Next Album (cmus) — skip to the next album quickly
+# Next Album (cmus)
 
 ---
 
-**next_album.xsh**: Skip remaining tracks to start of next album in cmus
+**next_album.xsh**: Skip to the next album in cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh` — shell used to run the script
+- `xonsh` — runs the .xsh script (Python-powered shell)
 - `cmus` — console music player
-- `cmus-remote` — control cmus from the command line
-- `coreutils` — for `cat` (used via xonsh subprocess)
+- `cmus-remote` — command-line control for cmus (bundled with cmus)
+- `coreutils` — for `cat` used by the script
+- `qtile` — optional, for keybinding integration on your WM
 
 ### Description
 
-This xonsh script fast-forwards cmus to the first track of the next album in your current play context.
+This Xonsh script jumps playback to the first track of the next album in your current cmus view. It works by:
+1) Switching cmus to view 4.
+2) Saving the current view into /tmp/now_playing.m3u.
+3) Reading that list, deriving album names from each file’s parent directory.
+4) Querying cmus for the currently playing file, inferring its album from its parent directory.
+5) Counting how many consecutive tracks belong to the current album, then issuing cmus-remote -n that many times to land on the next album’s first track.
 
-How it works:
-- Switches cmus to a specific view (`view 4`) that should reflect your current playback list (playlist/queue/library depending on your setup).
-- Saves that view to `/tmp/now_playing.m3u`.
-- Parses the m3u lines, extracts album names from the directory structure (second-to-last path component).
-- Obtains the current album (also via path parsing from `cmus-remote -Q`).
-- Counts how many consecutive entries at the start of the saved list belong to the current album.
-- Sends `cmus-remote -n` repeatedly to skip those tracks and land at the beginning of the next album.
-
-This approach is filesystem-hierarchy based (album = folder), which fits a typical organized library on Arch. It does not use tags.
+It assumes your music library is organized as .../Artist/Album/Track.ext so the parent directory name corresponds to the album.
 
 ### Usage
 
-- Make the script executable and run it when cmus is playing:
+- Run directly from a terminal (ensure it’s executable):
 ```
 chmod +x ~/.scripts/bin/next_album.xsh
 ~/.scripts/bin/next_album.xsh
 ```
 
-- Bind to a qtile key (recommended):
-```
-# in ~/.config/qtile/config.py
-from libqtile.config import Key
-from libqtile.lazy import lazy
-
-keys += [
-    Key([], "XF86AudioNext", lazy.spawn("~/.scripts/bin/next_album.xsh")),  # next album
-]
-```
-
-- Trigger from a terminal or a dmenu/rofi launcher:
+- Put it on your PATH (e.g., ~/.scripts/bin is already on PATH) and call:
 ```
 next_album.xsh
 ```
 
-Tip: If you already use XF86AudioNext for next track, consider another key or a chord to avoid conflicts.
+- Qtile keybinding (Arch Linux):
+```
+# in your config.py
+from libqtile.config import Key
+from libqtile.lazy import lazy
+
+keys += [
+    Key([], "XF86AudioNext", lazy.spawn("~/.scripts/bin/next_album.xsh")),
+]
+```
+
+- Xonsh alias:
+```
+aliases['next-album'] = '~/.scripts/bin/next_album.xsh'
+next-album
+```
+
+Requirements:
+- cmus must be running with an active view (playlist/queue/library).
+- The view at index 4 should correspond to the list you want to traverse.
 
 ---
 
-> [!WARNING]
-> Potential issues and improvements:
-> - Off-by-one risk: `counter` starts at 1; if your current album appears N times at the start of the saved list, the loop may skip N+1 tracks, potentially jumping past the first track of the next album. Consider initializing `counter = 0`.
-> - Fragility in parsing: `current_album` relies on splitting the path in `cmus-remote -Q`. Prefer parsing the `tag album` line from `-Q` or using `%a` via `format_print`.
-> - View dependency: `view 4` must correspond to your “upcoming tracks” view. If it doesn’t, adapt the view number to your workflow.
-> - Temp file collisions: use a unique temp file (e.g., `mktemp`) instead of a fixed `/tmp/now_playing.m3u`.
-> - No error handling if cmus isn’t running; add guards for better robustness.
+> [!TIP]
+> Potential improvements and caveats:
+> - Assumes album equals the parent directory of the file. If your library is flat or organized differently, use tags instead (e.g., parse cmus-remote -Q for tag album or use cmus-remote -C 'format_print %l').
+> - cmus-remote -Q indexing relies on the second line being file. More robust: parse the line starting with file or tag album.
+> - View 4 may not be what you expect if views are customized. Consider saving the current playlist explicitly (e.g., save -p) if that matches your workflow.
+> - Use a unique temp file (mktemp) and clean it up.
+> - Add error handling for when cmus isn’t running or /tmp/now_playing.m3u is empty.

@@ -1,39 +1,33 @@
-# Ollama Library Model Lister (cached, AI‑formatted)
+# Ollama model list (cached, LLM-formatted)
 
 ---
 
-**ollama-list.sh**: Build and cache a readable list of Ollama Library models
+**ollama-list.sh**: Fetches and caches a formatted list of Ollama models via LLM
 
 ---
 
 ### Dependencies
 
 - `bash` — shell runtime
-- `curl` — fetches the HTML from the Ollama Library (or custom) URL
-- `pandoc` — converts HTML to plain text before AI formatting
-- `aichat` — LLM CLI used to summarize/format the model list; requires provider config
-- `groq` (via `aichat`) — default provider/model `groq:llama-3.3-70b-versatile` needs a valid API key
-- `date`, `mkdir` — standard GNU coreutils available on Arch Linux
+- `curl` — fetch HTML from the Ollama Library page
+- `pandoc` — convert HTML to plain text before LLM processing
+- `aichat` — CLI to query an LLM (configured for Groq; uses `--model`)
+- `coreutils` — `mkdir`, `cat`, `date` for caching
 
 ### Description
 
-This script fetches the Ollama Library page (or any provided URL), converts it to plain text with pandoc, then asks aichat to produce a clean, human‑readable list of the models. Results are cached under:
-- Cache dir: ~/.cache/model_list
-- Files: response_cache.txt and cache_timestamp.txt
+This script scrapes the Ollama Library page (default: https://ollama.com/library?sort=popular), converts the HTML to plain text with `pandoc`, and asks an LLM (via `aichat`) to return “a nicely formatted list of all these models.” Results are cached under:
+- Cache dir: `~/.cache/model_list`
+- Files: `response_cache.txt`, `cache_timestamp.txt`
+- TTL: 7 days
 
-Caching avoids repeated network and LLM calls for up to 7 days. You can override both the source URL and the LLM model. The default LLM is Groq’s llama‑3.3‑70b‑versatile through aichat; ensure your aichat config and API keys (e.g., GROQ) are set.
+If a valid cache exists, it’s printed immediately; otherwise, a fresh fetch is performed and cached. You can override the source URL and the LLM model, or bypass the cache entirely.
 
-Flow:
-1) Parse flags: --url, --model, --no-cache
-2) Validate or create cache
-3) If cache is fresh, print it; else:
-   - curl URL → pandoc (html→plain) → aichat prompt
-   - write both response and timestamp to cache
-   - print response
+Arch/qtile context: this works well as a terminal command or bound to a qtile key to pop up a quick, readable model list in your terminal emulator.
 
 ### Usage
 
-Basic (uses defaults and cache):
+Basic (use cache if fresh):
 ```
 ~/.scripts/bin/ollama-list.sh
 ```
@@ -43,33 +37,39 @@ Force refresh (ignore cache):
 ~/.scripts/bin/ollama-list.sh --no-cache
 ```
 
-Use a different source URL:
+Custom LLM model (Groq via aichat):
 ```
-~/.scripts/bin/ollama-list.sh --url "https://ollama.com/library?sort=updated"
-```
-
-Use a different LLM (requires aichat provider set up):
-```
-~/.scripts/bin/ollama-list.sh --model "openai:gpt-4o-mini"
-~/.scripts/bin/ollama-list.sh --model "ollama:llama3:8b"   # local Ollama via aichat
+~/.scripts/bin/ollama-list.sh --model "groq:llama-3.3-70b-versatile"
 ```
 
-Pipe to pager:
+Custom source URL (e.g., different sort/filter):
 ```
-~/.scripts/bin/ollama-list.sh | less -R
+~/.scripts/bin/ollama-list.sh --url "https://ollama.com/library?sort=new"
 ```
 
-Qtile keybinding example (spawn in terminal):
+qtile keybinding example (spawn in kitty, no cache):
 ```
-Key([mod], "o", lazy.spawn("alacritty -e ~/.scripts/bin/ollama-list.sh"))
+Key([mod], "o", lazy.spawn("kitty -e /home/matias/.scripts/bin/ollama-list.sh --no-cache"))
+```
+
+tldr:
+```
+# fresh list now
+ollama-list.sh --no-cache
+
+# tweak LLM
+ollama-list.sh --model "groq:llama-3.1-70b"
+
+# inspect different page
+ollama-list.sh --url "https://ollama.com/library?sort=trending"
 ```
 
 ---
 
 > [!TIP]
-> - The name suggests “Ollama” but the script doesn’t use the `ollama` CLI; it only scrapes the library page and formats via `aichat`. Consider renaming for clarity.
-> - Error handling is minimal: if curl/pandoc/aichat fail, the script still writes empty cache. Add set -euo pipefail and check exit codes.
-> - Cache is not keyed by URL/model; switching flags will overwrite a single cache. Include a hash of URL+model in filenames.
-> - The aichat prompt is vague; provide a stricter instruction for consistent formatting.
-> - Consider adding a User-Agent to curl and handling HTTP errors and timeouts.
-> - Concurrency: add a simple lockfile to prevent overlapping runs corrupting the cache.
+> - Add error handling: check exit codes for `curl`, `pandoc`, and `aichat`; fail fast with helpful messages.
+> - Consider a `--max-age DAYS` flag to adjust TTL without editing the script.
+> - Provide `--help` output and accept `-h`.
+> - Guard against concurrent writes to the cache (use a lockfile).
+> - The LLM prompt is vague; a deterministic parser (e.g., `pup`, `hxselect`, or `jq` if you find an API) would be more stable.
+> - Validate `aichat` stdin behavior; if not supported, pass the page text via a `--input`/`-f` option or rework the prompt.

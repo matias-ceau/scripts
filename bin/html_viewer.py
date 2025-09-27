@@ -1,26 +1,39 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script --quiet
+#
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "markdown",
+#     "pyqt6",
+#     "pyqt6-qt6",
+#     "pyqt6-sip",
+#     "pyqt6-webengine-qt6",
+# ]
+# ///
+
 
 # INFO: "Simple html viewer"
 
-import sys
 import argparse
 import os
 import re
+import sys
+
+import markdown
+from PyQt6.QtCore import Qt, QUrl
+from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineSettings
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWidgets import (
     QApplication,
-    QMainWindow,
     QFileDialog,
-    QVBoxLayout,
-    QWidget,
+    QLineEdit,
+    QMainWindow,
     QMenu,
     QToolBar,
-    QLineEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtCore import QUrl, Qt
-from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtWebEngineCore import QWebEngineSettings, QWebEnginePage
-import markdown
 
 
 class CustomWebEnginePage(QWebEnginePage):

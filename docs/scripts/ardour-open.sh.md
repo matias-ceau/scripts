@@ -1,77 +1,58 @@
-# Ardour Session Opener
+# Ardour Session Opener (fzf + bat)
 
 ---
 
-**ardour-open.sh**: Interactive picker for Ardour sessions with formatted preview and recent-first sort
+**ardour-open.sh**: Fuzzy-pick and open Ardour sessions with colored list and bat preview
 
 ---
 
 ### Dependencies
 
-- `fd`: Fast, user-friendly alternative to `find`, used to locate `.ardour` files in your audio projects directory.
-- `stat`: Retrieves modification timestamps, required for sorting sessions by recency.
-- `xargs`, `sed`, `sort`: Standard Unix tools for manipulating file lists and formatting.
-- `bat`: Syntax-highlighted preview for `.ardour` project files in FZF preview pane.
-- `improved-fzfmenu.sh`: Custom script or wrapper (user-supplied); used to invoke `fzf` with enhanced options.
-- `fzf`: Fuzzy finder for interactive selection.
-- `ardour`: The DAW itself, to open the selected session.
-
----
+- `bash` — interpreter
+- `fd` — fast file search for .ardour files
+- `xargs`, `stat`, `sort`, `sed`, `echo` — GNU coreutils/textutils
+- `bat` — syntax-highlighted preview (XML for .ardour)
+- `fzf` — fuzzy finder (used via wrapper)
+- `improved-fzfmenu.sh` — your wrapper around `fzf` with preview support
+- `ardour` — DAW to open the selected session
+- Optional: `qtile` — to bind to a key for quick access
 
 ### Description
 
-This script provides an interactive way to open Ardour sessions from your `~/audio/PROJECTS` directory.
+This script scans your Ardour project directory for session files (*.ardour), sorts them by most recently modified, and presents a colorized list in an fzf-powered menu. While navigating, a live preview of the selected .ardour (XML) file is shown using bat, sized to the preview pane.
 
-#### How it works:
-
-- It uses `fd` to search for all `.ardour` session files under your `AUDIO_PROJECTS` root.
-- Outputs are sorted by modification time (most recent first), via `stat` and `sort`.
-- The session list is color-formatted to distinguish paths, then shown in an FZF-based menu using the user script `improved-fzfmenu.sh`.
-- A syntax-highlighted preview of each `.ardour` XML file is available (using `bat`) in the FZF preview window.
-- When a session is selected, the script opens it with Ardour, stripping color escape sequences as needed.
-
-Functions are modular:
-- `search_cmd`: Gathers, sorts, and formats available sessions.
-- `strip_ansi`: Removes ANSI color codes (internal use).
-- `get_path`: Resolves selected session to its absolute, uncolored path.
-- `preview_cmd`: Provides text preview for the FZF pane.
-- The main workflow (bottom of script) orchestrates calling these utilities.
-
----
+Key pieces:
+- `AUDIO_PROJECTS` defaults to `$HOME/audio/PROJECTS` and controls the search root.
+- `search_cmd` builds the session list with colorized path segments and sorts by mtime via `stat -c %Y`.
+- `preview_cmd` calls `bat -l xml` with `--terminal-width=$FZF_PREVIEW_COLUMNS` for readable previews.
+- `get_path` sanitizes the selected colored entry (ANSI stripped) and reconstructs the absolute path.
+- Selection is performed through `improved-fzfmenu.sh` with `--ansi` and a 60% preview pane. The chosen session is opened with `ardour`.
 
 ### Usage
 
-You can run this script in your terminal:
-
-```sh
+- Run interactively:
+```
 ~/.scripts/bin/ardour-open.sh
 ```
 
-Or, assign it to a keybinding in your Qtile config for quick access.
-
-#### Example (tldr):
-
-```sh
-ardour-open.sh
+- Override the projects directory (one-off):
 ```
-_Select session interactively → see colored list + preview → press ENTER to open in Ardour_
+AUDIO_PROJECTS="$HOME/audio/ARCHIVE" ~/.scripts/bin/ardour-open.sh
+```
 
-**Arguments:**  
-No command-line arguments required; all configuration is by convention (`$HOME/audio/PROJECTS`).
+- Qtile keybinding (e.g. in config.py):
+```
+Key([mod], "a", lazy.spawn("~/.scripts/bin/ardour-open.sh"))
+```
 
-**Key Integration Tip:**  
-For fastest workflow on Qtile, bind to a convenient key (e.g., Mod4+a).
+- Tip: If you cancel the menu, Ardour may be spawned with an empty path. Consider adding a guard (see Critique).
 
 ---
 
-> [!NOTE]
->
-> - **Hardcoded paths:** The project directory is set via `export AUDIO_PROJECTS="$HOME/audio/PROJECTS"`. Hardcoding may be inflexible if you change machines/locations. Consider moving this to a config file or supporting command-line overrides.
->
-> - **Reliance on user script:** `improved-fzfmenu.sh` is not standard; ensure it’s robust and maintained.
->
-> - **Color formatting:** The color escape codes in search results look nice but could cause problems if the script is ever used outside FZF (since it relies on “--ansi”). Ensure `strip_ansi` covers all edge cases.
->
-> - **Potential performance:** For very large audio project trees, the stat + sort step might add noticeable delay. For now, it should be fine for typical project counts.
->
-> - **Preview width/behavior:** Preview window width is hardcoded; if you have small terminals, tweak the `--preview-window` parameter.
+> [!TIP]
+> - Paths with spaces/newlines may break the `xargs` pipeline. Prefer `fd -0 … | xargs -0 …` to be robust.
+> - The colorization `sed` rules hard-code `/home/matias/audio/PROJECTS`. Replace with `$AUDIO_PROJECTS` to avoid drift.
+> - Check for cancellation before launching: if `"$selected"` is empty, exit without calling `ardour`.
+> - Use `printf` instead of `echo -e` for safer escape handling.
+> - Consider quoting `$FZF_PREVIEW_COLUMNS` and providing a default when unset.
+> - Add dependency checks and helpful messages if `fd`, `bat`, or `improved-fzfmenu.sh` are missing.

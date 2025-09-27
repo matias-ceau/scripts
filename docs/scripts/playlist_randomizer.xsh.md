@@ -1,64 +1,52 @@
-# CMUS Album-Order Randomizer
+# cmus Playlist Album Randomizer (xonsh)
 
 ---
 
-**playlist_randomizer.xsh**: Randomizes album order from an m3u playlist and plays it in cmus
+**playlist_randomizer.xsh**: Pick an m3u playlist, shuffle album order, play via cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh` — shell interpreter used by the script
-- `python-pandas` — builds/reshuffles track lists by album
-- `dmenu` — interactive playlist selector
-- `cmus`/`cmus-remote` — player and remote control interface
-- `coreutils` (`ls`, `cat`, `echo`) — used via xonsh subprocess syntax
+- `xonsh` — shell interpreter used by the script.
+- `python` — required by xonsh; system Python on Arch.
+- `python-pandas` — builds a DataFrame to group/shuffle albums.
+- `dmenu` — interactive playlist picker.
+- `cmus` and `cmus-remote` — music player and control CLI.
+- `coreutils` (`ls`, `cat`) — used via xonsh subprocess calls.
 
 ### Description
 
-This xonsh script lets you pick an existing `.m3u` playlist, then plays it in cmus with albums randomized but tracks kept in album order.
+This script lets you choose an `.m3u` playlist via `dmenu`, then plays it in cmus with albums randomized but tracks within each album kept in sorted order. It:
 
-Workflow:
-1. Lists `.m3u` names from `~/.playlists` and prompts selection via `dmenu -i -l 30`.
-2. Reads the selected playlist file and splits it into paths.
-3. Derives “album” as the penultimate path component and “song” as the filename.
-4. Uses `pandas` to:
-   - Shuffle album order randomly.
-   - Sort tracks within each album by song name (lexicographic).
-5. Writes the reordered list to `/tmp/randomized.m3u`.
-6. Controls cmus: switches to library view, clears queue, adds the randomized playlist, and starts playback.
+1) Lists `.m3u` names in `~/.playlists`, presents them with `dmenu -i -l 30`, and captures your selection.
+2) Reads the selected playlist’s entries (one path per line), filters out blanks, and derives two columns: album directory (parent folder) and song filename.
+3) Randomizes album order, sorts songs within each album alphabetically, and writes the result to `/tmp/randomized.m3u`.
+4) Controls cmus: switches to playlist view (`view 4`), clears the queue, adds the randomized playlist, then starts playback (`-n`, `-p`).
 
-Assumes your audio files are laid out so that album = second-last path segment (e.g., /Music/Artist/Album/01 - Track.flac).
+This is ideal on Arch + qtile for a quick, keyboard-driven shuffle by album while preserving album cohesion.
 
 ### Usage
 
-- Run from terminal:
-  ```
-  ~/.scripts/bin/playlist_randomizer.xsh
-  ```
-  Select a playlist in dmenu; playback starts in cmus.
+- Run interactively from a terminal: `~/.scripts/bin/playlist_randomizer.xsh`
+- Bind in qtile (example): add a key calling `lazy.spawn('xonsh ~/.scripts/bin/playlist_randomizer.xsh')`.
+- Ensure cmus is running: e.g., start `cmus` first; `cmus-remote` requires a running instance.
+- Expected locations:
+  - Playlists listed from: `~/.playlists` (names shown in dmenu).
+  - Playlist file read from: `/home/matias/notes/playlists/<selected>.m3u` (see critique).
+  - Output: `/tmp/randomized.m3u`.
 
-- Qtile keybinding (Arch, qtile):
-  ```
-  Key([mod], "F9", lazy.spawn("~/.scripts/bin/playlist_randomizer.xsh"))
-  ```
-
-- Install deps on Arch:
-  ```
-  sudo pacman -S xonsh python-pandas dmenu cmus
-  ```
-
-Notes:
-- `cmus-remote` requires a running cmus instance; start cmus once (e.g., in a terminal or a qtile scratchpad).
-- Track order within albums relies on file name sorting; include track numbers in names for correct order.
+tldr:
+- Prepare `.m3u` files with absolute paths to tracks.
+- Hit your binding or run the script.
+- Pick a playlist in dmenu.
+- cmus queue is replaced with a randomized-by-album order and starts playing.
 
 ---
 
 > [!TIP]
-> Potential improvements:
-> - Path inconsistency: selection lists from `~/.playlists`, but the script reads from `/home/matias/notes/playlists/{selected}.m3u`. Unify to the same directory (use `PLAYLIST_PATH` for reading).
-> - Robust filtering: the `'m3u' in i` check may pick non-`.m3u` files; use a proper `.endswith(".m3u")`.
-> - Quoting and spaces: rely less on `ls` parsing; use Python to enumerate files to avoid edge cases.
-> - Sorting tracks: lexicographic sort can misorder tracks if names lack leading numbers; parse track numbers when present.
-> - Error handling: add checks for empty selection, missing files, and empty playlists; print user-friendly messages.
-> - Reproducibility: accept a seed or allow toggling album reshuffle vs. full shuffle.
+> - The script lists playlists from `~/.playlists` but reads from `/home/matias/notes/playlists`. Unify to a single `PLAYLIST_PATH` to avoid mismatches.
+> - `i.split('.')[0]` will truncate names containing multiple dots; prefer strict extension checks (e.g., endswith `.m3u`) and `Path.stem`.
+> - Add early exits for empty selection, missing files, or a non-running cmus; handle `#EXTM3U` and comments.
+> - Sorting tracks alphabetically may break track order; parse track numbers or use natural sorting.
+> - Consider dropping `pandas` for a lightweight approach if performance or dependency size matters.

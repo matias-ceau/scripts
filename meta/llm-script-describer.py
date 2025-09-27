@@ -232,7 +232,9 @@ def find_source_file(binary_path):
     name_without_ext = os.path.splitext(filename)[0]
 
     for ext in SRC_FILE_EXTENSIONS:
-        source_path = os.path.join(BIN_FILE_SRC_PATH, f"{name_without_ext}{ext}")
+        source_path = os.path.join(
+            BIN_FILE_SRC_PATH, f"{name_without_ext}/{name_without_ext}{ext}"
+        )
         if os.path.exists(source_path):
             print_colored(f"Found source file: {source_path}", kind="success")
             return source_path

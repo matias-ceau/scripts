@@ -1,53 +1,56 @@
-# fzfmenu Cache Launcher
+# fzfmenu cache builder for PATH executables
 
 ---
 
-**fzfmenu_cache.sh**: Caches and lists executables in PATH instantaneously for fzfmenu launcher
+**fzfmenu_cache.sh**: Cache PATH executables to RAM and print them, with background refresh
 
 ---
 
 ### Dependencies
 
-- `fd` — Modern alternative to `find` for fast file searches. Used here for listing executables quickly.
-- `/dev/shm` — System memory-backed temporary storage (usually available on modern Linux).
-- `bash` — Script uses Bash-specific syntax.
-- `sort`, `tee`, `mv` — Basic coreutils, standard on Arch Linux.
+- `bash` — shell interpreter
+- `fd` — fast file finder; used to list executables/symlinks in PATH
+- `coreutils` — `sort`, `cat`, `tee`, `mv`, `rm`
+- `fzf` (optional) — consumer for interactive selection
 
 ### Description
 
-This script speeds up the execution time for any menu or launcher script (such as your custom `fzfmenu`) that needs to list all executables in your `$PATH`. It achieves this by building and caching an up-to-date list of all executable files found in `$HOME/.local/bin` and `/usr/bin` (plus any other directories in the user's `$PATH`) using `fd`.
+This helper builds and serves a fast, deduplicated list of launchable commands for your fzf-based launcher. It scans only the first level of each directory in PATH (prepending `$HOME/.local/bin` and `/usr/bin`), collecting both executable files and symlinks using `fd` with `-t x -t l --maxdepth 1`, then sorts them uniquely.
 
-- **Cache Location**: The cache file is placed in `/dev/shm/fzfmenu_path_cache` — this is a RAM-disk location, guaranteeing very fast reads and ephemeral storage (reset at boot).
-- **Cache Strategy**: 
-    - If the cache exists, its contents are output immediately (providing nearly instant results).
-    - Meanwhile, a new cache is built in the background for the next script invocation, keeping the list fresh with minimal launch delay.
-    - The cache is saved atomically using a `.tmp` file then moved over the old cache.
-- **Environment Manipulation**: Checks in `$HOME/.local/bin` first, so custom user scripts and binaries are always found.
+The list is cached in RAM at `/dev/shm/fzfmenu_path_cache` to minimize disk I/O and keep startup snappy under Qtile on Arch. On normal invocation, it prints the cached list to stdout (creating it if missing) and simultaneously refreshes the cache in the background for the next run. A `--refresh` mode atomically rebuilds the cache and exits without printing.
+
+Color output is currently preserved via `fd --color=always`, which is useful when piping into `fzf --ansi`.
 
 ### Usage
 
-Typically, you'd use this script as input for an `fzf`-based program launcher. It’s designed to be piped into another script or command:
-
+- Print list (build if needed), suitable for piping:
 ```
-/home/matias/.scripts/bin/fzfmenu_cache.sh | fzf --ansi
-```
-
-**Stand-alone execution:**
-```sh
-/home/matias/.scripts/bin/fzfmenu_cache.sh
-# Outputs a sorted, colored, unique list of all “executables” in $PATH directories
+~/.scripts/bin/fzfmenu_cache.sh
 ```
 
-**In a keybinding (Qtile config example):**
-```python
-Key([mod], "p", lazy.spawn("sh ~/.scripts/bin/fzfmenu_cache.sh | fzf --ansi | xargs -r $SHELL -ic"))
+- Force a cache rebuild only (e.g., at login or on PATH changes):
 ```
+~/.scripts/bin/fzfmenu_cache.sh --refresh
+```
+
+- Use with fzf to pick and launch a command (detached):
+```
+cmd="$(~/.scripts/bin/fzfmenu_cache.sh | fzf --ansi)"
+[ -n "$cmd" ] && setsid -f "$cmd" >/dev/null 2>&1
+```
+
+- Pre-warm cache from Qtile autostart (once per session):
+```
+~/.scripts/bin/fzfmenu_cache.sh --refresh &
+```
+
+- Cron/systemd-user timer alternative: run `--refresh` periodically to keep it hot.
 
 ---
 
 > [!TIP]
-> - While this design makes menu launches almost instantaneous, it has a *race condition*: the cache is always being rebuilt in the background, but it's possible for a menu to show slightly outdated data after you’ve just installed or removed programs.
-> - It’s not cross-platform (somewhat Arch-centric: assumes existence of `/dev/shm`, GNU coreutils, `fd`) and hardcodes `$HOME/.local/bin` and `/usr/bin`.
-> - You may consider error-handling if `$CACHE` is not writable, or abstracting `$PATH` handling for more flexibility.
-> - If you have a rapidly changing `$PATH`, consider mechanisms for an explicit cache refresh.
-> - To sort strictly by file name (not including full path), adjust the `sort -u` or post-process output.
+> - When no cache exists, two builds may run concurrently (one for output, one for refresh). Consider guarding refresh with `flock` or skipping the extra rebuild on first run.
+> - The output is produced from a background job; if a consumer expects synchronous output, foreground the initial output and only refresh in the background.
+> - Caching colored lines (`--color=always`) can leak ANSI codes to non-fzf consumers; consider storing plain output and adding a flag to colorize on demand.
+> - Validate `fd` availability and provide a graceful fallback or hint (e.g., install `fd` on Arch).
+> - You may want to include `/usr/local/bin` in PATH precedence if you rely on locally installed binaries.

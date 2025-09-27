@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>Scripts</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/fontawesome.min.css" rel="stylesheet">
+        <link href="css/brands.min.css" rel="stylesheet">
+        <link href="css/solid.min.css" rel="stylesheet">
+        <link href="css/v4-font-face.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">Scripts</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="." class="nav-link active" aria-current="page">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Scripts</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="scripts/albumplayer.xsh/" class="dropdown-item">Cmus Album Picker (dmenu + xonsh)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ansi-cheatsheet.sh/" class="dropdown-item">ANSI Escape Code Cheatsheet Viewer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ansi8bit2rgb_hex.py/" class="dropdown-item">ansi8bit2rgb_hex.py</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ardour-open.sh/" class="dropdown-item">Ardour Session Opener (fzf + bat)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/build_and_link.sh/" class="dropdown-item">Build and symlink helper for $SCRIPTS/bin</a>
+</li>
+                                    
+<li>
+    <a href="scripts/chezmoi_on_a_new_system.sh/" class="dropdown-item">Initialize Chezmoi on a New System</a>
+</li>
+                                    
+<li>
+    <a href="scripts/citeboard.sh/" class="dropdown-item">Citeboard: Quick Paper Citation and Access</a>
+</li>
+                                    
+<li>
+    <a href="scripts/closest_colors.py/" class="dropdown-item">Closest Terminal Colors Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/color_restrict.py/" class="dropdown-item">Color Restrict Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/colormap_from_text.sh/" class="dropdown-item">Colormap Extractor from Text Files</a>
+</li>
+                                    
+<li>
+    <a href="scripts/command_prompt.sh/" class="dropdown-item">Command Prompt: FZF History Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/count_tokens_with_tiktoken.py/" class="dropdown-item">Count Tokens with tiktoken</a>
+</li>
+                                    
+<li>
+    <a href="scripts/create_cover_art.sh/" class="dropdown-item">Create Cover Art from Audio Spectrogram</a>
+</li>
+                                    
+<li>
+    <a href="scripts/desk_fzf.sh/" class="dropdown-item">Fuzzy .desktop Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/display_markdown.py/" class="dropdown-item">Display Markdown Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/dmenu_run_scripts.py/" class="dropdown-item">Dmenu-style Script Launcher (dmenu_run_scripts.py)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/edit_chezmoi_cfg_files.sh/" class="dropdown-item">Edit Chezmoi Config Files</a>
+</li>
+                                    
+<li>
+    <a href="scripts/editor.sh/" class="dropdown-item">Fast Fuzzy File Editor</a>
+</li>
+                                    
+<li>
+    <a href="scripts/env.sh/" class="dropdown-item">Environment Loader Library (Flexoki/FZF/Paths)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fix-markdown-links.sh/" class="dropdown-item">Fix Markdown Links Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/flexoki_show.sh/" class="dropdown-item">Flexoki Color Palette Preview</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ftp-data-mount.sh/" class="dropdown-item">FTP Data Mount Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fzf-file-manager.sh/" class="dropdown-item">Fuzzy File Manager with fzf</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fzf_albumlauncher.xsh/" class="dropdown-item">FZF Album Launcher for cmus</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fzf_songlauncher.sh/" class="dropdown-item">fzf Song Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fzfmenu.sh/" class="dropdown-item">fzfmenu Helper (fzfmenu.sh)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fzfmenu_cache.sh/" class="dropdown-item">fzfmenu cache builder for PATH executables</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fzfmenu_run.sh/" class="dropdown-item">FZF Menu Runner</a>
+</li>
+                                    
+<li>
+    <a href="scripts/fzfpreview.sh/" class="dropdown-item">fzf File &amp; Image Preview Demo</a>
+</li>
+                                    
+<li>
+    <a href="scripts/generate_commit_message.py/" class="dropdown-item">AI-powered Git commit message generator</a>
+</li>
+                                    
+<li>
+    <a href="scripts/get-window-thumbnails.sh/" class="dropdown-item">Get Window Thumbnails Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/get-windows.sh/" class="dropdown-item">qtile: Get Windows Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/get_hyperlinks_in_folder.py/" class="dropdown-item">Visualize Markdown Note Hyperlinks in a Folder</a>
+</li>
+                                    
+<li>
+    <a href="scripts/get_repos_present_on_host.sh/" class="dropdown-item">get_repos_present_on_host.sh</a>
+</li>
+                                    
+<li>
+    <a href="scripts/get_scripts_relations.py/" class="dropdown-item">Script Relations Visualizer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/get_scripts_relations.xsh/" class="dropdown-item">Script Relations Visualizer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/git_cd.sh/" class="dropdown-item">Git Project Directory Quick CD</a>
+</li>
+                                    
+<li>
+    <a href="scripts/git_clone_by_author-repo.sh/" class="dropdown-item">GitHub Clone by author/repo Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/git_update_all_other_repos.sh/" class="dropdown-item">Git: Update All Other Repos</a>
+</li>
+                                    
+<li>
+    <a href="scripts/grub-tune-to-audio-python.py/" class="dropdown-item">Convert GRUB Tune to Audio (Python)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/gsi.sh/" class="dropdown-item">Git Repository Sync and Info Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/help-pastel.sh/" class="dropdown-item">Pastel Command Helper</a>
+</li>
+                                    
+<li>
+    <a href="scripts/help_pwcli.sh/" class="dropdown-item">PipeWire CLI Helper</a>
+</li>
+                                    
+<li>
+    <a href="scripts/html_viewer.py/" class="dropdown-item">Hypertext Viewer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/improved-fzfmenu.sh/" class="dropdown-item">Improved FZF launcher (Alacritty, pipe-aware)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/install_dependencies.sh/" class="dropdown-item">Install Core Utilities and Apps</a>
+</li>
+                                    
+<li>
+    <a href="scripts/interactive_git_sync.sh/" class="dropdown-item">Interactive Git Repo Synchronizer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/json_to_markdown.py/" class="dropdown-item">JSON to Markdown Converter</a>
+</li>
+                                    
+<li>
+    <a href="scripts/jupyter_new_notebook.xsh/" class="dropdown-item">Jupyter New Notebook Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/keyboard-help.sh/" class="dropdown-item">Keyboard Layout Helper</a>
+</li>
+                                    
+<li>
+    <a href="scripts/launch_tmux_with_music_player.sh/" class="dropdown-item">Launch Tmux with Music Player</a>
+</li>
+                                    
+<li>
+    <a href="scripts/list-openai-models.sh/" class="dropdown-item">OpenAI Model Lister</a>
+</li>
+                                    
+<li>
+    <a href="scripts/list_process.sh/" class="dropdown-item">list_process.sh</a>
+</li>
+                                    
+<li>
+    <a href="scripts/llama-all-scripts-describer.py/" class="dropdown-item">Llama-powered Script Documentation Generator</a>
+</li>
+                                    
+<li>
+    <a href="scripts/llm-script-describer.py/" class="dropdown-item">LLM Script Describer — generate per-file docs and a README summary</a>
+</li>
+                                    
+<li>
+    <a href="scripts/m3u_creator.sh/" class="dropdown-item">m3u Creator Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/mechen_music_transfert.py/" class="dropdown-item">Mechen Music Transfert Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/megacmd_launch_tmux.sh/" class="dropdown-item">megacmd_launch_tmux.sh</a>
+</li>
+                                    
+<li>
+    <a href="scripts/megaignore_editor.sh/" class="dropdown-item">MegaIgnore File Editor</a>
+</li>
+                                    
+<li>
+    <a href="scripts/megasync.sh/" class="dropdown-item">Megasync Arch/Qtile Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/midi2arch.xsh/" class="dropdown-item">MIDI Controller to Script Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/midi2cmd.py/" class="dropdown-item">MIDI2CMD Python Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/minimal-browser.py/" class="dropdown-item">Minimal Python Qt Web Browser</a>
+</li>
+                                    
+<li>
+    <a href="scripts/minimal_gpt_call.py/" class="dropdown-item">Minimal GPT-4o Mini CSV Generation</a>
+</li>
+                                    
+<li>
+    <a href="scripts/new_script_creator.sh/" class="dropdown-item">User Script Generator</a>
+</li>
+                                    
+<li>
+    <a href="scripts/next_album.xsh/" class="dropdown-item">Next Album (cmus)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/nvim_in_new_terminal.sh/" class="dropdown-item">nvim in Floating Terminal</a>
+</li>
+                                    
+<li>
+    <a href="scripts/nvpn-tui-help.sh/" class="dropdown-item">NordVPN TUI Helper (and Generic CLI TUI Helper)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/obsidian-vault-selector.sh/" class="dropdown-item">Obsidian Vault Selector (fzf-driven)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/obsidian.xsh/" class="dropdown-item">Obsidian Vault Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/old-ousse/" class="dropdown-item">Ousse Indexing Database Generator</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ollama-list.sh/" class="dropdown-item">Ollama model list (cached, LLM-formatted)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/open_url_in_instance.sh/" class="dropdown-item">Open URL in Existing Qutebrowser Instance</a>
+</li>
+                                    
+<li>
+    <a href="scripts/openwebui-launcher.sh/" class="dropdown-item">Open WebUI Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/openwebui_serve.sh/" class="dropdown-item">Open WebUI Server Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ousse-locate.sh/" class="dropdown-item">ousse-locate: a database/search helper for Ousse data</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ousse-update.sh/" class="dropdown-item">Custom Locate Database Updater</a>
+</li>
+                                    
+<li>
+    <a href="scripts/pacman-fuzzy-search.sh/" class="dropdown-item">Pacman Fuzzy Search Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/pdfopener.sh/" class="dropdown-item">PDF picker and opener</a>
+</li>
+                                    
+<li>
+    <a href="scripts/playlist_player.xsh/" class="dropdown-item">Playlist Player (cmus Edition)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/playlist_randomizer.xsh/" class="dropdown-item">cmus Playlist Album Randomizer (xonsh)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ppm-color-reducer/" class="dropdown-item">Ppm color reducer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/pyman.sh/" class="dropdown-item">PyMan: Interactive Python Manual Navigator</a>
+</li>
+                                    
+<li>
+    <a href="scripts/qtile_dice_group.py/" class="dropdown-item">qtile_dice_group: Quick Switch to Complementary Qtile Group</a>
+</li>
+                                    
+<li>
+    <a href="scripts/qtile_window_to_group_and_switch.py/" class="dropdown-item">Move Focused Window to Next/Previous Group and Switch — qtile_window_to_group_and_switch.py</a>
+</li>
+                                    
+<li>
+    <a href="scripts/quick-pass.sh/" class="dropdown-item">QuickPass: Interactive Password Selection &amp; Autofill</a>
+</li>
+                                    
+<li>
+    <a href="scripts/qutebrowser-modify-source-bookmarks.sh/" class="dropdown-item">qutebrowser Bookmark &amp; Session Sync Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/random_album.xsh/" class="dropdown-item">Random CMUS Album Shuffle</a>
+</li>
+                                    
+<li>
+    <a href="scripts/random_wallpapers.xsh/" class="dropdown-item">Random Wallpaper Chooser</a>
+</li>
+                                    
+<li>
+    <a href="scripts/read_the_fucking_manual.sh/" class="dropdown-item">RTMF: Read The Fucking Manual History Query Tool</a>
+</li>
+                                    
+<li>
+    <a href="scripts/rgfzf.sh/" class="dropdown-item">rgfzf.sh — Fuzzy Ripgrep/Vim file opener</a>
+</li>
+                                    
+<li>
+    <a href="scripts/sandisk_music_transfert.py/" class="dropdown-item">Sandisk Music Transfer Tool</a>
+</li>
+                                    
+<li>
+    <a href="scripts/screenshot.sh/" class="dropdown-item">screenshot.sh – Screenshot Utility Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/script.sh/" class="dropdown-item">Fuzzy Typed Command Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/script_launcher.sh/" class="dropdown-item">Script launcher.sh</a>
+</li>
+                                    
+<li>
+    <a href="scripts/select_script/" class="dropdown-item">Script Selector Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/send_email.py/" class="dropdown-item">Send Email Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/setting-up-syncs.sh/" class="dropdown-item">Sync Setup Helper with Mega</a>
+</li>
+                                    
+<li>
+    <a href="scripts/shell_history_info.sh/" class="dropdown-item">Shell History Analyzer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/show-all-qutebrowser-scripts.sh/" class="dropdown-item">Show All Qutebrowser Scripts</a>
+</li>
+                                    
+<li>
+    <a href="scripts/show_keyboard_layout.py/" class="dropdown-item">Show Custom Keyboard Layout</a>
+</li>
+                                    
+<li>
+    <a href="scripts/snekai.sh/" class="dropdown-item">snekai: Jupyter and IPython Environment Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/songlauncher.sh/" class="dropdown-item">Song Launcher – Play Songs in cmus via dmenu</a>
+</li>
+                                    
+<li>
+    <a href="scripts/speach-to-text.py/" class="dropdown-item">Speech to Text Audio Transcriber</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ssh-fzf.sh/" class="dropdown-item">ssh-fzf — Fuzzy SSH Command Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/sync-repo-simple.py/" class="dropdown-item">Simple Git Repo Sync Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/sync-repo-simple.sh/" class="dropdown-item">Simple Git Repo Synchronization Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/sync-repo.py/" class="dropdown-item">Python Git Repository Synchronizer</a>
+</li>
+                                    
+<li>
+    <a href="scripts/sync-repo.sh/" class="dropdown-item">Sync Git Repository Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/terminal_with_command.sh/" class="dropdown-item">terminal_with_command.sh</a>
+</li>
+                                    
+<li>
+    <a href="scripts/text_spectrogram.py/" class="dropdown-item">Text-Mode Spectrogram (Live Microphone Viewer)</a>
+</li>
+                                    
+<li>
+    <a href="scripts/tmux-help.py/" class="dropdown-item">Tmux Help Assistant Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/tmux_manager.py/" class="dropdown-item">Tmux Session Manager</a>
+</li>
+                                    
+<li>
+    <a href="scripts/tmux_session.sh/" class="dropdown-item">tmux Session Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/toggle_picom.sh/" class="dropdown-item">Toggle Picom Compositor</a>
+</li>
+                                    
+<li>
+    <a href="scripts/transform_symlink.sh/" class="dropdown-item">transform_symlink.sh</a>
+</li>
+                                    
+<li>
+    <a href="scripts/try_the_bat_suit.sh/" class="dropdown-item">Try the Bat Suit</a>
+</li>
+                                    
+<li>
+    <a href="scripts/tui-gpt.py/" class="dropdown-item">Mother: Terminal TUI Chat with GPT</a>
+</li>
+                                    
+<li>
+    <a href="scripts/ugc-python.py/" class="dropdown-item">UGC HTML Movie Titles Extractor</a>
+</li>
+                                    
+<li>
+    <a href="scripts/update_birthdays.sh/" class="dropdown-item">Update File Birthdays Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/update_env.xsh/" class="dropdown-item">Update Environment File with API Keys</a>
+</li>
+                                    
+<li>
+    <a href="scripts/utils_update_symlinks.sh/" class="dropdown-item">Symlink Management Utility</a>
+</li>
+                                    
+<li>
+    <a href="scripts/utopia.sh/" class="dropdown-item">Utopia Film Pages Downloader</a>
+</li>
+                                    
+<li>
+    <a href="scripts/vimwiki.sh/" class="dropdown-item">Vimwiki FZF Launcher</a>
+</li>
+                                    
+<li>
+    <a href="scripts/vox.py/" class="dropdown-item">Vox Amp Models Lookup CLI</a>
+</li>
+                                    
+<li>
+    <a href="scripts/wallpaper.sh/" class="dropdown-item">Wallpaper Rotator Script</a>
+</li>
+                                    
+<li>
+    <a href="scripts/wrapper.sh/" class="dropdown-item">Simple Bash Command Wrapper</a>
+</li>
+                                    
+<li>
+    <a href="scripts/xephyr.sh/" class="dropdown-item">Xephyr + Qtile Testing Harness</a>
+</li>
+                                    
+<li>
+    <a href="scripts/you_are_not_documented.sh/" class="dropdown-item">you_are_not_documented.sh</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="scripts/albumplayer.xsh/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<ul>
+<li><a href="scripts/albumplayer.xsh/">albumplayer.xsh</a> -- <em>Pick a cmus album via dmenu, enqueue it plus 10 random albums</em></li>
+<li><a href="scripts/ansi-cheatsheet.sh/">ansi-cheatsheet.sh</a> -- <em>Quickly displays a cheatsheet of ANSI escape codes in a syntax-highlighted view</em></li>
+<li><a href="scripts/ansi8bit2rgb_hex.py/">ansi8bit2rgb_hex.py</a> -- <em>Converts 8-bit ANSI color codes to RGB or HEX representations with optional colorized output and names</em></li>
+<li><a href="scripts/ardour-open.sh/">ardour-open.sh</a> -- <em>Fuzzy-pick and open Ardour sessions with colored list and bat preview</em></li>
+<li><a href="scripts/build_and_link.sh/">build_and_link.sh</a> -- <em>Compile C/C++ or install Python app into $SCRIPTS/bin and symlink into repo root</em></li>
+<li><a href="scripts/chatgpt-all-scripts-describer.py.md">chatgpt-all-scripts-describer.py</a> -- <em>A Python script to generate documentation for other scripts using OpenAI's GPT API.</em></li>
+<li><a href="scripts/chezmoi_on_a_new_system.sh/">chezmoi_on_a_new_system.sh</a> -- <em>Script to initialize and apply Chezmoi configuration for user 'matias-ceau'.</em></li>
+<li><a href="scripts/citeboard.sh/">citeboard.sh</a> -- <em>Find academic references by citation key, copy their identifier, or open associated PDFs.</em></li>
+<li><a href="scripts/closest_colors.py/">closest_colors.py</a> -- <em>Find the closest matching terminal color for a list of color hex codes.</em></li>
+<li><a href="scripts/color_restrict.py/">color_restrict.py</a> -- <em>Restricts image colors to those in a custom palette with optional resizing.</em></li>
+<li><a href="scripts/colormap_from_text.sh/">colormap_from_text.sh</a> -- <em>Extracts and displays unique color codes from text or config files in various formats</em></li>
+<li><a href="scripts/command_prompt.sh/">command_prompt.sh</a> -- <em>Interactive shell history picker via fzf wrapper</em></li>
+<li><a href="scripts/count_tokens_with_tiktoken.py/">count_tokens_with_tiktoken.py</a> -- <em>Count token usage for a text file or stdin using OpenAI <code>tiktoken</code>.</em></li>
+<li><a href="scripts/create_cover_art.sh/">create_cover_art.sh</a> -- <em>generates a cover image by creating a spectrogram from a selected <code>.wav</code> file.</em></li>
+<li><a href="scripts/desk_fzf.sh/">desk_fzf.sh</a> -- <em>Quickly search and launch <code>.desktop</code> applications using <code>fzf</code> and a cached file listing.</em></li>
+<li><a href="scripts/display_markdown.py/">display_markdown.py</a> -- <em>Script to display markdown files in the terminal with styling</em></li>
+<li><a href="scripts/dmenu_run_scripts.py/">dmenu_run_scripts.py</a> -- <em>Presents a list of runnable scripts via <code>rofi</code> integrated with xonsh for selection and execution.</em></li>
+<li><a href="scripts/dmenu_run_scripts.xsh.md">dmenu_run_scripts.xsh</a> -- <em>A script to run user scripts via dmenu or rofi.</em></li>
+<li><a href="scripts/edit_chezmoi_cfg_files.sh/">edit_chezmoi_cfg_files.sh</a> -- <em>Fuzzy-find and edit dotfiles managed by chezmoi, with preview and optional sync/apply.</em></li>
+<li><a href="scripts/edit_chezmoi_cfg_files.sh/">edit_chezmoi_cfg_files.sh</a> -- <em>Script to search and edit Chezmoi managed configuration files and directories.</em></li>
+<li><a href="scripts/editor.sh/">editor.sh</a> -- <em>Quickly edit files using fzf, with smart search modes and exclusions.</em></li>
+<li><a href="scripts/env.sh/">env.sh</a> -- <em>Modular environment loader for colors, FZF, paths, git and debug</em></li>
+<li><a href="scripts/fix-markdown-links.sh/">fix-markdown-links.sh</a> -- <em>Adjust relative paths in markdown links to start from a base directory</em></li>
+<li><a href="scripts/flexoki_show.sh/">flexoki_show.sh</a> -- <em>Script to visually display the Flexoki color palette and roles in your terminal</em></li>
+<li><a href="scripts/ftp-data-mount.sh/">ftp-data-mount.sh</a> -- <em>Mounts a remote DATA folder from Mega via FTP to /mnt/ftp/DATA</em></li>
+<li><a href="scripts/fzf-file-manager.sh/">fzf-file-manager.sh</a> -- <em>Interactive terminal-based file manager leveraging <code>fzf</code> and <code>eza</code> for rapid navigation.</em></li>
+<li><a href="scripts/fzf_albumlauncher.xsh/">fzf_albumlauncher.xsh</a> -- <em>Pick an album via fzf and queue/play it in cmus</em></li>
+<li><a href="scripts/fzfmenu.sh/">fzfmenu.sh</a> -- <em>Helper script that runs <code>fzf</code> inside an <code>alacritty</code> terminal instance.</em></li>
+<li><a href="scripts/fzfmenu_cache.sh/">fzfmenu_cache.sh</a> -- <em>Cache PATH executables to RAM and print them, with background refresh</em></li>
+<li><a href="scripts/fzfmenu_run.sh/">fzfmenu_run.sh</a> -- <em>Launches app selection using fzf in a floating terminal, as a <code>dmenu_run</code> replacement.</em></li>
+<li><a href="scripts/fzfpreview.sh/">fzfpreview.sh</a> -- <em>Display file or image contents in fzf preview window using various tools and fallback logic</em></li>
+<li><a href="scripts/generate_commit_message.py/">generate_commit_message.py</a> -- <em>Generate commit messages from staged diff via OpenRouter; safe fallback</em></li>
+<li><a href="scripts/generate_commit_message.sh.md">generate_commit_message.sh</a> -- <em>Script to generate commit messages using OpenAI's GPT-4o-mini</em></li>
+<li><a href="scripts/get-window-thumbnails.sh/">get-window-thumbnails.sh</a> -- <em>Creates thumbnails of currently open windows on your qtile environment.</em></li>
+<li><a href="scripts/get-windows.sh/">get-windows.sh</a> -- <em>Outputs information about currently open windows in qtile (ID, group, name, wm_class)</em></li>
+<li><a href="scripts/get_hyperlinks_in_folder.py/">get_hyperlinks_in_folder.py</a> -- <em>Scans a folder of markdown notes and builds a hyperlink graph visualization.</em></li>
+<li><a href="scripts/get_repos_present_on_host.sh/">get_repos_present_on_host.sh</a> -- <em>List and register two-level git repos present under <code>$GIT_REPOS</code> for this host.</em></li>
+<li><a href="scripts/get_scripts_relations.py/">get_scripts_relations.py</a> -- <em>Scans user scripts to detect and visualize script dependencies.</em></li>
+<li><a href="scripts/get_scripts_relations.xsh/">get_scripts_relations.xsh</a> -- <em>Scans <code>$SCRIPTS</code> directory for scripts and visualizes intra-folder dependencies as a directed graph</em></li>
+<li><a href="scripts/git_cd.sh/">git_cd.sh</a> -- <em>Quickly <code>cd</code> to any git project directory found on the system using a fuzzy search.</em></li>
+<li><a href="scripts/git_clone_by_author-repo.sh/">git_clone_by_author-repo.sh</a> -- <em>Clone a GitHub repository via SSH, HTTPS, or from a local path with developer-oriented subfolder convention.</em></li>
+<li><a href="scripts/git_update_all_other_repos.sh/">git_update_all_other_repos.sh</a> -- <em>Batch-pulls all git repositories (with HTTPS remote) at exact depth 3 under <code>$GIT_REPOS</code></em></li>
+<li><a href="scripts/grub-tune-to-audio-python.py/">grub-tune-to-audio-python.py</a> -- <em>Converts a GRUB_INIT_TUNE string into an MP3 audio file</em></li>
+<li><a href="scripts/gsi.sh/">gsi.sh</a> -- <em>Interactive, robust script for syncing a local Git repository with its remote, handling merges, conflicts, and summary display.</em></li>
+<li><a href="scripts/help-pastel.sh/">help-pastel.sh</a> -- <em>Enhanced interactive subcommand and help browser for <code>pastel</code> CLI.</em></li>
+<li><a href="scripts/help_pwcli.sh/">help_pwcli.sh</a> -- <em>Interactive helper for PipeWire CLI tools, displays per-command help with preview.</em></li>
+<li><a href="scripts/html_viewer.py/">html_viewer.py</a> -- <em>Simple graphical viewer for local HTML and Markdown, with folder browsing.</em></li>
+<li><a href="scripts/improved-fzfmenu.sh/">improved-fzfmenu.sh</a> -- <em>Launch fzf in Alacritty with optional piping and preserved stdio</em></li>
+<li><a href="scripts/install_dependencies.sh/">install_dependencies.sh</a> -- <em>Bash script to bulk-install essential terminal and desktop utilities.</em></li>
+<li><a href="scripts/interactive_git_sync.sh/">interactive_git_sync.sh</a> -- <em>Interactive script for syncing multiple git repositories with <code>fzf</code> selection.</em></li>
+<li><a href="scripts/json_to_markdown.py/">json_to_markdown.py</a> -- <em>Converts a simple JSON file (list of dicts with "role" and "content") to a styled Markdown file.</em></li>
+<li><a href="scripts/jupyter_new_notebook.xsh/">jupyter_new_notebook.xsh</a> -- <em>Quickly create and open a blank Jupyter notebook in Chromium via dmenu.</em></li>
+<li><a href="scripts/keyboard-help.sh/">keyboard-help.sh</a> -- <em>Displays keyboard layout help in a floating terminal with syntax highlighting</em></li>
+<li><a href="scripts/launch_tmux_with_music_player.sh/">launch_tmux_with_music_player.sh</a> -- <em>Creates a headless <code>tmux</code> session named "MUSIC" and starts the <code>cmus</code> music player within.</em></li>
+<li><a href="scripts/legacy-sync.repo.sh.md">legacy-sync.repo.sh</a> -- <em>A script to synchronize a Git repository while providing enhanced output formatting.</em></li>
+<li><a href="scripts/list-openai-models.sh/">list-openai-models.sh</a> -- <em>Lists and caches available OpenAI API models with creation dates</em></li>
+<li><a href="scripts/list_process.sh/">list_process.sh</a> -- <em>Lists all systemd services, showing their statuses sorted by type</em></li>
+<li><a href="scripts/llama-all-scripts-describer.py/">llama-all-scripts-describer.py</a> -- <em>Automated Github-style markdown documentation for scripts using Llama 3.1</em></li>
+<li><a href="scripts/llm-script-describer.py/">llm-script-describer.py</a> -- <em>Generate per-script docs and README sections via OpenAI</em></li>
+<li><a href="scripts/m3u_creator.sh/">m3u_creator.sh</a> -- <em>Quickly generate an m3u playlist file from all files in the current directory</em></li>
+<li><a href="scripts/mechen_music_transfert.py/">mechen_music_transfert.py</a> -- <em>Syncs a subset of unlistened music albums to the MECHEN MP3 player, fitting within a max size.</em></li>
+<li><a href="scripts/megacmd_launch_tmux.sh/">megacmd_launch_tmux.sh</a> -- <em>Launches <code>mega-cmd</code> inside a new detached tmux session.</em></li>
+<li><a href="scripts/megaignore_editor.sh/">megaignore_editor.sh</a> -- <em>Fuzzy finder interface for searching, editing, and deleting <code>.megaignore</code> files.</em></li>
+<li><a href="scripts/megasync.sh/">megasync.sh</a> -- <em>Launches MEGAsync with specific environment variables set for Qtile/Arch environments</em></li>
+<li><a href="scripts/midi2arch.xsh/">midi2arch.xsh</a> -- <em>Transform a MIDI controller into a keyboard/script launcher.</em></li>
+<li><a href="scripts/midi2arch.xsh/">midi2arch.xsh</a> -- <em>Transform a MIDI controller into a script/keyboard command launcher for Arch</em></li>
+<li><a href="scripts/midi2cmd.py/">midi2cmd.py</a> -- <em>Manage and monitor MIDI controller input and test connections from the terminal</em></li>
+<li><a href="scripts/minimal-browser.py/">minimal-browser.py</a> -- <em>Minimal local HTML viewer using PyQt6/QWebEngine, for local docs or apps</em></li>
+<li><a href="scripts/minimal_gpt_call.py/">minimal_gpt_call.py</a> -- <em>Simple script to interact with OpenAI GPT-4o-mini for CSV sample generation.</em></li>
+<li><a href="scripts/new_script_creator.sh/">new_script_creator.sh</a> -- <em>Automates script creation with templating based on file extension</em></li>
+<li><a href="scripts/new_script_creator.sh/">new_script_creator.sh</a> -- <em>Quickly create or adapt user scripts with templating and permissions in <code>$SCRIPTS/bin</code>.</em></li>
+<li><a href="scripts/next_album.xsh/">next_album.xsh</a> -- <em>Skip to the next album in cmus</em></li>
+<li><a href="scripts/nvim_in_new_terminal.sh/">nvim_in_new_terminal.sh</a> -- <em>Open a file in <code>nvim</code> inside a floating Alacritty terminal window</em></li>
+<li><a href="scripts/nvpn-tui-help.sh/">nvpn-tui-help.sh</a> -- <em>Interactive terminal UI for navigating nordvpn (or other CLI programs) commands and help.</em></li>
+<li><a href="scripts/obsidian-vault-selector.sh/">obsidian-vault-selector.sh</a> -- <em>Select and open Obsidian vaults with preview and search</em></li>
+<li><a href="scripts/obsidian.xsh/">obsidian.xsh</a> -- <em>Quickly select and open an Obsidian vault via a fuzzy menu</em></li>
+<li><a href="scripts/old-ousse/">old-ousse</a> -- <em>Generates a collection of custom mlocate databases for various areas of your filesystem</em></li>
+<li><a href="scripts/ollama-list.sh/">ollama-list.sh</a> -- <em>Fetches and caches a formatted list of Ollama models via LLM</em></li>
+<li><a href="scripts/open_url_in_instance.sh/">open_url_in_instance.sh</a> -- <em>Open a URL in an already running qutebrowser session, or start a new one if needed</em></li>
+<li><a href="scripts/openwebui-launcher.sh/">openwebui-launcher.sh</a> -- <em>Bash script to launch Open WebUI and open it in a minimal browser.</em></li>
+<li><a href="scripts/openwebui_serve.sh/">openwebui_serve.sh</a> -- <em>Launch Open WebUI via uvx with XDG-compliant data directory</em></li>
+<li><a href="scripts/ousse-locate.sh/">ousse-locate.sh</a> -- <em>Experimental script for managing and searching local <code>.db</code> databases with preview support.</em></li>
+<li><a href="scripts/ousse-update.sh/">ousse-update.sh</a> -- <em>Custom script to update various <code>mlocate</code> databases with personal folder scopes.</em></li>
+<li><a href="scripts/pacman-fuzzy-search.sh/">pacman-fuzzy-search.sh</a> -- <em>Fuzzy search and install Arch Linux packages (repo/AUR) using paru and fzf</em></li>
+<li><a href="scripts/pdfopener.sh/">pdfopener.sh</a> -- <em>Fuzzy-pick a PDF in $HOME and open it with Evince, falling back to xdg-open</em></li>
+<li><a href="scripts/playlist_player.xsh/">playlist_player.xsh</a> -- <em>Select and play a saved <code>.m3u</code> playlist in cmus via dmenu</em></li>
+<li><a href="scripts/playlist_randomizer.xsh/">playlist_randomizer.xsh</a> -- <em>Pick an m3u playlist, shuffle album order, play via cmus</em></li>
+<li><a href="scripts/ppm-color-reducer/">ppm-color-reducer</a> -- <em>Reduce colors in a P6 PPM image to a user-defined palette</em></li>
+<li><a href="scripts/pyman.sh/">pyman.sh</a> -- <em>Interactive fuzzy finder for Python topics, keywords, builtins, and installed modules/packages.</em></li>
+<li><a href="scripts/qtile_dice_group.py/">qtile_dice_group.py</a> -- <em>Instantly switches to the workspace ("group") with a number summing to 7 with the current one.</em></li>
+<li><a href="scripts/qtile_window_to_group_and_switch.py/">qtile_window_to_group_and_switch.py</a> -- <em>Moves the current focused window to the next or previous qtile group and switches focus to that group</em></li>
+<li><a href="scripts/quick-pass.sh/">quick-pass.sh</a> -- <em>Fuzzy-find and copy your pass(1) passwords using <code>fzf</code> with one-click paste/edit support.</em></li>
+<li><a href="scripts/qutebrowser-modify-source-bookmarks.sh/">qutebrowser-modify-source-bookmarks.sh</a> -- <em>Synchronizes qutebrowser bookmarks, quickmarks, and sessions with chezmoi dotfiles.</em></li>
+<li><a href="scripts/random_album.xsh/">random_album.xsh</a> -- <em>Select 10 random albums from cmus and start playback</em></li>
+<li><a href="scripts/random_wallpapers.xsh/">random_wallpapers.xsh</a> -- <em>Script to set a random wallpaper from the <code>~/.wallpapers</code> directory.</em></li>
+<li><a href="scripts/read_the_fucking_manual.sh/">read_the_fucking_manual.sh</a> -- <em>Query and analyze your <code>man</code>/<code>batman</code> usage history for most searched entries.</em></li>
+<li><a href="scripts/rgfzf.sh/">rgfzf.sh</a> -- <em>Search for text using ripgrep + fuzzy finder, preview with bat, open in neovim.</em></li>
+<li><a href="scripts/sandisk_music_transfert.py/">sandisk_music_transfert.py</a> -- <em>Transfers music files to a Sandisk media player while managing storage capacity and file formats.</em></li>
+<li><a href="scripts/sandisk_music_transfert.py/">sandisk_music_transfert.py</a> -- <em>Transfers unplayed albums from your music library to your Sandisk media player, automatically fitting them to available space.</em></li>
+<li><a href="scripts/screenshot.sh/">screenshot.sh</a> -- <em>Simple utility for taking fullscreen or user-selected screenshots using <code>grim</code>.</em></li>
+<li><a href="scripts/script.sh/">script.sh</a> -- <em>Launches <code>fzf</code> in an <code>xterm</code> window and types the selected entry using <code>xdotool</code>.</em></li>
+<li><a href="scripts/script_launcher.sh/">script_launcher.sh</a> -- <em>Fuzzy-find and launch scripts with enhanced previews and editing options</em></li>
+<li><a href="scripts/script_launcher.sh/">script_launcher.sh</a> -- <em>Run scripts with fzf</em></li>
+<li><a href="scripts/select_script/">select_script</a> -- <em>Interactively select and execute a script from cached metadata using Rofi</em></li>
+<li><a href="scripts/send_email.py/">send_email.py</a> -- <em>Script to send an email from the command line with argparse and <code>smtplib</code></em></li>
+<li><a href="scripts/setting-up-syncs.sh/">setting-up-syncs.sh</a> -- <em>Automates MEGA cloud syncs for key folders and differentiates setup by host.</em></li>
+<li><a href="scripts/shell_history_info.sh/">shell_history_info.sh</a> -- <em>Analyze and summarize the most frequent lines, words, or characters in your shell command history files.</em></li>
+<li><a href="scripts/show-all-qutebrowser-scripts.sh/">show-all-qutebrowser-scripts.sh</a> -- <em>Display the content of Qutebrowser's bundled scripts using <code>bat</code> for preview</em></li>
+<li><a href="scripts/show_keyboard_layout.py/">show_keyboard_layout.py</a> -- <em>Prints a custom visual keyboard layout to the terminal for reference.</em></li>
+<li><a href="scripts/snekai.sh/">snekai.sh</a> -- <em>Utility for launching Jupyter Lab, Jupyter Notebook, or IPython from a dedicated Python virtual environment</em></li>
+<li><a href="scripts/songlauncher.sh/">songlauncher.sh</a> -- <em>Quickly search and play music files via dmenu and cmus</em></li>
+<li><a href="scripts/speach-to-text.py/">speach-to-text.py</a> -- <em>Python script for recording audio via a selected device and transcribing it to text using OpenAI Whisper.</em></li>
+<li><a href="scripts/ssh-fzf.sh/">ssh-fzf.sh</a> -- <em>Fuzzy-find and execute ssh commands from <code>pass</code> using <code>fzf</code>.</em></li>
+<li><a href="scripts/sync-repo-simple.py/">sync-repo-simple.py</a> -- <em>Automates syncing a git repository, handling conflicts, stashing, and summary output.</em></li>
+<li><a href="scripts/sync-repo-simple.sh/">sync-repo-simple.sh</a> -- <em>Automates the process of syncing a local git repository with its remote, including smart error handling and conflict resolution.</em></li>
+<li><a href="scripts/sync-repo.py/">sync-repo.py</a> -- <em>Python utility for automating git repository synchronization with rich terminal UI, local/remote conflict handling, and progress feedback.</em></li>
+<li><a href="scripts/sync-repo.sh/">sync-repo.sh</a> -- <em>Synchronize a local git repository with its remote, handling stashes, conflicts, and pretty output</em></li>
+<li><a href="scripts/terminal_with_command.sh/">terminal_with_command.sh</a> -- <em>Opens a floating Alacritty terminal to execute a given command, showing output and staying open.</em></li>
+<li><a href="scripts/test.sh.md">test.sh</a> -- <em>A script to handle input from standard input (stdin) or provide a default message if no input is given.</em></li>
+<li><a href="scripts/text_spectrogram.py/">text_spectrogram.py</a> -- <em>Live real-time text-based spectrogram using microphone input and ANSI colors.</em></li>
+<li><a href="scripts/tmux-help.py/">tmux-help.py</a> -- <em>A script to provide useful assistance and search functionalities for tmux commands and sections.</em></li>
+<li><a href="scripts/tmux-help.py/">tmux-help.py</a> -- A script providing helpful utilities and search capabilities for tmux commands.*</li>
+<li><a href="scripts/tmux_manager.py/">tmux_manager.py</a> -- <em>Python utility to manage named tmux sessions using a YAML configuration file</em></li>
+<li><a href="scripts/tmux_session.sh/">tmux_session.sh</a> -- <em>Minimal script to launch a detached tmux session with a specified window and command</em></li>
+<li><a href="scripts/toggle_picom.sh/">toggle_picom.sh</a> -- <em>Simple script to toggle the Picom compositor on and off with notifications.</em></li>
+<li><a href="scripts/transform_symlink.sh/">transform_symlink.sh</a> -- <em>Convert symlinks into copies of their targets (both files and directories).</em></li>
+<li><a href="scripts/try_the_bat_suit.sh/">try_the_bat_suit.sh</a> -- <em>Fuzzy-finds and previews files with syntax highlighting in terminal using <code>bat</code> and <code>fzf</code>.</em></li>
+<li><a href="scripts/tui-gpt.py/">tui-gpt.py</a> -- <em>Interactive TUI chat application for GPT models themed as "Mother" from Aliens.</em></li>
+<li><a href="scripts/ugc-python.py/">ugc-python.py</a> -- <em>Extracts and lists movie titles from HTML input piped via stdin.</em></li>
+<li><a href="scripts/update_birthdays.sh/">update_birthdays.sh</a> -- <em>Extracts and records the creation date ("birthday") of all files in your scripts directory using git history.</em></li>
+<li><a href="scripts/update_env.xsh/">update_env.xsh</a> -- <em>Extracts current environment API keys and writes them to a <code>.env</code> file.</em></li>
+<li><a href="scripts/utils_update_symlinks.sh/">utils_update_symlinks.sh</a> -- <em>maintain and update symlinks for <code>$SCRIPTS</code> into <code>~/.local/bin</code>, logging actions and cleaning obsolete links</em></li>
+<li><a href="scripts/utopia.sh/">utopia.sh</a> -- <em>Download selected Utopia Bordeaux film pages to HTML files</em></li>
+<li><a href="scripts/vimwiki.sh/">vimwiki.sh</a> -- <em>Fuzzy search and open Markdown notes in Vim from your notes directory.</em></li>
+<li><a href="scripts/vox.py/">vox.py</a> -- <em>Command-line utility to list and describe Vox amp modeling options</em></li>
+<li><a href="scripts/wallpaper.sh/">wallpaper.sh</a> -- <em>Randomly select, set, or browse wallpapers using feh and optional GUIs.</em></li>
+<li><a href="scripts/wrapper.sh/">wrapper.sh</a> -- <em>Wraps execution of any command, logs invocation with timestamp.</em></li>
+<li><a href="scripts/xephyr.sh/">xephyr.sh</a> -- <em>Launches a nested X session with Xephyr, running a development Qtile instance.</em></li>
+<li><a href="scripts/you_are_not_documented.sh/">you_are_not_documented.sh</a> -- <em>Finds scripts lacking specific inline documentation tags</em></li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2025-09-24 11:07:57.182413+00:00
+-->

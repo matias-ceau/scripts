@@ -1,52 +1,77 @@
-# Modular environment loader (Flexoki + fzf) for your scripts
+# Environment Loader Library (Flexoki/FZF/Paths)
 
 ---
 
-**env.sh**: Modular env loader for scripts: core paths, Flexoki colors, fzf, git, debug
+**env.sh**: Modular environment loader for colors, FZF, paths, git and debug
 
 ---
 
 ### Dependencies
 
-- `bash` — required (uses BASH_SOURCE, export -f)
-- `coreutils` — for `readlink` and `dirname`
-- `fzf` — optional; only needed when loading the `fzf` module
-- `fd` — optional; used by `FZF_DEFAULT_COMMAND` when `fzf` module is loaded
-- `bat` — optional; used by `FZF_PREVIEW_COMMAND` when `fzf` module is loaded
+- `bash` — required; uses arrays, export -f, and BASH_SOURCE
+- `coreutils` — for `readlink` used to resolve script root
+- `fd` — used by `FZF_DEFAULT_COMMAND` for fast file search
+- `bat` — used by `FZF_PREVIEW_COMMAND` for syntax-highlighted previews
+- `fzf` — interactive fuzzy finder, styled via Flexoki palette (optional)
 
 ### Description
 
-This library centralizes environment setup for your Arch + qtile script collection. It exposes a single entrypoint, `load_env`, that activates targeted “modules”:
+This library provides a single function, `load_env`, that sets up a modular environment for your scripts on Arch + qtile. It discovers your scripts root at runtime (`$SCRIPTS`) via `readlink -f "${BASH_SOURCE[0]}"`, populates `$PATH` with `$SCRIPTS/bin` and `$HOME/.local/bin`, and optionally configures:
 
-- core/paths: Sets `SCRIPTS` to the repository root (detected from this file path), ensures `$SCRIPTS/bin` and `$HOME/.local/bin` are in `PATH`. Loaded by default when no argument is passed. Flags: `SCRIPTS_ENV_LOADED=1`.
-- colors: Loads the Flexoki palette as exported variables (`FLEXOKI_*`) and convenience aliases like `PRIMARY_COLOR`, `SUCCESS_COLOR`, etc. Flag: `FLEXOKI_LOADED=1`.
-- fzf: Applies opinionated `FZF_DEFAULT_COMMAND` (via `fd`), Flexoki-themed `FZF_DEFAULT_OPTS` when colors are loaded, and a `bat`-based preview. Flag: `FZF_ENV_LOADED=1`.
-- git: Sets data locations (`GIT_REPOS`, `LOCALDATA`) without shelling out to git.
-- debug: Prints what got loaded to stderr to help during development.
+- Flexoki color palette (exports named hex colors + semantic aliases)
+- FZF defaults (command, keybindings, preview, and themed colors)
+- Git-related locations (`$GIT_REPOS`, `$LOCALDATA`)
+- Debug output to stderr
 
-Convenience functions are exported for common sets: `load_env_minimal`, `load_env_colors`, `load_env_fzf`, `load_env_full`.
+It is idempotent: a guard (`$SCRIPTS_ENV_LOADED`) avoids re-initializing core state. Convenience wrappers are exported: `load_env_minimal`, `load_env_colors`, `load_env_fzf`, `load_env_full`.
 
 ### Usage
 
-- In another script (recommended): add at the top  
-  `source "$HOME/.scripts/lib/env.sh"; load_env_fzf`
-- Minimal path setup only:  
-  `source "$HOME/.scripts/lib/env.sh"; load_env_minimal`
-- Colors + fzf with themed UI:  
-  `source "$HOME/.scripts/lib/env.sh"; load_env "core,colors,fzf"`
-- Full stack (paths, colors, fzf, git):  
-  `source "$HOME/.scripts/lib/env.sh"; load_env_full`
-- Ad-hoc in a terminal for testing:  
-  `source ~/.scripts/lib/env.sh; load_env_full; env | grep -E 'FZF_|FLEXOKI_|SCRIPTS'`
-- qtile binding: point your keybinding to a script that sources this file and calls one of the helpers before running its logic. No need to preload it in qtile itself.
+tldr:
+```
+# In an interactive shell (bash)
+source ~/.scripts/lib/env.sh
+load_env "core,colors,fzf"
+fzf  # now uses Flexoki theme and fd+bat preview
+```
 
-On Arch, install optional tools as needed: `pacman -S fzf fd bat`.
+In another script:
+```
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/env.sh"
+load_env_full
+# your script...
+```
+
+Using helpers:
+```
+source ~/.scripts/lib/env.sh
+load_env_fzf     # == "core,colors,fzf"
+load_env_minimal # only core paths
+```
+
+Qtile integration (autostart or spawned scripts):
+```
+# ~/.config/qtile/autostart.sh
+source ~/.scripts/lib/env.sh
+load_env_colors
+```
+
+Debugging:
+```
+source ~/.scripts/lib/env.sh
+load_env "debug,core,colors,fzf"
+```
+
+Note:
+- Modules are comma-separated within a single argument (e.g., "core,colors").
+- If you use only `fzf` without `colors`, FZF uses sane defaults without theming.
 
 ---
 
 > [!TIP]
-> Improvements:
-> - Module matching is substring-based; current comma-separated style works, but `[[ "$modules" == *"core"* ]]` will also match unexpected strings containing `core`. Consider splitting on commas into an array and matching exact tokens.
-> - `FZF_DEFAULT_OPTS` is multi-line; it works, but trimming indentation would be cleaner. You could build it incrementally or via an array for readability.
-> - Add soft checks for `fd`, `fzf`, and `bat` to avoid confusing errors when they’re missing (e.g., set sane fallbacks).
-> - Consider a `paths`-only mode that doesn’t piggyback on `core`, to clarify intent.
+> - Consider splitting the `modules` argument by commas and matching tokens to avoid accidental substring matches (e.g., “gitx” matching “git”).
+> - Auto-enable `colors` when `fzf` is requested to ensure themed output: detect `fzf` and source `colors` if not present.
+> - Add command existence checks (`fd`, `bat`, `fzf`) and degrade gracefully or warn when missing.
+> - Export `$SCRIPT_PATHS` into `$PATH` only once using a loop over components to reduce duplication logic.
+> - Provide an “unload” or “reload” function to reset FZF options when testing.

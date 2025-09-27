@@ -14,7 +14,7 @@ BROWSER=$(which minimal-browser.py)
 while [[ $# -gt 0 ]]; do
   case "$1" in
   init)
-    DATA_DIR=$HOME/.local/share/open-webui uvx --python 3.12 'open-webui@latest' serve
+    DATA_DIR=$HOME/.local/share/open-webui uvx --python 3.11 'open-webui@latest' serve
     shift 2
     ;;
   -H | --host)

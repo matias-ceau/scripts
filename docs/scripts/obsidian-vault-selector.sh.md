@@ -1,74 +1,65 @@
-# Obsidian Vault Selector
+# Obsidian Vault Selector (fzf-driven)
 
 ---
 
-**obsidian-vault-selector.sh**: Select and open an Obsidian vault from all available vaults using an interactive fuzzy finder.
+**obsidian-vault-selector.sh**: Select and open Obsidian vaults with preview and search
 
 ---
 
 ### Dependencies
 
-- `bash`: Required shell interpreter.
-- `obsidian`: The [Obsidian](https://obsidian.md/) note-taking application.
-- `jq`: For parsing JSON configuration file of Obsidian.
-- `eza`: Modern replacement for `ls`, used for directory listing and tree view.
-- `bat`: A `cat` clone with syntax highlighting (for file previews).
-- `rg` (ripgrep): For filtering out unnecessary files in previews.
-- `notify-send`: To show desktop notifications (used if nothing is selected).
-- `improved-fzfmenu.sh`: User script; an enhanced wrapper/interface to `fzf` (fuzzy finder), with support for custom previews and label bindings.
-- `setsid`: To detach the obsidian open command.
-- **(Recommended)**: Ensure the `$XDG_CONFIG_HOME/obsidian/obsidian.json` exists and is up to date.
-
----
+- `obsidian` — desktop app CLI; handles obsidian:// links on Arch
+- `jq` — parse vault paths from Obsidian config
+- `eza` — colorful ls and tree previews
+- `ripgrep` (`rg`) — filter preview noise
+- `bat` — style the tree preview
+- `improved-fzfmenu.sh` — your fzf wrapper; used for selection UI
+- `libnotify` (`notify-send`) — user feedback when nothing is selected
+- `util-linux` (`setsid`) — detach the launcher process
+- `bash`, `awk`, `sed` — shell utilities
+- Obsidian config: `$XDG_CONFIG_HOME/obsidian/obsidian.json`
 
 ### Description
 
-This script provides a TUI (terminal UI) selector for your Obsidian vaults and opens the chosen vault directly. It parses the vault list from your main Obsidian configuration JSON file, then presents them with an `fzf`-powered interactive menu enriched with previews using `eza` and `bat`.  
-Features include:
+This script discovers your Obsidian vaults from Obsidian’s config file, presents them in an fzf-based menu, and opens the chosen vault via Obsidian’s deep-link scheme.
 
-- Displaying vaults found in `obsidian.json`
-- Listing contents and a directory tree within preview
-- Filtering out common binary or build artifacts in previews (`.js`, `.css`, images, etc.)
-- Click-to-open vault with the proper Obsidian URL handler (`obsidian://`)
-- Notification if no selection is made
-- Nicely colored/structured output leveraging `eza`, `bat`, and `rg`
-- Custom preview window layout and label updates for clarity while browsing
-
----
+Flow:
+- Fetch vault directories from `$XDG_CONFIG_HOME/obsidian/obsidian.json` using `jq`, then normalize via `eza --stdin`.
+- Show an interactive picker (`improved-fzfmenu.sh`) listing only the last path segment (vault name) while keeping the full path for operations.
+- Live preview blends:
+  - `eza -la` for a detailed top-level listing, and
+  - a colorized `eza -T` tree, filtered by `rg` to hide noisy binaries, then prettified with `bat`.
+- On selection, derive the vault name from the path and open it with `obsidian obsidian://open?vault=<name>` in a detached session (`setsid`). If nothing is selected, a `notify-send` message appears.
 
 ### Usage
 
-Save and make the script executable:
-```sh
-chmod +x ~/.scripts/bin/obsidian-vault-selector.sh
-```
+- Run interactively:
+  ```
+  ~/.scripts/bin/obsidian-vault-selector.sh
+  ```
+  Use arrows or type to fuzzy-search; Enter opens the highlighted vault.
 
-To launch the selector (from terminal, dmenu, or keybinding):
-```sh
-~/.scripts/bin/obsidian-vault-selector.sh
-```
+- Bind to a qtile key:
+  ```
+  # in config.py
+  from libqtile.lazy import lazy
+  Key([mod], "o", lazy.spawn("~/.scripts/bin/obsidian-vault-selector.sh")),
+  ```
 
-- The script will open an interactive terminal menu, displaying all found vaults.
-- Use fuzzy finding to filter/select a vault.
-- Previews update in real-time: 
-  - Top: directory listing
-  - Bottom: directory tree and filtered file previews
-- Hit `<Enter>` to open the selected vault in Obsidian.
+- TL;DR
+  ```
+  obsidian-vault-selector.sh  # pick a vault → opens in Obsidian
+  ```
 
-Typical example for a Qtile keybinding:
-```python
-Key([mod], "o", lazy.spawn("~/.scripts/bin/obsidian-vault-selector.sh"))
-```
+Notes:
+- Ensure `$XDG_CONFIG_HOME` is set (commonly `~/.config` on Arch).
+- `improved-fzfmenu.sh` must be in PATH and compatible with your terminal setup.
 
 ---
 
 > [!TIP]
->
-> - **Potential Improvements:**  
->   - If `$XDG_CONFIG_HOME/obsidian/obsidian.json` doesn't exist or is malformed, the script may fail silently—consider adding early error checks and user-friendly error messages.
->   - The script assumes `obsidian` protocol URLs are valid/openable; if `obsidian` is not in PATH or the handler isn't registered, nothing will happen—inform the user if spawning the URL fails.
->   - `improved-fzfmenu.sh` is a user script dependency; errors there will break this workflow.
->   - `sed 's/"//g'` may eat quotes elsewhere—using jq's output options might be safer.
->   - For very large vaults, preview commands may be slow or resource-heavy. Consider adding a preview size limit or lazy loading.
->   - Paths with spaces may break variable handling in bash—ensure robust quoting around all variable expansions.
->   - If you move vault folders frequently, make sure your `obsidian.json` stays fresh (Obsidian can leave old paths, causing “not found” errors or opening the wrong location).
+> - Deep link ambiguity: vaults are opened by name. If two vaults share the same name, the wrong one might open. Prefer `obsidian://open?path=<abs_path>` with proper URL encoding.
+> - URL encoding: vault names/paths with spaces should be encoded. Consider `jq -sRr @uri` or `python -c 'import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))'`.
+> - Robustness: quote `$XDG_CONFIG_HOME` and the config path; handle missing/invalid `obsidian.json`.
+> - Preview performance: large vaults may slow previews. Consider limiting tree depth (`eza -T -L 2`).
+> - Portability: `eza --stdin` behavior can vary; a safer approach is `while read -r p; do echo "$p"; done`. Add `set -euo pipefail` and run `shellcheck` for diagnostics.

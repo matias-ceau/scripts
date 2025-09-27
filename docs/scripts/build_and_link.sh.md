@@ -1,72 +1,72 @@
-# Build & Link Helper
+# Build and symlink helper for $SCRIPTS/bin
 
 ---
 
-**build_and_link.sh**: Build C/C++ or Python app into $SCRIPTS/bin and symlink into repo root
+**build_and_link.sh**: Compile C/C++ or install Python app into $SCRIPTS/bin and symlink into repo root
 
 ---
 
 ### Dependencies
 
-- `bash` — script interpreter
-- `coreutils` — for `ln`, `mkdir`, `basename`
-- `gcc` — compiles `.c` (also provides `g++`)
-- `g++` — compiles `.cpp`
-- `python` — for Python projects (when using `uv`)
-- `uv` — fast Python package/app installer (uses `pyproject.toml`)
-- `SCRIPTS` env var — points to your scripts root (e.g. `/home/matias/.scripts`)
+- `bash` — shell interpreter
+- `coreutils` — for `ln`, `mkdir`, etc.
+- `gcc` — build C sources
+- `g++` — build C++ sources
+- `uv` — Python packaging/installer (Arch: pacman -S uv)
+- `pyproject.toml` — required when installing a Python project
+- `SCRIPTS` — environment variable pointing at your scripts root (e.g. $HOME/.scripts)
 
 ### Description
 
-This small builder streamlines turning source files into runnable artifacts under `$SCRIPTS/bin` and then creates a repo-local symlink to the built target.
+This meta-builder compiles a single C/C++ source file or installs a Python project into $SCRIPTS/bin, then creates a symlink back into the current repository directory. It is designed for a simple, local workflow on Arch Linux, and pairs well with qtile keybindings or shell aliases.
 
 Flow:
-- Validates `SCRIPTS` and the provided source file.
-- Derives `base` from the filename (without extension).
-- Ensures `$SCRIPTS/bin` exists.
-- Per filetype:
-  - `.c` → `gcc <src> -o $SCRIPTS/bin/<base>`
-  - `.cpp` → `g++ <src> -o $SCRIPTS/bin/<base>`
-  - `.py` → requires a `pyproject.toml` in the current directory, then runs:
-    - `uv pip install --app . --target "$SCRIPTS/bin/<base>"`
-    - This creates an isolated app install; the target is typically a directory containing `bin/` entry points.
-- Finally symlinks the built artifact back into the repo root as `./<base>`.
+- Verifies SCRIPTS is set, creates $SCRIPTS/bin if needed.
+- Deduces the base name from the provided source path.
+- For .c/.cpp: builds to $SCRIPTS/bin/<base> via gcc/g++.
+- For .py: if the current working directory contains pyproject.toml, installs the app using uv into $SCRIPTS/bin/<base>.
+- Finally, symlinks $SCRIPTS/bin/<base> to ./<base> in your current repo.
 
-Designed for Arch Linux and easy integration with qtile keybindings or editor workflows.
+Note: The “repo_dir” is the current working directory; run the script from the repository where you want the symlink to appear.
 
 ### Usage
 
-TL;DR:
-- Export your scripts root once (e.g. in shell profile):
-  ```
-  export SCRIPTS="$HOME/.scripts"
-  ```
-- From any repo directory:
-  ```
-  /home/matias/.scripts/meta/build_and_link.sh path/to/main.c
-  /home/matias/.scripts/meta/build_and_link.sh src/tool.cpp
-  ```
-- For Python (project must have pyproject.toml in CWD):
-  ```
-  cd /path/to/python-project
-  /home/matias/.scripts/meta/build_and_link.sh app/__main__.py
-  ```
-- Result:
-  - Built artifact at: `$SCRIPTS/bin/<base>`
-  - Symlink at repo root: `./<base>` pointing to the built artifact (or app dir)
-
-Qtile example (bind to compile current file from terminal):
+Set up once in your shell profile:
+```bash
+export SCRIPTS="$HOME/.scripts"
 ```
-lazy.spawn("$HOME/.scripts/meta/build_and_link.sh $FILE")
+
+C example:
+```bash
+cd ~/code/my-c-tool
+"$SCRIPTS/meta/build_and_link.sh" "$SCRIPTS/src/hello.c"
+# Produces $SCRIPTS/bin/hello and symlink ./hello
+```
+
+C++ example:
+```bash
+cd ~/code/my-cpp-tool
+"$SCRIPTS/meta/build_and_link.sh" "$SCRIPTS/src/greeter.cpp"
+# Produces $SCRIPTS/bin/greeter and symlink ./greeter
+```
+
+Python (uv, from a project with pyproject.toml):
+```bash
+cd ~/code/my-py-app        # must contain pyproject.toml
+"$SCRIPTS/meta/build_and_link.sh" "$SCRIPTS/src/my-py-app.py"
+# Installs app into $SCRIPTS/bin/my-py-app and symlinks ./my-py-app
+```
+
+qtile binding idea (spawn a rebuild for a known file):
+```python
+Key([mod], "b", lazy.spawn("$HOME/.scripts/meta/build_and_link.sh $HOME/.scripts/src/hello.c"))
 ```
 
 ---
 
-> [!TIP]
-> - `SRC` is defined but unused; remove or repurpose.
-> - Consider adding `-O2 -pipe -march=native -Wall -Wextra` via `CFLAGS/CXXFLAGS`, and accept optional flags.
-> - Detect and warn if `uv` is missing; suggest `sudo pacman -S uv`.
-> - For Python, `uv pip install --app` creates a directory; you may want to symlink its `bin/<entrypoint>` instead of the whole dir.
-> - Use absolute paths via `realpath` to make symlinks robust when invoked from elsewhere.
-> - Add support for more languages (`cargo`, `go build`, `zig`, `make`/`meson`) and a help message (`-h/--help`).
-> - Guard against clobbering an existing file named `<base>` in the repo.
+> [!WARNING]
+> - Python path is only used for extension detection; the actual install targets the current directory’s pyproject. Consider taking the project dir as the argument for Python.
+> - uv --app --target writes an app layout (often a directory with bin/). Symlinking $BIN/<base> may point to a directory, not an executable. You may want to link $BIN/<base>/bin/<entrypoint> instead.
+> - No compiler flags are set. Add CFLAGS/CXXFLAGS/LDFLAGS (e.g., -O2 -Wall -Wextra) or accept extra args.
+> - $SRC is defined but unused.
+> - Consider set -euo pipefail, using realpath, and better error messages.

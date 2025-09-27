@@ -1,79 +1,73 @@
-# AI-Powered Commit Message Generator
+# AI-powered Git commit message generator
 
 ---
 
-**generate_commit_message.py**: Generate concise commit messages from staged diffs via OpenRouter or fallback
+**generate_commit_message.py**: Generate commit messages from staged diff via OpenRouter; safe fallback
 
 ---
 
 ### Dependencies
 
-- `git` — used to read staged diffs and numstat
-- `uv` — runs this Python script with inline PEP 723 metadata and auto-installs deps
-- `python>=3.12` — required runtime
-- `requests` — HTTP client for the API call
-- `OpenRouter API` — remote LLM service (optional; falls back when missing)
+- `uv` — runs the script with inline deps; zero-setup via the shebang
+- `python>=3.12` — runtime for the script
+- `requests` — HTTP client (auto-resolved by `uv`)
+- `git` — to read the staged diff
+- `OPENROUTER_API_KEY` — API key in env; also accepts `openrouter` or any var containing `OPENROUTER`
 
 ### Description
 
-This script inspects your staged changes and produces a clean, conventional commit message. It prefers using OpenRouter (model: `openai/gpt-oss-120b`) and gracefully falls back to a locally built summary if the API key is missing or the request fails.
+Generates a concise commit message from the staged diff and prints it to stdout. It captures the diff with `git diff --cached --no-color --no-ext-diff -U0`, then aggressively condenses large patches to keep the prompt small, skipping noisy paths like node_modules, dist/build artifacts, lockfiles, and minified/map files. Encoding is robust: raw bytes are decoded with `COMMIT_DIFF_ENCODING` (default `utf-8`) and `COMMIT_DIFF_ERRORS` (default `replace`) to avoid crashes on binary or non-UTF8 data.
 
-Highlights:
-- Robust git I/O with safe decoding even on non-UTF8/binary content.
-- Smart diff condensation with per-file change caps, exclusion patterns (e.g. node_modules, lockfiles, minified assets), and numstat fallback.
-- Message sanitization: removes code fences, boilerplate (“Commit message:”), control chars, and length-caps to avoid CI/editor issues.
-- Always prints something sensible; never blocks your commit due to API/encoding errors.
+If an OpenRouter API key is present, it calls `https://openrouter.ai/api/v1/chat/completions` with `openai/gpt-oss-120b` to produce a subject (≤70 chars) plus a short body. Output is sanitized to strictly contain a valid commit message. If the key is missing or the request fails, it falls back to a deterministic summary built from `git diff --numstat`.
 
-Environment knobs:
-- `OPENROUTER_API_KEY` (or any env var containing `OPENROUTER`) for API auth.
-- `COMMIT_MAX_DIFF_CHARS` (default 120000), `COMMIT_PER_FILE_CHANGE_LIMIT` (default 2000).
-- `COMMIT_DIFF_ENCODING` (default utf-8), `COMMIT_DIFF_ERRORS` (replace|ignore|surrogateescape).
-- `COMMIT_MAX_MESSAGE_CHARS` (default 4000).
+Config knobs (env):
+- `COMMIT_MAX_DIFF_CHARS` (default 120000)
+- `COMMIT_PER_FILE_CHANGE_LIMIT` (default 2000)
+- `COMMIT_MAX_MESSAGE_CHARS` (default 4000)
+- `COMMIT_DIFF_ENCODING`, `COMMIT_DIFF_ERRORS`
 
 ### Usage
 
-TL;DR:
+tldr:
 ```bash
-# 1) Stage your changes
+# Arch: ensure uv is installed (pacman -S uv) and script is on PATH
+export OPENROUTER_API_KEY=sk-or-...
 git add -A
-
-# 2) Print a commit message to stdout (uses fallback if no API key)
-~/.scripts/bin/generate_commit_message.py
-
-# 3) Commit with generated message
-git commit -F <(~/.scripts/bin/generate_commit_message.py)
+git commit -m "$(~/.scripts/bin/generate_commit_message.py)"
 ```
 
-Set API key (OpenRouter):
+Git alias:
 ```bash
-export OPENROUTER_API_KEY="sk-or-..."
+git config --global alias.gcm '!~/.scripts/bin/generate_commit_message.py'
+git commit -m "$(git gcm)"
 ```
 
-As a prepare-commit-msg hook:
+Prepare-commit-msg hook:
 ```bash
 cat > .git/hooks/prepare-commit-msg <<'SH'
-#!/bin/sh
-# If message already provided, do nothing
-[ -s "$1" ] && exit 0
-msg="$HOME/.scripts/bin/generate_commit_message.py"
-"$msg" > "$1" || exit 0
+#!/usr/bin/env bash
+case "$2" in merge|squash) exit 0;; esac
+msg="$(~/.scripts/bin/generate_commit_message.py)" || exit 0
+[ -n "$msg" ] && printf '%s\n' "$msg" > "$1"
 SH
 chmod +x .git/hooks/prepare-commit-msg
 ```
 
-Quick alias to add+commit:
+Tuning (optional):
 ```bash
-git config alias.acm '!f(){ git add -A && msg="$($HOME/.scripts/bin/generate_commit_message.py)" && git commit -m "$msg"; }; f'
+export COMMIT_MAX_DIFF_CHARS=80000
+export COMMIT_PER_FILE_CHANGE_LIMIT=1200
+export COMMIT_DIFF_ENCODING='utf-8'
+export COMMIT_DIFF_ERRORS='replace'
+export COMMIT_MAX_MESSAGE_CHARS=2000
 ```
 
-Qtile keybinding idea:
-- Bind a terminal command that runs the alias in your repo, or trigger a small script that opens a terminal and runs the commit flow.
+Wayland clipboard (qtile):
+```bash
+~/.scripts/bin/generate_commit_message.py | wl-copy
+```
 
 ---
 
 > [!TIP]
-> - Consider CLI flags for model/url selection and a “local only” mode (no network).
-> - The env key discovery may match unintended variables containing OPENROUTER; restrict to exact names.
-> - Add support for writing directly to a provided commit message file (hook arg) for tighter integration.
-> - Exclusion patterns are substring-based; anchoring/globs might be more precise.
-> - Consider supporting unstaged diffs or a flag to include working tree changes.
+> Improvements: accept CLI flags to override `model`, `url`, temperature, and limits; add provider selection (OpenAI, local LLM) via env/args; cache/timeout backoffs; optionally insert co-authors or conventional commit prefixes; unit tests for diff condensation and sanitization; support reading unstaged diff or specific paths; add a dry-run/verbose mode.
