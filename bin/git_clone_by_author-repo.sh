@@ -3,9 +3,10 @@
 #INFO:#@CLI@=2024-07= "get git repos"
 
 usage() {
-    echo "Usage: $0 [-s | -l <path>] developer/package"
-    echo "  -s, --ssh       Use SSH for cloning (git@github.com:developer/package.git)"
-    echo "  -l, --local     Use local repository with the specified path"
+    echo "Usage: $0 [-s | -l <path> | --git-options <opts>] developer/package"
+    echo "  -s, --ssh     Use SSH for cloning (git@github.com:developer/package.git)"
+    echo "  -l, --local   Use local repository with the specified path"
+    echo "  -g <opt>     Run git clone with additional option (can be provided multiple times)"
     exit 1
 }
 
@@ -17,6 +18,7 @@ GIT_REPOS="${GIT_REPOS:-"$HOME/git"}"
 SSH=''
 LOCAL=''
 LOCAL_PATH=""
+GIT_CMD="git clone"
 
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
     case $1 in
@@ -27,6 +29,10 @@ while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do
             LOCAL=true
             shift
             LOCAL_PATH=$1
+            ;;
+        -g)
+            shift
+            GIT_CMD="$GIT_CMD ${1}"
             ;;
         *)
             usage
@@ -53,11 +59,11 @@ mkdir -p "$TARGET_DIR"
 
 if [[ "$SSH" ]]; then
     echo "Using SSH"
-    git clone "git@github.com:$REPO.git" "$TARGET_DIR/$PACKAGE"
+    $GIT_CMD "git@github.com:$REPO.git" "$TARGET_DIR/$PACKAGE"
 elif [[ "$LOCAL" ]]; then
     echo "Using local repo"
-    git clone "$LOCAL_PATH" "$TARGET_DIR/$PACKAGE"
+    $GIT_CMD "$LOCAL_PATH" "$TARGET_DIR/$PACKAGE"
 else
     echo "Using https"
-    git clone "https://github.com/$REPO.git" "$TARGET_DIR/$PACKAGE"
+    $GIT_CMD "https://github.com/$REPO.git" "$TARGET_DIR/$PACKAGE"
 fi
