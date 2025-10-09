@@ -4,7 +4,7 @@
 
 # Escape each argument
 #args=()
-term=alacritty
+shell=footclient
 title=i_fzfmenu
 title_prefix=--terminal-title=
 class=floating
@@ -40,10 +40,11 @@ if [ "$pipe" -eq 1 ]; then
 fi
 
 exec systemd-run --user --scope --quiet \
-    $term \
+    $shell \
         -T "$title" \
-        --class "$class" \
-        -e bash -c "$fzfcmd"
+        -W 100x30 \
+        --app-id "$class" \
+        -- bash -c "$fzfcmd"
 
 #
 #TODO:

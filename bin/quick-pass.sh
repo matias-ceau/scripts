@@ -12,14 +12,14 @@ fd -tf '\.gpg$' \
     --format "${fd_fmt}" |
 sort |
 sed 's#\./##' |
-fzf \
+improved-fzfmenu.sh \
     --ansi \
     --nth 3 \
     --delimiter ' ' \
-    --bind 'ctrl-e:execute(pass edit {3} & sleep 1)' \
-    --bind 'ctrl-x:execute(pass {3} | xdotool type --file -)' |
-cut -d' ' -f3 |
-xargs pass
+    --bind 'ctrl-e:become(pass edit {3})' \
+    --bind 'ctrl-y:become(pass -c {3})' \
+    --bind 'enter:become(echo {} > /dev/shm/psst)'
+ydotool type "$(cat /dev/shm/psst)"
 
 #TODO: make it write to qutebrowser FIFO
 # sed -e "s#${PASSWORD_STORE_DIR}.*/##g" |
