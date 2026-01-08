@@ -1,67 +1,56 @@
-# Visualize Markdown Note Hyperlinks in a Folder
+# Markdown Wiki Link Graph Extractor
 
 ---
 
-**get_hyperlinks_in_folder.py**: Scans a folder of markdown notes and builds a hyperlink graph visualization.
+**get_hyperlinks_in_folder.py**: Scan a folder of markdown notes for `[[wiki links]]` and build a graph
 
 ---
 
 ### Dependencies
 
-- `python` (with modules: `click`, `matplotlib`, `networkx`, `tqdm`)
-- `fd` : Fast alternative to `find` for listing markdown files.
-- `rg` (ripgrep): Recursively searches markdown links in notes.
-- `jq` : Processes line-oriented json from ripgrep output.
-- `bash` (subprocesses)
-- All dependencies should be installed and available in `PATH`. On Arch Linux, install with `pacman` or `pip` as appropriate.
+- `python` (Arch package: `python`)
+- `click` (CLI options)
+- `tqdm` (progress bar)
+- `networkx` (directed graph structure)
+- `matplotlib` (optional rendering with `--draw`)
+- `fd` (fast file discovery; used to list `.md` files)
+- `ripgrep` / `rg` (searches wiki-style links with JSON output)
+- `jq` (extracts matches/submatches from `rg --json`)
 
 ### Description
 
-This script parses a directory for markdown (`.md`) notes and analyzes all internal wiki-style links (`[[note name]]` or `[[note name|alias]]`). The information is compiled into a directed graph representing hyperlinks between notes. Optionally, the script can visualize the network using matplotlib (via `networkx`).
+This script scans a notes directory (e.g., an Obsidian vault) and extracts all `[[...]]` style links found in Markdown files. It then builds a directed graph where:
 
-#### Script Workflow
+- Each node is a Markdown file (internally mapped to a numeric id).
+- Each edge is a link from one file to another (`source -> target`).
 
-1. **Path Resolution:**
-   - Expands variables/tilde and validates the provided note folder.
-2. **Markdown File Listing:**
-   - Uses `fd` to quickly list all markdown files in the search path.
-3. **Reference Extraction:**
-   - Uses `ripgrep` (`rg`) to find wiki-style links in notes.
-   - Pipes results into `jq` to parse out file/link targets efficiently.
-4. **Graph Construction:**
-   - Maps files and their outbound links to a directed graph.
-   - Each node is a note; each edge is a hyperlink.
-5. **Visualization:**
-   - Optionally plots the graph using `matplotlib`.
+Pipeline overview:
+
+1. **Resolve target folder**: `get_search_path()` expands `~` and `$VARS` and validates the directory.
+2. **List notes**: `list_all_notes()` uses `fd` to collect `.md` files and assigns each file a stable numeric id.
+3. **Extract links**: `get_references()` runs `rg` with a regex matching `[[note]]`, `[[note|alias]]`, and strips match data via `jq`.
+4. **Normalize link targets**: `get_hyperlink_id()` resolves basename-only matches, removes `|alias` and `#heading`, and enforces a `.md` suffix.
+5. **Graph build + optional draw**: `networkx.DiGraph()` is created; `--draw` visualizes it with a spring layout.
 
 ### Usage
 
-> **Tip:** Run interactively via terminal, or bind to a qtile key/chord for faster access.
+Run from a terminal:
 
-**Scan a note folder and print progress:**  
-```
-get_hyperlinks_in_folder.py --path "/path/to/notes"
-```
+    get_hyperlinks_in_folder.py --path ~/notes
 
-**Scan current directory (default) and visualize hyperlink graph:**  
-```
-get_hyperlinks_in_folder.py --draw
-```
+Draw the graph (interactive Matplotlib window):
 
-**Common workflow example:**  
-```
-cd ~/zettelkasten
-get_hyperlinks_in_folder.py --draw
-```
+    get_hyperlinks_in_folder.py --path ~/notes --draw
 
-_No output? Ensure you have markdown files and wiki-links in your folder!_
+Typical qtile binding (spawn in a terminal if you want to see progress):
+
+    lazy.spawn("alacritty -e get_hyperlinks_in_folder.py --path ~/notes --draw")
 
 ---
 
-> [!NOTE]
-> - The script assumes your note links conform to `[[...]]` (Obsidian style).  
-> - Error handling could be improved, e.g., if subprocesses fail or output unexpected formats.
-> - The node IDs are mapped by filename order, which means graph node numbers may not always correspond to the same note if files are added/removed.
-> - The script opens a matplotlib window, which may block execution if run inside qtile keybindings without `matplotlib` set to use a non-interactive backend.
-> - Consider adding file labels or note titles as node labels for more meaningful visualization.
-> - Strongly dependent on GNU/Linux CLI ecosystem; will not work natively on Windows.
+> [!TIP]
+> Improvements to consider:
+> - `get_references()` builds JSON by string concatenation; this is fragile (trailing commas, empty output). Prefer reading line-by-line and `json.loads()` per line.
+> - Matching links by **basename only** can collide (two files with same name in different folders). Using full relative paths (or Obsidian-style resolution rules) would be safer.
+> - There’s no output when `--draw` is not provided; exporting edges/nodes to `json`/`csv`/`dot` would make the script more useful headlessly.
+> - `assert p2.returncode == 0` will crash without context; handle errors and surface `stderr` from `jq`/`rg`.

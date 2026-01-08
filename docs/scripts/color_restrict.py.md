@@ -1,61 +1,51 @@
-# Color Restrict Script
+# Palette Color Restrict (Nearest-Color Quantizer)
 
 ---
 
-**color_restrict.py**: Restricts image colors to those in a custom palette with optional resizing.
+**color_restrict.py**: Reduce an image to a fixed RGB palette by nearest-color matching
 
 ---
 
 ### Dependencies
 
-- `pillow` (PIL): Required for image loading, conversion, and saving.
-- `numpy`: Used for efficient pixel array manipulation and color matching.
-- Python 3.13+ (uses some modern type annotations and possibly new features)
-- `uv` (for running with `uv run` as per shebang, a Python package/dependency runner)
-
----
+- `uv` (runtime): script shebang uses `uv run --script` to manage deps and run it
+- `python>=3.13`
+- `pillow` (PIL): image loading, RGB conversion, resizing, saving
+- `numpy`: fast vectorized distance computation over all pixels
 
 ### Description
 
-This script restricts the colors of any given image to a fixed, hardcoded palette. The palette is defined in the `PALETTE` numpy array and covers a variety of earthy and neutral tones, suitable for stylized effects or palette-limited graphics.
+`color_restrict.py` takes an input image and remaps every pixel to the closest color from a hardcoded palette (`PALETTE`). The matching is done with a vectorized Euclidean distance in RGB space:
 
-#### Core Workflow:
-- **Input:** Takes an image file as input.
-- **Resize:** If the image's largest dimension exceeds 4000px, it is proportionally resized using high-quality Lanczos resampling, helpful for processing very large images without running out of RAM.
-- **Palette Reduction:** All pixels in the image are mapped to the closest color in the specified palette using efficient numpy broadcasting and vectorized operations (see `find_closest_colors` function).
-- **Output:** The resultant image (palette-reduced) is saved to the given output path.
+- The image is opened via Pillow and forced into `RGB` mode.
+- If the image is very large, it is downscaled so that the largest dimension is at most `max_size` (default: `4000`) using `LANCZOS` resampling.
+- Pixels are converted to a NumPy array and passed to `find_closest_colors()`, which:
+  - reshapes the image to a flat list of RGB triples,
+  - computes squared distances to each palette entry using broadcasting,
+  - selects the nearest palette color per pixel (`argmin`),
+  - reshapes back and saves.
 
-#### Functions:
-- `find_closest_colors`: Finds, for each pixel, the palette color with the minimum Euclidean distance in RGB space.
-- `process_image`: Handles image loading, optional resizing, applying the palette conversion, and saving.
-- `main`: Validates arguments and manages the program flow.
-
----
+This is useful for enforcing a consistent look across assets (wallpapers, UI mockups, theme previews) and pairs well with a qtile theming workflow where you want images to match your chosen scheme.
 
 ### Usage
 
-You can run this script from the command line or assign it to a Qtile keybinding or launcher. It is not interactive; explicit file paths are required. Example usage:
+Run directly (uv will install/resolve deps as needed):
 
-```sh
-uv run color_restrict.py input_image.jpg output_image.jpg
-```
+    ./color_restrict.py input.jpg output.png
 
-**Arguments:**
-- `input_image.jpg`: Path to source image.
-- `output_image.jpg`: Path to save the palette-converted image.
+Or explicitly:
 
-You might want to bind this to a key in Qtile or use with a file manager custom action.
+    uv run /home/matias/.scripts/dev/color_restrict.py input.png output.png
 
-**tldr:**
-```
-color_restrict.py <input> <output>
-```
+tldr:
+
+- Convert and overwrite to a new file:
+
+      ./color_restrict.py in.png out.png
+
+- Best practice: use PNG for output to avoid extra JPEG artifacts.
 
 ---
 
-> [!NOTE]
-> - The script is performant for reasonably-sized images thanks to vectorized numpy operations, but processing very large images may still require considerable RAM.
-> - The color palette is hardcoded; consider adding a command-line switch to load custom palettes if needed for flexibility.
-> - The maximum image dimension (4000px) is also hardcoded. Making this a user-supplied argument would improve the script's general utility.
-> - The output is always in JPEG or PNG format (determined by extension), but the format is not otherwise checked; you may wish to add error handling to verify format support and output path validity.
-> - The use of Python >=3.13 and the `uv` runner may limit compatibility on some systems. Ensure `uv` is installed (`pip install uv`) and available in your `$PATH`.
+> [!TIP]
+> The palette mapping ignores alpha channels; transparent PNGs will be flattened to RGB. Consider handling `RGBA` by preserving alpha (process RGB channels only, then reattach alpha). Also, nearest-color in RGB space can look harsh; adding optional dithering (e.g., Floyd–Steinberg) or converting to a perceptual space (Lab/OKLab) before distance computation can improve visual results. Finally, `max_size` is hardcoded—exposing it as a CLI flag would make the script more flexible.

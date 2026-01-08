@@ -1,67 +1,58 @@
-# tmux Session Launcher
+# Tmux Session Launcher
 
 ---
 
-**tmux_session.sh**: Minimal script to launch a detached tmux session with a specified window and command
+**tmux_session.sh**: Create a detached tmux session/window and run a command inside
 
 ---
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer. Required to create, attach, and manage terminal sessions.
-- `/usr/bin/bash`: The script is written for bash and uses basic shell features.
-- `getopts`: Shell builtin used for parsing options.
+- `bash` (script runtime; uses `getopts`)
+- `tmux` (creates the session/window and runs the provided command)
 
 ### Description
 
-This script provides a simplified interface for launching new `tmux` sessions on your Arch Linux environment, especially useful if you often automate terminal multiplexer setups (e.g., for development or testing environments from qtile keybindings). It ensures you specify:
+This script is a small helper to spawn a new **detached** tmux session with a single named window, executing a command immediately in that window. It’s useful on Arch Linux/qtile setups when you want to start background terminal workflows (dev servers, music tools, log tails, etc.) from a keybinding, autostart hook, or another script—without attaching to tmux.
 
-- a tmux session name (`-s`),
-- a window name within that session (`-w`),
-- and a command to run inside the new window (`-c`).
+How it works:
 
-**Key features:**
-- Enforces all options as mandatory, avoiding ambiguous or partial session creation.
-- Useful as both an interactive tool or within scripts and window manager hooks.
-- Output echoes all parameters for quick verification.
-
-#### How it works:
-- Parses options with `getopts`. Exits with usage info if any required option is missing.
-- Launches a new detached (`-d`) tmux session with the assigned session/window name and command.
-- Prints the resulting configuration for transparency.
-
----
+- Requires three flags:
+  - `-s` session name
+  - `-w` window name
+  - `-c` command to run (typically quoted)
+- Validates that all options are provided, otherwise prints a usage message and exits.
+- Calls:
+  - `tmux new-session -d -s "$session" -n "$window" "$command"`
+- Prints a short summary for verification (helpful when called from a terminal or logged).
 
 ### Usage
 
-To run the script directly from a terminal:
+Run from a terminal or from qtile/autostart scripts:
 
+```sh
+tmux_session.sh -s work -w editor -c "nvim ~/notes/todo.md"
 ```
-~/.scripts/bin/tmux_session.sh -s dev_session -w editor -c "nvim"
+
+Start a long-running process:
+
+```sh
+tmux_session.sh -s dev -w api -c "cd ~/src/api && make run"
 ```
 
-**Example use cases:**
-- Starting a new Python REPL in a tmux session called `py`:
-  ```
-  ~/.scripts/bin/tmux_session.sh -s py -w repl -c "python"
-  ```
-- Running a long process in its own session:
-  ```
-  ~/.scripts/bin/tmux_session.sh -s downloads -w aria -c "aria2c http://example.com/file"
-  ```
+Tail logs in the background:
 
-**Integration with qtile:**
+```sh
+tmux_session.sh -s sys -w logs -c "journalctl -f"
+```
 
-You can bind this script to a key or group launch:
-```python
-# Example (add to qtile config):
-Key([mod], "F10", lazy.spawn("~/.scripts/bin/tmux_session.sh -s scratchpad -w sysmon -c 'htop'"))
+Later, attach manually:
+
+```sh
+tmux attach -t work
 ```
 
 ---
 
 > [!TIP]
-> - This script doesn't check for existing sessions/windows with the same names, which may result in errors or duplicate sessions if you run the script with the same parameters multiple times. It would be beneficial to add a check to prevent accidental overwrite or to attach to existing sessions.
-> - The command runs only in the first window; additional window management must be done manually.
-> - Optionally, support for attaching to the session after creation, or making options optional (with sensible defaults), could improve usability.
-> - Lastly, a `-h|--help` option for cleaner CLI usage would be handy.
+> Consider handling the case where the session already exists (currently `tmux new-session` will fail). A common improvement is: if session exists, create a new window or just send the command to an existing window. Also, the shebang is `#!/usr/bin/bash` (fine on Arch), but `#!/usr/bin/env bash` can be more portable. Finally, if the command includes complex quoting, you may want to accept `-c` as “the rest of arguments” instead of a single string to avoid shell-escaping pitfalls.

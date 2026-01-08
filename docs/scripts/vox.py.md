@@ -1,75 +1,65 @@
-# Vox Amp Models Lookup CLI
+# Vox amp options browser (CLI)
 
 ---
 
-**vox.py**: Command-line utility to list and describe Vox amp modeling options
+**vox.py**: Print and filter a Vox amp-model option table from the terminal
 
 ---
 
 ### Dependencies
 
-- `python` (3.x): Script interpreter
-- `pandas`: Data manipulation and filtering
-- `tabulate`: Pretty-printing tables in the terminal
-
-You can install python dependencies with:
-```
-pip install pandas tabulate
-```
-
----
+- `python`
+- `python-pandas` (Arch package: `python-pandas`) — data handling via `DataFrame`
+- `python-tabulate` (Arch package: `python-tabulate`) — pretty-print tables in terminal
 
 ### Description
 
-This Python script provides a command-line interface (CLI) for browsing, searching, and retrieving descriptions of various Vox amp models and modes, including clean, crunch, and metal options, with handy technical commentary for each. The data is organized in a `pandas` DataFrame and includes fields like `name`, `mode`, `color`, `amp_name`, and a descriptive text for each item.
+`vox.py` is a small CLI helper that contains a hardcoded catalog of amp models (name/mode/color/optional “real” amp name/description). It’s meant for quick lookup while dialing tones, without having to open manuals.
 
-#### Key features:
-- **Tabular overview**: With no argument, a truncated table (40 chars of description) is shown for all amp models—quick for browsing.
-- **Detail lookup**: Pass a row number, and you’ll get the detailed model/mode header, full name, and the complete amp description.
-- **Filter by color**: Use `g`, `o`, or `r` as argument to filter the table by model "color" type.
-- **Fuzzy text search**: Enter a substring (case-insensitive) to see matching model names.
-- **Terminal output**: All results are formatted as easy-to-read tables via `tabulate`.
+The script builds a `pandas.DataFrame` with these columns:
 
-The script is great for quick information lookup from the terminal, especially useful for musicians or tinkerers who want to recall the sound profile or special features of a given amp model.
+- `name`: family name (e.g. `VOX AC30`, `UK METAL`)
+- `mode`: `STD` / `SPL` / `CST`
+- `color`: shorthand filter (`g`, `o`, `r`)
+- `amp_name`: optional real-world reference (often empty)
+- `description`: full text; truncated to 40 chars in list views
 
----
+Behavior depends on the first argument:
+
+- no args: prints the full table (descriptions truncated)
+- numeric arg: prints a detailed view for that row index, including full description
+- `g|o|r`: filters by `color` and prints the table
+- anything else: substring search against `name` (case-insensitive by uppercasing the query)
+
+This is ideal as a quick terminal tool, and can be bound to a qtile key to pop a terminal with results.
 
 ### Usage
 
-**Display all Vox amp models (in brief):**
-```
-python /home/matias/.scripts/bin/vox.py
-```
+List everything (compact):
 
-**Show full details for a specific model by index:**
-```
-python /home/matias/.scripts/bin/vox.py 17
-```
+    vox.py
 
-**Filter models by "color" category:**
-```
-python /home/matias/.scripts/bin/vox.py g    # Green
-python /home/matias/.scripts/bin/vox.py o    # Orange
-python /home/matias/.scripts/bin/vox.py r    # Red
-```
+Show one entry by index (full details):
 
-**Fuzzy search by part of amp name:**
-```
-python /home/matias/.scripts/bin/vox.py VOX
-python /home/matias/.scripts/bin/vox.py CLEAN
-```
+    vox.py 15
 
-You can bind this script to a keybinding in Qtile for fast pop-up queries, or run it from dmenu/rofi.
+Filter by “color”:
+
+    vox.py g
+    vox.py o
+    vox.py r
+
+Search by name substring:
+
+    vox.py vox
+    vox.py metal
+    vox.py ac30
+
+Example qtile idea (spawn in your preferred terminal):
+
+    lazy.spawn("alacritty -e /home/matias/.scripts/bin/vox.py")
 
 ---
 
-> [!TIP]  
-> **Suggestions:**  
-> - The script is very data-driven and easy to maintain, but:  
->   - The colors `g/o/r` could be explained (e.g., as amp classes or sound types) in the output or docstring.  
->   - There’s no usage/help output (`-h` or `--help`). Consider adding an argument to print instructions.  
->   - Filtering by amp name is uses a basic substring search; regex or more fuzzy searching (or tab-completion) could help.  
->   - Some columns like `amp_name` are often empty—maybe hide if empty? Or list those with named references separately.  
->   - Truncating description by default is good for performance, but a flag for "full description" in table would help.
->
-> Overall, works well for bespoke terminal workflows or as a pop-up lookup window.
+> [!TIP]
+> `df['description']` is truncated in-place for list views; if you call multiple modes in the same process (e.g., later refactor to an interactive TUI), you’ll lose the full text. Prefer using a temporary column (e.g. `desc_short`) or `assign()` for printing. Also consider `args[0].isdigit()` vs `isnumeric()` edge cases, and add a `--help`/`argparse` interface for discoverability (plus column headers via `tabulate(..., headers="keys", showindex=True)`).

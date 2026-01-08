@@ -2,842 +2,911 @@
   "albumplayer.xsh": {
     "file": "albumplayer.xsh",
     "path": "bin/albumplayer.xsh",
-    "description": "Selects and plays a full album (with extras queued) via cmus and dmenu",
+    "description": "Build a temp playlist from a chosen album and play it in cmus",
     "doc_path": "docs/scripts/albumplayer.xsh.md",
-    "hash": "ece1447f9419325093b7f5c5bdd808888c674869c078c4201022a837727b4fbe"
+    "hash": "9401dd8f8a21859a5730efa0a0d1b3d82f4bd670639a93172323a1afbf389237"
   },
   "ansi8bit2rgb_hex.py": {
     "file": "ansi8bit2rgb_hex.py",
     "path": "bin/ansi8bit2rgb_hex.py",
-    "description": "Converts 8-bit ANSI color codes to RGB or HEX representations with optional colorized output and names",
+    "description": "Convert ANSI 256-color codes to RGB or HEX (with optional preview)",
     "doc_path": "docs/scripts/ansi8bit2rgb_hex.py.md",
     "hash": "ccd3924f74a4be3142a7ad9bb1cd9f2e0cec0471acf75b13581b940f59a2e490"
   },
   "ansi-cheatsheet.sh": {
     "file": "ansi-cheatsheet.sh",
     "path": "bin/ansi-cheatsheet.sh",
-    "description": "Quickly displays a cheatsheet of ANSI escape codes in a syntax-highlighted view",
+    "description": "Render a quick ANSI escape codes cheatsheet with syntax highlighting",
     "doc_path": "docs/scripts/ansi-cheatsheet.sh.md",
     "hash": "425a1c174c425b5ddeef9871de852518c32c674ea276c208b57bb6bd493ccdf4"
   },
   "ardour-open.sh": {
     "file": "ardour-open.sh",
     "path": "bin/ardour-open.sh",
-    "description": "Interactive picker for Ardour sessions with formatted preview and recent-first sort",
+    "description": "Pick a recent Ardour session from ~/audio/PROJECTS and open it",
     "doc_path": "docs/scripts/ardour-open.sh.md",
-    "hash": "2ba17020f5bf686f2fa4785999727c83b962061c5c3a2f8cc7dd95f414bbda76"
+    "hash": "430ba70cb6f6d3dded13b2090ee42ce47dfcba45fa9083f565fb20d03acf3027"
   },
   "citeboard.sh": {
     "file": "citeboard.sh",
     "path": "bin/citeboard.sh",
-    "description": "Find academic references by citation key, copy their identifier, or open associated PDFs.",
+    "description": "Select a BibTeX citation key, then open the PDF or copy the key",
     "doc_path": "docs/scripts/citeboard.sh.md",
     "hash": "7695f69cd23195f906c31844a63f55dff2a6036a51493f7724c65c1dfb84752c"
   },
   "closest_colors.py": {
     "file": "closest_colors.py",
     "path": "bin/closest_colors.py",
-    "description": "Find the closest matching terminal color for a list of color hex codes.",
+    "description": "Find closest palette colors to a list of target hex colors",
     "doc_path": "docs/scripts/closest_colors.py.md",
     "hash": "c6f00ebde8506605828b8d1fbf202335ed10f3e17b96e1c36fe5c8424580a9e1"
   },
   "colormap_from_text.sh": {
     "file": "colormap_from_text.sh",
     "path": "bin/colormap_from_text.sh",
-    "description": "Extracts and displays unique color codes from text or config files in various formats",
+    "description": "Extract unique hex colors from text and print as RGB/hex (optionally previewed)",
     "doc_path": "docs/scripts/colormap_from_text.sh.md",
     "hash": "be58184ba693c4d0be5421c3d270d0d5a60f36a49e0433243a2cad639ee803b3"
   },
   "color_restrict.py": {
     "file": "color_restrict.py",
     "path": "dev/color_restrict.py",
-    "description": "Restricts image colors to those in a custom palette with optional resizing.",
+    "description": "Reduce an image to a fixed RGB palette by nearest-color matching",
     "doc_path": "docs/scripts/color_restrict.py.md",
     "hash": "dca94c26b8331b212d3b2265541b45807d304c92a250752aab9a27c5b18c8fc3"
   },
   "command_prompt.sh": {
     "file": "command_prompt.sh",
     "path": "bin/command_prompt.sh",
-    "description": "Launches a command prompt with shell history suggestions using fuzzy search",
+    "description": "Pick a past command from shell history via fzf and output it",
     "doc_path": "docs/scripts/command_prompt.sh.md",
-    "hash": "e45f987815b0becda25b3f8f034561bdb138bb5146a8d49305ebe2e752a9b582"
+    "hash": "adfa52a270cc912e14a34f07c0f85cc9d17c056ff72f6d035abf6051caaeaa1c"
   },
   "count_tokens_with_tiktoken.py": {
     "file": "count_tokens_with_tiktoken.py",
     "path": "bin/count_tokens_with_tiktoken.py",
-    "description": "Count token usage for a text file or stdin using OpenAI `tiktoken`.",
+    "description": "Count tokens for a text using tiktoken and an OpenAI model encoding",
     "doc_path": "docs/scripts/count_tokens_with_tiktoken.py.md",
-    "hash": "ab9b1492695008be79eb724241d1820f107f727086becac1bd4810f07324c1aa"
+    "hash": "53b2d37b9cd78e293f076376b5cdddacf1cf9f82e40fe8d3d23e472a235c6c52"
   },
   "create_cover_art.sh": {
     "file": "create_cover_art.sh",
     "path": "bin/create_cover_art.sh",
-    "description": "generates a cover image by creating a spectrogram from a selected `.wav` file.",
+    "description": "Create a cover art image from a `.wav` spectrogram",
     "doc_path": "docs/scripts/create_cover_art.sh.md",
     "hash": "2abf08551b56765d3c18e0e937b8ed87d3bf4dcb999f68b1469eaf30504cae8e"
   },
   "desk_fzf.sh": {
     "file": "desk_fzf.sh",
     "path": "bin/desk_fzf.sh",
-    "description": "Quickly search and launch `.desktop` applications using `fzf` and a cached file listing.",
+    "description": "Search and launch installed apps by selecting a .desktop file via fzf",
     "doc_path": "docs/scripts/desk_fzf.sh.md",
     "hash": "a06d79c79bc1a4b9aaf1119bd201a81b04b5f53d70b8bf337a534dbfd161e6b5"
   },
   "dmenu_run_scripts.py": {
     "file": "dmenu_run_scripts.py",
     "path": "bin/dmenu_run_scripts.py",
-    "description": "Presents a list of runnable scripts via `rofi` integrated with xonsh for selection and execution.",
+    "description": "Rofi-based launcher for your \u201cactive\u201d scripts using xonsh metadata",
     "doc_path": "docs/scripts/dmenu_run_scripts.py.md",
     "hash": "c9883b3043db9dbca56c736b88626ac28f8223754c3cea361636952c9c4ba306"
   },
   "edit_chezmoi_cfg_files.sh": {
     "file": "edit_chezmoi_cfg_files.sh",
     "path": "bin/edit_chezmoi_cfg_files.sh",
-    "description": "Fuzzy-find and edit dotfiles managed by chezmoi, with preview and optional sync/apply.",
+    "description": "Fuzzy-pick chezmoi-managed files/dirs, edit them, then optionally apply/sync",
     "doc_path": "docs/scripts/edit_chezmoi_cfg_files.sh.md",
     "hash": "2a3cadcb5fb5df085ed2e72cdd07a83664fa626e728212d92fcaa8a6239030b6"
   },
   "editor.sh": {
     "file": "editor.sh",
     "path": "bin/editor.sh",
-    "description": "Quickly edit files using fzf, with smart search modes and exclusions.",
+    "description": "Fuzzy-find files with `fd`/`fzf` and open them in `nvim` (optionally sudo)",
     "doc_path": "docs/scripts/editor.sh.md",
     "hash": "3b9fe423e5c400d7cb6e0a2c1b5122fa9854c3e38113fb821612d91b92408696"
   },
   "flexoki_show.sh": {
     "file": "flexoki_show.sh",
     "path": "bin/flexoki_show.sh",
-    "description": "Script to visually display the Flexoki color palette and roles in your terminal",
+    "description": "Print a Flexoki color reference table with ANSI truecolor swatches",
     "doc_path": "docs/scripts/flexoki_show.sh.md",
     "hash": "af13df7cb3217f006e2a36b2d8fdc7131e8313b0711c1f4cea6c54f04f27eddc"
   },
   "ftp-data-mount.sh": {
     "file": "ftp-data-mount.sh",
     "path": "bin/ftp-data-mount.sh",
-    "description": "Mounts a remote DATA folder from Mega via FTP to /mnt/ftp/DATA",
+    "description": "Mounts the MEGA \u201cDATA\u201d FTP endpoint into `/mnt/ftp/DATA`",
     "doc_path": "docs/scripts/ftp-data-mount.sh.md",
     "hash": "57cbb6b2cfe9e74f7db675a20c783fe3672ee53c89ab07382502f100adbe5786"
   },
   "fzf_albumlauncher.xsh": {
     "file": "fzf_albumlauncher.xsh",
     "path": "bin/fzf_albumlauncher.xsh",
-    "description": "Quickly search for and play an album in cmus using fzf and beets.",
+    "description": "Pick a beets album via fzf and enqueue it in cmus",
     "doc_path": "docs/scripts/fzf_albumlauncher.xsh.md",
-    "hash": "c333c4038948a783da307132187fdd95b230498e04afbb3d05cf6ea4e7036be7"
+    "hash": "e3fc4270d42d976bc5289921b02e8a375940e1035ac5e13a2b022da5f894875e"
   },
   "fzf-file-manager.sh": {
     "file": "fzf-file-manager.sh",
     "path": "bin/fzf-file-manager.sh",
-    "description": "Interactive terminal-based file manager leveraging `fzf` and `eza` for rapid navigation.",
+    "description": "FZF-based interactive file browser with rich previews (eza/bat/kitty)",
     "doc_path": "docs/scripts/fzf-file-manager.sh.md",
     "hash": "0db55d180896c91457a3d5196e9eeaf0933c4f529aacd28c9e3c8804b1a0c437"
   },
   "fzfmenu_cache.sh": {
     "file": "fzfmenu_cache.sh",
     "path": "bin/fzfmenu_cache.sh",
-    "description": "Caches and lists executables in PATH instantaneously for fzfmenu launcher",
+    "description": "Build and maintain a cached list of executables found in `$PATH`",
     "doc_path": "docs/scripts/fzfmenu_cache.sh.md",
-    "hash": "2c3674f5d9b6b863c337a821a9045324f5cb5a08276d3c1960fae27f0572ccf0"
+    "hash": "fc4dd0b1fe6d342ec33a779880517927ae3d8fa22d7e1f8ce140a02533403ea0"
   },
   "fzfmenu_run.sh": {
     "file": "fzfmenu_run.sh",
     "path": "bin/fzfmenu_run.sh",
-    "description": "Launches app selection using fzf in a floating terminal, as a `dmenu_run` replacement.",
+    "description": "Pick a command with fzf and run it via systemd-run (user scope)",
     "doc_path": "docs/scripts/fzfmenu_run.sh.md",
     "hash": "3b9c3b8415cc209a411cf4fad84a11bdd1788c5b91a2cdd0030b8b996ecea583"
   },
   "fzfmenu.sh": {
     "file": "fzfmenu.sh",
     "path": "bin/fzfmenu.sh",
-    "description": "Helper script that runs `fzf` inside an `alacritty` terminal instance.",
+    "description": "Launches `fzf` in an Alacritty window, acting like a terminal dmenu helper",
     "doc_path": "docs/scripts/fzfmenu.sh.md",
     "hash": "d3559a9ee9a294e476046d94220c88bdb9f52ef4b9c663f5f54a43a48f80bf08"
   },
   "fzfpreview.sh": {
     "file": "fzfpreview.sh",
     "path": "dev/fzfpreview.sh",
-    "description": "Display file or image contents in fzf preview window using various tools and fallback logic",
+    "description": "FZF preview script for text, binaries, and images (kitty/chafa/imgcat)",
     "doc_path": "docs/scripts/fzfpreview.sh.md",
     "hash": "78a00c33461e9a42b4176632417f391379958252d2104eccadcb583d3a5e4601"
   },
   "fzf_songlauncher.sh": {
     "file": "fzf_songlauncher.sh",
     "path": "bin/fzf_songlauncher.sh",
-    "description": "Quickly choose and play a song with `cmus` using `fzf` fuzzy finder",
+    "description": "Pick a music file with fzf and play it in cmus",
     "doc_path": "docs/scripts/fzf_songlauncher.sh.md",
     "hash": "b815a6fd321a5604431dc7401ef702accc060ed64299304d69eb0b77b3728c5f"
   },
   "generate_commit_message.py": {
     "file": "generate_commit_message.py",
     "path": "bin/generate_commit_message.py",
-    "description": "Generate an AI-powered git commit message from staged changes.",
+    "description": "Generate a commit message from the staged diff (LLM or fallback)",
     "doc_path": "docs/scripts/generate_commit_message.py.md",
-    "hash": "d5ccd8eefc0725c7af5a3ec6f437afca54e88ac40e8ba3f4203aade1ad9e4055"
+    "hash": "027162592e307e6255a672e52d078048de1981b637636de6095bb1f2500c21f7"
   },
   "get_hyperlinks_in_folder.py": {
     "file": "get_hyperlinks_in_folder.py",
     "path": "bin/get_hyperlinks_in_folder.py",
-    "description": "Scans a folder of markdown notes and builds a hyperlink graph visualization.",
+    "description": "Scan a folder of markdown notes for `[[wiki links]]` and build a graph",
     "doc_path": "docs/scripts/get_hyperlinks_in_folder.py.md",
     "hash": "7bd750eb23d907acf5179afc3c86d70841c1010c21f01ec92b24bb949b8c7e9f"
   },
   "get_repos_present_on_host.sh": {
     "file": "get_repos_present_on_host.sh",
     "path": "bin/get_repos_present_on_host.sh",
-    "description": "List and register two-level git repos present under `$GIT_REPOS` for this host.",
+    "description": "Scan `$GIT_REPOS` and record repos present on this machine",
     "doc_path": "docs/scripts/get_repos_present_on_host.sh.md",
     "hash": "21ac52cf494301293b12a7ec4b9a4910a01d531c4436ebbecea625d72a906459"
   },
   "get_scripts_relations.py": {
     "file": "get_scripts_relations.py",
     "path": "bin/get_scripts_relations.py",
-    "description": "Scans user scripts to detect and visualize script dependencies.",
+    "description": "Build and visualize a directed graph of script cross-references",
     "doc_path": "docs/scripts/get_scripts_relations.py.md",
     "hash": "9eddff1f4bd5333462495ce2242998ebc2a9bafb6bc7323c11c1ec863b3f226f"
   },
   "get_scripts_relations.xsh": {
     "file": "get_scripts_relations.xsh",
     "path": "dev/get_scripts_relations.xsh",
-    "description": "Scans `$SCRIPTS` directory for scripts and visualizes intra-folder dependencies as a directed graph",
+    "description": "Build and display a dependency graph between scripts under `$SCRIPTS`",
     "doc_path": "docs/scripts/get_scripts_relations.xsh.md",
     "hash": "562ef3baaf152f5a955516819c08c5cc52c311349488b2da6ff821df1cf02f7c"
   },
   "get-windows.sh": {
     "file": "get-windows.sh",
     "path": "dev/get-windows.sh",
-    "description": "Outputs information about currently open windows in qtile (ID, group, name, wm_class)",
+    "description": "Print Qtile windows as TSV (id, group, name, wm_class)",
     "doc_path": "docs/scripts/get-windows.sh.md",
     "hash": "cd55bcd4b094cd9a715625803dbe460e727d40f3e178f4ac3b2f4c4044bd593b"
   },
   "git_cd.sh": {
     "file": "git_cd.sh",
     "path": "bin/git_cd.sh",
-    "description": "Quickly `cd` to any git project directory found on the system using a fuzzy search.",
+    "description": "Fuzzy-pick a git repo directory from `locate` and print its path",
     "doc_path": "docs/scripts/git_cd.sh.md",
     "hash": "25efbc1325bee69dfad067edfe85f3eceb5ded6ca016a04bb83c28be8c5fa607"
   },
   "git_clone_by_author-repo.sh": {
     "file": "git_clone_by_author-repo.sh",
     "path": "bin/git_clone_by_author-repo.sh",
-    "description": "Clone a GitHub repository via SSH, HTTPS, or from a local path with developer-oriented subfolder convention.",
+    "description": "Clone a GitHub repo into `$GIT_REPOS/<author>/<repo>` with ssh/https/local",
     "doc_path": "docs/scripts/git_clone_by_author-repo.sh.md",
-    "hash": "654f59d7a0f7d49f8d437ab4583bba81437b0a7c1a1170ab3369d3ecb3ec8d45"
+    "hash": "55c4ec4e8abd2b2b41ee89c13f02916d7a6dd5fae7824a5ca9ad7e8d64e0723b"
   },
   "git_update_all_other_repos.sh": {
     "file": "git_update_all_other_repos.sh",
     "path": "bin/git_update_all_other_repos.sh",
-    "description": "Batch-pulls all git repositories (with HTTPS remote) at exact depth 3 under `$GIT_REPOS`",
+    "description": "Bulk `git pull` for repos under `$GIT_REPOS` and report successes/errors",
     "doc_path": "docs/scripts/git_update_all_other_repos.sh.md",
-    "hash": "efd54161739b556cab412a119a1cf1883133ad4a19c0cc51879e9198f2443e2a"
+    "hash": "67ec6ad25e7ad21b44d92379959cc1180d249f61f58c04b765a10acd244b5f18"
   },
   "grub-tune-to-audio-python.py": {
     "file": "grub-tune-to-audio-python.py",
     "path": "bin/grub-tune-to-audio-python.py",
-    "description": "Converts a GRUB_INIT_TUNE string into an MP3 audio file",
+    "description": "Convert a GRUB_INIT_TUNE string into an MP3 audio file",
     "doc_path": "docs/scripts/grub-tune-to-audio-python.py.md",
     "hash": "811571daf90d076e7fe742f2c1d5d2a3a9fbfeab2ddcaa9902f21897288952a8"
   },
   "gsi.sh": {
     "file": "gsi.sh",
     "path": "dev/gsi.sh",
-    "description": "Interactive, robust script for syncing a local Git repository with its remote, handling merges, conflicts, and summary display.",
+    "description": "fetch, fast-forward/rebase, auto-commit, push (optional dry-run)",
     "doc_path": "docs/scripts/gsi.sh.md",
     "hash": "a0cc3ae05222d55c00a409702a781477e6529ee99c8f921234f268a54b07a578"
   },
   "help-pastel.sh": {
     "file": "help-pastel.sh",
     "path": "bin/help-pastel.sh",
-    "description": "Enhanced interactive subcommand and help browser for `pastel` CLI.",
+    "description": "Interactive `pastel` help browser with `fzf` + previews",
     "doc_path": "docs/scripts/help-pastel.sh.md",
     "hash": "bff997b3d82b7cd109c3ce835e5c52790c71d5cd433a8329adeddf410f4e6385"
   },
   "help_pwcli.sh": {
     "file": "help_pwcli.sh",
     "path": "dev/help_pwcli.sh",
-    "description": "Interactive helper for PipeWire CLI tools, displays per-command help with preview.",
+    "description": "Browse PipeWire CLI tools and preview their `-h` help in fzf",
     "doc_path": "docs/scripts/help_pwcli.sh.md",
     "hash": "356edce4bb6072023a2b3ffb03367b5a7ddd1d8935d0fb80992758f945fd4036"
   },
   "html_viewer.py": {
     "file": "html_viewer.py",
     "path": "bin/html_viewer.py",
-    "description": "Simple graphical viewer for local HTML and Markdown, with folder browsing.",
+    "description": "PyQt6 viewer for HTML/Markdown/text with folder index + wiki links",
     "doc_path": "docs/scripts/html_viewer.py.md",
-    "hash": "fa2c3d3559b92720d0b99768cf92540c8cdebee5ad7e8c54fc5e46d32eee2f9f"
+    "hash": "51f4abb3c4690505b9a8799293403c66fcc482ecf35e072a04364691b4df6b76"
   },
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "bin/improved-fzfmenu.sh",
-    "description": "Launches an `fzf` session in an Alacritty floating terminal; flexible output piping.",
+    "description": "Launches `fzf` in a floating foot terminal, optionally piping output",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "22df00fbdd4fc18de85ce9518a53a49705623d80a0e096177e5939de2416a932"
+    "hash": "544ce3bd7da946499fac2a35e0e6dc7d273c416a645e66541c2ef441ee02bd98"
   },
   "install_dependencies.sh": {
     "file": "install_dependencies.sh",
     "path": "bin/install_dependencies.sh",
-    "description": "Bash script to bulk-install essential terminal and desktop utilities.",
+    "description": "Install a base set of Arch packages via paru (AUR helper)",
     "doc_path": "docs/scripts/install_dependencies.sh.md",
     "hash": "82fbb78e5e521328cfd4f1ec89a5073f247f23d3f4cf36991f58c4bae5a593d5"
   },
   "interactive_git_sync.sh": {
     "file": "interactive_git_sync.sh",
     "path": "bin/interactive_git_sync.sh",
-    "description": "Interactive script for syncing multiple git repositories with `fzf` selection.",
+    "description": "Pick a repo via fzf and run your sync-repo.sh on it",
     "doc_path": "docs/scripts/interactive_git_sync.sh.md",
     "hash": "3948253203f862c10842686c224c0961e68f06a7585a845538943daf9f1f7fbf"
   },
   "json_to_markdown.py": {
     "file": "json_to_markdown.py",
     "path": "bin/json_to_markdown.py",
-    "description": "Converts a simple JSON file (list of dicts with \"role\" and \"content\") to a styled Markdown file.",
+    "description": "Convert a chat-like JSON array into a simple Markdown transcript",
     "doc_path": "docs/scripts/json_to_markdown.py.md",
     "hash": "c8a506fc89eb3845043b063c4a4e97559c2a05dc54649addea8a59d5009a43fd"
   },
   "jupyter_new_notebook.xsh": {
     "file": "jupyter_new_notebook.xsh",
     "path": "bin/jupyter_new_notebook.xsh",
-    "description": "Quickly create and open a blank Jupyter notebook in Chromium via dmenu.",
+    "description": "Create an empty Jupyter notebook in ~/projects and open it in Chromium",
     "doc_path": "docs/scripts/jupyter_new_notebook.xsh.md",
     "hash": "6bc684850215243a149d1ecfab38bafe74878a951b9452e2d37506ad3b087448"
   },
   "keyboard-help.sh": {
     "file": "keyboard-help.sh",
     "path": "bin/keyboard-help.sh",
-    "description": "Displays keyboard layout help in a floating terminal with syntax highlighting",
+    "description": "Open a floating xterm showing your current keyboard layout",
     "doc_path": "docs/scripts/keyboard-help.sh.md",
     "hash": "d2b19b7b7278aa48d78f311a664eeddea20bf9523ff619fd3996282805546232"
   },
   "launch_tmux_with_music_player.sh": {
     "file": "launch_tmux_with_music_player.sh",
     "path": "bin/launch_tmux_with_music_player.sh",
-    "description": "Creates a headless `tmux` session named \"MUSIC\" and starts the `cmus` music player within.",
+    "description": "Create a detached tmux session and start `cmus` in it",
     "doc_path": "docs/scripts/launch_tmux_with_music_player.sh.md",
     "hash": "8166a26fcc10d87c3aec22d59114297055896563fceacc8718b0a2551a226508"
   },
   "list-openai-models.sh": {
     "file": "list-openai-models.sh",
     "path": "bin/list-openai-models.sh",
-    "description": "Lists and caches available OpenAI API models with creation dates",
+    "description": "List OpenAI models with creation dates, cached for 24h in TSV",
     "doc_path": "docs/scripts/list-openai-models.sh.md",
     "hash": "34a1817d48e953302a1948a47f9b55118e0be39fc5e8003890866060ae6baef8"
   },
   "list_process.sh": {
     "file": "list_process.sh",
     "path": "bin/list_process.sh",
-    "description": "Lists all systemd services, showing their statuses sorted by type",
+    "description": "List systemd services (all states) sorted by unit file state",
     "doc_path": "docs/scripts/list_process.sh.md",
     "hash": "6eeabc534c4f85d68eb1a1251435faccb726ea020802154f742d8c703529008c"
   },
   "llama-all-scripts-describer.py": {
     "file": "llama-all-scripts-describer.py",
     "path": "bin/llama-all-scripts-describer.py",
-    "description": "Automated Github-style markdown documentation for scripts using Llama 3.1",
+    "description": "Generate per-script markdown docs from your symlink CSV using Ollama",
     "doc_path": "docs/scripts/llama-all-scripts-describer.py.md",
     "hash": "5b78e71d509daeeae4fdecb66d9aad7e9a509ac8ca105f0dacace03304979112"
   },
   "llm-script-describer.py": {
     "file": "llm-script-describer.py",
     "path": "meta/llm-script-describer.py",
-    "description": "Automates documentation generation for user scripts using OpenAI's LLMs",
+    "description": "Auto-generate per-script docs + README summary from your $SCRIPTS repo",
     "doc_path": "docs/scripts/llm-script-describer.py.md",
-    "hash": "bb1c5419f4a48285839c0be1fc9680784cb509dd93e5e472d5600f644e090ebf"
+    "hash": "8141f7f5e9b4521f34726ae24786481a08662bfa26d5c2f4fbaed888e808f092"
   },
   "m3u_creator.sh": {
     "file": "m3u_creator.sh",
     "path": "bin/m3u_creator.sh",
-    "description": "Quickly generate an m3u playlist file from all files in the current directory",
+    "description": "Create an .m3u playlist from all entries in the current directory",
     "doc_path": "docs/scripts/m3u_creator.sh.md",
     "hash": "58a4118b39f470f5fd2137d9899860beb78408e03633e92683898eee38f5e527"
   },
   "mechen_music_transfert.py": {
     "file": "mechen_music_transfert.py",
     "path": "bin/mechen_music_transfert.py",
-    "description": "Syncs a subset of unlistened music albums to the MECHEN MP3 player, fitting within a max size.",
+    "description": "Sync a random selection of unlistened albums to the MECHEN player",
     "doc_path": "docs/scripts/mechen_music_transfert.py.md",
     "hash": "86eddb5434d07d4b325bad8435375ce8306ecba060e29d10beab295d4058f909"
   },
   "megacmd_launch_tmux.sh": {
     "file": "megacmd_launch_tmux.sh",
     "path": "bin/megacmd_launch_tmux.sh",
-    "description": "Launches `mega-cmd` inside a new detached tmux session.",
+    "description": "Start `mega-cmd` in a dedicated detached tmux session",
     "doc_path": "docs/scripts/megacmd_launch_tmux.sh.md",
     "hash": "ce8895fffb7a381655495efa1415e582a452c5a8b6ec1a1224ed8ab78f6cb9c0"
   },
   "megaignore_editor.sh": {
     "file": "megaignore_editor.sh",
     "path": "bin/megaignore_editor.sh",
-    "description": "Fuzzy finder interface for searching, editing, and deleting `.megaignore` files.",
+    "description": "Find, preview, edit or delete `.megaignore` files interactively",
     "doc_path": "docs/scripts/megaignore_editor.sh.md",
     "hash": "685075c0aa2bfec0b4e2d290543b8e92e5a028ddc6746e23ce6762eaef1c6c33"
   },
   "megasync.sh": {
     "file": "megasync.sh",
     "path": "dev/megasync.sh",
-    "description": "Launches MEGAsync with specific environment variables set for Qtile/Arch environments",
+    "description": "Launches `megasync` with env vars to avoid Qt theme/desktop issues",
     "doc_path": "docs/scripts/megasync.sh.md",
     "hash": "7449cbad4dfde0287a298219859cefa96dd0328bfe992e39d48a8f4817f460e1"
   },
   "midi2arch.xsh": {
     "file": "midi2arch.xsh",
     "path": "bin/midi2arch.xsh",
-    "description": "Transform a MIDI controller into a script/keyboard command launcher for Arch",
+    "description": "Map nanoKONTROL2 MIDI CC events to shell commands on Arch Linux",
     "doc_path": "docs/scripts/midi2arch.xsh.md",
     "hash": "6a485338801fffadc810c31264a39280a17d61d46bfe6124cc87a8501df17a5d"
   },
   "midi2cmd.py": {
     "file": "midi2cmd.py",
     "path": "bin/midi2cmd.py",
-    "description": "Manage and monitor MIDI controller input and test connections from the terminal",
+    "description": "List/test/monitor ALSA MIDI controllers and print messages (raw/parsed)",
     "doc_path": "docs/scripts/midi2cmd.py.md",
     "hash": "3cc21d49131d3f132cf0c550f2ab3fc9eba9920d4270d55163aa87c2c5409b6b"
   },
   "minimal-browser.py": {
     "file": "minimal-browser.py",
     "path": "bin/minimal-browser.py",
-    "description": "Minimal local HTML viewer using PyQt6/QWebEngine, for local docs or apps",
+    "description": "Minimal PyQt6 WebEngine viewer for local HTML/docs (or any URL)",
     "doc_path": "docs/scripts/minimal-browser.py.md",
     "hash": "cb5ea545f5584ff4b495e4c9a556c553e949a281cd040fbadaf63edd06786c05"
   },
   "minimal_gpt_call.py": {
     "file": "minimal_gpt_call.py",
     "path": "dev/minimal_gpt_call.py",
-    "description": "Simple script to interact with OpenAI GPT-4o-mini for CSV sample generation.",
+    "description": "Tiny Python script that calls OpenAI chat completions and prints the response",
     "doc_path": "docs/scripts/minimal_gpt_call.py.md",
     "hash": "100c9f17e34d885385903cb245cee614b7c65f285837dccc3498c5628d80827e"
   },
   "new_script_creator.sh": {
     "file": "new_script_creator.sh",
     "path": "bin/new_script_creator.sh",
-    "description": "Quickly create or adapt user scripts with templating and permissions in `$SCRIPTS/bin`.",
+    "description": "Quickly create or import scripts into `$SCRIPTS/bin` with templates",
     "doc_path": "docs/scripts/new_script_creator.sh.md",
     "hash": "31a002266658af01789843a97c12dc5567d376d8e9d54a6e42e81fa9f88309ea"
   },
   "next_album.xsh": {
     "file": "next_album.xsh",
     "path": "bin/next_album.xsh",
-    "description": "Skips playback to the first track of the next album in cmus.",
+    "description": "Skip to the next album in cmus by advancing tracks until album changes",
     "doc_path": "docs/scripts/next_album.xsh.md",
-    "hash": "5e7ec51eb9b5a589cae02b0ada09c3dbf41c379d3f5c7ffc803f06f20cab41a7"
+    "hash": "4080c07cc49755424585aec164677a946ab1052adf999709c24590ae8534bfc0"
   },
   "nvim_in_new_terminal.sh": {
     "file": "nvim_in_new_terminal.sh",
     "path": "bin/nvim_in_new_terminal.sh",
-    "description": "Open a file in `nvim` inside a floating Alacritty terminal window",
+    "description": "Open a floating Alacritty terminal running Neovim for a given file",
     "doc_path": "docs/scripts/nvim_in_new_terminal.sh.md",
     "hash": "614daf8e8da646eaed2c991dd41276cf2b3853bf58eff78b3fcdaf74c49b6076"
   },
   "nvpn-tui-help.sh": {
     "file": "nvpn-tui-help.sh",
     "path": "bin/nvpn-tui-help.sh",
-    "description": "Interactive terminal UI for navigating nordvpn (or other CLI programs) commands and help.",
+    "description": "Browse CLI subcommands and help via fzf using shell completions",
     "doc_path": "docs/scripts/nvpn-tui-help.sh.md",
     "hash": "31e857f5bdd4ced0b0dee87ca7b4d46351557f525ea84a39c0cbb09ce7267d0c"
   },
   "obsidian-vault-selector.sh": {
     "file": "obsidian-vault-selector.sh",
     "path": "bin/obsidian-vault-selector.sh",
-    "description": "Select and open an Obsidian vault from all available vaults using an interactive fuzzy finder.",
+    "description": "Interactive picker to open any Obsidian vault from your config",
     "doc_path": "docs/scripts/obsidian-vault-selector.sh.md",
-    "hash": "a9f8e40562a190559b76d532229f91469b53e9741a477fe918c0d64f7c1c9205"
+    "hash": "ce2848920e1b1d813c717c842046ebcd59c4948cfd1d087b59a5ef417c65039f"
   },
   "obsidian.xsh": {
     "file": "obsidian.xsh",
     "path": "bin/obsidian.xsh",
-    "description": "Quickly select and open an Obsidian vault via a fuzzy menu",
+    "description": "Pick an Obsidian vault from `$HOME/PKM` and open it via URI",
     "doc_path": "docs/scripts/obsidian.xsh.md",
     "hash": "1878546c18f9aa0d3d9b15bff8c9804192665ac6288e06e7479d56e05e58f1da"
   },
   "old-ousse": {
     "file": "old-ousse",
     "path": "dev/old-ousse",
-    "description": "Generates a collection of custom mlocate databases for various areas of your filesystem",
+    "description": "Generate multiple `locate` databases for different filesystem scopes",
     "doc_path": "docs/scripts/old-ousse.md",
     "hash": "c5ab77549d504623e78aa88ee751a2564e07572c08951fb1b13674c753c52288"
   },
   "open_url_in_instance.sh": {
     "file": "open_url_in_instance.sh",
     "path": "bin/open_url_in_instance.sh",
-    "description": "Open a URL in an already running qutebrowser session, or start a new one if needed",
+    "description": "Send a URL to qutebrowser via IPC, or start qutebrowser if needed",
     "doc_path": "docs/scripts/open_url_in_instance.sh.md",
     "hash": "07cb4c8323474de8ea77d40af5bacf9f64dfc9974d6d4ec0f00695f778ef0fd2"
   },
   "openwebui-launcher.sh": {
     "file": "openwebui-launcher.sh",
     "path": "bin/openwebui-launcher.sh",
-    "description": "Bash script to launch Open WebUI and open it in a minimal browser.",
+    "description": "Start Open WebUI in tmux, wait until ready, then open in browser",
     "doc_path": "docs/scripts/openwebui-launcher.sh.md",
-    "hash": "ed5f25a71bb2500d94b9b57da90356c1c22033450926468833092c3a255ea3d0"
+    "hash": "8dd475c8724ed9f8db17ad989898c3cc2ec21eab414ddf51526a8e28458b1ea7"
   },
   "ousse-locate.sh": {
     "file": "ousse-locate.sh",
     "path": "dev/ousse-locate.sh",
-    "description": "Experimental script for managing and searching local `.db` databases with preview support.",
+    "description": "Inspect `.local/share/ousse` DB files (size/age) and list entries",
     "doc_path": "docs/scripts/ousse-locate.sh.md",
     "hash": "1c2bdf87acccb84d512b3376a8c91da7da99fc3d4ee27ab3dfff2642c4c6e83f"
   },
   "ousse-update.sh": {
     "file": "ousse-update.sh",
     "path": "meta/ousse-update.sh",
-    "description": "Custom script to update various `mlocate` databases with personal folder scopes.",
+    "description": "Build multiple `updatedb` databases for different filesystem scopes",
     "doc_path": "docs/scripts/ousse-update.sh.md",
     "hash": "2e8580414542817f0a96aebb7828c035a5b81257c6f40e36f3458fddc2ddd547"
   },
   "pacman-fuzzy-search.sh": {
     "file": "pacman-fuzzy-search.sh",
     "path": "bin/pacman-fuzzy-search.sh",
-    "description": "Fuzzy search and install Arch Linux packages (repo/AUR) using paru and fzf",
+    "description": "Fuzzy-find Arch packages (repo/AUR) with previews and install on enter",
     "doc_path": "docs/scripts/pacman-fuzzy-search.sh.md",
-    "hash": "f7d95cea9b721828fe39fabfb84139e0298ae2299e89586b60f72d51e654ebb0"
+    "hash": "1a6e8e268edcad26120a733d262ac567bea711c476ecbcdf2eca269de8c0ea2a"
   },
   "pdfopener.sh": {
     "file": "pdfopener.sh",
     "path": "bin/pdfopener.sh",
-    "description": "Pick and open any PDF file in your home directory with evince (or fallback).",
+    "description": "Pick a PDF from `$HOME` and open it (Evince fallback)",
     "doc_path": "docs/scripts/pdfopener.sh.md",
-    "hash": "4260c9aa577f4bba822acc8f9dd7530b2623f32776ad06bfad594823ef07b9e5"
+    "hash": "bc6c3d9177304498179c94efa72b4873877a8ecf202ae043966e65c6dfcd7c73"
   },
   "playlist_player.xsh": {
     "file": "playlist_player.xsh",
     "path": "bin/playlist_player.xsh",
-    "description": "Select and play a saved `.m3u` playlist in cmus via dmenu",
+    "description": "Pick a playlist from `~/.playlists` and play it in cmus",
     "doc_path": "docs/scripts/playlist_player.xsh.md",
     "hash": "fa095521eb1eb6db81e3acfb55f958a42d6198c7854a0cdea6895e92bcf32aa9"
   },
   "playlist_randomizer.xsh": {
     "file": "playlist_randomizer.xsh",
     "path": "bin/playlist_randomizer.xsh",
-    "description": "Picks a playlist of albums and plays them in random album order with cmus",
+    "description": "Pick a playlist and play albums in randomized order via cmus",
     "doc_path": "docs/scripts/playlist_randomizer.xsh.md",
-    "hash": "d1434c6d839f3ab4750d81327d8ee195c67982a8817b3a43b7a7ec96ac117681"
+    "hash": "f5480d5f8cef45b55cfeac626d9a5281b95e24813ff1bef55063db9bb71633c3"
   },
   "ppm-color-reducer": {
     "file": "ppm-color-reducer",
     "path": "bin/ppm-color-reducer",
-    "description": "Reduce colors in a P6 PPM image to a user-defined palette",
+    "description": "Reduce a P6 PPM image to the nearest colors from a given palette",
     "doc_path": "docs/scripts/ppm-color-reducer.md",
-    "hash": "0938ae98863c44fb70df6b5cba51575aed68b74bb0df568d3a2b1c1dc777be2d"
+    "hash": "e8bf3eaa0d732b5c06dd793059ffe6ea64de7537fed72781ec98d9e71c9cd6de"
   },
   "pyman.sh": {
     "file": "pyman.sh",
     "path": "bin/pyman.sh",
-    "description": "Interactive fuzzy finder for Python topics, keywords, builtins, and installed modules/packages.",
+    "description": "Interactive pydoc/fzf browser for Python topics, keywords, builtins and libs",
     "doc_path": "docs/scripts/pyman.sh.md",
     "hash": "5a09f668349f0dc019f369cfb93a964e54e5aa4aa84641583bfc5f1901338303"
   },
   "qtile_dice_group.py": {
     "file": "qtile_dice_group.py",
     "path": "bin/qtile_dice_group.py",
-    "description": "Instantly switches to the workspace (\"group\") with a number summing to 7 with the current one.",
+    "description": "Switch to the complementary group (dice sum to 7) in Qtile",
     "doc_path": "docs/scripts/qtile_dice_group.py.md",
     "hash": "5c6c47fddc043e42d8888164b0e640f37ef846d0685d1549afa85eac7d4b5a9e"
   },
   "qtile_window_to_group_and_switch.py": {
     "file": "qtile_window_to_group_and_switch.py",
     "path": "bin/qtile_window_to_group_and_switch.py",
-    "description": "Moves the current focused window to the next or previous qtile group and switches focus to that group",
+    "description": "Move focused window to adjacent qtile group and switch to it",
     "doc_path": "docs/scripts/qtile_window_to_group_and_switch.py.md",
     "hash": "50950d355649d0f31334cf320895d4a2ec9494abc557287194dfdf0c4fac5c40"
   },
   "quick-pass.sh": {
     "file": "quick-pass.sh",
     "path": "bin/quick-pass.sh",
-    "description": "Fuzzy-find and copy your pass(1) passwords using `fzf` with one-click paste/edit support.",
+    "description": "Fuzzy-pick a pass entry and type it via ydotool",
     "doc_path": "docs/scripts/quick-pass.sh.md",
-    "hash": "85ca24bad7b8181add8d7c48cb0ebabc68dc0e98fb8fe7bd42fd06087a733aaa"
+    "hash": "897ca56ffe829861698949b0f951efc143d8ff56609cfcee7455fca4e6b119f3"
   },
   "qutebrowser-modify-source-bookmarks.sh": {
     "file": "qutebrowser-modify-source-bookmarks.sh",
     "path": "bin/qutebrowser-modify-source-bookmarks.sh",
-    "description": "Synchronizes qutebrowser bookmarks, quickmarks, and sessions with chezmoi dotfiles.",
+    "description": "Mirror qutebrowser bookmarks/quickmarks and sessions into your chezmoi source",
     "doc_path": "docs/scripts/qutebrowser-modify-source-bookmarks.sh.md",
     "hash": "a532bdb54a15ef7d87e553788663a9247bf77097e5dcdd671b5bf862b8365507"
   },
   "random_album.xsh": {
     "file": "random_album.xsh",
     "path": "bin/random_album.xsh",
-    "description": "Selects 10 random albums from your cmus library and plays them.",
+    "description": "Build a random-albums playlist from cmus library and start playback",
     "doc_path": "docs/scripts/random_album.xsh.md",
-    "hash": "dc78e3509c09e8fa7b65ba00d841ab10d65053991e965760e04f6914b8f04bcc"
+    "hash": "cd747611ec5e57fbe6f0176f469c951a0a780a22e9ef5bc16d22e7b2c9776ce7"
   },
   "random_wallpapers.xsh": {
     "file": "random_wallpapers.xsh",
     "path": "bin/random_wallpapers.xsh",
-    "description": "Script to set a random wallpaper from the `~/.wallpapers` directory.",
+    "description": "Pick a random wallpaper from `~/.wallpapers` and set it",
     "doc_path": "docs/scripts/random_wallpapers.xsh.md",
     "hash": "32d2b9d6fb0ee11762249bc8d29c1110b1a967ce6e622da9b6031b2b986a1ac8"
   },
   "read_the_fucking_manual.sh": {
     "file": "read_the_fucking_manual.sh",
     "path": "bin/read_the_fucking_manual.sh",
-    "description": "Query and analyze your `man`/`batman` usage history for most searched entries.",
+    "description": "Show your most searched man/batman pages from shell history",
     "doc_path": "docs/scripts/read_the_fucking_manual.sh.md",
     "hash": "9db77412c74ed8d78e322ee35be680da38d3920498ed6f16839c041c3a1024fa"
   },
   "rgfzf.sh": {
     "file": "rgfzf.sh",
     "path": "bin/rgfzf.sh",
-    "description": "Search for text using ripgrep + fuzzy finder, preview with bat, open in neovim.",
+    "description": "Fuzzy-search ripgrep matches, preview with bat, open in Neovim at line",
     "doc_path": "docs/scripts/rgfzf.sh.md",
     "hash": "c23d6895c89f4c9b2ffaf02f14bb50ba647e45e0cdcbd8818578cd90a924f386"
   },
   "sandisk_music_transfert.py": {
     "file": "sandisk_music_transfert.py",
     "path": "bin/sandisk_music_transfert.py",
-    "description": "Transfers unplayed albums from your music library to your Sandisk media player, automatically fitting them to available space.",
+    "description": "Randomly select unlistened albums and sync them to a Sandisk player",
     "doc_path": "docs/scripts/sandisk_music_transfert.py.md",
     "hash": "44d8031cab7d20a13716ff203860aaa2a90d6f8e1c8648e2105031650b7ab1a0"
   },
   "screenshot.sh": {
     "file": "screenshot.sh",
     "path": "bin/screenshot.sh",
-    "description": "Simple utility for taking fullscreen or user-selected screenshots using `grim`.",
+    "description": "Take a screenshot with Grim, optionally selecting an area",
     "doc_path": "docs/scripts/screenshot.sh.md",
     "hash": "b6d456b8f8e68bcc0a065e7a5d3afec4a57c3ca09b07d50651765d919965461f"
   },
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "bin/script_launcher.sh",
-    "description": "Fuzzy-find and launch scripts with enhanced previews and editing options",
+    "description": "Interactive launcher for `$SCRIPTS` entries with fzf + previews",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "8d0eb841595bcfb9e40739a4585e47ffdd2e6f9f955799f975f6a552a0f98dec"
+    "hash": "b6566a44cccf21630d2cc97bb54b03f8be11a3e960659981d5e0080173f76910"
   },
   "script.sh": {
     "file": "script.sh",
     "path": "dev/script.sh",
-    "description": "Launches `fzf` in an `xterm` window and types the selected entry using `xdotool`.",
+    "description": "Run `fzf` in xterm and type the selection into the focused window",
     "doc_path": "docs/scripts/script.sh.md",
     "hash": "2dc7e7cfd3474559d06ada59ffa6ff1b23ffe33dfc04c2091ea7f9ccaea22657"
   },
   "select_script": {
     "file": "select_script",
     "path": "bin/select_script",
-    "description": "Interactively select and execute a script from cached metadata using Rofi",
+    "description": "Rofi-based picker to execute a script from a cached CSV description list",
     "doc_path": "docs/scripts/select_script.md",
-    "hash": "8118344df099ac6269278bee4ff4541cbc7640e1675d01d8be75274c1cb86d6b"
+    "hash": "bcb237db17bfaa1309facb6f18f7aebb1b6afd335a865b7aefa9f25c2ce53d77"
   },
   "send_email.py": {
     "file": "send_email.py",
     "path": "bin/send_email.py",
-    "description": "Script to send an email from the command line with argparse and `smtplib`",
+    "description": "Send a plaintext email via Gmail SMTP using a password from `pass`",
     "doc_path": "docs/scripts/send_email.py.md",
     "hash": "0ef7394851b12999f8a8d8a3b14bbecfdb2ca1762d93442c1077a36c704a4030"
   },
   "setting-up-syncs.sh": {
     "file": "setting-up-syncs.sh",
     "path": "bin/setting-up-syncs.sh",
-    "description": "Automates MEGA cloud syncs for key folders and differentiates setup by host.",
+    "description": "Register Mega sync pairs for XDG folders and host-specific storage",
     "doc_path": "docs/scripts/setting-up-syncs.sh.md",
     "hash": "d772758354ea07e584b1927cc5d525584bd8aaeb92d3c3c5d3eaf8ccbbb8f53e"
   },
   "shell_history_info.sh": {
     "file": "shell_history_info.sh",
     "path": "bin/shell_history_info.sh",
-    "description": "Analyze and summarize the most frequent lines, words, or characters in your shell command history files.",
+    "description": "Show most frequent lines/words/chars/options in your shell history",
     "doc_path": "docs/scripts/shell_history_info.sh.md",
     "hash": "863f95e8216fa68dc696472bde0e1a6ce1f142508803fce66d4a3d27b9cbdfbc"
   },
   "show-all-qutebrowser-scripts.sh": {
     "file": "show-all-qutebrowser-scripts.sh",
     "path": "bin/show-all-qutebrowser-scripts.sh",
-    "description": "Display the content of Qutebrowser's bundled scripts using `bat` for preview",
+    "description": "Display qutebrowser\u2019s installed script files with syntax highlighting",
     "doc_path": "docs/scripts/show-all-qutebrowser-scripts.sh.md",
     "hash": "68234c42e1028cb214850ea219544876364a0405966195882ebac2c0b0f2163e"
   },
   "show_keyboard_layout.py": {
     "file": "show_keyboard_layout.py",
     "path": "bin/show_keyboard_layout.py",
-    "description": "Prints a custom visual keyboard layout to the terminal for reference.",
+    "description": "Print a preformatted keyboard layout map to stdout",
     "doc_path": "docs/scripts/show_keyboard_layout.py.md",
     "hash": "bd6c72e09cc2eae94f78291e30a52649a5bee51dc836329901b54b3f9e1d09ff"
   },
   "snekai.sh": {
     "file": "snekai.sh",
     "path": "lib/snekai/snekai.sh",
-    "description": "Utility for launching Jupyter Lab, Jupyter Notebook, or IPython from a dedicated Python virtual environment",
+    "description": "Launch Jupyter Lab/Notebook/IPython from the `snekai` virtualenv",
     "doc_path": "docs/scripts/snekai.sh.md",
     "hash": "17d24d17a5e9afe6681507b6c26e5dc1f422dcfc85c2522de14aefcca1e3f3ed"
   },
   "songlauncher.sh": {
     "file": "songlauncher.sh",
     "path": "bin/songlauncher.sh",
-    "description": "Quickly search and play music files via dmenu and cmus",
+    "description": "Pick a track via dmenu and play it in cmus",
     "doc_path": "docs/scripts/songlauncher.sh.md",
     "hash": "cc9a7542ff3f34c6bbaef5016289b924120048631c4c96315ba6dc73368f2d43"
   },
   "speach-to-text.py": {
     "file": "speach-to-text.py",
     "path": "bin/speach-to-text.py",
-    "description": "Python script for recording audio via a selected device and transcribing it to text using OpenAI Whisper.",
+    "description": "Record audio from a chosen device and transcribe it with OpenAI Whisper",
     "doc_path": "docs/scripts/speach-to-text.py.md",
-    "hash": "65710fe2a17044d94f855147bc81cb275f0b19319f77103bcfa88de007776a03"
+    "hash": "0dec55c890074059f648a2d5b0d6d643ca0935d8b0fd6e6bcfc31fdfa2ab5251"
   },
   "ssh-fzf.sh": {
     "file": "ssh-fzf.sh",
     "path": "bin/ssh-fzf.sh",
-    "description": "Fuzzy-find and execute ssh commands from `pass` using `fzf`.",
+    "description": "Pick an SSH command from pass via fzf and execute it in a login shell",
     "doc_path": "docs/scripts/ssh-fzf.sh.md",
     "hash": "11f19f60408dab1b6577b068516b9a37ae5fec72d21fae325b5eb45fad8c43f4"
   },
   "sync-repo.py": {
     "file": "sync-repo.py",
     "path": "bin/sync-repo.py",
-    "description": "Python utility for automating git repository synchronization with rich terminal UI, local/remote conflict handling, and progress feedback.",
+    "description": "Sync a git repo with interactive conflict handling and rich output",
     "doc_path": "docs/scripts/sync-repo.py.md",
-    "hash": "24b92cc7faa53a381672fbda3b1c94e2fc1e71602c282cb43821b55f965a8e53"
+    "hash": "603500f3422520cd3ab50fbdad59c162f3550e69af7f5a0c64b345b4f7775c54"
   },
   "sync-repo.sh": {
     "file": "sync-repo.sh",
     "path": "bin/sync-repo.sh",
-    "description": "Synchronize a local git repository with its remote, handling stashes, conflicts, and pretty output",
+    "description": "fetch, rebase/ff, stash, auto-commit, push, pretty output",
     "doc_path": "docs/scripts/sync-repo.sh.md",
     "hash": "240532bb7de6e943b1e26cdc91225c0b66e3d4a38638734f58f8b43b3f23798d"
   },
   "sync-repo-simple.py": {
     "file": "sync-repo-simple.py",
     "path": "bin/sync-repo-simple.py",
-    "description": "Automates syncing a git repository, handling conflicts, stashing, and summary output.",
+    "description": "pull/rebase safely, auto-commit local changes, then push",
     "doc_path": "docs/scripts/sync-repo-simple.py.md",
     "hash": "85c5a7c1b093739f1106217dfe135f02ff942f88b4c7f60c39daab783f22ea41"
   },
   "sync-repo-simple.sh": {
     "file": "sync-repo-simple.sh",
     "path": "bin/sync-repo-simple.sh",
-    "description": "Automates the process of syncing a local git repository with its remote, including smart error handling and conflict resolution.",
+    "description": "Sync a git repo with remote, stashing local changes and auto-committing",
     "doc_path": "docs/scripts/sync-repo-simple.sh.md",
     "hash": "9976259c0646dab2ddaca293b8a80a9c6d4c1d7a7455a4e77a36977b59f4fd0f"
   },
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
     "path": "bin/terminal_with_command.sh",
-    "description": "Opens a floating Alacritty terminal to execute a given command, showing output and staying open.",
+    "description": "Open a floating Alacritty terminal, run a command, then stay open",
     "doc_path": "docs/scripts/terminal_with_command.sh.md",
     "hash": "1b3d05c8db46c3a8ad339197d1f87a97f7332f8ff8e2777ed8e1b8e022fdc7a6"
   },
   "text_spectrogram.py": {
     "file": "text_spectrogram.py",
     "path": "dev/text_spectrogram.py",
-    "description": "Live real-time text-based spectrogram using microphone input and ANSI colors.",
+    "description": "Live terminal spectrogram from microphone input with adjustable gain",
     "doc_path": "docs/scripts/text_spectrogram.py.md",
     "hash": "8841ed8e201a0de863a79eec70a45a64964f2a9865e99f25ab6e1d95910f4390"
   },
   "tmux_manager.py": {
     "file": "tmux_manager.py",
     "path": "bin/tmux_manager.py",
-    "description": "Python utility to manage named tmux sessions using a YAML configuration file",
+    "description": "Manage and launch tmux sessions/windows from a YAML config",
     "doc_path": "docs/scripts/tmux_manager.py.md",
-    "hash": "565f9f51b18bec72792785e0ae02c850770bc987666ff477e8312b9579195110"
+    "hash": "5a5375282e5c68b666b6e174dcc1d6643fd239ec60973a040af6ff5d4b754f53"
   },
   "tmux_session.sh": {
     "file": "tmux_session.sh",
     "path": "bin/tmux_session.sh",
-    "description": "Minimal script to launch a detached tmux session with a specified window and command",
+    "description": "Create a detached tmux session/window and run a command inside",
     "doc_path": "docs/scripts/tmux_session.sh.md",
     "hash": "4c67c514866841997f518ca20c06aaa14501cbe4ed76427363fdb760797baec2"
   },
   "toggle_picom.sh": {
     "file": "toggle_picom.sh",
     "path": "bin/toggle_picom.sh",
-    "description": "Simple script to toggle the Picom compositor on and off with notifications.",
+    "description": "Toggle `picom` compositor on/off with desktop notifications",
     "doc_path": "docs/scripts/toggle_picom.sh.md",
     "hash": "79a36619b1e24601df35b6ce4931f142b29855efb7ece055acb83f089d4b1700"
   },
   "transform_symlink.sh": {
     "file": "transform_symlink.sh",
     "path": "bin/transform_symlink.sh",
-    "description": "Convert symlinks into copies of their targets (both files and directories).",
+    "description": "Turn symlinks into copies of their targets (file or directory)",
     "doc_path": "docs/scripts/transform_symlink.sh.md",
     "hash": "7f7adf05e68fafb56cbf58221a0e087c939a646dd7466e1e72233a37bfe98a33"
   },
   "try_the_bat_suit.sh": {
     "file": "try_the_bat_suit.sh",
     "path": "bin/try_the_bat_suit.sh",
-    "description": "Fuzzy-finds and previews files with syntax highlighting in terminal using `bat` and `fzf`.",
+    "description": "Pick a file and preview it with `bat` using a chosen syntax language",
     "doc_path": "docs/scripts/try_the_bat_suit.sh.md",
     "hash": "af31e4aae58c605accf6eb3b4c4377915d845058ad5aa2dce07aae060d848dc3"
   },
   "tui-gpt.py": {
     "file": "tui-gpt.py",
     "path": "bin/tui-gpt.py",
-    "description": "Interactive TUI chat application for GPT models themed as \"Mother\" from Aliens.",
+    "description": "Textual-based TUI chat client streaming responses from OpenAI",
     "doc_path": "docs/scripts/tui-gpt.py.md",
-    "hash": "1a3b038f3df683969a6e8659edc8cc4e966f2a907f414c9e5d24390f7d2d3bd5"
+    "hash": "000c1c04bd457eae9607da9dbf31d9b472269b80a3edc40c368732ef9cca86ee"
   },
   "ugc-python.py": {
     "file": "ugc-python.py",
     "path": "dev/ugc-python.py",
-    "description": "Extracts and lists movie titles from HTML input piped via stdin.",
+    "description": "Extracts and numbers movie titles from UGC-like HTML read from stdin",
     "doc_path": "docs/scripts/ugc-python.py.md",
     "hash": "52f0ce0cf8733d6432c3669391a1a52730144c3829695c42c5cf0019ebbc6d34"
   },
   "update_birthdays.sh": {
     "file": "update_birthdays.sh",
     "path": "meta/update_birthdays.sh",
-    "description": "Extracts and records the creation date (\"birthday\") of all files in your scripts directory using git history.",
+    "description": "Rebuilds `bdays.csv` with each script\u2019s \u201cbirth date\u201d from git history",
     "doc_path": "docs/scripts/update_birthdays.sh.md",
     "hash": "a7cddd6a3800605709c26c7e35820eab3c4e277dd0b7788adb8d581979f32f34"
   },
   "update_env.xsh": {
     "file": "update_env.xsh",
     "path": "bin/update_env.xsh",
-    "description": "Extracts current environment API keys and writes them to a `.env` file.",
+    "description": "Writes `*_API_KEY` environment vars into `~/.env`",
     "doc_path": "docs/scripts/update_env.xsh.md",
     "hash": "ad12534f449d6846549b43c02cfa9dbc085e819bace7b25a6551bfcd8f5f0386"
   },
   "utils_update_symlinks.sh": {
     "file": "utils_update_symlinks.sh",
     "path": "meta/utils_update_symlinks.sh",
-    "description": "maintain and update symlinks for `$SCRIPTS` into `~/.local/bin`, logging actions and cleaning obsolete links",
+    "description": "Sync executable symlinks from `$SCRIPTS` into `~/.local/bin` and log results",
     "doc_path": "docs/scripts/utils_update_symlinks.sh.md",
     "hash": "627aa63335f2ef392472a4da765a06cb819f43db4393e0898692f4883a615da2"
   },
   "utopia.sh": {
     "file": "utopia.sh",
     "path": "dev/utopia.sh",
-    "description": "Download selected Utopia Bordeaux film pages to HTML files",
+    "description": "Download Utopia Bordeaux film pages for a fixed list of film IDs",
     "doc_path": "docs/scripts/utopia.sh.md",
     "hash": "980f8456a8f84f3efb5e61726dbc2b26139b040f63b537c3d16206e6ff5e2201"
   },
   "vimwiki.sh": {
     "file": "vimwiki.sh",
     "path": "bin/vimwiki.sh",
-    "description": "Fuzzy search and open Markdown notes in Vim from your notes directory.",
+    "description": "Pick a Markdown note with fzf and open it in Neovim",
     "doc_path": "docs/scripts/vimwiki.sh.md",
     "hash": "65d8890a40436337d033371be359624667889ffa5c1d5e2c8ee3d4ac16335f7f"
   },
   "vox.py": {
     "file": "vox.py",
     "path": "bin/vox.py",
-    "description": "Command-line utility to list and describe Vox amp modeling options",
+    "description": "Print and filter a Vox amp-model option table from the terminal",
     "doc_path": "docs/scripts/vox.py.md",
     "hash": "c11a48deacf487b191b891ab5e71c3c86cf713e0de96542c77741c2ef846fe24"
   },
   "wallpaper.sh": {
     "file": "wallpaper.sh",
     "path": "bin/wallpaper.sh",
-    "description": "Randomly select, set, or browse wallpapers using feh and optional GUIs.",
+    "description": "Set wallpapers (random/select/gui) and keep a history for \u201cprevious\u201d",
     "doc_path": "docs/scripts/wallpaper.sh.md",
     "hash": "4a5ad13e46ca83020685ee7fd809138f0848e6c12ec8b33de8c89e101daab946"
   },
   "wrapper.sh": {
     "file": "wrapper.sh",
     "path": "dev/wrapper.sh",
-    "description": "Wraps execution of any command, logs invocation with timestamp.",
+    "description": "Runs a command, then logs it with a timestamp to a fixed log file",
     "doc_path": "docs/scripts/wrapper.sh.md",
     "hash": "5a78482062da94105aa6a31e71ea725a49d5a8814f3e2d1e2276ec2aa8f08e11"
   },
   "xephyr.sh": {
     "file": "xephyr.sh",
     "path": "dev/xephyr.sh",
-    "description": "Launches a nested X session with Xephyr, running a development Qtile instance.",
+    "description": "Launch Qtile in Xephyr with a terminal for safe config testing",
     "doc_path": "docs/scripts/xephyr.sh.md",
     "hash": "2dce10ffc89ad3b84dad83cad853c3c7bcff865c7efe97395ca1cd71491cca86"
   },
   "you_are_not_documented.sh": {
     "file": "you_are_not_documented.sh",
     "path": "bin/you_are_not_documented.sh",
-    "description": "Finds scripts lacking specific inline documentation tags",
+    "description": "#` documentation marker",
     "doc_path": "docs/scripts/you_are_not_documented.sh.md",
     "hash": "459ea82b462cd6185cbd300f5bec9e2a05f907f90d3a14344c082490241e5ebd"
+  },
+  "birdcage.sh": {
+    "file": "birdcage.sh",
+    "path": "bin/birdcage.sh",
+    "description": "Run a command in a private Firejail cage with a domain-whitelisted HTTP(S) proxy",
+    "doc_path": "docs/scripts/birdcage.sh.md",
+    "hash": "85125adf8e4bbeae94aa5f48c3c67b7242e8eb847fe33df1ad03d39986000151"
+  },
+  "build_and_link.sh": {
+    "file": "build_and_link.sh",
+    "path": "meta/build_and_link.sh",
+    "description": "Build a C/C++/Python app into `$SCRIPTS/bin` and symlink it locally",
+    "doc_path": "docs/scripts/build_and_link.sh.md",
+    "hash": "5b9d593b132d12cfec9205caa0a04fa639fac6ff8bd3f2d6950898cf347c10cd"
+  },
+  "env.sh": {
+    "file": "env.sh",
+    "path": "lib/env.sh",
+    "description": "Modular environment loader for your scripts (paths, colors, fzf, git)",
+    "doc_path": "docs/scripts/env.sh.md",
+    "hash": "7cea16541510c0077a2c2ee65b601697d52cc40177f8d97d9eb646b09771076d"
+  },
+  "hyprlaunch.sh": {
+    "file": "hyprlaunch.sh",
+    "path": "bin/hyprlaunch.sh",
+    "description": "Launch Hyprland from a TTY with clean Wayland/systemd-user env handling",
+    "doc_path": "docs/scripts/hyprlaunch.sh.md",
+    "hash": "45fe866158c31e149455ed8736af802a9d68a4fd5fe013573816ae22b325abcd"
+  },
+  "_megaCMD-download_1.sh": {
+    "file": "_megaCMD-download_1.sh",
+    "path": "bin/_megaCMD-download_1.sh",
+    "description": "Downloads MEGAcmd Arch package and installs it via pacman",
+    "doc_path": "docs/scripts/_megaCMD-download_1.sh.md",
+    "hash": "36e7f6d4ebf283b733dda28666edbf968890067257dfff3317f8783fe2610b4c"
+  },
+  "ollama-list.sh": {
+    "file": "ollama-list.sh",
+    "path": "bin/ollama-list.sh",
+    "description": "Fetch and format Ollama library models with a 7-day local cache",
+    "doc_path": "docs/scripts/ollama-list.sh.md",
+    "hash": "731a5dd1bc5b8d4be234c91f40daf964b1c728209777bb47a4f4f26b34bc31fc"
+  },
+  "openwebui_serve.sh": {
+    "file": "openwebui_serve.sh",
+    "path": "bin/openwebui_serve.sh",
+    "description": "Launch Open WebUI via uvx with data stored in XDG data directory",
+    "doc_path": "docs/scripts/openwebui_serve.sh.md",
+    "hash": "52574d683be04fd527da0a9e1a8d3cebe802272a24dcfac3b41b46a1ddb729c4"
+  },
+  "qdrant_local.py": {
+    "file": "qdrant_local.py",
+    "path": "bin/qdrant_local.py",
+    "description": "Start a local Qdrant Docker container with persistent storage and ports",
+    "doc_path": "docs/scripts/qdrant_local.py.md",
+    "hash": "721f7f93d303ae38fc05117d21a3a31fd92ebcf66ed552097b90b6d4fbd03ae8"
+  },
+  "test-env.sh": {
+    "file": "test-env.sh",
+    "path": "test/test-env.sh",
+    "description": "Quick sanity checks for `env.sh` minimal and feature-specific loads",
+    "doc_path": "docs/scripts/test-env.sh.md",
+    "hash": "c737d5b4cc3e43b2f53b4e2e15d485b4ee34035009d3921bf6544bf4f6dae8a3"
+  },
+  "toggle-performance.sh": {
+    "file": "toggle-performance.sh",
+    "path": "bin/toggle-performance.sh",
+    "description": "Toggle between tuned balanced and throughput-performance CPU profiles",
+    "doc_path": "docs/scripts/toggle-performance.sh.md",
+    "hash": "9a2d05388c47e52b0e7c25092cf7ed02d6f9bd6795dd2b1e3f80e009d828185d"
   }
 }
-

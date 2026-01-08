@@ -1,72 +1,58 @@
-# Edit Chezmoi Config Files
+# Chezmoi Config Picker & Editor
 
 ---
 
-**edit_chezmoi_cfg_files.sh**: Fuzzy-find and edit dotfiles managed by chezmoi, with preview and optional sync/apply.
+**edit_chezmoi_cfg_files.sh**: Fuzzy-pick chezmoi-managed files/dirs, edit them, then optionally apply/sync
 
 ---
 
 ### Dependencies
 
-- `chezmoi`: Manages personal dotfiles as source-controlled templates.
-- `eza`: `ls` replacement for colorful/fancy directory listings.
-- `fzf`: Command-line fuzzy finder for interactive file selection.
-- `bat`: `cat` clone with syntax highlighting and Git integration (for file preview).
-- `fd`: Simple, fast file finder (used for globbing files in directories).
-- `$SCRIPTS/sync-repo.sh`: User script to sync repositories. (Script references this for optional syncing.)
-- Optional: `nvim` (currently commented out), for editing files.
-
----
+- `bash`
+- `chezmoi` — lists managed paths, opens editor via `chezmoi edit`, applies via `chezmoi apply`
+- `fzf` — interactive picker with live reload bindings
+- `bat` — file preview with syntax highlighting
+- `eza` — colored listing + icons (used as fzf input + dir preview)
+- `fd` — expands a selected directory into a list of files to edit
+- `$SCRIPTS/sync-repo.sh` — custom script to sync your dotfiles repo (used on “apply and sync”)
+- Environment: `$CHEZMOI` and `$SCRIPTS` are assumed to exist for the sync path
 
 ### Description
 
-This script provides an interactive way to browse, preview, and edit dotfiles managed by chezmoi on your Arch Linux system. Leveraging the fuzzy finder `fzf`, the script initially lists all files managed by chezmoi, allowing quick filtering and selection. Pressing <kbd>Alt+D</kbd> toggles to directory mode, allowing navigation into directories managed by chezmoi. Previews are shown for files (with `bat`) and folders (with tree view from `eza`).
+This script is a TUI workflow for managing your chezmoi dotfiles on Arch (ideal to bind in qtile). It:
 
-Once a file or directory is selected, the script opens it for editing via `chezmoi edit`. After editing, you are prompted to:
-
-- Apply the changes with `chezmoi apply` (`a` or Enter)
-- Apply and also sync the repo (`s`)
-- Exit without applying/syncing (`x`)
-
-The script is engineered for quick use within a terminal and can be easily bound to a custom keybinding in qtile for even snappier access to your chezmoi workflow.
-
-**Key implemented functions:**
-- `remove_icons`: Filters out terminal icons/escape sequences for clean file operations.
-- `preview_command`: Generates live previews for files (using `bat`) and directories (using `eza`).
-- `search_files/search_dirs`: Returns lists of managed files/directories for selection/reloading in fzf.
-
----
+1. Saves your starting directory (`INITIAL_DIR`) and switches to `$HOME`.
+2. Builds an fzf list from `chezmoi managed`, formatted through `eza` (with colors/icons).
+3. Provides a preview pane:
+   - If the selected item is a file: uses `bat` with full style and forced color; includes filetype mappings for `*autosave` and `*.conf` as INI.
+   - If it’s a directory: shows a tree via `eza -T`.
+4. Lets you toggle the list contents:
+   - `Alt-f`: reload managed files
+   - `Alt-d`: reload managed directories
+5. After selection:
+   - File → `chezmoi edit <path>`
+   - Directory → `chezmoi edit $(fd . -tf <dir>)` (batch edit all files under it)
+6. Prompts to apply and optionally sync your repo, then returns to the original directory.
 
 ### Usage
 
-**Typical workflow (`tldr` version):**
+Run interactively (needs a terminal):
 
-```sh
-~/.scripts/bin/edit_chezmoi_cfg_files.sh
-```
+- Launch:
+  - `~/.scripts/bin/edit_chezmoi_cfg_files.sh`
+- In fzf:
+  - `Alt-f` → show files
+  - `Alt-d` → show directories
+  - `Enter` → edit selection
+- After editing:
+  - `a` (default) → `chezmoi apply`
+  - `s` → `chezmoi apply` + `$SCRIPTS/sync-repo.sh $CHEZMOI`
+  - `x` → exit without applying
 
-**Within fzf prompt:**
-- Filter to find the file or directory managed by chezmoi you'd like to edit.
-- Press <kbd>Alt+D</kbd> to switch to directory view.
-- Press <kbd>Alt+F</kbd> to switch back to file view.
-- Press <kbd>Enter</kbd> on your selection.
-
-**After editing:**
-```
-- [a] Apply changes
-- [s] Apply and sync repo
-- [x] Exit (no apply)
-```
-
-This script is best launched from a terminal or bound to a custom key in your `qtile` configuration.
+Suggested qtile binding example:
+- `lazy.spawn("alacritty -e ~/.scripts/bin/edit_chezmoi_cfg_files.sh")`
 
 ---
 
 > [!TIP]
-> **Critique / Potential Improvements:**
-> - Script assumes `$SCRIPTS/sync-repo.sh` and `$CHEZMOI` are properly set up in the environment. Consider adding checks and clearer error handling for missing variables or dependencies.
-> - Usage of `chezmoi edit $(fd . -tf "$path")` is a bit ambiguous: if the chosen directory contains many files, you may want to provide more selective logic, otherwise this could open an excessive number of editors or possibly fail.
-> - The script could leverage `chezmoi source-path` to ensure file paths are correct, especially with unusual chezmoi configuration.
-> - Some code (e.g. `nvim` integration) is commented out; clarify or remove.
-> - For large chezmoi repos, consider limiting the search scope or preview size for responsiveness.  
-> - `remove_icons` may not be foolproof for all terminal-icon themes; further refinement might be needed for maximum robustness.
+> A few rough edges to consider: (1) `path="$selected"` is likely wrong when you `cd $HOME` and `eza` outputs relative paths; you probably want `path="$HOME/$selected"` after `remove_icons`. (2) Unquoted variables (`cd $HOME`, `chezmoi edit $(fd ...)`) can break on spaces—quote defensively and use arrays. (3) `remove_icons` strips non-printables but icons are printable; better to disable icons for the fzf source or output a raw path column for selection while still previewing with icons. (4) `SHELL=$(which bash)` is unused except as an env var name shadow; prefer `SHELL="$(command -v bash)"` or remove it.

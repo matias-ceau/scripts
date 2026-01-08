@@ -1,56 +1,64 @@
-# Simple Bash Command Wrapper
+# Command Wrapper + Logger
 
 ---
 
-**wrapper.sh**: Wraps execution of any command, logs invocation with timestamp.
+**wrapper.sh**: Runs a command, then logs it with a timestamp to a fixed log file
 
 ---
 
 ### Dependencies
 
-- `bash`: Required to run the script.
-- Any command you wish to wrap.
-- The path `/data/data/com.termux/files/home/log.txt` must be writable.[footnote:On typical Arch Linux systems, this path is used by Termux on Android. Make sure it is adjusted for your environment.]
-- `date`: Used to generate timestamps.
-- `sleep`: Used for a 1-second delay at the end of the script.
+- `bash` — script interpreter
+- `date` — generates a Unix timestamp (`%s`)
+- `sleep` — adds a 1s delay after execution
+- Write access to `/data/data/com.termux/files/home/log.txt` — fixed log destination (Termux path)
 
 ### Description
 
-This script serves as a transparent wrapper around any command you wish to run. It performs the following steps:
+This tiny wrapper executes whatever command you pass to it, then appends a log line containing:
 
-1. Executes the provided command line exactly as given.
-2. After completion, logs the current UNIX timestamp along with the invoked command to a log file at `/data/data/com.termux/files/home/log.txt`.
-3. Pauses for one second (`sleep 1`) before exiting.
+- the current Unix timestamp (seconds since epoch)
+- the exact argument list you provided (`$@`)
 
-It is particularly useful if you want a simple way to trace or audit temporary command executions (for development, debugging, or learning purposes). 
+It writes to a hardcoded log file located at:
 
-#### Structure
+`/data/data/com.termux/files/home/log.txt`
 
-- `$@` : Expands to all arguments given to the script—this means it will directly run whatever full command you provide.
-- `echo "$(date '+%s') - $@" >> /data/data/com.termux/files/home/log.txt"` : Appends a log entry with the current date (as epoch seconds) and the command.
-- `sleep 1` : Waits for one second at the end. This gives you a moment to see command output (helpful if run in a terminal window that closes quickly).
+This path strongly suggests the script was designed for **Termux (Android)**, not Arch Linux. After logging, it sleeps for one second, which can be useful for rate-limiting rapid invocations (e.g., if triggered repeatedly by a keybinding or file watcher).
+
+Key behavior details:
+
+- The command is executed via `$@` (word-splitting preserved by the shell). No extra quoting/escaping is applied.
+- Logging happens **after** the command runs, regardless of whether it succeeded or failed (no exit-status handling).
+- The log line format is:  
+  `TIMESTAMP - command arg1 arg2 ...`
 
 ### Usage
 
-The script can be run directly, given executable permissions, or called from other scripts, wrappers, or keybindings. You can use it with any command, passing the wrapped command as arguments.
+Run a command through the wrapper:
 
-**Examples:**
-
-```bash
-# Make the script executable (once only)
-chmod +x /home/matias/.scripts/dev/wrapper.sh
-
-# Run 'ls -l' and log the invocation
-/home/matias/.scripts/dev/wrapper.sh ls -l
-
-# Run an editor, e.g., nano on a file
-/home/matias/.scripts/dev/wrapper.sh nano test.txt
+```sh
+/home/matias/.scripts/dev/wrapper.sh notify-send "Hello" "World"
 ```
 
-**Tip:**  
-Integrate with Qtile keybindings by calling this script from your configuration — especially for any command whose calls you want to audit!
+Open a program and log it:
+
+```sh
+/home/matias/.scripts/dev/wrapper.sh alacritty -e htop
+```
+
+tldr:
+
+```sh
+wrapper.sh <command> [args...]
+```
+
+If you want to use it from qtile keybindings, point the keybinding to the wrapper and pass the command as arguments (ensure absolute paths if needed).
 
 ---
 
-> [!WARNING]  
-> The script hardcodes the log file path to a Termux-specific location (`/data/data/com.termux/files/home/log.txt`). On Arch Linux or a desktop environment, this path likely doesn’t exist and may cause errors or fail silently. Consider parameterizing the log file location to make this script portable across devices and environments. Also, this script does not handle any errors from the wrapped commands—it will only execute and log regardless of success or failure; capturing exit status might make logs more informative. Finally, be cautious when running commands with sensitive data, as everything is logged in plain text.
+> [!TIP]
+> - The log path is hardcoded to a Termux location; on Arch you likely want something like `$XDG_STATE_HOME/script-logs/log.txt` (or `~/.local/state/...`) and to `mkdir -p` the parent dir.
+> - Use `"$@"` (quoted) instead of `$@` to preserve arguments safely, especially for spaces and special characters.
+> - Consider logging exit status: `status=$?; ...; echo "... (exit=$status)" >> ...; exit $status` so callers can rely on the wrapper’s return code.
+> - If the command is long-running, logging happens only after it finishes; if you want “started” logs, log before execution too.

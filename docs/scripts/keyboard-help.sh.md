@@ -1,63 +1,47 @@
-# Keyboard Layout Helper
+# Keyboard layout helper (floating viewer)
 
 ---
 
-**keyboard-help.sh**: Displays keyboard layout help in a floating terminal with syntax highlighting
+**keyboard-help.sh**: Open a floating xterm showing your current keyboard layout
 
 ---
 
 ### Dependencies
 
-- `show_keyboard_layout.py` — Script providing a list or visual of the system's keyboard layout(s).
-- `xterm` — Terminal emulator used to display the output.
-- `setsid` — Utility to run a command in a new session.
-- `bat` — A `cat` clone with syntax highlighting and paging, improves readability.
-- `bash` — The shell used to execute the command.
-
----
+- `bash`
+- `show_keyboard_layout.py` (must be in `PATH`) — prints the keyboard layout text that will be displayed  
+- `xterm` — terminal window used for the floating viewer
+- `bat` — pager/highlighter used here as a plain pager (`--style=plain`)
+- `setsid` — detaches the process from the current session (usually provided by `util-linux`)
+- `which` — locates `show_keyboard_layout.py` (usually provided by `which`)
 
 ### Description
 
-This script is designed to quickly display your keyboard layout documentation in a floating terminal window—making it useful for reference or learning custom keybindings. Here’s how it works step by step:
+This script is a quick “what’s my keyboard mapping right now?” helper designed for a WM workflow (nice for qtile keybindings). It locates `show_keyboard_layout.py` via `which`, then spawns an `xterm` window detached from the current shell using `setsid`.
 
-1. **Finds the Keyboard Script:**  
-   It locates `show_keyboard_layout.py` with `which` to ensure it picks the correct script file.
+The `xterm` is configured with:
 
-2. **Floating Terminal**:  
-   It then runs the script in `xterm`, forcing a custom title (`KB_layout_floating`) and a large 20-point font for clarity.  
-   The `setsid` command ensures the terminal is launched as an independent session (preventing it from being closed if the calling session closes).
+- title: `KB_layout_floating` (useful for qtile rules, e.g. float-by-title)
+- font size: `-fs 20` for readability
+- command: runs the Python layout script and pipes its output into `bat` with paging enabled:
+  - `bat --paging=always --style=plain`
 
-3. **Syntax Highlighting with `bat`:**  
-   Output from your keyboard layout script is piped into `bat`, turning the terminal window into a scrollable, well-formatted display.
-
----
+The whole thing is backgrounded (`&`), so triggering it from a keybinding won’t block qtile or your current terminal.
 
 ### Usage
 
-You can run this script directly from the command line or map it to a keybinding in qtile for quick access.
+Run directly:
 
-**Command-line:**
-```
-~/.scripts/bin/keyboard-help.sh
-```
+    keyboard-help.sh
 
-**Qtile keybinding example (in your `config.py`):**
-```python
-Key([mod], "F1", lazy.spawn("~/.scripts/bin/keyboard-help.sh"))
-```
-> Replace `[mod]` with your mod key (e.g., "mod4" for the Super/Windows key).
+Typical qtile keybinding idea:
 
-**What you'll see:**  
-A floating `xterm` window titled `KB_layout_floating` that displays your current keyboard layout in a readable, scrollable format.  
-Use arrow keys to scroll, `q` to quit (`bat`'s navigation).
+    # in qtile config
+    Key([mod], "F1", lazy.spawn("keyboard-help.sh"))
+
+If you want it to float automatically, match on the xterm title `KB_layout_floating` in your qtile floating rules.
 
 ---
 
 > [!TIP]
-> 
-> *Potential improvements and critique*:
-> - The script assumes `show_keyboard_layout.py` is in your `$PATH` and executable; you may wish to check this explicitly and print a friendly error if missing.
-> - If `bat` or `xterm` are not installed, the script will fail silently. Adding dependency checks and error messages can make debugging easier.
-> - Consider supporting other terminal emulators (like `alacritty` or `urxvt`) if you swap away from `xterm` in the future.
-> - The terminal is not forced to float; if your qtile rules don’t float windows with the given title/class, you may wish to set up a rule or call `wmctrl`/Qtile hooks to do so.
-> - If you frequently need this, consider caching the keyboard layout if generation is slow.
+> Consider handling missing dependencies more gracefully. If `show_keyboard_layout.py` isn’t found, `which` returns an empty string and `bash -c ""` will run and `bat` will sit waiting. You could add a guard like `command -v show_keyboard_layout.py >/dev/null || exit 1`. Also, if your goal is purely paging, `less -R` (or `batcat` naming differences on some systems) may be simpler. Finally, `setsid` + `&` is slightly redundant; you could keep one depending on whether you need full detachment from the controlling terminal.

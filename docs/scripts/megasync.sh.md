@@ -1,57 +1,50 @@
-# Megasync Arch/Qtile Launcher
+# MegaSync launcher (Qt env overrides)
 
 ---
 
-**megasync.sh**: Launches MEGAsync with specific environment variables set for Qtile/Arch environments
+**megasync.sh**: Launches `megasync` with env vars to avoid Qt theme/desktop issues
 
 ---
 
 ### Dependencies
 
-- `megasync`: Official MEGA desktop sync client for Linux.
-- `bash`: Standard GNU Bourne Again SHell interpreter.
+- `megasync` — MEGA desktop sync client (AUR/community package on Arch)
+- `bash`
 
 ### Description
 
-This launcher script starts the `megasync` client, but ensures two key environment variables are set for compatibility in non-standard desktop environments (like Qtile):
+This is a tiny wrapper around `megasync` meant for a Qtile/Arch desktop where Qt applications sometimes pick up unwanted platform theme integration or “desktop settings unaware” behavior (typically via KDE/GNOME environment hooks, `xdg-desktop-portal`, or theme engines).
 
-- `DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1`: Prevents MEGAsync from unsetting the `QT_QPA_PLATFORMTHEME` variable, which can be crucial for consistent theming and font rendering under Qtile or non-GNOME/KDE WMs.
-- `DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1`: Tells MEGAsync not to mark itself as "unaware" of desktop environment settings, improving appearance and possibly notification behavior on Arch/Qtile setups.
+It runs `megasync` with two environment variables set for that process only:
 
-This script is especially useful if you experience MEGAsync theming glitches or settings issues with your custom window manager.
+- `DO_NOT_UNSET_QT_QPA_PLATFORMTHEME=1`
+- `DO_NOT_SET_DESKTOP_SETTINGS_UNAWARE=1`
 
-The script is written for Arch Linux with the Qtile WM, but will work on any system (primarily X11) where these issues occur.
+In practice, these flags can help keep MEGAsync from changing (or being changed by) global Qt platform theme settings and can reduce visual glitches, theme mismatches, or odd font/icon behavior when running outside a full KDE session (common with qtile).
+
+Because the variables are exported inline, they affect only the `megasync` process spawned by this script, not your whole session.
 
 ### Usage
 
-#### TL;DR
+Run it from a terminal:
 
-```shell
-~/.scripts/dev/megasync.sh
-```
+    ~/.scripts/dev/megasync.sh
 
-- You can run this directly in your terminal, or assign it to a key binding in Qtile (see below).
+Make it executable if needed:
 
-#### Qtile Keybinding Example
+    chmod +x ~/.scripts/dev/megasync.sh
 
-Add to your `~/.config/qtile/config.py`:
-```python
-Key([mod], "m", lazy.spawn("~/.scripts/dev/megasync.sh"), desc="Launch MEGAsync with env fixes")
-```
+Typical Qtile usage (keybinding/spawn):
 
-#### Autostart Example
+- In your qtile config, call it via `lazy.spawn("~/.scripts/dev/megasync.sh")`
+- Or add it to your autostart if you want MEGAsync always running after login.
 
-Add to your Qtile autostart script (e.g. in `~/.config/qtile/autostart.sh`):
-```bash
-~/.scripts/dev/megasync.sh &
-```
+Quick “tldr”:
+
+    # start MEGAsync with the intended Qt env overrides
+    megasync.sh
 
 ---
 
 > [!TIP]
-> **Critique & Suggestions:**  
-> - This script is minimal and does its job, but it lacks error checking (e.g., if `megasync` is not installed, it will just fail silently).  
-> - Inline export of variables is clear, but if you add more variables or logic, consider using the `export` command for better readability and maintainability.  
-> - For logging or troubleshooting, you might want to redirect stdout/stderr to a simple log file.  
-> - Consider a shebang portability tweak (`#!/usr/bin/env bash`) for improved robustness across systems.  
-> - If you have other apps with similar needs, generalizing this script to wrap arbitrary commands with custom environment variables may be useful.  
+> Consider using `exec megasync` as the last command to avoid an extra shell process: `... exec megasync`. Also, if you ever need to debug whether these variables still matter, log the environment or temporarily remove them to confirm they’re still required on your current Qt/MEGAsync version.

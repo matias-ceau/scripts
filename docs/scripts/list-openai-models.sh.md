@@ -1,62 +1,59 @@
-# OpenAI Model Lister
+# OpenAI model list (cached)
 
 ---
 
-**list-openai-models.sh**: Lists and caches available OpenAI API models with creation dates
+**list-openai-models.sh**: List OpenAI models with creation dates, cached for 24h in TSV
 
 ---
 
 ### Dependencies
 
-- `openai`: OpenAI command-line interface; used to fetch the list of available models for your account.
-- `jq`: Command-line JSON processor; used to extract model IDs and creation times from OpenAI's API output.
-- `bat`: Syntax-highlighting `cat` clone; used to display the cached output with TSV highlighting.
-- `stat`, `sed`, `tr`, and standard GNU utilities.
-
-### Description
-
-This script fetches the list of available models from your OpenAI account using the `openai` CLI, extracting each model's creation date and ID. To improve efficiency and avoid frequent API calls, it caches the resulting model list as a TSV file in `$XDG_CACHE_HOME/openai-model-list.tsv`, refreshing it only if the cache is older than 24 hours.
-
-**Core functionality:**
-
-- Checks if a recent cache exists (less than 24 hours old).  
-- If cache is valid, pretty-prints its content using `bat` as TSV.
-- Otherwise, fetches a fresh model list:
-    - Calls `openai api models.list`, pipes through `jq` to get date/id info.
-    - Parses the creation dates with `date`, formats to `%Y-%m-%d`, or echoes raw values on failure.
-    - Reformats to TSV (`\t` separated), sorts, and saves to the cache.
-    - Displays the cache using `bat`.
-
-The script is well-suited for your Arch + qtile workflow, supporting both direct terminal usage and integration into custom keybindings or scripts.
-
-### Usage
-
-To list available OpenAI models with their creation dates:
-
-```sh
-~/.scripts/bin/list-openai-models.sh
-```
-
-**Example keybinding in qtile (Python):**
-```python
-Key([mod], "o", lazy.spawn("~/.scripts/bin/list-openai-models.sh"))
-```
-> Output will use `bat` (with TSV highlighting). If you don't have a recent cache, the OpenAI API will be queried.
-
-**Typical output:**
-```
-2022-05-14	ada
-2022-05-14	babbage
-2023-03-01	gpt-4
-...
-```
+- `openai` (OpenAI CLI): provides `openai api models.list`
+- `jq`: parses JSON output to extract `created` and `id`
+- `coreutils` (`date`, `stat`, `sort`, `tr`): timestamp handling and sorting
+- `sed`: reshapes output into TSV rows
+- `bat`: pretty-prints the TSV (`-ppltsv`)
 
 ---
 
-> [!NOTE]
-> - The `jq` command `.["created", "id"]` is not valid syntax for extracting both fields as a tuple or object. This could lead to no output or the wrong fields being fetched. Consider revising it to e.g. `.data[] | [.created, .id] | @tsv` to properly extract and format the fields you want.
-> - The script assumes `$XDG_CACHE_HOME` is set. If it isn't, the cache path will be unset, causing failure or unexpected behavior.
-> - Reliance on external commands (`bat`, `openai`, `jq`, etc.) means the script will fail silently if any are missing. You may want to add checks or error messages for missing dependencies.
-> - The caching logic uses `stat --format="%Y"`, which gives the modification time in seconds since the epoch, but the cache freshness check should be tested to make sure time arithmetic is correct.  
-> - As written, the parsing pipeline is brittle and may not correctly process the OpenAI API’s current output structure. Re-examine and test with current API responses.  
-> - For machine use or further automation, consider outputting clean TSV/CSV and allowing a `--no-color` flag for scripting.
+### Description
+
+This script prints a table of available OpenAI models and their creation date. To avoid hitting the API repeatedly, it caches the result in:
+
+- `$XDG_CACHE_HOME/openai-model-list.tsv`
+
+On each run, it checks the cache file’s mtime via `stat --format="%Y"` and compares it to the current epoch time (`date +%s`). If the cache is younger than 86400 seconds (24 hours), it skips updating and simply displays the cached TSV.
+
+The update pipeline:
+
+1. `openai api models.list` returns a JSON list of models.
+2. `jq -c '.["created", "id"]'` extracts the Unix timestamp and model id (compact array per line).
+3. A `while read` loop converts the timestamp to `YYYY-MM-DD` using `date -d @<epoch>`. If conversion fails, it echoes the raw line (fallback).
+4. Newlines are transformed into tabs, then `sed` splits rows back onto newlines to form TSV-like output.
+5. Output is `sort`ed and written to the cache, then displayed with `bat`.
+
+---
+
+### Usage
+
+Run directly from a terminal (or bind it in qtile to spawn a floating terminal):
+
+    list-openai-models.sh
+
+Force-refresh by deleting the cache:
+
+    rm -f "$XDG_CACHE_HOME/openai-model-list.tsv"
+    list-openai-models.sh
+
+tldr:
+
+- Show cached list (fast): `list-openai-models.sh`
+- Refresh (manual): remove cache file, rerun
+
+---
+
+> [!TIP]
+> Consider hardening a few edges:
+> - If `$XDG_CACHE_HOME` is unset, `CACHE` becomes `/openai-model-list.tsv`. Default it: `: "${XDG_CACHE_HOME:=$HOME/.cache}"`.
+> - `jq -c '.["created","id"]'` assumes the top-level shape matches; you may want `jq -r '.data[] | [.created, .id] | @tsv'` to avoid the `tr/sed` dance and quote issues.
+> - The cache freshness check uses `stat` and arithmetic; add `set -euo pipefail` carefully (with guards) to catch failures from `openai`/`jq` early.

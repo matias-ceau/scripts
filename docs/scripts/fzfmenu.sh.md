@@ -1,66 +1,46 @@
-# fzfmenu Helper (fzfmenu.sh)
+# Terminal FZF Menu Helper (Alacritty)
 
 ---
 
-**fzfmenu.sh**: Helper script that runs `fzf` inside an `alacritty` terminal instance.
+**fzfmenu.sh**: Launches `fzf` in an Alacritty window, acting like a terminal dmenu helper
 
 ---
 
 ### Dependencies
 
-- `alacritty`  
-  GPU-accelerated terminal emulator used to spawn a floating window for menu interaction.
-- `fzf`  
-  Command-line fuzzy finder; provides interactive filtering UX.
-- Bash  
-  Standard shell interpreter (`#!/bin/bash`).
-- (Optional) External scripts or programs whose output is piped into this script.
-
----
+- `alacritty` — terminal emulator used to host the picker
+- `fzf` — fuzzy finder used as the “menu”
+- `/proc` filesystem — required for the `/proc/$$/fd/*` redirections (standard on Arch)
 
 ### Description
 
-This script emulates the role of a "rofi" or "dmenu" prompt using `alacritty` and `fzf` for a more extensible, powerful selection interface. It acts as a drop-in interactive menu system, especially suitable for workflows in tiling WMs such as Qtile under Arch Linux.
+`fzfmenu.sh` is a small helper intended to mimic a `dmenu`-like workflow, but using `fzf` inside an ephemeral Alacritty window titled `fzfmenu`.
 
-**Functionality breakdown:**
-- Receives arguments meant for `fzf` (such as options to customize prompt, layout, preview, etc.).
-- Securely escapes all provided arguments to ensure safe command parsing.
-- Spawns an `alacritty` terminal with the window title `fzfmenu`, executes `fzf` with the provided arguments, and connects its input and output directly to the parent process' standard input/output using `/proc/$$/fd/{0,1}`.
+It’s designed to be used in pipelines:
 
-This function is best invoked by other scripts as a helper to display selections in a floating/centered `alacritty` window.
+- it **reads candidates from stdin**
+- opens Alacritty
+- runs `fzf` with any arguments you pass to the script
+- **writes the selected line(s) back to stdout** of the original caller
 
----
+A key detail is the use of `/proc/$$/fd/0` and `/proc/$$/fd/1`: this forwards stdin/stdout from the *parent script process* into the spawned Alacritty command, preserving pipe behavior even though `fzf` runs in a separate terminal process.
+
+Arguments are escaped using `printf %q` and reassembled, so passing complex `fzf` flags (with spaces/shell metacharacters) is safer than naive string concatenation.
 
 ### Usage
 
-You usually don't call this script directly, but as part of a larger menu script or from within keybindings in Qtile. However, standalone usage is possible for debugging.
+Typical pattern (like `dmenu`):
 
-**Example (Basic File Picker):**
-```bash
-ls | ~/.scripts/bin/fzfmenu.sh --prompt="Pick a file: "
-```
+- Pick one entry:
+  - `printf "%s\n" one two three | fzfmenu.sh`
+- With common `fzf` options:
+  - `printf "%s\n" *.desktop | fzfmenu.sh --prompt="Run> " --height=100%`
+- Multi-select:
+  - `some_generator | fzfmenu.sh -m --bind 'tab:toggle'`
 
-**With Custom Preview Window:**
-```bash
-find ~/Documents -type f | ~/.scripts/bin/fzfmenu.sh --preview='head -20 {}' --height=40%
-```
-
-**Integration in a Script (Pseudocode):**
-```bash
-choices=$(some_command_producing_list | ~/.scripts/bin/fzfmenu.sh [fzf options])
-```
-
-**Qtile Keybinding (Python fragment):**
-```python
-Key([mod], "p", lazy.spawn("my-launcher-script.sh"))
-```
-_Each script that needs a selection/launcher menu can use `fzfmenu.sh` as the backend._
+Qtile/keybinding usage (conceptually): bind a command that produces a list, pipes into `fzfmenu.sh`, then acts on the selection.
 
 ---
 
 > [!TIP]
-> While this script securely escapes and forwards options to fzf (improving safety compared to naive wrappers), several considerations could improve robustness:
-> - **No input checking**: The script assumes that stdin, stdout, and `/proc/$$/fd/{0,1}` are available and properly connected. Not all terminals/shell invocations will provide these; a check and fallback for non-Linux/pseudo-terminal use would increase portability.
-> - **No error handling**: If `alacritty` or `fzf` are missing, the script fails silently. Consider adding checks for dependencies or descriptive error messages for easier debugging.
-> - **Window management**: By default, `alacritty` will open in a standard size; integrating options to open as a floating/centered window (using `--class`, `--geometry`, or external WM rules) might better emulate dmenu-like UX in Qtile.
-> - **Performance**: For very large input lists, piping directly through the script may be slower than using `fzf` async sources. Consider allowing additional fzf features for large/remote datasets.
+> You may not need manual escaping + string execution. Prefer passing args directly: `alacritty ... -e fzf "$@" <... >...` to avoid edge cases with quoting and word-splitting. Also consider adding `-o`/`--class` (or `--title`) consistency if you plan to match the window in qtile rules, and think about setting `--layout=reverse --border` defaults for a more “menu-like” feel.

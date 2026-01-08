@@ -1,71 +1,53 @@
-# Update Environment File with API Keys
+# Export API keys to `~/.env`
 
 ---
 
-**update_env.xsh**: Extracts current environment API keys and writes them to a `.env` file.
+**update_env.xsh**: Writes `*_API_KEY` environment vars into `~/.env`
 
 ---
 
 ### Dependencies
 
-- `xonsh`: Python-powered shell; needed to run `.xsh` scripts.
-- Environment variables: The script expects all API keys to be present as environment variables ending with `API_KEY`.
-
----
+- `xonsh` (shebang: `/usr/bin/xonsh`)
+- A shell environment where your API keys are already exported (e.g., from qtile autostart, `~/.profile`, `direnv`, etc.)
 
 ### Description
 
-This script is designed to help you manage your API keys on your Arch Linux system (WM: qtile). It scans all your environment variables for keys whose names end with `API_KEY`, then creates (or overwrites) the file `$HOME/.env` containing these key-value pairs in standard dotenv format.
+This Xonsh script snapshots your current environment and generates a simple dotenv-style file at `~/.env`.
 
-#### Main Steps:
+How it works:
 
-1. Collect all environment variables ending with `API_KEY` using a dictionary comprehension.
-2. Format each `KEY=VALUE` pair, joined by newlines.
-3. Write this content to `$HOME/.env`.
+- It inspects the current environment mapping (`${...}` in xonsh).
+- It filters variables whose name ends with `API_KEY` (exact suffix match on the last 7 characters).
+  - Examples matched: `OPENAI_API_KEY`, `GITHUB_API_KEY`
+  - Not matched: `APIKEY`, `OPENAI_KEY`, `API_KEY_EXTRA`
+- It writes the selected variables to `~/.env` in the form:
 
-**Example entry in `.env` after running:**
-```
-OPENAI_API_KEY=sk-XXXXX
-GITHUB_API_KEY=ghp-YYYYY
-```
+  - `NAME=value`
+  - one per line, with a trailing newline at the end of the file
 
----
+This is handy on Arch + qtile setups where you want a single dotenv file for apps/scripts without duplicating secrets in multiple places. Note that it overwrites `~/.env` every run.
 
 ### Usage
 
-You can run this script directly in any terminal where `xonsh` is available:
+Run manually (interactive or from a launcher):
 
-```
-xonsh /home/matias/.scripts/bin/update_env.xsh
-```
-
-Or, if it's executable:
-```
-~/.scripts/bin/update_env.xsh
-```
-
-If you want to automate or bind it to a key (for example in qtile or sxhkd), simply add the above command.
-
-**Typical workflow:**
-1. Export your API keys in your shell session:
-    ```
-    export OPENAI_API_KEY=sk-XXXXX
-    export GITHUB_API_KEY=ghp-YYYYY
-    ```
-2. Run the script to update `.env`:
-    ```
     update_env.xsh
-    ```
+
+Or explicitly:
+
+    /home/matias/.scripts/bin/update_env.xsh
+
+Typical flow:
+
+    export OPENAI_API_KEY="..."
+    export SOME_SERVICE_API_KEY="..."
+    update_env.xsh
+    cat ~/.env
+
+You can bind it in qtile (e.g., via `lazy.spawn("update_env.xsh")`) after your session has loaded the environment variables you want to capture.
 
 ---
 
 > [!TIP]
->
-> - **Security note:** The script will overwrite your `.env` every time; make sure this is intended, especially if you store additional values in `.env` manually.
-> - **Improvements:** Consider adding:
->    - A warning or backup of previous `.env` before overwriting.
->    - Filtering or support for other secrets (not just `API_KEY` suffixes).
->    - Option to append instead of overwrite.
->    - Logging/echo output for feedback.
->
-> Also, note that this script pulls variables from the current environment—not from files or shells other than the one running the script. If running from a graphical launcher that doesn't inherit your terminal env, you might not get all keys.
+> Consider quoting/escaping values when writing dotenv (spaces, `#`, newlines) and using `os.path.join($HOME, ".env")` instead of string concatenation. Also, the script currently overwrites `~/.env` unconditionally—if you store other variables there, you may want to merge/update instead. Finally, filtering only by `*_API_KEY` is simple but may miss secrets using other naming conventions (e.g., `TOKEN`, `SECRET`, `KEY`).

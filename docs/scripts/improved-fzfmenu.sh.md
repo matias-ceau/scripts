@@ -1,72 +1,51 @@
-# Improved FZF launcher (Alacritty, pipe-aware)
+# Improved Fzfmenu Launcher (footclient + systemd-run)
 
 ---
 
-**improved-fzfmenu.sh**: Launch fzf in Alacritty with optional piping and preserved stdio
+**improved-fzfmenu.sh**: Launches `fzf` in a floating foot terminal, optionally piping output
 
 ---
 
 ### Dependencies
 
-- `alacritty` – terminal emulator used to host fzf
-- `fzf` – fuzzy finder
-- `systemd-run` – spawn the terminal in a user scope
-- `bash` – script shell
-- `qtile` (optional) – window rules can target the class `floating`
-- `bat` (optional) – pretty previews in examples
+- `fzf` — fuzzy finder UI
+- `footclient` — terminal client used to display the menu (Wayland-friendly)
+- `systemd-run` — used with `--user --scope` to spawn an isolated transient scope
+- `bash` — executes the composed `fzf` command string
+
+---
 
 ### Description
 
-This script opens an fzf session inside Alacritty with a predictable window class and title, suitable for qtile floating rules. It preserves the caller’s STDIN and, optionally, STDOUT across the terminal boundary using /proc file descriptors:
+This script is a small “menu runner” that opens `fzf` inside a dedicated terminal window and returns the selection to the caller. It’s designed for a qtile workflow where you want a predictable floating terminal instance (via `--app-id floating`) and a custom window title (useful for rules, scratchpads, or debugging).
 
-- Reads from caller input: fzf ... < /proc/$$/fd/0
-- Writes back to caller output when --pipe is set: > /proc/$$/fd/1
+Key behaviors:
 
-Arguments not recognized by the wrapper are safely shell-escaped and forwarded to fzf. Two wrapper options are handled:
+- **Argument passthrough to `fzf`**: all arguments are shell-escaped (`printf "%q"`) and appended to `fzf_args`.
+- **Special options**:
+  - `--pipe`: when enabled, `fzf` writes its selection to the parent’s stdout (so you can chain it in pipelines).
+  - `--terminal-title=<title>`: sets the foot window title (`-T`), defaulting to `i_fzfmenu`.
+- **Robust stdin/stdout bridging**: `fzf` reads from `/proc/$$/fd/0` and (optionally) writes to `/proc/$$/fd/1`, ensuring that even though `fzf` runs in a new terminal process, it still consumes the original stdin and can emit to the original stdout.
 
-- --pipe: send selection back to the caller’s stdout
-- --terminal-title=TITLE: set the Alacritty window title (default: i_fzfmenu)
+The terminal is started through `systemd-run --user --scope --quiet` which keeps the process tree tidy and avoids lingering services.
 
-The terminal class is fixed to floating, making it easy to match in qtile.
-
-The command is started via systemd-run --user --scope for clean resource handling and isolation, then exec’d to replace the wrapper process.
+---
 
 ### Usage
 
-Basic (input via pipe, view result in the Alacritty window):
-```
-printf "apple\nbanana\ncherry\n" | ~/.scripts/bin/improved-fzfmenu.sh
-```
+Run interactively, or bind it in qtile to pop up a fuzzy menu.
 
-Return the selection to your shell (--pipe):
-```
-printf "a\nb\nc\n" | ~/.scripts/bin/improved-fzfmenu.sh --pipe
-```
-
-Chain the result:
-```
-rg -n "" | ~/.scripts/bin/improved-fzfmenu.sh --pipe | cut -d: -f1 | xargs -r nvim
-```
-
-Pass fzf options (are forwarded as-is):
-```
-fd . ~/projects \
-| ~/.scripts/bin/improved-fzfmenu.sh --pipe --terminal-title=Proj-Find \
-    --preview 'bat --style=numbers --color=always {}' --ansi --height 80% -m
-```
-
-Qtile keybinding example:
-```
-Key([mod], "p",
-    lazy.spawn("~/.scripts/bin/improved-fzfmenu.sh --pipe --reverse --height=90%")
-)
-```
+- Basic:
+  - `improved-fzfmenu.sh`
+- Pass `fzf` options:
+  - `printf "%s\n" a b c | improved-fzfmenu.sh --height 40% --reverse`
+- Pipe selection back to caller:
+  - `chosen=$(printf "%s\n" a b c | improved-fzfmenu.sh --pipe)`
+  - `printf "%s\n" a b c | improved-fzfmenu.sh --pipe | xargs -r notify-send`
+- Set terminal title (helps for WM rules):
+  - `improved-fzfmenu.sh --terminal-title=power_menu --pipe`
 
 ---
 
 > [!TIP]
-> - Hardcoded terminal/class: add flags like --term=kitty and --class=… to match diverse rules.
-> - Relying on /proc/$$/fd works locally; it may fail across user boundaries (sudo) or sandboxing.
-> - Without --pipe, selections won’t reach the parent shell; document this prominently or default to --pipe when stdout is a pipe.
-> - systemd-run overhead: consider --collect or properties to auto-clean transient scopes.
-> - If no STDIN is provided, fzf reads from the parent TTY path; clarify expected input (usually via a pipe).
+> The `fzf_args` string-building is generally safe thanks to `%q`, but it’s still more robust to store args in an array and avoid `bash -c` entirely. Also consider making `shell`, geometry (`-W 100x30`), and `--app-id` configurable flags, and add a `--` separator so user `fzf` args can’t conflict with script options (`--pipe`, `--terminal-title=`).

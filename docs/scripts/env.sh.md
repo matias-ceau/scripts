@@ -1,77 +1,59 @@
-# Environment Loader Library (Flexoki/FZF/Paths)
+# Modular environment loader (env.sh)
 
 ---
 
-**env.sh**: Modular environment loader for colors, FZF, paths, git and debug
+**env.sh**: Modular environment loader for your scripts (paths, colors, fzf, git)
 
 ---
 
 ### Dependencies
 
-- `bash` — required; uses arrays, export -f, and BASH_SOURCE
-- `coreutils` — for `readlink` used to resolve script root
-- `fd` — used by `FZF_DEFAULT_COMMAND` for fast file search
-- `bat` — used by `FZF_PREVIEW_COMMAND` for syntax-highlighted previews
-- `fzf` — interactive fuzzy finder, styled via Flexoki palette (optional)
+- `bash` (uses `BASH_SOURCE`, function exports)
+- `readlink` (for `readlink -f` to resolve the scripts directory)
+- `fd` (used by `FZF_DEFAULT_COMMAND`)
+- `fzf` (consumes `FZF_DEFAULT_*` variables)
+- `bat` (used by `FZF_PREVIEW_COMMAND`)
 
 ### Description
 
-This library provides a single function, `load_env`, that sets up a modular environment for your scripts on Arch + qtile. It discovers your scripts root at runtime (`$SCRIPTS`) via `readlink -f "${BASH_SOURCE[0]}"`, populates `$PATH` with `$SCRIPTS/bin` and `$HOME/.local/bin`, and optionally configures:
+This file is a shared library meant to be sourced by your scripts to standardize environment setup on Arch Linux (and nicely matches qtile keybound scripts). The main entrypoint is `load_env`, which accepts a comma-separated list of *modules* and exports environment variables accordingly.
 
-- Flexoki color palette (exports named hex colors + semantic aliases)
-- FZF defaults (command, keybindings, preview, and themed colors)
-- Git-related locations (`$GIT_REPOS`, `$LOCALDATA`)
-- Debug output to stderr
+Key behaviors:
 
-It is idempotent: a guard (`$SCRIPTS_ENV_LOADED`) avoids re-initializing core state. Convenience wrappers are exported: `load_env_minimal`, `load_env_colors`, `load_env_fzf`, `load_env_full`.
+- **One-time core init**: guarded by `SCRIPTS_ENV_LOADED`. It sets `SCRIPTS` to the root of your scripts collection (derived from this file’s path).
+- **paths/core module**: defines `SCRIPT_PATHS` and prepends `$SCRIPTS/bin` and `$HOME/.local/bin` to `PATH` if missing.
+- **colors module**: exports the Flexoki palette plus semantic aliases (`PRIMARY_COLOR`, `ERROR_COLOR`, etc.), enabling consistent theming across scripts.
+- **fzf module**: configures `FZF_DEFAULT_COMMAND` (using `fd`) and `FZF_DEFAULT_OPTS` with Flexoki colors when available, plus a `bat` preview command.
+- **git module**: exports `GIT_REPOS` and `LOCALDATA` defaults.
+- **debug module**: prints what was loaded to stderr.
+
+Convenience wrappers (`load_env_minimal`, `load_env_fzf`, etc.) cover common combinations and are exported for use in subshells.
 
 ### Usage
 
-tldr:
-```
-# In an interactive shell (bash)
-source ~/.scripts/lib/env.sh
-load_env "core,colors,fzf"
-fzf  # now uses Flexoki theme and fd+bat preview
+Source it, then load the modules you need:
+
+```bash
+source "$HOME/.scripts/lib/env.sh"
+load_env "core,colors"
 ```
 
-In another script:
-```
-#!/usr/bin/env bash
-source "$(dirname "${BASH_SOURCE[0]}")/../lib/env.sh"
-load_env_full
-# your script...
+Common patterns:
+
+```bash
+load_env_minimal          # core only
+load_env_colors           # core + Flexoki
+load_env_fzf              # core + colors + fzf
+load_env_full             # core + colors + fzf + git + paths
 ```
 
-Using helpers:
-```
-source ~/.scripts/lib/env.sh
-load_env_fzf     # == "core,colors,fzf"
-load_env_minimal # only core paths
-```
+Debug a script’s environment quickly:
 
-Qtile integration (autostart or spawned scripts):
+```bash
+load_env "core,colors,fzf,debug"
 ```
-# ~/.config/qtile/autostart.sh
-source ~/.scripts/lib/env.sh
-load_env_colors
-```
-
-Debugging:
-```
-source ~/.scripts/lib/env.sh
-load_env "debug,core,colors,fzf"
-```
-
-Note:
-- Modules are comma-separated within a single argument (e.g., "core,colors").
-- If you use only `fzf` without `colors`, FZF uses sane defaults without theming.
 
 ---
 
 > [!TIP]
-> - Consider splitting the `modules` argument by commas and matching tokens to avoid accidental substring matches (e.g., “gitx” matching “git”).
-> - Auto-enable `colors` when `fzf` is requested to ensure themed output: detect `fzf` and source `colors` if not present.
-> - Add command existence checks (`fd`, `bat`, `fzf`) and degrade gracefully or warn when missing.
-> - Export `$SCRIPT_PATHS` into `$PATH` only once using a loop over components to reduce duplication logic.
-> - Provide an “unload” or “reload” function to reset FZF options when testing.
+> `[[ "$modules" == *"fzf"* ]]` does substring matching, so a module named `g` would match `git` accidentally. Consider splitting on commas into an array and matching exact module names. Also, `export -f` only helps for `bash` subshells (not `sh`), and `FZF_DEFAULT_OPTS` includes leading whitespace/newlines—usually fine, but trimming can avoid surprises.

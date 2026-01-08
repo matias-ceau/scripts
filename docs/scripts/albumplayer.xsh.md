@@ -1,61 +1,55 @@
-# Cmus Album Picker (dmenu + xonsh)
+# Cmus Album Player (dmenu)
 
 ---
 
-**albumplayer.xsh**: Pick a cmus album via dmenu, enqueue it plus 10 random albums
+**albumplayer.xsh**: Build a temp playlist from a chosen album and play it in cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh` — the script is written in Xonsh (Python-powered shell)
-- `cmus` — console music player controlled via `cmus-remote`
-- `dmenu` — album selection UI
-- `coreutils` — uses `cat` and `echo`
-- `~/.config/cmus/lib.pl` — cmus library/playlist file (m3u-like list of tracks)
+- `xonsh` — script runtime
+- `cmus` — music player
+- `cmus-remote` — control `cmus` from the CLI (usually shipped with `cmus`)
+- `dmenu` — interactive album selector
+- `cat`, `echo` — standard coreutils (used via xonsh subprocess calls)
+
+---
 
 ### Description
 
-This script lets you quickly pick an album from your cmus library via dmenu, then constructs a temporary M3U playlist containing:
-- All tracks from the selected album
-- All tracks from 10 additional random albums
+This xonsh script reads your `cmus` library file (`.config/cmus/lib.pl` relative to your `$HOME`), derives a list of “albums” from track paths, lets you pick one album via `dmenu`, then generates a temporary playlist at `/tmp/temp.m3u`.
 
-It reads track paths from `~/.config/cmus/lib.pl`, derives album identifiers from directory structure, presents a nicely formatted album list in dmenu, writes the resulting playlist to `/tmp/temp.m3u`, and then drives cmus to clear and load the new queue.
+Album detection is done by taking the last two directory components before the filename (`.../<artist>/<album>/<track>`), and storing them as `artist/album`. A “fancy” display string is built for `dmenu` to improve readability (artist padded/truncated, then an em dash and album name). After you select an album, the script:
 
-Key flow:
-1. Parse the library file into per-album groups.
-2. Show a right-aligned, truncated album list in dmenu.
-3. Build `/tmp/temp.m3u` with the chosen album first, followed by 10 shuffled albums.
-4. Use `cmus-remote` to clear the queue and play.
+1. Collects all tracks belonging to the selected album.
+2. Randomly shuffles the remaining albums and appends tracks from the next 10 albums (a quick “radio after this album” queue).
+3. Writes everything to `/tmp/temp.m3u`.
+4. Uses `cmus-remote` to clear the current queue, load the playlist, start playback, and skip to the next track once (`-n`)—effectively ensuring playback begins.
+
+This is well-suited to a qtile keybinding since it’s non-interactive except for `dmenu`.
+
+---
 
 ### Usage
 
-- Install deps on Arch:
-  ```
-  sudo pacman -S xonsh cmus dmenu
-  ```
-- Ensure you have a library file (from cmus):
-  ```
-  cmus-remote -C 'save -l ~/.config/cmus/lib.pl'
-  ```
-- Run from a terminal (starting in $HOME, see notes below):
-  ```
-  ~/.scripts/bin/albumplayer.xsh
-  ```
-- Qtile keybinding example:
-  ```
-  Key([mod], "a", lazy.spawn("~/.scripts/bin/albumplayer.xsh"))
-  ```
+Run from anywhere (it expects `~/.config/cmus/lib.pl` to exist):
 
-Customize:
-- Number of random albums: change `for a in albums[:10]:` to your desired count.
-- Temp file location: edit `temp_path = os.path.expanduser('/tmp/temp.m3u')`.
+    albumplayer.xsh
+
+Typical qtile binding (example):
+
+    Key([mod], "a", lazy.spawn("albumplayer.xsh"))
+
+Notes:
+- You must have `cmus` running for `cmus-remote` commands to work.
+- The generated playlist file is always `/tmp/temp.m3u` and will be overwritten.
 
 ---
 
 > [!TIP]
-> - The script uses a relative path `.config/cmus/lib.pl`; if your CWD isn’t `$HOME`, it will fail. Use `os.path.expanduser('~/.config/cmus/lib.pl')` instead.
-> - Cancelling dmenu or no match triggers `IndexError` at `res_[0]`; add a guard for empty selection.
-> - Album matching uses substring checks and set-based albums; duplicate album names across artists may collide. Consider tuples `(artist, album)` or full absolute paths for keys.
-> - Writing to `/tmp/temp.m3u` can race if launched twice; generate a unique tempfile.
-> - `cmus-remote -p` then `-n` may not reliably start playback; prefer `cmus-remote -C 'player-play'`.
+> Potential improvements:
+> - Use `~/.config/cmus/lib.pl` explicitly (currently it’s missing the `~/` prefix, so it may fail unless run from `$HOME`).
+> - Handle cancel/empty selection from `dmenu` (currently `res_[0]` will crash if nothing is selected).
+> - Consider quoting/escaping paths more defensively and ensuring `.m3u` entries are absolute and valid for `cmus`.
+> - Remove the stray `print(playlist_paths[-1])` or gate it behind a debug flag.

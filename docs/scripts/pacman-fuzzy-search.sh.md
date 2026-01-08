@@ -1,74 +1,49 @@
-# Pacman Fuzzy Search Script
+# Pacman Fuzzy Search (fzf package browser)
 
 ---
 
-**pacman-fuzzy-search.sh**: Fuzzy search and install Arch Linux packages (repo/AUR) using paru and fzf
+**pacman-fuzzy-search.sh**: Fuzzy-find Arch packages (repo/AUR) with previews and install on enter
 
 ---
 
 ### Dependencies
 
-- `paru`: AUR helper to query and install repo and AUR packages.
-- `fzf`: Command-line fuzzy finder for interactive search.
-- `bat`: Colorful `cat` clone with syntax highlighting (used for pretty previews).
-- `ripgrep` (`rg`): Fast grep replacement, used for filtering results.
-- `notify-send`: Used to send desktop notifications.
-- `sed`: Stream editor for text processing (standard on most systems).
-
-_Ensure all dependencies are installed, preferably via pacman/AUR. Script assumes a Unix-like environment (Arch Linux), and is suitable for usage with qtile WM and interactive keybindings._
-
----
+- `bash`
+- `pacman` (fallback package manager backend)
+- `paru` or `yay` (preferred AUR-capable backend; first found is used)
+- `fzf` (interactive fuzzy UI)
+- `ripgrep` (`rg`, for filtering/regex decisions)
+- `bat` (pretty colored preview rendering)
+- `sed` (output shaping)
+- `notify-send` (debug notifications when filters are active)
+- `blabel` (custom helper used in fzf keybinds to build border labels)
 
 ### Description
 
-This script enables an advanced fuzzy search for available and installed packages (including AUR) using `paru` as the package interface and `fzf` for selection. It sets up a persistent cache directory, leverages ripgrep for filtering, and bat for syntax-highlighted previews.
+This script provides an `fzf` interface over `pacman -Sl` (or `paru/yay -Sl`) so you can browse packages with ANSI colors, preview metadata, and install selections.
 
-**Key Features:**
-- **Preview Pane**: Shows detailed package info (`paru -Si` or `paru -Qi`) in a colored panel powered by `bat`.
-- **Interactive Search**: Lets you type to search across packages. Results can be filtered between AUR, repo, or installed packages.
-- **Multi-select & Install**: Select multiple packages to install at once.
-- **Dynamic Reloading**: Under the hood, supports reloads and border label changes (partially implemented, see commented code).
-- **Keybind Support**: Suitable for mapping to a key in your qtile config for quick popup access.
+It creates a cache directory at `~/.cache/pacman-fuzzy-search` (currently just ensured to exist), then detects a package manager in order: `paru`, `yay`, `pacman` and exports it as `AUR_PKG_MGR`.
 
-#### Functions:
-- `preview_cmd`: Displays package details for the selected line in `fzf` using `paru` and formats them for easier reading.
-- `paruSl`: Lists all available packages (`paru -Sl`) with some visual tweaks.
-- `search_cmd`: Intended to filter results based on togglable "repo" and "installed" modes (partially implemented; see commented logic for future improvements).
-- `fzf_cmd`: Runs `fzf` with several custom keybinds and options for a rich TUI search/selection experience.
+Key pieces:
 
----
+- `pacSl()`: lists all packages (`-Sl`) with color adjustments (tweaks magenta to yellow and normalizes `unknown-version`).
+- `preview_cmd()`: uses `-Si` for remote package info, but switches to `-Qi` if the selected line contains `[installed]`. Output is reformatted via `sed` and rendered through `bat` for a YAML-like, readable preview.
+- `search_cmd()`: reload source for `fzf` based on the current `FZF_BORDER_LABEL` (expects flags like `a` for AUR and `i` for installed); can emit a `notify-send` debug popup.
 
 ### Usage
 
-#### Run Directly
+Run interactively in a terminal (ideal from a qtile keybinding spawning your terminal):
 
-```
-~/.scripts/bin/pacman-fuzzy-search.sh
-```
+    pacman-fuzzy-search.sh
 
-- Use arrow keys to browse.
-- Type to search.
-- Space or tab to select multiple packages.
-- Press `Enter` to install selected packages (via `paru -S`).
-
-#### Assign to qtile Keybinding
-
-Edit your `~/.config/qtile/config.py`:
-
-```python
-Key([mod], "F12", lazy.spawn("~/.scripts/bin/pacman-fuzzy-search.sh"))
-```
-
-#### Example - TLDR
-
-```
-# Launch fuzzy search for packages
-~/.scripts/bin/pacman-fuzzy-search.sh
-```
+Inside `fzf` (highlights):
+- `Enter`: install selected packages  
+  - installs `{+2}` (the package name column) via `$AUR_PKG_MGR -S`
+- `Alt-w`: cycle preview layout (right / up / hidden)
+- `Alt-h`: toggle prompt indicator and reload results
+- `Alt-a`, `Alt-i`: toggle border label filters (requires `blabel`) and reload
 
 ---
 
-> [!NOTE]
-> While the script is robust and provides a friendly package search/install workflow, the advanced mode switching (filtering to only AUR, only installed, etc.) is incomplete—referenced via commented code in both functions and keybinding setups. Additionally, customization of border labels and dynamic reloading of results can be enhanced by finishing the commented-out logic.
-> 
-> The use of `bat` for previewing is visually appealing but may appear cluttered for very long package descriptions. Consider adding more intuitive filtering UI or more keybinds for filtering for a future version.
+> [!TIP]
+> The `--bind` lines for `alt-a/alt-i` look inconsistent (one bind for `alt-i` accidentally triggers `alt-a:+reload-sync`). Consider cleaning/duplicating them correctly to avoid confusing reload behavior. Also, `CACHE_DIR` is created but unused; either wire it into cached queries or remove it. Finally, `notify-send` in `search_cmd()` can become noisy—make it conditional on a debug flag.

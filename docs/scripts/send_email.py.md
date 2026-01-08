@@ -1,69 +1,47 @@
-# Send Email Script
+# Gmail SMTP CLI sender (pass-backed)
 
 ---
 
-**send_email.py**: Script to send an email from the command line with argparse and `smtplib`
+**send_email.py**: Send a plaintext email via Gmail SMTP using a password from `pass`
 
 ---
 
 ### Dependencies
 
-- `python` (>=3.6) — The script is written in Python.
-- `argparse` (builtin) — For parsing command-line arguments.
-- `smtplib` (builtin) — To send mail via SMTP.
-- `ssl` (builtin) — For secure SMTP connection.
-- `subprocess` (builtin) — To securely fetch passwords.
-- `email` (builtin) — Constructs MIME email messages.
-- `pass` — Password manager; retrieves email account passwords securely from your password store.
+- `python` (stdlib: `argparse`, `smtplib`, `ssl`, `subprocess`, `email.message`)
+- `pass` (password-store): used to fetch the sender’s SMTP password
+- A working Gmail SMTP setup (account credentials / app password if needed)
 
 ### Description
 
-This script provides a CLI utility for quickly sending emails from your terminal, leveraging your existing password store for authentication:
+This script is a small CLI utility to send a plaintext email through Gmail’s SMTP-over-SSL endpoint (`smtp.gmail.com:465`). It builds an `EmailMessage` with `From`, `To`, and `Subject` headers and uses `set_content()` for the body.
 
-- It uses `argparse` to accept sender, receiver, subject, display name, and content as flags/arguments.
-- Emails are structured using the `EmailMessage` class for clean formatting.
-- The `get_password()` function fetches your email account password from the `pass` password manager, assuming you keep the plain password on the second line of the pass file for the sender's email.
-- It uses `smtplib.SMTP_SSL` to securely connect to Gmail's SMTP server on port 465 and send your message.
+Password retrieval is delegated to `pass show <sender>`. The script then takes the **second line** of the output (`splitlines()[1]`) as the password. That implies your `pass` entry for the sender email must be formatted with at least two lines (commonly: first line could be a label, second line the app password).
+
+It’s well-suited for automation on Arch (cron/systemd timers) or for a qtile keybinding when you want a quick “fire-and-forget” notification email without opening a mail client.
 
 ### Usage
 
-You can run this script directly from the terminal or bind it to a launcher/shortcut in qtile. 
+Run from a terminal:
 
-Basic example:
+- Minimal (uses defaults):
+  - `send_email.py`
 
-```
-$ ~/.scripts/bin/send_email.py \
-    --email-sender matiasylinenceau@gmail.com \
-    --email-receiver someone@example.com \
-    -s "Subject Line" \
-    -c "Body of the email"
-```
+- Custom receiver / subject / body:
+  - `send_email.py --email-receiver "you@example.com" -s "Build done" -c "The pipeline finished successfully."`
 
-With minimal arguments (uses script defaults):
+- Custom sender + display name header:
+  - `send_email.py --email-sender "account@gmail.com" --display-name "Matias <account@gmail.com>" -s "Hi" -c "Hello"`
 
-```
-$ ~/.scripts/bin/send_email.py
-```
+Arguments:
 
-**Arguments:**
-
-| Flag                | Default                        | Description                    |
-|---------------------|--------------------------------|--------------------------------|
-| --email-sender      | matiasylinenceau@gmail.com     | Gmail address to send from     |
-| --email-receiver    | matias@ceau.net                | Address to send mail to        |
-| -s, --subject       | automatic                      | Email subject                  |
-| --display-name      | self                           | Name shown as sender           |
-| -c, --content       | Testing                        | Email body                     |
-
-*Ensure that your password is correctly stored in `pass` under the label that matches your sender's email address, with the password on the second line.*
+- `--email-sender`: Gmail address used to authenticate
+- `--email-receiver`: destination address
+- `-s/--subject`: subject line
+- `--display-name`: literal value used in the `From` header
+- `-c/--content`: plaintext body
 
 ---
 
-> [!CAUTION]
-> - The script directly fetches the second line from your `pass` entry for the sender's email, assuming your password is configured on that line. This could fail if your password is located elsewhere or your `pass` entry structure differs.
-> - Password retrieval isn't very flexible. If you use GPG comments or extra metadata in your password store, you might need to adjust the line indexing.
-> - `"From"` header uses the display name only, which may cause the message to appear malformed in some email clients that expect "Display Name <email@address>" format.
-> - SMTP server details are hardcoded for Gmail; this won't work with other providers as-is.
-> - No error handling for failed authentication, mail delivery errors, or password retrieval.
-> - Sending HTML or attachments is not supported—content is plain text only.
-> - Consider switching to environment variables (or a secrets manager) for more portable authentication if you ever migrate from `pass`.
+> [!TIP]
+> Consider making `pass show` parsing more robust: `pass` typically stores the password on the first line, so using `splitlines()[0]` (or searching for a specific field) avoids fragile assumptions. Also handle errors (missing entry, non-zero return code) and avoid hardcoding Gmail host/port so you can reuse the script with other SMTP servers. Finally, `From` should usually include the actual email (`Name <email>`), otherwise some SMTP servers/clients may display it oddly.

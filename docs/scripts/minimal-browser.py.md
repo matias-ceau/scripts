@@ -1,69 +1,57 @@
-# Minimal Python Qt Web Browser
+# Minimal PyQt WebEngine Browser
 
 ---
 
-**minimal-browser.py**: Minimal local HTML viewer using PyQt6/QWebEngine, for local docs or apps
+**minimal-browser.py**: Minimal PyQt6 WebEngine viewer for local HTML/docs (or any URL)
 
 ---
 
 ### Dependencies
 
-- `python` (>=3.8): Standard Python interpreter.
-- `PyQt6`: Python bindings for the Qt6 application framework (including QtWebEngine).
-- `PyQt6-WebEngine`: Provides the `QWebEngineView` widget for web content rendering.
-
-*On Arch Linux:*
-```bash
-sudo pacman -S python-pyqt6 python-pyqt6-webengine
-```
-or consider using `pip` in a virtual environment.
+- `python` (Arch package: `python`)
+- `PyQt6` (Arch: `python-pyqt6`)
+- `PyQt6-WebEngine` / Qt WebEngine bindings (Arch: typically `python-pyqt6-webengine`)
+- Qt WebEngine runtime libs (pulled by the packages above)
 
 ### Description
 
-This script launches a minimalistic web browser using the PyQt6 framework, specifically the `QWebEngineView` widget. The goal is to offer a lightweight alternative to full-featured browsers for use cases such as:
+`minimal-browser.py` is a tiny GUI “browser” built with **PyQt6** and **QWebEngineView**. It’s ideal for a qtile/Arch workflow when you want a dedicated, lightweight viewer for **local documentation** (Sphinx builds, project docs, static HTML) without launching a full browser profile.
 
-- Browsing local web documentation (e.g., Sphinx/Markdown-generated docs)
-- Testing static HTML/JS pages locally
-- Creating streamlined browser windows for local apps
+Behavior:
 
-**Features:**
-- Opens a specified local file (HTML, Markdown rendered as HTML).
-- If no file is passed via CLI, it defaults to your local Sphinx docs (`/home/matias/git/matias-ceau/pyfiber/docs/_build/html/index.html`).
-- Simple GUI window, using Qt’s vertical layout.
+- If a command-line argument is provided, it loads it via `QUrl(sys.argv[1])`.
+- Otherwise it falls back to a hard-coded default file URL:
+  `file:///home/matias/git/matias-ceau/pyfiber/docs/_build/html/index.html`
+- It wraps the `QWebEngineView` in a basic `QMainWindow` + `QVBoxLayout`.
 
-**Main components:**
-- `QApplication`: Manages application control.
-- `SimpleBrowser` (QMainWindow): Hosts a `QWebEngineView` widget.
-- CLI file argument handling: Loads file from `sys.argv[1]` if present.
+This is especially handy as a “docs viewer” you can bind in qtile, or use as a quick HTML preview tool while developing static sites.
 
 ### Usage
 
-From a shell:
+Run from a terminal (or bind to a qtile key):
 
-```bash
-# Open a specific local HTML file
-minimal-browser.py /path/to/your/file.html
+- Open the default doc page:
+  
+      minimal-browser.py
 
-# Open the default page (pyfiber Sphinx docs)
-minimal-browser.py
-```
+- Open a local HTML file (recommended with `file://`):
+  
+      minimal-browser.py file:///home/matias/project/docs/_build/html/index.html
 
-If you want to bind it to a qtile keybinding (example):
-```python
-Key([mod], "f1", lazy.spawn("minimal-browser.py ~/docs/index.html"))
-```
+- Open a remote URL:
+  
+      minimal-browser.py https://docs.python.org/3/
 
-You can place this script anywhere in your `$PATH` for easy access. Make it executable:
+tldr:
 
-```bash
-chmod +x ~/.scripts/bin/minimal-browser.py
-```
+- `minimal-browser.py` → opens your predefined docs homepage  
+- `minimal-browser.py <url-or-path>` → opens the given target in a Qt WebEngine window
 
 ---
 
-> [!NOTE]
-> - The script currently only loads local files and assumes HTML compatibility. If you pass in a Markdown file, it will not render it correctly unless it has already been converted to HTML.
-> - No navigation (Back/Forward/Reload) or URL bar is provided—this is by design, but if needed, you could easily enhance it with Qt widgets.
-> - There is minimal error handling. If the file path is invalid or the WebEngine components aren’t properly installed, the script may crash.
-> - The script hardcodes a default path. Consider reading a config file or using a dialog for greater flexibility.
-> - The shebang should be `#!/usr/bin/env python3` for portability, especially if your system calls `python` as version 2.x for some reason.
+> [!TIP]
+> Improvements to consider:
+> - The argument handling is fragile: passing a plain filesystem path (e.g. `/home/.../index.html`) won’t become a proper `file://` URL; detect local paths and convert using `QUrl.fromLocalFile()`.
+> - Add basic navigation (back/forward/reload, address bar) or at least keyboard shortcuts for a smoother “viewer” experience.
+> - The hard-coded default path is user-specific; consider reading from an env var (e.g. `MINIMAL_BROWSER_HOME`) or a config file.
+> - Use `/usr/bin/env python` in the shebang for portability (`#!/usr/bin/env python3`).

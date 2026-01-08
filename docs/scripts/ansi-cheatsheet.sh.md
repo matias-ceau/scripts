@@ -2,56 +2,49 @@
 
 ---
 
-**ansi-cheatsheet.sh**: Quickly displays a cheatsheet of ANSI escape codes in a syntax-highlighted view
+**ansi-cheatsheet.sh**: Render a quick ANSI escape codes cheatsheet with syntax highlighting
 
 ---
 
 ### Dependencies
 
-- `bat`: A (cat-compatible) syntax highlighting viewer for the terminal.
-  - Needed to render the cheatsheet in a more readable and visually appealing format.
-- Shell: Assumes `/usr/bin/bash` as the shell interpreter.
+- `bash` (script interpreter)
+- `bat` (prints the embedded markdown with pager/syntax highlighting via `-p -l md`)
 
 ### Description
 
-This script provides a concise, formatted reference to common ANSI escape codes for text formatting, coloring, and cursor control in terminal environments. It leverages `bat` with the options `-p` (plain output), `-l md` (language: markdown), and displays a hardcoded markdown cheatsheet covering:
+`ansi-cheatsheet.sh` is a tiny convenience script that outputs an ANSI escape code cheatsheet directly to your terminal. Instead of keeping a separate markdown file around, the content is embedded in a heredoc and piped to `bat`, which:
 
-- **Text formatting** (reset, bold, underline, etc.)
-- **Foreground and background colors** (standard and "bright" variants)
-- **Cursor movements** (positioning, clearing, saving/restoring)
-- **Miscellaneous** codes (cursor visibility, screen clearing)
+- forces Markdown highlighting (`-l md`)
+- prints to stdout without paging (`-p`), making it fast and predictable in terminals and keybindings
 
-The use of a markdown-formatted here-document (`<< EOF ... EOF`) ensures the cheatsheet is always up to date with no external file dependencies.
+The cheatsheet covers:
+
+- common text attributes (`\e[1m` bold, `\e[4m` underline, etc.)
+- 8-color foreground/background codes (`30–37` / `40–47`)
+- bright variants (`90–97` / `100–107`)
+- a few cursor movement/screen control sequences
+- a note about equivalent escape notations (`\e`, `\x1b`, `\033`)
+
+This is useful on Arch/qtilе setups when writing status bar scripts, `notify-send` formatting experiments, TUI tweaks, or when you need a reminder while editing shell scripts.
 
 ### Usage
 
-This script is intended to be run in any terminal:
+Run it from any terminal:
 
-```bash
-ansi-cheatsheet.sh
-```
+    ansi-cheatsheet.sh
 
-- No arguments are required (or processed).
-- You can bind it to a key in your `qtile` configuration for quick access, e.g., to open a new terminal with the cheatsheet.
+Or via full path:
 
-#### Example: Running as a command
-```sh
-~/.scripts/bin/ansi-cheatsheet.sh
-```
+    ~/.scripts/bin/ansi-cheatsheet.sh
 
-#### Example: Qtile keybinding (assuming `xterm`)
-```python
-Key([], "F12", lazy.spawn("xterm -e ~/.scripts/bin/ansi-cheatsheet.sh")),
-```
+Suggested qtile keybinding idea (launch in your preferred terminal):
+
+- spawn a terminal executing the script, e.g. `alacritty -e ansi-cheatsheet.sh`
+
+Because the script uses `bat -p`, it won’t keep an interactive pager open; it will just print and exit (your terminal scrollback becomes the “viewer”).
 
 ---
 
 > [!TIP]
-> The script is simple and effective, but there are a few things to consider:
-> - The script will fail with a confusing message if `bat` is not installed. You could add a simple check:
->   ```bash
->   command -v bat >/dev/null 2>&1 || { echo "bat is required but not installed. Aborting."; exit 1; }
->   ```
-> - Consider making the markdown cheatsheet an external file for easier updates if the content grows.
-> - Add command-line options for output format (plain, markdown, etc.), or a `--help` flag to improve usability.
-> - Some escape code examples (`\x1b[31mBlack\x1b[0m`) are not actually rendered (the color is lost when using `bat` for markdown), so you may want to clarify which are literal versus rendered.
+> Consider adding a fallback when `bat` isn’t installed (e.g. `command -v bat >/dev/null || cat`). Also, one line in the cheatsheet mixes raw escape bytes (`\x1b[31mBlack\x1b[0m`) while the others are plain labels—either standardize the examples (show each color rendered) or keep all labels consistent. If you ever want paging/search, drop `-p` (or add a flag to toggle it).

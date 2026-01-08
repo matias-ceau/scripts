@@ -1,62 +1,48 @@
-# Create Cover Art from Audio Spectrogram
+# Spectrogram Cover Art Generator
 
 ---
 
-**create_cover_art.sh**: generates a cover image by creating a spectrogram from a selected `.wav` file.
+**create_cover_art.sh**: Create a cover art image from a `.wav` spectrogram
 
 ---
 
 ### Dependencies
 
-- `sox`  
-  Audio processing tool; used to generate spectrograms from audio files.
-- `dmenu`  
-  Dynamic menu for X; provides an interactive way to pick a `.wav` file.
-- `imagemagick` (`convert`)  
-  Suite for image processing; used to resize the generated spectrogram.
-
----
+- `sox` — generates the spectrogram image from audio
+- `dmenu` — interactive picker to select the `.wav` file
+- `imagemagick` (`convert`) — resizes the generated PNG
+- `find`, `grep`, `sed`, `rm` — standard Unix utilities (present on Arch by default)
 
 ### Description
 
-This script is designed to quickly produce a visual cover (art) for an audio file by generating and resizing the spectrogram of a selected `.wav` file. Intended for workflows where visual art for audio projects is needed, it leverages:
+This script creates “cover art” by turning a WAV file into a spectrogram image. It’s tailored to your local audio workspace under `/home/matias/audio/PROJECTS`:
 
-- **sox**: to create a high-resolution (1600x900) PNG spectrogram of the `.wav` source selected by the user.
-- **dmenu**: to interactively present all `.wav` files under `/home/matias/audio/PROJECTS` for easy selection within a X session (works seamlessly under qtile).
-- **ImageMagick**: to force the spectrogram image into the desired 1600x900 resolution, ensuring uniform cover sizes.
-- Intermediate files are managed efficiently: the original spectrogram is deleted after resizing, keeping only the final `_RESIZED.png` image.
+1. It lists WAV files under `~/audio/PROJECTS` and lets you choose one via `dmenu`.
+2. It computes a spectrogram using `sox` with a fixed resolution and scaling:
+   - `-x 1600` sets the spectrogram width in pixels
+   - `-Y 900` sets the intensity (dB range) / visual scaling
+   - `-r` enables a “raw” style rendering (no extra annotations)
+3. It resizes the image to exactly `1600x900` using ImageMagick, producing a second file with the `_RESIZED` suffix.
+4. It removes the original PNG and keeps only the resized one.
 
-The script maintains a simple pipeline and expects the user to be at least minimally familiar with the terminal and X-based app launching.
-
----
+Output files are written next to the selected WAV, using the same base name:
+- `…/track.wav` → `…/track_RESIZED.png`
 
 ### Usage
 
-tldr:
+Run from a terminal session under X11/Wayland (needs `dmenu`):
 
-```sh
-/home/matias/.scripts/bin/create_cover_art.sh
-```
+    ~/.scripts/bin/create_cover_art.sh
 
-**What happens:**
+Typical flow:
+- Select a `.wav` entry in the `dmenu` list
+- The resulting image appears alongside the audio file
 
-1. A `dmenu` menu appears listing all `.wav` files in `/home/matias/audio/PROJECTS`.
-2. You choose one file (via keyboard navigation/typing).
-3. The script:
-    - Creates a spectrogram image (`file.png`).
-    - Resizes it to 1600x900 pixels (`file_RESIZED.png`).
-    - Deletes the unresized temporary image.
-4. The final result is `file_RESIZED.png` next to your original `.wav` file.
+Qtile keybinding example:
 
-**You can:**
-- Assign the script to a qtile keybinding for even faster access.
-- Chain it with further artwork automation scripts if desired.
+    Key([mod], "c", lazy.spawn("~/.scripts/bin/create_cover_art.sh"), desc="Create spectrogram cover art")
 
 ---
 
 > [!TIP]
-> - The script has no checking for user cancellation in `dmenu` (empty selection).
-> - It does not escape spaces or special characters in filenames; files with such names may cause errors.
-> - All operations are done in-place in the same directory as the selected `.wav`, which could clutter your project folder with image files.
-> - Consider adding error handling and filename quoting (e.g. `"$file"`, `"$name"`) to improve robustness.
-> - If multiple files with the same base name (but different extensions) exist, overwriting is possible.
+> Consider hardening quoting and selection: `printf $file` should be `printf '%s' "$file"` (paths with spaces will break), and `find … | grep .wav` can match unintended files; prefer `find … -type f -iname '*.wav'`. Also, `sed 's/.wav//'` removes only the first “wav” match; use `sed 's/\.wav$//'`. You could avoid the extra resize+delete step by generating the spectrogram at the final size directly (verify `sox spectrogram` options), and add a “cancel” guard if the dmenu selection is empty.

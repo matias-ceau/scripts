@@ -1,64 +1,54 @@
-# Script Relations Visualizer
+# Scripts Relations Graph (Xonsh)
 
 ---
 
-**get_scripts_relations.xsh**: Scans `$SCRIPTS` directory for scripts and visualizes intra-folder dependencies as a directed graph
+**get_scripts_relations.xsh**: Build and display a dependency graph between scripts under `$SCRIPTS`
 
 ---
 
 ### Dependencies
 
-- `xonsh`: Shell to run `.xsh` scripts, blends Python and shell
-- `fd`: Fast alternative to `find`, used for listing scripts in `$SCRIPTS`
-- `basename`: CLI utility to get the filename, used to simplify paths
-- `rg` (ripgrep): Fast text searching tool to find dependencies/uses
-- `python` (with modules: `json`, `networkx`, `matplotlib`): For graph generation and visualization
-
-**Python packages:**
-- `networkx`: For graph representation
-- `matplotlib`: For plotting the graph
+- `xonsh` — required to run the script
+- `fd` — enumerates files under `$SCRIPTS`
+- `ripgrep` (`rg`) — finds scripts that reference other scripts by name
+- `basename` (coreutils) — extracts filenames from paths
+- `python-networkx` (`networkx`) — builds the directed graph
+- `python-matplotlib` (`matplotlib`) — renders the graph window
+- `$SCRIPTS` environment variable — must point to your scripts directory
 
 ### Description
 
-This script collects the relations between scripts inside your `$SCRIPTS` directory by:
-- Listing all scripts in `$SCRIPTS` (using `fd`)
-- For each script, searching for references to its basename within the script directory (using `rg`)
-- Building a dictionary mapping each script to those in which it appears to be referenced
-- Using Python (via xonsh) to construct a directed graph (with NetworkX) that shows which scripts depend on which others
-- Rendering and displaying a dependency graph via `matplotlib`
+This Xonsh utility scans your scripts directory and visualizes “who references whom” as a directed graph.
 
-Key variables/functions:
-- **dic**: Dictionary mapping script basenames to lists of scripts importing/calling them
-- **networkx**: Handles the construction of the dependency graph (nodes = scripts, edges = dependency links)
-- **matplotlib**: Visualizes the dependency network as a directed graph
+Workflow:
 
-**Note:** Only scripts whose names are referenced (by basename match) are considered as dependencies.
+1. Collect all files under `$SCRIPTS` using `fd`.
+2. For each script `k`, take its filename (`basename`) and search the whole `$SCRIPTS` tree for files containing that filename using `rg --files-with-matches`.
+3. Build a mapping like:
+
+- key: `some_script.sh`
+- value: `[list_of_scripts_that_contain_the_string_some_script.sh]`
+
+4. Convert the mapping into a `networkx.DiGraph`, adding an edge for each discovered relation.
+5. Render the graph with a spring layout via Matplotlib (`plt.show()` opens a GUI window).
+
+This is handy on Arch + qtile to quickly inspect how your personal scripts are coupled, and to spot “hub” scripts or unexpected references.
 
 ### Usage
 
-Typically, set your `$SCRIPTS` to the directory you want to analyze:
+Run interactively (needs a GUI for Matplotlib):
 
-```xonsh
-$SCRIPTS = ~/scripts/
-./get_scripts_relations.xsh
-```
+- `./get_scripts_relations.xsh`
 
-#### Quick Example
+Or:
 
-```xonsh
-export SCRIPTS=~/scripts
-xonsh /home/matias/.scripts/dev/get_scripts_relations.xsh
-```
+- `xonsh /home/matias/.scripts/dev/get_scripts_relations.xsh`
 
-- Run this either in a terminal or bind the command to a key in Qtile to quickly visualize your scripts' interconnections.
-- The script opens a Matplotlib window with an interactive plot of the relations (no files are written).
+Suggested from qtile (spawns a GUI window):
+
+- `Key([...], "g", lazy.spawn("xonsh ~/.scripts/dev/get_scripts_relations.xsh"))`
 
 ---
 
 > [!TIP]
->
-> - The script's dependency detection is based purely on a basename match, so it may generate false positives/negatives if script names are generic or commonly referenced in other contexts.
-> - There's no exclusion for comments or string matches, so the presence of a script name anywhere in a file is treated as a dependency.
-> - Consider outputting the graph to a file for integration into documentation or scripts!
-> - Error handling is minimal — missing dependencies or unset `$SCRIPTS` will cause the script to fail.
-> - For large script directories, the graph layout may be cluttered. Adding options for filtering or subgraphing could help.
+> Potential improvements: the edge direction is likely inverted (currently `file -> dep` where `dep` is actually “script that matched”, i.e., the caller). Consider flipping to `caller -> callee`. Also, using plain filename substring matching can create false positives (e.g., comments, partial matches, same names in different dirs); anchoring patterns or parsing `source`/`bash` calls would be more accurate. Add CLI options (e.g., output JSON, filter extensions, ignore vendored folders) and consider `plt.tight_layout()` for readability on larger graphs.

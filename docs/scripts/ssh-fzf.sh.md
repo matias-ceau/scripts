@@ -1,80 +1,50 @@
-# ssh-fzf — Fuzzy SSH Command Launcher
+# SSH command picker (pass + fzf)
 
 ---
 
-**ssh-fzf.sh**: Fuzzy-find and execute ssh commands from `pass` using `fzf`.
+**ssh-fzf.sh**: Pick an SSH command from pass via fzf and execute it in a login shell
 
 ---
 
 ### Dependencies
 
-- `pass`: Secure password manager storing and retrieving passwords, ssh commands here.
-- `fzf`: Command-line fuzzy finder for interactive selection.
-- `bash`: Ensures commands are run in a login shell.
-- Entry in `pass` (by convention: `ssh_cmds`): Should store a newline-separated list of SSH commands.
-
----
+- `bash` — script interpreter
+- `pass` — provides the `ssh_cmds` entry containing your SSH commands
+- `fzf` — interactive fuzzy finder UI
 
 ### Description
 
-This script is designed to quickly launch SSH connections using commands securely stored and organized in your `pass` password store. The SSH commands must be saved as entries under `ssh_cmds` within `pass`—each command on a separate line.
+This script is a tiny launcher for SSH (or generally *any*) commands stored inside your password-store. It:
 
-**What it does:**
+1. Reads the content of `pass ssh_cmds` (a multiline secret/entry in your `~/.password-store`).
+2. Pipes it into `fzf` so you can interactively search and select one line.
+3. If you selected something (non-empty), it executes that line via `bash -l -c`.
 
-1. Retrieves SSH command entries using `pass ssh_cmds`.
-2. Presents them in `fzf` so you can fuzzy search and pick one interactively.
-3. If a choice is made, it runs it in a login shell to ensure shell config is sourced.
+Using `bash -l` is convenient on Arch because it loads your login shell environment (e.g., `~/.bash_profile`), making sure your PATH, SSH agent variables, and any qtile-launched environment quirks are consistent. This is especially useful when triggering it from qtile keybindings where the environment can differ from a terminal.
 
-This integration is useful for users who manage multiple SSH hosts and want an ergonomic CLI workflow leveraging security and efficiency. Designed for minimal user interaction and intended as a quick-launch tool—ideal for workflow integration in qtile keybindings or simply from a terminal prompt.
+Your `ssh_cmds` entry should typically be a list of one-command-per-line, for example:
 
----
+- `ssh myuser@host`
+- `ssh -J jump user@internal-host`
+- `mosh user@server` (works too)
 
 ### Usage
 
-#### Interactive Terminal
+Run interactively (needs a TTY for `fzf`):
 
-Just run:
+- `ssh-fzf.sh`
 
-```
-~/.scripts/bin/ssh-fzf.sh
-```
+Recommended from qtile: bind it to open in your terminal (since `fzf` is interactive), e.g. via your preferred terminal command.
 
-#### From qtile Keybinding
+tldr:
 
-Add a keybinding in your qtile config, for example:
-
-```python
-Key([mod], "s", lazy.spawn("~/.scripts/bin/ssh-fzf.sh"))
-```
-
-#### How to populate your `pass` entry
-
-Store your SSH commands under `ssh_cmds` (newline-separated):
-
-```
-pass insert ssh_cmds
-```
-For example (paste one per line):
-```
-ssh matias@server1
-ssh otheruser@backup-host
-ssh -p 2222 me@myspecialbox
-```
-
-**Tldr:**
-
-```
-# Populate ssh_cmds in pass
-pass insert ssh_cmds
-
-# Invoke the script (choose host interactively)
-~/.scripts/bin/ssh-fzf.sh
-```
+- Add lines to pass:  
+  - `pass edit ssh_cmds`
+- Pick a line with fuzzy search:
+  - `ssh-fzf.sh`
+- Execute selection automatically on Enter.
 
 ---
 
 > [!TIP]
-> - If the `ssh_cmds` entry is missing in `pass`, the script will fail silently—consider adding error handling for missing or empty entries.
-> - The script assumes each line in `ssh_cmds` is a safe, valid SSH command. There's a potential risk if any line is not an SSH command or contains malicious shell code.
-> - You may want to refresh your `pass` store or `fzf` index if changes aren't being picked up immediately.
-> - For more complex workflows, consider also copying other connection information (like passwords/keys) or extending the script to manage multiple categories of remote hosts.
+> Consider trimming out the password-store “first line” convention: `pass` entries often start with a password on line 1. If `ssh_cmds` follows that pattern, `fzf` may show (and execute) unintended lines. You can mitigate by storing only commands in that entry, or by filtering (e.g., `tail -n +2`). Also note that executing arbitrary strings via `bash -c` is powerful but risky—ensure only trusted commands are stored there, and consider adding a preview (`fzf --preview`) or confirmation prompt before execution.

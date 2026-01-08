@@ -1,64 +1,63 @@
-# Update File Birthdays Utility
+# Script file “birthdays” index updater
 
 ---
 
-**update_birthdays.sh**: Extracts and records the creation date ("birthday") of all files in your scripts directory using git history.
+**update_birthdays.sh**: Rebuilds `bdays.csv` with each script’s “birth date” from git history
 
 ---
 
 ### Dependencies
 
-- `fd`: A simple, fast and user-friendly alternative to `find`. Required for efficient file discovery.
-- `git`: Used to determine the historical creation date of files.
-- `sed`: For line manipulation and text substitution.
-- `basename`: Extracts the filename from a path.
-- `sort`, `cut`, `tail`, `cat`, `rm`: Standard UNIX utilities.
-- Assumes `$SCRIPTS` environment variable is set, pointing to your scripts directory.
-- Files must be tracked by `git` for the birthdays to be accurate.
+- `bash`
+- `git` — used to retrieve the first commit date of each file (`git log --follow`)
+- `fd` — file discovery under `$SCRIPTS`
+- `sed` — fills missing dates
+- `coreutils`: `sort`, `tail`, `cut`, `basename`, `rm`, `date`
 
 ### Description
 
-This script populates a CSV file (`bdays.csv` in your `$SCRIPTS` directory) with the creation ("birthday") dates for every tracked file under `$SCRIPTS`. For each file found, it analyzes its git log using:
+This script generates a CSV file (`$SCRIPTS/bdays.csv`) containing a “birthday” for each script in your `$SCRIPTS` tree: the date of the earliest git commit that touched the file (with rename tracking via `--follow`).
 
-```
-git log --follow --format=%ai <file> | tail -n 1
-```
+Workflow:
 
-This pipeline ensures the script finds the earliest commit date associated with each file (including across renames). The output lines contain `YYYY-MM-DD, filename`.
+1. Creates a temporary file at `$SCRIPTS/bdays.csv.temp`.
+2. Uses `fd` to enumerate files under `$SCRIPTS` (files only, because `-t x` is used).
+3. For each file, it runs:
 
-After constructing an intermediate `.temp` file, the script substitutes any empty date fields (which could occur if a file is untracked by git) with today's date. It then sorts the CSV for better readability and reference.
+   - `git log --follow --format=%ai <file>` to list commit timestamps
+   - `tail -n 1` to select the oldest entry
+   - `cut -d' ' -f1` to keep only `YYYY-MM-DD`
 
-This is especially useful for tracking when scripts were first committed in a long-running dotfiles or scripts repository.
+4. Appends lines in the form:
+
+   - `YYYY-MM-DD, filename`
+
+5. If a file has no git history (or `git log` returns nothing), the date field is blank; `sed` replaces leading `, ` with today’s date.
+6. Sorts the final output and writes it to `$SCRIPTS/bdays.csv`, then removes the temp file.
+
+This is handy for meta-maintenance: tracking when scripts first appeared, generating dashboards, or feeding status widgets in qtile.
 
 ### Usage
 
-You can run this script at any time to update your birthday records:
+Run from anywhere, as long as `$SCRIPTS` is set:
 
-```
-bash ~/.scripts/meta/update_birthdays.sh
-```
+    export SCRIPTS="$HOME/.scripts"
+    ~/.scripts/meta/update_birthdays.sh
 
-If you often edit or add new scripts, consider binding this script to a key sequence in your `qtile` config or having a cron or systemd timer trigger it periodically.
+Typical output file:
 
-**Sample `$bdays.csv` output:**
+    2023-08-14, volume.sh
+    2024-02-01, lock.sh
 
-```
-2022-03-01, launch_steam.sh
-2023-02-16, get_wifi_info.sh
-2024-05-02, update_birthdays.sh
-```
+Suggested qtile binding (example idea):
 
-Just ensure that `$SCRIPTS` is set in your environment (e.g., in your `.bashrc`):
-
-```
-export SCRIPTS="$HOME/.scripts"
-```
+    lazy.spawn("~/.scripts/meta/update_birthdays.sh")
 
 ---
 
 > [!TIP]
-> - Files not tracked by git will have today's date as their "birthday", which may not reflect their true age.
-> - All `basename` calls strip directory paths; if multiple files have identical names in different directories, you'll lose location context.
-> - Using `echo > "$BDAYS.temp"` truncates the file but leaves an empty line at the top of the CSV. Consider using `: > "$BDAYS.temp"` and filtering out empty lines.
-> - To improve efficiency, process substitution or parallelization might help with large numbers of files.
-> - Consider adding error handling (e.g., if `$SCRIPTS` isn't set, or if `fd`/`git` aren't available).
+> Consider adding safety and correctness improvements:
+> - Quote `$SCRIPTS` in `--search-path "$SCRIPTS"` to handle spaces.
+> - `fd . -tx` likely means “executable files”; if you want *all* scripts, consider `-t f` and filter by extension/path.
+> - Running `git log` per file can be slow; you could batch via `git ls-files` + `git log --name-only` parsing.
+> - Prefer `sed 's/^, /.../'` without `cat` (use input redirection) and use `mktemp` for the temp file to avoid collisions.

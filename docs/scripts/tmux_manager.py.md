@@ -1,100 +1,69 @@
-# Tmux Session Manager
+# tmux_manager — YAML-driven tmux session launcher
 
 ---
 
-**tmux_manager.py**: Python utility to manage named tmux sessions using a YAML configuration file
+**tmux_manager.py**: Manage and launch tmux sessions/windows from a YAML config
 
 ---
 
 ### Dependencies
 
-- `tmux` (Terminal multiplexer; must be installed and in your `PATH`)
-- `python >=3.13`
-- `colorama`: For colored terminal output
-- `pyyaml`: For loading and saving YAML configs
-- `uv` (optional, but script shebang expects `uv run --script`; see [uv](https://github.com/astral-sh/uv))
-- Standard Python libraries: `argparse`, `os`, `signal`, `subprocess`, `sys`, `pathlib`
+- `python>=3.13` (script header targets 3.13)
+- `uv` (runs via shebang: `uv run --script`)
+- `tmux` (session/window creation and probing)
+- `pyyaml` (reads/writes the sessions config)
+- `colorama` (colored status/output)
+- `build`, `setuptools` (declared in header; not used at runtime but required by the script metadata block)
+
+---
 
 ### Description
 
-This script manages your tmux sessions based on a central YAML config (`$SCRIPTS/config/tmux_sessions.yaml`). Sessions are defined in this file along with their windows and startup commands. The script supports:
+This script provides a small “tmux profiles” manager backed by a YAML file at `$SCRIPTS/config/tmux_sessions.yaml` (defaults to `~/scripts/config/tmux_sessions.yaml` if `$SCRIPTS` is unset). On first run, it creates the directory and writes a default config containing example sessions (e.g. `MEGA`, `MUSIC`).
 
-- Listing all configured sessions and their statuses
-- Launching specific or all sessions, optionally force-restarting them
-- Autostarting only those flagged as `autostart: true` in config
-- Interactive prompt to add new sessions via the CLI
-- Output uses color coding for better readability (requires a truecolor terminal)
+Core behaviors:
 
-Session definitions are like:
+- Parses `sessions:` entries into `TmuxSession` objects (session names are normalized to uppercase).
+- Checks session status via `tmux has-session -t NAME`.
+- Launches sessions detached (`tmux new-session -d`) and then adds additional windows via `tmux new-window`.
+- Supports “force restart” with `--relaunch` (kills existing sessions before recreating).
+- Provides an interactive `--add` flow to append/overwrite a session definition and writes back YAML.
 
-```yaml
-sessions:
-  - name: MUSIC
-    autostart: true
-    windows:
-      - name: player
-        command: cmus
-      - name: edit
-        command: nvim ~/Music/playlist.m3u
-```
+Signal handling for `SIGINT`/`SIGTERM` exits cleanly, which is handy when binding this in qtile and you cancel mid-run.
 
-Features:
-- Automatically initializes config if missing, including a sensible default
-- Handles proper process detachment and session killing/relaunching
-- Safety prompts for overwriting existing session configs
-- Graceful exit on Ctrl+C, with visually distinct warnings/errors
+---
 
 ### Usage
 
-You may run tmux_manager.py in a terminal, or bind it to a key in your qtile setup (recommended for quick autostart, etc).
+List configured sessions and running state:
 
-**Common invocations:**
+    tmux_manager.py --list
 
-```sh
-./tmux_manager.py --list
-# or (if using uv as in the shebang)
-uv run -- tmux_manager.py --list
+Launch all sessions:
 
-./tmux_manager.py --session MUSIC         # Launch "MUSIC"
-./tmux_manager.py --session music --relaunch   # Relaunch (kill & restart) "MUSIC"
-./tmux_manager.py --all                   # Launch all configured sessions
-./tmux_manager.py --auto                  # Launch only autostart sessions
-./tmux_manager.py --add                   # Add a new session interactively
-```
+    tmux_manager.py --all
 
-For integrating autostart on login:
-Add to your qtile or user startup scripts:
-```sh
-tmux_manager.py --auto
-```
+Launch only `autostart: true` sessions (good for login/qtile autostart):
 
-**Interactive Session Creation:**
-```
-$ ./tmux_manager.py --add
+    tmux_manager.py --auto
 
-=== Adding New Tmux Session Configuration ===
-Enter session name: dev
-Enable autostart? (y/N): y
+Launch one session (case-insensitive):
 
-Enter window name (or empty to finish): python
-Enter command for this window: nvim main.py
+    tmux_manager.py --session music
 
-Enter window name (or empty to finish):
-Session 'DEV' added successfully!
-```
+Force relaunch (kill + recreate):
+
+    tmux_manager.py --session music --relaunch
+
+Add a new session interactively:
+
+    tmux_manager.py --add
 
 ---
 
 > [!TIP]
->
-> - The script will always create `$SCRIPTS/config/tmux_sessions.yaml` if not present, but `$SCRIPTS` must be set (or it'll default to `~/scripts`). Make sure you have consistent environment handling.
->
-> - The script relies on `tmux` CLI; any custom tmux configuration might affect behavior.
->
-> - No built-in "delete session from config" option. Removing sessions must be done by editing the YAML directly, or implement an extra flag.
->
-> - Consider validating window commands before execution to surface errors proactively.
->
-> - Windows and commands are not deeply validated; misconfigured YAML (wrong keys, etc.) is only warned, not fatal.
->
-> - If run from within tmux, window management may behave unexpectedly (detached sessions).
+> Improvements to consider:
+> - `build`/`setuptools` aren’t used at runtime; removing them from the script metadata avoids unnecessary installs.
+> - `tmux new-session ... [window_cmd]` passes the command as a single argument; complex commands with spaces/shell operators won’t work as expected—consider `tmux ... sh -lc '...'` or YAML `command: ["prog","arg"]` support.
+> - Window names are uppercased on add, but not on load; standardize casing for consistency.
+> - `--all/--auto` currently treats “already running” as a failure unless `--relaunch`; you might prefer “skip if running” semantics.

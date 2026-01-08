@@ -1,60 +1,58 @@
-# Hypertext Viewer
+# Hypertext Viewer (PyQt6)
 
 ---
 
-**html_viewer.py**: Simple graphical viewer for local HTML and Markdown, with folder browsing.
+**html_viewer.py**: PyQt6 viewer for HTML/Markdown/text with folder index + wiki links
 
 ---
 
 ### Dependencies
 
-- `python3` — Required to run the script.
-- `PyQt6` — Provides the Qt GUI (widgets, WebEngine, core modules).
-- `PyQt6-WebEngine` — Enables web page rendering.
-- `markdown` — Converts Markdown files to HTML for display.
-- (Optional) Your Arch Linux setup should have the necessary Qt6 and Python dependencies (`python-pyqt6`, `python-pyqt6-webengine`, `python-markdown` on Arch).
+- `uv` (shebang runs the script via `uv run --script`)
+- `python>=3.13`
+- `markdown` (Markdown → HTML conversion)
+- `pyqt6`, `pyqt6-webengine-qt6`, `pyqt6-qt6`, `pyqt6-sip` (GUI + WebEngine)
 
 ### Description
 
-This script implements a minimal hypertext file viewer for local HTML, Markdown documents, and folders, tailored for desktop use. It combines a web browser widget (via PyQt6's `QWebEngineView`) with custom folder and Markdown handling:
-- **Folder as Entry Point**: Dropping a directory opens `index.md`, `index.html`, or `README.md` if present; else, it lists folder contents as clickable links.
-- **Markdown Rendering**: .md files are rendered as HTML using Python's `markdown` module, with support for Obsidian-style `[[wiki links]]`, auto-converted to Markdown link syntax before rendering.
-- **Navigation**: Maintains simple back/forward history, a URL bar for navigation, and clickable links in HTML/Markdown.
-- **JavaScript Toggle**: Simple menu/toolbar UI for toggling JS support—ideal when opening unknown or potentially unsafe HTML.
-- **Smart File-Finding**: Resolves relative or missing files by recursively searching from a `project_root` (the first file/dir loaded).
-- **Cross-link Handling**: Local file and wiki links (in Markdown) transparently open without launching an external browser; web URLs (e.g., `http://`) are printed to stdout.
+A lightweight desktop “docs browser” meant for local projects (notes, README trees, exported docs). It wraps a `QWebEngineView` in a `QMainWindow` and adds:
 
-The flexible design lets you browse, preview, and traverse documentation projects, code wikis, or general HTML/Markdown notes from within a PyQt-based app.
+- **File/folder opening**
+  - If a folder is opened, it auto-detects `index.md`, `index.html`, or `README.md`.
+  - If none exists, it renders a clickable **directory listing** as HTML.
+- **Markdown rendering**
+  - `.md` files are converted using `markdown.markdown()`.
+  - Supports Obsidian-style wiki links by rewriting:
+    - `[[file]]` → `[file](file)`
+    - `[[alias|file]]` → `[alias](file)`
+- **Smart local link handling**
+  - Clicked local links are intercepted (`CustomWebEnginePage.acceptNavigationRequest`) and resolved.
+  - If a link points to a missing local path, it falls back to searching the **whole project root** (directory of the initially opened path, otherwise `cwd`).
+- **Navigation**
+  - A simple custom history stack with Back/Forward actions.
+- **Optional JavaScript**
+  - Toggleable via menu or `--disable-js`, applied through `QWebEngineSettings`.
+
+This fits well as a qtile keybinding helper to quickly browse a repo’s docs or your notes directory.
 
 ### Usage
 
-Run interactively or map to a qtile keybinding. Example invocations:
+Run directly (via the `uv` shebang):
 
-```
-# Open a Markdown file
-html_viewer.py ~/projects/wiki/NLP_notes.md
+- Open a file:
+  - `~/.scripts/bin/html_viewer.py README.md`
+- Open a folder (loads `index.md`/`index.html`/`README.md` or shows listing):
+  - `~/.scripts/bin/html_viewer.py ~/projects/myrepo`
+- Disable JavaScript (safer for random HTML):
+  - `~/.scripts/bin/html_viewer.py --disable-js docs/index.html`
 
-# Open a directory (tries to open index.md/html, or browses files)
-html_viewer.py ~/projects/wiki/
-
-# Disable JavaScript for web view (for security)
-html_viewer.py --disable-js somefile.html
-
-# Run with no argument, then open files using the GUI menu
-html_viewer.py
-```
-
-- URL bar: Enter a file or directory path to open directly.
-- Use the `File` > `Open File` menu, or toolbar for navigation.
-- Folders display clickable file lists.
-- Go back/forward with toolbar buttons.
+In qtile, you can bind it to open the current project docs, e.g.:
+- `lazy.spawn("~/.scripts/bin/html_viewer.py ~/projects/foo")`
 
 ---
 
-> [!CAUTION]
-> - The script does not currently sanitize potentially unsafe HTML or JS—use the JavaScript toggle when opening untrusted files.
-> - There’s no support for opening remote (http/https) URLs within the viewer; external links are just printed to stdout.
-> - The file-finding logic is simple (considers only file names, not relative paths as hyperlinks may expect).
-> - Large directories/folders are displayed with a minimal HTML template—could be styled for improved navigation.
-> - The GUI depends on PyQt6; startup time and resource usage are higher than CLI tools. Consider using `xdg-mime` or qtile custom keybindings for best integration in your environment.
-> - Internationalization and accessibility features are not present; folder/file names with non-UTF8 chars may cause issues.
+> [!TIP]
+> A few improvements worth considering:
+> - When `findFile()` fails in `loadFile()`, the error prints `None` because `file_path` gets overwritten; keep the original input for clearer messages.
+> - `os.walk()` on every missing link can be slow on big repos; caching an index (or limiting to certain extensions) would speed things up.
+> - External URLs are only printed; optionally open them via `xdg-open` or allow navigation in the same view (with a safety prompt).

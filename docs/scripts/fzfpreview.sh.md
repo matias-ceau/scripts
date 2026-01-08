@@ -1,70 +1,63 @@
-# fzf File & Image Preview Demo
+# fzf file/image preview helper
 
 ---
 
-**fzfpreview.sh**: Display file or image contents in fzf preview window using various tools and fallback logic
+**fzfpreview.sh**: FZF preview script for text, binaries, and images (kitty/chafa/imgcat)
 
 ---
 
 ### Dependencies
 
-- `bat` or `batcat`: Syntax-highlighting cat clone for text files.
-- `chafa`: Convert images for terminal display (Sixel, etc).
-- `imgcat`: Show images inline in iTerm2.
-- `kitty icat`: Used for image previews in kitty.
-- `fzf`: Fuzzy file finder (to provide the preview window).
-- Standard utilities: `file`, `cat`, `awk`, `stty`, `sed`.
-
----
+- `fzf` (indirect): meant to be used as `--preview` command
+- `file`: MIME/type detection (`--mime`)
+- `bat` / `batcat`: syntax-highlighted text previews (fallbacks to `cat`)
+- `kitty` (optional): uses `kitty icat` when running inside Kitty (`$KITTY_WINDOW_ID`)
+- `chafa` (optional): renders images in terminal (Sixel output)
+- `imgcat` (optional): image preview for iTerm2
 
 ### Description
 
-This script is a robust utility for integrating file and image preview capabilities into fzf workflows. Depending on file type and available utilities, it:
-- Displays code/text files with syntax highlighting via `bat`/`batcat` (with `cat` fallback).
-- Shows images in the preview window using:
-  - `kitty icat` when in Kitty terminal (with special flags for best preview UX, including scroll bug workarounds),
-  - `chafa` for terminals supporting Sixel graphics (ensures multi-image support),
-  - `imgcat` for iTerm2 environments,
-  - or just displays file info if no suitable method is found.
+This script is a robust `fzf` preview backend that adapts to the selected entry’s type:
 
-Special care is taken to detect binary files, avoid scrolling bugs, and substitute `~` home references. It dynamically sizes the preview window based on fzf environment variables, with fallbacks via `stty`.
-
----
+- Expands `~/` to `$HOME` so paths coming from shell-like sources work.
+- Uses `file --mime` to detect whether the target is an image.
+  - **Non-image**:
+    - If `file` reports `=binary`, it prints a concise `file` summary and stops (avoids dumping unreadable bytes).
+    - Otherwise, it prefers `batcat`/`bat` with color enabled and no pager, honoring `BAT_STYLE` (defaults to `numbers`).
+  - **Image**:
+    - Computes preview geometry from `FZF_PREVIEW_COLUMNS`/`FZF_PREVIEW_LINES`, with fallbacks to `stty size`.
+    - Includes a small workaround to prevent bottom-of-screen scrolling glitches in some Sixel setups (fzf issue #2544).
+    - Rendering order:
+      1) `kitty icat` (best experience on Arch + Kitty)
+      2) `chafa` (Sixel)
+      3) `imgcat` (iTerm2)
+      4) fallback to `file` output
 
 ### Usage
 
-You typically call this script from within an fzf command, setting it as the `--preview` argument:
+Set it as your `fzf` preview command:
 
 ```sh
-fzf --preview '/home/matias/.scripts/dev/fzfpreview.sh {}'
+fzf --preview '~/.scripts/dev/fzfpreview.sh {}'
 ```
 
-Or, you can preview any file from the terminal:
+Typical patterns:
 
 ```sh
-/home/matias/.scripts/dev/fzfpreview.sh ./path/to/file_or_image
+# File picker
+find . -type f | fzf --preview '~/.scripts/dev/fzfpreview.sh {}'
+
+# With bat style override
+BAT_STYLE=plain fzf --preview '~/.scripts/dev/fzfpreview.sh {}'
 ```
 
-**Arguments:**
-- Takes one positional argument: the path to the file.
+You generally don’t run it manually, but you can:
 
-**Examples:**
-- Preview a script file in fzf:
-  ```
-  fzf --preview '~/.scripts/dev/fzfpreview.sh {}'
-  ```
-- Directly preview an image:
-  ```
-  ~/.scripts/dev/fzfpreview.sh ~/Pictures/test.jpg
-  ```
-
-The script can be assigned to a `qtile` keybinding or composited into custom scripts for more integrated workflows.
+```sh
+~/.scripts/dev/fzfpreview.sh path/to/file.png
+```
 
 ---
 
 > [!TIP]
-> - The script assumes you have either `bat` or `batcat` for text previews, but doesn't error out if neither is found (falls back to `cat` without syntax highlighting).
-> - `imgcat` is assumed to be appropriate if available, but without checks for actual iTerm2 use. The author notes this in the script, but in case you use `imgcat` outside iTerm2, you could add an explicit check using `it2check`.
-> - For even better integration with fzf, you could allow the script to accept more than one argument (e.g., adding extra options) or improve error messages if preview tools aren't found.
-> - If you plan to use this on other terminals (not Kitty/iTerm2), verify correct behavior, especially Sixel support.
-> - Consider adding better handling when no dependencies are available, to let the user know which tools are missing for full functionality.
+> The script assumes paths with spaces are passed as a single argument; ensure your `fzf` input/placeholder usage preserves quoting. Consider adding explicit checks for unreadable files and returning a clear message (e.g., “permission denied”). Also note that Sixel support depends on terminal capabilities; on Arch, you may want to standardize on Kitty (`kitty icat`) for consistent image previews.

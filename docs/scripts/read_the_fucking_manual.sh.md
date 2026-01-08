@@ -1,68 +1,64 @@
-# RTMF: Read The Fucking Manual History Query Tool
+# Read the manual history leaderboard
 
 ---
 
-**read_the_fucking_manual.sh**: Query and analyze your `man`/`batman` usage history for most searched entries.
+**read_the_fucking_manual.sh**: Show your most searched man/batman pages from shell history
 
 ---
 
 ### Dependencies
 
-- `bat` — Enhanced `cat` clone, used here to pretty print help.
-- `ripgrep` (`rg`) — Fast, recursive search tool for filtering and searching entries.
-- `sed`, `awk`, `cut`, `sort`, `uniq` — Standard Unix command-line tools for parsing and analyzing your shell history.
-- Your shell (`bash` and/or `zsh`) must store history files at `$XDG_STATE_HOME/bash/history` and `$XDG_STATE_HOME/zsh/history`.  
-- Optional: `batman` (`bat` + `man`), if you also use that for reading manuals.
-
----
+- `bash`
+- `bat` (used to render the help text via `bat -plhelp`)
+- `ripgrep` (`rg`, used to filter history lines and optionally search results)
+- `sed`, `awk`, `cut`, `sort`, `uniq`, `head` (coreutils / text utilities)
+- `$XDG_STATE_HOME` with:
+  - `$XDG_STATE_HOME/zsh/history`
+  - `$XDG_STATE_HOME/bash/history`
 
 ### Description
 
-This script aggregates and analyzes your usage of `man` and `batman`, helping you identify which manuals you check the most. It parses your history files (both Bash and Zsh), extracts invocations of `man` and `batman`, and summarizes how often each manual page is looked up.
+This script mines your Zsh and Bash history files and builds a ranked list of manual pages you’ve looked up the most via `man` or `batman`.
 
-Key features:
-- **Top searches**: Displays your most frequently referenced manual pages.
-- **Threshold filtering**: Show only entries above a certain number of searches.
-- **Flexible search**: Pass any arguments, and they are sent to `ripgrep` for powerful filtering.
-- **Customizable count**: Show as many (or as few) results as you want.
+Pipeline overview (inside `get_searches()`):
 
-#### How it works
-- Combines history from Bash and Zsh.
-- Pulls out all manual lookups (`man` or `batman` commands), ignoring options and only capturing the main entry/page.
-- Counts and sorts entries, so you immediately see which tools you reference the most.
+1. Concatenates both history files.
+2. Strips Zsh extended-history prefixes (`: <time>:<duration>;`) so commands look normal.
+3. Keeps only lines starting with `man ` or `batman `.
+4. Removes the command prefix and drops option-only invocations (lines where the page name starts with `-`).
+5. Extracts the first argument (the page name), counts occurrences, sorts by frequency, and prints:  
+   `pagename count`
 
----
+The `case` statement then offers common views (top 10 by default, top N, above a threshold, full list) or lets you pass any `rg` query to search the ranked output.
 
 ### Usage
 
+```sh
+# Default: top 10 manual pages you searched
+read_the_fucking_manual.sh
+
+# Help
+read_the_fucking_manual.sh -h
+read_the_fucking_manual.sh --help
+
+# Top N
+read_the_fucking_manual.sh -n 25
+read_the_fucking_manual.sh --number 25
+
+# Only pages searched more than N times
+read_the_fucking_manual.sh -m 3
+read_the_fucking_manual.sh --more-than 3
+
+# Show all ranked entries
+read_the_fucking_manual.sh -a
+read_the_fucking_manual.sh --all
+
+# Search within the ranked list using ripgrep arguments
+read_the_fucking_manual.sh '^systemd'
+read_the_fucking_manual.sh -i 'pacman|paru'
 ```
-$ read_the_fucking_manual.sh
-# Show the 10 most searched manual entries
-
-$ read_the_fucking_manual.sh -n 20
-# Show the top 20 most searched
-
-$ read_the_fucking_manual.sh --all
-# Show all searched manual pages sorted by frequency
-
-$ read_the_fucking_manual.sh --more-than 2
-# Show all entries searched more than twice
-
-$ read_the_fucking_manual.sh ls
-# Search for entries matching "ls" pattern (uses ripgrep)
-
-$ read_the_fucking_manual.sh -h
-# Show help text in a pretty way (via bat)
-```
-
-You can run this script interactively in a terminal or bind it to a key in Qtile for quick access.
 
 ---
 
 > [!TIP]
-> 
-> - The script assumes your Bash and Zsh history files are located at `$XDG_STATE_HOME/bash/history` and `$XDG_STATE_HOME/zsh/history`, which may not match your current setup (default is usually `$HOME/.bash_history`/`.zsh_history`). Consider making this configurable or more autodetecting.
-> - Filtering out arguments after man/batman may sometimes drop intended multi-word lookups (like `man git log`), so the counting is on the first word after `man`.
-> - No colored output except for the help section; you might want to add color to the frequency column for clarity.
-> - Edge case: If `$2` isn't set for some options, the script might misbehave. Add input validation for safer argument parsing.
-> - Consider supporting other shells or making the history path override via env variable or script argument.
+> Consider quoting numeric args and providing defaults for `-m` when `$2` is empty (your help says default 1, but the code doesn’t enforce it). Also guard against unset `$XDG_STATE_HOME` or missing history files to avoid noisy errors. Finally, `-n` should validate `$2` (empty/non-numeric) and `get_searches` could be sped up slightly by using a single `awk` script instead of multiple processes.

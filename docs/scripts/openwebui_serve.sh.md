@@ -1,63 +1,56 @@
-# Open WebUI Server Launcher
+# Open WebUI Serve (uvx)
 
 ---
 
-**openwebui_serve.sh**: Launch Open WebUI via uvx with XDG-compliant data directory
+**openwebui_serve.sh**: Launch Open WebUI via uvx with data stored in XDG data directory
 
 ---
 
 ### Dependencies
 
-- `bash` — script shell.
-- `uv` (provides `uvx`) — runs Python apps without global installs; fetches tools on demand.
-- `python` (3.12) — interpreter used by `uvx --python 3.12`.
-- `open-webui` — Python package providing the `open-webui` CLI/server.
-- `systemd` (optional) — to run as a user service.
-- `XDG_DATA_HOME` — used to place persistent data under an XDG-compliant path.
+- `bash`
+- `uvx` (from `uv`): runs ephemeral Python apps without manual venv management
+- `python` `3.11` (available to `uvx`)
+- `open-webui` (fetched automatically as `open-webui@latest`)
 
 ### Description
 
-This tiny launcher runs Open WebUI with `uvx`, always using the latest published Python package and Python 3.12 runtime. It sets a per-run environment variable so Open WebUI stores all state under:
-- $XDG_DATA_HOME/open-webui (typically ~/.local/share/open-webui on Arch if XDG_DATA_HOME is set)
+This script starts **Open WebUI** using `uvx`, forcing **Python 3.11** and placing Open WebUI’s persistent data under your XDG data directory.
 
-Because it uses `uvx`:
-- No global Python packages are installed; dependencies are cached by uv.
-- You always get the latest `open-webui` due to the @latest specifier.
-- Python 3.12 is ensured even if system Python differs.
+Key behaviors:
 
-The variable assignment prefix (DATA_DIR="...") only applies to this command invocation, keeping your environment clean.
+- Sets `DATA_DIR` to: `$XDG_DATA_HOME/open-webui`  
+  This follows the XDG base directory spec and keeps application state out of `~/.config` and `~/.local/share` clutter.
+- Runs: `uvx --python 3.11 open-webui@latest serve`  
+  `uvx` will download/cache the requested package version (`@latest`) and execute the `serve` entrypoint, so you don’t need to install Open WebUI globally.
+
+On Arch + qtile, this makes it convenient to start the service from a keybinding, a scratchpad terminal, or an autostart hook while keeping data in a predictable location.
 
 ### Usage
 
-- Make sure ~/.scripts/bin is in your PATH and the script is executable:
-  - chmod +x ~/.scripts/bin/openwebui_serve.sh
-- Start the server:
-  - openwebui_serve.sh
-- Then open in your browser (default): http://localhost:8080
+Run from a terminal:
 
-Examples:
-- Run in a terminal to see logs:
-  - alacritty -e openwebui_serve.sh
-- Qtile keybinding:
-  - lazy.spawn("alacritty -e ~/.scripts/bin/openwebui_serve.sh")
-- As a systemd user service (~/.config/systemd/user/openwebui.service):
-  - [Unit]
-    Description=Open WebUI (uvx)
-  - [Service]
-    ExecStart=%h/.scripts/bin/openwebui_serve.sh
-    Restart=on-failure
-  - [Install]
-    WantedBy=default.target
-  - systemctl --user enable --now openwebui.service
+    ~/.scripts/bin/openwebui_serve.sh
 
-Environment tweaks (before launching):
-- Change port: PORT=3000 openwebui_serve.sh
-- Override data dir: DATA_DIR=/path/to/data openwebui_serve.sh
+Typical “tldr”:
+
+    # Start server (downloads/caches open-webui automatically)
+    openwebui_serve.sh
+
+    # Ensure XDG_DATA_HOME is set (optional; usually already is)
+    export XDG_DATA_HOME="$HOME/.local/share"
+    openwebui_serve.sh
+
+Suggested qtile autostart (conceptually):
+
+    # call the script once on session start (in your autostart hook)
+    ~/.scripts/bin/openwebui_serve.sh &
 
 ---
 
 > [!TIP]
-> - If XDG_DATA_HOME is unset, DATA_DIR may expand to “/open-webui”. Consider a fallback: DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/open-webui".
-> - The script does not pass through CLI arguments. To allow this, append "$@" after serve: … open-webui@latest serve "$@".
-> - Pinning a version (e.g., open-webui==vX.Y.Z) can improve reproducibility.
-> - You may want to add a simple healthcheck/retry or systemd sandboxing (ProtectHome, PrivateTmp) for robustness.
+> Consider hardening and ergonomics:
+> - If `$XDG_DATA_HOME` is empty, `DATA_DIR` becomes `/open-webui`. Add a fallback: `: "${XDG_DATA_HOME:=$HOME/.local/share}"`.
+> - Quote variables to be safe: `DATA_DIR="$XDG_DATA_HOME/open-webui"`.
+> - You may want a fixed version instead of `@latest` for reproducibility.
+> - For a long-running service, using a `systemd --user` unit is more robust than a WM autostart (restart on failure, logs, clean shutdown).

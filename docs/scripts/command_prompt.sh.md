@@ -1,74 +1,52 @@
-# Command Prompt: FZF History Launcher
+# Command prompt (history-based launcher)
 
 ---
 
-**command_prompt.sh**: Interactive shell history picker via fzf wrapper
+**command_prompt.sh**: Pick a past command from shell history via fzf and output it
 
 ---
 
 ### Dependencies
 
-- `bash` — script interpreter
-- `shell_history_info.sh` — user script; outputs history in TSV; `-l` lists entries
-- `improved-fzfmenu.sh` — user script; wrapper around `fzf` with sane defaults
-- `fzf` — interactive fuzzy finder (used by the wrapper)
-- `cut` — from coreutils, extracts the command field
+- `bash`
+- `shell_history_info.sh` — provides history entries (used with `-l`)
+- `improved-fzfmenu.sh` — fzf-based menu wrapper (handles terminal UI, sorting, ANSI, etc.)
+- `cut` — extracts the command field from tab-separated output
 
 ### Description
 
-This script provides a minimal, fast command launcher backed by your shell history. It:
+This script is a tiny “command prompt” helper that turns your shell history into an interactive launcher. It works as a pipeline:
 
-1) Calls `shell_history_info.sh -l` to fetch history in a table-like (TSV) format.
-2) Pipes that to `cut -f2` to keep only the command text (second column).
-3) Sends the list to `improved-fzfmenu.sh` with:
-   - `--terminal-title=cmd_prompt` to name the terminal window,
-   - `--tac` to show most recent commands first,
-   - `--ansi` to preserve colored entries (if any).
+1. `get_cmd()` calls `shell_history_info.sh -l`, then extracts the second field with `cut -f2`. This implies `shell_history_info.sh -l` outputs a tab-separated format where field 2 is the actual command string.
+2. `fzf_cmd()` feeds those commands into `improved-fzfmenu.sh` configured as:
+   - `--terminal-title=cmd_prompt` to set a recognizable terminal title (nice for qtile rules/scratchpads),
+   - `--tac` to reverse order (so newest items appear first if the wrapper mirrors `tac` behavior),
+   - `--ansi` to preserve coloring if present.
 
-The chosen command is printed to stdout. The script itself does not execute the command; this is intentional for safety and flexibility (you decide whether to run, edit, or copy it).
+Finally, `get_cmd | fzf_cmd` prints the selected command to stdout. Typically, you’d capture/evaluate it elsewhere (e.g., insert into your prompt, copy to clipboard, or execute).
 
 ### Usage
 
-TL;DR examples:
+Run it from a terminal (or from qtile via a keybinding launching a terminal command):
 
-- Pick a command and print it
-  ```
-  command_prompt.sh
-  ```
+    ~/.scripts/bin/command_prompt.sh
 
-- Pick and execute (bash login shell). Empty selection does nothing.
-  ```
-  cmd="$(command_prompt.sh)" && [ -n "$cmd" ] && bash -lc "$cmd"
-  ```
+Use it as an interactive selector and then:
 
-- Pick and copy to clipboard (X11)
-  ```
-  command_prompt.sh | xclip -selection clipboard
-  ```
+- Print selected command (default behavior):
 
-- Run, then open the selected command in $EDITOR for tweaks
-  ```
-  cmd="$(command_prompt.sh)" && [ -n "$cmd" ] && ${EDITOR:-nvim} -c "startinsert" -c "normal Go$cmd"
-  ```
+    selected="$(~/.scripts/bin/command_prompt.sh)"
+    printf '%s\n' "$selected"
 
-- Qtile keybinding: pick and execute
-  ```
-  # in config.py
-  from libqtile.config import Key
-  from libqtile.lazy import lazy
+- Execute the selected command (be careful):
 
-  keys += [
-      Key(["mod4"], "p",
-          lazy.spawn("sh -lc 'cmd=\"$(command_prompt.sh)\"; [ -n \"$cmd\" ] && bash -lc \"$cmd\"'"),
-          desc="Run command from history picker"),
-  ]
-  ```
+    bash -lc "$(~/.scripts/bin/command_prompt.sh)"
+
+- Copy to clipboard (example):
+
+    ~/.scripts/bin/command_prompt.sh | wl-copy
 
 ---
 
 > [!TIP]
-> - The script currently lacks error handling; consider `set -euo pipefail` and guarding missing dependencies.
-> - It does not execute the selection; optionally add a `-x/--exec` flag to run automatically.
-> - Assuming tab-delimited input, `cut -f2` is fine; if the format changes, make the delimiter explicit.
-> - Consider a preview (e.g., frequency, last run time) via `fzf --preview`.
-> - Multi-line commands may not be represented well; you could join or preview full entries before selection.
+> Consider adding an explicit “execute vs output” mode (e.g., `--run`), and handle empty selections (`fzf` exit code) to avoid running an empty string. Also, relying on `cut -f2` assumes stable tab-separated output; using a more robust parser or documenting the expected `shell_history_info.sh -l` format would prevent breakage.

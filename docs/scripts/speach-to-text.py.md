@@ -1,67 +1,61 @@
-# Speech to Text Audio Transcriber
+# Speech to Text (Whisper CLI recorder)
 
 ---
 
-**speach-to-text.py**:  
-Python script for recording audio via a selected device and transcribing it to text using OpenAI Whisper.
+**speach-to-text.py**: Record audio from a chosen device and transcribe it with OpenAI Whisper
 
 ---
 
 ### Dependencies
 
-- `openai`  
-  Python package to access the OpenAI API (used for sending audio to Whisper).
-- `scipy`  
-  For writing WAV files to disk.
-- `sounddevice`  
-  For capturing audio from microphone/audio input.
-- `uv`  
-  Used as the fast Python package runner (see shebang).
-- Python >= 3.13
+- `uv` (script runner via shebang: `uv run --script`)
+- `python>=3.13`
+- `sounddevice` (records audio from an input device)
+- `scipy` (writes the recorded buffer as a WAV via `scipy.io.wavfile.write`)
+- `openai` (calls Whisper transcription API)
+- OpenAI credentials (typically `OPENAI_API_KEY` exported in your shell/session)
 
 ### Description
 
-This script offers a minimal, interactive solution to record your speech (or any audio) through a selected audio device, and get it transcribed using the OpenAI Whisper API.
+This script is a small interactive “press Enter to stop” recorder that saves a temporary WAV file (`temp.wav`) and sends it to OpenAI’s Whisper endpoint for transcription.
 
-#### Main Features:
-- Defaults to the device "UMC202HD 192k: USB", or prompts you to choose an input device.
-- Records up to 30 seconds of mono audio, sample rate at 48 kHz.
-- Recording stops when you press Enter (`<CR>`).
-- Audio is saved temporarily as `temp.wav`.
-- Uses the OpenAI Python SDK to transcribe the wav file with the `whisper-1` model and prints the result to stdout.
+Key behavior:
 
-#### Functions:
-- **record_or_abort()**: Handles live, interactive recording and writes to disk.
-- **transcribe()**: Uploads the file and outputs the transcription.
+- Uses a fixed `SAMPLE_RATE` of `48000`, mono (`CHANNELS = 1`).
+- Attempts to auto-select the audio input device by matching `PREFERED_DEVICE = "UMC202HD 192k: USB"` against `sd.query_devices()`.
+  - If not found, it prints the full device list and prompts for an index interactively.
+- Records up to `MAX_RECORD_TIME = 3000` seconds.
+- The recording loop polls `input("<CR> to stop")`; hitting Enter stops recording and trims the buffer to the elapsed time.
+- Writes `temp.wav` in the current working directory, then calls `client.audio.transcriptions.create(model="whisper-1", file=...)` and prints the resulting text to stdout.
+
+This fits well as a terminal-driven utility on Arch (and can be launched from qtile keybindings that spawn a terminal).
 
 ### Usage
 
-**tldr:**
+Run from a terminal (interactive):
 
-```sh
-# You probably want to run this interactively from your default terminal:
-~/.scripts/bin/speach-to-text.py
-
-# Or bind it in your qtile config to a keypress, using:
-lazy.spawn("~/.scripts/bin/speach-to-text.py")
+```bash
+cd /where/you/want/temp.wav
+/home/matias/.scripts/bin/speach-to-text.py
 ```
 
-#### Steps:
-1. If your audio device is not "UMC202HD 192k: USB", you'll be prompted to select a device by index.
-2. Speak/record after the prompt. Press Enter to stop before 30s.
-3. Wait for transcription to print (network connection required for OpenAI API).
-4. Check the prompt for your recognized speech.
+If your preferred device is not detected, select one:
 
-*Requires your OpenAI API key to be configured in your environment* (see OpenAI Python SDK docs).
+```text
+<device list...>
+Choose device by index: 12
+```
+
+Stop recording:
+
+```text
+<CR> to stop
+# press Enter
+```
+
+Use in qtile (example idea): bind a key to spawn your terminal and run the script so you can interact with prompts.
 
 ---
 
-> [!NOTE]
-> - Typo in script name (`speach-to-text.py` → `speech-to-text.py` recommended).
-> - Device selection logic could be improved for robustness (e.g., safe integer parsing and device validation).
-> - No automatic deletion of `temp.wav`, so temp files may accumulate.
-> - No error handling if OpenAI API fails, or if network is absent.
-> - Consider making duration/config parameters customizable by CLI arguments.
-> - Prompt is minimal (`<CR> to stop`), but could be more user-friendly.
-> - Would benefit from a notification about where to set the OpenAI API key.
-> - For qtile integration, check that the script does not require terminal input if assigning to a keybinding.
+> [!TIP]
+> Consider using a non-blocking keypress/GUI trigger instead of repeated `input()` calls (it currently spams prompts and blocks). Also: `index` can be `None`, leading to writing the full preallocated buffer (mostly silence) if you never press Enter; better to always stop the stream cleanly or set a shorter default. Use a unique temp path (e.g. `/tmp/stt-XXXX.wav`) to avoid clobbering and handle cleanup. Finally, wrap file I/O in a context manager (`with open(...)`) and add error handling for missing `OPENAI_API_KEY` / network failures.

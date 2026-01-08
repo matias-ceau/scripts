@@ -1,57 +1,53 @@
-# Random Wallpaper Chooser
+# Random wallpaper picker
 
 ---
 
-**random_wallpapers.xsh**: Script to set a random wallpaper from the `~/.wallpapers` directory.
+**random_wallpapers.xsh**: Pick a random wallpaper from `~/.wallpapers` and set it
 
 ---
 
 ### Dependencies
 
-- `xonsh`: Python-powered shell language; required to interpret this script.
-- `feh`: Lightweight image viewer and wallpaper setter.
-- `dmenu` (commented-out): Fast, dynamic menu for X, useful for selecting wallpapers interactively ([currently not used in the script]).
+- `xonsh` — executes this `.xsh` script
+- `feh` — sets the wallpaper via `--bg-scale`
 
 ### Description
 
-This Xonsh script, intended for use on Arch Linux (with qtile as the Window Manager), selects a random PNG or JPG image from your `~/.wallpapers` directory and sets it as the desktop wallpaper using `feh` with the `--bg-scale` option.
+This script selects a wallpaper image from `/home/matias/.wallpapers` and applies it using `feh`.
 
 How it works:
-- Lists all files in your wallpaper folder.
-- Filters for files with `.png` or `.jpg` extensions.
-- Randomly picks one.
-- Sets it as your wallpaper.
-- Includes a commented-out section for using `dmenu` to interactively pick a wallpaper, but this code path is currently disabled.
+
+- Reads the wallpaper directory with `os.listdir()`
+- Filters files by extension, accepting only names ending in `png` or `jpg` (simple last-3-chars check)
+- Picks one entry at random via `random.choice()`
+- Calls `feh --bg-scale` to set the selected file as the current wallpaper
+
+There are commented-out lines suggesting an interactive `dmenu` selector (building a newline-separated list and letting you choose), but the current active behavior is always random.
+
+Because it’s written in xonsh, it mixes Python logic with direct shell execution; the final `feh` invocation is executed as a command, with xonsh’s `@(...)` used to splice Python expressions into the argument list.
 
 ### Usage
 
-Default usage is to run from your preferred shell or keybinding—no arguments required.
+Run manually:
 
-```sh
-xonsh /home/matias/.scripts/bin/random_wallpapers.xsh
-```
+    random_wallpapers.xsh
 
-#### As a qtile keybinding
+Typical “tldr” patterns:
 
-Example (in your `config.py`):
+- Set a new random wallpaper (e.g. bound to a key in qtile):
 
-```python
-Key([mod], "w", lazy.spawn("xonsh /home/matias/.scripts/bin/random_wallpapers.xsh"), desc="Set random wallpaper"),
-```
+    ~/.scripts/bin/random_wallpapers.xsh
 
-#### TL;DR
+- Run on login (qtile autostart):
 
-- Place images (`.png`, `.jpg`) in `~/.wallpapers`.
-- Run the script:  
-  `xonsh /home/matias/.scripts/bin/random_wallpapers.xsh`
-- Enjoy a new random desktop background!
+    # in your autostart.sh or qtile startup hook
+    ~/.scripts/bin/random_wallpapers.xsh
 
 ---
 
-> [!NOTE]
-> **Critique & Suggestions:**  
-> - If `~/.wallpapers` contains files with uppercase extensions (`.JPG`, `.PNG`), they will not be recognized. You could use `.lower()` to handle case-insensitive matches.
-> - No check for empty wallpaper directory; consider adding a condition to handle this gracefully.
-> - For a larger or more dynamic collection of wallpapers (nested folders), a recursive approach using `os.walk()` might be useful.
-> - The commented-out `dmenu` functionality could be toggled via a command-line flag for interactive vs. random selecting.  
-> - Using `feh --bg-scale ...` works well for most cases but may stretch or compress wallpapers; consider `--bg-fill` or others depending on your preference.
+> [!TIP]
+> Improvements to consider:
+> - The extension check (`i[-3:]`) misses `jpeg`, uppercase extensions (`.JPG`), and files shorter than 3 chars; use `os.path.splitext(i)[1].lower() in ('.png', '.jpg', '.jpeg')`.
+> - If the folder is empty, `random.choice()` will raise an exception—add a guard and a helpful error message.
+> - Hardcoding `/home/matias` reduces portability; prefer `os.path.expanduser('~/.wallpapers')`.
+> - If you want the original interactive mode, re-enable the `dmenu` selection and add `dmenu` as an explicit dependency.

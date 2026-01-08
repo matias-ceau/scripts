@@ -1,72 +1,51 @@
-# m3u Creator Script
+# M3U Playlist Creator (Current Directory)
 
 ---
 
-**m3u_creator.sh**: Quickly generate an m3u playlist file from all files in the current directory
+**m3u_creator.sh**: Create an .m3u playlist from all entries in the current directory
 
 ---
 
 ### Dependencies
 
-- `bash`  
-  Standard GNU Bourne Again Shell.
-- `ls`  
-  Coreutils tool to list directory contents.
+- `bash` — script runtime
+- `basename` — from `coreutils`, used to name the playlist after the current directory
+- `ls` — from `coreutils`, used to list directory entries
 
 ### Description
 
-This script automates the creation of an `.m3u` playlist file containing all files (one per line) in the current directory. The generated playlist is named after the directory itself, following this pattern:
+This script generates a simple `.m3u` playlist based on the contents of your current working directory.
 
-```
-<directory-name>.m3u
-```
+- The playlist name is derived from the directory name you’re currently in:
+  - If you are in `~/Music/AphexTwin`, the output will be `AphexTwin.m3u`.
+- It writes the playlist to the current directory.
+- The playlist content is produced by `ls -1`, meaning:
+  - One entry per line
+  - Includes *everything* returned by `ls` (files, directories, etc., depending on what’s in the folder)
+- The playlist is overwritten if it already exists.
 
-For example, if you're in a directory called `MyMusic`, running this script will create a file called `MyMusic.m3u` that lists every file in that directory.
-
-**How it works:**
-
-- Retrieves the base name of your current working directory (`$PWD`).
-- Runs `ls -1` to list all files (non-recursively) in the directory, one per line.
-- Writes this file list into a new `.m3u` file whose name matches your current directory name.
-
-This is useful for quickly generating simple playlist files compatible with music players that support the M3U format.
+This is a minimal “quick and dirty” generator, useful when you keep music in clean folders and want a fast playlist to load in players like `mpv`, `vlc`, or your music library tools.
 
 ### Usage
 
-You can run the script in any directory to create a playlist from the files in that directory.
+Run it from inside the directory you want to create a playlist for:
 
-#### Direct Terminal execution:
-```bash
-cd ~/Music/Albums/SomeAlbum
-~/.scripts/bin/m3u_creator.sh
-```
+    cd ~/Music/SomeAlbum
+    ~/.scripts/bin/m3u_creator.sh
 
-This creates `SomeAlbum.m3u` in the current directory, containing a list of all files found there.
+Result:
 
-#### Assigning to qtile keybinding:
-To map the script to a keybinding in your qtile config:
+    SomeAlbum.m3u
 
-```python
-Key([mod], "F10", lazy.spawn("~/.scripts/bin/m3u_creator.sh"))
-```
-*(Replace `[mod]` and `"F10"` with your preferred modifier and key)*
+Open with a player (example with `mpv`):
 
-#### TL;DR
+    mpv SomeAlbum.m3u
 
-```sh
-# From within any folder:
-m3u_creator.sh
-# A playlist .m3u appears with the same name as the directory, listing all files inside.
-```
+Since it’s non-interactive and has no arguments, it’s a good fit for:
+- a `qtile` keybinding (spawn in a terminal or direct spawn if `$PWD` is meaningful)
+- a file manager “custom action” (recommended, since it runs relative to the folder)
 
 ---
 
 > [!TIP]
->
-> - The script lists **all files**, regardless of file type. Consider filtering for music files (e.g., `.mp3`, `.flac`) if you want your playlist to include only relevant formats.
-> - Files are listed in alphabetical order and not recursively. Subfolders and their contents are not included.  
-> - Filenames containing newlines or special characters could cause issues with some players.  
-> - If re-run, the script overwrites any existing `.m3u` with the same name, which might lead to data loss if your playlist was edited manually.  
-> - For a more robust solution, use `find` and filtering, e.g.  
->   `find . -maxdepth 1 -type f -iname "*.mp3" | sort > "$playlist_file"`  
->   This way, only music files are included in the playlist.
+> Consider filtering to actual audio files (e.g., `*.mp3 *.flac *.ogg`) and excluding the playlist file itself to avoid self-inclusion. Also note that `ls` is not robust for filenames with newlines and its ordering may not match “natural sort”; using `find -maxdepth 1 -type f -printf '%f\n' | sort` (or similar) is safer and more predictable.

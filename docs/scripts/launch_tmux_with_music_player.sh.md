@@ -1,56 +1,54 @@
-# Launch Tmux with Music Player
+# Launch tmux “MUSIC” session with cmus
 
 ---
 
-**launch_tmux_with_music_player.sh**: Creates a headless `tmux` session named "MUSIC" and starts the `cmus` music player within.
+**launch_tmux_with_music_player.sh**: Create a detached tmux session and start `cmus` in it
 
 ---
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer for managing multiple terminal sessions.
-- `cmus`: Lightweight CLI music player.
-- `/usr/bin/bash`: The script runs in Bash; Arch Linux uses `/usr/bin/bash` by default.
+- `tmux` — terminal multiplexer used to create/manage the session
+- `cmus` — CLI music player started inside the tmux window
 
 ### Description
 
-This script is designed to quickly set up a detached `tmux` session running the `cmus` music player, ideal for background music listening without launching a visible terminal window. Specifically, it:
+This script is a small helper to bootstrap a dedicated music tmux session in the background. It creates a new detached tmux session named `MUSIC`, with an initial window named `cmus`, and runs `cmus` as the window command.
 
-- Creates a new `tmux` session named `MUSIC`.
-- Opens a window inside the session, named `cmus`.
-- Launches `cmus` within that window.
-- Does *not* attach to the session, so it runs quietly in the background.
+Because the session is created with `-d` (detached), no terminal window is opened automatically—useful on Arch Linux with qtile when you want your music player always available without spawning a new terminal on startup or keypress.
 
-This makes it easy to integrate with qtile keybindings or scripts; for example, you can bind this script to a hotkey to instantly start your music backend.
+What it runs:
+
+- `tmux new-session -d` → create the session without attaching
+- `-s MUSIC` → session name is `MUSIC`
+- `-n cmus` → first window is named `cmus`
+- `'cmus'` → command executed in that window
+
+If the session already exists, `tmux` will error and the script will exit with a non-zero status.
 
 ### Usage
 
-To use the script, simply execute:
+Run manually:
 
-```
-~/.scripts/bin/launch_tmux_with_music_player.sh
-```
-
-#### Example: Attach to the session
-
-To view or control `cmus`, simply attach to the tmux session:
-
-```
-tmux attach-session -t MUSIC
-```
-Or, if you want to close the player and kill the session:
-```
-tmux kill-session -t MUSIC
+```sh
+launch_tmux_with_music_player.sh
 ```
 
-#### Typical workflow with qtile
+Attach to the session later:
 
-- Bind this script to a keybinding in your qtile `config.py`.
-- Control playback via `cmus-remote` commands, tmux, or by re-attaching as shown above.
+```sh
+tmux attach -t MUSIC
+```
+
+Or switch to it if you’re already inside tmux:
+
+```sh
+tmux switch-client -t MUSIC
+```
+
+Typical qtile use (example idea): bind a key to run the script once, and another key to open a terminal attached to `MUSIC`.
 
 ---
 
 > [!TIP]
-> - The script does not check if a session called `MUSIC` already exists. Running it multiple times will result in a tmux error ("duplicate session: MUSIC"). You could improve the script by checking for an existing session and, optionally, switching to (or restarting) it.
-> - Also, there is no error handling; failures of `cmus` (if it is not installed, for example) won't show up unless you manually check.
-> - Consider accepting the session name or music player as an optional argument to make the script more flexible for future use.
+> Consider making the script idempotent: check whether the `MUSIC` session already exists (`tmux has-session -t MUSIC`) and only create it if missing. You may also want a companion “toggle/attach” script for qtile that launches the session if needed and then opens a terminal attached to it. Additionally, quoting is unnecessary for the simple `cmus` command, and you might prefer a lowercase session name for consistency, unless you intentionally use uppercase.

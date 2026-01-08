@@ -1,67 +1,60 @@
-# Closest Terminal Colors Utility
+# Closest ANSI Color Matcher
 
 ---
 
-**closest_colors.py**: Find the closest matching terminal color for a list of color hex codes.
+**closest_colors.py**: Find closest palette colors to a list of target hex colors
 
 ---
 
 ### Dependencies
 
-- `python` (standard library; no external packages required)
+- `python` (tested with any modern Python 3)
+- `sys` (Python stdlib)
+- A terminal that supports **truecolor** escape sequences (`\033[38;2;R;G;Bm`) to display the preview blocks
 
 ### Description
 
-This script is designed to help you match arbitrary hex color codes to their closest equivalent from a palette of terminal colors (by default, the 8-bit ANSI palette). It's particularly useful when customizing color schemes for terminal emulators, status bars (like in qtile), or anywhere color fidelity matters but you are limited to discrete color options.
+This script helps you map arbitrary hex colors (your “desired” colors) to the nearest color from a “possible” palette by computing a simple Euclidean distance in RGB space.
 
-The script operates by:
-- Accepting an input file (`file1`) that contains the hex codes of colors you care about (one per line).
-- Optionally accepting a second file (`file2`) which defines the color palette to compare against, in `name HEX` format separated by whitespace (default: the internal 256-color ANSI palette).
-- Calculating the Euclidean distance between each requested color and all palette entries to find the closest match.
-- Printing a visually rich output with:
-  - Original and closest color blocks shown via terminal ANSI escape codes.
-  - Both color hex codes and the palette "name" for the closest match.
+- `hex_to_rgb()` parses `#RRGGBB` into an `(r, g, b)` tuple.
+- `color_distance()` computes the RGB distance between two colors.
+- `find_closest_color()` selects the palette entry that minimizes that distance.
 
-**Key Functions:**
-- `hex_to_rgb(hex_color)`: Converts a `#RRGGBB` string to an (R, G, B) tuple.
-- `color_distance(c1, c2)`: Standard Euclidean distance in 3D RGB space.
-- `find_closest_color(target_color, possible_colors)`: Finds the closest palette color (by RGB) to `target_color`.
+Inputs:
+- `file1` is a text file containing one hex color per line (e.g. `#aabbcc`).
+- `file2` (optional) is a palette file. If omitted, the script falls back to an embedded **ANSI 256-color** table formatted like: `color42    #00cc66`.
+
+Output (one line per desired color):
+- left: original hex
+- two colored swatches: original vs closest match
+- right: closest hex and its palette name (e.g. `color42`)
+
+This is useful when adapting themes for qtile / terminal configs on Arch, where you may want to approximate a palette (ANSI 256 or a curated set) while keeping colors visually consistent.
 
 ### Usage
 
-**Run from the terminal:**
+tldr:
 
-```
-python closest_colors.py <file1> [<file2>]
-```
+- Use embedded ANSI256 palette:
+  
+  python /home/matias/.scripts/bin/closest_colors.py desired.txt
 
-- `<file1>`: Path to a file with your desired hex colors, one per line. Example:
-  ```
-  #ff8800
-  #CAFE00
-  #222233
-  ```
-- `<file2>` (optional): Custom palette file with lines like:
-  ```
-  cyan   #00ffff
-  red    #ff0000
-  green  #00ff00
-  ```
+- Use a custom palette file:
+  
+  python /home/matias/.scripts/bin/closest_colors.py desired.txt palette.txt
 
-**Example:**
-```
-python closest_colors.py ~/mycolors.txt
-python closest_colors.py ~/mycolors.txt ~/custom_palette.txt
-```
+Example `desired.txt`:
 
-This works seamlessly with your qtile/Arch Linux setup. You can also bind this script to a key or call it from other scripts as needed.
+  #1e1e2e
+  #89b4fa
+  #f38ba8
+
+Example `palette.txt` lines:
+
+  colorA  #112233
+  colorB  #aabbcc
 
 ---
 
 > [!TIP]
->
-> - The script expects the input and palette files to be formatted strictly (one hex code per line in `file1`; `<name><tab><hex>` or `<name> <hex>` in `file2`).
-> - The internal ANSI palette is embedded as a single (very long) string. Consider externalizing this to a file both for maintainability and performance.
-> - The output uses ANSI escape codes, so usage outside a true terminal (e.g., some logging systems or editors) may not display color blocks correctly.
-> - Error handling is minimal; malformed lines or missing files will cause uncaught exceptions. Input validation could be improved for robustness.
-> - You might want options for different color distance heuristics (perceptual distances, for example).
+> Consider adding input validation (skip empty lines, ignore comments, handle invalid hex). Also, `possible_dict = dict([l.split()[::-1] for l in f2])` will break on blank/malformed lines; a safer parser would help. Finally, Euclidean RGB distance is quick but not perceptually uniform—if accuracy matters, consider converting to CIELAB (via `colorspacious`/`colormath`) or at least using weighted RGB.

@@ -1,56 +1,63 @@
-# Utopia Film Pages Downloader
+# Utopia film page fetcher
 
 ---
 
-**utopia.sh**: Download selected Utopia Bordeaux film pages to HTML files
+**utopia.sh**: Download Utopia Bordeaux film pages for a fixed list of film IDs
 
 ---
 
 ### Dependencies
 
-- `bash`: Required as the script interpreter.
-- `curl`: Used to fetch web content via HTTP.
-  
+- `bash` (POSIX shell environment on Arch)
+- `curl` (HTTP client used to fetch the HTML pages)
+
 ### Description
 
-This script automates the process of fetching and saving several film information pages from the Utopia Bordeaux cinema website. The script defines a set of film IDs and downloads each corresponding web page, saving each as a separate HTML file (`film_<ID>.html`). Each download is announced in the terminal for progress tracking.
+This script bulk-downloads several film detail pages from the Utopia Bordeaux website and stores them locally as HTML files. It defines:
 
-Key Details:
+- A `base_url` pointing to the Utopia Bordeaux index endpoint.
+- An `ids` array containing the film IDs you want to fetch.
+- A loop that requests each film page using `curl` and saves it as `film_<id>.html` in the current working directory.
 
-- **Base URL**: The script targets pages under `https://www.cinemas-utopia.org/bordeaux/index.php`.
-- **ID Array**: Edit the `ids` array to fetch different films without modifying core logic.
-- Each HTML page is saved using its film ID for easy reference.
-- Status messages provide feedback on progress.
+Each request appends `&mode=film` to ensure the site returns the film page view. Progress is printed after each download, followed by a final completion message.
+
+This is useful if you want to:
+- quickly archive pages for offline reading,
+- later parse the HTML (e.g., with `pup`, `python+bs4`, `xmllint`, etc.),
+- integrate it into a larger pipeline (cron/systemd timer, or a qtile keybinding that refreshes the cache).
 
 ### Usage
 
-You can execute this script from a terminal window or map it to a qtile keybinding if you routinely fetch such pages.
+Run it from a terminal (it writes files into the directory you run it from):
 
-```bash
-bash /home/matias/.scripts/dev/utopia.sh
+```sh
+cd /tmp/utopia-cache
+~/.scripts/dev/utopia.sh
 ```
 
-Output will look like:
-```
-Fetched content for film ID: 7767
-Fetched content for film ID: 7860
-...
-All content fetched.
+Resulting files:
+
+```sh
+ls -1 film_*.html
+# film_7767.html
+# film_7860.html
+# ...
 ```
 
-To customize which films are fetched, simply edit the `ids` array:
+Edit the list of IDs to change what gets downloaded:
 
-```bash
-ids=("1234" "5678")  # Replace with your desired film IDs
+```sh
+ids=("1234" "5678")
+```
+
+If you want it runnable from anywhere but still keep outputs in one place, call it like:
+
+```sh
+mkdir -p ~/.cache/utopia
+cd ~/.cache/utopia && ~/.scripts/dev/utopia.sh
 ```
 
 ---
 
 > [!TIP]
-> - **Improvements**: The script does not handle errors from `curl` (e.g., network issues, missing pages), meaning if a fetch fails, you'll end up with an empty or invalid HTML file but still get a “Fetched...” message. Add `|| echo "Failed to fetch..."` after the curl command or use `set -e` at the top with error checks for greater robustness.
->
-> - **Enhancement**: Consider creating an output directory for fetched files (e.g., `./utopia-films/film_$id.html`) to prevent cluttering your working directory. Support for command-line parameters to override IDs or the base URL would also add flexibility.
->
-> - **Arch-specific advice**: Ensure `curl` is installed (`sudo pacman -S curl`). No Arch-specific changes required otherwise.
->
-> - **Qtile integration**: The script is suitable for a keybinding in qtile; however, since it produces multiple files, you may want notifications or a summary at the end if run from a GUI context.
+> Consider adding `set -euo pipefail` and using `curl -fSL --retry 3 --retry-delay 1` to fail on HTTP errors and be more robust. Also, the output directory is implicit (current directory): you could add a configurable destination (e.g., `out_dir="${1:-.}"`) and ensure it exists. Finally, if IDs change often, fetching them dynamically (or reading from a file) would avoid editing the script each time.

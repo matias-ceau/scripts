@@ -1,70 +1,62 @@
-# QuickPass: Interactive Password Selection & Autofill
+# Quick Pass picker & typer
 
 ---
 
-**quick-pass.sh**: Fuzzy-find and copy your pass(1) passwords using `fzf` with one-click paste/edit support.
+**quick-pass.sh**: Fuzzy-pick a pass entry and type it via ydotool
 
 ---
 
 ### Dependencies
 
-- `fd`: Fast, user-friendly alternative to `find` (used here for searching GPG files).
-- `fzf`: Command-line fuzzy finder for interactive selection.
-- `pass`: Standard Unix password manager (`pass(1)`).
-- `xdotool`: Simulates keyboard input (used for autofill via `ctrl-x`).
-- `sort`, `sed`, `xargs`: Standard Unix core utilities.
-- _Arch Linux packages: `fd`, `fzf`, `pass`, `xdotool`_
-
-_Note_: `PASSWORD_STORE_DIR` environment variable should be set (defaults to `~/.password-store` for `pass`). 
-
----
+- `bash`
+- `fd` — used to list `.gpg` entries in your password store
+- `pass` — password-store backend (`pass edit`, `pass -c`)
+- `sort`, `sed` — basic formatting pipeline
+- `improved-fzfmenu.sh` — your fzf wrapper (must accept `--ansi` and pass `--bind` through to `fzf`)
+- `ydotool` — types the selected secret into the focused window
+- `$PASSWORD_STORE_DIR` — must point to your password-store directory (e.g. `~/.password-store`)
 
 ### Description
 
-This script provides a terminal-based interactive interface to your `pass` password store:
+This script provides a fast “pick and type” workflow for `pass` on Arch (nice for qtile keybindings). It:
 
-- **File Discovery:** Uses `fd` to quickly locate all `.gpg` files in your password-store directory.  
-- **Pretty Formatting:** Formats output with `fd` using nerd font icons and color codes for better readability in the selector.  
-- **Fuzzy Search:** Pipelined to `fzf`, allowing for fuzzy interactive selection of entries.
-- **Actions:**
-  - `CTRL-E`: Edit the selected entry with `pass edit`.
-  - `CTRL-X`: Typing the password into the active window via `xdotool type`.
-  - `Enter`: Copies the selected password to your clipboard with `pass` (as per normal `pass` behavior).
+1. Uses `fd` to recursively find `*.gpg` files under `$PASSWORD_STORE_DIR`.
+2. Formats each candidate with ANSI colors + a lock icon, and strips paths to resemble `pass` entry names (e.g. `mail/gmail`).
+3. Feeds the list into `improved-fzfmenu.sh` with ANSI enabled and a custom delimiter, so fzf token `{3}` resolves to the actual entry name.
+4. Key actions inside fzf:
+   - `Ctrl-e`: opens `pass edit <entry>`
+   - `Ctrl-y`: runs `pass -c <entry>` (copies to clipboard)
+   - `Enter`: writes the selected line to `/dev/shm/psst`
+5. After fzf exits, it calls `ydotool type "$(cat /dev/shm/psst)"`.
 
-The selected entry is always extracted cleanly (stripping paths/extensions) and fed to `pass`.
-
----
+Because `ydotool` types into whatever currently has focus, this pairs well with launching it, selecting an entry, alt-tabbing (if needed), then confirming.
 
 ### Usage
 
-You can run the script from your terminal or bind it to a key in Qtile for faster access:
+Run interactively (requires a TTY and focus for typing):
 
-#### TL;DR
+    quick-pass.sh
 
-```sh
-quick-pass.sh
-```
+Typical “tldr” inside the menu:
 
-#### Example Integration (Qtile keybinding)
+- Search: start typing
+- Edit entry:
 
-```python
-# In your Qtile config.py
-Key([mod], "p", lazy.spawn("~/.scripts/bin/quick-pass.sh")),
-```
+      Ctrl-e
 
-#### Keyboard Shortcuts Inside fzf
+- Copy to clipboard:
 
-- Navigate with arrow keys, filter with fuzzy search.
-- `Enter`: Reveal/password to clipboard.
-- `Ctrl-E`: Edit password entry.
-- `Ctrl-X`: Autofill password in the currently focused window with simulated keystrokes.
+      Ctrl-y
+
+- Type into focused window:
+
+      Enter
+
+Suggested qtile binding:
+
+- Bind to a key that opens a small terminal (or uses your fzf launcher) and keep target window focused before pressing Enter.
 
 ---
 
 > [!TIP]
->  
-> - There is a partial TODO for writing passwords directly to `qutebrowser` via FIFO; consider implementing this to expand browser integration.
-> - The color formatting (`fd_fmt`) assumes your terminal supports true color and nerdfont (for Unicode icons).
-> - As currently written, the script just outputs the password to stdout rather than copying it directly to the clipboard; consider using `pass -c` or piping output to `xclip`/`wl-copy` if you prefer that workflow.
-> - Ensure that `xdotool`-based paste with `ctrl-x` is only used in trusted contexts, as it types out your password.
-> - For portability, some hardcoded color codes and prompt formatting could be extracted into variables or config files. Handle edge cases like spaces in paths with care (wrap in quotes inside the script).
+> Consider extracting the actual pass entry name (without ANSI/prefix) before writing to `/dev/shm/psst`; currently `echo {}` may include formatting or extra tokens, so `ydotool` could type junk. Prefer `enter:become(echo {3} > /dev/shm/psst)` or write the decrypted secret via `pass show -n {3}`. Also, `/dev/shm/psst` is a plaintext file; use a safer IPC mechanism (pipe, mktemp + shred, or direct `ydotool type "$(pass show -n ...)"`).

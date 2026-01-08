@@ -1,73 +1,52 @@
-# transform_symlink.sh
+# Transform symlinks into real files/directories
 
 ---
 
-**transform_symlink.sh**: Convert symlinks into copies of their targets (both files and directories).
+**transform_symlink.sh**: Turn symlinks into copies of their targets (file or directory)
 
 ---
 
 ### Dependencies
 
-- `fd`: A fast, user-friendly alternative to `find`. Used here to discover symlinks recursively.
-- `fzf`: Command-line fuzzy finder. Provides an interactive menu to select symlinks for transformation.
-- `bat`: (Optional but used in the preview) For pretty-print file previews within `fzf`.
-- Standard GNU utils: `readlink`, `cp`, `rm`.
-
----
+- `bash`
+- `readlink` (from `coreutils`) — resolves the symlink target
+- `rm`, `cp` (from `coreutils`) — removes the symlink and copies the target in its place
+- `fd` — used in interactive mode to discover symlinks
+- `fzf` — interactive selector when no arguments are provided
+- `bat` — preview inside `fzf` (nice-to-have; without it the preview will fail)
 
 ### Description
 
-This script's core purpose is to **"unsymlink"**: it takes symlinks (files or directories that point elsewhere) and replaces each with a copy of the data they point to, deleting the link in the process.
+`transform_symlink.sh` “unsymlinks” paths: it replaces a symlink with a real copy of whatever it points to. This is useful when you want to vendor a config directory, freeze a snapshot of linked files, or remove symlink indirections before moving/archiving.
 
-Key logic/features:
-
-- If run **without arguments**, it uses `fd` to list all symlinks (depth 5 by default) below `$PWD`, filters the selection via `fzf`, and transforms the selected symlink.
-- If run **with one or more arguments**, each argument is handled as a symlink path and processed in turn.
-- Helpful `usage` function with colored terminal output details available options, synopsis, and examples.
-- Handles basic error situations: not a symlink, or target does not exist.
-- Symlink transformation is performed by:
-    1. Validating the symlink and its target.
-    2. Removing the symlink.
-    3. Copying the target (using `cp -r`) into the original symlink's path.
-
----
+Behavior:
+- If the given path is **not** a symlink (`[[ -L ... ]]`), it errors and returns non‑zero.
+- It resolves the target via `readlink` and ensures it exists.
+- It removes the symlink (`rm "$symlink_path"`) and then copies the target into the same path (`cp -r "$target_path" "$symlink_path"`).
+- With **no arguments**, it searches the current directory (`$PWD`) up to depth 5 for symlinks, then lets you pick one using `fzf` with a `bat` preview.
 
 ### Usage
 
-Run without arguments for interactive selection (uses `fzf`):
+Interactive (best for ad-hoc cleanup in a project folder):
 
-```
-transform_symlink.sh
-```
+    transform_symlink.sh
 
-Run with explicit paths to transform:
+Transform one symlink:
 
-```
-transform_symlink.sh /path/to/link1 /path/to/link2
-```
+    transform_symlink.sh /path/to/link
 
-Print help:
+Transform multiple symlinks:
 
-```
-transform_symlink.sh --help
-```
+    transform_symlink.sh link1 link2 link3
 
-**In your Qtile config:**  
-You can bind a key to run this script (e.g., in a terminal):
+Help:
 
-```python
-Key([mod], "F7", lazy.spawn("alacritty -e ~/.scripts/bin/transform_symlink.sh"))
-```
+    transform_symlink.sh -h
+    transform_symlink.sh --help
+
+For qtile: this works well bound to a key that opens a terminal in the current working directory and runs it (since the interactive mode is TUI-based).
 
 ---
 
 > [!TIP]
-> The script is very useful for “materializing” data that might otherwise be lost if a symlink’s target is deleted. Here are some potential enhancements:
->
-> - **Relative Symlink Targets:** The script assumes `readlink` outputs an absolute path. If the symlink uses a relative target, `cp` could fail or act unpredictably. Consider resolving to an absolute path first.
-> - **Overwrite Warnings:** The script always replaces the symlink, destroying any data present at that path if a copy fails midway. Adding a backup or prompt would be safer.
-> - **Multiple Selection:** In interactive mode, only one symlink can be selected. Consider allowing multi-select via `fzf`’s `--multi`.
-> - **Robustness:** Better handling of symlink edge cases (e.g., broken symlinks, links with spaces/newlines).
-> - **Preview Dependency:** If `bat` is missing, the preview in `fzf` fails silently; consider fallback to `cat`.
-> 
-> Otherwise, the script achieves its purpose efficiently and fits well into your Arch + Qtile workflow!
+> Consider using `readlink -f` (or handling relative targets) because `readlink` may return a relative path that won’t exist unless resolved against the symlink’s directory. Also, `rm` happens before the copy: if `cp` fails you’ve already lost the link—adding a confirmation prompt, a `--dry-run`, and/or copying to a temp path then moving into place would make it safer. Finally, `cp -r` is suboptimal for single files (and doesn’t preserve attributes); `cp -a` plus a file/dir check would be more robust.

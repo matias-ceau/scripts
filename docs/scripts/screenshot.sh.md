@@ -1,66 +1,59 @@
-# screenshot.sh – Screenshot Utility Script
+# Wayland Screenshot Helper
 
 ---
 
-**screenshot.sh**: Simple utility for taking fullscreen or user-selected screenshots using `grim`.
+**screenshot.sh**: Take a screenshot with Grim, optionally selecting an area
 
 ---
 
 ### Dependencies
 
-- `grim`  
-  Wayland screenshot utility used to capture the screen or region.
-
-- `slurp`  
-  Region selector for Wayland; used to draw a selection box.
-
-- `notify-send`  
-  Desktop notification tool to show messages after saving screenshots.
+- `bash`
+- `grim` — Wayland screenshot tool (outputs PNGs)
+- `slurp` — interactive region selector (used with `--select`)
+- `notify-send` — desktop notifications (typically via `libnotify`)
+- `date` — for timestamped filenames
 
 ### Description
 
-This script streamlines taking screenshots under a Wayland environment (such as Sway or river). Screenshots are saved in your `$HOME/Pictures` folder with a timestamped filename for easy organization.
+This script is a small Wayland-oriented screenshot wrapper designed for your Arch + qtile workflow (especially under a Wayland session). It writes screenshots to `~/Pictures` using a unique, timestamp-based filename:
 
-**Functionality:**
-- **Fullscreen screenshot:**  
-  By default (`no arguments`), the entire display is captured.
-- **Area selection screenshot:**  
-  When called with `--select`, allows interactive selection of a screen region.  
-  Uses `slurp` to let you define a region with the mouse, then captures it via `grim`.
+- Filename format: `YYYY-MM-DD-screenshot-<unix_epoch>.png`
+- Output directory: `$HOME/Pictures`
 
-**Notifications:**  
-Every time a screenshot is taken, the script sends a desktop notification showing the saved filename using `notify-send`.
+It supports two modes:
+
+1. **Fullscreen** (default): calls `grim` without geometry.
+2. **Area selection** (`--select`): uses `slurp` to let you draw a rectangle, then passes the resulting geometry to `grim -g`.
+
+After saving, it sends a notification showing the script name and the saved filename, which is convenient when bound to a qtile keybinding (no terminal interaction required).
 
 ### Usage
 
-The script can be run directly in the terminal, bound to a keybinding in `qtile`, or called from a script/shortcut.
-
-Examples:
-
+Fullscreen screenshot (saves into `~/Pictures`):
 ```sh
-# Fullscreen screenshot
 ~/.scripts/bin/screenshot.sh
+```
 
-# Interactive area selection
+Select an area interactively:
+```sh
 ~/.scripts/bin/screenshot.sh --select
 ```
 
-You can set this up as a keybinding in your `qtile` config. Example:
+Example qtile keybindings (conceptual):
+```sh
+# Fullscreen
+screenshot.sh
 
-```python
-Key([mod], "Print", lazy.spawn("~/.scripts/bin/screenshot.sh")),
-Key([mod, "shift"], "Print", lazy.spawn("~/.scripts/bin/screenshot.sh --select")),
+# Selection
+screenshot.sh --select
 ```
-
-**Output:**  
-- All screenshots are saved to `~/Pictures` with a format like `2024-06-30-screenshot-1719758632.png`.
 
 ---
 
 > [!TIP]
->
-> - If `$HOME/Pictures` does not exist, the script will fail to save the screenshot. Consider adding a check to create the directory if missing (`mkdir -p "$_OUTPUT_DIR"`).
-> - There’s no error handling: if `grim`, `slurp`, or `notify-send` are missing or fail, you won’t get any warning.
-> - The notification message is always "Selection saved as ..." even for fullscreen shots—consider customizing the message for clarity.
-> - Minor: Script could use `local` for variables to restrict scope, though in this context it's not critical.
-> - For further flexibility, you might want to allow custom output directory or filename prefix via command-line arguments.
+> A few improvements to consider:
+> - The notification message always says “Selection saved…” even for fullscreen; you might want separate wording.
+> - Quote your paths to be safe: `"$ _OUTPUT_DIR/$_NAME"` (especially if `$HOME` ever contains spaces).
+> - Ensure the output directory exists (`mkdir -p "$_OUTPUT_DIR"`), otherwise `grim` will fail silently.
+> - Consider allowing a custom directory via an env var or flag (useful for syncing to a “Screenshots” subfolder).

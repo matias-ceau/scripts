@@ -1,76 +1,65 @@
-# ansi8bit2rgb_hex.py
+# ANSI 8-bit to RGB / HEX Converter
 
 ---
 
-**ansi8bit2rgb_hex.py**: Converts 8-bit ANSI color codes to RGB or HEX representations with optional colorized output and names
+**ansi8bit2rgb_hex.py**: Convert ANSI 256-color codes to RGB or HEX (with optional preview)
 
 ---
 
 ### Dependencies
 
-- `python` (standard library only)
-    - Uses: `os`, `sys`
-- **No third-party libraries required**
-
----
+- `python` (3.10+) — uses `match/case` pattern matching
+- A terminal supporting ANSI 256 colors (for `--colorize` output)
 
 ### Description
 
-This script provides a flexible utility for converting 8-bit ANSI color codes (0–255) into RGB or hexadecimal (HEX) color representations. It can handle:
-- Single color codes (e.g., 42)
-- Comma-separated lists (e.g., 42,100,255)
-- Ranges (e.g., 50-99)
-- The full palette (default if no color specified)
+This script converts ANSI 8-bit (0–255) color codes (often used in terminal themes, `ls`, `bat`, `fzf`, etc.) into either:
 
-Internally, the conversion logic is based on the standard xterm 256-color palette:
-- **0–15:** System/standard colors
-- **16–231:** 6×6×6 color cube (calculates R, G, B steps)
-- **232–255:** Greyscale ramp
+- `rgb(r,g,b)` strings, or
+- `#rrggbb` hex strings
 
-Key features:
-- Output format: Choose between `rgb(R,G,B)` or HEX (`#rrggbb`)
-- Optional coloring: Visually show the color in the terminal (assuming terminal ANSI support)
-- Optional labeling: Prepend each output with its ANSI color name (e.g., `color242`)
-- Batch output: Support for ranges/lists and displaying all 256 colors
+The conversion follows the standard xterm 256-color palette mapping:
 
-The script also provides clear usage instructions, in-terminal help, and error handling for out-of-range/invalid arguments.
+- `0–15`: standard ANSI colors (fixed table)
+- `16–231`: 6×6×6 color cube (`51` step per channel)
+- `232–255`: grayscale ramp (`(color-232)*10 + 8`)
 
----
+Output can be optionally:
+- labeled with `colorN` using `--name/-n`
+- “previewed” by setting the background to that ANSI color using `--colorize/-c` (useful when tuning qtile/terminal palettes)
+
+If no color argument is provided, it prints values for all 256 colors.
 
 ### Usage
 
-You can execute this script directly from the terminal, assign it to a keybinding in Qtile, or invoke it from other scripts. Here are some usage examples:
+Convert a single color:
 
-```
-# Show single color in RGB
-ansi8bit2rgb_hex.py rgb 242
-# Output: rgb(108,108,108)
+    ansi8bit2rgb_hex.py rgb 242
+    ansi8bit2rgb_hex.py hex 242
 
-# Show single color in HEX
-ansi8bit2rgb_hex.py hex 242
-# Output: #6c6c6c
+Add labels and/or background preview:
 
-# Show with name and as color block
-ansi8bit2rgb_hex.py rgb -n -c 196
+    ansi8bit2rgb_hex.py rgb -n 242
+    ansi8bit2rgb_hex.py hex -c -n 35
 
-# Show a range of colors, colored and with their names
-ansi8bit2rgb_hex.py hex --colorize --name 20-25
+Ranges and lists:
 
-# Show all ANSI 8-bit colors in HEX
-ansi8bit2rgb_hex.py hex
+    ansi8bit2rgb_hex.py rgb 35-167
+    ansi8bit2rgb_hex.py rgb 35,167,200
 
-# Show help/usage
-ansi8bit2rgb_hex.py help
-```
+Dump the whole palette (great for theme work):
 
-> Tip: You can assign this script as a rofi runner, a custom dmenu, or a Qtile keybinding for fast lookups.
+    ansi8bit2rgb_hex.py rgb
+    ansi8bit2rgb_hex.py hex -n
+
+Help:
+
+    ansi8bit2rgb_hex.py help
 
 ---
 
 > [!TIP]
-> - The argument parsing is functional, but could be made clearer (as currently, any extra argument is treated as a color selector; could lead to confusion if options are placed after the number).
-> - The script doesn't currently validate for argument order/uniqueness or mutually exclusive options; e.g., you can pass both `-n` multiple times with no effect.
-> - Adding support for piping from stdin (for bulk operations), a more idiomatic argparse usage, or JSON output for scripting would increase versatility.
-> - The colorized output can be difficult to read with some terminals if contrasting foreground text is not used. Consider implementing the brightness-based contrasting text color technique outlined in your commented example code at the bottom of the script.
-> - Minor typo: `oolorize` should be `colorize` in the usage section.
-> - Overall, the script is robust for everyday use in a color theming/workflow context for Qtile/Arch.
+> Improvements to consider:
+> - The usage text says `--colored`, but the actual option is `--colorize`; also there’s a small typo (“oolorize”).
+> - Argument parsing is a bit fragile: it loops over `sys.argv[1:]` (including `rgb/hex`) and always treats the last token as a color spec, so adding future flags may break parsing. Using `argparse` would make this more robust.
+> - When `--colorize` is enabled, the script sets only background color; adding automatic contrasting foreground (as hinted in the commented section) would make the preview much more readable.

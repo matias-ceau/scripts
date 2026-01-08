@@ -1,63 +1,57 @@
-# Simple Git Repo Sync Script
+# Simple Git repo sync (fetch/rebase/stash + auto-commit)
 
 ---
 
-**sync-repo-simple.py**: Automates syncing a git repository, handling conflicts, stashing, and summary output.
+**sync-repo-simple.py**: Sync a git repo: pull/rebase safely, auto-commit local changes, then push
 
 ---
 
 ### Dependencies
 
-- `python3` - The script runs as a Python 3 interpreter.
-- `git` - All operations use Git CLI commands.
-- `awk`, `sed`, `grep` - Used in parsing remote URLs (ensure these standard POSIX tools are available, typically present on Arch Linux).
-- ENV variables: `EDITOR` or falls back to `vim`/`nvim` for manual conflict resolution.
+- `python` (python3)
+- `git`
+- `awk`, `sed`, `grep` (used to derive a human-readable repo name from `git remote -v`)
+- `$EDITOR` (optional) default: `vim` for merge conflicts, `nvim` for stash conflicts
 
 ### Description
 
-This script efficiently automates the process of synchronizing a git repository. It is specifically geared for day-to-day command-line workflow, such as on an Arch Linux system managed by qtile. The core functionality includes:
+This script is a “one-shot” synchronizer for a given Git repository directory. It:
 
-- **Fetching and pulling (with rebase fallback):** Detects local/remote divergence; if a fast-forward is not possible, a rebase is attempted.
-- **Conflict Handling:** Handles both merge and stash conflicts, prompting for user intervention when required. It leverages your `$EDITOR` (default `vim` or `nvim`) to resolve merge or stash conflicts interactively.
-- **Stashing:** If local changes are present before pulling, they're automatically stashed and re-applied after remote updates, with dedicated handling for conflicted files.
-- **Automatic Commit and Push:** If changes are detected in the repository, the script adds, commits (with an auto-generated message describing user and host), and pushes them.
-- **Summary Output:** At the end of the sync, prints a contextual summary showing commit times and a diffstat of the recent change.
-
-The script is designed to be robust, stopping on errors for manual intervention, and aiming for minimal interaction except in cases of conflicts.
+1. Validates the provided path is a directory and a Git repo (`.git` exists).
+2. Detects:
+   - `remote` via `git remote`
+   - `local` branch via `git branch --show-current`
+   - a display `repo_name` parsed from the fetch URL
+3. Fetches everything (`git fetch --all --prune`), then attempts to update the current branch from its upstream:
+   - If a fast-forward merge is possible: `git merge --ff-only @{u}`
+   - Otherwise: tries `git pull --rebase <remote> <branch>`
+   - If rebase/merge conflicts happen, it offers interactive conflict handling (abort/skip/manual editing).
+4. If local changes exist before pulling, they’re stashed and later re-applied; stash conflicts are handled per-file with an interactive “ours/theirs/manual” choice.
+5. If there are local changes after syncing, it stages everything (`git add -A`), generates a commit message like `N change(s) from user@host`, commits, and pushes. If push fails, it retries after a fast-forward pull.
+6. Prints a quick summary including `git diff --stat HEAD^`.
 
 ### Usage
 
-You can run this script directly from the terminal or integrate it into a keybinding or shortcut within qtile or your shell. Example usage:
+Run from anywhere (good for a qtile keybinding, but interactive when conflicts occur):
 
-```bash
-sync-repo-simple.py /path/to/your/repo
-```
+    sync-repo-simple.py ~/path/to/repo
 
-**Arguments:**
-- `repo_dir` (*required*): Path to the git repository you wish to sync.
-  
-**Example:**
-```bash
-sync-repo-simple.py ~/projects/mydotfiles
-```
+Typical “tldr” flows:
 
-- The script prints diagnostic and status information throughout the process.
-- On conflicts, you'll be prompted interactively in the terminal to resolve them.
+    # Sync repo (fetch + pull/rebase + commit+push if needed)
+    sync-repo-simple.py ~/.dotfiles
 
-**Editor for Conflicts:** Set your preferred editor in your environment:
-```bash
-export EDITOR=nvim
-```
-or let it default to `vim`/`nvim`.
+    # Use a custom editor for conflict resolution
+    EDITOR=nvim sync-repo-simple.py ~/code/project
+
+Notes:
+- If conflicts occur, you’ll be prompted in the terminal; don’t run it “silent” in the background.
 
 ---
 
 > [!TIP]
-> **Critique:**  
-> - The script assumes only one remote; in multi-remote setups, its behavior may not be as intended.
-> - Command-line parsing is minimal; no verbosity flags or dry-run mode.
-> - Using `shell=True` with user data in commands introduces potential security issues; safer subprocess argument handling is recommended.
-> - Uses repeated subprocess calls (`git status -s` is run several times), which could be minimized for performance.
-> - Error messages are printed to stderr, but exit codes are inconsistent (for example, unsuccessful pushes try again but don't alert if the retry fails).
-> - The script’s remote URL parsing is a bit brittle, relying on shell command composition; using pure python (e.g., `gitpython`) would be more robust.
-> - Good scripting discipline overall; could benefit from modularization or adapting a library like `GitPython` for advanced setups.
+> Improvements to consider:
+> - Bug: `git diff --quiet {local} @{u}` is missing an f-string, so `{local}` won’t expand; it should be `f"git diff --quiet {local} @{{u}}"`.
+> - `remote = git remote` may return multiple remotes; consider defaulting to `origin` or letting the user choose.
+> - `git reset --hard` for “skip” is destructive; a safer approach is `git rebase --skip` (when rebasing) or clearer state-dependent logic.
+> - Parsing repo name via `awk/sed` is brittle; consider `git remote get-url <remote>` and Python parsing (handles SSH/HTTPS reliably).

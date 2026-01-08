@@ -1,57 +1,50 @@
-# PDF picker and opener
+# PDF picker & opener (fd + fzf)
 
 ---
 
-**pdfopener.sh**: Fuzzy-pick a PDF in $HOME and open it with Evince, falling back to xdg-open
+**pdfopener.sh**: Pick a PDF from `$HOME` and open it (Evince fallback)
 
 ---
 
 ### Dependencies
 
-- `fd` — fast file finder; used to list PDFs under `$HOME`
-- `improved-fzfmenu.sh` — your fzf wrapper; must accept `--ansi` and print the selected path
-- `fzf` — required by `improved-fzfmenu.sh` for interactive selection
-- `evince` — primary PDF viewer
-- `xdg-open` — fallback opener if `evince` fails
-- `bash` as `/bin/sh` on Arch — script uses `[[ ... ]]` which is a bashism
+- `fd` (from `fd`): fast file finder used to list PDFs under your home directory
+- `improved-fzfmenu.sh`: your fzf-based menu wrapper (must accept stdin and output a selected path)
+- `evince`: preferred PDF viewer
+- `xdg-open` (from `xdg-utils`): fallback opener using your default PDF handler
 
 ### Description
 
-This script lets you quickly locate and open any PDF inside your home directory. It composes a simple pipeline:
+This script provides a quick “pick and open” workflow for PDFs on Arch, ideal for binding in qtile.
 
-1) `fd -tf '\.pdf$' "$HOME" --color=always` lists all regular files ending with .pdf beneath `$HOME`.  
-2) The list is piped to `improved-fzfmenu.sh --ansi` for an interactive fuzzy pick.  
-3) If a valid file is selected, the script tries `evince "$file"`; on failure it falls back to `xdg-open "$file"`.
+It searches recursively in `$HOME` for files ending with `.pdf` via `fd`, then pipes the results into `improved-fzfmenu.sh` with `--ansi` enabled. The `fd` output is colorized (`--color=always`), which is why `--ansi` is required so fzf can properly display (and ignore) ANSI color codes while filtering.
 
-Colorized `fd` output pairs with `--ansi` so fuzzy matching ignores ANSI sequences while keeping colored display in the menu.
+After selection, it validates that the chosen entry is an actual file. If nothing valid is selected (e.g., canceling the fzf prompt), it exits silently.
+
+Opening behavior is:
+
+1. Try `evince "$file"`
+2. If Evince fails (missing, crashes, non-zero exit), fall back to `xdg-open "$file"` to use the system default PDF viewer.
 
 ### Usage
 
-- Run from a terminal:
-  ```
-  ~/.scripts/bin/pdfopener.sh
-  ```
+Run from a terminal, launcher, or bind to a qtile key.
 
-- Bind to a key in qtile (e.g., Mod+p):
-  ```
-  # in ~/.config/qtile/config.py
-  from libqtile.config import Key
-  from libqtile.command import lazy
+tldr:
 
-  keys.append(Key([mod], "p", lazy.spawn("~/.scripts/bin/pdfopener.sh")))
-  ```
+- Pick a PDF from home and open it:
+  - `pdfopener.sh`
 
-- Typical flow:
-  - Invoke the script
-  - Start typing to filter PDFs
-  - Press Enter to open the highlighted file
+Suggested qtile binding:
 
-No arguments are required; the script is non-interactive beyond the fzf selector.
+- `lazy.spawn("~/.scripts/bin/pdfopener.sh")`
+
+Notes:
+
+- The search scope is your entire `$HOME`, so initial indexing/filtering speed depends on home size.
+- Canceling the picker cleanly exits with code `0`.
 
 ---
 
 > [!TIP]
-> - Portability: `[[ ... ]]` is a bashism. Either change the shebang to `#!/usr/bin/env bash` or switch to POSIX `[ ... ]`.
-> - Path correctness: `fd` prints paths relative to `$HOME` in this usage. If your current directory is not `$HOME`, `[[ -f "$file" ]]` and `evince "$file"` may fail. Use `fd -a ...` for absolute paths, or `cd "$HOME"` before running `fd`.
-> - ANSI safety: Relying on colorized input requires `improved-fzfmenu.sh` to strip ANSI from the selected output. For robustness, consider `fd --color=never` and drop `--ansi`.
-> - UX idea: Add a preview (e.g., `pdfinfo`, `exiftool`, or filename context) in your fzf wrapper to show metadata while selecting.
+> Consider output stability: `fd --color=always` may cause the selected string to include ANSI escapes depending on how `improved-fzfmenu.sh` returns results. If you ever see “file not found” after selecting, switch to `fd --color=never` or ensure the wrapper strips ANSI codes before printing the selection. Also, `#!/bin/sh` plus `[[ ... ]]` is not POSIX; on Arch `/bin/sh` is often `dash`, which will fail. Use `#!/usr/bin/env bash` or replace with `[ ! -f "$file" ]`.

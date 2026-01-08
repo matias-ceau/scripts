@@ -1,60 +1,49 @@
-# Toggle Picom Compositor
+# Toggle Picom compositor
 
 ---
 
-**toggle_picom.sh**: Simple script to toggle the Picom compositor on and off with notifications.
+**toggle_picom.sh**: Toggle `picom` compositor on/off with desktop notifications
 
 ---
 
 ### Dependencies
 
-- `picom` - Lightweight compositor for X11
-- `pkill` / `pgrep` - Process management commands (provided by `procps-ng`)
-- `notify-send` - Desktop notification tool (commonly provided by `libnotify`)
-- `bash` - The script interpreter
+- `picom` (the compositor to start/stop)
+- `procps` / `pgrep` + `pkill` (process detection and termination)
+- `libnotify` / `notify-send` (user-facing notifications)
 
 ### Description
 
-This script checks if the `picom` compositor is currently running and toggles its state accordingly, providing a desktop notification on both actions:
+This script provides a simple “compositor toggle” for an X11 session: it checks whether `picom` is currently running and either stops it or starts it in the background.
 
-- If `picom` is running, it sends a notification and terminates the process.
-- If `picom` is not running, it notifies the user and starts `picom` in the background with the `-b` option.
+- If `picom` is detected via `pgrep -x picom`, it sends a notification and terminates the process with `pkill picom`.
+- Otherwise, it sends a notification and launches `picom -b` (forks to background).
 
-The script is especially useful in tiling window manager setups (such as qtile on Arch Linux), where you may want to quickly enable or disable window transparency and other compositor effects.
-
-#### Breakdown
-
-- `pgrep -x "picom"`: Checks for running `picom` processes.
-- `notify-send`: Sends a desktop notification for user feedback.
-- `pkill picom`: Stops any running `picom`.
-- `picom -b`: Starts `picom` in daemon/background mode.
+This is especially handy on Arch + qtile when you want to quickly disable compositing (e.g., troubleshooting tearing, performance in games, input latency issues) and re-enable it afterward without opening a terminal.
 
 ### Usage
 
-This script can be executed directly, or bound to a keybinding in qtile for fast toggling.
+Run from a terminal:
 
-**Direct terminal usage:**
-```
-/home/matias/.scripts/bin/toggle_picom.sh
-```
-
-**Example qtile keybinding (Python, in your config.py):**
-```python
-Key([mod], "F12", lazy.spawn("/home/matias/.scripts/bin/toggle_picom.sh"))
+```sh
+~/.scripts/bin/toggle_picom.sh
 ```
 
-**tldr**
+Typical “tldr” behavior:
 
-- Just run the script; it will start or stop picom, with a notification.
-- Useful to quickly disable compositing for screen sharing/gaming, or re-enable it for eye candy.
+```sh
+# If picom is running -> stop it
+toggle_picom.sh
+
+# If picom is not running -> start it in background
+toggle_picom.sh
+```
+
+Suggested qtile keybinding (example idea):
+
+- Bind it to a key chord like `mod + shift + p` so you can toggle compositing instantly during your workflow (especially useful before launching fullscreen apps).
 
 ---
 
 > [!TIP]
-> 
-> The script is effective and minimal! Some potential improvements:
-> - There's no error handling for cases where `picom` fails to start (e.g., config issues).
-> - It assumes only one `picom` instance ever runs (multiple displays/setups might want more).
-> - If you want custom configurations or logging, you could add arguments to pass extra options to `picom`.
-> - On Wayland, `picom` is not relevant; script only applies for X11 sessions.
-> - You could add audible feedback (e.g., with `aplay` or similar) for extra accessibility.
+> Consider using `pkill -x picom` to match the exact process name (mirrors your `pgrep -x`). Also, `notify-send` may fail silently if no notification daemon is running; if you rely on feedback, you could add a fallback (e.g., log to stdout). Finally, if you use multiple `picom` instances/configs, you might want to launch with an explicit config path (e.g., `picom --config ~/.config/picom/picom.conf -b`) and/or verify it started successfully after spawning.

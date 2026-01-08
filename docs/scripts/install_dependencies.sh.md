@@ -1,63 +1,61 @@
-# Install Core Utilities and Apps
+# Bootstrap Arch dependencies install (paru)
 
 ---
 
-**install_dependencies.sh**: Bash script to bulk-install essential terminal and desktop utilities.
+**install_dependencies.sh**: Install a base set of Arch packages via paru (AUR helper)
 
 ---
 
 ### Dependencies
 
-- `paru`: An AUR helper for Arch Linux, used for package management.
-- The script also installs the following packages (listed for reference, as they are dependencies of the script use-case, not the script execution):
+- `bash` (script runtime)
+- `paru` (AUR helper used to install packages)
+- `pacman` (used indirectly by `paru`)
 
-  - `git` (version control)
-  - `fd` (faster `find`)
-  - `bat` (cat clone with syntax highlighting)
-  - `fzf` (fuzzy finder)
-  - `ripgrep` (fast search)
-  - `neovim` (text editor)
-  - `chezmoi` (dotfiles manager)
-  - `dmenu` (launcher menu)
-  - `findutils` (modern find/xargs)
-  - `rofi` (powermenu/launcher)
-  - `dunst` (notification daemon)
-  - `python-pandas` (data manipulation)
-  - `python-colorama` (terminal coloring)
-  - `light` (screen backlight control)
-  - `xdotool` (simulate keyboard/mouse input)
+Packages installed by the script:
+
+- `git`, `findutils`
+- `fd`, `bat`, `fzf`, `ripgrep`
+- `neovim`, `chezmoi`
+- `dmenu`, `rofi`
+- `dunst` (notifications; useful with qtile)
+- `python-pandas`, `python-colorama` (Python tooling used by other scripts)
+- `light` (backlight control; often bound to qtile keys)
+- `xdotool` (X11 automation)
 
 ### Description
 
-This script is a straightforward tool for quickly provisioning a new or existing Arch Linux system (in your case optimized for a qtile-based setup) with a suite of essential desktop, editor, launcher, and utility tools.
+This is a small “bootstrap” installer for your Arch setup. It feeds a fixed list of packages to `paru` via stdin and installs only what’s missing:
 
-It works by passing a list of key packages via a Bash here-document directly into `paru`, which will install only those not already present (`--needed`). Using process substitution, the list is assembled and piped persistently and efficiently into `paru`.
+- `paru -S` installs packages from repos/AUR.
+- `--needed` skips reinstalling packages already present.
+- `-` tells `paru` to read package names from standard input.
+- Process substitution (`< <( … )`) supplies the heredoc-generated list.
 
-The approach lets you easily update the set of "must have" packages for your workflow by simply adding or removing lines from the here-document.
+This is a handy complement to a qtile/dotfiles workflow (e.g., before applying your `chezmoi` config), ensuring core CLI tools and common WM utilities are available.
 
 ### Usage
 
-Run the script with:
+Run interactively in a terminal (recommended so you can review prompts):
 
-```bash
-~/.scripts/bin/install_dependencies.sh
-```
+    chmod +x ~/.scripts/bin/install_dependencies.sh
+    ~/.scripts/bin/install_dependencies.sh
 
-- **Interactive:** The script can be run in a terminal and will prompt for password if required by `paru`.
-- **Automating dotfiles:** It pairs well with dotfiles bootstrapping (e.g., as part of a chezmoi setup or post-install routine).
+If you want it available everywhere:
 
-#### Adding more packages
+    ~/.scripts/bin/install_dependencies.sh
 
-Simply add new lines in the `cat <<EOF` block before `EOF`.
+Typical “tldr”:
 
-#### Example tldr
+- Install baseline packages on a new Arch machine:
 
-```sh
-# To ensure you've got all tools for your qtile+Arch setup:
-bash ~/.scripts/bin/install_dependencies.sh
-```
+      install_dependencies.sh
+
+- Re-run anytime; existing packages will be skipped:
+
+      install_dependencies.sh
 
 ---
 
-> [!TIP]  
-> The script is effective but assumes `paru` is already installed—perhaps document or check for this explicitly. Error handling and reporting could also be improved (e.g., warn about missing `paru` or failed installs). Finally, for greater flexibility, consider accepting package names as arguments or allowing for grouped lists (e.g., "minimal"/"full").
+> [!TIP]
+> Consider adding `set -euo pipefail` for safer execution and a quick check that `paru` exists (fallback message if not). You may also want `--noconfirm` *only* for fully unattended setups, and splitting packages into “required” vs “optional” groups (e.g., `dmenu` vs `rofi`) to better match your qtile workflow.

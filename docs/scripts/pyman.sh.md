@@ -1,87 +1,54 @@
-# PyMan: Interactive Python Manual Navigator
+# pyman — Python “man” pages + module browser via fzf
 
 ---
 
-**pyman.sh**: Interactive fuzzy finder for Python topics, keywords, builtins, and installed modules/packages.
+**pyman.sh**: Interactive pydoc/fzf browser for Python topics, keywords, builtins and libs
 
 ---
 
 ### Dependencies
 
-- `python` _(with pydoc utility)_: For module info, builtins, keywords, topics extraction
-- `fzf` _(fuzzy-finder)_: UI for interactive searching and navigation
-- `bat` _(cat clone with syntax highlighting)_: For previewing python/manual text nicely
-- `fd` _(find alternative)_: For fast filesystem searching within site-packages
-- `rg` _(ripgrep)_: For filtering/searching, used extensively in subcommands
-- `ranger` _(file manager, optional)_: Opens directories inside site-packages
-- `notify-send`: For quick-notification popups (feedback when navigating to source)
-- `$XDG_CACHE_HOME` (recommended set)
-  
-> _You may want to install these via your package manager if they're missing:_
->
-> ```sh
-> sudo pacman -S python fzf bat fd ripgrep ranger libnotify
-> ```
-
----
+- `python` — provides `pydoc` output and builtins listing  
+- `pydoc` (ships with Python) — documentation source (`pydoc topics|keywords|<module>`)  
+- `fzf` — interactive selector + keybind-driven modes  
+- `bat` — colored preview/paging (`--wrap=character` used for narrow panes)  
+- `fd` — fast filesystem traversal of Python’s stdlib directory  
+- `ripgrep` (`rg`) — filtering and simple matching  
+- `sed`, `cut`, `sort`, `uniq`, `tr` — text shaping  
+- `notify-send` — desktop notification showing resolved source path  
+- `ranger` — directory browsing when selecting package directories  
 
 ### Description
 
-This script is designed to serve as a "manual browser" for Python within your terminal, leveraging `fzf` for live, interactive exploration of:
+`pyman.sh` is a TUI “documentation hub” for Python on Arch. It detects your Python minor version (`python -V` → `3.xx`) and points `SEARCH_PATH` to `/usr/lib/python$VERS/` (i.e., the stdlib). From there it:
 
-- Installed site-packages and their modules
-- Module submodules (recursively)
-- Python builtins, keywords, help topics
+- Lists top-level stdlib entries (`get_site_packages`) and lets you drill into submodules (`get_submodules`) by turning paths into dotted import names.
+- Provides quick-switch modes for `pydoc`:
+  - Builtins (`alt-b`)
+  - Keywords (`alt-k`)
+  - Topics (`alt-t`)
+  - Libraries/modules view (`alt-l`, default)
+- Uses a live preview pane (`bat_preview`) that renders `pydoc` output as `man` or `rst` depending on the current prompt.
 
-**Functionality Highlights:**
-- Custom functions (`get_topics`, `get_keywords`, `get_builtins`, `get_site_packages`, `get_submodules`) dynamically query and format results from your system's Python install.
-- `bat` provides syntax-highlighted previews of module source or documentation.
-- `fzf` is extensively customized with keybinds (see Usage) for switching between "libraries, builtins, keywords, topics", entering submodules, and showing previews.
-- When you choose a file, you get a preview, and can open source with `bat`, or enter directories with `ranger`.
-
-**Custom Keybinds (fzf):**
-- `Alt+l`: List all installed site-packages ("Libs")
-- `Alt+b`: Python builtins list
-- `Alt+k`: Python keywords
-- `Alt+t`: Python help topics
-- `Alt+m`: Drill into submodules (contextual to selection in "Libs")
-- `Enter`: Show source file with `bat` or open directory in `ranger`
-- `Alt+p`: Toggle preview pane
-
-Python version is auto-detected; everything runs in your shell context (Qtile/Arch-friendly: *no X dependencies except notify-send*).
-
----
+Pressing `Enter` either opens the resolved source (with `bat` for files, `ranger` for directories) or displays the `pydoc` page when in Builtins/Topics/Keywords mode.
 
 ### Usage
 
-To launch the browser:
-```sh
-~/.scripts/bin/pyman.sh
-```
-It will automatically display installed `site-packages` in an interactive fzf prompt:
+Run interactively (best as a qtile keybinding or terminal launcher):
 
-- **Navigate** with arrow keys, fuzzy-search by typing
-- **Preview docs/source** in the right pane (auto-wrap to terminal width)
-- **Switch modes** (libs, builtins, topics, keywords) using Alt+key as described above
-- **Enter** on an item to view source (or open directory in ranger if it's a package)
-- **Submodules** can be browsed with Alt+m while on a package
-- **Notifications** will indicate file/dir opened
+- `pyman.sh`
 
-> **tldr:** Launch in terminal and start exploring Python from all angles—docs, source, and more—using only your keyboard.
+Inside fzf:
+
+- `alt-l` → libraries/modules list (default)
+- `alt-m` → drill into submodules for the current selection
+- `alt-b` → builtins
+- `alt-k` → keywords
+- `alt-t` → topics
+- `alt-p` → toggle preview
+- `Enter` → open source (modules view) or show docs (other views)
 
 ---
 
-> [!NOTE]
-> **Strengths:**  
-> - Highly interactive and leverages your terminal environment.
-> - Great use of shell/Python tools and colors for readability.
-> 
-> **Potential Issues & Improvements:**  
-> - Assumes `python` points to the desired interpreter and uses nonstandard regex for `python -V`; might not work for Python 3.10+.  
-> - Some tools (`bat`/`fd`/`ranger`) are optional, yet script will fail if missing—should ideally check for these and degrade gracefully.  
-> - The recursive submodule exploration (Alt+m) could confuse users with large or nested modules; might benefit from limiting depth or adding indicators.  
-> - Some functions produce lots of subshells. Could refactor heavy pipelines for efficiency and reproducibility.
-> - `$XDG_CACHE_HOME` must be set or script will fail to create cache directories.
-> 
-> **Overall:**  
-> Superb utility for Python power users! Robust and highly hackable; just needs a bit more polish and portability if you want to share it outside your own setup.
+> [!TIP]
+> `PYMAN_CUR_FILE`/`PYMAN_CUR_DIR` are created/exported but never used; you can remove them or actually use them for caching `pydoc` output. Also, parsing `python -V` with a strict `3.xx` regex can break on alphas/betas or future formatting—consider `python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")'`. Finally, the script assumes stdlib lives in `/usr/lib/python$VERS/`; on some setups it may differ (e.g., `/usr/lib/python3.xx/` is fine on Arch, but virtualenvs won’t be covered).

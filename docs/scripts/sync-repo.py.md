@@ -1,82 +1,62 @@
-# Python Git Repository Synchronizer
+# Sync a Git repository (fetch/pull/stash/commit/push)
 
 ---
 
-**sync-repo.py**: Python utility for automating git repository synchronization with rich terminal UI, local/remote conflict handling, and progress feedback.
+**sync-repo.py**: Sync a git repo with interactive conflict handling and rich output
 
 ---
 
 ### Dependencies
 
-- `python` (>=3.7): Required for script execution.
-- `rich`: For terminal UI components (progress bars, tables, syntax highlighting, etc.).  
-  > Install via: `pip install rich`
-- `git`: Used for command-line git operations.
-- User Environment:
-  - Editor: Uses `$EDITOR` (defaults to `vim`/`nvim` in some flows).
-  - Runs best in an interactive terminal.
-- Other tools: (used via subprocess in subshells, typically already installed)
-  - `awk`, `grep`, `sed` (for repo name extraction)
-
----
+- `uv` (shebang uses `uv run --script`) to run with inline deps
+- `python>=3.13`
+- `git`
+- `rich` (pretty console output: panels, tables, progress, syntax highlighting)
+- `$EDITOR` (optional; used to resolve conflicts, defaults to `vim`/`nvim`)
 
 ### Description
 
-This script provides a streamlined workflow for synchronizing a git repository with its remote, automating fetch, pull, stash, add, commit, push, and handling both merge and stash conflicts interactively with concise feedback in a colorful Rich-style interface.
+This script automates a “safe-ish” sync cycle for a Git repository on your Arch/qtile setup:
 
-#### Core features:
-- **Automatic Syncing:** Runs `git fetch`, handles fast-forwards, and rebases automatically. Attempts to keep the workflow non-blocking unless manual intervention is strictly required.
-- **Stash/Conflict Handling:** If you have uncommitted local changes, they're stashed and later re-applied. Any conflicts are detected, and the script offers clear options for manual resolution, keeping local/remote, or opening your `$EDITOR` for both merge or stash conflict resolution.
-- **Status and Summaries:** Summarizes repository state before and after sync, includes commit, time, and diff statistics in a tabular view.
-- **Commit Automation:** Automatically creates messages indicating the number of changes and basic user/host info.
+- Validates the target path is a Git repo, then discovers:
+  - current branch (`git branch --show-current`)
+  - remote name (`git remote`)
+  - repo name (parsed from `git remote -v`)
+- Fetches everything (`git fetch --all --prune`) with a progress display.
+- If local is behind upstream (`git diff --quiet <branch> @{u}`):
+  - stashes local changes if the working tree is dirty
+  - tries a fast-forward merge (`git merge --ff-only @{u}`)
+  - if FF fails, falls back to `git pull --rebase <remote> <branch>`
+  - if rebase/merge conflicts occur, prompts you to:
+    - abort merge
+    - skip (hard reset)
+    - open `$EDITOR` on conflicted files and then `git add . && git commit`
+  - pops the stash and, if conflicts arise, resolves per-file via:
+    - remote version (`--theirs`)
+    - local version (`--ours`)
+    - manual edit in `$EDITOR`
+- If there are local changes afterwards, it stages (`git add -A`), commits with an auto message based on `git status -s`, then pushes. If push fails, it attempts a fast-forward pull and retries.
 
-#### Functions breakdown:
-- `run_command`: Prints, runs, and syntax-highlights git commands.
-- `handle_merge_pull_conflicts` & `handle_stash_conflict`: User-friendly handling for git conflicts (merge or stash).
-- `display_summary`: Shows key commit/diff info in a table.
-- The script expects a git repo path, checks its validity, and runs in the selected folder.
-
----
+Finally, it prints a summary table (time, current/previous commit dates) and `git diff --stat HEAD^`.
 
 ### Usage
 
-Simple usage example (Arch, qtile, terminal):
-
-```
-python /home/matias/.scripts/bin/sync-repo.py ~/dev/my_project
-```
-
-Or for use as a keybinding (with qtile or similar WM):
-
-- Assign the script to a key shortcut, optionally with a dmenu prompt to select the repo path.
-
-**Behavior summary:**
-- If everything is clean: fetch/pull/commit/push quietly.
-- If changes/conflicts: prompts you, guides you through resolution.
-
-**Interactive resolution:**
-
-- During merge conflicts:  
-  - `[e]` open `$EDITOR`,  
-  - `[a]` abort merge,  
-  - `[s]` skip commit.
-- During stash conflicts:  
-  - `[r]` use remote,  
-  - `[l]` keep local,  
-  - `[m]` manual edit.
+- Run on any repo path:
+  - `sync-repo.py ~/code/myrepo`
+- Typical flow (tldr):
+  - `sync-repo.py <repo>`  
+  - if prompted during conflicts, type:
+    - merge conflicts: `a` (abort) / `s` (skip) / `e` (edit)
+    - stash conflicts: `r` (remote) / `l` (local) / `m` (manual)
+- Works well as a qtile keybinding launching a terminal:
+  - `alacritty -e sync-repo.py ~/code/dotfiles`
 
 ---
 
 > [!TIP]
->
-> - **Robustness:** Script mostly assumes origin/main structure. It could break for more complex remote configs or bare repos.
-> - **Hardcoded flows:** It assumes command-line tools like `awk`/`sed` in your shell, and some git commands are not cross-repo/branch robust.
-> - **Environment reliance:** Relies on `$EDITOR`, `$USER`, `$HOSTNAME` being set.
-> - **Potential improvements:**
->   - Add thorough exception handling for subprocesses.
->   - Make prompts/commands more configurable (select both branch and remote explicitly).
->   - Use proper git plumbing over shell-grade command parsing for increased reliability.
->   - Support dry-run mode or add logging.
->   - Allow non-interactive operation for automation (e.g., pass options via args for CI).
->
-> Despite being highly functional for daily CLI-driven syncing and conflict handling, be mindful of repo-specific edge cases and multi-remote/branch workflows!
+> Improvements to consider:
+> - Avoid `shell=True` and piped parsing (`grep|awk|sed`) for repo name; use `git remote get-url` and Python parsing for robustness.
+> - `git remote` may return multiple remotes; picking the first silently can be wrong.
+> - `git reset --hard` on “skip” is destructive; consider prompting for confirmation or using safer strategies.
+> - Conflict resolution commits without a message (`git commit` opens editor) which may block automation; optionally pass a message or guide the user more explicitly.
+> - `git stash drop` after conflict handling may drop useful data; consider keeping the stash unless fully applied cleanly.

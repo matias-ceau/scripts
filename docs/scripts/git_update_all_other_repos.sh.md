@@ -1,69 +1,54 @@
-# Git: Update All Other Repos
+# Update all Git repos (HTTPS only)
 
 ---
 
-**git_update_all_other_repos.sh**: Batch-pulls all git repositories (with HTTPS remote) at exact depth 3 under `$GIT_REPOS`
+**git_update_all_other_repos.sh**: Bulk `git pull` for repos under `$GIT_REPOS` and report successes/errors
 
 ---
 
 ### Dependencies
 
-- `fd`: Fast alternative to find; used here for directory searching at specific depth.
-- `git`: Distributed version control; required for repo operations.
-- `ripgrep` (`rg`): Fast search tool; used to filter remote URLs.
-- `bat`: Cat clone with syntax highlighting.
-- `sed`: Stream editor, for formatting repository info.
-- Environment Variable: `GIT_REPOS`  
-  The root path where your repositories are located. Must be set before running the script.
-
----
+- `git` — performs `pull` and inspects remotes
+- `fd` — finds `.git` directories quickly (`-H` to include hidden)
+- `ripgrep` (`rg`) — filters `git remote -v` output to keep HTTPS fetch remotes
+- `bat` — pretty-print repo headers and show final reports
+- Environment: `$GIT_REPOS` — root directory containing your repositories
 
 ### Description
 
-This script scans a directory tree (set via the environment variable `$GIT_REPOS`) at an exact depth of 3 for `.git` directories, identifying all potential git repositories at that level.  
-For each repo found:
+This script scans your `$GIT_REPOS` tree for Git repositories (by locating directories named `.git` at an exact depth of 3), then updates each repo via `git pull` **only if** its `fetch` remote uses `https`.
 
-1. It checks if the repo has a "fetch" remote configured with an HTTPS URL.
-2. If so, it prints formatted info about the repo using `sed` and pretty-prints it with `bat` using TOML highlighting.
-3. Then, it attempts to do a `git pull` for that repo.
-4. If the pull fails, an error message is displayed in highlighted color.
+For each eligible repo it:
 
-This setup is ideal for batch-updating multiple project repositories arranged neatly under a common directory hierarchy, e.g. `$GIT_REPOS/org/project/.git`.
+1. Prints a formatted header derived from the repo path (using `sed`) and renders it with `bat` (TOML lexer + Monokai theme).
+2. Runs `git -C "<repo>" pull`.
+3. Appends the repo path to either:
+   - `/tmp/git-successfull-updates.txt`
+   - `/tmp/git-failed-updates.txt`
+4. At the end, displays both summary files with `bat`.
 
----
+This is well suited for an Arch + qtile workflow: run it in a terminal, or call it from a keybinding if you’re okay with interactive `git pull` prompts (credentials, conflicts).
 
 ### Usage
 
-**1. Set the `$GIT_REPOS` environment variable to your main git repositories folder:**
-```bash
-export GIT_REPOS="$HOME/projects"
-```
+Run from any shell (requires `$GIT_REPOS`):
 
-**2. Run the script:**
-```bash
-~/.scripts/bin/git_update_all_other_repos.sh
-```
+    export GIT_REPOS="$HOME/dev"
+    ~/.scripts/bin/git_update_all_other_repos.sh
 
-- Can be run interactively in a terminal.
-- The script prints each repo before pulling, highlighting line 2 for visibility.
-- Only repositories with HTTPS remotes under the specified directory are touched.
-- Suitable to assign to a keybinding from within qtile, or execute on demand.
+Typical “tldr”:
 
-#### Example Run Output
-```toml
-[my-repo] #org/my-repo
-```
-```
-remote: Enumerating objects: 5, done.
-remote: Counting objects: 100%...
-...
-```
+    # Update all HTTPS repos under $GIT_REPOS (depth=3), then show a report
+    GIT_REPOS="$HOME/git" git_update_all_other_repos.sh
+
+Outputs:
+
+- Live `git pull` output per repo
+- Final combined report rendered by `bat`:
+  - `/tmp/git-successfull-updates.txt`
+  - `/tmp/git-failed-updates.txt`
 
 ---
 
-> [!TIP]
-> - The script expects your repositories to all reside at exactly depth 3 under `$GIT_REPOS` (e.g., `$GIT_REPOS/org/project/.git`). If your layout differs, you may need to adjust the `--exact-depth` parameter.
-> - The search is limited to HTTPS remotes; SSH remotes are excluded. You may want to support both in some cases.
-> - The invocation of `bat` for highlighting is a nice touch, but using `--highlight-line 2` may not always have the intended effect if the output of `sed` varies.
-> - Failed pulls are shown with a red-background message, but you might want to log errors to a file for later review.
-> - If any dependency is missing (such as `fd`, `bat`, or `ripgrep`), the script will fail—consider adding a check or a short dependency note at runtime.
+> [!WARNING]
+> There’s a bug: `cat > SUCCESSES` / `cat > ERRORS` should be `cat > "$SUCCESSES"` / `cat > "$ERRORS"`; currently it writes to files literally named `SUCCESSES` and `ERRORS`. Also consider quoting variables everywhere (`"$GIT_REPOS"`, `"$SUCCESSES"`), using `while IFS= read -r line`, and handling non-fast-forward pulls (maybe `git fetch --all` + `git status` or `git pull --rebase`). The `--exact-depth=3` assumption may miss repos; making depth configurable would improve portability.

@@ -1,76 +1,62 @@
-# Git Repository Sync and Info Utility
+# gsi — Improved Git sync helper (fetch/rebase/commit/push)
 
 ---
 
-**gsi.sh**: Interactive, robust script for syncing a local Git repository with its remote, handling merges, conflicts, and summary display.
+**gsi.sh**: One-shot git sync: fetch, fast-forward/rebase, auto-commit, push (optional dry-run)
 
 ---
 
 ### Dependencies
 
-- `git`: Core functionality for all sync operations.
-- `bat`: Pretty-prints command lines and outputs for improved readability.
-- `glow`: Markdown rendering for information and summaries in the terminal.
-- `realpath`, `sed`, `awk`, `date`, `wc`, etc.: Standard GNU/Linux utilities for bash scripting.
-- Optionally uses `${EDITOR:-vim}` for conflict resolution.
-- Expects `bash` as the interpreter.
-
----
+- `git` (with an upstream set for the current branch)
+- `bash`
+- `realpath` (from `coreutils`)
+- `sed`, `awk`, `grep`, `wc` (core userland)
+- `bat` (optional) — prettier command/output rendering
+- `glow` (optional) — nicer markdown-ish headings in terminal
+- `$EDITOR` (optional) — used during conflict resolution (defaults to `vim`)
 
 ### Description
 
-This script provides an enhanced, interactive command-line tool for keeping a local Git repository in sync with its remote, with a particular focus on visual clarity and safe automation. Features include:
+`gsi.sh` is a convenience sync script for your repos on Arch + qtile setups where you want a consistent “update & publish” routine.
 
-- **Colorized, bat-highlighted command outputs** for easier tracking of actions.
-- **Markdown rendering** (via `glow`) for readable summaries.
-- **Intelligent handling of local changes:**
-  - Warns about and stashes local modifications before pulling.
-  - Attempts fast-forward merges, followed by rebase if necessary.
-  - Can handle merge conflicts interactively: opens your $EDITOR, allows aborting/skipping, or manual resolution.
-- **Dry-run support** to preview actions without making changes (via `--dry-run`).
-- **Convenient push/commit logic:** if local changes are detected, automatically adds, commits (with informative message), and pushes.
-- **Repository maintenance:** runs `git maintenance run` post-sync.
-- **Human-friendly summary** printed using Markdown and glow.
-- **Robust error handling**: colored messages and immediate exit on errors.
-- **Usage and example display** when not enough arguments are given.
+What it does, in order:
 
-This script is particularly well-suited for workflow automation (e.g., bound to a key with Qtile), but is equally useful interactively. It's designed for fast switching between multiple Git repos, such as dotfiles or script collections.
-
----
+1. Validates the target path and ensures it’s a Git repository.
+2. Detects the current branch (`git branch --show-current`) and remote (`git remote`).
+3. Fetches updates (`git fetch --all --prune`).
+4. If the branch is behind its upstream:
+   - stashes local uncommitted changes (if any),
+   - tries `git merge --ff-only @{u}`,
+   - falls back to `git pull --rebase <remote> <branch>`,
+   - offers an interactive conflict handler (abort / skip / open editor).
+   - re-applies the stash.
+5. Shows `git status -s`, and if there are changes:
+   - stages everything (`git add -A`),
+   - auto-creates a commit message like `N change(s) from user@host`,
+   - pushes, retrying after a fast-forward pull if needed.
+6. Runs `git maintenance run` and prints a short “log/changes” summary.
 
 ### Usage
 
-Basic usage from the terminal:
-```
-./gsi.sh <repository_path> [--dry-run]
-```
-#### Arguments:
-- `<repository_path>`: (Required) Path to the git repository you want to sync.
-- `--dry-run`: (Optional) Show what would happen, but make no changes.
+tldr:
 
-#### Examples:
-```
-./gsi.sh ~/.scripts
-./gsi.sh $SCRIPTS
-./gsi.sh $HOME/repos/dots --dry-run
-```
-You can also alias in your shell or bind to a key in Qtile for rapid access.
+- Sync a repo:
+  - `gsi.sh ~/.scripts`
+- Dry run (prints what would be executed):
+  - `gsi.sh ~/.scripts --dry-run`
 
-#### On merge conflicts:
-The script will prompt you for:
-- `e`: Open $EDITOR to resolve conflicts (or default to vim)
-- `a`: Abort
-- `s`: Skip this commit
+Notes:
+
+- Designed to be run from anywhere (it `cd`s into the repo and returns).
+- Works well as a shell alias or a qtile keybinding launching a terminal command:
+  - `alacritty -e gsi.sh ~/path/to/repo`
 
 ---
 
 > [!TIP]
-> - The script is functionally robust, but a few improvements are possible:
->   - No check for untracked files or dirty state pre-stash (could prompt the user or show a diff).
->   - Usage of `eval` for command execution in `run_command()` can be dangerous if input data is not well-controlled.
->   - For multi-remote repositories or detached HEAD state, remote/branch detection may not always yield the intended targets.
->   - The conflict handler covers only merge conflicts, but fails for non-merge-related errors (e.g., rebase problems).
->   - Some external tools (`bat`, `glow`) are optional, but script behavior might be less readable without them.
->   - Error messages could be enhanced to offer remediation advice directly.
->
-> Overall, this script is very powerful for personal workflow on Arch Linux + Qtile!
+> Improvements to consider:
+> - `REMOTE="$(git remote)"` can return multiple remotes; prefer `git remote show` or default to `origin`.
+> - `git diff --quiet "$LOCAL" "@{u}"` assumes an upstream exists; add a guard with `git rev-parse --abbrev-ref --symbolic-full-name @{u}`.
+> - `handle_conflicts`: “skip” uses `git reset --hard` (destructive). Consider `git rebase --skip` when rebasing, or detect merge vs rebase state.
+> - Auto-commit of *all* changes may be risky in repos with generated files; consider an allowlist, prompts, or `--no-commit` mode.

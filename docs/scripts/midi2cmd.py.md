@@ -1,72 +1,56 @@
-# MIDI2CMD Python Utility
+# MIDI Controller CLI (amidi helper)
 
 ---
 
-**midi2cmd.py**: Manage and monitor MIDI controller input and test connections from the terminal
+**midi2cmd.py**: List/test/monitor ALSA MIDI controllers and print messages (raw/parsed)
 
 ---
 
 ### Dependencies
 
-- `python` (tested with standard Python 3)
-- `click` (`pip install click`) — CLI framework for building commands and options
-- `amidi` (provided by `alsa-utils` on Arch Linux) — Command-line MIDI device tool
-- `shlex` and `subprocess` — Standard Python libraries (no extra install needed)
-
----
+- `python` (run via `uv` shebang)
+- `uv` (because of `#!/usr/bin/env -L uv python`)
+- `python-click` (CLI framework)
+- `alsa-utils` (`amidi` for listing and reading devices)
 
 ### Description
 
-This script provides a convenient terminal interface to interact with MIDI controllers connected to your system, primarily designed for use on your Arch Linux system with `qtile` window manager. 
+`midi2cmd.py` is a small Click-based CLI to inspect and sanity-check MIDI controllers on Arch using ALSA’s `amidi`. It builds a name → device-id mapping by parsing `amidi -l`, then exposes three subcommands:
 
-Core capabilities:
-- **List available MIDI controllers** (device names and device IDs)
-- **Monitor MIDI messages** from a selected controller, in `raw` or parsed/human-readable mode
-- **Connection test** to verify if a controller device is accessible
+- **list**: prints every controller detected by `amidi`, along with its `hw:<id>` address.
+- **test**: attempts a short read (`amidi -d -t 0.1`) against the selected controller to confirm it’s accessible.
+- **monitor**: reads MIDI data and outputs either:
+  - `raw`: the unprocessed `amidi` output
+  - `parsed`: a minimal decoder for common 3-byte messages (Control Change, Note On, Note Off)
 
-**Command Overview:**
-- Uses the `amidi` tool for device interrogation and message monitoring
-- Offers a CLI via the robust `click` Python package
-- Default controller is set to `nanoKONTROL2` if none specified
-
-**Highlights:**
-- Parsed monitoring mode provides simple decoding (`Control Change`, `Note On`, `Note Off`) for common MIDI messages
-- Helpful output on missing controllers and incorrect usage
-- Functions portably as a terminal tool, well-suited for integration with keybindings or scripts in your `qtile` setup
-
----
+The controller argument is optional and defaults to `nanoKONTROL2`, which matches your “MIDI controller to keyboard/script launcher” workflow (e.g., quick probing before wiring events into qtile keybindings or an external mapper).
 
 ### Usage
 
-```
-# List all connected MIDI controllers
-$ midi2cmd.py list
-
-# Monitor MIDI messages (raw mode, default controller nanoKONTROL2)
-$ midi2cmd.py monitor
-
-# Monitor a specific controller by name in parsed mode
-$ midi2cmd.py monitor MyController --mode parsed
-
-# Test connection to nanoKONTROL2
-$ midi2cmd.py test
-
-# Test connection to another controller by name
-$ midi2cmd.py test MyController
+```sh
+midi2cmd.py --help
+midi2cmd.py list
 ```
 
-You can assign script invocations to `qtile` keybindings for advanced MIDI-triggered workflows. For persistent monitoring or scripting, run in a terminal or assign to an autostart script with desired arguments.
+Test a specific device:
 
----
+```sh
+midi2cmd.py test nanoKONTROL2
+midi2cmd.py test "Your Controller Name"
+```
+
+Monitor raw bytes (good for discovery):
+
+```sh
+midi2cmd.py monitor nanoKONTROL2
+midi2cmd.py monitor "Your Controller Name" --mode raw
+```
+
+Monitor with basic decoding:
+
+```sh
+midi2cmd.py monitor nanoKONTROL2 --mode parsed
+```
 
 > [!TIP]
->
-> - The script currently only interprets a subset of MIDI messages (3-byte standard ones) in parsed mode, so System Exclusive or SysRealtime messages will appear as `Unknown messages`. For robust controller mapping/automation, you might extend the parsing logic or add script execution on certain MIDI events.
-> 
-> - The use of `run` for monitoring MIDI input means it will block until process exit and does not handle continuous streaming efficiently; for real-time usage consider a subprocess with event-driven or line-by-line output handling.
-> 
-> - Default controller name (`nanoKONTROL2`) is hardcoded; you might want to make this configurable or load from a preferences file.
-> 
-> - Only basic error handling: If `amidi` is missing or ALSA MIDI isn't available, errors may not be friendly.
-> 
-> - Shebang includes `-L uv` which may not be universally supported; ensure your environment supports this or replace with a simple Python shebang.
+> `monitor` currently uses `subprocess.run()`, which waits for `amidi` to exit; in practice you’ll want streaming (`subprocess.Popen` + incremental reads) so it behaves like a real live monitor and can be stopped cleanly with Ctrl-C. Also, the CLI command name `list` shadows Python’s built-in `list` and then gets used in an error message in `monitor`, which is confusing—rename the command function (e.g., `list_cmd`) and import `builtins.list` if needed. Finally, parsed mode assumes each output line is a clean hex triplet; `amidi` output formats can vary, so a more robust parser (or `aseqdump`) may be more reliable.

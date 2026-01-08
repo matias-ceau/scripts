@@ -1,48 +1,43 @@
-# terminal_with_command.sh
+# Floating terminal runner
 
 ---
 
-**terminal_with_command.sh**: Opens a floating Alacritty terminal to execute a given command, showing output and staying open.
+**terminal_with_command.sh**: Open a floating Alacritty terminal, run a command, then stay open
 
 ---
 
 ### Dependencies
 
-- `alacritty` — GPU-accelerated terminal emulator (required for window class and title support).
-- `bash` — The default shell for command execution.
-- `qtile` (environment context) — Floating window support configured within your qtile setup.
-- (Optional) Any command you wish to run in the floating terminal.
-
----
+- `bash` (uses interactive mode `-i` and argument forwarding via `"$@"`)
+- `alacritty` (terminal emulator; sets window title/class for your qtile rules)
+- `qtile` (optional, but implied: match `WM_CLASS=floating` and/or title `term_w_cmd` to float)
 
 ### Description
 
-This script is designed to launch a floating terminal window under the `qtile` window manager on Arch Linux, immediately executing the command(s) you pass as arguments. It utilizes `alacritty`, setting the window title to `term_w_cmd` and the window class to `floating`, making it easy to manage its floating behavior via qtile rules. After executing the provided command, the script keeps the shell open (`exec "$SHELL"`), allowing you to inspect output or run further commands interactively.
+This script spawns an Alacritty window configured for easy window-manager targeting:
 
-By leveraging `-e bash -i -c`, the script ensures commands run in an interactive session, so aliases and functions are available and the environment is set up as in a normal shell. Passing `"$@"` ensures all arguments are interpreted as a single command with arguments, preserving quoting.
+- `-T term_w_cmd` sets the window title to `term_w_cmd`
+- `--class 'floating'` sets the `WM_CLASS` to `floating` (handy for qtile rules)
+- `-e bash -i -c '…' _ "$@"` runs a small Bash snippet:
+  - executes the passed command (via `"$@"` so arguments are preserved)
+  - then runs `exec "$SHELL"` to keep the terminal open after the command finishes (useful to read output, logs, errors)
 
----
+Because Bash is started as interactive (`-i`), your shell startup files may run, which can be useful (aliases/functions) but may also add latency.
 
 ### Usage
 
-You can invoke the script from anywhere, e.g. within keybindings, scripts, or directly from a terminal.
+Run from a terminal, a launcher, or bind it in qtile to open a temporary floating “output” terminal:
 
-**Basic usage:**
-```
-terminal_with_command.sh <command> [arguments]
-```
-**Examples:**
-```
-terminal_with_command.sh htop
-terminal_with_command.sh nvim ~/notes/todo.md
-terminal_with_command.sh bash -c "echo Hello && sleep 5"
-```
-_Note:_ You can assign this script to a keybinding in your qtile config to rapidly run diagnostics, editors, or monitoring tools in a floating terminal.
+- Run a simple command:
+  - `terminal_with_command.sh pacman -Qi qtile`
+- Run something long-lived:
+  - `terminal_with_command.sh journalctl -f -u NetworkManager`
+- Run a shell pipeline (wrap it in `bash -lc`):
+  - `terminal_with_command.sh bash -lc 'ps aux | rg qtile | less'`
+
+Suggested qtile matching (conceptually): float windows with title `term_w_cmd` or `wm_class == "floating"`.
 
 ---
 
-> [!NOTE]
-> - The script does not validate command existence, so typos or missing commands will simply result in an error message inside the terminal window.
-> - The script assumes `alacritty` is installed and in the PATH; this won’t work with other terminal emulators unless modified.
-> - If you want more flexibility (e.g. alternate terminal emulators or improved error handling), you could parameterize the terminal command and include checks for the command’s existence.
-> - Using `"$@"` with a leading `_` as `$1` inside the script (`"$@"` after `_`) is a bash pattern to preserve all original arguments exactly, but if no command is given, the terminal will open to a shell prompt. If you would prefer to display a usage message or error, add a command presence check at the beginning.
+> [!TIP]
+> Consider adding basic safety/UX improvements: check for missing args (print usage), verify `alacritty` exists, and optionally background/detach (`setsid … &`) so it doesn’t block the caller. Also note that `bash -i` can trigger interactive prompts/slow startup; if you don’t need interactive behavior, drop `-i` or switch to `bash -lc` for predictable non-interactive execution with login-like env.

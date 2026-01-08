@@ -1,68 +1,50 @@
-# UGC HTML Movie Titles Extractor
+# UGC HTML Movie Title Extractor
 
 ---
 
-**ugc-python.py**: Extracts and lists movie titles from HTML input piped via stdin.
+**ugc-python.py**: Extracts and numbers movie titles from UGC-like HTML read from stdin
 
 ---
 
 ### Dependencies
 
-- `uv`  
-  _Alternative Python runner/virtual env manager, used to execute the script with dependencies resolved._
-- `beautifulsoup4`  
-  _HTML/XML parser; required for extracting movie titles from given HTML._
-- `python >= 3.13`  
-  _Script is intended for newer Python (adjust if using an older version)._
-
----
+- `uv` (shebang uses `uv run --script`) to run with inline dependency resolution
+- `python>=3.13`
+- `beautifulsoup4` (provides `bs4.BeautifulSoup` HTML parsing)
 
 ### Description
 
-This script reads HTML from standard input, parses it, and extracts a clean list of movie titles from the first `<div class="info-wrapper">`.  
-It trims lines and filters out non-movie text blocks (like those starting with "Films avec de l'audio description" or "Rappel"), then prints each movie on a new line with a numeric index.
+This script is a small stdin → stdout filter to scrape movie titles from an HTML page (likely copied/saved from a UGC cinema page). It:
 
-**Main steps:**
-- Read the HTML content from stdin.
-- Parse with `BeautifulSoup` (`html.parser`).
-- Find the `<div>` with class `info-wrapper`.
-- Split and clean lines from the div's text.
-- Ignore irrelevant header/notification lines.
-- Output a numbered list to stdout.
+1. Reads the entire HTML document from **stdin** (`sys.stdin.read()`).
+2. Parses it with BeautifulSoup using the `html.parser` backend.
+3. Searches for a `div` with class `info-wrapper`, assumed to contain the list of movies.
+4. Converts that section to plain text with explicit line splitting via `get_text(separator="\n")`.
+5. Filters out unwanted header/reminder lines (currently anything starting with:
+   - `Films avec de l'audio description`
+   - `Rappel`)
+6. Prints the remaining lines as a numbered list (`1. Title`, `2. Title`, …).
 
----
+This is convenient on Arch Linux when you want a quick textual list to paste into notes, a notification, a rofi menu, or a qtile widget pipeline.
 
 ### Usage
 
-**Pipe HTML to the script:**
+Run it by piping HTML into it:
 
-```sh
-cat page.html | uv run --script --quiet /home/matias/.scripts/dev/ugc-python.py 
-```
-or (if executable):
-```sh
-chmod +x /home/matias/.scripts/dev/ugc-python.py
-cat page.html | /home/matias/.scripts/dev/ugc-python.py
-```
+- From a saved file:
+  - `cat page.html | ~/.scripts/dev/ugc-python.py`
 
-**Within Qtile:**
-- You can bind this script to a keybinding or use it in combination with a web scraping or clipboard utility.
+- From the clipboard (example with `wl-paste` on Wayland):
+  - `wl-paste | ~/.scripts/dev/ugc-python.py`
 
-**Typical output:**
-```
-1. The Godfather
-2. Pulp Fiction
-3. Interstellar
-...
-```
+- Basic “tldr”:
+  - Input: full HTML document on stdin  
+  - Output: numbered movie titles on stdout  
+  - Arguments: none
+
+You can bind it in qtile as part of a command pipeline (e.g., fetch/copy page → parse → display), since it is non-interactive and writes to stdout.
 
 ---
 
-> [!CAUTION]
->
-> - The script assumes only a single relevant `<div class="info-wrapper">`. If the HTML structure changes or multiple such divs are present, some movies could be missed or repeated.
-> - No error is raised for missing dependencies; script will simply fail. Consider adding dependency checks.
-> - The shebang redundantly appears twice in the script. The second one (`#!/usr/bin/env python`) is ignored due to placement.
-> - Filtering logic is hardcoded for specific phrases (in French). If site notification text changes, false positives may appear.
-> - Would benefit from command-line options (for input file path or custom selectors).
-> - Adding optional output formats (CSV, JSON) could be useful for scripting.
+> [!TIP]
+> Consider making the selector more robust: `div.info-wrapper` may change, and the current line-based heuristic can accidentally include non-title lines. A safer approach is to target specific child tags (e.g., `a`, `h3`, or known title containers) and extract only those. Also, remove the second `#!/usr/bin/env python` line (it’s redundant) and add an explicit UTF-8 handling note if you often process French accents.

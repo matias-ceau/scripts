@@ -1,71 +1,57 @@
-# Colormap Extractor from Text Files
+# Colormap From Text
 
 ---
 
-**colormap_from_text.sh**: Extracts and displays unique color codes from text or config files in various formats
+**colormap_from_text.sh**: Extract unique hex colors from text and print as RGB/hex (optionally previewed)
 
 ---
 
 ### Dependencies
 
-- `bash` — Shell interpreter for execution.
-- `grep` — For extracting hex color codes from text.
-- `sort` — For finding unique color codes.
-- `bat` — For colored help output; will fail if not installed.
-- `cat` — For reading files to stdin.
-- (Optional) `qtile` — Not directly required, but can be integrated with keybindings in your setup.
-
----
+- `bash`
+- `grep` (uses `-oE` to extract `#[0-9a-fA-F]{6}`)
+- `sort` (deduplicates via `sort -u`)
+- `cat` (when reading from files)
+- `bat` (used to render the help output with `bat -plhelp`)
 
 ### Description
 
-This script extracts all unique hexadecimal color codes (`#RRGGBB` format, case-insensitive) from standard input or one or more text files. It is particularly useful for parsing configuration files to quickly generate palettes (for example, from your qtile, gtk, or neovim configs).
+`colormap_from_text.sh` scans input text (either stdin or one/multiple files) for 6-digit hex colors (`#RRGGBB`). It deduplicates them and converts each color to either:
 
-Depending on the flag, it outputs the palette as:
-- Hex codes (`#RRGGBB`)
-- RGB tuples (`rgb(r, g, b)`)
-- CSV (`r, g, b`)
-- Optionally, colors are previewed visually in the terminal with a background swatch.
+- raw RGB triplets: `r, g, b` (default)
+- CSS-style: `rgb(r, g, b)` via `-r/--rgb`
+- original hex: `#RRGGBB` via `-x/--hex-code`
 
-**Features:**
-- Reads from stdin (pipe) or file arguments.
-- Use `-x/--hex-code` for hex output, `-r/--rgb` for `rgb(r,g,b)` output, `-c/--color` for terminal color preview.
-- Formats are mutually exclusive for hex and rgb.
-- Quick visualization of color palettes from any text/config file.
+With `-c/--color`, it also prints a terminal color swatch using truecolor escape sequences (`\e[48;2;R;G;Bm ... \e[0m`), which is useful when iterating on qtile themes, rofi configs, alacritty/kitty themes, etc.
 
----
+Notes on flow:
+
+- When stdin is piped, it processes that stream directly.
+- When run without a pipe, it expects one or more file paths; it `cat`s them into the same pipeline.
 
 ### Usage
 
-**From command line with file(s):**
-```
-colormap_from_text.sh -x -c ~/.config/qtile/config.py
-```
+Pipe from any command:
 
-**From a pipeline:**
-```
-cat ~/.config/gtk-3.0/settings.ini | colormap_from_text.sh -r
-```
+    cat ~/.config/qtile/config.py | colormap_from_text.sh
+    rg '#[0-9a-fA-F]{6}' -n ~/.config -S | colormap_from_text.sh -r
+    cat theme.conf | colormap_from_text.sh -x
 
-**Examples:**
-```sh
-colormap_from_text.sh -x       # (with stdin) Outputs only hex codes
-colormap_from_text.sh -r       # (with stdin) Outputs only `rgb(r, g, b)`
-colormap_from_text.sh -c       # (with stdin) Outputs color blocks and csv values
-colormap_from_text.sh -x -c my_colors.conf
-cat myfile | colormap_from_text.sh -r -c
-```
+Read one or more files:
 
-- **Invalid usage** (e.g., both -x and -r):  
-  Script displays an error and usage message.
+    colormap_from_text.sh ~/.config/qtile/config.py
+    colormap_from_text.sh -c -r ~/.config/alacritty/alacritty.yml ~/.Xresources
+
+Preview swatches (good for quick visual palette checks):
+
+    colormap_from_text.sh -c ~/.config/qtile/config.py
+    cat colors.ini | colormap_from_text.sh -c -x
 
 ---
 
 > [!TIP]
-> **Critique:**  
-> - The script assumes all color codes are in `#RRGGBB` format (no support for shorthand `#RGB` or alpha channels).
-> - Dependency on `bat` for help output may cause failure if `bat` is not installed; suggest a fallback to standard echo/cat if `bat` is missing.
-> - Only the first six digits after `#` are parsed, so malformed or extended color codes could sneak in without warning.
-> - The option parsing does not allow you to mix files and stdin conveniently; if both are detected, priority is not clear.
-> - It could be made more robust by accepting multiple files directly with correct POSIX argument handling.
-> - You might consider supporting inline comments (to filter out pseudo-colors), or supporting output in other formats (like JSON for script consumption).
+> Improvements to consider:
+> - The help text suggests “`<stdout> | script`” but mentions `<file(s)>` while the parser currently treats any non-option as a file; adding `--` support (end of options) would avoid edge cases with filenames starting with `-`.
+> - `usage()` always exits with `1`; use `0` for `-h/--help` and `1` for errors.
+> - Add support for 3/8-digit hex (`#RGB`, `#RRGGBBAA`) if you ever parse web/CSS-heavy configs.
+> - `bat` is optional; consider falling back to `cat` if `bat` isn’t installed.

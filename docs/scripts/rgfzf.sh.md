@@ -1,67 +1,49 @@
-# `rgfzf.sh` — Fuzzy Ripgrep/Vim file opener
+# Ripgrep → fzf → Neovim jump
 
 ---
 
-**rgfzf.sh**: Search for text using ripgrep + fuzzy finder, preview with bat, open in neovim.
+**rgfzf.sh**: Fuzzy-search ripgrep matches, preview with bat, open in Neovim at line
 
 ---
 
 ### Dependencies
 
-- `rg`  
-    Ripgrep for fast file and text searching.
-- `fzf`  
-    Fuzzy finder, provides interactive UI for selecting results.
-- `bat`  
-    For previewing file content with syntax highlighting.
-- `nvim`  
-    Opens the selected file and line (swap for another editor if needed).
-- `bash`  
-    Required for the script and `fzf` interactions.
+- `rg` (ripgrep) — fast text search engine
+- `fzf` — interactive fuzzy finder UI
+- `bat` — syntax-highlighted preview for the selected file
+- `nvim` — opens the chosen file directly at the matched line
 
 ### Description
 
-This script allows you to:
+`rgfzf.sh` chains together a common “search → filter → open” workflow:
 
-1. Search files for some text using `ripgrep` (`rg`).
-2. Pipe the results to `fzf` for interactive, incremental narrowing.
-3. Use `bat` to preview search matches in context and with syntax highlighting.
-4. Open the selected file at the given line with `nvim` (great for code navigation).
+1. `rg` searches your query across files and prints matches in the form `file:line:match`, with ANSI colors enabled and `--smart-case` (case-insensitive unless your query contains uppercase).
+2. `fzf` consumes that stream and lets you narrow results interactively. It’s configured to:
+   - understand fields separated by `:` (`--delimiter :`) so `{1}` = filename and `{2}` = line number
+   - keep colors (`--ansi`) and adjust highlight styling
+   - show a preview via `bat`, jumping the preview to the matching line (`--highlight-line {2}`)
+   - position the preview above the list (`up,60%`) and scroll it relative to the match
+3. Pressing Enter replaces the fzf process with Neovim (`become`) and jumps to the right line: `nvim {1} +{2}`.
 
-The command pipeline works like this:
-- Results from `rg` are fed to `fzf` (`fzf --ansi` for color compat).
-- `fzf` parses results using `:` as the delimiter (`filename:line:text`).
-- On selection, a floating preview window pops up (`bat`, colored), highlighting the relevant line.
-- Pressing `enter` launches `nvim` at the selected file and line.
-
-#### Example run:
-Suppose you search for a string:
-```
-rgfzf.sh 'def main'
-```
-You’ll get a live-updating list of ripgrep hits, fuzzy filter it, preview with bat, and `Enter` to jump to code in neovim.
+This is ideal for quick navigation from a terminal, or for binding in qtile to pop up a terminal running the script.
 
 ### Usage
 
 ```sh
-# Search for a string in the current directory and subdirectories
-rgfzf.sh <search_terms>
-
-# Example: Find all "TODO" comments
-rgfzf.sh TODO
-
-# For interactivity via keybinding (Qtile / sxhkd)
-# In your config: bind a key to run this script (ensure terminal popup)
+rgfzf.sh <pattern>
 ```
 
-- You can run `rgfzf.sh <pattern>` from any directory.
-- If assigned to a keybinding, it works best if your terminal will pop up (such as with a scratchpad in Qtile).
+Examples (tldr-style):
+
+```sh
+rgfzf.sh "qtile"
+rgfzf.sh "keybinding"
+rgfzf.sh "class MyWidget"
+```
+
+Run in a terminal (interactive). In qtile, you’ll typically bind it to spawn your terminal, e.g. “open terminal and run `rgfzf.sh 'foo'`” (you’ll still type the query unless you wrap it).
 
 ---
 
 > [!TIP]
-> - `nvim` is hardcoded; consider passing your preferred editor as an argument or environment variable.
-> - The preview window is set at 60% height; this could be adjusted for smaller/larger terminals.
-> - If `bat` or `fzf` are missing, the script will fail silently. Defensive checks could improve the UX.
-> - The script doesn’t work in directories with no ripgrep hits; some user feedback here could help.
-> - If you use `kitty`, `alacritty` or similar GPU terminals, preview/ansi-rendering will look best.
+> Consider handling the “no query” case explicitly (currently it runs `rg ""`, which may return everything or error depending on rg version/options). Also, filenames containing `:` will break the `{1}/{2}` field extraction; you could switch rg’s output to `--json` and parse it, or use a more robust delimiter strategy. Adding `--hidden`/`--glob` options (optionally toggled) can make it more useful on Arch dotfiles.

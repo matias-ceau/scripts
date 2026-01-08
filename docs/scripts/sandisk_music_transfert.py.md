@@ -1,71 +1,58 @@
-# Sandisk Music Transfer Tool
+# Sandisk music transfer (beets → player sync)
 
 ---
 
-**sandisk_music_transfert.py**: Transfers unplayed albums from your music library to your Sandisk media player, automatically fitting them to available space.
+**sandisk_music_transfert.py**: Randomly select unlistened albums and sync them to a Sandisk player
 
 ---
 
 ### Dependencies
 
-- `python >= 3`
-- `pandas`: For DataFrame operations.
-- `os`, `subprocess`, `random`: Python standard libraries.
-- `rsync` *(system command)*: Efficient file transfer.
-- `beets` (`beet` command): Music library manager, used here to query album statuses.
-- `du`, `rm`, `mkdir`, `sudo`: Shell utilities for disk usage checking and file operations.
-
-*Optionally*: 
-- `getpass` (commented; for password requests during `sudo` operations).
-
----
+- `python` (Arch package: `python`)
+- `pandas` (`python-pandas`) for dataframe filtering/aggregation
+- `beets` (`beets`) to query “not listened” albums via `beet ls`
+- `du` (from `coreutils`) to estimate album sizes
+- `rsync` to copy/update albums efficiently
+- `sudo`, `rm`, `mkdir` for cleanup and folder creation
+- Your library layout assumes `/home/matias/music/<...>` (artist inferred from path)
 
 ### Description
 
-This script automates the process of syncing not-yet-listened music albums from your local beets music library to a Sandisk media player's mounted storage (presumed automounted at `/run/media/matias/EC95-4FBB/Music`).  
-It performs the following actions:
+This script builds a set of albums from your Beets library tagged with `status:0` (interpreted as “not listened”), then syncs *only* those albums to your Sandisk device under:
 
-- Queries your beets library for albums marked as unplayed (`status:0`).
-- Calculates their disk usage.
-- Randomly drops artists from the transfer list until the sum of albums fits within your defined device space limit (`MAX_SPACE`).
-- Removes old albums from the device that are no longer in the transfer list.
-- Cleans up empty folders on the device.
-- Creates any necessary folder structure for new albums.
-- Uses `rsync` to efficiently sync albums over to the device, ensuring that only new/updated files are transferred.
+- `player_path = /run/media/matias/EC95-4FBB/Music`
 
-It is primarily useful for workflow automation (such as from a terminal or invoked in a `qtile` keybinding), targeting creative control over your portable music collection while not exceeding device capacity.
+To fit the device, it sums album sizes (via `du -sk`) and repeatedly drops a *random artist* until the total size is below `MAX_SPACE` (currently ~30 MiB). It also filters out albums whose detected format isn’t in:
 
----
+`aac, m4a, flac, mp3, wav, wma`
+
+Finally, it:
+1) removes albums from the device that are not in the selected set,  
+2) prunes empty artist folders,  
+3) recreates target folders,  
+4) `rsync`s each album directory.
 
 ### Usage
 
-- Ensure the device is mounted at the path configured in `player_path`.
-- Ensure your beets library is up to date, and that `beet` CLI works.
-- Run the script directly:
+Run manually (interactive terminal recommended because it may invoke `sudo`):
 
-```
-python ~/.scripts/bin/sandisk_music_transfert.py
-```
+- `python /home/matias/.scripts/bin/sandisk_music_transfert.py`
 
-- For regular usage, consider a keybinding in your `qtile` config:
+Typical workflow:
 
-```python
-Key([], "F10", lazy.spawn("python ~/.scripts/bin/sandisk_music_transfert.py"))
-```
+- Mount the Sandisk (should appear under `/run/media/matias/...`)
+- Ensure Beets `status` field is populated
+- Launch script, let it trim artists until it fits, then sync
 
-_Note: If you uncomment `getpass`, you may be prompted for your sudo password when deleting old files on the device._
+If you want to bind it in qtile, wrap it in a terminal command so you can see progress:
+
+- `alacritty -e python /home/matias/.scripts/bin/sandisk_music_transfert.py`
 
 ---
 
-> [!WARNING]
-> **Critique:**  
-> - The script references `password` in `proc.communicate(password.encode())` but this variable is commented out, so the script will crash if deletions are necessary—uncomment and assign `password` before use.
-> - The construction of DataFrames using `pd.DataFrame` has a faulty syntax (`'path' : album_paths` dict keys must be in curly braces, not lambda form). This will cause runtime errors.
-> - Usage of `os.path.isdir(i)` in the context `i in os.listdir(player_path)` is incorrect; `i` should be an absolute path.
-> - Error handling is minimal; if `rsync` or `mkdir` fails mid-process, script does not recover gracefully.
-> - The script assumes all music folders strictly follow a consistent naming pattern and directory structure.
-> - Some string interpolations/f-strings use a wrong syntax (`f"len(album_paths)}..."`).
-> - Filtering out the 'cover.jpg' file in 'format' list comprehension is done incorrectly.
-> - Hardcoding file paths and device ID reduces portability. Consider moving configurations to the script’s header or to a config file for easier edits.
-> - Consider running dry-runs first when developing automation that deletes data.  
-> **Recommended:** Refactor, add argument parsing for flexibility, robust error handling, and test with smaller directories first.
+> [!CAUTION]
+> - The script currently has multiple syntax/logic issues (broken f-strings, malformed `DataFrame` constructor, bad list comprehensions) and will not run as-is.
+> - `MAX_SPACE = 30 * 1024**2` is ~30 MiB, likely far below your player capacity.
+> - `os.path.isdir(i)` is checked without joining `player_path`, so device discovery is wrong.
+> - `password` is commented out but used; prefer `sudo` with cached credentials or avoid `sudo` by fixing mount permissions (e.g., `udisks2` options).
+> - Format detection via `os.listdir(i)[0]` is unreliable (may pick `cover.jpg`); use file scanning or `beet ls -f '$format'`.

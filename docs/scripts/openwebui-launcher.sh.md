@@ -2,64 +2,53 @@
 
 ---
 
-**openwebui-launcher.sh**: Bash script to launch Open WebUI and open it in a minimal browser.
+**openwebui-launcher.sh**: Start Open WebUI in tmux, wait until ready, then open in browser
 
 ---
 
 ### Dependencies
 
-- `uvx`: A Python virtual environment tool for launching Python apps.
-- `open-webui`: The actual Web UI Python application (`open-webui serve` command).
-- `tmux`: Used to daemonize the Open WebUI backend.
-- `notify-send`: For desktop notifications.
-- `curl`: To poll server readiness.
-- `rg` (ripgrep): Used for efficient process search.
-- `minimal-browser.py`: Custom/user-defined lightweight browser script. Must be available in `$PATH`.
-
----
+- `open-webui` (CLI): provides `open-webui serve`
+- `tmux`: runs the server in a detached, named session (`OPENWEBUI`)
+- `ripgrep` (`rg`): checks if a server is already running
+- `curl`: polls the HTTP endpoint until it responds
+- `libnotify` (`notify-send`): desktop notifications (works well under qtile)
+- `minimal-browser.py`: custom browser launcher script (resolved via `which`)
 
 ### Description
 
-This script streamlines the process of starting the Open WebUI server and launching it in a minimal web browser, designed with integration into an Arch Linux + qtile environment.
+This script is a convenience launcher for **Open WebUI** on Arch/qtile. It:
 
-**Core functionalities:**
-- Server Initialization: Optionally, with `init`, uses `uvx` to provision the latest `open-webui` package in a Python 3.12 environment and serve it.
-- Host/Port Customization: Overrides default host/port with `-H/--host` and `-p/--port` flags.
-- Idempotent Launch: Prevents duplicate `open-webui` instances by scanning running processes.
-- Timeout-wrapped readiness checks: Waits (up to 30s) for the web UI to become responsive before launching the browser.
-- Desktop Notifications: Notifies status at major steps for UX clarity.
-- Browser Launch: Starts the `minimal-browser.py` pointing at the running Web UI once it is live.
+1. Builds a target URL from `HOST`/`PORT` (defaults: `localhost:8080`).
+2. Checks for an existing server process using `ps | rg 'open-webui serve' | rg '8080'`.
+3. If not found, it starts `open-webui serve` inside a detached tmux session:
+   - Session: `OPENWEBUI`
+   - Window name: `openwebui`
+4. Sends a notification, then **waits for readiness** by polling `curl -I http://HOST:PORT` every 2 seconds (up to 30 seconds).
+5. Once reachable, it notifies again and opens the URL using `minimal-browser.py`.
 
----
+There is also an `init` mode intended to run Open WebUI via `uvx` with Python 3.11 and a fresh-ish `DATA_DIR` (`~/.local/share/open-webui/`), but its current implementation has argument-handling issues (see critique).
 
 ### Usage
 
-```sh
-# Launch with default localhost:8080, or customize:
-openwebui-launcher.sh
-openwebui-launcher.sh --host 0.0.0.0 --port 9000
+Run from a terminal, qtile keybinding, or launcher menu:
 
-# To initialize Open WebUI using uvx for a fresh Python env:
-openwebui-launcher.sh init
+- Launch (default `localhost:8080`):
+  - `openwebui-launcher.sh`
 
-# Full example, custom host/port, initializing:
-openwebui-launcher.sh init -H 127.0.0.1 -p 8181
-```
+- Custom host/port:
+  - `openwebui-launcher.sh --host 0.0.0.0 --port 3000`
+  - `openwebui-launcher.sh -H localhost -p 8081`
 
-This script can be effectively connected to a qtile keybinding, e.g.:
-```python
-Key([mod], "F12", lazy.spawn("openwebui-launcher.sh"))
-```
-Or, run from dmenu/rofi using the script path.
+- Access the tmux session:
+  - `tmux attach -t OPENWEBUI`
 
 ---
 
-> [!NOTE]
-> The script is functional but could be improved for robustness:
-> - Error handling is minimal (e.g. no checks for missing dependencies or for invalid/not found `open-webui` executable).
-> - The process check (`rg 'open-webui serve' | rg '8080'`) is brittle if running on a custom port or if `rg` is unavailable.
-> - If `minimal-browser.py` isn't available, the script exits silently.
-> - Notification text is basic—consider including more diagnostics for failures, or use more dynamic, user-friendly notifications.
-> - The `eval` on the browser line may be unnecessary and slightly risky; directly invoking the browser may be safer.
-> - The `init` argument may unintentionally discard host/port overrides (since `shift 2` skips the next argument).
-> - Consider using a CLI parsing library (e.g., `getopts` or even Python's `argparse` for more maintainable options handling).
+> [!TIP]
+> **Potential improvements / issues**
+> - The running-check is hardcoded to `8080` (`rg '8080'`), so using `--port` won’t prevent duplicate servers on other ports.
+> - `init)` runs `DATA_DIR=... uvx ... serve` *immediately* and then does `shift 2` even though `init` is a single token; this likely breaks parsing. Consider handling `init` as a separate execution path and `shift 1`.
+> - `DATA_DIR` is assigned but never exported/used by `open-webui serve` in the main path (unless Open WebUI reads it implicitly). If needed, `export DATA_DIR=...` (or the correct env var) should be set.
+> - `eval "$BROWSER $URL"` can be avoided; prefer `"$BROWSER" "$URL"` for safer quoting.
+> - If `minimal-browser.py` is missing, `BROWSER` becomes empty; add a fallback (e.g., `xdg-open`).

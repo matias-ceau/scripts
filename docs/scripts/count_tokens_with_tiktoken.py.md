@@ -1,58 +1,56 @@
-# Count Tokens with tiktoken
+# Count tokens with tiktoken (stdin/file)
 
 ---
 
-**count_tokens_with_tiktoken.py**: Count token usage for a text file or stdin using OpenAI `tiktoken`.
+**count_tokens_with_tiktoken.py**: Count tokens for a text using tiktoken and an OpenAI model encoding
 
 ---
 
 ### Dependencies
 
-- `tiktoken`  
-  Python package for OpenAI tokenizer encoding/decoding.  
-- Python 3.x (interpreter)
+- `uv` (runs the script with inline dependency metadata via the shebang)
+- `python>=3.14`
+- `tiktoken>=0.12.0` (tokenizer + model-specific encodings)
 
 ### Description
 
-This script counts the number of tokens (as understood by OpenAI's tokenization schemes) in a given text.  
-It's designed to be used in two ways:
+This script prints the number of tokens for a given input using `tiktoken`’s `encoding_for_model(model)`. It’s designed to fit nicely into a CLI workflow on Arch Linux and can be used in pipelines (stdin) or by pointing to a file.
 
-1. **Through a command line file argument**: supply a file with the `-f` flag to count tokens in its contents.
-2. **Via stdin**: you can pipe text directly to it for interactive or scripted workflows.
+Key behavior:
 
-The script defaults to the `gpt-4o` model for tokenization if no model is specified. The model can be changed using the `-m` flag.  
-It parses arguments manually and gracefully provides usage help.
+- **Default model**: `gpt-4o` (controls which encoding is used).
+- **Input sources**:
+  - If `-f <path>` is provided, the file content is tokenized.
+  - Otherwise, the script reads from **stdin** (`sys.stdin.read()`), making it ideal for pipes.
+- **Output format**: a single line: `nb_tokens\t<number>` (tab-separated), which is easy to parse with tools like `cut`, `awk`, or in qtile widgets/hooks.
 
-**Key Functions:**
-- `count_tokens(text, model)`: returns token count using the specified model.
-- `get_options(arguments)`: CLI argument parser, fetches file contents or reads from stdin, and selects the model.
-- `usage()`: prints usage help and exits.
+Internally:
+- `count_tokens(text, model)` resolves the encoding and encodes the whole text, returning `len(tokens)`.
+- `get_options(argv)` implements minimal flag parsing for `-h`, `-f`, and `-m`.
 
 ### Usage
 
-Examples for Arch Linux + qtile environment:
+Pipe text:
 
-```sh
-# Pipe text and count tokens with default model (gpt-4o)
-echo "Hello world!" | ~/.scripts/bin/count_tokens_with_tiktoken.py
+    echo "Hello world" | /home/matias/.scripts/bin/count_tokens_with_tiktoken.py
 
-# Count tokens in a file
-~/.scripts/bin/count_tokens_with_tiktoken.py -f ~/long_document.txt
+Count tokens of a file:
 
-# Specify a different OpenAI model (e.g. gpt-3.5-turbo)
-~/.scripts/bin/count_tokens_with_tiktoken.py -f ~/text.txt -m gpt-3.5-turbo
+    /home/matias/.scripts/bin/count_tokens_with_tiktoken.py -f ~/notes/prompt.txt
 
-# Get help
-~/.scripts/bin/count_tokens_with_tiktoken.py -h
-```
+Select another model encoding:
 
-You can assign this script to a keybinding in your qtile config, especially to process clipboard contents or selected files.
+    cat prompt.txt | /home/matias/.scripts/bin/count_tokens_with_tiktoken.py -m gpt-4.1
+
+Show help:
+
+    /home/matias/.scripts/bin/count_tokens_with_tiktoken.py -h
+
+Suggested qtile use (example keybinding runs on current selection via xclip):
+
+    xclip -o -selection clipboard | count_tokens_with_tiktoken.py
 
 ---
 
 > [!TIP]
-> - The argument parsing is simplistic and may break for input with overlapping or reordered flags, e.g. if `-m` is used before `-f`.
-> - The usage string could show the full script name for clarity in help output.
-> - There is no error handling for model names that are not recognized by `tiktoken`.
-> - Consider using a standard argument parser like `argparse` or `click` for more robustness and flexibility.
-> - Reading stdin is blocking; if nothing is piped, the script will wait for user input. An explicit prompt or timeout could improve interactivity.
+> The argument parsing is fragile: it joins argv into a string and searches for `" -m "` / `" -f "` which fails if flags are at the start/end or combined differently (e.g. `-m gpt-4o` at end). Consider `argparse` for robust parsing and proper `--help/--model/--file` long options. Also, `encoding_for_model()` can raise for unknown models—catch and print a friendly error (or fall back to `get_encoding("o200k_base")`).

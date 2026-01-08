@@ -1,59 +1,49 @@
-# fzf Song Launcher
+# FZF Song Launcher
 
 ---
 
-**fzf_songlauncher.sh**: Quickly choose and play a song with `cmus` using `fzf` fuzzy finder
+**fzf_songlauncher.sh**: Pick a music file with fzf and play it in cmus
 
 ---
 
 ### Dependencies
 
-- `cmus-remote`  
-  Command-line remote control for the cmus music player.
-- `find`  
-  Standard UNIX utility to search for files in a directory hierarchy.
-- `fzf`  
-  Command-line fuzzy finder, allows interactive selection.
-- A `music` directory  
-  The script assumes `music` (relative to where it's run) contains your music files.
+- `cmus` / `cmus-remote` — controls the `cmus` player from the shell
+- `fzf` — interactive fuzzy finder UI
+- `find` — lists files recursively
+- A `music` directory in the current working directory (or a symlink, since `find -L` is used)
 
 ### Description
 
-This script provides a rapid way to browse and play songs with minimal keystrokes, leveraging fuzzy searching.
+This script is a minimal “song picker” meant for quick launching of a track into **cmus**. It:
 
-- It searches recursively for files in your `music` directory (`find -L music -type f`).  
-  `-L` ensures that symbolic links are followed.
-- The results are piped into `fzf`, which presents an interactive fuzzy search interface in your terminal.
-- The selected file's full path is passed as an argument to `cmus-remote -f`, instructing the running cmus instance to play that file immediately.
+1. Recursively lists every file under `music` (following symlinks via `find -L`).
+2. Pipes the list into `fzf` so you can fuzzy-search by filename/path.
+3. Sends the selected path to `cmus-remote -f`, which tells cmus to load/play that file.
 
-This utility is particularly useful in a qtile environment on Arch Linux, where quick minimal interfaces are favored and scripts can be tightly integrated with keybindings.
+Because it uses a relative path (`music`), the behavior depends on where you run it from. On an Arch + qtile setup, it’s typically intended to be run from a terminal or bound to a keybinding that launches it in a terminal emulator.
 
 ### Usage
 
-1. Ensure `cmus` is running in a background terminal.
-2. Ensure your music files are placed inside a directory named `music` in your home or desired location.
-3. Execute the script:
-    ```
-    /home/matias/.scripts/bin/fzf_songlauncher.sh
-    ```
-    Or, make it executable and call directly:
-    ```
-    chmod +x ~/.scripts/bin/fzf_songlauncher.sh
-    ~/.scripts/bin/fzf_songlauncher.sh
-    ```
-4. Optionally, bind this script to a keybinding in your qtile config for instant access.
+Run interactively (needs a TTY for `fzf`):
 
-**tldr:**  
-```sh
-cd ~/    # directory should contain 'music'
-./.scripts/bin/fzf_songlauncher.sh
-```
-You'll get a fuzzy file selector. Choose a song. It will play in cmus.
+    fzf_songlauncher.sh
+
+Typical “tldr” flow:
+
+- Start `cmus` in a terminal (or ensure it’s already running).
+- Run the script.
+- Type to filter, press `Enter` to play the selected file.
+
+Example qtile keybinding concept (launch in your terminal):
+
+    alacritty -e /home/matias/.scripts/bin/fzf_songlauncher.sh
 
 ---
 
 > [!TIP]
-> - The `music` directory is hardcoded and relative; if run outside the intended location (e.g., from `~/`), it may not find your files. Consider making the path absolute or configurable by environment variable or argument.
-> - No filetype filtering: all files in `music` are selectable—even non-audio files. Consider restricting the file types (`-iname "*.mp3"` etc.).
-> - No cmus instance check: if cmus isn't running, the script fails silently.
-> - A minimal usage message or error reporting would improve user feedback.
+> Improvements to consider:
+> - Handle cancel/empty selection: if you press `Esc` in `fzf`, `cmus-remote -f ""` may error; guard with `selection=$(...) || exit` and `[ -n "$selection" ]`.
+> - Use an absolute music path (e.g., `$HOME/music`) so it works from any CWD.
+> - Quote/escape and/or restrict file types (e.g., `-iname '*.mp3' -o -iname '*.flac'`) to avoid picking non-audio files.
+> - If `cmus` isn’t running, `cmus-remote` fails; you could auto-start cmus or show a notification.

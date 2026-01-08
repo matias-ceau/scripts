@@ -1,76 +1,55 @@
-# Simple Git Repo Synchronization Script
+# Simple Git repo sync (fetch/pull/stash/commit/push)
 
 ---
 
-**sync-repo-simple.sh**: Automates the process of syncing a local git repository with its remote, including smart error handling and conflict resolution.
+**sync-repo-simple.sh**: Sync a git repo with remote, stashing local changes and auto-committing
 
 ---
 
 ### Dependencies
 
-- `git`: Required for all version control operations.
-- `bash`: The script is written in Bash and uses Bashisms.
-- `realpath`: Resolves absolute file paths.
-- `${EDITOR}` (environment variable, e.g. `vim`, `nvim`): For editing conflicted files during manual merge resolution.
-- `awk`, `sed`, `grep`, `wc`: Used for minor command-line parsing and info extraction.
-
----
+- `bash`
+- `git`
+- `realpath` (from `coreutils`) — resolves the repo path
+- `awk`, `sed`, `grep`, `wc` — used for repo name parsing and commit message
+- `$EDITOR` (fallbacks: `vim` for merge conflicts, `nvim` for stash conflicts)
 
 ### Description
 
-This script simplifies the process of keeping a local git repository (or dotfiles repository) in sync with its remote counterpart. It combines fetching, merging/pulling, conflict management, auto-committing, and pushing into a single, streamlined command.
+`sync-repo-simple.sh` is an opinionated “one command sync” helper for a single repository directory. It:
 
-#### Highlights:
-
-- **Automatic Stashing:** If uncommitted changes are present, they're safely stashed before pulling new changes.
-- **Merge/Pull Conflict Handling:** Interactive prompts help resolve merge and rebase conflicts, opening your editor for manual resolution when necessary.
-- **Stash Conflict Options:** Select whether to keep the remote, local, or manually edited version of conflicted files after stashing.
-- **Commit Automation:** Generates a succinct commit message and commits any modified files.
-- **Error Handling:** Exits on errors, displaying an informative message.
-- **Summarized Sync:** Prints a summary of changes at the end of the run.
-
-#### Functions:
-
-- `run_command`: Prints and executes commands in real-time.
-- `handle_error`: Graceful exits on terminal errors.
-- `generate_commit_message`: Auto-generates a concise commit message.
-- `handle_merge_pull_conflicts / handle_stash_conflict`: User-friendly prompts to guide through conflict resolution.
-- `display_summary`: Presents a mini changelog summary after a successful sync.
-
----
+1. Validates the provided path, `cd`s into it, and ensures it’s a Git repository.
+2. Fetches all remotes (`git fetch --all --prune`).
+3. If the local branch isn’t up to date with its upstream (`@{u}`), it:
+   - stashes local modifications (if any),
+   - tries a fast-forward merge (`git merge --ff-only @{u}`),
+   - falls back to a rebase pull (`git pull --rebase <remote> <branch>`),
+   - offers an interactive conflict handler if rebase/merge fails.
+4. Re-applies stashed changes and interactively resolves conflicts file-by-file (ours/theirs/manual).
+5. If there are local changes after syncing, it stages everything, generates a simple commit message (`N change(s) from user@host`), commits, then pushes. If push fails, it tries a fast-forward pull and retries the push.
+6. Prints a quick summary including timestamps and `git diff --stat HEAD^`.
 
 ### Usage
 
-You can run this script from a terminal. Optionally, you can bind it to a key in your qtile config for rapid one-key syncs.
+Run from anywhere (it will return to your original directory):
 
-**Command Syntax:**
-```
-sync-repo-simple.sh <path/to/git/repository>
-```
-**Examples:**
-```
-sync-repo-simple.sh ~/dotfiles
-sync-repo-simple.sh ~/Projects/my-coolapp
-```
+    sync-repo-simple.sh /path/to/repo
 
-**Help Option:**
-```
-sync-repo-simple.sh -h
-```
+Help (minimal):
 
-**Workflow:**
-1. Accepts a single directory argument (the local repo).
-2. Checks that argument is a directory and a git repo.
-3. Fetches, stashes if necessary, rebases/merges/pulls remote changes.
-4. Guides you through any conflicts.
-5. Commits and pushes any new local changes.
-6. Prints a summary, then returns you to your starting directory.
+    sync-repo-simple.sh --help
+    sync-repo-simple.sh -h
+
+Typical qtile/keybinding use (interactive on conflicts, uses `$EDITOR`):
+
+- Bind to a terminal command (recommended), since prompts may appear:
+  - Conflict resolution menu during pull/rebase
+  - Per-file stash conflict choices: `r` (theirs), `l` (ours), `m` (manual)
 
 ---
 
-> [!TIP]
-> - While generally robust, the script would benefit from improved detection of "no stashed changes" (current logic may always attempt stash pop even if no stashes exist).
-> - The commit message could be made more descriptive or customizable (maybe even integrating actual diff summaries or invoking an external LLM/text generator).
-> - Error messages and help text are sparse ("help" placeholder); consider expanding for less ambiguity.
-> - Handles only one remote and branch—multi-remote/branch environments may need manual tweaking.
-> - If used frequently, consider more granular logging or a dry-run mode for extra safety in destructive operations (such as `reset --hard`).
+> [!WARNING]
+> - The stash re-apply logic is likely inverted: `if ! [[ $(git stash list) ]]; then ... git stash pop` will try to pop when the stash list is empty. Consider using `if [[ -n $(git stash list) ]]; then`.
+> - `run_command()` prints and `eval`s strings: this is fragile with quoting and can be unsafe. Prefer arrays or direct `git` invocations.
+> - Remote detection uses `git remote` (could return multiple). Picking the first remote explicitly (e.g., `origin`) would be more predictable.
+> - `git reset --hard` in conflict handling can discard work; consider a safer option or an extra confirmation prompt.

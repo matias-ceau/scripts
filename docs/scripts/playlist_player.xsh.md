@@ -1,61 +1,46 @@
-# Playlist Player (cmus Edition)
+# Cmus Playlist Picker (dmenu)
 
 ---
 
-**playlist_player.xsh**: Select and play a saved `.m3u` playlist in cmus via dmenu
+**playlist_player.xsh**: Pick a playlist from `~/.playlists` and play it in cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh`: Shell interpreter used to run this script (shebang: `#!/usr/bin/env xonsh`)
-- `cmus-remote`: Command-line remote control for cmus music player
-- `dmenu`: Dynamic menu for X; used to select playlists
-- Playlist directory: Assumes playlists are stored as `.m3u` files in `~/.playlists`
+- `xonsh` — script runtime
+- `cmus-remote` — controls the running `cmus` instance
+- `cmus` — must be running (or `cmus-remote` commands will fail)
+- `dmenu` — interactive menu used to select a playlist (works well with qtile)
+- `~/.playlists/*.m3u` — playlist directory and files expected by the script
 
 ### Description
 
-This script provides an interactive way to select and play a playlist in `cmus` on your Arch Linux system. Here's a breakdown of its functionality:
+This Xonsh script provides a fast “choose and play” workflow for `cmus` playlists stored in `~/.playlists`. It:
 
-1. **Playlist Discovery:** The script looks for `.m3u` files in your `~/.playlists` directory, collecting each filename (without extension).
-2. **dmenu Interface:** All discovered playlists are presented in a dmenu prompt, allowing you to select the one you wish to play.
-3. **cmus Control:**
-   - Switches to cmus library view #4 (presumably playlist view).
-   - Clears the current cmus queue.
-   - Adds the selected playlist to the cmus queue.
-   - Skips to the next track (to trigger the playlist load properly).
-   - Starts playback in cmus.
+1. Switches cmus to the playlist/library view (`view 4`).
+2. Clears the current playlist/queue (`clear`).
+3. Builds a list of available playlists by listing files in `~/.playlists` that contain `m3u` in the name, then stripping the extension (everything after the first `.`).
+4. Sends that list to `dmenu` (case-insensitive, 30 visible lines) so you can pick one quickly.
+5. Adds the selected `.m3u` playlist to cmus, skips to next track, and starts playback (`-n` then `-p`).
 
-The workflow is linear and interacts with the user only via `dmenu`, making it a fast and distraction-free playlist launcher suitable for keybindings or scripting within your qtile Window Manager environment.
+This fits nicely into an Arch + qtile setup: bind it to a key to get an instant launcher-like playlist switcher.
 
 ### Usage
 
-You can run this script from your terminal or bind it to a key combination (recommended for qtile users):
+Run from a terminal, or more typically via a qtile keybinding/autostart command:
 
-```sh
-playlist_player.xsh
-```
+- Run directly:
+  - `playlist_player.xsh`
 
-#### Example workflow:
+- Example qtile binding:
+  - `lazy.spawn("playlist_player.xsh")`
 
-1. Script runs and opens dmenu listing all `.m3u` playlists in `~/.playlists`:
-    ```
-    +----------------------------+
-    | my_rock_playlist           |
-    | relaxing_sounds            |
-    | synthwave_collection       |
-    +----------------------------+
-    ```
-2. Select one (e.g., `synthwave_collection`), press Enter.
-3. That playlist is instantly loaded and playback starts in cmus.
-
-**For qtile users:**  
-Bind the script to a convenient key combination in your qtile config for seamless use.
+- Expected layout:
+  - `~/.playlists/Chill.m3u`
+  - `~/.playlists/Workout.m3u`
 
 ---
 
 > [!TIP]
-> - The script assumes all `.m3u` files are directly under `~/.playlists`. It does not handle nested directories or non-`.m3u` playlist formats.
-> - There is no error checking for the existence of cmus, dmenu, or the playlist directory; running it without these in place will fail without clear error messages.
-> - If two playlists have the same prefix before `.m3u` (e.g., `foo.m3u`, `foo.bak.m3u`), both will appear as `foo` and may cause confusion.
-> - You might want to add logic to detect and report when no playlists are found, or when the user cancels dmenu (currently tries to add a `.m3u` with an empty name if nothing is selected).
+> Consider handling “no selection” (Esc) to avoid trying to add `/.m3u`. Also, filtering with `i.endswith(".m3u")` is safer than `'m3u' in i`, and `split('.')[0]` can break names like `my.mix.m3u`. Using `os.path.splitext(i)[0]` and quoting/escaping the path would improve robustness. You could also check whether `cmus` is running and show a `notify-send` message on failure.

@@ -1,58 +1,55 @@
-# Ardour Session Opener (fzf + bat)
+# Ardour Session Picker (FZF + Preview)
 
 ---
 
-**ardour-open.sh**: Fuzzy-pick and open Ardour sessions with colored list and bat preview
+**ardour-open.sh**: Pick a recent Ardour session from ~/audio/PROJECTS and open it
 
 ---
 
 ### Dependencies
 
-- `bash` — interpreter
-- `fd` — fast file search for .ardour files
-- `xargs`, `stat`, `sort`, `sed`, `echo` — GNU coreutils/textutils
-- `bat` — syntax-highlighted preview (XML for .ardour)
-- `fzf` — fuzzy finder (used via wrapper)
-- `improved-fzfmenu.sh` — your wrapper around `fzf` with preview support
-- `ardour` — DAW to open the selected session
-- Optional: `qtile` — to bind to a key for quick access
+- `bash`
+- `fd` — fast file finder used to locate `*.ardour` sessions
+- `stat` — fetches mtime so sessions can be sorted by “most recent”
+- `sort`, `sed`, `xargs` — formatting + ordering pipeline
+- `bat` — syntax-highlighted preview of the `.ardour` XML session file
+- `ardour` — the DAW itself
+- `improved-fzfmenu.sh` — your wrapper around `fzf` (menu UI, preview handling)
 
 ### Description
 
-This script scans your Ardour project directory for session files (*.ardour), sorts them by most recently modified, and presents a colorized list in an fzf-powered menu. While navigating, a live preview of the selected .ardour (XML) file is shown using bat, sized to the preview pane.
+This script provides a quick launcher for Ardour sessions stored under `~/audio/PROJECTS`. It:
 
-Key pieces:
-- `AUDIO_PROJECTS` defaults to `$HOME/audio/PROJECTS` and controls the search root.
-- `search_cmd` builds the session list with colorized path segments and sorts by mtime via `stat -c %Y`.
-- `preview_cmd` calls `bat -l xml` with `--terminal-width=$FZF_PREVIEW_COLUMNS` for readable previews.
-- `get_path` sanitizes the selected colored entry (ANSI stripped) and reconstructs the absolute path.
-- Selection is performed through `improved-fzfmenu.sh` with `--ansi` and a 60% preview pane. The chosen session is opened with `ardour`.
+1. Searches for `*.ardour` files in `$AUDIO_PROJECTS`.
+2. Sorts them by last modification time (newest first).
+3. Displays them in an ANSI-colored interactive menu (via `improved-fzfmenu.sh`).
+4. Shows a live preview of the selected session file using `bat` (XML highlighting, full style, wrapped).
+5. Opens the chosen session with `ardour`.
+
+Notable helpers:
+
+- `search_cmd()`: builds the candidate list, applying ANSI color and stripping the leading base path for readability.
+- `strip_ansi()`: removes ANSI escape codes (important because the menu entries contain color codes).
+- `get_path()`: reconstructs the absolute path from the menu entry while sanitizing ANSI codes.
+- `preview_cmd()`: renders the selected `.ardour` file in the preview pane.
 
 ### Usage
 
-- Run interactively:
-```
-~/.scripts/bin/ardour-open.sh
-```
+Run from a terminal (or from a qtile keybinding that spawns a terminal/menu wrapper):
 
-- Override the projects directory (one-off):
-```
-AUDIO_PROJECTS="$HOME/audio/ARCHIVE" ~/.scripts/bin/ardour-open.sh
-```
+- Launch picker:
+  - `ardour-open.sh`
 
-- Qtile keybinding (e.g. in config.py):
-```
-Key([mod], "a", lazy.spawn("~/.scripts/bin/ardour-open.sh"))
-```
+tldr:
+- Navigate list → see preview → press Enter → Ardour opens the session.
 
-- Tip: If you cancel the menu, Ardour may be spawned with an empty path. Consider adding a guard (see Critique).
+qtile example:
+- Bind to a key and spawn:
+  - `lazy.spawn("alacritty -e /home/matias/.scripts/bin/ardour-open.sh")`
+  - or if `improved-fzfmenu.sh` is terminal-less, spawn directly:
+    - `lazy.spawn("/home/matias/.scripts/bin/ardour-open.sh")`
 
 ---
 
 > [!TIP]
-> - Paths with spaces/newlines may break the `xargs` pipeline. Prefer `fd -0 … | xargs -0 …` to be robust.
-> - The colorization `sed` rules hard-code `/home/matias/audio/PROJECTS`. Replace with `$AUDIO_PROJECTS` to avoid drift.
-> - Check for cancellation before launching: if `"$selected"` is empty, exit without calling `ardour`.
-> - Use `printf` instead of `echo -e` for safer escape handling.
-> - Consider quoting `$FZF_PREVIEW_COLUMNS` and providing a default when unset.
-> - Add dependency checks and helpful messages if `fd`, `bat`, or `improved-fzfmenu.sh` are missing.
+> Consider hardening edge cases: handle empty selection (user presses Esc) before calling `ardour`, and guard against filenames containing newlines/spaces (the `xargs stat` pipeline can break). Also, `SHELL=$(which bash)` is unused and can be removed. If you want truly “most recently used” rather than mtime, you could track selection history in a cache file.

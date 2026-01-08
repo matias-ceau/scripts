@@ -1,72 +1,60 @@
-# Try the Bat Suit
+# Interactive `bat` language tester
 
 ---
 
-**try_the_bat_suit.sh**: Fuzzy-finds and previews files with syntax highlighting in terminal using `bat` and `fzf`.
+**try_the_bat_suit.sh**: Pick a file and preview it with `bat` using a chosen syntax language
 
 ---
 
 ### Dependencies
 
-- `bat`: A `cat` clone with syntax highlighting and Git integration.
-- `fzf`: A general-purpose command-line fuzzy finder.
-- `fd`: Simple, fast and user-friendly alternative to `find`.
-- `ripgrep` (`rg`): Line-oriented search tool that recursively searches your directory.
-- `sed`, `cut`: Standard Unix text processing tools (part of coreutils).
-- _Optional_: Must be run under Bash; exported preview functions may require Bash-specific features.
-
----
+- `bash`
+- `bat` — syntax-highlighting pager
+- `fzf` — interactive selection UI + preview pane
+- `fd` — fast file finder (used when no file argument is provided)
+- `ripgrep` (`rg`) — parses the selected language line from `bat --list-languages`
+- `sed`, `cut` — lightweight parsing/color formatting
 
 ### Description
 
-This script provides an enhanced and interactive command-line tool for browsing and syntax-highlighting files, especially useful within the terminal workflow on Arch Linux and the Qtile window manager.
+This script is an interactive playground to quickly test how `bat` highlights a given file under different syntax definitions.
 
-1. **File Selection**:
-    - If a file is provided as the first argument, it’s used directly.
-    - Otherwise, it invokes `fd` to produce a list of files in the current directory tree and passes this list into `fzf` for fuzzy searching. Files are displayed in color.
+Workflow:
 
-2. **Language Highlighting**:
-    - Uses `bat --list-languages` to obtain all available syntax highlighting options.
-    - Allows selection of a language in `fzf` (with blue highlighting).
+1. **Choose a file**
+   - If the first argument is an existing file, it is used.
+   - Otherwise, it launches `fd` piped into `fzf` so you can pick a file interactively.
 
-3. **Preview**:
-    - For each available language, it previews the chosen file with `bat` using plain output (`-pp`), applying the selected language for syntax highlighting.  
-    - The preview is dynamically updated in the `fzf` pane via the Bash-exported function `preview_cmd`.
+2. **Choose a `bat` language**
+   - It reads available syntaxes via `bat --list-languages`.
+   - The language names are tinted blue with `sed` to improve readability in the list.
 
----
+3. **Preview**
+   - While navigating languages in `fzf`, the preview pane runs `preview_cmd`:
+     - Extracts the language token after `:` from the selected `bat` line (e.g. `Python: py, pyw` → `-lpy`)
+     - Runs `bat -pp --color=always "$FILE"` with that `-l…` override.
+
+This is particularly handy on Arch + qtile to bind to a key and visually compare syntaxes without editing config files.
 
 ### Usage
 
-Run from any terminal window. If you want to select a file using fuzzy search:
-```
-try_the_bat_suit.sh
-```
-
-Or specify a file directly as a parameter:
-```
-try_the_bat_suit.sh ~/projects/notes.md
-```
-
-_Navigating the UI:_
-- When prompted, search for or select a syntax highlighting language.
-- See the live syntax-highlighted preview of your file as you navigate.
-- Can be assigned to a keybinding in Qtile for fast access.
-
-#### TL;DR
 ```sh
-# Fuzzy-pick and preview any file:
+# Pick a file interactively, then browse bat syntaxes with a preview
 try_the_bat_suit.sh
-
-# Preview a specific file:
-try_the_bat_suit.sh myfile.py
 ```
+
+```sh
+# Provide a file directly
+try_the_bat_suit.sh ~/.config/qtile/config.py
+```
+
+Suggested qtile usage: bind it to a key and launch in a terminal (kitty/alacritty), since it’s fully interactive.
 
 ---
 
 > [!TIP]
->
-> - If you cancel out of one of the two `fzf` prompts, the script exits without action—there’s no error handling for null selections.
-> - The `fd` file search is rooted in the current directory; if called from home, it might produce a very long list. Consider limiting it with arguments or cd’ing to an appropriate folder before running.
-> - The preview function relies on Bash and exported shell functions, which won't work in shells like Zsh unless adapted.
-> - Error handling for missing dependencies (notably `bat`, `fzf`, `fd`, `rg`) could be enhanced to provide user-friendly messages.  
-> - The preview logic for language parsing is somewhat brittle (`lang="-l$(...)"`); if the output format of `bat --list-languages` changes, this may break. Parsing could be made more robust.
+> Improvements to consider:
+> - The language parsing assumes the first alias after `:` is valid (`-l...`). Some entries may not map cleanly; using `bat --list-languages --plain` (if available) or more robust parsing could help.
+> - `fd . -tf` searches from the current directory; you may want a default base dir (e.g. `$HOME`) for consistency.
+> - If `fzf` returns an empty selection, `bat` will error; add guards for empty `$FILE` and empty language selection.
+> - `SHELL=/usr/bin/bash` is set but not used; you can remove it unless you rely on it elsewhere.

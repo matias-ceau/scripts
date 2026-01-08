@@ -1,63 +1,54 @@
-# FTP Data Mount Script
+# Mount MEGA FTP data via curlftpfs
 
 ---
 
-**ftp-data-mount.sh**: Mounts a remote DATA folder from Mega via FTP to /mnt/ftp/DATA
+**ftp-data-mount.sh**: Mounts the MEGA “DATA” FTP endpoint into `/mnt/ftp/DATA`
 
 ---
 
 ### Dependencies
 
-- `mega-ftp` : Command-line tool for managing Mega.nz storage via FTP interface.
-- `curlftpfs` : Mounts remote FTP folders as local filesystems using FUSE.
-- `rg` : Ripgrep, a fast grep alternative for searching text (used here for output parsing).
-- `cut` : Basic UNIX command for splitting lines of text.
-- Bash (intended for `/usr/bin/bash`, not /bin/sh).
-
----
+- `bash`
+- `mega-ftp` (your script/command): prints and/or selects MEGA FTP endpoints
+- `curlftpfs`: FUSE-based FTP filesystem mount tool
+- `ripgrep` (`rg`): filters `mega-ftp` output by folder name
+- `coreutils` (`cut`): extracts the URL field from `mega-ftp` output
+- FUSE support (`fuse2`/`fuse3` depending on your setup) and appropriate user permissions
 
 ### Description
 
-This script is designed to mount a specific folder named `DATA` from your Mega.nz account (or any service accessible via `mega-ftp`) to a local directory at `/mnt/ftp/DATA`.
+This script mounts a specific MEGA FTP share (hardcoded as `DATA`) under `/mnt/ftp/DATA` using `curlftpfs`.
 
-**Core steps:**
-1. It defines `FOLDER` as `DATA` and `DEST` as `/mnt/ftp`.
-2. It invokes `mega-ftp` with the folder name, presumably to initialize or refresh authorization or listing.
-3. It then obtains the FTP URL corresponding to the `DATA` folder using:
-   - `mega-ftp` to list FTP targets,
-   - `rg` to search for the `DATA` folder line,
-   - `cut -d' ' -f2` to extract the FTP URL/Path.
-4. It mounts the remote folder to `/mnt/ftp/DATA` using `curlftpfs`.
+Workflow:
 
-The script assumes that:
-- The output of `mega-ftp` contains lines with the folder name and its corresponding FTP URL, separated by spaces.
-- The destination directory `/mnt/ftp` (and `/mnt/ftp/DATA`) exists and is writable.
+1. `FOLDER=DATA` defines the target entry name to locate.
+2. `DEST="/mnt/ftp"` defines the base mount directory.
+3. `mega-ftp "$FOLDER"` is executed first and must succeed (via `&&`). This likely ensures credentials are available, the endpoint exists, or a session is initialized.
+4. It then runs `mega-ftp` again (without args), filters the line matching `DATA` with `rg`, extracts the second space-delimited field with `cut -d' ' -f2` (expected to be the FTP URL), and mounts it to `${DEST}/${FOLDER}`.
 
----
+Because the URL parsing assumes a fixed output format, changes in `mega-ftp` output (extra spaces/columns) can break the mount step.
 
 ### Usage
 
-**Mount DATA folder to /mnt/ftp/DATA:**
-```bash
-~/.scripts/bin/ftp-data-mount.sh
-```
+Run interactively in a terminal, or bind to a qtile key (it does not prompt by itself):
 
-**Typical workflow:**
-- You can run this script manually in a terminal.
-- For integration in qtile, assign it to a keybinding for quick mount operations.
-- To unmount, use:
-  ```bash
-  fusermount -u /mnt/ftp/DATA
-  ```
+- Mount DATA:
+  - `ftp-data-mount.sh`
 
-**Automate on login/startup:**
-You may call this script from your `.xprofile` or as a hook in your qtile config.
+Typical checks:
+
+- Ensure mountpoint exists:
+  - `sudo mkdir -p /mnt/ftp/DATA`
+- Verify mounted:
+  - `mount | rg '/mnt/ftp/DATA'`
+  - `ls /mnt/ftp/DATA`
+
+To unmount:
+
+- `fusermount -u /mnt/ftp/DATA`  
+  or (depending on your system) `umount /mnt/ftp/DATA`
 
 ---
 
-> [!NOTE]
-> - The script lacks error handling: If `mega-ftp` fails or if the folder doesn't exist, the script will either do nothing or may return confusing errors.
-> - There are hardcoded paths and folder names (`DATA` and `/mnt/ftp`). Make these script parameters for reuse and flexibility.
-> - It assumes output formats for both `mega-ftp` and the folder listings. Changes upstream may break parsing.
-> - Ensure the `DEST` path exists before running, or add logic to create it as-needed.
-> - Consider saving logs, and providing feedback to the user upon failure/success.
+> [!TIP]
+> Consider creating the mountpoint automatically (`mkdir -p`) and adding error handling (`set -euo pipefail`). Also avoid calling `mega-ftp` twice: capture its output once and parse it. Finally, the `cut -d' ' -f2` approach is fragile if spacing varies; prefer a structured output format from `mega-ftp` (e.g., `--json`) or a more robust parser.

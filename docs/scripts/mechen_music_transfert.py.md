@@ -1,51 +1,56 @@
-# Mechen Music Transfert Utility
+# Mechen music transfer (random subset sync)
 
 ---
 
-**mechen_music_transfert.py**: Syncs a subset of unlistened music albums to the MECHEN MP3 player, fitting within a max size.
+**mechen_music_transfert.py**: Sync a random selection of unlistened albums to the MECHEN player
 
 ---
 
 ### Dependencies
 
 - `python3`
-- `pandas`: Data manipulation and filtering.
-- `beet` (from beets): For querying the music library; used to list unlistened albums.
-- `du`, `rsync`, `mkdir`, `rm`, `sudo`: Used for size calculation, syncing, and filesystem operations.
-- Your music should be organized in `/home/matias/music` and the player mounted at `/home/matias/MECHEN`.
+- `pandas` (Python package)
+- `beets` (`beet`) — used to list albums with `status:0`
+- `du` — to estimate album sizes
+- `rsync` — to copy/update albums efficiently
+- `sudo` — the script runs `rm`, `mkdir`, and `rsync` with elevated rights
 
 ### Description
 
-This script helps you transfer a random subset of unlistened music albums to your MECHEN MP3 player device, keeping within a specified storage size (`50MB` by default, `MAX_SPACE`). The process is as follows:
+This script is a “fill the device for discovery” workflow: it queries your Beets library for albums marked as *not listened* (`status:0`), then builds a candidate list of album folders and trims it down until the total size fits within `MAX_SPACE`.
 
-1. **Password Prompt**: Requests your sudo password interactively (once per run).
-2. **Album Discovery**: Uses `beet` (beets) to find all unlistened albums by status.
-3. **Size Calculation**: Gathers directory sizes to stay within `MAX_SPACE`.
-4. **Randomized Filtering**: Randomly removes artists from the selection until the fit is right.
-5. **Cleanup**: Removes albums and artists from the device not in the current selection.
-6. **Directory Creation**: Makes sure album/artist folders exist on the player device.
-7. **Sync**: Uses `rsync` (with `sudo`) to copy album contents.
+Key steps:
 
-This script manages both the selection logic and the device's filesystem state, so your MECHEN always contains "fresh" unlistened albums, without going over its storage limit.
+- **Library query**: `beet ls -ap status:0` returns absolute album paths; the script also derives `short_path` relative to `/home/matias/music/`.
+- **Sizing**: runs `du -sk` on each album folder and stores sizes (in KiB).
+- **Selection logic**: while the total exceeds `MAX_SPACE` (currently `50 * 1024**2`), it drops *all albums* from a randomly chosen artist (unless that artist already exists on the device, in which case it keeps them and retries).
+- **Device reconciliation**:
+  - Removes albums currently on the device that are **not** in the selected dataframe.
+  - Removes **empty artist folders** after cleanup.
+- **Deployment**: creates required folders and then `rsync -rvu --delete` each album directory to `/home/matias/MECHEN/<Artist>/<Album>`.
+
+The script prompts once for your sudo password and feeds it to each sudo command via stdin.
 
 ### Usage
 
-- Make sure your player is mounted at `/home/matias/MECHEN`.
-- You need to have your music library managed by [beets](https://beets.io/) and tagged appropriately.
-- Run the script in a terminal:
-  ```
-  python3 /home/matias/.scripts/bin/mechen_music_transfert.py
-  ```
-- You will be prompted for your sudo password (used for file operations on the player device).
-- The script will display progress as it selects albums, prepares folders, and syncs files.
+Run interactively in a terminal (password prompt):
 
-**Tip:** Set up a keybinding in your Qtile config to quickly launch this script in a terminal if you refresh your player frequently.
+    /home/matias/.scripts/bin/mechen_music_transfert.py
+
+Typical flow:
+
+- Enter sudo password when prompted
+- Script prints number of “not listened” albums + total size
+- It trims randomly until it fits, then cleans and syncs
+
+Suggested qtile keybinding (opens a terminal):
+
+- bind a key to: `alacritty -e /home/matias/.scripts/bin/mechen_music_transfert.py`
 
 ---
 
-> [!TIP]
-> - The script hardcodes paths (music library, player mount), space limits, and uses sudo, which makes it less portable and somewhat risky (danger of `rm -rf`). Consider parameterizing these with command-line arguments or a config file, and add more user prompts for destructive actions.
-> - Error handling is minimal—if a subprocess fails, it silently continues. Checking exit statuses and printing errors would make it more robust.
-> - Using `getpass` for the sudo password is practical for you, but reusing the password for every operation is slow; consider using a root-owned helper script or running the script with `sudo` directly.
-> - You might want to log operations for troubleshooting, especially if synced files go missing!
-> - This script is powerful for your workflow, but double-check your beets status tags and consider backing up the MECHEN folder before using.
+> [!WARNING]
+> - `MAX_SPACE` is set to ~50 TiB (`50 * 1024**2` bytes), likely meant to be 50 GiB; consider `50 * 1024**3` (bytes) or keep everything consistently in KiB since `du -sk` returns KiB.
+> - `artists_on_device` is computed with `os.path.isdir(i)` instead of `os.path.isdir(os.path.join(player_path, i))`, which can mis-detect directories depending on cwd.
+> - Comparing `albums_on_device` (`Artist/Album`) with `df["short_path"]` relies on Beets path layout; any mismatch can trigger unintended deletions.
+> - Passing the sudo password around is risky; prefer running the whole script with `sudo` once, or configure a minimal `/etc/sudoers.d` rule for `rsync/rm/mkdir` on the mount point.

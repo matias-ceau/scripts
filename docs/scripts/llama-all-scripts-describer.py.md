@@ -1,87 +1,57 @@
-# Llama-powered Script Documentation Generator
+# Llama-powered scripts documentation generator
 
 ---
 
-**llama-all-scripts-describer.py**: Automated Github-style markdown documentation for scripts using Llama 3.1
+**llama-all-scripts-describer.py**: Generate per-script markdown docs from your symlink CSV using Ollama
 
 ---
 
 ### Dependencies
 
-- `python` (3.8+ recommended)  
-- `colorama` – For colored terminal output ([PyPI link](https://pypi.org/project/colorama/))
-- `ollama` – Python client for interfacing with local Llama model API
-- `fd` – Fast file finding utility (available on Arch as `fd`)
-- `ripgrep` (rg) – Fast grep alternative
-- `xargs` – For passing arguments from stdin
-- `csv` (Python stdlib)  
-- `subprocess`, `os`, `sys`, `argparse` (Python stdlib)
-- Custom user script: `utils_update_symlinks.sh` (Ensures symlinks are up-to-date before doc generation)
-- Local Llama 3.1 model accessible via `ollama`  
-
----
+- `python` (stdlib: `argparse`, `csv`, `os`, `subprocess`, `sys`)
+- `ollama` (Python package) — uses `ollama.Client()` to call a local model
+- `colorama` — colored terminal output
+- `fd` — enumerates files under `$SCRIPTS`
+- `ripgrep` (`rg`) — filters out `*.md`
+- `xargs`, `basename` — shell pipeline utilities
+- `utils_update_symlinks.sh` — optional pre-step to refresh symlink metadata
+- Environment variable: `SCRIPTS` — base directory containing `data/`, `docs/`, `src/`
 
 ### Description
 
-This script automates the generation (and maintenance) of markdown documentation for your personal script collection, leveraging Llama 3.1 as an AI-powered doc writer. Its workflow is as follows:
+This script automates documentation for your personal scripts repo on Arch. It reads a CSV (default: `$SCRIPTS/data/symlink_data.csv`) and, for each entry, generates a markdown file in `$SCRIPTS/docs/scripts/<scriptname>.md`.
 
-- **Symlink Update Prompt:**  
-  Before working, it asks to run your `utils_update_symlinks.sh` to ensure the symlink state matches your scripts.
+Key behaviors:
 
-- **Script Enumeration:**  
-  It lists all files within `$SCRIPTS`, filters out markdown files, and builds a set of known script files.
-
-- **Orphaned Doc Detection:**  
-  After processing, it points out markdown docs that no longer correspond to any actual script (i.e., orphans).
-
-- **Binary/Script Differentiation:**  
-  If it finds a binary file, it attempts to locate the source in `$SCRIPTS/src` using common source extensions. If found, it documents that source; if not, it warns and skips.
-
-- **Script Description:**  
-  For each script (from your CSV, typically symlink structure), it:
-    - Reads the script (or source)
-    - Calls out to the Llama 3.1 Ollama endpoint to generate GitHub-flavored markdown documentation
-    - Writes this documentation to `$SCRIPTS/docs/scripts/<scriptname>.md`
-    - Updates `$SCRIPTS/docs/index.md` with a link to the new doc
-
-- **Index Updating:**  
-  The index file is maintained for easy navigation.
-
----
+- Interactive pre-flight: asks whether to run `utils_update_symlinks.sh` before generating docs.
+- Skips already-documented scripts: if `docs/scripts/<filename>.md` exists, it won’t regenerate it.
+- Binary handling: detects binaries via null bytes in the first 1024 bytes. If binary, it tries to locate a matching source file in `$SCRIPTS/src/` by basename with common extensions (`.c`, `.py`, `.sh`, `.rs`, etc.).
+- LLM generation: feeds the script source to Ollama (`model="llama3.1"`) and writes the returned markdown-ish description.
+- Indexing: appends a link entry to `$SCRIPTS/docs/index.md`.
+- Orphan check: compares existing `docs/scripts/*.md` against current script names under `$SCRIPTS` and reports orphaned docs.
 
 ### Usage
 
-Typical scenario on your qtile + Arch system:
+Run with default CSV:
 
-```sh
-llama-all-scripts-describer.py [optional/path/to/symlink_data.csv]
-```
+    llama-all-scripts-describer.py
 
-If you do not provide a CSV path, it assumes:
-```
-$SCRIPTS/data/symlink_data.csv
-```
-with environment variable `SCRIPTS` pointing to your scripts directory.
+Run with a custom CSV path:
 
-#### Example Workflows
+    llama-all-scripts-describer.py /path/to/symlink_data.csv
 
-- **Simply run:**
-  ```
-  llama-all-scripts-describer.py
-  ```
-- **Specify an alternate symlink data file:**
-  ```
-  llama-all-scripts-describer.py /path/to/custom_symlink_data.csv
-  ```
+Typical workflow (good for a qtile keybinding or manual run after adding scripts):
 
-> **Best used from a terminal or bound to a key in your qtile workflow.**
+    # update symlink csv (when prompted), then generate missing docs
+    llama-all-scripts-describer.py
+
+Outputs:
+
+- `$SCRIPTS/docs/scripts/<script>.md` created per undocumented script
+- `$SCRIPTS/docs/index.md` appended with links
+- terminal report including orphaned docs
 
 ---
 
-> [!CAUTION]
-> - The script assumes a specific directory structure governed by your `$SCRIPTS` env variable - this isn't portable unless others mimic your setup.
-> - The binary/source pairing mechanism is extension-based and could miss custom extensions or source locations.  
-> - Docs are only generated if `.md` does not already exist; no updating of existing docs unless you remove them.
-> - `ollama` setup (especially model name `llama3.1`) must be correct and available, or the script will silently skip doc generation.
-> - The CSV parser skips the header but assumes full three-column CSV conformity (`original_path, symlink, command_name`); mismatches could cause runtime errors.
-> - For robust automation, additional logging/reporting and error handling would be helpful, as errors (for instance, permission issues or subprocess failures) currently cause abrupt exits in some places.
+> [!TIP]
+> Consider (1) avoiding `shell=True` in `get_script_files()` and replacing the pipeline with pure Python for portability and safety, (2) de-duplicating index entries (currently always appends), (3) making the Ollama model configurable via CLI/env, and (4) improving binary/source mapping (current approach assumes source basename matches the binary name exactly).

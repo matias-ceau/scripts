@@ -1,61 +1,55 @@
-# megacmd_launch_tmux.sh
+# MEGAcmd tmux launcher
 
 ---
 
-**megacmd_launch_tmux.sh**: Launches `mega-cmd` inside a new detached tmux session.
+**megacmd_launch_tmux.sh**: Start `mega-cmd` in a dedicated detached tmux session
 
 ---
 
 ### Dependencies
 
-- `tmux`: Terminal multiplexer to manage sessions.
-- `mega-cmd`: MEGA CLI client for interacting with MEGA cloud services.
+- `tmux` — terminal multiplexer used to host the long-running session  
+- `mega-cmd` — MEGA command-line daemon/shell you want to keep available
 
 ### Description
 
-This script is a utility for starting the `mega-cmd` application in a detached tmux session. It creates a new tmux session called `MEGA` with a single window named `megacmd`, running the `mega-cmd` process in it. This is helpful to ensure that `mega-cmd` runs in the background and remains alive, independent from any terminal window.
+This script creates (or attempts to create) a dedicated `tmux` session named `MEGA` and starts `mega-cmd` inside it. The session is created **detached** (`-d`), so it won’t take over your current terminal—handy for launching from qtile keybindings, autostart hooks, or other scripts.
 
-Key features:
+Command breakdown:
 
-- Starts tmux detached (`-d`).
-- Sets session name (`-s MEGA`).
-- Sets initial window name (`-n megacmd`) for clarity.
-- Ensures that `mega-cmd` keeps running until explicitly killed or the tmux session is ended.
+- `tmux new-session`: creates a new session
+- `-d`: start detached (don’t attach immediately)
+- `-s MEGA`: session name is `MEGA`
+- `-n megacmd`: initial window name is `megacmd`
+- `'mega-cmd'`: command executed in that window
+
+This provides a persistent place where MEGA’s CLI can run without being tied to a terminal tab you might close.
 
 ### Usage
 
-You can run this script directly from the terminal, or call it from another script, your qtile config, or a keybinding.
+Run manually:
 
-**Basic usage:**
-```
-~/.scripts/bin/megacmd_launch_tmux.sh
-```
+    ~/.scripts/bin/megacmd_launch_tmux.sh
 
-**Check if the session is running:**
-```
-tmux ls
-```
+Attach to the session:
 
-**Attach to the MEGA session:**
-```
-tmux attach -t MEGA
-```
+    tmux attach -t MEGA
 
-**Kill the session when you're done:**
-```
-tmux kill-session -t MEGA
-```
+Detach (inside tmux):
 
-**Automate from qtile:**
-You can set up a qtile keybinding to execute this script, making `mega-cmd` management seamless from your window manager.
+    Ctrl-b d
+
+Kill the session when you don’t need it anymore:
+
+    tmux kill-session -t MEGA
+
+qtile keybinding example (conceptually):
+
+- bind a key to execute:
+
+      ~/.scripts/bin/megacmd_launch_tmux.sh
 
 ---
 
 > [!TIP]
-> - The script does not check if the `MEGA` session already exists, so running it multiple times will fail with a duplicate session error.
-> - For idempotency, consider adding:
->   ```
->   tmux has-session -t MEGA 2>/dev/null || tmux new-session -d -s MEGA -n megacmd 'mega-cmd'
->   ```
-> - No logging or notification is implemented; if `mega-cmd` fails, you won't see errors.
-> - If you want auto-start at login, consider adding the script to your `.xprofile` or an autostart mechanism in qtile.
+> `tmux new-session` will fail if a session named `MEGA` already exists. Consider using `tmux has-session -t MEGA 2>/dev/null || tmux new-session ...` to make it idempotent, or `tmux new-session -A -s MEGA ...` (attach-or-create behavior). You may also want to ensure `mega-cmd` is on `$PATH` in non-interactive launches (qtile/autostart), or use an absolute path for reliability.

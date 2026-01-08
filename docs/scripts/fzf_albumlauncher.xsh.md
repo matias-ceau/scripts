@@ -1,46 +1,49 @@
-# FZF Album Launcher for cmus
+# FZF Album Launcher (beets → cmus)
 
 ---
 
-**fzf_albumlauncher.xsh**: Pick an album via fzf and queue/play it in cmus
+**fzf_albumlauncher.xsh**: Pick a beets album via fzf and enqueue it in cmus
 
 ---
 
 ### Dependencies
 
-- `xonsh` — script interpreter.
-- `beets` (`beet`) — provides album list; `beet ls -a` outputs albums.
-- `fzf` — fuzzy finder for interactive selection.
-- `cmus` and `cmus-remote` — audio player and its remote control.
-- `sed` — used to extract album names from beets output.
+- `xonsh`: script runtime (`#!/usr/bin/env xonsh`)
+- `beet` (beets): provides the album list via `beet ls -a`
+- `sed`: trims `beet` output (`s/.* - //g`)
+- `fzf`: interactive selector UI
+- `cmus-remote`: controls cmus (queueing, playback, saving playlist)
+- `cmus`: must be running for `cmus-remote` to work
 
 ### Description
 
-This xonsh script lets you fuzzy-search your beets album library and instantly queue and play the selection in cmus.
+This script bridges your beets library and cmus: it lists albums with `beet ls -a`, extracts the album title portion, then lets you choose one with `fzf`. Once selected, it uses a sequence of `cmus-remote -C` commands to:
 
-Flow:
-- Lists albums with `beet ls -a`, then uses `sed 's/.* - //g'` to keep only the album title (dropping the artist).
-- Pipes into `fzf` for interactive selection; the chosen line is `.strip()`’d.
-- If a selection is made, cmus is controlled via `cmus-remote`:
-  - Switches to the queue view, clears it, then goes to the sorted library view.
-  - Applies a filter `album="<selection>"`, marks results, and adds them to the queue (`win-add-q`).
-  - Clears the filter, returns to the queue, nudges playback (`-n`, `-p`), and saves the queue to `/tmp/nowplaying.m3u`.
+1. Clear the current selection/filters.
+2. Apply a filter matching the chosen album (`filter album="…"`) in the library view.
+3. Mark the filtered results and add them to the queue (`win-add-q`).
+4. Return to the queue view, cap queue display (`lqueue 100`), and start playback (`-n`, `-p`).
+5. Export the resulting queue/now playing list to `/tmp/nowplaying.m3u`.
 
-On Arch Linux, install dependencies with pacman: `cmus`, `fzf`, `beets`, `xonsh`, `sed`. Ensure cmus is running before using the script.
+It’s well-suited to a qtile keybinding because it’s a quick, single-shot interactive picker (fzf), then hands off to cmus.
 
 ### Usage
 
-- Make executable: `chmod +x ~/.scripts/bin/fzf_albumlauncher.xsh`
-- Run from a terminal: `~/.scripts/bin/fzf_albumlauncher.xsh`
-- From qtile, bind a key (example): `Key([mod], "a", lazy.spawn("~/.scripts/bin/fzf_albumlauncher.xsh"))`
-- If `fzf` layout needs tuning, set `FZF_DEFAULT_OPTS` (e.g., `--height 60% --reverse`) in your shell env.
-- Result: Selected album is queued and starts playing; the current queue is saved to `/tmp/nowplaying.m3u`.
+Run from a terminal (needs fzf interaction):
+
+    fzf_albumlauncher.xsh
+
+Typical flow:
+
+- Type to fuzzy-search an album name
+- Press `Enter` to enqueue and start playing
+- `/tmp/nowplaying.m3u` is updated with the current selection
+
+qtile example idea (run in a terminal like `alacritty`):
+
+    alacritty -e /home/matias/.scripts/bin/fzf_albumlauncher.xsh
 
 ---
 
 > [!TIP]
-> Improvements and caveats:
-> - Ambiguity: Only album names are used. If two artists have an album with the same title, both may be queued. Consider feeding `fzf` with `"$albumartist - $album"` and filtering with both fields (e.g., `filter album="$album" albumartist="$artist"`).
-> - Quoting: Albums containing double quotes will break the filter. Escape quotes in the query (e.g., replace `"` with `\"`).
-> - `sed` split: Using `s/.* - //` assumes the format includes “ - ” once; album titles containing “ - ” will be truncated. Prefer `beet ls -a -f '$albumartist\t$album'` and parse robustly.
-> - cmus state: Ensure cmus is running; otherwise `cmus-remote` will fail. Consider auto-starting cmus if not detected.
+> The `sed 's/.* - //g'` simplification may cause ambiguous matches if different artists share album titles; consider using `beet ls -a -f '$albumartist - $album'` and filtering on both fields. Also, `filter album="..."` will break if the album contains double quotes; escaping/sanitizing the selection would make it more robust. Finally, saving to a fixed `/tmp/nowplaying.m3u` is convenient, but you may want to ensure permissions and consider a user-scoped runtime dir (`$XDG_RUNTIME_DIR`) on Arch.

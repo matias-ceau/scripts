@@ -1,75 +1,55 @@
-# GitHub Clone by `author/repo` Script
+# Clone GitHub repo by `author/repo`
 
 ---
 
-**git_clone_by_author-repo.sh**: Clone a GitHub repository via SSH, HTTPS, or from a local path with developer-oriented subfolder convention.
+**git_clone_by_author-repo.sh**: Clone a GitHub repo into `$GIT_REPOS/<author>/<repo>` with ssh/https/local
 
 ---
 
 ### Dependencies
 
-- `git` — Required for cloning repositories.
-- Bash (standard on Arch Linux)
-- [Environment variable] `GIT_REPOS` — (Optional) To set the base directory for cloned repositories. Defaults to `$HOME/git`.
-
----
+- `bash`
+- `git` (used via `git clone`)
+- `coreutils` (`mkdir`)
+- `cut` (from `coreutils`)
 
 ### Description
 
-This script simplifies cloning GitHub repositories based on the familiar `developer/package` notation, with support for:
+This script standardizes where your GitHub checkouts land on your Arch setup by enforcing a directory layout based on the GitHub owner:
 
-- **Cloning via HTTPS (default):** Standard GitHub HTTPS URL.
-- **Cloning via SSH:** If you pass `-s` or `--ssh`, it uses the SSH protocol (e.g., `git@github.com:author/package.git`).
-- **Cloning from a local repository:** With `-l <path>`, it clones from a provided local path.
+- Default base directory: `$HOME/git`
+- Override base directory: set `GIT_REPOS` (e.g. `GIT_REPOS=$HOME/dev`)
+- Destination layout: `$GIT_REPOS/<developer>/<package>`
 
-**Features:**
-- All repos are placed in the target dir `$GIT_REPOS/author/package`.
-- Automatically creates the developer (`author`) directory if it doesn't exist.
-- Defensive argument parsing: mutually exclusive options for SSH/local, validation of required arguments.
-- Designed for interactive CLI use, but easily mapped to a keybinding or qtile command.
+It accepts a single positional argument in the form `developer/package`, extracts both parts using `cut`, ensures `$GIT_REPOS/<developer>` exists, then runs `git clone` using one of three sources:
 
----
+1. **HTTPS** (default): `https://github.com/developer/package.git`
+2. **SSH** (`-s|--ssh`): `git@github.com:developer/package.git`
+3. **Local path** (`-l|--local <path>`): clones from an existing local repo location
+
+You can also append extra `git clone` flags using `-g <opt>` multiple times (e.g. `--depth 1`, `--recurse-submodules`), which are concatenated into the final clone command.
 
 ### Usage
 
-**Clone a repo from GitHub via HTTPS (default):**
+```sh
+git_clone_by_author-repo.sh developer/package
 ```
-$ ~/git_clone_by_author-repo.sh matias/myproject
-```
-Clones into: `$GIT_REPOS/matias/myproject`
 
-**Clone using SSH:**
+```sh
+git_clone_by_author-repo.sh --ssh neovim/neovim
 ```
-$ ~/git_clone_by_author-repo.sh -s matias/myproject
-```
-or
-```
-$ ~/git_clone_by_author-repo.sh --ssh matias/myproject
-```
-Clones from `git@github.com:matias/myproject.git`.
 
-**Clone from a local repo:**
+```sh
+git_clone_by_author-repo.sh -l /mnt/repos/neovim neovim/neovim
 ```
-$ ~/git_clone_by_author-repo.sh -l /some/path/to/repo matias/myproject
-```
-or
-```
-$ ~/git_clone_by_author-repo.sh --local /some/path/to/repo matias/myproject
-```
-Clones from `/some/path/to/repo` into the appropriately named folder.
 
-**Set custom base directory (optional):**
+```sh
+GIT_REPOS="$HOME/git" git_clone_by_author-repo.sh -g --depth=1 -g --recurse-submodules burntsushi/ripgrep
 ```
-$ export GIT_REPOS=~/Projects
-$ ~/git_clone_by_author-repo.sh matias/myproject
-```
+
+Qtile keybinding friendly (non-interactive): run it directly in `lazy.spawn(...)`.
 
 ---
 
 > [!TIP]
-> - The script is robust and well-organized for its purpose, but a few usability improvements are possible:
->   - Currently, the script doesn’t validate if the input is correctly in the `author/repo` format (no error if e.g. only one element is given).
->   - Error handling in case the `git clone` command fails is absent; consider checking the exit code for a better user experience.
->   - Consider supporting custom hosting (e.g., GitLab) via additional flags or config in the future.
->   - The usage message could be a bit clearer about argument requirements for `-l`. 
->   - Flag handling would benefit from using standard tools such as `getopts` for more scalable option parsing.
+> Consider tightening argument parsing: `-g` currently accepts a single token, so options requiring a value with spaces won’t work (e.g. `-c key=value` without quoting). Using `getopts` (or supporting `--git-options "..."`) would match the help text and improve robustness. Also, validate `developer/package` more strictly (ensure both parts are non-empty) and quote/array the git command to avoid word-splitting issues (`GIT_CMD` as an array).

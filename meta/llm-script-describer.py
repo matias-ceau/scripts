@@ -8,6 +8,7 @@
 # ///
 
 import argparse
+import concurrent.futures
 import csv
 import hashlib
 import json
@@ -50,8 +51,8 @@ SRC_FILE_EXTENSIONS = [
     ".java",
     ".cs",
 ]
-PER_FILE_LLM = "gpt-5"
-SUMMARY_LLM = "o4-mini-high"
+PER_FILE_LLM = "gpt-5.2"
+SUMMARY_LLM = "gpt-5.2"
 
 system_prompt_1 = """\
 1) You are a helpful assistant that generates GitHub documentation in markdown format for user scripts. Your audience is mainly the creator of the scripts themselves so provide information adapted to his context (OS : Arch linux, WM : qtile).
@@ -298,18 +299,24 @@ def write_markdown(filename, content):
         file.write(content)
 
 
-def update_index(filename, relative_path, short_description):
-    print_colored(f"Updating index file: {INDEX_PATH}", kind="info")
-    with open(INDEX_PATH, "a") as file:
-        pass
+def batch_update_index(updates):
+    print_colored(f"Updating index file in batch: {INDEX_PATH}", kind="info")
+    if not os.path.exists(INDEX_PATH):
+        with open(INDEX_PATH, "w") as f:
+            pass
+
     with open(INDEX_PATH, "r") as file:
         lines = file.readlines()
 
-    new_line = f"- [{filename}]({relative_path}) -- *{short_description}*\n"
-    for n, l in enumerate(lines):
-        if filename in l.split("](")[0]:
-            lines.pop(n)
-    lines.append(new_line)
+    updated_filenames = {u[0] for u in updates}
+
+    # Remove old entries for updated files. 
+    # We check if line looks like an entry and contains the filename.
+    # The check 'filename in l.split("](")[0]' from original code is preserved but adapted.
+    lines = [l for l in lines if not (l.strip().startswith("- [") and "](" in l and any(fname in l.split("](")[0] for fname in updated_filenames))]
+
+    for filename, rel_path, short_desc in updates:
+        lines.append(f"- [{filename}]({rel_path}) -- *{short_desc}*\n")
 
     lines.sort(key=lambda x: x.lower())
 
@@ -336,7 +343,7 @@ def process_script(script_path, client, llm_model):
 
     if filename in INFO_JSON and INFO_JSON[filename]["hash"] == current_hash:
         print_colored(f"Skipping unchanged script: {script_path}", kind="info")
-        return
+        return filename, None, None
 
     if is_binary(script_path):
         print_colored(
@@ -365,15 +372,18 @@ def process_script(script_path, client, llm_model):
 
     relative_path = os.path.relpath(markdown_path, DOCS_PATH)
     short_description = description.split("---")[1].split(":")[-1].strip()
-    update_index(filename, relative_path, short_description)
-
-    INFO_JSON[filename] = {
+    
+    info_entry = {
         "file": filename,
         "path": os.path.relpath(script_path, SCRIPTS_PATH),
         "description": short_description,
         "doc_path": os.path.relpath(markdown_path, SCRIPTS_PATH),
         "hash": current_hash,
     }
+    
+    index_entry = (filename, relative_path, short_description)
+    
+    return filename, info_entry, index_entry
 
 
 def update_readme(client, llm_model):
@@ -416,16 +426,38 @@ def process_csv(client, llm_model):
         f"Reading scripts from CSV file and creating docs and json datafile: {CSV_PATH}",
         kind="main_section",
     )
-    # uses the csv file as script source
+    
+    rows = []
     with open(CSV_PATH, "r") as csvfile:
         reader = csv.reader(csvfile)
         next(reader)  # Skip header
         for row in reader:
-            original_path = row[0]
-            process_script(original_path, client, llm_model)
+            rows.append(row[0])
+
+    index_updates = []
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_script = {executor.submit(process_script, path, client, llm_model): path for path in rows}
+        
+        for future in concurrent.futures.as_completed(future_to_script):
+            script_path = future_to_script[future]
+            try:
+                filename, info_entry, index_entry = future.result()
+                
+                if info_entry:
+                    INFO_JSON[filename] = info_entry
+                
+                if index_entry:
+                    index_updates.append(index_entry)
+            
+            except Exception as e:
+                print_colored(f"Error processing {script_path}: {e}", kind="error")
 
     with open(INFO_JSON_PATH, "w") as f:
         json.dump(INFO_JSON, f, indent=2)
+
+    if index_updates:
+        batch_update_index(index_updates)
 
 
 def main():

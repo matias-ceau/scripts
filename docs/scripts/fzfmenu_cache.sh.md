@@ -1,56 +1,54 @@
-# fzfmenu cache builder for PATH executables
+# fzfmenu cache builder (PATH executables)
 
 ---
 
-**fzfmenu_cache.sh**: Cache PATH executables to RAM and print them, with background refresh
+**fzfmenu_cache.sh**: Build and maintain a cached list of executables found in `$PATH`
 
 ---
 
 ### Dependencies
 
-- `bash` — shell interpreter
-- `fd` — fast file finder; used to list executables/symlinks in PATH
-- `coreutils` — `sort`, `cat`, `tee`, `mv`, `rm`
-- `fzf` (optional) — consumer for interactive selection
+- `bash`
+- `fd` — used to quickly enumerate executable files in each `$PATH` entry
+- `sort`, `tee`, `cat`, `mv` — coreutils
+- Writable shared memory at `/dev/shm` (typical on Arch with `tmpfs`)
 
 ### Description
 
-This helper builds and serves a fast, deduplicated list of launchable commands for your fzf-based launcher. It scans only the first level of each directory in PATH (prepending `$HOME/.local/bin` and `/usr/bin`), collecting both executable files and symlinks using `fd` with `-t x -t l --maxdepth 1`, then sorts them uniquely.
+This script generates a cache of executable filenames located in your `$PATH`, intended to be consumed by an `fzf`-based launcher/menu (e.g., a qtile keybinding that pipes candidates into `fzf`).
 
-The list is cached in RAM at `/dev/shm/fzfmenu_path_cache` to minimize disk I/O and keep startup snappy under Qtile on Arch. On normal invocation, it prints the cached list to stdout (creating it if missing) and simultaneously refreshes the cache in the background for the next run. A `--refresh` mode atomically rebuilds the cache and exits without printing.
+Key behaviors:
 
-Color output is currently preserved via `fd --color=always`, which is useful when piping into `fzf --ansi`.
+- Cache location: `/dev/shm/fzfmenu_path_cache` (fast, RAM-backed, wiped on reboot).
+- PATH override: prepends `~/.local/bin` and `/usr/bin` to ensure common user/system tools are included.
+- Cache builder: iterates through each directory in `$PATH` and runs:
+  - `fd . -u -t x -t l --maxdepth=1 --search-path "$dir"`
+  - Results are deduplicated via `sort -u`.
+- Two modes:
+  1. Normal mode: prints cached content quickly (if present), otherwise builds it.
+  2. `--refresh`: rebuilds the cache atomically (via temp file + `mv`) and exits with no output.
+
+Additionally, in normal mode it *always* triggers a background rebuild so the next invocation is up-to-date without blocking the current one.
 
 ### Usage
 
-- Print list (build if needed), suitable for piping:
-```
+```sh
+# Print cached executable list (best for piping into fzf)
 ~/.scripts/bin/fzfmenu_cache.sh
 ```
 
-- Force a cache rebuild only (e.g., at login or on PATH changes):
-```
+```sh
+# Rebuild cache only (useful at login, after installing packages, etc.)
 ~/.scripts/bin/fzfmenu_cache.sh --refresh
 ```
 
-- Use with fzf to pick and launch a command (detached):
-```
-cmd="$(~/.scripts/bin/fzfmenu_cache.sh | fzf --ansi)"
-[ -n "$cmd" ] && setsid -f "$cmd" >/dev/null 2>&1
-```
+Example qtile/launcher pipeline:
 
-- Pre-warm cache from Qtile autostart (once per session):
+```sh
+~/.scripts/bin/fzfmenu_cache.sh | fzf --ansi | xargs -r -I{} sh -lc '{}'
 ```
-~/.scripts/bin/fzfmenu_cache.sh --refresh &
-```
-
-- Cron/systemd-user timer alternative: run `--refresh` periodically to keep it hot.
 
 ---
 
 > [!TIP]
-> - When no cache exists, two builds may run concurrently (one for output, one for refresh). Consider guarding refresh with `flock` or skipping the extra rebuild on first run.
-> - The output is produced from a background job; if a consumer expects synchronous output, foreground the initial output and only refresh in the background.
-> - Caching colored lines (`--color=always`) can leak ANSI codes to non-fzf consumers; consider storing plain output and adding a flag to colorize on demand.
-> - Validate `fd` availability and provide a graceful fallback or hint (e.g., install `fd` on Arch).
-> - You may want to include `/usr/local/bin` in PATH precedence if you rely on locally installed binaries.
+> Consider removing `--color=always`: the cache is plain text, and ANSI codes can pollute `fzf` matching unless you always use `--ansi`. Also, the normal path runs `build_cache` twice concurrently (one for initial output/build, one for refresh), which can be redundant and race on the same cache file; a simple lock (`flock`) and a single background refresh after output would reduce contention. Finally, `fd` on non-existent PATH entries is suppressed, but you might want to skip unreadable dirs explicitly for clarity/performance.

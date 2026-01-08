@@ -1,71 +1,46 @@
-# Obsidian Vault Launcher
+# Obsidian Vault Picker
 
 ---
 
-**obsidian.xsh**: Quickly select and open an Obsidian vault via a fuzzy menu
+**obsidian.xsh**: Pick an Obsidian vault from `$HOME/PKM` and open it via URI
 
 ---
 
 ### Dependencies
 
-- `xonsh`  
-  Required as the script runs under the xonsh shell.
-
-- `obsidian`  
-  Assumes the `obsidian` protocol handler is installed and working (usually provided by the official AppImage or native package).
-
-- `fzfmenu.sh`  
-  Script or wrapper to invoke `fzf` with dmenu-like options, and must be in your `$PATH`.
-
-- `eza`  
-  Used for the vault preview inside `fzfmenu.sh` (`eza -T` gives a directory tree).
-
-- `notify-send`  
-  For desktop notifications when no vault is selected.
-
----
+- `xonsh` — runs the script (`#!/usr/bin/env -S xonsh --no-rc`)
+- `obsidian` — CLI entrypoint used to open an `obsidian://` URL
+- `fzfmenu.sh` — interactive picker (your wrapper around `fzf` / menu UX)
+- `eza` — used for the preview tree (`eza -T --sort=modified --color=always …`)
+- `file` — checks that entries inside `$HOME/PKM` are directories
+- `notify-send` — feedback when nothing is selected
+- `ls` — used to list candidate vault names
 
 ### Description
 
-This script streamlines the process of opening an Obsidian vault by:
+This Xonsh script provides a fast “vault switcher” for Obsidian on Arch + qtile setups. It scans `$HOME/PKM` and builds a list of vault candidates by listing entries and filtering to those whose `file -b …` result is `directory`.
 
-- Listing all the directories under `~/PKM` (your Personal Knowledge Management folder) — each directory is treated as a vault.
-- Allowing you to interactively select a vault using an interactive fuzzy finder (`fzfmenu.sh`). For each directory, it shows a live preview using `eza`, so you can inspect vaults before selecting.
-- Once a vault is chosen, it opens the vault using the Obsidian URL scheme (`obsidian://open?vault=...`). If you cancel the selection, a notification is shown.
+The vault list is then piped into `fzfmenu.sh`, letting you interactively choose one vault. While navigating the list, a preview pane shows a tree view of the vault contents using `eza`, sorted by modification time—useful to quickly spot the “active” vault.
 
-#### Key implementation details
+Once a vault is selected, the script opens it via Obsidian’s URI scheme:
 
-- Xonsh-powered: takes full advantage of Python scripting and shell syntax.
-- Directory-only filtering: Only shows directories in `~/PKM`, preventing non-vault files from cluttering the menu.
-- `fzfmenu.sh`: Customizes the fuzzy selection menu and shows pretty previews via `eza`.
+- `obsidian://open?vault=<vault_name>`
 
----
+If the selection is empty (escape/cancel), it sends a desktop notification instead of failing silently.
 
 ### Usage
 
-You can run this script from your terminal, or (recommended) assign it to a keybinding in your qtile config for lightning-quick vault launching.
+Run from a terminal, qtile keybinding, or launcher:
 
-#### Manual usage (from terminal):
-```sh
-xonsh ~/.scripts/bin/obsidian.xsh
-```
+- Open the picker:
+  - `obsidian.xsh`
+- Typical qtile binding (conceptually):
+  - bind a key to: `/home/matias/.scripts/bin/obsidian.xsh`
 
-#### Assign to qtile keybinding (example):
-```python
-Key([mod], "o", lazy.spawn("xonsh ~/.scripts/bin/obsidian.xsh"))
-```
-
-#### TL;DR
-
-- Run the script.
-- Fuzzy-select a vault (with directory tree preview).
-- It automatically opens in Obsidian, or you get notified if cancelled.
+Notes:
+- Vaults must live directly under `$HOME/PKM` and be named exactly as Obsidian expects for `vault=`.
 
 ---
 
 > [!TIP]
-> - The script is concise and well-focused, but does not currently handle names with spaces robustly (if your vault has spaces or unusual characters in the name, URL-encoding may be needed for the Obsidian protocol).
-> - As a small improvement, consider adding error checking for missing dependencies (e.g., `fzfmenu.sh`, `obsidian`, `eza`, `notify-send`) to provide more user-friendly diagnostics if called from outside an interactive shell.
-> - You might want to parametrize the vaults folder instead of hardcoding `$HOME/PKM` for flexibility.
-> - The commented-out dmenu section is obsolete, so it can be removed to tidy the script. Also, supporting native dmenu in addition to fzf could improve platform versatility.
-> - For large PKM directories, previewing with `eza -T` could be slow; consider limiting depth or adding an option for speed.
+> Consider switching from `ls` parsing to a safer directory walk (handles spaces/newlines), e.g. `glob`/`os.listdir` + `os.path.isdir`. Also, `file` is relatively heavy; a direct stat check is faster. If vault names can contain spaces, ensure the URI is properly URL-encoded. Finally, you may want to validate that `obsidian` exists and fall back to `xdg-open "obsidian://…"` for portability.

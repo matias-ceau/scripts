@@ -1,75 +1,56 @@
-# MIDI Controller to Script Launcher
+# MIDI Controller → Arch Launcher (nanoKONTROL2)
 
 ---
 
-**midi2arch.xsh**: Transform a MIDI controller into a script/keyboard command launcher for Arch
+**midi2arch.xsh**: Map nanoKONTROL2 MIDI CC events to shell commands on Arch Linux
 
 ---
 
 ### Dependencies
 
-- `xonsh`: Required shell to interpret the script.
-- `python-yaml`: For parsing the YAML configuration file.
-- `aseqdump`: MIDI event monitoring utility.
-- `xdotool` *(commented, not currently used)*: For simulating keypress events.
-- `nanoKONTROL2` (or compatible MIDI controller): The script is designed for this device.
-- User config file: `~/.scripts/config/midi2arch/nanoKONTROL2.yaml` – Describes MIDI event to command mappings.
-
----
+- `xonsh` — executes the script and enables `@(cmd)` dynamic execution
+- `python-pyyaml` (`yaml`) — loads the controller mapping from YAML
+- `alsa-utils` (`aseqdump`) — reads raw MIDI events via ALSA sequencer
+- A config file at `~/.scripts/config/midi2arch/nanoKONTROL2.yaml`
 
 ### Description
 
-This script enables mapping physical controls on a MIDI device (such as nanoKONTROL2) to arbitrary shell commands or keypresses on an Arch Linux system, specifically for use with the qtile window manager workflow.
+This Xonsh script turns a MIDI controller (currently hard-coded to **Korg nanoKONTROL2**) into a command launcher. It:
 
-**How It Works:**
-1. **Device Detection:**  
-   The script looks for attached MIDI controllers, specifically `nanoKONTROL2`. If not found, it exits.
-2. **Configuration:**  
-   Reads control mappings from a YAML config file located at `~/.scripts/config/midi2arch/nanoKONTROL2.yaml`. This file defines which controller control triggers which shell command or action.
-3. **Listening Loop:**  
-   Spawns `aseqdump` as a subprocess to listen for real-time MIDI events.  
-   - When a specific control-change message with value `127` is detected, the mapped command is executed via xonsh interpolation.
-   - Receiving control `cc == 39` (hardcoded) will terminate the listener.
-4. **Event Listing Mode:**  
-   If run with the `-l` flag, dumps all MIDI events to stdout for mapping discovery or debugging (no commands are triggered).
+1. Loads a YAML configuration describing the MIDI device name and a set of control mappings.
+2. Detects whether `nanoKONTROL2` is present via `aseqdump -l`.
+3. Spawns `aseqdump -p <device>` and continuously reads MIDI lines from stdout.
+4. Extracts **CC number** and **value** from each event line.
+5. When a control change hits `val == 127` (typical “button press” max value), it looks up the matching control in `CFG['controls']` and executes the mapped command using Xonsh’s `@(cmd)`.
+6. Special case: if `cc == 39`, the script terminates `aseqdump` and exits cleanly (“Bye”).
 
----
+This is well-suited for qtile workflows: map knobs/buttons to scripts (launchers, audio routing, window actions, etc.) and keep the logic in YAML.
 
 ### Usage
 
-**Basic:**
+Run interactively in a terminal (recommended while debugging mappings):
 
-```sh
-midi2arch.xsh
-```
-- Connect your MIDI controller (nanoKONTROL2).
-- Press controls as mapped in your YAML config, and the corresponding shell commands will run.
+    midi2arch.xsh
 
-**Event Listing (debug/discover mode):**
-```sh
-midi2arch.xsh -l
-```
-- Just prints MIDI events as received.
-- Useful for mapping controls in your YAML.
+List/dump MIDI events only (no commands executed):
 
-**Add to qtile or WM keybindings:**
-- Can be run at login or via a specific keybinding in your qtile config.
-- Background usage is typical for real-time response.
+    midi2arch.xsh -l
 
-**YAML Mapping Config Example:**
-```yaml
-general:
-  name: nanoKONTROL2
-controls:
-  play_button: ["button_play", 41, "Pressed", "playerctl play"]
-  stop_button: ["button_stop", 42, "Pressed", "playerctl stop"]
-```
+Help:
+
+    midi2arch.xsh -h
+
+Typical workflow:
+
+- Start `-l`, press controls, note CC numbers
+- Add/update entries in `~/.scripts/config/midi2arch/nanoKONTROL2.yaml`
+- Run normally to execute commands on button presses (`val == 127`)
 
 ---
 
-> [!IMPORTANT]
-> - **Error Handling:** The script currently parses MIDI messages in a brittle way (fixed CSV position, lacks robust MIDI spec parsing). It may break on unexpected event lines.
-> - **Limited Device Support:** Only recognizes `nanoKONTROL2` explicitly; others would require code edits and a proper extension of detection logic.
-> - **Security:** Executing arbitrary commands from a YAML file can be a risk; ensure your config file is secure.
-> - **Graceful Exit:** Hardcoded control (cc==39) for exit is not flexible; make this configurable for broader device support.
-> - **Enhancements:** Use async subprocess and full MIDI parsing library for robustness. Add more CLI options and config validation.
+> [!TIP]
+> Improvements to consider:
+> - The CC/value parsing is brittle (depends on `aseqdump` output format); using regex or splitting more defensively would reduce exceptions.
+> - `ctrl = ...; list(ctrl.values())[-1]` can crash if no mapping matches; handle “not found” explicitly.
+> - `cc == 39` as a quit signal is magic; make it configurable in YAML.
+> - Device detection is hard-coded to nanoKONTROL2 even though the YAML contains `general.name`; you could unify detection + selection using config first, fallback to autodetect.

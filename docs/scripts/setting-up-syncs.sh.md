@@ -1,66 +1,60 @@
-# Sync Setup Helper with Mega
+# Mega sync bootstrap (per-host)
 
 ---
 
-**setting-up-syncs.sh**: Automates MEGA cloud syncs for key folders and differentiates setup by host.
+**setting-up-syncs.sh**: Register Mega sync pairs for XDG folders and host-specific storage
 
 ---
 
 ### Dependencies
 
-- `mega-sync`: Command-line tool or personal script for synchronizing folders with MEGA (ensure it's available in `PATH`).
-- `hostnamectl`: Required for retrieving the system hostname.
-- Standard `bash` environment (tested on Arch Linux).
-
----
+- `bash`
+- `hostnamectl` (from `systemd`) — used to detect the current machine name
+- `mega-sync` — MEGA CLI command to create/manage a sync between a local folder and a MEGA path
+- Mounted paths (host-specific): e.g. `/mnt/mega/...`, `/mnt/HDD2/...` (must exist before running)
 
 ### Description
 
-This script configures and initiates folder synchronizations between your local system and MEGA cloud storage. It uses your host's name to determine which directories to sync, allowing for machine-specific configurations.
+This script centralizes the setup of your MEGA synchronization pairs, using the current hostname (`hostnamectl hostname`) to decide which extra syncs to configure.
 
-The script:
-- Syncs default XDG user directories (`Desktop`, `Downloads`, etc.) and a personal knowledge management directory (`PKM`) to equivalent paths in your MEGA storage.
-- Checks the hostname (using `hostnamectl hostname`) to apply extra syncs uniquely for `karhu` or `karjala` hosts (for example, additional media or backup folders).
-- The specific MEGA destinations are organized to keep backups and user data grouped per device.
+It always registers:
+- Standard XDG-like directories (`Desktop`, `Downloads`, `Documents`, etc.) into a per-host MEGA tree: `/BACKUPS/$HOST/...`
+- Your notes/PKM directory: `~/PKM` ↔ `/PKM` (shared across hosts)
 
-It's designed for use in personal computing environments where you have multiple machines with shared or device-specific cloud storage needs (e.g., your Arch Linux setup running `qtile`).
+Then it branches by host:
 
----
+- **Host `karhu`**
+  - Syncs `~/UnifiedLibrary` to a shared MEGA folder `/UnifiedLibrary`
+  - Syncs a quick-share device folder (`/mnt/mega/hauki/xiaomi_mega`) to `/HOST_QUICKSHARES/xiaomi_mega`
+  - Syncs `/mnt/mega/karjala` to `/BACKUPS/karjala` (likely pulling another host’s backup locally)
+
+- **Host `karjala`**
+  - Syncs a different local UnifiedLibrary mount to `/UnifiedLibrary`
+  - Syncs large media (`/mnt/HDD2/MEGA/AUDIOVISUAL`) to `/AUDIOVISUAL`
+  - Syncs other hosts’ device mirrors into `/BACKUPS/*` and quickshares
+
+This is ideal for an Arch + qtile setup where you want a single command (or autostart hook) to ensure all sync pairs exist after reinstall/migration.
 
 ### Usage
 
-You typically run the script manually or trigger it on login/boot per host.
+Run manually in a terminal (recommended the first time to spot mount/login issues):
 
-#### Terminal (one-off run):
+    setting-up-syncs.sh
 
-```
-bash ~/.scripts/bin/setting-up-syncs.sh
-```
+Typical workflow:
 
-#### Add to a qtile/autostart script:
+    # ensure MEGA is logged in and mounts exist
+    mega-whoami
+    mount | rg '/mnt/(mega|HDD2)'
 
-```python
-import subprocess
-subprocess.Popen(["/home/matias/.scripts/bin/setting-up-syncs.sh"])
-```
+    # register syncs
+    ~/.scripts/bin/setting-up-syncs.sh
 
-#### With keybinding in qtile (example):
+qtile autostart example:
 
-```python
-Key([mod], "F12", lazy.spawn("~/.scripts/bin/setting-up-syncs.sh")),
-```
-
-#### Requirements:
-- Make sure `mega-sync` is accessible and pre-configured for your account.
-- Ensure required mount points are available before running (e.g., `/mnt/mega` or `/mnt/HDD2`).
+    subprocess.Popen([os.path.expanduser("~/.scripts/bin/setting-up-syncs.sh")])
 
 ---
 
 > [!TIP]
-> 
-> The script is straightforward but can be improved for flexibility, safety, and clarity:
-> - **Host Check**: It would be safer to quote hostnames in the conditionals (`"$HOST"`).
-> - **Error Handling**: Currently, it does not report or exit on failed syncs or missing mount points. Adding checks and logging would make troubleshooting easier.
-> - **Configurability**: Paths and folder lists are hardcoded. Consider externalizing to a config file for greater portability.
-> - **Parallelization**: Long-running syncs could potentially block; running them in the background (with `&`) or in parallel could improve speed.
-> - **Documentation**: Inline comments are clear, but brief explanations of why certain directories are chosen (especially for the TODOs) would help future maintenance.
+> Consider adding `set -euo pipefail` and quoting the hostname comparison (`[ "$HOST" = "karhu" ]`) for robustness. Also, `mega-sync` will error if local paths don’t exist; you may want to `mkdir -p` XDG folders and guard host-specific mountpoints with checks (e.g. `[[ -d /mnt/HDD2/MEGA ]] || exit 0`) to avoid noisy failures on laptops/offline states.

@@ -1,61 +1,54 @@
-# Move Focused Window to Next/Previous Group and Switch — qtile_window_to_group_and_switch.py
+# Move focused window to next/prev group and follow
 
 ---
 
-**qtile_window_to_group_and_switch.py**: Moves the current focused window to the next or previous qtile group and switches focus to that group
+**qtile_window_to_group_and_switch.py**: Move focused window to adjacent qtile group and switch to it
 
 ---
 
 ### Dependencies
 
-- `python` (any version with qtile support)
-- `libqtile.command.client.InteractiveCommandClient`  
-  Used for communicating with the running qtile instance to manipulate windows and groups.
-- `notify-send`  
-  For graphical feedback in case of command misuse.
+- `python` (shebang: `/usr/bin/python`)
+- `qtile` (provides `libqtile.command.client.InteractiveCommandClient`)
+- `notify-send` (from `libnotify`, used for error notifications)
 
 ### Description
 
-This script is designed to be used with the qtile window manager on your Arch Linux system. It allows quick reassignment of the currently-focused window to another group, either the next (`-n`) or previous (`-p`), with an automatic switch to that group. The script uses `InteractiveCommandClient` to interface with the active qtile instance.
+This script is a small helper meant for your qtile workflow on Arch Linux: it takes the currently focused window and sends it to another group, *then switches your view to that group*.
 
-Logic summary:
+It uses qtile’s IPC command interface via `InteractiveCommandClient()`, then:
 
-- Checks command-line argument (`-n` for next, `-p` for previous).
-- Determines current group index from qtile.
-- Calculates the target group, cycling through 6 groups (uses modular arithmetic).
-- Moves the window to the target group and switches to it.
-- On wrong arguments, sends a critical notification using `notify-send`.
+- Reads the current group index from `c.screen[0].items("group")`
+- Computes a target group in a fixed set of **6 groups** (numbered `1..6`)
+  - `-n` → next group (wraps: 6 → 1)
+  - `-p` → previous group (wraps: 1 → 6)
+- Calls `c.window.togroup(str(target), switch_group=True)` to both move the window and follow it.
 
-Groups are numbered 1 through 6. The script wraps around: moving forward from group 6 brings you to group 1, and moving backward from group 1 brings you to group 6.
+If the first CLI argument is not `-n` or `-p`, it sends a critical desktop notification via `notify-send`.
 
 ### Usage
 
-Run directly from your terminal, or (more likely) bind to key combinations in your qtile config as an efficient window management shortcut.
+Run from a terminal, or more typically bind it in qtile (recommended).
 
-**Terminal invocation examples:**
+tldr:
 
-```sh
-~/.scripts/bin/qtile_window_to_group_and_switch.py -n   # Move to next group
-~/.scripts/bin/qtile_window_to_group_and_switch.py -p   # Move to previous group
-```
+- Move focused window to next group and switch:
+  - `qtile_window_to_group_and_switch.py -n`
+- Move focused window to previous group and switch:
+  - `qtile_window_to_group_and_switch.py -p`
 
-**Typical qtile keybinding:**
+Example qtile keybindings:
 
-```python
-Key([mod, "shift"], "period", lazy.spawn("~/.scripts/bin/qtile_window_to_group_and_switch.py -n")),
-Key([mod, "shift"], "comma", lazy.spawn("~/.scripts/bin/qtile_window_to_group_and_switch.py -p")),
-```
-
-**Error handling:**  
-If called with incorrect arguments, you'll get a critical urgency notification via `notify-send`, e.g.:
-
-> Problem running /home/matias/.scripts/bin/qtile_window_to_group_and_switch.py
+- `mod + shift + l` → next group:
+  - `lazy.spawn("~/.scripts/bin/qtile_window_to_group_and_switch.py -n")`
+- `mod + shift + h` → previous group:
+  - `lazy.spawn("~/.scripts/bin/qtile_window_to_group_and_switch.py -p")`
 
 ---
 
 > [!TIP]
-> - The "6" in `current % 6 + 1` is hardcoded, so if you ever change the number of groups, this must be updated manually in the script.
-> - No argument validation for missing or extra arguments: running without arguments or with invalid ones will cause an unhandled index error.
-> - Consider adding a `try/except` block to gracefully handle missing argument cases (e.g., via `argparse` or manual checks).
-> - If you use group names not strictly numbered "1" to "6", this will break. Either generalize the logic to get all groups from qtile dynamically, or maintain group numbers.
-> - For larger configs, extracting group count directly from qtile's state would make this more robust.
+> Improvements to consider:
+> - Guard against missing arguments (`sys.argv[1]` will crash if none is provided). A usage message + nonzero exit code would be cleaner.
+> - The group discovery is brittle: `items("group")[-1][0]` assumes ordering and numeric names. If you rename groups or have >6, this will misbehave. Consider using `c.group.info()` / `c.groups()` and derive the current group name directly.
+> - Hardcoding “6 groups” is limiting; you could compute the list of available groups and wrap over its length.
+> - The error path only triggers for “wrong flag”, not for IPC failures; wrapping the main logic in `try/except` and notifying on exceptions would help.

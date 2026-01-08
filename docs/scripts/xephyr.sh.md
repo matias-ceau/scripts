@@ -1,77 +1,60 @@
-# Xephyr + Qtile Testing Harness
+# Qtile Xephyr Sandbox Launcher
 
 ---
 
-**xephyr.sh**: Launches a nested X session with Xephyr, running a development Qtile instance.
+**xephyr.sh**: Launch Qtile in Xephyr with a terminal for safe config testing
 
 ---
 
 ### Dependencies
 
-- `Xephyr`: Lightweight nested X server, part of the `xorg-server-xephyr` package.
-- `python3`: Required for launching Qtile and (optionally) for guessing the terminal emulator.
-- `qtile`: Should be installed; script assumes development inside or near the qtile source tree.
-- `libqtile.utils`: Used by the helper line for terminal guessing.
-- `$APP` (your terminal, like `alacritty`, `urxvt`, etc.): Automatically detected but can be overridden.
-- `readlink`, `dirname`, `sleep`, `env`, `wait`, `kill`: Standard UNIX utilities.
-
----
+- `bash`
+- `Xephyr` (from `xorg-server-xephyr`) — nested X server
+- `python3` — used to run Qtile and (by default) detect a terminal
+- `qtile` (your local checkout at `../bin/qtile`) — started inside Xephyr
+- `libqtile` — for `libqtile.utils.guess_terminal`
+- A terminal emulator (auto-detected), or set via `APP`
 
 ### Description
 
-This script is a developer utility for quickly spawning a testing instance of your (possibly modified) Qtile window manager within a Xephyr nested X server. This workflow is very handy for Arch Linux users who want to test configuration changes, experiment with Qtile development, or debug their Qtile setup—without interfering with their primary running X session.
+This script starts a nested X server via Xephyr and runs a separate Qtile instance inside it. It’s ideal on Arch/qtile for testing config changes without risking your main qtile session.
 
-#### Key points:
-- **Screen and Display**: Customizable with `SCREEN_SIZE` (default: 800x600) and `XDISPLAY` (default: :1).
-- **Terminal Launch**: Attempts to detect your preferred terminal, or will use one you specify with `$APP`.
-- **Qtile Logging**: Set `LOG_LEVEL` environment variable to control verbosity (default: `INFO`).
-- **Isolation**: The script launches Qtile under the nested server and starts your terminal. When the Qtile session ends, Xephyr is killed—cleaning up automatically.
+Key behavior:
 
-#### Flow:
-
-1. Launches Xephyr.
-2. Starts a Qtile test instance with the same configuration as your real session.
-3. Spawns a terminal inside the nested X session.
-4. Tears down everything when done.
-
----
+- Resolves `HERE` to the script’s directory and starts Qtile from `HERE/../bin/qtile`, which fits a development checkout layout.
+- Uses environment variables for customization:
+  - `SCREEN_SIZE` (default `800x600`)
+  - `XDISPLAY` (default `:1`)
+  - `LOG_LEVEL` (default `INFO`)
+  - `APP` defaults to `libqtile.utils.guess_terminal()`
+  - `PYTHON` defaults to `python3`
+- Exports `QTILE_XEPHYR=1` for the nested session (useful in your config to branch behavior).
+- Lifecycle: when the nested Qtile exits, the script kills Xephyr.
 
 ### Usage
 
-You will usually run this from a terminal; it's interactive and best *not* bound to a keyboard shortcut (due to cleanup requirements).
+Run from a terminal (recommended), optionally passing qtile CLI args after `--`-style usage:
 
-Basic usage:
-```
-$ ~/.scripts/dev/xephyr.sh
-```
+- Basic:
+  - `~/.scripts/dev/xephyr.sh`
 
-To specify a screen size or display number:
-```
-$ SCREEN_SIZE=1280x720 XDISPLAY=:2 ~/.scripts/dev/xephyr.sh
-```
+- Custom screen size and display:
+  - `SCREEN_SIZE=1280x720 XDISPLAY=:2 ~/.scripts/dev/xephyr.sh`
 
-To run Qtile with debug logging:
-```
-$ LOG_LEVEL=DEBUG ~/.scripts/dev/xephyr.sh
-```
+- Increase Qtile log verbosity:
+  - `LOG_LEVEL=DEBUG ~/.scripts/dev/xephyr.sh`
 
-To override the terminal used inside the session:
-```
-$ APP=alacritty ~/.scripts/dev/xephyr.sh
-```
+- Force a specific terminal inside Xephyr:
+  - `APP=alacritty ~/.scripts/dev/xephyr.sh`
 
-To pass extra arguments to `qtile start`:
-```
-$ ~/.scripts/dev/xephyr.sh --some-qtile-option
-```
+- Pass arguments to `qtile start`:
+  - `~/.scripts/dev/xephyr.sh -c ~/.config/qtile/config.py`
 
 ---
 
 > [!TIP]
-> **Possible Improvements:**
-> - The script assumes Qtile's `start` binary is available at `../bin/qtile` relative to the script, which is brittle; consider a more flexible lookup.
-> - No check if required programs (`Xephyr`, Qtile, terminal) are installed—adding basic dependency checks could make the tool friendlier.
-> - `sleep 1` may be insufficient on some systems for Xephyr to initialize; consider a more robust "wait for display ready" mechanism.
-> - Arguments after the script are passed only to `qtile start`, not Xephyr or the terminal. Make this explicit in documentation, or add more flexible argument parsing.
-> - No error handling for background process termination; if Qtile or the terminal crashes, Xephyr may remain orphaned.
-> - On modern Arch instals, you may want to explicitly use `python` or `python3`. The `PYTHON` variable can be set to suit, but clarify its need and defaults and possibly fallback better if neither are available.
+> Improvements to consider:
+> - Quote variables (`"$0"`, `"$@"`, `"${SCREEN_SIZE}"`, etc.) to avoid word-splitting issues.
+> - Add `set -euo pipefail` and a `trap` to reliably clean up Xephyr on errors/interrupt (`INT`, `TERM`).
+> - The `sleep 1` race can be flaky; consider polling until the Xephyr display is ready (e.g., `xdpyinfo -display "$XDISPLAY"` in a loop).
+> - `-ac` disables access control; fine locally, but note the security tradeoff.

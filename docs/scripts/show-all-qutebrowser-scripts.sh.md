@@ -1,66 +1,49 @@
-# Show All Qutebrowser Scripts
+# Show all qutebrowser scripts (packaged files)
 
 ---
 
-**show-all-qutebrowser-scripts.sh**: Display the content of Qutebrowser's bundled scripts using `bat` for preview
+**show-all-qutebrowser-scripts.sh**: Display qutebrowser’s installed script files with syntax highlighting
 
 ---
 
 ### Dependencies
 
-- `qutebrowser`: The package from which scripts are listed.
-- `pacman`: Used for querying files installed by qutebrowser (Arch Linux package manager).
-- `ripgrep` (`rg`): Filters out directories from the listing.
-- `sed`: For text substitution, to format paths.
-- `xargs`: Executes `bat` on each listed file.
-- `bat`: Syntax-highlighting cat clone, used to preview file content.
-
----
+- `qutebrowser` (pacman package): the script reads its installed file list
+- `pacman`: used to query files installed by the `qutebrowser` package (`pacman -Ql`)
+- `tail`: keeps only the last entries of the file list (assumes scripts are at the end)
+- `ripgrep` (`rg`): filters out directory entries (`rg -v '/$'`)
+- `sed`: strips the pacman prefix to get paths relative to qutebrowser’s root
+- `xargs`: passes paths to the viewer
+- `bat`: pretty-prints files with syntax highlighting
 
 ### Description
 
-This script lists and displays all non-directory files provided by the `qutebrowser` package (likely helper scripts or utilities shipped in its `/usr/bin` or `/usr/share` directories). 
+This helper script is meant for quickly inspecting “script-like” files shipped with the Arch Linux `qutebrowser` package. It queries pacman for the list of installed paths, then:
 
-Core steps:
+1. Takes only the last 37 lines of the listing (a heuristic for “the interesting bits”).
+2. Removes directory entries (lines ending with `/`).
+3. Strips the leading `… qutebrowser ` part from `pacman -Ql` output so only the file path remains.
+4. Feeds the resulting file list to `bat` to view them all at once with nice formatting.
 
-1. `pacman -Ql qutebrowser` lists all files installed by the package.
-2. `tail -n 37` takes the last 37 lines, assuming these correspond to the actual scripts (might need tweaking if upstream packaging changes).
-3. `rg -v '/$'` filters out directories, only keeping files.
-4. `sed 's/^.*qutebrowser //'` strips the leading package/file info, resulting in just paths relative to the root.
-5. `xargs bat` sequentially displays the content of these files using `bat` for pretty-printing.
-
-This process produces a quick audit/glance at all Qutebrowser-related scripts, helpful for quickly reviewing helpers, wrappers, or plugin code.
-
----
+This is useful when you want to browse bundled userscripts/templates shipped by the package without manually hunting through `/usr/share`/`/usr/lib` paths.
 
 ### Usage
 
-You can run this script in a terminal:
+Run in a terminal:
 
-```
-~/.scripts/bin/show-all-qutebrowser-scripts.sh
-```
+    show-all-qutebrowser-scripts.sh
 
-Or assign it to a custom keybinding in Qtile, for example in your `~/.config/qtile/config.py`:
+Typical “tldr” flow:
 
-```python
-Key([mod], "F12", lazy.spawn("~/.scripts/bin/show-all-qutebrowser-scripts.sh"))
-```
+    # View the packaged qutebrowser script files
+    show-all-qutebrowser-scripts.sh
 
-#### Example TLDR
+    # Save the output to a file (still colored if your pager preserves it)
+    show-all-qutebrowser-scripts.sh > /tmp/qb-scripts.txt
 
-```
-Show the scripts in the terminal:
-$ ~/.scripts/bin/show-all-qutebrowser-scripts.sh
-
-Send output to a file for later viewing:
-$ ~/.scripts/bin/show-all-qutebrowser-scripts.sh > qtb_scripts.txt
-```
+Because it’s non-interactive, it also works well from a qtile keybinding (launch in your terminal emulator).
 
 ---
 
-> [!NOTE]
-> - The use of `tail -n 37` is brittle. If Qutebrowser's packaging changes, this might omit some scripts or include non-scripts. Consider using `awk` or filtering directly for `.sh` or relevant script paths instead.
-> - This script only works on Arch (or Arch-like) systems where `pacman` is available.
-> - `bat` will error on binary or un-readable files. Adding safeguards for file type could improve robustness.
-> - For distribution or portability, checking whether all dependencies are present would be helpful.
+> [!TIP]
+> This relies on `tail -n 37`, which is brittle: package contents can change and the “scripts” may no longer be in the last 37 entries. Consider filtering by path instead (e.g., `rg '/userscripts/|/scripts/'`) or using `pacman -Qlq qutebrowser` for clean paths and then selecting specific directories. Also, if filenames can contain spaces, prefer `xargs -d '\n'` or `while IFS= read -r` to avoid splitting issues.

@@ -1,80 +1,58 @@
-# Text-Mode Spectrogram (Live Microphone Viewer)
+# Text-mode Microphone Spectrogram
 
 ---
 
-**text_spectrogram.py**: Live real-time text-based spectrogram using microphone input and ANSI colors.
+**text_spectrogram.py**: Live terminal spectrogram from microphone input with adjustable gain
 
 ---
 
 ### Dependencies
 
-- `numpy`: Fast numeric array and FFT operations.
-- `sounddevice`: Real-time microphone data acquisition.
-- `shutil`: Terminal size detection.
-- Standard Python modules: `math`, `argparse`.
-- ALSA or PulseAudio (system dependency) support for audio input on Linux.
-- Terminal with ANSI color support (most modern terminals, including those in Arch Linux environments).
-- (Optional) qtile: Can be bound to a keybinding for quick access.
-
----
+- `python` (3.x)
+- `numpy` (FFT + array ops)
+- `sounddevice` (PortAudio bindings; provides `InputStream`, `query_devices()`)
+- `portaudio` (system library used by `sounddevice`, Arch package typically `portaudio`)
+- A terminal that supports ANSI 24-bit color escape sequences (for the gradient)
 
 ### Description
 
-This script visualizes real-time audio frequencies from the default (or user-specified) microphone device as a colorful spectrogram directly in your terminal. 
+This script renders a real-time, text-mode spectrogram in your terminal using live microphone (or other input device) data.
 
-**How it works:**
-- Uses `sounddevice` to capture live audio data.
-- Applies FFT (Fast Fourier Transform, via `numpy`) to obtain frequency/amplitude information.
-- Draws the amplitude spectrum per block as a colored horizontal line using gradients of ANSI terminal color escapes (“heatmap” style).
-- Configurable parameters let you:
-    - Change frequency range (`--range`)
-    - Adjust gain interactively (`+` to increase, `-` to decrease)
-    - Set spectrogram width
-    - Choose block duration (responsiveness vs. latency)
-    - Select microphone device
-    - List available input devices
+It computes an FFT on each captured audio block and maps the magnitude values across a configurable frequency range to a colored character gradient. The output width is tied to the number of columns (`--columns`) and defaults to your current terminal width (via `shutil.get_terminal_size()`), making it handy for quick audio debugging directly in a shell.
 
-The UI is minimalist, relying on “press <enter> to quit,” and responds to `+` and `-` for scaling.
-
----
+Key implementation details:
+- Device discovery: `--list-devices` prints `sounddevice`’s device table and exits.
+- Frequency mapping: the script converts the requested `LOW..HIGH` Hz range to FFT bins (`delta_f`, `fftsize`, `low_bin`) so each printed column corresponds roughly to one frequency “slice”.
+- Live control: during streaming, you can type `+` or `-` then press Enter to adjust the gain factor (doubling/halving), or just press Enter to quit.
 
 ### Usage
 
-General usage in terminal:
+List audio devices (useful on Arch when device IDs change):
+```bash
+./text_spectrogram.py --list-devices
 ```
-python3 ~/.scripts/dev/text_spectrogram.py [options]
-```
-List audio devices first if needed:
-```
-python3 ~/.scripts/dev/text_spectrogram.py --list-devices
-```
-Set device by index or substring, and adjust frequency range:
-```
-python3 ~/.scripts/dev/text_spectrogram.py --device 2 --range 300 3500
-```
-Start with custom gain, width, or block duration:
-```
-python3 ~/.scripts/dev/text_spectrogram.py --gain 20 --columns 100 --block-duration 40
-```
-**During Execution:**
-- `+` (then <enter>): Double gain/contrast.
-- `-` (then <enter>): Halve gain/contrast.
-- `<Enter>` or `q/Q`: Quit.
 
-Example (good for qtile keybinding):
+Run with defaults (range 100–2000 Hz, gain 10):
+```bash
+./text_spectrogram.py
 ```
-alacritty --class="SpectroTerm" -e python3 ~/.scripts/dev/text_spectrogram.py --range 200 4000
+
+Select a device and tune display width / range:
+```bash
+./text_spectrogram.py -d 2 -c 120 -r 50 8000
 ```
+
+Adjust responsiveness (block duration in ms):
+```bash
+./text_spectrogram.py -b 25
+```
+
+Interactive controls (while running):
+- `+<Enter>` increase gain
+- `-<Enter>` decrease gain
+- `<Enter>` / `q<Enter>` quit
 
 ---
 
 > [!TIP]
-> - **User Experience:** Requires frequent keypresses for UI interaction, and printing to input blocks ongoing visualization (single-threaded: input() pauses spectrogram updates).
-> - **Improvements:**
->   - Replace `input()` with non-blocking key listening (e.g., `curses` or `readchar`) for smooth, uninterrupted display.
->   - Optionally support stereo or more channels.
->   - Consider dynamic resizing based on terminal dimension changes (SIGWINCH).
->   - Add a persistent info/header/status bar.
-> - **Performance:** Might experience lag on slow terminals or with large FFT sizes.
-> - **Portability:** Hard requirement for color and Unicode support; basic shell or tmux sessions may render colors poorly.
-> - **Exception Handling:** Good coverage, but consider graceful restart of the stream if device disconnects.
+> Consider switching from `input()` to non-blocking key reads (e.g., `curses` or `termios`) so the UI doesn’t require Enter. Also, printing every FFT line without throttling can flood scrollback; you may want to clear/redraw in-place (ANSI cursor control) for a stable “live view”. Finally, guard against very small `--columns` (division by zero when `columns-1`) and consider a window function (Hann) to reduce spectral leakage.

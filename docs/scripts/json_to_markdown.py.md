@@ -1,61 +1,65 @@
-# JSON to Markdown Converter
+# JSON → Markdown Converter
 
 ---
 
-**json_to_markdown.py**: Converts a simple JSON file (list of dicts with "role" and "content") to a styled Markdown file.
+**json_to_markdown.py**: Convert a chat-like JSON array into a simple Markdown transcript
 
 ---
 
 ### Dependencies
 
-- `python` (tested on Python 3)
-- Standard library modules only: `json`, `os`, `sys`
-
----
+- `python` (Arch package: `python`)
+- `json` (Python standard library)
+- `os` (Python standard library)
+- `sys` (Python standard library)
 
 ### Description
 
-This script enables rapid conversion of structured dialogue data (stored in JSON files) into readable Markdown, using a minimal and direct approach. The expected JSON file format is a list of dictionaries, each with the keys `"role"` and `"content"`:
-```json
-[
-  {"role": "user", "content": "Hello!"},
-  {"role": "assistant", "content": "Hi there!"}
-]
-```
+`json_to_markdown.py` turns a JSON file containing a list of objects into a Markdown file meant to read like a conversation log.
 
-The script:
-- Takes a path to a JSON file as a command-line argument.
-- Reads the file and parses the content.
-- Iterates over each entry, formatting it in Markdown:
-    - Displays the role (capitalized) as a header in bold and prefixed with hashes.
-    - Follows with an underline and the content.
-    - Delimits entries with horizontal rules (___).
-- Writes the Markdown output to a file in the same directory, with the same basename and `.md` extension.
+Expected input structure (per element in the top-level array):
 
----
+- `role`: a string (e.g. `"user"`, `"assistant"`) — it will be capitalized in output
+- `content`: the message body (string)
+
+For each entry, the script appends a Markdown “section” separated by horizontal rules and a heading:
+
+- `___`
+- `# **Role:**`
+- message content
+
+The output filename is derived from the input:
+- If the input ends with `.json`, it replaces it with `.md`
+- Otherwise, it appends `.md`
+
+It also expands `~` and environment variables and converts the path to an absolute path, which fits nicely with your Arch + qtile workflow (can be called from keybindings, launchers, or hooks without worrying about relative paths).
 
 ### Usage
 
-**Basic usage from terminal:**
-```sh
-python /home/matias/.scripts/bin/json_to_markdown.py <path_to_json_file>
-```
+Run from a terminal (or from qtile via `lazy.spawn`):
 
-**Example:**
-```sh
-python ~/.scripts/bin/json_to_markdown.py ~/my_dialogue.json
-```
-- If the input is `~/my_dialogue.json`, the result will be `~/my_dialogue.md`.
+    ./json_to_markdown.py ~/path/to/chat.json
 
-**Tip:**
-- This script can be run from a qtile keybinding, or any launcher, as long as you pass the JSON file as the first argument.
+If the file is not named `.json`, it still works:
+
+    ./json_to_markdown.py /tmp/session_export
+    # writes /tmp/session_export.md
+
+Example input snippet:
+
+    [
+      {"role": "user", "content": "Hello"},
+      {"role": "assistant", "content": "Hi!"}
+    ]
+
+Result: `chat.md` in the same directory as the input.
 
 ---
 
 > [!TIP]
-> 
-> - The script assumes that every entry in the JSON is a dictionary with `"role"` and `"content"` keys. If any item is missing these keys, it will crash with a `KeyError`. Consider adding a try-except block to handle malformed inputs gracefully.
-> - There’s no command-line help (`-h`) or usage display, so running without arguments will throw an IndexError. Adding a usage message for missing/invalid arguments would improve robustness.
-> - Activity is silent: no console output or progress. For complex jobs or scripting integration, consider printing the output filename or a completion message.
-> - Scripts writes over existing `.md` files with the same name without warning.
-> - The MarkDown format is simple but could be enhanced with optional arguments (e.g. custom templates, append mode, etc.) for future iterations.
+> Improvements to consider:
+> - Add basic argument validation: running without `sys.argv[1]` currently raises `IndexError`.
+> - Guard against missing keys (`role`/`content`) to avoid `KeyError`, or provide defaults.
+> - Use `argparse` for `-o/--output` and stdin support, which is handy when piping exports.
+> - Consider using `---` or Markdown headings without bold for cleaner rendering; `___` can be interpreted as a horizontal rule but may be inconsistent across renderers.
+> - Preserve newlines/formatting in `content` (currently it’s written raw; that’s good, but you might want to ensure it ends with a newline consistently).

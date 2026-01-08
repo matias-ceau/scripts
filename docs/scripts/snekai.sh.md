@@ -1,68 +1,50 @@
-# snekai: Jupyter and IPython Environment Launcher
+# SnekAI Jupyter Launcher
 
 ---
 
-**snekai.sh**: Utility for launching Jupyter Lab, Jupyter Notebook, or IPython from a dedicated Python virtual environment
+**snekai.sh**: Launch Jupyter Lab/Notebook/IPython from the `snekai` virtualenv
 
 ---
 
 ### Dependencies
 
-- `bash` — Required to run the script.
-- `jupyter-lab` — Must be installed in the SNEKVENV (`~/.local/venv/snekai`).
-- `jupyter-notebook` — Should be present in the SNEKVENV for notebook support.
-- `ipython` — Needs to be available in the same virtual environment.
-- Python virtual environment at `~/.local/venv/snekai` (`python -m venv ~/.local/venv/snekai`)
-- _Optional_: Your own `/home/matias/.scripts/lib/snekai/` path organization
-
----
+- `bash`
+- `python` + `venv` (your virtual environment at `$HOME/.local/venv/snekai`)
+- `jupyterlab` (provides `jupyter-lab`, installed inside the venv)
+- `notebook` (provides `jupyter-notebook`, installed inside the venv)
+- `ipython` (provides `ipython`, installed inside the venv)
 
 ### Description
 
-This script provides a simplified CLI wrapper for launching:
-- **Jupyter Lab**
-- **Jupyter Notebook**
-- **IPython shell**
+This script is a small dispatcher to run common Jupyter tooling from a dedicated Python virtual environment (`$SNEKVENV`). It ensures the environment is activated (so imports, kernels, and packages match your “SnekAI” setup), then calls the corresponding binary directly from the venv:
 
-All tools are run from a Python virtual environment located at `~/.local/venv/snekai`, ensuring clean separation from your system Python or other environments.
+- `lab()`: activates the venv and starts JupyterLab
+- `notebook()`: activates the venv and starts the classic Jupyter Notebook UI
+- `ipython()`: activates the venv and opens an interactive IPython shell
 
-**Functions:**
-- `lab()`: Activates the venv and runs Jupyter Lab.
-- `notebook()`: Activates the venv and runs Jupyter Notebook.
-- `ipython()`: Activates the venv and launches an IPython shell.
-
-Each function ensures the environment is sourced so that dependencies and kernels are correct. The command-line argument determines which tool is launched.
-
----
+Because it uses the venv’s absolute binary paths (`$SNEKVENV/bin/...`), you don’t rely on `PATH` ordering—useful on Arch where system packages and pip packages may coexist.
 
 ### Usage
 
-You can call the script directly from your terminal or bind it to a key in your qtile configuration.
+Run it from a terminal, or bind it in qtile (recommended for quick launches).
 
-#### Examples
+tldr:
 
-```sh
-# Launch Jupyter Lab
-~/.scripts/lib/snekai/snekai.sh lab
+- Start JupyterLab  
+  `~/.scripts/lib/snekai/snekai.sh lab`
 
-# Launch Jupyter Notebook
-~/.scripts/lib/snekai/snekai.sh notebook
+- Start classic Notebook  
+  `~/.scripts/lib/snekai/snekai.sh notebook`
 
-# Launch IPython shell
-~/.scripts/lib/snekai/snekai.sh ipython
-```
+- Open IPython in the same env  
+  `~/.scripts/lib/snekai/snekai.sh ipython`
 
-You may also want to symlink or add the script directory to your PATH for convenience:
+Example qtile keybinding idea:
 
-```sh
-ln -s ~/.scripts/lib/snekai/snekai.sh ~/bin/snekai
-snekai lab
-```
+- Launch lab in a terminal:  
+  `alacritty -e ~/.scripts/lib/snekai/snekai.sh lab`
 
 ---
 
 > [!TIP]
-> - The script expects the venv at `~/.local/venv/snekai`. If it’s missing or unpopulated, commands will fail. Consider adding checks to ensure the venv and tools exist.
-> - Error handling is minimal: typing an unrecognized argument just prints "Unknown command". More helpful usage info could be provided.
-> - Currently, the environment is activated via `source`, but commands are then run explicitly via full path (`$SNEKVENV/bin/…`). If you always source, you may just call `jupyter-lab` directly.
-> - No support for passing additional arguments (e.g., opening specific notebooks or labs); consider forwarding `$@` to the commands for increased flexibility.
+> Consider adding a help message and exit codes: print valid subcommands when unknown, and `exit 1` on error. Also, `source` is redundant if you already call the venv binaries directly; either rely on activation (and run `jupyter-lab` without the full path) or skip activation entirely. Finally, check that `$SNEKVENV` exists before running to avoid confusing “file not found” failures.

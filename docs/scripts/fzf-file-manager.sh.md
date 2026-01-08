@@ -1,68 +1,62 @@
-# Fuzzy File Manager with fzf
+# fzf File Manager (TUI navigator)
 
 ---
 
-**fzf-file-manager.sh**: Interactive terminal-based file manager leveraging `fzf` and `eza` for rapid navigation.
+**fzf-file-manager.sh**: FZF-based interactive file browser with rich previews (eza/bat/kitty)
 
 ---
 
 ### Dependencies
 
-- `fzf` : Fuzzy finder for the terminal, provides search and selection UI.
-- `eza` : Enhanced `ls` replacement, used for directory listings and preview formatting.
-- `bat` : Syntax-highlighting cat clone, renders content previews.
-- `rg` (ripgrep): Rapid grep tool, used for environment variable searching and file content matching.
-- `pastel` : Command-line color manipulation tool, formats color for previews.
-- `kitten icat` : For inline image previews in compatible terminals.
-- `awk`, `sed`, `file` : Standard command-line tools for processing outputs.
-- `notify-send` : Sends desktop notifications, used for debug/informational purposes.
-
----
+- `bash`
+- `fzf` (interactive fuzzy finder + keybind actions)
+- `eza` (directory listings; script relies on `--long` output format)
+- `bat` (syntax-highlighted previews and formatting)
+- `ripgrep` (`rg`, used in `get_color()` and MIME detection)
+- `file` (MIME/type detection)
+- `kitty` / `kitten icat` (inline image previews in Kitty)
+- `pastel` (color formatting; used by `get_color()`)
+- `notify-send` (debug notifications on unexpected results)
+- Flexoki env vars like `FLEXOKI_BLACK` (used for fzf colors)
 
 ### Description
 
-This script implements a robust, interactive file manager for your terminal window manager (like qtile), utilizing a rich set of tools for both navigation and file previewing. The workflow pivots around the powerful fuzzy searching provided by `fzf`, which is deeply integrated with `eza`'s colorful and featureful directory listings. 
+This script implements a lightweight “file manager” loop around `fzf`. Each iteration lists the current directory via `eza` (through `ls_cmd()`), pipes it into a heavily customized `fzf` UI (`fzf_cmd()`), and then updates `CUR_DIR` depending on what you selected and which navigation key you used.
 
-Key Features:
-- **Directory Navigation**: Navigate up and down the directory tree using fuzzy search results, with support for both 'forward' and 'backward' movement via line selection.
-- **File Preview**: Inline preview for:
-  - Directories (tree with `eza`)
-  - Text files (syntax highlighting with `bat`)
-  - Image files (shown inline using `kitten icat` when supported)
-  - File and directory metadata (via `file`, `eza_def`, and labels)
-- **Custom Theming**: Color extraction from the environment (expecting `FLEXOKI*` variables) for fine-tuned appearance.
-- **Interactive Controls**: Keybindings within `fzf` for toggling preview, changing prompt, jumping, directional navigation, and refreshing preview.
-- **Continuous Navigation Loop**: Loops until an entry is selected or quit, updating the current directory based on selection logic.
+Previewing is the core feature:
 
----
+- `preview_cmd {7..}` reconstructs the selected path from the `eza --long` output (fields 7..end), then:
+  - shows a 1-line header-style listing (`eza --list-dirs`)
+  - prints MIME info (`file -i`)
+  - if directory: renders a depth-2 tree
+  - if image: uses `kitten icat` with a computed preview geometry
+  - else: previews the file with `bat` (grid/snip + wrapping)
+
+Navigation is done by emitting markers into the selection stream:
+- `ctrl-h` prints `backward` then accepts
+- `ctrl-l` prints `forward` then accepts  
+The loop reads that marker and the selected entry to decide whether to enter a directory or go “up”.
 
 ### Usage
 
-#### Run Directly in Terminal
-```sh
-bash ~/.scripts/bin/fzf-file-manager.sh
-```
+Run in a terminal (ideal inside Kitty):
 
-#### Assign to a Keybinding (qtile example)
-Add to your `.config/qtile/config.py`:
-```python
-Key([mod], "e", lazy.spawn("bash ~/.scripts/bin/fzf-file-manager.sh")),
-```
+    fzf-file-manager.sh
 
-#### Key Interactions While Running
-Within the `fzf` interface:
-- `Alt+P`: Toggle preview window.
-- `Alt+Space`: Execute a fresh preview of the selection.
-- `Alt+H`: Toggle prompt label and reload listing (shows hidden files).
-- Directional navigation is embedded based on the "forward" or "backward" lines in the file details.
-- `Ctrl+H` / `Ctrl+L`: Move backward/forward in navigation.
+Start in a specific directory (passed through to `eza`):
 
-**Note**: The script expects your terminal to support truecolor and the Kitty graphics protocol for image preview.
+    cd ~/Downloads
+    fzf-file-manager.sh
+
+Keybindings (inside fzf):
+
+- `Alt-p`: toggle preview
+- `Alt-h`: toggle hidden files (changes prompt to `H> ` and reloads with `--all`)
+- `Ctrl-l`: enter (forward)
+- `Ctrl-h`: go up (backward)
+- `Alt-Space`: run the preview command for the current entry (acts like “open preview output”)
 
 ---
 
-> [!WARNING]
-> - The script is quite monolithic and complex; breaking functionality into smaller scripts (e.g., dedicated preview/render helpers) could improve readability and maintenance.
-> - Error handling is minimal: if dependencies (like `kitten icat`) are missing, previews silently fail or produce odd behavior.
-> - Certain features seem experimental or commented out, and some bindings are not fully documented—adding an in-script help display would enhance usability.
-> - Assumes a specific environment with color variables set (`FLEXOKI*`), which could cause issues on other setups; fallback defaults or checks for these would improve portability.
+> [!TIP]
+> The parsing is fragile: it depends on `eza --long` spacing and assumes filenames begin at field 7. Consider switching to a null-delimited format (e.g., `find -print0` + `fzf --read0`) or `eza --oneline --absolute` to avoid `awk` field slicing issues. Also, `get_color()` is exported but unused; either integrate it into `--color` options or remove it. Finally, `cd "$CUR_DIR"` inside the loop means the script changes its own working dir only—if you want qtile integration, emit the final directory to stdout so a wrapper can `cd` in the parent shell.

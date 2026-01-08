@@ -1,79 +1,61 @@
-# Custom Locate Database Updater
+# Ousse updatedb profiles (multiple locate DBs)
 
 ---
 
-**ousse-update.sh**: Custom script to update various `mlocate` databases with personal folder scopes.
+**ousse-update.sh**: Build multiple `updatedb` databases for different filesystem scopes
 
 ---
 
 ### Dependencies
 
-- `updatedb`  
-  *From the `mlocate` package. Generates locate databases. Required for all update operations.*
-
-- `fd`  
-  *A simple, fast and user-friendly alternative to `find`. Used for pruning folders dynamically.*
-
-- `rg`  
-  *ripgrep, a fast line-oriented search tool, used together with `fd` for filtering.*
-
-- `sed`  
-  *Utilized for line edits, especially directory path formatting.*
-
-- `realpath`  
-  *For canonicalizing file/directory paths.*
-
-- Environment variable: `$XDG_DATA_HOME`  
-  *Ensure it's set, otherwise fallback will not be handled by this script.*
-
----
+- `updatedb` (from `mlocate`/`plocate`): generates locate databases
+- `fd`: used to discover directories and generate prune lists dynamically
+- `ripgrep` (`rg`): filters `fd` output
+- `realpath`: resolves `~/UnifiedLibrary` location
+- `sed`, `tr`, `dirname`: basic text/path utilities
+- Environment: `XDG_DATA_HOME` (stores DBs in `$XDG_DATA_HOME/ousse`)
 
 ### Description
 
-This script streamlines the update of multiple `mlocate` database files to maintain rapid file search across your primary directories: `$HOME`, dotfiles, external data drives, root, MEGA sync, device folders, "limbo" directories, and HDD2.
+This script maintains several separate locate databases (stored as `*.db` files) to speed up searches per “scope” (home, dots, root, mounts, etc.) without mixing everything into a single system database.
 
-Each function (e.g., `_home`, `_dots`, etc.) invokes `updatedb` scoped to specific directories, leveraging `fd` and `rg` for dynamic prune paths and names. This ensures that:
-- Unwanted folders or mounts are skipped.
-- Each scope has minimal, tailored prune rules for optimal search usefulness.
-- All database files are written under `$XDG_DATA_HOME/ousse/`.
+It creates `$XDG_DATA_HOME/ousse` and then runs `updatedb` with custom options:
 
-#### Example: `_dots`
-Prunes all non-dot directories in `$HOME`, thus ensuring dotfiles (configurations) are not skipped or flooded by regular folders.
+- `-l 0`: do not require a filesystem change threshold (always scan).
+- `-o <file>`: output database file.
+- `-U <path>`: root(s) to index.
+- `--prune-bind-mounts`: toggled per profile.
+- `--prunenames` / `--prunepaths`: selectively exclude content (e.g. `/tmp`, pacman DB, cache).
 
-Note: The `_custom_updatedb` function is a stub and not currently used.
-
----
+Profiles implemented:
+- `_home`: `$HOME` (excluding `/tmp`)
+- `_dots`: focuses on dotfiles by pruning non-dot top-level entries in `$HOME`
+- `_data`: indexes `/mnt` with exclusions around `DATA`, `HDD2`, `SSD`
+- `_root`: indexes `/` with a large prune list (cache, pacman local DB, tmp, etc.)
+- `_mega`: indexes the parent directory of `~/UnifiedLibrary`
+- `_devices`, `_limbo`: discover target directories with `fd`
+- `_hdd2`: indexes `/mnt/HDD2` (bind mounts pruned)
 
 ### Usage
 
-Typically, use this from a terminal (or assign it to a keybinding in Qtile):
+Run from a terminal (or wire to a qtile keybinding for periodic refresh):
 
-```
-# Update all databases
-~/.scripts/meta/ousse-update.sh all
+- Update one scope:
+  - `ousse-update.sh home`
+  - `ousse-update.sh root`
+  - `ousse-update.sh mega`
+  - `ousse-update.sh hd`
 
-# Update only home database
-~/.scripts/meta/ousse-update.sh home
+- Update everything:
+  - `ousse-update.sh all`
 
-# Update only dots database
-~/.scripts/meta/ousse-update.sh dots
-
-# Other available targets:
-#   data, root, mega, devices, limbo, hdd2
-
-# For example, to update only devices:
-~/.scripts/meta/ousse-update.sh devices
-```
-
-Can be run periodically (e.g., via `systemd` service/timer, or cron/anacron for root tasks).
+Databases are written to:
+- `$XDG_DATA_HOME/ousse/home.db`, `dots.db`, `root.db`, etc.
 
 ---
 
 > [!WARNING]
-> - The function `_dot` in the case statement should be `_dots` to match the defined function name, otherwise `"dots"` command silently fails.
-> - Error handling is minimal or absent: e.g., missing dependencies, unset `$XDG_DATA_HOME`, permissions issues are not surfaced.
-> - Database paths and prunelists have some redundancy; consider factoring shared pruning logic.
-> - `_custom_updatedb` is unfinished, and its usage is unclear or broken.
-> - Usage of external commands (`fd`, `rg`, `sed`, etc.) assumes all are installed and available on `$PATH`.
-> - Expanding `MIN_AGE` (currently commented) could streamline avoiding redundant updates.
-> - Consider documenting or adding a help message for maintainability.
+> - The case branch `dot*) _dot ;;` calls `_dot` but the function is `_dots`; this currently breaks the “dots” mode.
+> - Several `-U $(...)` expansions are unquoted; paths with spaces will break. Quote command substitutions (or use arrays).
+> - `_custom_updatedb()` is unused and only checks arg count; either implement it fully (shared wrapper) or remove it.
+> - `updatedb` flavor/options vary between `mlocate` and `plocate`; ensure your installed tool supports the flags you use.

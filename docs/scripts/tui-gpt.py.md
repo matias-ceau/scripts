@@ -1,73 +1,60 @@
-# Mother: Terminal TUI Chat with GPT
+# Textual GPT TUI Chat Client
 
 ---
 
-**tui-gpt.py**: Interactive TUI chat application for GPT models themed as "Mother" from Aliens.
+**tui-gpt.py**: Textual-based TUI chat client streaming responses from OpenAI
 
 ---
 
 ### Dependencies
 
-- `python >=3.12` – Minimum Python version required.
-- `openai` – Official OpenAI Python client for API queries.
-- `textual` – For building terminal GUI apps.
-- `rich` – Used by textual for colors and themes.
-- (Optional, commented out but referenced) `llm` – Alternative model interface (not actively used in this script).
-- Environment variable: `OPENAI_API_KEY` must be set for authentication.
-
----
+- `uv` (shebang runner): executes the script with inline dependency resolution (`uv run --script`)
+- `python>=3.12`
+- `openai`: OpenAI API client used for streaming chat completions
+- `textual`: TUI framework (widgets, events, worker threads)
+- `rich`: used for terminal theme (`MONOKAI`) via Textual’s `ansi_theme_dark`
+- Environment: `OPENAI_API_KEY` must be set
 
 ### Description
 
-This script launches a terminal-based chat interface styled after "Mother", the AI from the Alien movies. It uses the [Textual](https://www.textualize.io/) library for a modern terminal UI, showing chat prompts and model responses with custom colors and borders for clarity.
+This script provides a minimal chat-like TUI (well-suited for qtile keybind launching) built with Textual. It renders the conversation as alternating Markdown blocks:
 
-Key features:
+- `Prompt`: user messages, styled with a subtle `$primary` background and right margin.
+- `Response`: assistant messages, bordered and styled with `$success` background; `BORDER_TITLE` shows the selected model (`gpt-4o-2024-08-06`).
 
-- **Prompt/Response distinction**: Your input is styled differently from AI replies.
-- **Continuous streaming**: AI responses appear in real time as they are received from OpenAI's GPT API (`gpt-4o-2024-08-06`).
-- **Alien lore flavor**: All model output is instructively themed as if spoken by "Mother" from Alien.
-- **Persistent vertical scroll**: See previous chat history, auto-scroll enabled.
+On submit (`Input.Submitted`), it:
+1. Clears the input.
+2. Mounts a `Prompt` widget with the user text.
+3. Mounts an empty `Response` widget and anchors it (keeps view near the latest message).
+4. Streams the OpenAI response in a background thread (`@work(thread=True)`), incrementally updating the Markdown content via `call_from_thread`.
 
-Key components:
-
-- `MotherApp` class: Main Textual app, handles UI layout and interactions.
-- `Prompt` and `Response`: Widgets for displaying user questions and AI answers.
-- Upon each input, the script creates a new API chat session and renders the stream live, suitable for direct interactive use in a terminal.
-
----
+The system prompt is intentionally blunt (`SYSTEM = "Formulate all responses as if you gave a shit."`), and the API call uses `chat.completions.create(..., stream=True)` to provide token-by-token updates.
 
 ### Usage
 
-Set up your API key (one-time, or in your shell config):
+Set your API key:
 
-```
-export OPENAI_API_KEY="sk-..."
-```
+    export OPENAI_API_KEY="…"
 
-Run the script directly from your terminal:
+Run directly (thanks to the `uv` shebang):
 
-```
-python /home/matias/.scripts/bin/tui-gpt.py
-```
+    /home/matias/.scripts/bin/tui-gpt.py
 
-#### TL;DR
+Typical flow:
+- Type a prompt in the input field
+- Press Enter to submit
+- Watch the response stream into the bordered message box
 
-- Start chat:  
-  ```bash
-  python tui-gpt.py
-  ```
-- Type your query, press `Enter`.
-- Responses stream in real time.
-- Exit with `Ctrl+C` or standard Textual quit sequences.
+Optional qtile integration (example idea):
 
-Tip: Assign this script to a qtile keybinding for instant access from your Arch setup!
+    lazy.spawn("~/.scripts/bin/tui-gpt.py")
 
 ---
 
-> [!NOTE]
-> - No error handling for missing or invalid `OPENAI_API_KEY`—fails with an exception if not set.
-> - Script depends on a recent version of Textual; older Python packages might not render the interface as intended.
-> - Code for the optional `llm` backend is present but commented, which could be cleaned up or made configurable.
-> - API key is read directly from the environment; consider adding better secrets management.
-> - Consider adding input history navigation and multi-turn chat context for a richer experience.  
-> - Currently, the system prompt is hardcoded; making it configurable at runtime could improve utility.
+> [!TIP]
+> Improvements to consider:
+> - Add conversation memory (include prior turns in `messages`) so the model can follow context.
+> - Guard against missing `OPENAI_API_KEY` (show a friendly error in the UI instead of a `KeyError`).
+> - Handle streaming edge cases: `chunk.choices[0].delta.content` can be `None` and `choices` can vary; add safer checks.
+> - Consider input disabling while a request is running, plus cancellation/interrupt support.
+> - The script header lists `llm` as a dependency but it’s not used (commented out); remove it or add a toggle to select backend.
