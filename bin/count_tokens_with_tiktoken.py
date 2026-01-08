@@ -1,4 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run --quiet --script
+#
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "tiktoken>=0.12.0",
+# ]
+# ///
+
 
 import sys
 

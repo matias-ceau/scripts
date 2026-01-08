@@ -1,9 +1,16 @@
 #!/bin/bash
 
-#INFO:# "Opens any obsidian vault
+#INFO:# "Opens any obsidian vault"
 
-SHELL="$(which bash)"
+# Ensure XDG_CONFIG_HOME is set
+: "${XDG_CONFIG_HOME:=$HOME/.config}"
 
+# Create a temporary file for the functions to ensure they are available in the fzf subshell
+FUNC_FILE=$(mktemp)
+trap "rm -f $FUNC_FILE" EXIT
+
+# Define functions and write them to the temp file
+cat << 'EOF' > "$FUNC_FILE"
 preview_cmd() {
     eza -la --list-dirs --time=modified --no-permissions --time-style=long-iso --total-size --color=always --icons=always "$1"
     eza \
@@ -25,36 +32,35 @@ open_vault() {
     fi
 }
 
-search_cmd() {
-    cat $XDG_CONFIG_HOME/obsidian/obsidian.json |
-    jq '.vaults .[] .path' | sed 's/"//g' |
-    eza --oneline --color=always --icons=never --stdin --list-dirs
-}
-# fd -td -Hg '.obsidian' "$HOME/PKM" -E ".debris" awk -F/ '{print $(NF-2)}'
-
 plabel_cmd() {
     eza --oneline --list-dirs --color=always --icons=always "$1"
 }
+EOF
 
-export -f preview_cmd
-export -f open_vault
-export -f search_cmd
-export -f plabel_cmd
+# Command to source the functions
+SOURCE_CMD="source $FUNC_FILE"
 
-vault="$(search_cmd |
-    improved-fzfmenu.sh  \
-        --terminal-title=obsidian-open-vault \
-        --pipe \
-        --with-nth -1 \
-        --delimiter / \
-        --ansi \
-        --border \
-        --info inline-right \
-        --preview-window='top,70%,border-bottom' \
-        --bind="resize:refresh-preview" \
-        --preview-label="" \
-        --preview-label-pos bottom \
-        --bind 'focus:transform-preview-label:plabel_cmd {1..-1}' \
-    --preview='preview_cmd {}')"
+search_cmd() {
+    if [ -f "$XDG_CONFIG_HOME/obsidian/obsidian.json" ]; then
+        cat "$XDG_CONFIG_HOME/obsidian/obsidian.json" |
+        jq '.vaults .[] .path' | sed 's/"//g' |
+        eza --oneline --color=always --icons=never --stdin --list-dirs
+    else
+        echo "Error: Obsidian config not found at $XDG_CONFIG_HOME/obsidian/obsidian.json" >&2
+    fi
+}
 
-open_vault "$vault"
+search_cmd | improved-fzfmenu.sh \
+    --terminal-title=obsidian-open-vault \
+    --with-nth -2 \
+    --delimiter / \
+    --ansi \
+    --border \
+    --info inline-right \
+    --preview-window='top,70%,border-bottom' \
+    --bind="resize:refresh-preview" \
+    --preview-label="" \
+    --preview-label-pos bottom \
+    --bind 'focus:transform-preview-label:bash -c "$SOURCE_CMD; plabel_cmd {1..-1}"' \
+    --bind "enter:execute(bash -c \"$SOURCE_CMD; open_vault {}\")" \
+    --preview "bash -c \"$SOURCE_CMD; preview_cmd {}\""

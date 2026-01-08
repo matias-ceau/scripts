@@ -2,13 +2,19 @@
 
 export SHELL=/usr/bin/bash
 export CACHE_DIR=$HOME/.cache/pacman-fuzzy-search
+for tool in paru yay pacman; do
+    if command -v "$tool" >/dev/null 2>&1; then
+        export AUR_PKG_MGR="$tool"
+        break
+    fi
+done
 mkdir -p "$CACHE_DIR"
 
 preview_cmd() {
     local cmd='-Si'
     local prefix=''
     echo "$1" | rg -q '\[installed\]' && cmd='-Qi' || prefix="$2/"
-    paru "$cmd" "$prefix$3" |
+    $AUR_PKG_MGR "$cmd" "$prefix$3" |
     sed -E 's/^ +(.+: )/  \1/' |
     sed -E 's/(^.*): *(.*: .*$)/\1:\n  \2/' |
     sed -E 's/None/No/; /[Ss]ize/s/([MGkK]iB)/# \1/' |
@@ -23,10 +29,10 @@ preview_cmd() {
 }
 export -f preview_cmd
 
-paruSl() {
-    paru -Sl --color=always | sed -E 's/;35m/;33m/; s/unknown-version/unknown/'
+pacSl() {
+    $AUR_PKG_MGR -Sl --color=always 2>/dev/null | sed -E 's/;35m/;33m/; s/unknown-version/unknown/'
 }
-export -f paruSl
+export -f pacSl
 
 search_cmd() {
     local args
@@ -39,9 +45,9 @@ search_cmd() {
     [[ "$inst" ]] && args+="${inst}"
     if [[ "$args" ]]; then
         notify-send "pac" "repo: $repo\ninst: $inst\n${args}"
-        paruSl | rg -v "${args}"
+        pacSl | rg -v "${args}"
     else
-        paruSl
+        pacSl
     fi
 }
 export -f search_cmd
@@ -58,7 +64,12 @@ fzf_cmd() {
         --preview='preview_cmd "{}" {1} {2}' \
         --bind 'resize:refresh-preview' \
         --bind 'alt-w:change-preview-window(right,50%|up,40%,border-horizontal|hidden)' \
-        --bind 'enter:become:paru -S {+2}'
+        --bind 'enter:become:$AUR_PKG_MGR -S {+2}' \
+        --bind 'alt-h:transform:[[ ! $FZF_PROMPT =~ H ]] && echo "change-prompt(H> )+reload(search_cmd)" || echo "change-prompt(> )+reload()"' \
+        --bind 'alt-a:change-border-label#"$(blabel -a)"#' \
+        --bind 'alt-i:change-border-label#"$(blabel -i)"#' \
+        --bind 'alt-a:transform-border-label#blabel -a#' --bind 'alt-a:+reload-sync#search_cmd#' \
+        --bind 'alt-i:transform-border-label#blabel -i#' --bind 'alt-a:+reload-sync#search_cmd#'
 }
 
 # --topdown Print search results from top to bottom. Repo packages will print first. This is the default.
@@ -78,10 +89,4 @@ fzf_cmd() {
 #               Limit the number of packages returned in a search to the given amount. Defaults to 0 (no limit). This applies separately to repo and AUR packages.
 export -f fzf_cmd
 
-paruSl | fzf_cmd
-# --bind 'alt-h:transform:[[ ! $FZF_PROMPT =~ H ]] && echo "change-prompt(H> )+reload(search_cmd)" || echo "change-prompt(> )+reload()"'
-# --bind 'alt-a:change-border-label#"$(blabel -a)"#' \
-    # --bind 'alt-i:change-border-label#"$(blabel -i)"#' \
-    #
-# --bind 'alt-a:transform-border-label#blabel -a#' --bind 'alt-a:+reload-sync#search_cmd#' \
-    # --bind 'alt-i:transform-border-label#blabel -i#' --bind 'alt-a:+reload-sync#search_cmd#' \
+pacSl | fzf_cmd
