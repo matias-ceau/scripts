@@ -18,7 +18,7 @@ from textual.reactive import Reactive
 from textual.widgets import Footer, Header, Input, Markdown
 
 SYSTEM = """Formulate all responses as if you gave a shit."""
-MODEL = "gpt-4o-2024-08-06"
+MODEL = os.environ.get("OPENAI_MODEL", "gpt-4o-2024-08-06")
 
 
 class Prompt(Markdown):

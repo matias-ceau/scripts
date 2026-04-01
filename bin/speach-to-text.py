@@ -16,10 +16,10 @@ from openai import OpenAI
 from scipy.io.wavfile import write
 
 SAMPLE_RATE = 48_000
-PREFERED_DEVICE = "UMC202HD 192k: USB"
+PREFERRED_DEVICE = "UMC202HD 192k: USB"
 DEVICE = (
-    PREFERED_DEVICE
-    if PREFERED_DEVICE in str(sd.query_devices())
+    PREFERRED_DEVICE
+    if PREFERRED_DEVICE in str(sd.query_devices())
     else int(input(f"{sd.query_devices()}\n Choose device by index: "))
 )
 MAX_RECORD_TIME = 3000

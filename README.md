@@ -2,31 +2,69 @@
 
 ## Description
 
-<!-- llm_generated_output_start -->
+A personal **Arch Linux / Qtile toolbox**: ~107 composable scripts turning common desktop and CLI tasks into fast, keyboard-driven actions. The style is “build tiny primitives, wire them into keybindings” — using **dmenu/rofi** for minimal GUI prompts or **fzf** inside floated terminals. Scripts are deliberately non-interactive beyond the picker step, making them ideal for `qtile lazy.spawn(...)`.
 
-This repository is a personal **Arch Linux / qtile–oriented toolbox**: lots of small, composable scripts that turn common desktop and CLI tasks into fast, keyboard-driven actions. The overall style is “build tiny primitives, then wire them into keybindings”, using either **dmenu/rofi** for minimal GUI prompts or **fzf** inside a dedicated terminal (often floated via WM_CLASS/title conventions). Many scripts are deliberately non-interactive beyond the picker step, making them ideal for qtile `lazy.spawn(...)`.
+**Core themes:**
+- **Menu-driven launchers** and command palettes for the local ecosystem: enumerate executables, cache candidates, preview sources/docs, run/attach/edit quickly
+- **Workflow automation**: chezmoi dotfile helpers, git sync flows (single-repo and bulk), and meta tooling (symlink inventory, doc generation, dependency graphs)
+- **Desktop ergonomics**: Qtile window/group introspection, wallpapers, screenshots, compositor toggles, performance profiles, lightweight Markdown/HTML viewers
+- **Audio**: cmus/beets album/playlist launchers, spectrogram viewer, DAW helpers, music sync to portable players
+- **AI integration**: LLM-powered commit message generation, speech-to-text via Whisper, TUI chat client, local Ollama doc generation
 
-A big theme is **menu-driven launchers** and “command palettes” for *your own* ecosystem: scripts to enumerate executables, cache candidates, preview sources/docs, and then run/attach/edit quickly. This includes wrappers that preserve stdin/stdout across spawned terminals (so pickers can behave like `dmenu` in pipelines) and helpers that standardize previews via `bat`, directory trees via `eza`, and consistent colors (Flexoki).
+**Languages & stack:** Bash, Python 3.12+ (via `uv` shebangs for reproducible deps), Xonsh, C. External tools: `fd`, `rg`, `fzf`, `bat`, `eza`, `foot`, `systemd-run`.
 
-There’s also a strong **workflow automation** angle:
-- **dotfiles / chezmoi** helpers to quickly find, edit, apply, and sync configuration changes
-- **git maintenance** utilities ranging from single-repo “safe sync” flows to bulk updates and per-host repo inventories
-- “meta” tooling that keeps the repo maintainable (symlink inventory, doc generation, relation graphs)
+**Key building blocks:**
+- [`lib/env.sh`](docs/scripts/env.sh.md) — modular environment loader (paths, Flexoki colors, FZF theme, git)
+- [`improved-fzfmenu.sh`](docs/scripts/improved-fzfmenu.sh.md) — floating foot terminal picker wrapper
+- [`meta/utils_update_symlinks.sh`](docs/scripts/utils_update_symlinks.sh.md) — syncs `$SCRIPTS/bin` → `~/.local/bin` and maintains CSV inventory
 
-For desktop ergonomics, you have several **qtile-specific utilities** (window/group introspection and actions), plus convenience scripts for wallpapers, screenshots, compositor toggles, performance profiles, and lightweight viewers (Markdown/HTML). Audio is another pillar: cmus/beets playlist/album launchers, simple playlist generators, and a few media/DAW helpers.
+## Quick Start
 
-The codebase mixes **bash**, **python**, **xonsh**, and a few small compiled tools (C). Python scripts often use `uv` shebangs for reproducible deps, while shell scripts lean on the Arch “power user” stack (`fd`, `rg`, `fzf`, `bat`, `eza`, `systemd-run`, notifications).
+```bash
+# 1. Install required packages
+./bin/install_dependencies.sh
 
-Key building blocks worth knowing because many scripts revolve around them:
-- a modular environment loader: [env.sh](docs/scripts/env.sh.md)
-- a robust floating picker wrapper: [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md)
-- a central symlink/index workflow for `$SCRIPTS/bin` and `~/.local/bin` (docs + metadata kept in sync)
+# 2. Symlink scripts into PATH
+./meta/utils_update_symlinks.sh
 
-Overall: it’s a cohesive, keyboard-first personal “OS layer” on top of Arch + qtile, optimized for speed, previewability, and reuse.
+# 3. Source the environment loader in your shell config
+source “$SCRIPTS/lib/env.sh” && load_env_full
 
-<!-- llm_generated_output_end -->
+# 4. (Optional) Build compiled tools
+FILE=src/select_script/select_script.c make -C src/select_script build
 
-*Note: This section was entirely generated with gpt-4o-mini*
+# 5. Run smoke tests
+bash test/test-env.sh
+```
+
+## Repository Layout
+
+```
+bin/        ~107 executable scripts (primary deliverables)
+lib/        Shared libraries (env.sh, core bootstrap)
+meta/       Maintenance scripts (symlinks, doc generation, metadata)
+src/        Compiled source code (C with Makefiles)
+docs/       Per-script markdown docs (auto-generated)
+config/     YAML configs (tmux sessions, MIDI mappings)
+test/       Smoke tests
+dev/        Experimental/WIP scripts
+archived/   Deprecated scripts kept for reference
+```
+
+## Known Issues & TODOs
+
+| File | Issue | Severity |
+|------|-------|----------|
+| `bin/hyprlaunch.sh:9` | Uses `-eq` (integer compare) instead of `=` for string `-t`; also `local` outside a function | **HIGH** |
+| `meta/llm-script-describer.py:54-55` | Hardcoded `gpt-5.2` — a non-existent model, will crash on first run | **HIGH** |
+| `src/select_script/select_script.c:32` | First `sscanf` field `%[^,]` has no width limit — buffer overflow risk | **HIGH** |
+| `bin/send_email.py:28-29` | Sender/receiver email addresses hardcoded in argparse defaults | MEDIUM |
+| `bin/speach-to-text.py:19` | Device name `UMC202HD 192k: USB` hardcoded; falls back to interactive prompt | MEDIUM |
+| `bin/tui-gpt.py` | Model `gpt-4o-2024-08-06` version-locked; no API call timeout | MEDIUM |
+| `meta/utils_update_symlinks.sh:43` | `fd … \| while read` breaks on filenames containing newlines | MEDIUM |
+| Multiple git scripts | `eval “$1”` / `eval “$GIT_CMD”` patterns — command injection if input is untrusted | MEDIUM |
+| Many scripts | Missing `set -euo pipefail`; only `birdcage.sh` uses strict mode | LOW |
+| Several scripts | Unfixed `# TODO` comments in production code | LOW |
 
 ## [Index](docs/index.md)
 

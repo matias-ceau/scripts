@@ -28,8 +28,10 @@ void load_cache(ScriptInfo **infos, int *count, const char *cache_file) {
     fgets(line, sizeof(line), file);
 
     while (fgets(line, sizeof(line), file)) {
-        temp_infos = realloc(temp_infos, sizeof(ScriptInfo) * (*count + 1));
-        sscanf(line, "%[^,],%*[^,],%*[^,],%*[^,],%*[^,],%*[^,],\"%255[^\"]\"", 
+        ScriptInfo *tmp = realloc(temp_infos, sizeof(ScriptInfo) * (*count + 1));
+        if (!tmp) { perror("realloc"); fclose(file); free(temp_infos); return; }
+        temp_infos = tmp;
+        sscanf(line, "%255[^,],%*[^,],%*[^,],%*[^,],%*[^,],%*[^,],\"%255[^\"]\"",
                temp_infos[*count].file, temp_infos[*count].descr);
         (*count)++;
     }

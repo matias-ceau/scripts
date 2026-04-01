@@ -40,7 +40,7 @@ remove_broken_symlinks() {
 
 # Simplified symlink function
 create_symlinks() {
-    fd '' -t x "$SOURCE_DIR" | while read -r FILE; do
+    fd -0 '' -t x "$SOURCE_DIR" | while IFS= read -r -d '' FILE; do
         BASENAME=$(basename "$FILE")
         SYMLINK="$TARGET_DIR/$BASENAME"
 

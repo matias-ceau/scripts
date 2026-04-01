@@ -6,8 +6,9 @@
 #  - safe even if lingered systemd user already runs services
 # ────────────────────────────────────────────────────────────────
 
-if [ ${1} -eq '-t' ] ; then
-  local $duration=$2
+duration=0
+if [ "${1-}" = '-t' ]; then
+  duration="${2:-0}"
 fi
 # === 1. Declare / sanitize environment =======================================
 export XDG_SESSION_TYPE=wayland

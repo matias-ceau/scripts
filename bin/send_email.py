@@ -3,6 +3,7 @@
 # INFO:#@CLI@ "Script to send emails"
 
 import argparse
+import os
 import smtplib
 import ssl
 import subprocess
@@ -25,8 +26,8 @@ def generate_mail(display_name, email_receiver, subject, content, **kwargs):
 
 def argument_parser():
     parser = argparse.ArgumentParser(description="Send an email")
-    parser.add_argument("--email-sender", default="matiasylinenceau@gmail.com")
-    parser.add_argument("--email-receiver", default="matias@ceau.net")
+    parser.add_argument("--email-sender", default=os.environ.get("EMAIL_SENDER", "matiasylinenceau@gmail.com"))
+    parser.add_argument("--email-receiver", default=os.environ.get("EMAIL_RECEIVER", "matias@ceau.net"))
     parser.add_argument("-s", "--subject", default="automatic")
     parser.add_argument("--display-name", default="self")
     parser.add_argument("-c", "--content", default="Testing")
