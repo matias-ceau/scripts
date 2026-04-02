@@ -9,7 +9,5 @@ folder="$(locate \
     awk '{print $2}')"
 
 if [ -n "$folder" ]; then
-    dest="$(echo "$folder" | sed 's#~#/home/matias#')"
-    echo "$dest"
-    cd "$dest"
+    echo "cd "$(echo "$folder" | sed 's#~#/home/matias#')""
 fi
