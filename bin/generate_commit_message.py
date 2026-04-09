@@ -2,18 +2,17 @@
 
 # /// script
 # requires-python = ">=3.12"
-# dependencies = [
-#     "requests"
-# ]
+# dependencies = []
 # ///
 
+import json
 import os
 import re
 import subprocess
 import sys
+import urllib.error
+import urllib.request
 from typing import List, Tuple
-
-import requests
 
 
 def key_finder(word: str) -> str | None:
@@ -56,7 +55,9 @@ def _git_run(args: List[str]) -> str:
     """Run git with robust decoding that won't crash on non-UTF8/binary output."""
     # Allow overrides via env if needed
     enc = os.getenv("COMMIT_DIFF_ENCODING", "utf-8")
-    err_mode = os.getenv("COMMIT_DIFF_ERRORS", "replace")  # replace|ignore|surrogateescape
+    err_mode = os.getenv(
+        "COMMIT_DIFF_ERRORS", "replace"
+    )  # replace|ignore|surrogateescape
 
     # Force predictable encoding/quoting from git
     git_cmd = [
@@ -89,14 +90,18 @@ def _git_run(args: List[str]) -> str:
 def get_staged_diff() -> str:
     try:
         # -U0: zero context to reduce size; --no-color: clean text; --no-ext-diff: avoid external tools
-        return _git_run(["diff", "--cached", "--no-color", "--no-ext-diff", "-U0"])  # safe decode
+        return _git_run(
+            ["diff", "--cached", "--no-color", "--no-ext-diff", "-U0"]
+        )  # safe decode
     except subprocess.CalledProcessError:
         sys.exit(1)
 
 
 def get_numstat() -> str:
     try:
-        return _git_run(["diff", "--cached", "--numstat", "--no-color", "--no-ext-diff"]).strip()
+        return _git_run(
+            ["diff", "--cached", "--numstat", "--no-color", "--no-ext-diff"]
+        ).strip()
     except subprocess.CalledProcessError:
         return ""
 
@@ -294,7 +299,7 @@ def generate_commit_message(
     diff: str,
     api: str = "openrouter",
     url: str = "https://openrouter.ai/api/v1/chat/completions",
-    model: str = "openai/gpt-oss-120b",
+    model: str = "openrouter/auto",
 ) -> str:
     api_key = key_finder(api)
     prompt = f"""Write a concise git commit message for these changes:
@@ -314,7 +319,9 @@ YOU CAN ONLY OUTPUT THE COMMIT MESSAGE, NOTHING ELSE AT ALL
 
     # If no API key, fall back to local generation instead of aborting the commit
     if not api_key:
-        print("Warning: missing API key; using fallback commit message.", file=sys.stderr)
+        print(
+            "Warning: missing API key; using fallback commit message.", file=sys.stderr
+        )
         return _fallback_commit_message(diff)
 
     payload = {
@@ -327,16 +334,24 @@ YOU CAN ONLY OUTPUT THE COMMIT MESSAGE, NOTHING ELSE AT ALL
 
     content = None
     try:
-        response = requests.post(url, json=payload, headers=headers, timeout=90)
-        response.raise_for_status()
-        data = response.json()
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(payload).encode(),
+            headers=headers,
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=90) as resp:
+            data = json.loads(resp.read())
         content = (
             data["choices"][0]["message"]["content"]
             if "message" in data["choices"][0]
             else data["choices"][0]["content"]
         )
     except Exception as e:
-        print(f"Warning: API request failed, using fallback commit message. Error: {e}", file=sys.stderr)
+        print(
+            f"Warning: API request failed, using fallback commit message. Error: {e}",
+            file=sys.stderr,
+        )
         return _fallback_commit_message(diff)
 
     try:
@@ -383,11 +398,14 @@ def main():
         _print_safely(msg)
     except Exception as e:
         # Never crash the commit due to encoding or API issues; always emit something sane
-        print(f"Warning: commit message generator failed; using fallback. Error: {e}", file=sys.stderr)
+        print(
+            f"Warning: commit message generator failed; using fallback. Error: {e}",
+            file=sys.stderr,
+        )
         try:
             # Best-effort fallback from whatever we managed to get
             ns = get_numstat()
-            msg = _fallback_commit_message(diff if 'diff' in locals() else ns)
+            msg = _fallback_commit_message(diff if "diff" in locals() else ns)
         except Exception:
             msg = "Update files"
         _print_safely(msg)

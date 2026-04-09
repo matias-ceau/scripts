@@ -29,7 +29,11 @@ if [[ -z "$exec_line" ]]; then
     exit 1
 fi
 
+# Strip .desktop field codes (%f, %u, %F, %U, etc.) — no file/URI arg here
+exec_line="${exec_line//%[fFuUdDnNickvm]/}"
+exec_line="${exec_line//%%/%}"
+
 # Execute the command specified in the Exec line
 echo "Running: $exec_line"
-eval "$exec_line"
+bash -c "$exec_line"
 

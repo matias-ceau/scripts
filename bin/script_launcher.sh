@@ -58,8 +58,9 @@ format_shown_line() {
 }
 
 cmd-full-path() {
-    expr='fd -tx $1 --absolute-path --search-path $SCRIPTS'
-    $(eval "$expr") "$2"
+    local cmd
+    cmd=$(fd -tx "$1" --absolute-path --search-path "$SCRIPTS" | head -n1)
+    "$cmd" "$2"
 }
 export -f cmd-full-path
 

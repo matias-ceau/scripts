@@ -3,7 +3,7 @@
 # Function to run command and print its output in real-time
 run_command() {
     echo "command: $1"
-    eval "$1"
+    bash -c "$1"
 }
 
 # Function to handle errors

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 #INFO:#@UTL@=2024-07= "create symlinks in ~/.local/bin and remove old ones"
 
@@ -8,12 +9,6 @@ TARGET_DIR="$HOME/.local/bin"
 LOG_FILE="$SCRIPTS/meta/log/symlinking.log"
 LOG_CSV="$SCRIPTS/meta/log/symlinking.log.csv"
 DATA_FILE="$SCRIPTS/symlink_data.csv"
-
-# Initialize the CSV file and backup last one
-if [ -f "$DATA_FILE" ]; then
-    tail -n +2 "$DATA_FILE" >> "$LOG_CSV"
-fi
-echo "Original Path,Symlink,Command Name" >"$DATA_FILE"
 
 # Function to log errors with date
 log_info() {
@@ -59,33 +54,40 @@ create_symlinks() {
     done
 }
 
-# Function to add all symlinks pointing to $SCRIPTS to CSV
+# Rebuild CSV from current symlinks pointing to $SCRIPTS, then display
 add_symlinks_to_csv() {
+    # Back up previous data before overwriting
+    if [ -f "$DATA_FILE" ]; then
+        tail -n +2 "$DATA_FILE" >> "$LOG_CSV"
+    fi
+
+    local tmpfile
+    tmpfile=$(mktemp)
+    echo "Original Path,Symlink,Command Name" > "$tmpfile"
+
     for SYMLINK in "$TARGET_DIR"/*; do
         if [ -L "$SYMLINK" ]; then
             TARGET=$(readlink "$SYMLINK")
-            if [[ $TARGET == $SCRIPTS* ]]; then
+            if [[ "$TARGET" == "$SCRIPTS"* ]]; then
                 BASENAME=$(basename "$SYMLINK")
-                echo "$TARGET,$SYMLINK,$BASENAME" >>"$DATA_FILE"
+                echo "$TARGET,$SYMLINK,$BASENAME" >> "$tmpfile"
             fi
         fi
     done
+
+    mv "$tmpfile" "$DATA_FILE"
     bat --no-pager -lcsv "$DATA_FILE"
 }
 
 # Run functions
-echo "# Cleaning..." | glow
+echo "# Cleaning..." | glow || echo "=== Cleaning ==="
 remove_broken_symlinks
 echo -e "\033[32mCleaning complete!\033[0m"
 
-sleep 2
-
-echo "# Symlinking..." | glow
+echo "# Symlinking..." | glow || echo "=== Symlinking ==="
 create_symlinks
 echo -e "\033[32mSymlinking complete!\033[0m"
 
-sleep 2
-
-echo "# Adding symlinks to CSV..." | glow
+echo "# Adding symlinks to CSV..." | glow || echo "=== Updating CSV ==="
 add_symlinks_to_csv
 echo -e "\033[32mCSV update complete!\033[0m"

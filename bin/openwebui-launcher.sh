@@ -46,4 +46,4 @@ if ! ps -ax | rg 'open-webui serve' | rg '8080' -q; then
 fi
 
 notify-send "Open WebUI" "Serving at ${URL}..."
-eval "$BROWSER $URL"
+"$BROWSER" "$URL"

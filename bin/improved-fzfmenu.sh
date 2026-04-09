@@ -41,7 +41,6 @@ else
     exit 1
 fi
 
-#
-#TODO:
+# TODO:
 # + add option to change the terminal (kitty for graphics)
 # + add sizing modification options ?

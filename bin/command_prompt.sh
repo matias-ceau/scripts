@@ -15,5 +15,3 @@ fzf_cmd() {
 }
 
 get_cmd | fzf_cmd
-
-#TODO:
