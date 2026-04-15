@@ -2,21 +2,24 @@
 
 ## Description
 
-A personal **Arch Linux / Qtile toolbox**: ~107 composable scripts turning common desktop and CLI tasks into fast, keyboard-driven actions. The style is “build tiny primitives, wire them into keybindings” — using **dmenu/rofi** for minimal GUI prompts or **fzf** inside floated terminals. Scripts are deliberately non-interactive beyond the picker step, making them ideal for `qtile lazy.spawn(...)`.
+<!-- llm_generated_output_start -->
 
-**Core themes:**
-- **Menu-driven launchers** and command palettes for the local ecosystem: enumerate executables, cache candidates, preview sources/docs, run/attach/edit quickly
-- **Workflow automation**: chezmoi dotfile helpers, git sync flows (single-repo and bulk), and meta tooling (symlink inventory, doc generation, dependency graphs)
-- **Desktop ergonomics**: Qtile window/group introspection, wallpapers, screenshots, compositor toggles, performance profiles, lightweight Markdown/HTML viewers
-- **Audio**: cmus/beets album/playlist launchers, spectrogram viewer, DAW helpers, music sync to portable players
-- **AI integration**: LLM-powered commit message generation, speech-to-text via Whisper, TUI chat client, local Ollama doc generation
+This repository is a personal “workflow toolkit” for Arch Linux centered around a keyboard-driven desktop (Qtile) and a terminal-first style. The scripts lean heavily on composable Unix pipelines and lightweight interactive pickers (mostly `fzf`, `dmenu`, and `rofi`) to turn common maintenance tasks into fast, repeatable actions you can bind to keys or run in scratchpad terminals.
 
-**Languages & stack:** Bash, Python 3.12+ (via `uv` shebangs for reproducible deps), Xonsh, C. External tools: `fd`, `rg`, `fzf`, `bat`, `eza`, `foot`, `systemd-run`.
+A recurring theme is **consistent UX and theming across scripts**: there’s a shared environment loader (`env.sh`) that standardizes paths, Flexoki colors, and `fzf` defaults so menus/previews feel uniform. Many tools also adopt the same pattern of “pick → preview → act”, using `bat`/`eza` for readable previews and wrappers that spawn floating terminals with predictable window titles/classes for Qtile rules.
 
-**Key building blocks:**
-- [`lib/env.sh`](docs/scripts/env.sh.md) — modular environment loader (paths, Flexoki colors, FZF theme, git)
-- [`improved-fzfmenu.sh`](docs/scripts/improved-fzfmenu.sh.md) — floating foot terminal picker wrapper
-- [`meta/utils_update_symlinks.sh`](docs/scripts/utils_update_symlinks.sh.md) — syncs `$SCRIPTS/bin` → `~/.local/bin` and maintains CSV inventory
+The collection spans a few broad categories:
+
+- **Desktop & WM utilities (Qtile-centric):** small helpers to introspect windows, move/switch groups, launch floating terminals/editors, manage screenshots/wallpapers, and toggle services/compositors/performance profiles.
+- **Interactive launchers:** multiple “command palette” style scripts for your own tools, system executables, `.desktop` apps, PDFs, notes/vaults, and help pages—built around cached sources for speed and preview panes for confidence.
+- **Dotfiles & system bootstrap:** quick Chezmoi initialization, a curated dependency installer for new machines, and pick-and-edit flows for Chezmoi-managed files with optional apply/sync.
+- **Git automation:** several tiers of repo sync tools (from simple shell to richer Python) with stash/rebase workflows and conflict handling, plus helpers for cloning, bulk pulling, and inventorying repos per-host.
+- **Media & “daily life” automation:** cmus/beets launchers and playlist generators, audio cover-art generation, device sync scripts, and a few niche utilities (MIDI-to-command mapping, GRUB tune rendering, cinema schedule parsing).
+- **LLM/dev tooling:** scripts that generate documentation, summarize diffs into commit messages, count tokens, run lightweight chat TUIs, or spin up local services (e.g., Docker-backed Qdrant/Open WebUI) in a tmux-friendly way.
+
+Overall, the repo is best read as an evolving set of **small, opinionated building blocks**—designed to be chained together, run non-interactively from Qtile bindings, and kept maintainable through shared environment conventions and auto-generated documentation.
+
+<!-- llm_generated_output_end -->
 
 ## Quick Start
 
@@ -56,7 +59,7 @@ archived/   Deprecated scripts kept for reference
 | File | Issue | Severity |
 |------|-------|----------|
 | `bin/hyprlaunch.sh:9` | Uses `-eq` (integer compare) instead of `=` for string `-t`; also `local` outside a function | **HIGH** |
-| `meta/llm-script-describer.py:54-55` | Hardcoded `gpt-5.2` — a non-existent model, will crash on first run | **HIGH** |
+| `meta/llm-script-describer.py:54-55` | Hardcoded `gpt-5.2` — model string should be reviewed when upgrading | LOW |
 | `src/select_script/select_script.c:32` | First `sscanf` field `%[^,]` has no width limit — buffer overflow risk | **HIGH** |
 | `bin/send_email.py:28-29` | Sender/receiver email addresses hardcoded in argparse defaults | MEDIUM |
 | `bin/speach-to-text.py:19` | Device name `UMC202HD 192k: USB` hardcoded; falls back to interactive prompt | MEDIUM |
@@ -72,7 +75,9 @@ archived/   Deprecated scripts kept for reference
 
 | File | Description |
 | --- | --- |
+| [_megaCMD-download.sh](docs/scripts/_megaCMD-download.sh.md) | Download MEGAcmd Arch package and install it via pacman |
 | [_megaCMD-download_1.sh](docs/scripts/_megaCMD-download_1.sh.md) | Downloads MEGAcmd Arch package and installs it via pacman |
+| [aichat-oneshots-viewer.sh](docs/scripts/aichat-oneshots-viewer.sh.md) | Browse aichat message blocks with fzf preview via a local netcat server |
 | [albumplayer.xsh](docs/scripts/albumplayer.xsh.md) | Build a temp playlist from a chosen album and play it in cmus |
 | [ansi-cheatsheet.sh](docs/scripts/ansi-cheatsheet.sh.md) | Render a quick ANSI escape codes cheatsheet with syntax highlighting |
 | [ansi8bit2rgb_hex.py](docs/scripts/ansi8bit2rgb_hex.py.md) | Convert ANSI 256-color codes to RGB or HEX (with optional preview) |
@@ -83,10 +88,10 @@ archived/   Deprecated scripts kept for reference
 | [closest_colors.py](docs/scripts/closest_colors.py.md) | Find closest palette colors to a list of target hex colors |
 | [color_restrict.py](docs/scripts/color_restrict.py.md) | Reduce an image to a fixed RGB palette by nearest-color matching |
 | [colormap_from_text.sh](docs/scripts/colormap_from_text.sh.md) | Extract unique hex colors from text and print as RGB/hex (optionally previewed) |
-| [command_prompt.sh](docs/scripts/command_prompt.sh.md) | Pick a past command from shell history via fzf and output it |
+| [command_prompt.sh](docs/scripts/command_prompt.sh.md) | Fuzzy-pick a past shell command and output it |
 | [count_tokens_with_tiktoken.py](docs/scripts/count_tokens_with_tiktoken.py.md) | Count tokens for a text using tiktoken and an OpenAI model encoding |
 | [create_cover_art.sh](docs/scripts/create_cover_art.sh.md) | Create a cover art image from a `.wav` spectrogram |
-| [desk_fzf.sh](docs/scripts/desk_fzf.sh.md) | Search and launch installed apps by selecting a .desktop file via fzf |
+| [desk_fzf.sh](docs/scripts/desk_fzf.sh.md) | Find installed `.desktop` files with fzf and run the selected entry |
 | [dmenu_run_scripts.py](docs/scripts/dmenu_run_scripts.py.md) | Rofi-based launcher for your “active” scripts using xonsh metadata |
 | [edit_chezmoi_cfg_files.sh](docs/scripts/edit_chezmoi_cfg_files.sh.md) | Fuzzy-pick chezmoi-managed files/dirs, edit them, then optionally apply/sync |
 | [editor.sh](docs/scripts/editor.sh.md) | Fuzzy-find files with `fd`/`fzf` and open them in `nvim` (optionally sudo) |
@@ -100,13 +105,13 @@ archived/   Deprecated scripts kept for reference
 | [fzfmenu_cache.sh](docs/scripts/fzfmenu_cache.sh.md) | Build and maintain a cached list of executables found in `$PATH` |
 | [fzfmenu_run.sh](docs/scripts/fzfmenu_run.sh.md) | Pick a command with fzf and run it via systemd-run (user scope) |
 | [fzfpreview.sh](docs/scripts/fzfpreview.sh.md) | FZF preview script for text, binaries, and images (kitty/chafa/imgcat) |
-| [generate_commit_message.py](docs/scripts/generate_commit_message.py.md) | Generate a commit message from the staged diff (LLM or fallback) |
+| [generate_commit_message.py](docs/scripts/generate_commit_message.py.md) | Generate a commit message from staged diff via OpenRouter (fallback to numstat) |
 | [get-windows.sh](docs/scripts/get-windows.sh.md) | Print Qtile windows as TSV (id, group, name, wm_class) |
 | [get_hyperlinks_in_folder.py](docs/scripts/get_hyperlinks_in_folder.py.md) | Scan a folder of markdown notes for `[[wiki links]]` and build a graph |
 | [get_repos_present_on_host.sh](docs/scripts/get_repos_present_on_host.sh.md) | Scan `$GIT_REPOS` and record repos present on this machine |
 | [get_scripts_relations.py](docs/scripts/get_scripts_relations.py.md) | Build and visualize a directed graph of script cross-references |
 | [get_scripts_relations.xsh](docs/scripts/get_scripts_relations.xsh.md) | Build and display a dependency graph between scripts under `$SCRIPTS` |
-| [git_cd.sh](docs/scripts/git_cd.sh.md) | Fuzzy-pick a git repo directory from `locate` and print its path |
+| [git_cd.sh](docs/scripts/git_cd.sh.md) | Pick a local git repo via fzf and output a `cd …` command |
 | [git_clone_by_author-repo.sh](docs/scripts/git_clone_by_author-repo.sh.md) | Clone a GitHub repo into `$GIT_REPOS/<author>/<repo>` with ssh/https/local |
 | [git_update_all_other_repos.sh](docs/scripts/git_update_all_other_repos.sh.md) | Bulk `git pull` for repos under `$GIT_REPOS` and report successes/errors |
 | [grub-tune-to-audio-python.py](docs/scripts/grub-tune-to-audio-python.py.md) | Convert a GRUB_INIT_TUNE string into an MP3 audio file |
@@ -114,8 +119,10 @@ archived/   Deprecated scripts kept for reference
 | [help-pastel.sh](docs/scripts/help-pastel.sh.md) | Interactive `pastel` help browser with `fzf` + previews |
 | [help_pwcli.sh](docs/scripts/help_pwcli.sh.md) | Browse PipeWire CLI tools and preview their `-h` help in fzf |
 | [html_viewer.py](docs/scripts/html_viewer.py.md) | PyQt6 viewer for HTML/Markdown/text with folder index + wiki links |
-| [hyprlaunch.sh](docs/scripts/hyprlaunch.sh.md) | Launch Hyprland from a TTY with clean Wayland/systemd-user env handling |
-| [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md) | Launches `fzf` in a floating foot terminal, optionally piping output |
+| [hyprlaunch.sh](docs/scripts/hyprlaunch.sh.md) | Start Hyprland from a TTY with clean env + safe D‑Bus handling |
+| [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md) | Launch `fzf` in a floating terminal, optionally preserving pipes |
+| [install-hyprland-deps.sh](docs/scripts/install-hyprland-deps.sh.md) | Installs Hyprland build deps and optional companion tools on Arch |
+| [install.sh](docs/scripts/install.sh.md) | Install, shutdown, or fully remove an Onyx Docker Compose deployment |
 | [install_dependencies.sh](docs/scripts/install_dependencies.sh.md) | Install a base set of Arch packages via paru (AUR helper) |
 | [interactive_git_sync.sh](docs/scripts/interactive_git_sync.sh.md) | Pick a repo via fzf and run your sync-repo.sh on it |
 | [json_to_markdown.py](docs/scripts/json_to_markdown.py.md) | Convert a chat-like JSON array into a simple Markdown transcript |
@@ -144,7 +151,7 @@ archived/   Deprecated scripts kept for reference
 | [old-ousse](docs/scripts/old-ousse.md) | Generate multiple `locate` databases for different filesystem scopes |
 | [ollama-list.sh](docs/scripts/ollama-list.sh.md) | Fetch and format Ollama library models with a 7-day local cache |
 | [open_url_in_instance.sh](docs/scripts/open_url_in_instance.sh.md) | Send a URL to qutebrowser via IPC, or start qutebrowser if needed |
-| [openwebui-launcher.sh](docs/scripts/openwebui-launcher.sh.md) | Start Open WebUI in tmux, wait until ready, then open in browser |
+| [openwebui-launcher.sh](docs/scripts/openwebui-launcher.sh.md) | Start Open WebUI in tmux and open it in your minimal browser |
 | [openwebui_serve.sh](docs/scripts/openwebui_serve.sh.md) | Launch Open WebUI via uvx with data stored in XDG data directory |
 | [ousse-locate.sh](docs/scripts/ousse-locate.sh.md) | Inspect `.local/share/ousse` DB files (size/age) and list entries |
 | [ousse-update.sh](docs/scripts/ousse-update.sh.md) | Build multiple `updatedb` databases for different filesystem scopes |
@@ -166,21 +173,21 @@ archived/   Deprecated scripts kept for reference
 | [sandisk_music_transfert.py](docs/scripts/sandisk_music_transfert.py.md) | Randomly select unlistened albums and sync them to a Sandisk player |
 | [screenshot.sh](docs/scripts/screenshot.sh.md) | Take a screenshot with Grim, optionally selecting an area |
 | [script.sh](docs/scripts/script.sh.md) | Run `fzf` in xterm and type the selection into the focused window |
-| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | Interactive launcher for `$SCRIPTS` entries with fzf + previews |
+| [script_launcher.sh](docs/scripts/script_launcher.sh.md) | Browse and run your `$SCRIPTS` with fzf, previews, and quick edit actions |
 | [select_script](docs/scripts/select_script.md) | Rofi-based picker to execute a script from a cached CSV description list |
-| [send_email.py](docs/scripts/send_email.py.md) | Send a plaintext email via Gmail SMTP using a password from `pass` |
+| [send_email.py](docs/scripts/send_email.py.md) | Send a simple plaintext email via Gmail using credentials from `pass` |
 | [setting-up-syncs.sh](docs/scripts/setting-up-syncs.sh.md) | Register Mega sync pairs for XDG folders and host-specific storage |
 | [shell_history_info.sh](docs/scripts/shell_history_info.sh.md) | Show most frequent lines/words/chars/options in your shell history |
 | [show-all-qutebrowser-scripts.sh](docs/scripts/show-all-qutebrowser-scripts.sh.md) | Display qutebrowser’s installed script files with syntax highlighting |
 | [show_keyboard_layout.py](docs/scripts/show_keyboard_layout.py.md) | Print a preformatted keyboard layout map to stdout |
 | [snekai.sh](docs/scripts/snekai.sh.md) | Launch Jupyter Lab/Notebook/IPython from the `snekai` virtualenv |
 | [songlauncher.sh](docs/scripts/songlauncher.sh.md) | Pick a track via dmenu and play it in cmus |
-| [speach-to-text.py](docs/scripts/speach-to-text.py.md) | Record audio from a chosen device and transcribe it with OpenAI Whisper |
+| [speach-to-text.py](docs/scripts/speach-to-text.py.md) | Record microphone audio and transcribe it using OpenAI Whisper |
 | [ssh-fzf.sh](docs/scripts/ssh-fzf.sh.md) | Pick an SSH command from pass via fzf and execute it in a login shell |
 | [sync-repo-simple.py](docs/scripts/sync-repo-simple.py.md) | pull/rebase safely, auto-commit local changes, then push |
-| [sync-repo-simple.sh](docs/scripts/sync-repo-simple.sh.md) | Sync a git repo with remote, stashing local changes and auto-committing |
+| [sync-repo-simple.sh](docs/scripts/sync-repo-simple.sh.md) | One-shot sync for a git repo with stash + conflict helpers |
 | [sync-repo.py](docs/scripts/sync-repo.py.md) | Sync a git repo with interactive conflict handling and rich output |
-| [sync-repo.sh](docs/scripts/sync-repo.sh.md) | fetch, rebase/ff, stash, auto-commit, push, pretty output |
+| [sync-repo.sh](docs/scripts/sync-repo.sh.md) | Sync a local git repo with remote, stashing/rebasing and auto-committing changes |
 | [terminal_with_command.sh](docs/scripts/terminal_with_command.sh.md) | Open a floating Alacritty terminal, run a command, then stay open |
 | [test-env.sh](docs/scripts/test-env.sh.md) | Quick sanity checks for `env.sh` minimal and feature-specific loads |
 | [text_spectrogram.py](docs/scripts/text_spectrogram.py.md) | Live terminal spectrogram from microphone input with adjustable gain |
@@ -190,11 +197,12 @@ archived/   Deprecated scripts kept for reference
 | [toggle_picom.sh](docs/scripts/toggle_picom.sh.md) | Toggle `picom` compositor on/off with desktop notifications |
 | [transform_symlink.sh](docs/scripts/transform_symlink.sh.md) | Turn symlinks into copies of their targets (file or directory) |
 | [try_the_bat_suit.sh](docs/scripts/try_the_bat_suit.sh.md) | Pick a file and preview it with `bat` using a chosen syntax language |
-| [tui-gpt.py](docs/scripts/tui-gpt.py.md) | Textual-based TUI chat client streaming responses from OpenAI |
+| [tui-gpt.py](docs/scripts/tui-gpt.py.md) | Textual-based streaming OpenAI chat TUI (quick prompt/response loop) |
 | [ugc-python.py](docs/scripts/ugc-python.py.md) | Extracts and numbers movie titles from UGC-like HTML read from stdin |
 | [update_birthdays.sh](docs/scripts/update_birthdays.sh.md) | Rebuilds `bdays.csv` with each script’s “birth date” from git history |
 | [update_env.xsh](docs/scripts/update_env.xsh.md) | Writes `*_API_KEY` environment vars into `~/.env` |
-| [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md) | Sync executable symlinks from `$SCRIPTS` into `~/.local/bin` and log results |
+| [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md) | Create symlinks in ~/.local/bin, clean broken ones, and refresh symlink CSV |
+| [utopia.py](docs/scripts/utopia.py.md) | Fetch Utopia Bordeaux weekly PDF schedules, parse to JSON, optionally enrich films |
 | [utopia.sh](docs/scripts/utopia.sh.md) | Download Utopia Bordeaux film pages for a fixed list of film IDs |
 | [vimwiki.sh](docs/scripts/vimwiki.sh.md) | Pick a Markdown note with fzf and open it in Neovim |
 | [vox.py](docs/scripts/vox.py.md) | Print and filter a Vox amp-model option table from the terminal |

@@ -1,52 +1,50 @@
-# Command prompt (history-based launcher)
+# Command prompt (history launcher)
 
 ---
 
-**command_prompt.sh**: Pick a past command from shell history via fzf and output it
+**command_prompt.sh**: Fuzzy-pick a past shell command and output it
 
 ---
 
 ### Dependencies
 
 - `bash`
-- `shell_history_info.sh` — provides history entries (used with `-l`)
-- `improved-fzfmenu.sh` — fzf-based menu wrapper (handles terminal UI, sorting, ANSI, etc.)
-- `cut` — extracts the command field from tab-separated output
+- `shell_history_info.sh` — custom helper that prints shell history (used with `-l`)
+- `improved-fzfmenu.sh` — custom fzf wrapper used to display the picker UI
+- `cut` — from `coreutils`
 
 ### Description
 
-This script is a tiny “command prompt” helper that turns your shell history into an interactive launcher. It works as a pipeline:
+This script provides a small “command prompt” powered by your shell history. It:
 
-1. `get_cmd()` calls `shell_history_info.sh -l`, then extracts the second field with `cut -f2`. This implies `shell_history_info.sh -l` outputs a tab-separated format where field 2 is the actual command string.
-2. `fzf_cmd()` feeds those commands into `improved-fzfmenu.sh` configured as:
-   - `--terminal-title=cmd_prompt` to set a recognizable terminal title (nice for qtile rules/scratchpads),
-   - `--tac` to reverse order (so newest items appear first if the wrapper mirrors `tac` behavior),
-   - `--ansi` to preserve coloring if present.
+1. Calls `shell_history_info.sh -l` to retrieve a list of history entries.
+2. Extracts only the command field via `cut -f2` (expects tab-separated output where field 2 is the command).
+3. Pipes the command list into `improved-fzfmenu.sh` configured as:
+   - `--terminal-title=cmd_prompt` to make the spawned terminal easy to spot in qtile
+   - `--tac` to reverse the list (most recent commands first)
+   - `--ansi` to preserve any color codes (if your history helper outputs ANSI)
 
-Finally, `get_cmd | fzf_cmd` prints the selected command to stdout. Typically, you’d capture/evaluate it elsewhere (e.g., insert into your prompt, copy to clipboard, or execute).
+The final selected line is printed to stdout. This design makes it composable: you can *capture* the selection, *paste* it, or *execute* it elsewhere depending on how you bind it in qtile.
 
 ### Usage
 
-Run it from a terminal (or from qtile via a keybinding launching a terminal command):
+Run interactively (it opens an fzf menu via your wrapper):
 
-    ~/.scripts/bin/command_prompt.sh
+    command_prompt.sh
 
-Use it as an interactive selector and then:
+Typical “tldr” compositions:
 
-- Print selected command (default behavior):
+- Print a command, then copy it:
 
-    selected="$(~/.scripts/bin/command_prompt.sh)"
-    printf '%s\n' "$selected"
+    command_prompt.sh | wl-copy
 
-- Execute the selected command (be careful):
+- Execute the selected command immediately (use with care):
 
-    bash -lc "$(~/.scripts/bin/command_prompt.sh)"
+    eval "$(command_prompt.sh)"
 
-- Copy to clipboard (example):
-
-    ~/.scripts/bin/command_prompt.sh | wl-copy
+- In qtile, bind to a key and open in a terminal that runs it, or integrate with a prompt widget that inserts text from stdout (recommended) instead of executing.
 
 ---
 
 > [!TIP]
-> Consider adding an explicit “execute vs output” mode (e.g., `--run`), and handle empty selections (`fzf` exit code) to avoid running an empty string. Also, relying on `cut -f2` assumes stable tab-separated output; using a more robust parser or documenting the expected `shell_history_info.sh -l` format would prevent breakage.
+> The script currently only *outputs* the chosen command; it doesn’t execute it. That’s safer, but you may want to document/standardize how you consume the output (clipboard vs prompt insert vs eval). Also, relying on `cut -f2` assumes `shell_history_info.sh -l` is consistently tab-delimited; consider making the delimiter explicit (`cut -d $'\t' -f2`) or switching to a more robust parser if commands can contain tabs/formatting.

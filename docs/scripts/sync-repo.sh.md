@@ -1,37 +1,38 @@
-# Sync Git Repository (fetch/pull/commit/push)
+# sync-repo — sync a Git repo (fetch/pull/commit/push) with nice TTY output
 
 ---
 
-**sync-repo.sh**: Sync a git repo: fetch, rebase/ff, stash, auto-commit, push, pretty output
+**sync-repo.sh**: Sync a local git repo with remote, stashing/rebasing and auto-committing changes
 
 ---
 
 ### Dependencies
 
-- `git` — core operations (fetch/merge/rebase/stash/commit/push/maintenance)
-- `bash` — script runtime (`#!/usr/bin/bash`)
-- `realpath` — resolve repository path (from `coreutils`)
-- `sed`, `awk`, `grep`, `wc` — small parsing helpers
-- `bat` *(optional)* — nicer command/message rendering
-- `glow` *(optional)* — renders markdown-like headings/messages in terminal
-- `$EDITOR` *(optional)* — used for conflict resolution (`vim`/`nvim` fallback)
+- `bash`
+- `git`
+- `realpath` (typically `coreutils`)
+- `sed`, `awk`, `grep`, `wc` (standard GNU userland)
+- `bat` (optional) — pretty “command” blocks and framed messages
+- `glow` (optional) — renders markdown-like headings/messages nicely in terminal
+- `$EDITOR` (optional) — used for conflict resolution (`vim`/`nvim` fallback)
 
 ### Description
 
-`sync-repo.sh` is an “opinionated” Git synchronizer for a single repository path. It:
+This script is a “one-shot” repository synchronizer for your Arch Linux workflow: given a repo path, it will:
 
-1. Validates the target directory is a Git repo and records current directory.
-2. Detects `REMOTE` (via `git remote`) and `LOCAL` (current branch).
-3. `git fetch --all --prune`.
-4. If upstream differs:
-   - stashes local modifications (if any),
-   - attempts a fast-forward merge (`git merge --ff-only @{u}`),
-   - otherwise tries `git pull --rebase <remote> <local>` and offers an interactive conflict handler.
-   - re-applies stash (`git stash pop`) and offers per-file conflict handling (`ours/theirs/manual`).
-5. If working tree has changes, it stages everything, commits with an auto-generated message (`N change(s) from user@host`), then pushes; on push failure it pulls fast-forward and retries.
-6. Runs `git maintenance run` and prints a short summary/log view.
+1. Detect current branch (`LOCAL`) and remote (`REMOTE`) and show a formatted header.
+2. `git fetch --all --prune`.
+3. If the upstream differs:
+   - stashes local changes (if any),
+   - tries `git merge --ff-only @{u}` first,
+   - falls back to `git pull --rebase $REMOTE $LOCAL`,
+   - provides an interactive merge-conflict handler (abort/skip/open editor).
+4. Pops the stash and, if conflicts occur, prompts per-file resolution:
+   - keep remote (`--theirs`), keep local (`--ours`), or manual edit.
+5. If working tree has changes: stages everything, auto-generates a commit message (`N change(s) from user@host`), commits, pushes (retrying after a fast-forward pull if push fails).
+6. Runs `git maintenance run` and prints a short log/stat-style summary.
 
-Output is enhanced when `bat`/`glow` are installed, making it comfortable to run in a terminal or a qtile keybinding that spawns a terminal.
+`--dry-run` prints the intended Git commands without modifying the repo.
 
 ### Usage
 
@@ -44,18 +45,18 @@ Examples (tldr-style):
 ```sh
 sync-repo.sh ~/.scripts
 sync-repo.sh "$SCRIPTS"
-sync-repo.sh ~/.scripts --dry-run
-sync-repo.sh --help
+sync-repo.sh "$SCRIPTS" --dry-run
 ```
 
-- `--dry-run`: prints the Git commands that would run, without modifying the repo.
-- Interactive steps occur only on conflicts (merge/rebase or stash pop).
+Good fits:
+- bind to a qtile key to sync dotfiles/scripts quickly (interactive on conflicts)
+- run manually in a terminal when you want “fetch → rebase → commit → push” in one step
 
 ---
 
 > [!TIP]
-> Potential improvements:
-> - `REMOTE="$(git remote)"` may return multiple remotes; pushing to multiple words can break (`git push origin upstream main`). Prefer `git remote get-url origin` and default to `origin`.
-> - `git diff --quiet "$LOCAL" '@{u}'` assumes an upstream is set; add a guard (`git rev-parse --abbrev-ref --symbolic-full-name @{u}`) with a clearer error.
-> - `eval` in `run_command` is unnecessary and can be risky; prefer executing arrays or direct commands.
-> - Commit message generator comment mentions an LLM, but implementation is static; either wire it in or adjust the comment.
+> Improvements to consider:
+> - `REMOTE="$(git remote)"` may return multiple remotes; prefer `git remote get-url origin` (or select `origin` by default) and handle missing upstream (`@{u}` can fail).
+> - Commit message generation is labeled “llm” but currently static; either remove the comment or integrate the external generator.
+> - `git diff --stat '@{1}'` in `display_summary` is fragile; consider capturing `OLD_HEAD=$(git rev-parse HEAD)` before syncing and diff against it afterward.
+> - `git commit -m "$MESSAGE"` can break if message contains quotes/newlines; safer: `git commit -m "$MESSAGE"` after sanitizing, or use a temporary file with `-F`.

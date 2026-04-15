@@ -1,56 +1,59 @@
-# AI commit message generator (OpenRouter + safe fallback)
+# AI-powered Git commit message generator (with safe fallback)
 
 ---
 
-**generate_commit_message.py**: Generate a commit message from the staged diff (LLM or fallback)
+**generate_commit_message.py**: Generate a commit message from staged diff via OpenRouter (fallback to numstat)
 
 ---
 
 ### Dependencies
 
+- `uv` (shebang uses `uv run --script`)  
 - `python>=3.12`
-- `uv` (script shebang runs via `uv run --script`)
-- `requests` (HTTP call to the chat completion endpoint)
-- `git` (reads staged diff/numstat)
-- Environment variable for API key (see below)
+- `git`
+- An OpenRouter-compatible API key in env (see `OPENROUTER_API_KEY`, etc.)
+
+---
 
 ### Description
 
-This script prints a ready-to-use Git commit message based on your *staged* changes.
+This script reads your **staged** changes (`git diff --cached`) and asks an LLM (default: OpenRouter) to produce a well-formatted commit message (subject line + blank line + body). It’s built to be robust in a real Arch/qtile workflow: it avoids crashing your commit due to encoding issues, large diffs, or network/API failures.
 
-Workflow:
-1. Reads the staged diff via `git diff --cached` with robust decoding (configurable via `COMMIT_DIFF_ENCODING` / `COMMIT_DIFF_ERRORS`).
-2. If the diff is too large, it **condenses** it:
-   - Splits per file (`diff --git` blocks)
-   - Removes context lines, keeps headers/hunks and `+/-` lines
-   - Truncates long lines and caps per-file change lines
-   - Fully “summarizes” excluded paths (locks, `dist/`, minified assets, sourcemaps, etc.)
-   - Final fallback: `--numstat` summary + small snippets
-3. Calls OpenRouter (`https://openrouter.ai/api/v1/chat/completions`) using `openai/gpt-oss-120b`.
-4. Sanitizes the response (removes code fences / “Commit message:” chatter, strips control chars, hard caps length).
-5. If anything fails (no key, network, API, encoding), it **never blocks you**: it generates a deterministic message from `git diff --cached --numstat`.
+Key behaviors:
 
-API key lookup is flexible: it tries `openrouter`, then `OPENROUTER_API_KEY`, then any env var containing `OPENROUTER`.
+- **Robust git output decoding** via `_git_run()` (configurable with `COMMIT_DIFF_ENCODING` and `COMMIT_DIFF_ERRORS`).
+- **Diff condensation** (`condense_diff()`):  
+  - Splits by file, keeps headers + hunk markers + only `+/-` lines  
+  - Truncates very long lines and caps per-file change lines  
+  - Excludes noisy paths (locks, `node_modules`, minified assets, etc.) using `EXCLUDE_PATTERNS`  
+  - If still too big, falls back to `--numstat` + tiny per-file snippets.
+- **API key discovery** (`key_finder()`): tries `openrouter`, `OPENROUTER_API_KEY`, or any env var containing `OPENROUTER`.
+- **Always emits something**: if API is missing/fails or sanitization yields empty output, it generates a deterministic message from `git diff --cached --numstat` (e.g. `Update 3 files (+120 -14)` plus per-file stats).
+
+---
 
 ### Usage
 
 Run inside a git repo with staged changes:
 
-- Stage changes first:
-  - `git add -p`
-- Generate message:
-  - `~/.scripts/bin/generate_commit_message.py`
+    generate_commit_message.py
 
-Use it directly for a commit:
+Typical hook/editor integration:
 
-- `git commit -m "$(~/.scripts/bin/generate_commit_message.py)"`
+- As a commit template generator:
 
-Tuning (examples):
+      git commit -e -m "$(generate_commit_message.py)"
 
-- `COMMIT_MAX_DIFF_CHARS=80000 COMMIT_PER_FILE_CHANGE_LIMIT=800 ~/.scripts/bin/generate_commit_message.py`
-- `OPENROUTER_API_KEY=... ~/.scripts/bin/generate_commit_message.py`
+- Or pipe into your editor/launcher scripts as needed.
+
+Environment knobs:
+
+    COMMIT_MAX_DIFF_CHARS=120000
+    COMMIT_PER_FILE_CHANGE_LIMIT=2000
+    COMMIT_MAX_MESSAGE_CHARS=4000
+    OPENROUTER_API_KEY=...
 
 ---
 
 > [!TIP]
-> Consider adding a CLI (`--api/--model/--url`) instead of hardcoding defaults, and support `git commit` templates/hooks (e.g., `prepare-commit-msg`) so it can auto-fill your editor buffer. Also, the env “contains OPENROUTER” heuristic can pick the wrong variable; preferring an explicit name first (already done) and documenting it prominently helps avoid surprises.
+> Consider adding CLI flags (model/url/api) instead of hardcoding defaults, and optionally support `--unstaged` / `--all` modes. Also, `key_finder()`’s “contains” lookup may accidentally match unrelated env vars; tightening it to a whitelist (e.g. `OPENROUTER_API_KEY`) would reduce surprises.

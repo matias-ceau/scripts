@@ -58,9 +58,9 @@
   "command_prompt.sh": {
     "file": "command_prompt.sh",
     "path": "bin/command_prompt.sh",
-    "description": "Pick a past command from shell history via fzf and output it",
+    "description": "Fuzzy-pick a past shell command and output it",
     "doc_path": "docs/scripts/command_prompt.sh.md",
-    "hash": "adfa52a270cc912e14a34f07c0f85cc9d17c056ff72f6d035abf6051caaeaa1c"
+    "hash": "798e13b32dc0e2004870b6a06a7c7c7fd1dd06d8ee47410e3cbcd039cd5a6fdf"
   },
   "count_tokens_with_tiktoken.py": {
     "file": "count_tokens_with_tiktoken.py",
@@ -79,9 +79,9 @@
   "desk_fzf.sh": {
     "file": "desk_fzf.sh",
     "path": "bin/desk_fzf.sh",
-    "description": "Search and launch installed apps by selecting a .desktop file via fzf",
+    "description": "Find installed `.desktop` files with fzf and run the selected entry",
     "doc_path": "docs/scripts/desk_fzf.sh.md",
-    "hash": "a06d79c79bc1a4b9aaf1119bd201a81b04b5f53d70b8bf337a534dbfd161e6b5"
+    "hash": "d6e8e51c563b6a1da3268cce18c78edc8220caec9cd3ebebf7637469d81420fe"
   },
   "dmenu_run_scripts.py": {
     "file": "dmenu_run_scripts.py",
@@ -170,9 +170,9 @@
   "generate_commit_message.py": {
     "file": "generate_commit_message.py",
     "path": "bin/generate_commit_message.py",
-    "description": "Generate a commit message from the staged diff (LLM or fallback)",
+    "description": "Generate a commit message from staged diff via OpenRouter (fallback to numstat)",
     "doc_path": "docs/scripts/generate_commit_message.py.md",
-    "hash": "027162592e307e6255a672e52d078048de1981b637636de6095bb1f2500c21f7"
+    "hash": "feca8b034df07de4e056c4a51129b273a76f7fae3c024c64b1941a37a9957bb9"
   },
   "get_hyperlinks_in_folder.py": {
     "file": "get_hyperlinks_in_folder.py",
@@ -212,9 +212,9 @@
   "git_cd.sh": {
     "file": "git_cd.sh",
     "path": "bin/git_cd.sh",
-    "description": "Fuzzy-pick a git repo directory from `locate` and print its path",
+    "description": "Pick a local git repo via fzf and output a `cd \u2026` command",
     "doc_path": "docs/scripts/git_cd.sh.md",
-    "hash": "25efbc1325bee69dfad067edfe85f3eceb5ded6ca016a04bb83c28be8c5fa607"
+    "hash": "d58e3e2eb2999bf0ffadac9038e5d0d4c95e5f39ec441ad1d74da1e1bd66597b"
   },
   "git_clone_by_author-repo.sh": {
     "file": "git_clone_by_author-repo.sh",
@@ -268,9 +268,9 @@
   "improved-fzfmenu.sh": {
     "file": "improved-fzfmenu.sh",
     "path": "bin/improved-fzfmenu.sh",
-    "description": "Launches `fzf` in a floating foot terminal, optionally piping output",
+    "description": "Launch `fzf` in a floating terminal, optionally preserving pipes",
     "doc_path": "docs/scripts/improved-fzfmenu.sh.md",
-    "hash": "544ce3bd7da946499fac2a35e0e6dc7d273c416a645e66541c2ef441ee02bd98"
+    "hash": "cb1217cc7cc4125acbea09898cdd610c56e8c68187479736029db869b05e7718"
   },
   "install_dependencies.sh": {
     "file": "install_dependencies.sh",
@@ -464,9 +464,9 @@
   "openwebui-launcher.sh": {
     "file": "openwebui-launcher.sh",
     "path": "bin/openwebui-launcher.sh",
-    "description": "Start Open WebUI in tmux, wait until ready, then open in browser",
+    "description": "Start Open WebUI in tmux and open it in your minimal browser",
     "doc_path": "docs/scripts/openwebui-launcher.sh.md",
-    "hash": "8dd475c8724ed9f8db17ad989898c3cc2ec21eab414ddf51526a8e28458b1ea7"
+    "hash": "0f40ef5bee201fadc4ffa66f2838f7d4e3b259e7728192d092bb9b8af863a0cf"
   },
   "ousse-locate.sh": {
     "file": "ousse-locate.sh",
@@ -597,9 +597,9 @@
   "script_launcher.sh": {
     "file": "script_launcher.sh",
     "path": "bin/script_launcher.sh",
-    "description": "Interactive launcher for `$SCRIPTS` entries with fzf + previews",
+    "description": "Browse and run your `$SCRIPTS` with fzf, previews, and quick edit actions",
     "doc_path": "docs/scripts/script_launcher.sh.md",
-    "hash": "b6566a44cccf21630d2cc97bb54b03f8be11a3e960659981d5e0080173f76910"
+    "hash": "6d2da0ffac90d5e4f47d877127dae019b5f56ebd5d8091f2e630ba2c895cb08d"
   },
   "script.sh": {
     "file": "script.sh",
@@ -618,9 +618,9 @@
   "send_email.py": {
     "file": "send_email.py",
     "path": "bin/send_email.py",
-    "description": "Send a plaintext email via Gmail SMTP using a password from `pass`",
+    "description": "Send a simple plaintext email via Gmail using credentials from `pass`",
     "doc_path": "docs/scripts/send_email.py.md",
-    "hash": "0ef7394851b12999f8a8d8a3b14bbecfdb2ca1762d93442c1077a36c704a4030"
+    "hash": "10f6455dcea5d675a3881f4011519ae6d5bbb5b2802eb886da4e7f9652c21e94"
   },
   "setting-up-syncs.sh": {
     "file": "setting-up-syncs.sh",
@@ -667,9 +667,9 @@
   "speach-to-text.py": {
     "file": "speach-to-text.py",
     "path": "bin/speach-to-text.py",
-    "description": "Record audio from a chosen device and transcribe it with OpenAI Whisper",
+    "description": "Record microphone audio and transcribe it using OpenAI Whisper",
     "doc_path": "docs/scripts/speach-to-text.py.md",
-    "hash": "0dec55c890074059f648a2d5b0d6d643ca0935d8b0fd6e6bcfc31fdfa2ab5251"
+    "hash": "bc9bf2083973cfb47a7c42a2634eb2201e39742bd2036708b8b6eafdf73172f6"
   },
   "ssh-fzf.sh": {
     "file": "ssh-fzf.sh",
@@ -688,9 +688,9 @@
   "sync-repo.sh": {
     "file": "sync-repo.sh",
     "path": "bin/sync-repo.sh",
-    "description": "fetch, rebase/ff, stash, auto-commit, push, pretty output",
+    "description": "Sync a local git repo with remote, stashing/rebasing and auto-committing changes",
     "doc_path": "docs/scripts/sync-repo.sh.md",
-    "hash": "240532bb7de6e943b1e26cdc91225c0b66e3d4a38638734f58f8b43b3f23798d"
+    "hash": "6f55a1f2813c83b1be524468aa9b2dca35fc77accdc7ed38a0ca75a392049adb"
   },
   "sync-repo-simple.py": {
     "file": "sync-repo-simple.py",
@@ -702,9 +702,9 @@
   "sync-repo-simple.sh": {
     "file": "sync-repo-simple.sh",
     "path": "bin/sync-repo-simple.sh",
-    "description": "Sync a git repo with remote, stashing local changes and auto-committing",
+    "description": "One-shot sync for a git repo with stash + conflict helpers",
     "doc_path": "docs/scripts/sync-repo-simple.sh.md",
-    "hash": "9976259c0646dab2ddaca293b8a80a9c6d4c1d7a7455a4e77a36977b59f4fd0f"
+    "hash": "81081a6229b48c70991ed8c9249026dbbd2e6036271c29f2fda9b4c28b89b1f2"
   },
   "terminal_with_command.sh": {
     "file": "terminal_with_command.sh",
@@ -758,9 +758,9 @@
   "tui-gpt.py": {
     "file": "tui-gpt.py",
     "path": "bin/tui-gpt.py",
-    "description": "Textual-based TUI chat client streaming responses from OpenAI",
+    "description": "Textual-based streaming OpenAI chat TUI (quick prompt/response loop)",
     "doc_path": "docs/scripts/tui-gpt.py.md",
-    "hash": "000c1c04bd457eae9607da9dbf31d9b472269b80a3edc40c368732ef9cca86ee"
+    "hash": "4d599b576653874c8cee02a1603fbac33477ad8d61ee5ff8e5b9afdc896e6df4"
   },
   "ugc-python.py": {
     "file": "ugc-python.py",
@@ -786,9 +786,9 @@
   "utils_update_symlinks.sh": {
     "file": "utils_update_symlinks.sh",
     "path": "meta/utils_update_symlinks.sh",
-    "description": "Sync executable symlinks from `$SCRIPTS` into `~/.local/bin` and log results",
+    "description": "Create symlinks in ~/.local/bin, clean broken ones, and refresh symlink CSV",
     "doc_path": "docs/scripts/utils_update_symlinks.sh.md",
-    "hash": "627aa63335f2ef392472a4da765a06cb819f43db4393e0898692f4883a615da2"
+    "hash": "f62f40b36cb7b90cb4fc04055cadd94301c1d82d52ea9bbf0052d34a61cf8dce"
   },
   "utopia.sh": {
     "file": "utopia.sh",
@@ -863,9 +863,9 @@
   "hyprlaunch.sh": {
     "file": "hyprlaunch.sh",
     "path": "bin/hyprlaunch.sh",
-    "description": "Launch Hyprland from a TTY with clean Wayland/systemd-user env handling",
+    "description": "Start Hyprland from a TTY with clean env + safe D\u2011Bus handling",
     "doc_path": "docs/scripts/hyprlaunch.sh.md",
-    "hash": "45fe866158c31e149455ed8736af802a9d68a4fd5fe013573816ae22b325abcd"
+    "hash": "d495af1ffe2eab47d8b0256e62d276978f10e089290a1eeb6f63ef9d8ecd5113"
   },
   "_megaCMD-download_1.sh": {
     "file": "_megaCMD-download_1.sh",
@@ -908,5 +908,40 @@
     "description": "Toggle between tuned balanced and throughput-performance CPU profiles",
     "doc_path": "docs/scripts/toggle-performance.sh.md",
     "hash": "9a2d05388c47e52b0e7c25092cf7ed02d6f9bd6795dd2b1e3f80e009d828185d"
+  },
+  "install-hyprland-deps.sh": {
+    "file": "install-hyprland-deps.sh",
+    "path": "dev/install-hyprland-deps.sh",
+    "description": "Installs Hyprland build deps and optional companion tools on Arch",
+    "doc_path": "docs/scripts/install-hyprland-deps.sh.md",
+    "hash": "75ee95466d3ea315885ecc60d58eed13ec94c76095a579c94589664178772ae5"
+  },
+  "_megaCMD-download.sh": {
+    "file": "_megaCMD-download.sh",
+    "path": "dev/_megaCMD-download.sh",
+    "description": "Download MEGAcmd Arch package and install it via pacman",
+    "doc_path": "docs/scripts/_megaCMD-download.sh.md",
+    "hash": "36e7f6d4ebf283b733dda28666edbf968890067257dfff3317f8783fe2610b4c"
+  },
+  "aichat-oneshots-viewer.sh": {
+    "file": "aichat-oneshots-viewer.sh",
+    "path": "dev/aichat-oneshots-viewer.sh",
+    "description": "Browse aichat message blocks with fzf preview via a local netcat server",
+    "doc_path": "docs/scripts/aichat-oneshots-viewer.sh.md",
+    "hash": "6992bb1e96bbbff751283850e7d5f90bc564983244e206d53399e82388807a25"
+  },
+  "install.sh": {
+    "file": "install.sh",
+    "path": "dev/install.sh",
+    "description": "Install, shutdown, or fully remove an Onyx Docker Compose deployment",
+    "doc_path": "docs/scripts/install.sh.md",
+    "hash": "c41e8ec2b1f3d785617dac1f0755db2b487e8318e5b2220acbdaa57270c06d8e"
+  },
+  "utopia.py": {
+    "file": "utopia.py",
+    "path": "dev/utopia.py",
+    "description": "Fetch Utopia Bordeaux weekly PDF schedules, parse to JSON, optionally enrich films",
+    "doc_path": "docs/scripts/utopia.py.md",
+    "hash": "4e62ab0a03df4acdc33d3e0e4b4ada5876fbef73dccf9d6f9125a7eb13e881ce"
   }
 }

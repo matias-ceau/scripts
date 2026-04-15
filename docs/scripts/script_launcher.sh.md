@@ -1,54 +1,66 @@
-# FZF Script Launcher (docs + source preview)
+# Interactive Script Launcher (fzf + previews)
 
 ---
 
-**script_launcher.sh**: Interactive launcher for `$SCRIPTS` entries with fzf + previews
+**script_launcher.sh**: Browse and run your `$SCRIPTS` with fzf, previews, and quick edit actions
 
 ---
 
 ### Dependencies
 
 - `bash`
-- `fzf` or `improved-fzfmenu.sh` (your wrapper with terminal title support)
-- `bat` (preview rendering for source and markdown docs)
-- `fd` (lists scripts under `$SCRIPTS`)
-- `ripgrep` (`rg`, used to detect file extensions)
-- `pastel` (hex → 24-bit ANSI colors)
-- `nvim` (editing action)
-- `$SCRIPTS/lib/env.sh` + `load_env "colors"` (provides `FLEXOKI_*` colors and env)
-- `terminal_with_command.sh` (open a terminal running the chosen script)
-- `nvim_in_new_terminal.sh` (edit in a new terminal)
+- `fzf` (or your wrapper `improved-fzfmenu.sh`): interactive picker UI
+- `fd`: enumerates scripts under `$SCRIPTS`
+- `ripgrep` (`rg`): extension detection (`.sh`, `.py`, `.xsh`, …)
+- `bat`: preview renderer (source + markdown docs)
+- `pastel`: converts Flexoki hex colors to ANSI (`ansi-24bit`)
+- `realpath`
+- `nvim`: quick edit action
+- `which`: resolves selected command path
+- `../lib/env.sh`: provides `load_env` and your `colors` variables (Flexoki palette)
+- User scripts used via bindings:
+  - `terminal_with_command.sh`
+  - `nvim_in_new_terminal.sh`
+  - `improved-fzfmenu.sh` (when not embedded)
+
+---
 
 ### Description
 
-This script is a qtile-friendly “command palette” for your personal scripts directory (`$SCRIPTS`). It enumerates executables via `fd -tx` and formats each entry with a colored icon depending on extension (`.sh`, `.py`, `.xsh`, fallback).
+`script_launcher.sh` is a Qtile-friendly “command palette” for your personal scripts directory. It lists executable files found under `$SCRIPTS`, decorates them with colored icons based on extension, and feeds the list into fzf.
 
-It then pipes the list into fzf (either plain `fzf` when `--embedded/-E` is used, or your `improved-fzfmenu.sh` wrapper otherwise). Two previews are available:
+The picker defaults to previewing the script *source* via `bat $(which {2})`, but can toggle to preview its documentation (`$SCRIPTS/docs/scripts/{2}.md`). It also offers multiple execution/edit workflows:
 
-- **Source preview** (default): `bat $(which {2})` with full styling.
-- **Docs preview**: `bat -lmd $SCRIPTS/docs/scripts/{2}.md` to show per-script documentation.
+- run directly in the current shell (`enter`)
+- run in a new terminal window (`alt-enter`)
+- edit in the current terminal (`ctrl-e`)
+- edit in a new terminal (`alt-e`)
 
-Keybindings are set up to run/edit scripts directly, plus toggle preview type and refresh on resize. Colors are derived from your Flexoki palette env vars and converted with `pastel`.
+The `--embedded/-E` flag switches from your terminal wrapper (`improved-fzfmenu.sh`) to plain `fzf` (useful when already inside a terminal).
+
+---
 
 ### Usage
 
-Run normally (uses `improved-fzfmenu.sh`):
-- `script_launcher.sh`
+Run normally (spawns your fzf terminal wrapper):
 
-Run “embedded” (use raw fzf, useful inside an existing terminal):
-- `script_launcher.sh --embedded`
-- `script_launcher.sh -E`
+    script_launcher.sh
 
-Inside the UI:
-- `Enter`: execute selected script (`bash -c {2}`)
-- `Alt+Enter`: run in a new terminal (`terminal_with_command.sh`)
-- `Ctrl+e`: edit in-place (`nvim $(which {2})`)
-- `Alt+e`: edit in a new terminal (`nvim_in_new_terminal.sh`)
-- `Alt+d`: preview docs (`$SCRIPTS/docs/scripts/<name>.md`)
-- `Alt+s`: preview source
-- Resize window: preview auto-refreshes
+Run “embedded” inside an existing terminal:
+
+    script_launcher.sh --embedded
+    script_launcher.sh -E
+
+Key bindings inside fzf (as shown in the header):
+
+- `enter`: execute selected script
+- `alt-enter`: execute in new terminal (via `terminal_with_command.sh`)
+- `ctrl-e`: open script in `nvim`
+- `alt-e`: open `nvim` in a new terminal
+- `alt-d`: preview documentation markdown
+- `alt-s`: preview source again
 
 ---
 
 > [!TIP]
-> `--nth=2` assumes fzf fields split cleanly; because the first “field” contains icons/colors, it works, but it’s fragile if filenames contain spaces. Consider outputting a delimiter (e.g., `printf "%s\t%s\n" icon name`) and using `--delimiter='\t' --with-nth=2`. Also, `bash -c {2}` and `$(which {2})` can misbehave with unusual names; using absolute paths from `fd --absolute-path` directly would be more robust.
+> Consider making the docs preview more robust: `{2}.md` assumes doc filenames match exactly the displayed “basename”. If two scripts share a name in different subdirs, or if selection isn’t on `$PATH`, `which {2}` may fail. Using the resolved `fd --absolute-path` result for both source and docs (and passing it through fzf as an extra field) would remove ambiguity. Also, `cmd-full-path` currently forwards only one argument (`"$2"`); switching to `"$@"` would make it future-proof for multi-arg actions.

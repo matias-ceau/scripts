@@ -1,57 +1,53 @@
-# Desktop file launcher (fzf)
+# Fuzzy-launch Desktop Entries
 
 ---
 
-**desk_fzf.sh**: Search and launch installed apps by selecting a .desktop file via fzf
+**desk_fzf.sh**: Find installed `.desktop` files with fzf and run the selected entry
 
 ---
 
 ### Dependencies
 
 - `bash`
-- `fd` — fast file finder used to locate `*.desktop`
-- `fzf` — interactive picker
-- `bat` — used to display the cache list and preview the selected file
-- `grep`, `head`, `cut`, `date` — core utilities
-- A valid `XDG_CACHE_HOME` (script writes to `$XDG_CACHE_HOME/desktop-script.txt`)
+- `fd` — fast file finder used to locate `.desktop` files
+- `fzf` — interactive fuzzy picker
+- `bat` — used to preview entries and to skip the cache header line
+- `grep`, `head`, `cut` — parse the `Exec=` field
+- `XDG_CACHE_HOME` — cache location (falls back to empty if unset; see critique)
 
 ### Description
 
-`desk_fzf.sh` is a simple application launcher tailored for a keyboard-driven workflow (great for qtile keybindings). It scans the filesystem for `.desktop` files, caches the results, and lets you pick one via `fzf` with a `bat` preview.
+This script searches your system for `.desktop` files, lets you pick one via `fzf`, then extracts and runs its `Exec=` command.
 
-**Cache behavior**
-- Cache file: `$XDG_CACHE_HOME/desktop-script.txt`
-- First line of the cache is a UNIX timestamp.
-- Cache is considered valid for **2 hours** (`7200` seconds). If older (or missing), the script refreshes it.
-- You can force a refresh with `--update`.
+To keep startup fast, it maintains a cache at `$XDG_CACHE_HOME/desktop-script.txt`. The first line is a Unix timestamp; the remaining lines are absolute paths to `.desktop` files found under `/`. The cache is considered valid for 2 hours (7200 seconds). If the cache is missing/old, it is rebuilt automatically, or you can force a rebuild.
 
-**Launch behavior**
-- After selection, it extracts the first `Exec=` line from the chosen `.desktop` file and runs it using `eval`.
-- If you cancel `fzf`, it exits cleanly.
+Selection UI:
+- The list shown in `fzf` comes from the cache (excluding the first timestamp line).
+- `--preview` renders the selected `.desktop` file with `bat`.
+
+Execution:
+- Takes the first `Exec=` line, strips common Desktop Entry field codes (`%f`, `%u`, etc.), fixes `%%` → `%`, then runs it via `bash -c`.
 
 ### Usage
 
-Interactive (terminal):
+Run interactively (best from a terminal, or bound to a Qtile key that spawns a terminal):
 
     desk_fzf.sh
 
-Force refresh cache:
+Force refresh the `.desktop` cache:
 
     desk_fzf.sh --update
 
-Typical qtile binding idea (spawn in a terminal, since `fzf` is TUI):
+Example Qtile keybinding (spawn in your preferred terminal):
 
-    # pseudo-example
-    lazy.spawn("alacritty -e /home/matias/.scripts/bin/desk_fzf.sh")
-
-Notes:
-- The search path is `/` (root), so the initial cache build can be slow.
+    lazy.spawn("alacritty -e desk_fzf.sh")
 
 ---
 
 > [!TIP]
 > **Potential improvements / issues**
-> - Scanning `/` is expensive and may hit permission errors; consider limiting to standard locations: `/usr/share/applications`, `~/.local/share/applications`, `/var/lib/flatpak/exports/share/applications`, etc.
-> - `--color always` in `fd` pollutes the cache with ANSI codes; you already preview with `bat`, so storing plain paths is safer.
-> - Using `eval "$exec_line"` is risky (and `Exec=` often contains field codes like `%U`, `%f`). Prefer parsing/removing `%` tokens and executing safely (e.g., via arrays or `gtk-launch`/`dex`).
-> - `XDG_CACHE_HOME` may be empty; add a fallback to `~/.cache`.
+> - `CACHE_FILE="$XDG_CACHE_HOME/..."`: if `XDG_CACHE_HOME` is empty, this writes to `/desktop-script.txt` (likely failing). Consider `CACHE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/desktop-script.txt"` and `mkdir -p "$(dirname "$CACHE_FILE")"`.
+> - `fd --search-path /` can be *very* expensive and may hit permission errors; consider targeting standard application dirs (`/usr/share/applications`, `~/.local/share/applications`, Flatpak exports).
+> - The function name `update-the-cache` contains `-`, which is not a valid Bash function name; use `update_the_cache()`.
+> - `bat --color=always {}` in preview will fail if the line isn’t a file path (ok here), but you may want `--preview-window=right:60%` etc. for ergonomics.
+> - Executing `Exec=` via `bash -c` can mis-handle quoting; a more robust approach is to parse into an argv array or use `gtk-launch`/`dex` to respect desktop entry semantics.

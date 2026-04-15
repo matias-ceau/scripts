@@ -2,54 +2,55 @@
 
 ---
 
-**sync-repo-simple.sh**: Sync a git repo with remote, stashing local changes and auto-committing
+**sync-repo-simple.sh**: One-shot sync for a git repo with stash + conflict helpers
 
 ---
 
 ### Dependencies
 
-- `bash`
-- `git`
-- `realpath` (from `coreutils`) — resolves the repo path
-- `awk`, `sed`, `grep`, `wc` — used for repo name parsing and commit message
-- `$EDITOR` (fallbacks: `vim` for merge conflicts, `nvim` for stash conflicts)
+- `git` — fetch/pull/rebase/commit/push workflow
+- `bash` — script runtime (`/usr/bin/bash`)
+- `realpath` — resolve the repo path (from `coreutils`)
+- `$EDITOR` (fallbacks: `vim` / `nvim`) — used when conflicts require manual edits
 
 ### Description
 
-`sync-repo-simple.sh` is an opinionated “one command sync” helper for a single repository directory. It:
+This script is a “good enough” repo synchronizer designed for quick daily use on Arch (and easy binding from qtile). Given a repository path, it:
 
-1. Validates the provided path, `cd`s into it, and ensures it’s a Git repository.
-2. Fetches all remotes (`git fetch --all --prune`).
-3. If the local branch isn’t up to date with its upstream (`@{u}`), it:
-   - stashes local modifications (if any),
-   - tries a fast-forward merge (`git merge --ff-only @{u}`),
-   - falls back to a rebase pull (`git pull --rebase <remote> <branch>`),
-   - offers an interactive conflict handler if rebase/merge fails.
-4. Re-applies stashed changes and interactively resolves conflicts file-by-file (ours/theirs/manual).
-5. If there are local changes after syncing, it stages everything, generates a simple commit message (`N change(s) from user@host`), commits, then pushes. If push fails, it tries a fast-forward pull and retries the push.
-6. Prints a quick summary including timestamps and `git diff --stat HEAD^`.
+1. **Parses args**: expects exactly one positional argument: the repo directory. Performs basic validation (`.git` must exist).
+2. **Fetches & integrates upstream**:
+   - Runs `git fetch --all --prune`.
+   - If the local branch differs from its upstream (`@{u}`), it stashes local modifications (if any), then tries:
+     - `git merge --ff-only @{u}` (fast-forward),
+     - otherwise falls back to `git pull --rebase`.
+   - If pull/rebase hits conflicts, `handle_merge_pull_conflicts` offers interactive options (abort / skip / open editor and commit).
+   - If stashed changes fail to re-apply, `handle_stash_conflict` lets you pick *theirs/ours/manual* per conflicted file.
+3. **Commits & pushes local changes**:
+   - If `git status -s` is non-empty, it stages everything (`git add -A`),
+   - creates a simple commit message based on the number of changed files and host/user,
+   - pushes to the detected remote and current branch, retrying after a fast-forward pull if needed.
+4. **Prints a quick summary** with recent commit times and `git diff --stat HEAD^`.
 
 ### Usage
 
-Run from anywhere (it will return to your original directory):
+Run from anywhere (interactive when conflicts occur):
 
-    sync-repo-simple.sh /path/to/repo
+    sync-repo-simple.sh ~/path/to/repo
 
 Help (minimal):
 
-    sync-repo-simple.sh --help
     sync-repo-simple.sh -h
+    sync-repo-simple.sh --help
 
-Typical qtile/keybinding use (interactive on conflicts, uses `$EDITOR`):
+qtile keybinding idea (run in a terminal because it may prompt):
 
-- Bind to a terminal command (recommended), since prompts may appear:
-  - Conflict resolution menu during pull/rebase
-  - Per-file stash conflict choices: `r` (theirs), `l` (ours), `m` (manual)
+    alacritty -e sync-repo-simple.sh ~/dev/dotfiles
 
 ---
 
-> [!WARNING]
-> - The stash re-apply logic is likely inverted: `if ! [[ $(git stash list) ]]; then ... git stash pop` will try to pop when the stash list is empty. Consider using `if [[ -n $(git stash list) ]]; then`.
-> - `run_command()` prints and `eval`s strings: this is fragile with quoting and can be unsafe. Prefer arrays or direct `git` invocations.
-> - Remote detection uses `git remote` (could return multiple). Picking the first remote explicitly (e.g., `origin`) would be more predictable.
-> - `git reset --hard` in conflict handling can discard work; consider a safer option or an extra confirmation prompt.
+> [!TIP]
+> Potential issues/improvements:
+> - `REMOTE="$(git remote)"` may return multiple remotes; `git push $REMOTE $LOCAL` will break if more than one exists. Prefer a single remote (e.g. `origin`) or detect the upstream remote via `@{u}`.
+> - The stash-pop logic is inverted: `if ! [[ $(git stash list) ]]; then ...` triggers when the stash list is empty. It should likely be `if [[ $(git stash list) ]]; then ...`.
+> - `git diff --quiet "$LOCAL" '@{u}'` will error if no upstream is set; consider checking `git rev-parse --abbrev-ref --symbolic-full-name @{u}` first.
+> - `handle_merge_pull_conflicts` uses `git reset --hard` for “skip”, which can discard work; consider safer alternatives or clearer wording.

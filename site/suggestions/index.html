@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Suggestions - Scripts</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Scripts</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Suggestions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../wayland_clipboard_history/" class="nav-link">Wayland Clipboard History Overview</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">Scripts</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../scripts/_megaCMD-download.sh/" class="dropdown-item">MEGAcmd quick downloader/installer (Arch)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/_megaCMD-download_1.sh/" class="dropdown-item">MEGAcmd one-shot installer (Arch)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/aichat-oneshots-viewer.sh/" class="dropdown-item">aichat oneshots viewer (fzf + preview server)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/albumplayer.xsh/" class="dropdown-item">Cmus Album Player (dmenu)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ansi-cheatsheet.sh/" class="dropdown-item">ANSI Escape Code Cheatsheet Viewer</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ansi8bit2rgb_hex.py/" class="dropdown-item">ANSI 8-bit to RGB / HEX Converter</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ardour-open.sh/" class="dropdown-item">Ardour Session Picker (FZF + Preview)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/birdcage.sh/" class="dropdown-item">Birdcage: Firejail + mitmproxy Whitelist Sandbox</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/build_and_link.sh/" class="dropdown-item">Build &amp; link a source file into $SCRIPTS/bin</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/chezmoi_on_a_new_system.sh/" class="dropdown-item">Initialize Chezmoi on a New System</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/citeboard.sh/" class="dropdown-item">Citeboard — pick a BibTeX entry and open its PDF or copy its key</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/closest_colors.py/" class="dropdown-item">Closest ANSI Color Matcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/color_restrict.py/" class="dropdown-item">Palette Color Restrict (Nearest-Color Quantizer)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/colormap_from_text.sh/" class="dropdown-item">Colormap From Text</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/command_prompt.sh/" class="dropdown-item">Command prompt (history launcher)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/count_tokens_with_tiktoken.py/" class="dropdown-item">Count tokens with tiktoken (stdin/file)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/create_cover_art.sh/" class="dropdown-item">Spectrogram Cover Art Generator</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/desk_fzf.sh/" class="dropdown-item">Fuzzy-launch Desktop Entries</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/display_markdown.py/" class="dropdown-item">Display Markdown Script</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/dmenu_run_scripts.py/" class="dropdown-item">Rofi script launcher (via script_identifier.xsh)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/edit_chezmoi_cfg_files.sh/" class="dropdown-item">Chezmoi Config Picker &amp; Editor</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/editor.sh/" class="dropdown-item">Interactive fzf Editor Picker (nvim)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/env.sh/" class="dropdown-item">Modular environment loader (env.sh)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fix-markdown-links.sh/" class="dropdown-item">Fix Markdown Links Script</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/flexoki_show.sh/" class="dropdown-item">Flexoki palette preview (terminal)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ftp-data-mount.sh/" class="dropdown-item">Mount MEGA FTP data via curlftpfs</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fzf-file-manager.sh/" class="dropdown-item">fzf File Manager (TUI navigator)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fzf_albumlauncher.xsh/" class="dropdown-item">FZF Album Launcher (beets → cmus)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fzf_songlauncher.sh/" class="dropdown-item">FZF Song Launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fzfmenu.sh/" class="dropdown-item">Terminal FZF Menu Helper (Alacritty)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fzfmenu_cache.sh/" class="dropdown-item">fzfmenu cache builder (PATH executables)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fzfmenu_run.sh/" class="dropdown-item">fzfmenu run (fzf-based “dmenu_run”)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/fzfpreview.sh/" class="dropdown-item">fzf file/image preview helper</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/generate_commit_message.py/" class="dropdown-item">AI-powered Git commit message generator (with safe fallback)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/get-window-thumbnails.sh/" class="dropdown-item">Get Window Thumbnails Script</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/get-windows.sh/" class="dropdown-item">Qtile Window Lister (tab-separated)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/get_hyperlinks_in_folder.py/" class="dropdown-item">Markdown Wiki Link Graph Extractor</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/get_repos_present_on_host.sh/" class="dropdown-item">Git repos inventory (per-host + global)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/get_scripts_relations.py/" class="dropdown-item">Script Relations Graph (SCRIPTS dependency map)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/get_scripts_relations.xsh/" class="dropdown-item">Scripts Relations Graph (Xonsh)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/git_cd.sh/" class="dropdown-item">Fuzzy cd to Git repositories</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/git_clone_by_author-repo.sh/" class="dropdown-item">Clone GitHub repo by author/repo</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/git_update_all_other_repos.sh/" class="dropdown-item">Update all Git repos (HTTPS only)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/grub-tune-to-audio-python.py/" class="dropdown-item">GRUB tune → MP3 converter</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/gsi.sh/" class="dropdown-item">gsi — Improved Git sync helper (fetch/rebase/commit/push)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/help-pastel.sh/" class="dropdown-item">Pastel Help Picker (fzf)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/help_pwcli.sh/" class="dropdown-item">PipeWire CLI Help Picker (fzf + bat)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/html_viewer.py/" class="dropdown-item">Hypertext Viewer (PyQt6)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/hyprlaunch.sh/" class="dropdown-item">Hyprland TTY Launcher (D‑Bus safe)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/improved-fzfmenu.sh/" class="dropdown-item">Improved floating fzf menu launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/install-hyprland-deps.sh/" class="dropdown-item">Install Hyprland Build Dependencies (Arch)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/install.sh/" class="dropdown-item">Onyx Docker Installer / Manager</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/install_dependencies.sh/" class="dropdown-item">Bootstrap Arch dependencies install (paru)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/interactive_git_sync.sh/" class="dropdown-item">Interactive Git Sync Picker</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/json_to_markdown.py/" class="dropdown-item">JSON → Markdown Converter</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/jupyter_new_notebook.xsh/" class="dropdown-item">Jupyter New Notebook (dmenu)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/keyboard-help.sh/" class="dropdown-item">Keyboard layout helper (floating viewer)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/launch_tmux_with_music_player.sh/" class="dropdown-item">Launch tmux “MUSIC” session with cmus</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/list-openai-models.sh/" class="dropdown-item">OpenAI model list (cached)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/list_process.sh/" class="dropdown-item">List running services (sorted)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/llama-all-scripts-describer.py/" class="dropdown-item">Llama-powered scripts documentation generator</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/llm-script-describer.py/" class="dropdown-item">LLM Documentation Generator for Scripts Repository</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/m3u_creator.sh/" class="dropdown-item">M3U Playlist Creator (Current Directory)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/mechen_music_transfert.py/" class="dropdown-item">Mechen music transfer (random subset sync)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/megacmd_launch_tmux.sh/" class="dropdown-item">MEGAcmd tmux launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/megaignore_editor.sh/" class="dropdown-item">Megaignore editor (fzf + nvim)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/megasync.sh/" class="dropdown-item">MegaSync launcher (Qt env overrides)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/midi2arch.xsh/" class="dropdown-item">MIDI Controller → Arch Launcher (nanoKONTROL2)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/midi2cmd.py/" class="dropdown-item">MIDI Controller CLI (amidi helper)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/minimal-browser.py/" class="dropdown-item">Minimal PyQt WebEngine Browser</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/minimal_gpt_call.py/" class="dropdown-item">Minimal OpenAI Chat Completion Call (Python)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/new_script_creator.sh/" class="dropdown-item">New Script Creator (Arch/qtile user scripts bootstrap)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/next_album.xsh/" class="dropdown-item">Next Album (cmus)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/nvim_in_new_terminal.sh/" class="dropdown-item">Neovim in a Floating Terminal</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/nvpn-tui-help.sh/" class="dropdown-item">Interactive CLI Help Navigator (fzf + completions)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/obsidian-vault-selector.sh/" class="dropdown-item">Obsidian Vault Selector (fzf)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/obsidian.xsh/" class="dropdown-item">Obsidian Vault Picker</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/old-ousse/" class="dropdown-item">Ousse database refresh (old)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ollama-list.sh/" class="dropdown-item">Ollama Library Model Lister (Cached)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/open_url_in_instance.sh/" class="dropdown-item">Open URL in running qutebrowser instance</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/openwebui-launcher.sh/" class="dropdown-item">Open WebUI Launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/openwebui_serve.sh/" class="dropdown-item">Open WebUI Serve (uvx)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ousse-locate.sh/" class="dropdown-item">Ousse DB locate playground (WIP)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ousse-update.sh/" class="dropdown-item">Ousse updatedb profiles (multiple locate DBs)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/pacman-fuzzy-search.sh/" class="dropdown-item">Pacman Fuzzy Search (fzf package browser)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/pdfopener.sh/" class="dropdown-item">PDF picker &amp; opener (fd + fzf)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/playlist_player.xsh/" class="dropdown-item">Cmus Playlist Picker (dmenu)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/playlist_randomizer.xsh/" class="dropdown-item">Cmus Playlist Randomizer (album-shuffled)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ppm-color-reducer/" class="dropdown-item">PPM palette color reducer</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/pyman.sh/" class="dropdown-item">pyman — Python “man” pages + module browser via fzf</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/qdrant_local.py/" class="dropdown-item">Qdrant Local (Docker launcher)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/qtile_dice_group.py/" class="dropdown-item">Qtile Dice Group Switcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/qtile_window_to_group_and_switch.py/" class="dropdown-item">Move focused window to next/prev group and follow</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/quick-pass.sh/" class="dropdown-item">Quick Pass picker &amp; typer</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/qutebrowser-modify-source-bookmarks.sh/" class="dropdown-item">Qutebrowser bookmarks/quickmarks sync to chezmoi</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/random_album.xsh/" class="dropdown-item">Random album picker for cmus</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/random_wallpapers.xsh/" class="dropdown-item">Random wallpaper picker</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/read_the_fucking_manual.sh/" class="dropdown-item">Read the manual history leaderboard</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/rgfzf.sh/" class="dropdown-item">Ripgrep → fzf → Neovim jump</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/sandisk_music_transfert.py/" class="dropdown-item">Sandisk music transfer (beets → player sync)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/screenshot.sh/" class="dropdown-item">Wayland Screenshot Helper</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/script.sh/" class="dropdown-item">Terminal fzf-to-typing bridge</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/script_launcher.sh/" class="dropdown-item">Interactive Script Launcher (fzf + previews)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/select_script/" class="dropdown-item">Rofi script picker (cache-backed)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/send_email.py/" class="dropdown-item">Send Email (Gmail SMTP helper)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/setting-up-syncs.sh/" class="dropdown-item">Mega sync bootstrap (per-host)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/shell_history_info.sh/" class="dropdown-item">Shell history frequency inspector</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/show-all-qutebrowser-scripts.sh/" class="dropdown-item">Show all qutebrowser scripts (packaged files)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/show_keyboard_layout.py/" class="dropdown-item">Show Keyboard Layout (ASCII cheat sheet)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/snekai.sh/" class="dropdown-item">SnekAI Jupyter Launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/songlauncher.sh/" class="dropdown-item">Song Launcher (cmus + dmenu)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/speach-to-text.py/" class="dropdown-item">Speech to Text (Whisper CLI)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ssh-fzf.sh/" class="dropdown-item">SSH command picker (pass + fzf)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/sync-repo-simple.py/" class="dropdown-item">Simple Git repo sync (fetch/rebase/stash + auto-commit)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/sync-repo-simple.sh/" class="dropdown-item">Simple Git repo sync (fetch/pull/stash/commit/push)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/sync-repo.py/" class="dropdown-item">Sync a Git repository (fetch/pull/stash/commit/push)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/sync-repo.sh/" class="dropdown-item">sync-repo — sync a Git repo (fetch/pull/commit/push) with nice TTY output</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/terminal_with_command.sh/" class="dropdown-item">Floating terminal runner</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/test-env.sh/" class="dropdown-item">Environment Loader Test Harness</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/text_spectrogram.py/" class="dropdown-item">Text-mode Microphone Spectrogram</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/tmux-help.py/" class="dropdown-item">Tmux Help Assistant Script</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/tmux_manager.py/" class="dropdown-item">tmux_manager — YAML-driven tmux session launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/tmux_session.sh/" class="dropdown-item">Tmux Session Launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/toggle-performance.sh/" class="dropdown-item">Toggle system performance profile (tuned + cpupower)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/toggle_picom.sh/" class="dropdown-item">Toggle Picom compositor</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/transform_symlink.sh/" class="dropdown-item">Transform symlinks into real files/directories</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/try_the_bat_suit.sh/" class="dropdown-item">Interactive bat language tester</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/tui-gpt.py/" class="dropdown-item">Textual GPT TUI Chat</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/ugc-python.py/" class="dropdown-item">UGC HTML Movie Title Extractor</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/update_birthdays.sh/" class="dropdown-item">Script file “birthdays” index updater</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/update_env.xsh/" class="dropdown-item">Export API keys to ~/.env</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utils_update_symlinks.sh/" class="dropdown-item">Update ~/.local/bin symlinks</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utopia.py/" class="dropdown-item">Utopia Bordeaux — PDF schedules to JSON (+ film descriptions)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/utopia.sh/" class="dropdown-item">Utopia film page fetcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/vimwiki.sh/" class="dropdown-item">Vimwiki Note Picker (fzf + Neovim)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/vox.py/" class="dropdown-item">Vox amp options browser (CLI)</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/wallpaper.sh/" class="dropdown-item">Wallpaper Picker &amp; History</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/wrapper.sh/" class="dropdown-item">Command Wrapper + Logger</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/xephyr.sh/" class="dropdown-item">Qtile Xephyr Sandbox Launcher</a>
+</li>
+                                    
+<li>
+    <a href="../scripts/you_are_not_documented.sh/" class="dropdown-item">Undocumented Script Finder</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../wayland_clipboard_history/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="2"><a href="#core-observations" class="nav-link">🔑 Core Observations</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#suggestions-for-smoothing" class="nav-link">🪄 Suggestions for Smoothing</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#possible-harmonized-layout" class="nav-link">📦 Possible Harmonized Layout</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="2"><a href="#tldr" class="nav-link">🚀 TL;DR</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="core-observations">🔑 Core Observations</h2>
+<ul>
+<li>✅ <strong>Separation of concerns</strong> is already there:  </li>
+<li><code>bin/</code> for executables with symlinks to <code>~/.local/bin</code>  </li>
+<li><code>lib/</code> for internal libraries / Python packages  </li>
+<li><code>config/</code> for script configs  </li>
+<li><code>meta/</code> for installer/setup automation  </li>
+<li>
+<p><code>docs/</code> + mkdocs site for documentation  </p>
+</li>
+<li>
+<p>✅ You’ve got <strong>sources</strong> in <code>src/</code> vs <strong>wrappers/executables</strong> in <code>bin/</code>.  </p>
+</li>
+<li>✅ Symlinking script executables to <code>~/.local/bin</code> is <em>exactly</em> how language
+ecosystems (Rust/Go/etc.) do it.  </li>
+<li>✅ You’ve captured "environment bootstrapping" (<code>utils_update_symlinks.sh</code>,
+<code>install_dependencies.sh</code>) which makes reproducibility easy.  </li>
+</ul>
+<p>So on the harmony scale, you’re already pretty aligned with Unix conventions.</p>
+<hr />
+<h2 id="suggestions-for-smoothing">🪄 Suggestions for Smoothing</h2>
+<h3 id="1-clarify-roles-of-top-level-dirs">1. Clarify Roles of Top-level Dirs</h3>
+<p>Each top-level dir should be semantically obvious:</p>
+<pre><code class="language-text">.scripts/
+├── bin/       # user-facing executables (symlinked to PATH)
+├── lib/       # shared code (importable libs, reusable helpers)
+├── config/    # config payloads/fixtures for scripts
+├── meta/      # install/bootstrap/support tooling
+├── docs/      # documentation, mkdocs, website
+├── src/       # &quot;real programs&quot; that get compiled/built (C, etc.)
+├── dev/       # experiments/scratch (like a lab notebook)
+├── test/      # integration/env tests
+├── archived/  # keep, but maybe rename `_archive/` or `attic/`
+</code></pre>
+<p>Keeping naming dead simple reduces browsing fatigue.</p>
+<hr />
+<h3 id="2-normalize-script-entrypoints">2. Normalize Script Entrypoints</h3>
+<p>Right now, <code>bin/</code> contains a mix:<br />
+- <code>something.sh</code><br />
+- <code>something.xsh</code><br />
+- <code>something.py</code><br />
+- <strong>Some compiled C things from <code>src/</code></strong> end up here too.  </p>
+<p>It might help to <strong>normalize all executables as extensionless entrypoints</strong> and
+delegate to the correct interpreter in the shebang.</p>
+<p>Example:</p>
+<pre><code>bin/foo.sh   → bin/foo
+bin/bar.py   → bin/bar
+src/ppm-color-reducer/ppm-color-reducer.c -&gt; bin/ppm-color-reducer
+</code></pre>
+<p>That way, everything in <code>bin/</code> looks like a program. Implementation details
+(bash/python/xonsh/C) become invisible.  </p>
+<hr />
+<h3 id="3-package-your-lib-bit-by-bit">3. Package Your <code>lib/</code> Bit by Bit</h3>
+<p>For the Python bits in <code>lib/</code>:<br />
+- Turn them into <strong>installable packages</strong> with <code>pyproject.toml</code> (you already
+have some!).<br />
+- Use <code>uv</code> to do editable installs locally:
+  <code>bash
+  uv pip install -e lib/snekai
+  uv pip install -e lib/maxwelld</code>
+- Then your scripts in <code>bin/</code> can cleanly <code>import maxwelld</code>.</p>
+<p>This way, the relationship “library provides logic” / “script is just CLI
+entrypoint” is clearer, and you don’t duplicate code across multiple scripts.</p>
+<hr />
+<h3 id="4-metadata-automation">4. Metadata &amp; Automation</h3>
+<p>You already have <code>meta/utils_update_symlinks.sh</code> — love it. Couple ideas:</p>
+<ul>
+<li><strong>One single bootstrap command</strong>, maybe <code>meta/bootstrap.sh</code>, that calls:  </li>
+<li><code>utils_update_symlinks.sh</code>  </li>
+<li>dependency installers  </li>
+<li>environment sanity checks  </li>
+<li>
+<p>anything else you need  </p>
+</li>
+<li>
+<p>Log installs/upgrades consistently (you already have <code>meta/log/</code> 👍). This is
+a very “package‑manager‑ish” touch.</p>
+</li>
+</ul>
+<hr />
+<h3 id="5-docs-harmony">5. Docs Harmony</h3>
+<p>The <code>docs/scripts/*.md</code> is 🔥 — it mirrors <code>bin/</code>. To harmonize:
+- Ensure <strong>1-to-1 mapping</strong>:<br />
+  - if a new script drops in <code>bin/</code>, stub MD entry is auto-added.<br />
+- Could even generate docs from script metadata (<code>#!/...</code>, comments, description
+block), then MkDocs builds it.</p>
+<p>This makes it portable — clone repo, run bootstrap, browse docs in-browser.</p>
+<hr />
+<h3 id="6-treat-it-like-a-personal-repo-of-packages">6. Treat It Like a Personal Repo of Packages</h3>
+<p>Think of <code>.scripts</code> as <strong>your own package registry</strong>:
+- <code>bin/</code> → installed commands<br />
+- <code>lib/</code> → internal libraries<br />
+- <code>src/</code> → software projects under development<br />
+- <code>config/</code> → per-package or script configs<br />
+- <code>docs/</code> → your package hub site<br />
+- <code>meta/</code> → like the <code>pacman</code> tooling layer  </p>
+<p>That’s literally how distros do it, scaled down to one user.</p>
+<hr />
+<h2 id="possible-harmonized-layout">📦 Possible Harmonized Layout</h2>
+<pre><code class="language-text">.scripts/
+├── bin/             # executables, no extensions
+├── lib/             # python libs (installable via pyproject/uv)
+├── src/             # C / compiled programs
+├── config/          # per-script configs
+├── docs/            # mkdocs, 1:1 docs for scripts
+├── meta/            # bootstrap, installers, cronjobs
+│   ├── bootstrap.sh
+│   ├── utils_update_symlinks.sh
+│   └── ...
+├── dev/             # scratchpad experiments
+├── test/            # tests, env checkers
+└── attic/           # archived old stuff
+</code></pre>
+<p>From a <em>Unix philosophy standpoint</em>, this looks extremely harmonious:
+- <code>bin/</code>, <code>lib/</code>, <code>share/docs</code> parallel <code>/usr/bin</code>, <code>/usr/lib</code>, <code>/usr/share/
+docs</code>.<br />
+- Extra dirs (<code>dev/</code>, <code>meta/</code>, <code>attic/</code>) are belts &amp; suspenders for your
+workflow.</p>
+<hr />
+<h2 id="tldr">🚀 TL;DR</h2>
+<p>Honestly: <strong>your system is already "nice enough"</strong> — it’s organized,
+reproducible, portable. The only refinements that might help long-term are:</p>
+<ol>
+<li>Normalize <code>bin/</code> to extensionless executables.  </li>
+<li>Promote <code>lib/</code> Python code to real packages.  </li>
+<li>Centralize bootstrapping in one script.  </li>
+<li>Keep the docs mirror tight with automation.  </li>
+<li>Treat repo as a <strong>personal package universe</strong> (exact parallel to <code>/usr</code>
+layout).  </li>
+</ol></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

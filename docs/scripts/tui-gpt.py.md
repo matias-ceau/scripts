@@ -1,60 +1,55 @@
-# Textual GPT TUI Chat Client
+# Textual GPT TUI Chat
 
 ---
 
-**tui-gpt.py**: Textual-based TUI chat client streaming responses from OpenAI
+**tui-gpt.py**: Textual-based streaming OpenAI chat TUI (quick prompt/response loop)
 
 ---
 
 ### Dependencies
 
-- `uv` (shebang runner): executes the script with inline dependency resolution (`uv run --script`)
 - `python>=3.12`
-- `openai`: OpenAI API client used for streaming chat completions
-- `textual`: TUI framework (widgets, events, worker threads)
-- `rich`: used for terminal theme (`MONOKAI`) via Textual’s `ansi_theme_dark`
-- Environment: `OPENAI_API_KEY` must be set
+- `uv` (because of the `#!/usr/bin/env -S uv run --quiet --script` shebang; enables single-file script execution)
+- `textual` (TUI framework: layout, widgets, event handling, threading helpers)
+- `openai` (Python SDK providing `OpenAI` client used for streaming chat completions)
+- `rich` (pulled by Textual; `MONOKAI` terminal theme is used explicitly)
+
+Environment variables:
+- `OPENAI_API_KEY` (required; script indexes `os.environ["OPENAI_API_KEY"]`)
+- `OPENAI_MODEL` (optional; defaults to `gpt-5.2`)
 
 ### Description
 
-This script provides a minimal chat-like TUI (well-suited for qtile keybind launching) built with Textual. It renders the conversation as alternating Markdown blocks:
+This script provides a minimal chat interface in the terminal using Textual. It renders each user message as a `Prompt` (left-ish, primary tint) and each assistant message as a `Response` (right-ish, success tint) inside a `VerticalScroll` container.
 
-- `Prompt`: user messages, styled with a subtle `$primary` background and right margin.
-- `Response`: assistant messages, bordered and styled with `$success` background; `BORDER_TITLE` shows the selected model (`gpt-4o-2024-08-06`).
+Key behaviors:
+- Streaming responses: `send_prompt()` calls `client.chat.completions.create(..., stream=True)` and incrementally updates the `Response` widget as tokens arrive.
+- Non-blocking UI: `@work(thread=True)` runs the network request in a worker thread, while `call_from_thread()` safely updates the UI.
+- Opinionated system prompt: `SYSTEM = "Formulate all responses as if you gave a shit."` is always prepended.
 
-On submit (`Input.Submitted`), it:
-1. Clears the input.
-2. Mounts a `Prompt` widget with the user text.
-3. Mounts an empty `Response` widget and anchors it (keeps view near the latest message).
-4. Streams the OpenAI response in a background thread (`@work(thread=True)`), incrementally updating the Markdown content via `call_from_thread`.
-
-The system prompt is intentionally blunt (`SYSTEM = "Formulate all responses as if you gave a shit."`), and the API call uses `chat.completions.create(..., stream=True)` to provide token-by-token updates.
+The `Response` widget’s border title is set to the active model name (`MODEL`), making it easy to confirm which model is being used.
 
 ### Usage
 
-Set your API key:
+Run directly (thanks to `uv` shebang):
 
-    export OPENAI_API_KEY="…"
+    chmod +x ~/.scripts/bin/tui-gpt.py
+    ~/.scripts/bin/tui-gpt.py
 
-Run directly (thanks to the `uv` shebang):
+Or run explicitly:
 
-    /home/matias/.scripts/bin/tui-gpt.py
+    uv run --quiet --script ~/.scripts/bin/tui-gpt.py
 
-Typical flow:
-- Type a prompt in the input field
-- Press Enter to submit
-- Watch the response stream into the bordered message box
+Set credentials/model:
 
-Optional qtile integration (example idea):
+    export OPENAI_API_KEY="..."
+    export OPENAI_MODEL="gpt-5.2"
 
-    lazy.spawn("~/.scripts/bin/tui-gpt.py")
+Qtile keybinding idea (spawn in your preferred terminal):
+
+    lazy.spawn("alacritty -e ~/.scripts/bin/tui-gpt.py")
 
 ---
 
 > [!TIP]
-> Improvements to consider:
-> - Add conversation memory (include prior turns in `messages`) so the model can follow context.
-> - Guard against missing `OPENAI_API_KEY` (show a friendly error in the UI instead of a `KeyError`).
-> - Handle streaming edge cases: `chunk.choices[0].delta.content` can be `None` and `choices` can vary; add safer checks.
-> - Consider input disabling while a request is running, plus cancellation/interrupt support.
-> - The script header lists `llm` as a dependency but it’s not used (commented out); remove it or add a toggle to select backend.
+> Consider adding basic error handling: missing `OPENAI_API_KEY`, network failures, and `delta.content` being `None` for non-text events. Also, chat history isn’t preserved (each request sends only the latest user prompt + system); if you want continuity, maintain a messages list and append turns. Finally, `OpenAI` is used but not listed in the `uv` dependencies header (only `llm`/`textual` are); add `openai` (and optionally `rich`) there for reproducible installs.

@@ -1,61 +1,58 @@
-# Speech to Text (Whisper CLI recorder)
+# Speech to Text (Whisper CLI)
 
 ---
 
-**speach-to-text.py**: Record audio from a chosen device and transcribe it with OpenAI Whisper
+**speach-to-text.py**: Record microphone audio and transcribe it using OpenAI Whisper
 
 ---
 
 ### Dependencies
 
-- `uv` (script runner via shebang: `uv run --script`)
+- `uv` (shebang uses `uv run --script` to resolve deps and run)
 - `python>=3.13`
-- `sounddevice` (records audio from an input device)
-- `scipy` (writes the recorded buffer as a WAV via `scipy.io.wavfile.write`)
-- `openai` (calls Whisper transcription API)
-- OpenAI credentials (typically `OPENAI_API_KEY` exported in your shell/session)
+- `sounddevice` — audio capture from your input device (PortAudio)
+- `scipy` — writes a WAV file via `scipy.io.wavfile.write`
+- `openai` — calls the Whisper transcription API
+- A working audio backend (Arch: typically `pipewire` + `pipewire-pulse`) so `sounddevice` can access devices
+- OpenAI credentials (e.g. `OPENAI_API_KEY` in your environment)
 
 ### Description
 
-This script is a small interactive “press Enter to stop” recorder that saves a temporary WAV file (`temp.wav`) and sends it to OpenAI’s Whisper endpoint for transcription.
+This script provides a minimal “push-to-stop” speech-to-text workflow:
 
-Key behavior:
+1. It records mono audio at `48_000 Hz` from a preferred device named `UMC202HD 192k: USB`.
+2. If that exact device string isn’t found in `sd.query_devices()`, it prints the full device list and prompts for an index.
+3. Recording starts immediately and continues until you press Enter in the terminal (`<CR> to stop`) or until `MAX_RECORD_TIME` (3000s).
+4. Audio is saved to `temp.wav` in the current working directory.
+5. The WAV file is uploaded to OpenAI Whisper (`model="whisper-1"`) and the resulting text is printed to stdout.
 
-- Uses a fixed `SAMPLE_RATE` of `48000`, mono (`CHANNELS = 1`).
-- Attempts to auto-select the audio input device by matching `PREFERED_DEVICE = "UMC202HD 192k: USB"` against `sd.query_devices()`.
-  - If not found, it prints the full device list and prompts for an index interactively.
-- Records up to `MAX_RECORD_TIME = 3000` seconds.
-- The recording loop polls `input("<CR> to stop")`; hitting Enter stops recording and trims the buffer to the elapsed time.
-- Writes `temp.wav` in the current working directory, then calls `client.audio.transcriptions.create(model="whisper-1", file=...)` and prints the resulting text to stdout.
-
-This fits well as a terminal-driven utility on Arch (and can be launched from qtile keybindings that spawn a terminal).
+Because it is interactive (uses `input()`), it’s best suited for running in a terminal scratchpad rather than a qtile keybinding—unless you spawn it inside a terminal.
 
 ### Usage
 
-Run from a terminal (interactive):
+Run from a terminal:
 
-```bash
-cd /where/you/want/temp.wav
-/home/matias/.scripts/bin/speach-to-text.py
-```
+    speach-to-text.py
 
-If your preferred device is not detected, select one:
+If your preferred interface isn’t detected, choose the device index when prompted:
 
-```text
-<device list...>
-Choose device by index: 12
-```
+    <device list>
+    Choose device by index: 3
 
 Stop recording:
 
-```text
-<CR> to stop
-# press Enter
-```
+    <CR> to stop
+    [press Enter]
 
-Use in qtile (example idea): bind a key to spawn your terminal and run the script so you can interact with prompts.
+Typical qtile usage (spawn in a terminal):
+
+    alacritty -e /home/matias/.scripts/bin/speach-to-text.py
 
 ---
 
 > [!TIP]
-> Consider using a non-blocking keypress/GUI trigger instead of repeated `input()` calls (it currently spams prompts and blocks). Also: `index` can be `None`, leading to writing the full preallocated buffer (mostly silence) if you never press Enter; better to always stop the stream cleanly or set a shorter default. Use a unique temp path (e.g. `/tmp/stt-XXXX.wav`) to avoid clobbering and handle cleanup. Finally, wrap file I/O in a context manager (`with open(...)`) and add error handling for missing `OPENAI_API_KEY` / network failures.
+> Improvements to consider:
+> - `input("<CR> to stop")` inside a loop blocks; you don’t actually “poll” time—recording just waits for Enter. A cleaner approach is to record continuously and stop on a single blocking `input()` (no loop), or use a non-blocking key listener.
+> - `temp.wav` is overwritten and written to the CWD; use `tempfile.NamedTemporaryFile()` and/or a dedicated cache dir.
+> - If you stop immediately, `index` may be very small; consider guarding against empty recordings and closing `audio_file` with a context manager.
+> - Device matching by exact string is brittle; matching by substring or saving a config would be more robust on Arch/PipeWire.

@@ -2,53 +2,54 @@
 
 ---
 
-**openwebui-launcher.sh**: Start Open WebUI in tmux, wait until ready, then open in browser
+**openwebui-launcher.sh**: Start Open WebUI in tmux and open it in your minimal browser
 
 ---
 
 ### Dependencies
 
 - `open-webui` (CLI): provides `open-webui serve`
-- `tmux`: runs the server in a detached, named session (`OPENWEBUI`)
-- `ripgrep` (`rg`): checks if a server is already running
-- `curl`: polls the HTTP endpoint until it responds
-- `libnotify` (`notify-send`): desktop notifications (works well under qtile)
-- `minimal-browser.py`: custom browser launcher script (resolved via `which`)
+- `tmux`: runs the server in a detached background session (`OPENWEBUI`)
+- `ripgrep` (`rg`): checks whether a server is already running
+- `curl`: polls the HTTP endpoint until it becomes available
+- `notify-send` (libnotify): desktop notifications (nice for qtile workflows)
+- `minimal-browser.py`: your local browser wrapper resolved via `which` (must be on `$PATH`)
+- `bash`: script runtime (`/usr/bin/bash`)
 
 ### Description
 
-This script is a convenience launcher for **Open WebUI** on Arch/qtile. It:
+This script is a small “service + opener” helper for Arch/qtile: it ensures an Open WebUI server is running, waits until it responds, then opens the Web UI in your preferred lightweight browser wrapper.
 
-1. Builds a target URL from `HOST`/`PORT` (defaults: `localhost:8080`).
-2. Checks for an existing server process using `ps | rg 'open-webui serve' | rg '8080'`.
-3. If not found, it starts `open-webui serve` inside a detached tmux session:
-   - Session: `OPENWEBUI`
-   - Window name: `openwebui`
-4. Sends a notification, then **waits for readiness** by polling `curl -I http://HOST:PORT` every 2 seconds (up to 30 seconds).
-5. Once reachable, it notifies again and opens the URL using `minimal-browser.py`.
+Key behavior:
 
-There is also an `init` mode intended to run Open WebUI via `uvx` with Python 3.11 and a fresh-ish `DATA_DIR` (`~/.local/share/open-webui/`), but its current implementation has argument-handling issues (see critique).
+- Defaults to `HOST=localhost` and `PORT=8080`, building `URL=http://HOST:PORT`.
+- If no existing process matches `open-webui serve` *and* `8080`, it starts the server in a detached tmux session:
+  - Session: `OPENWEBUI`
+  - Window: `openwebui`
+- It then sends a notification (“Opening…”) and polls the URL via `curl -I` until it responds, with a 30s timeout.
+- Finally, it notifies “Serving at …” and launches `minimal-browser.py URL`.
+
+There is also an `init` argument intended to initialize/run via `uvx` and Python 3.11, but note the current implementation has issues (see critique).
 
 ### Usage
 
-Run from a terminal, qtile keybinding, or launcher menu:
+Run from a terminal, a qtile keybinding, or a launcher menu.
 
-- Launch (default `localhost:8080`):
+- Launch (defaults to `localhost:8080`):
   - `openwebui-launcher.sh`
 
 - Custom host/port:
-  - `openwebui-launcher.sh --host 0.0.0.0 --port 3000`
-  - `openwebui-launcher.sh -H localhost -p 8081`
+  - `openwebui-launcher.sh --host 0.0.0.0 --port 8081`
+  - `openwebui-launcher.sh -H localhost -p 3000`
 
-- Access the tmux session:
-  - `tmux attach -t OPENWEBUI`
+- qtile keybinding idea:
+  - Bind to: `~/.scripts/bin/openwebui-launcher.sh`
 
 ---
 
 > [!TIP]
 > **Potential improvements / issues**
-> - The running-check is hardcoded to `8080` (`rg '8080'`), so using `--port` won’t prevent duplicate servers on other ports.
-> - `init)` runs `DATA_DIR=... uvx ... serve` *immediately* and then does `shift 2` even though `init` is a single token; this likely breaks parsing. Consider handling `init` as a separate execution path and `shift 1`.
-> - `DATA_DIR` is assigned but never exported/used by `open-webui serve` in the main path (unless Open WebUI reads it implicitly). If needed, `export DATA_DIR=...` (or the correct env var) should be set.
-> - `eval "$BROWSER $URL"` can be avoided; prefer `"$BROWSER" "$URL"` for safer quoting.
-> - If `minimal-browser.py` is missing, `BROWSER` becomes empty; add a fallback (e.g., `xdg-open`).
+> - The “already running” check is hardcoded to `8080` (`rg '8080'`), ignoring `--port`. Use `$PORT` in the match, or check the listening socket (`ss -lntp`).
+> - `init)` runs `DATA_DIR=$HOME... uvx ... serve` but doesn’t export `DATA_DIR`, and `shift 2` is wrong (only one arg consumed). Consider `export DATA_DIR=...; shift`.
+> - `BROWSER=$(which minimal-browser.py)` can fail silently; add a check and a fallback (e.g., `xdg-open`).
+> - `curl -I` may succeed on non-200 responses; consider `curl -fsS` or checking status codes for a cleaner “ready” signal.

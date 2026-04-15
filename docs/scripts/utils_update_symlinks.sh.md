@@ -1,54 +1,51 @@
-# Update local bin symlinks
+# Update `~/.local/bin` symlinks
 
 ---
 
-**utils_update_symlinks.sh**: Sync executable symlinks from `$SCRIPTS` into `~/.local/bin` and log results
+**utils_update_symlinks.sh**: Create symlinks in ~/.local/bin, clean broken ones, and refresh symlink CSV
 
 ---
 
 ### Dependencies
 
 - `bash`
-- `fd` — used to discover executable files under `$SCRIPTS`
-- `glow` — renders section headers in the terminal
-- `bat` — pretty-prints the resulting CSV (`-lcsv`)
-- `$SCRIPTS` env var — must point to your scripts root (source directory)
-- Write access to `~/.local/bin`
-- Log paths:
-  - `$SCRIPTS/meta/log/symlinking.log`
-  - `$SCRIPTS/meta/log/symlinking.log.csv`
-  - `$SCRIPTS/symlink_data.csv`
+- `fd` — scans the scripts directory for executable files (`-t x`)
+- `bat` — pretty-prints the resulting CSV (`bat -lcsv`)
+- `glow` — optional; renders the section headers (falls back to `echo`)
+- Environment variable: `SCRIPTS` — must point to your scripts root (e.g. `/home/matias/.scripts`)
 
 ### Description
 
-This script keeps `~/.local/bin` aligned with the executables living in your `$SCRIPTS` tree (useful on Arch + qtile where you likely call scripts from keybindings/rofi). It performs three steps:
+This utility keeps your user-local command namespace (`~/.local/bin`) in sync with your scripts repository.
 
-1. **Cleanup**: scans `~/.local/bin/*` and removes *broken* symlinks (links whose targets no longer exist), logging them as “Cleaning: …”.
-2. **Symlinking**: finds executable files under `$SCRIPTS` via `fd '' -t x` and attempts to create `~/.local/bin/<basename>` symlinks to each file.
-   - If the destination already exists and points elsewhere, it logs a **Conflict** instead of overwriting.
-3. **Inventory**: writes `symlink_data.csv` listing all symlinks in `~/.local/bin` that point back into `$SCRIPTS`. The previous CSV (minus header) is appended to `symlinking.log.csv` as a crude history/backup.
+It performs three steps:
+
+1. **Cleanup**: removes **broken symlinks** in `~/.local/bin` (symlink exists, target missing). Each removal is logged as an error-like event (“Cleaning: …”) to `meta/log/symlinking.log`.
+2. **Symlinking**: walks `"$SCRIPTS"` and finds every **executable file**, then ensures there is a symlink named after its basename in `~/.local/bin`.
+   - If a path already exists at the destination and points elsewhere, it **does not overwrite**; it logs a conflict instead.
+   - If nothing exists, it creates `ln -s "$FILE" "$TARGET_DIR/$BASENAME"`.
+3. **Inventory CSV**: rebuilds `"$SCRIPTS/symlink_data.csv"` from the current `~/.local/bin` symlinks that point back into `"$SCRIPTS"`. Before overwriting, it appends the previous CSV (minus header) into `meta/log/symlinking.log.csv` as a historical dump.
+
+This is particularly handy on Arch + qtile setups where you want stable command names for keybindings without manually managing links.
 
 ### Usage
 
-Run interactively in a terminal:
+Run manually (interactive output, safe for terminal use):
 
-- Ensure `$SCRIPTS` is set:
-  - `echo $SCRIPTS`
-- Execute:
-  - `~/.scripts/meta/utils_update_symlinks.sh`
+    SCRIPTS="$HOME/.scripts" ~/.scripts/meta/utils_update_symlinks.sh
 
-Typical “tldr”:
+Typical “just update everything” flow:
 
-- Sync symlinks:
-  - `utils_update_symlinks.sh`
-- Check results:
-  - `bat -lcsv "$SCRIPTS/symlink_data.csv"`
-  - `tail -n 50 "$SCRIPTS/meta/log/symlinking.log"`
+    ~/.scripts/meta/utils_update_symlinks.sh
 
-Suggested qtile binding (example):
-- `lazy.spawn("utils_update_symlinks.sh")`
+Afterwards, verify:
+
+    ls -l ~/.local/bin
+    bat -lcsv ~/.scripts/symlink_data.csv
+
+Suggested qtile keybinding: bind to a terminal command (since it prints status + uses `bat/glow`).
 
 ---
 
 > [!TIP]
-> Consider restricting `fd` to avoid symlinking unintended executables (e.g., exclude `.git`, `meta/`, or build dirs) and prefer `fd -H -E meta -E .git`. Also, `readlink` may return relative paths; using `readlink -f` would make conflict detection more reliable. Finally, the `if [ -e "$SYMLINK" ] … elif [ -L "$SYMLINK" ] …` branch is slightly inconsistent: a symlink to an existing target satisfies `-e` and will never hit the `-L` branch—simplify with a single `-L` check plus `-e` handling.
+> Consider narrowing the scan to a dedicated subfolder (e.g. `$SCRIPTS/bin`) to avoid linking unintended executables. Also, the conflict checks can be simplified: `-e` matches symlinks too, making the `elif [ -L ... ]` branch mostly unreachable. Finally, `readlink` on a non-symlink will fail under `set -e`; guarding with `-L` before calling `readlink` would make conflict logging more robust.

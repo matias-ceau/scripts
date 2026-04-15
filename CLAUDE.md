@@ -15,7 +15,6 @@ Chaque script doit avoir une ligne `#INFO:` pour être indexé :
 ```
 #INFO:#@CATEGORY@=YYYY-MM= "description courte"
 ```
-Catégories : `@RUN@`, `@UTILS@`, `@UTL@`, `@GIT@`, `@OTH@`
 
 ### Shell
 - Shebang : `#!/usr/bin/bash` (bash) ou `#!/bin/sh` (POSIX)
@@ -27,7 +26,7 @@ Catégories : `@RUN@`, `@UTILS@`, `@UTL@`, `@GIT@`, `@OTH@`
   ```python
   #!/usr/bin/env -S uv run --script --quiet
   # /// script
-  # requires-python = ">=3.12"
+  # requires-python = ">=3.14"
   # dependencies = [...]
   # ///
   ```
@@ -44,4 +43,4 @@ Catégories : `@RUN@`, `@UTILS@`, `@UTL@`, `@GIT@`, `@OTH@`
 - `$PASSWORD_STORE_DIR` — store pass
 
 ## Doc generation
-`meta/llm-script-describer.py` génère `docs/scripts/<nom>.md` via OpenAI (modèle `gpt-4o`). Le cache est dans `script_info.json`. Ne pas modifier les docs manuellement — elles sont regénérées automatiquement.
+`meta/llm-script-describer.py` génère `docs/scripts/<nom>.md` via OpenAI. Le cache est dans `script_info.json`. Ne pas modifier les docs manuellement — elles sont regénérées automatiquement.

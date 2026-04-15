@@ -1,47 +1,52 @@
-# Gmail SMTP CLI sender (pass-backed)
+# Send Email (Gmail SMTP helper)
 
 ---
 
-**send_email.py**: Send a plaintext email via Gmail SMTP using a password from `pass`
+**send_email.py**: Send a simple plaintext email via Gmail using credentials from `pass`
 
 ---
 
 ### Dependencies
 
-- `python` (stdlib: `argparse`, `smtplib`, `ssl`, `subprocess`, `email.message`)
-- `pass` (password-store): used to fetch the sender’s SMTP password
-- A working Gmail SMTP setup (account credentials / app password if needed)
+- `python` (stdlib: `argparse`, `smtplib`, `ssl`, `email.message`)
+- `pass` (password store CLI used to fetch the sender’s SMTP password)
+- A working Gmail SMTP setup (ideally an **App Password** if 2FA is enabled)
 
 ### Description
 
-This script is a small CLI utility to send a plaintext email through Gmail’s SMTP-over-SSL endpoint (`smtp.gmail.com:465`). It builds an `EmailMessage` with `From`, `To`, and `Subject` headers and uses `set_content()` for the body.
+This script sends a plaintext email through **Gmail’s SMTP over SSL** (`smtp.gmail.com:465`). It builds an `EmailMessage` with basic headers (`From`, `To`, `Subject`) and a plain content body, then authenticates to Gmail and sends.
 
-Password retrieval is delegated to `pass show <sender>`. The script then takes the **second line** of the output (`splitlines()[1]`) as the password. That implies your `pass` entry for the sender email must be formatted with at least two lines (commonly: first line could be a label, second line the app password).
+Credentials are retrieved from `pass` via:
 
-It’s well-suited for automation on Arch (cron/systemd timers) or for a qtile keybinding when you want a quick “fire-and-forget” notification email without opening a mail client.
+- `pass show <sender_email>`
+
+The script then takes the **second line** of the output (`splitlines()[1]`) as the password. This implies your password entry must have a predictable format (e.g., first line might be something else, second line is the SMTP/app password). If that’s not the case, sending will fail or use the wrong secret.
+
+Defaults for sender/receiver can be provided via environment variables:
+
+- `EMAIL_SENDER` (fallback: `matiasylinenceau@gmail.com`)
+- `EMAIL_RECEIVER` (fallback: `matias@ceau.net`)
 
 ### Usage
 
-Run from a terminal:
+Run from a terminal (also suitable for a qtile keybinding if you hardcode/pipe content):
 
-- Minimal (uses defaults):
+tldr:
+
+- Send with defaults:
   - `send_email.py`
-
-- Custom receiver / subject / body:
-  - `send_email.py --email-receiver "you@example.com" -s "Build done" -c "The pipeline finished successfully."`
-
-- Custom sender + display name header:
-  - `send_email.py --email-sender "account@gmail.com" --display-name "Matias <account@gmail.com>" -s "Hi" -c "Hello"`
-
-Arguments:
-
-- `--email-sender`: Gmail address used to authenticate
-- `--email-receiver`: destination address
-- `-s/--subject`: subject line
-- `--display-name`: literal value used in the `From` header
-- `-c/--content`: plaintext body
+- Set subject and content:
+  - `send_email.py -s "Build finished" -c "All tests passed."`
+- Override sender/receiver:
+  - `send_email.py --email-sender you@gmail.com --email-receiver other@domain.tld -s "Hi" -c "Hello!"`
+- Use env defaults:
+  - `EMAIL_SENDER=you@gmail.com EMAIL_RECEIVER=me@domain.tld send_email.py -s "Ping" -c "..."`
 
 ---
 
 > [!TIP]
-> Consider making `pass show` parsing more robust: `pass` typically stores the password on the first line, so using `splitlines()[0]` (or searching for a specific field) avoids fragile assumptions. Also handle errors (missing entry, non-zero return code) and avoid hardcoding Gmail host/port so you can reuse the script with other SMTP servers. Finally, `From` should usually include the actual email (`Name <email>`), otherwise some SMTP servers/clients may display it oddly.
+> Improvements to consider:
+> - `get_password()` assumes the password is on line 2; typically `pass show` returns the password on line 1. Consider using `splitlines()[0]` or parsing more robustly.
+> - Add error handling for missing `pass`, missing entry, empty output, or SMTP auth failures (currently silent besides exceptions).
+> - `From` is set to `display_name` only; many clients expect `From` like `Name <email@domain>`. You could format it or set both properly.
+> - Consider supporting stdin for `--content` (e.g., `-c -`), attachments, and HTML content if needed.

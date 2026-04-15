@@ -1,47 +1,50 @@
-# Hyprland TTY Launcher (isolated D‑Bus)
+# Hyprland TTY Launcher (D‑Bus safe)
 
 ---
 
-**hyprlaunch.sh**: Launch Hyprland from a TTY with clean Wayland/systemd-user env handling
+**hyprlaunch.sh**: Start Hyprland from a TTY with clean env + safe D‑Bus handling
 
 ---
 
 ### Dependencies
 
-- `Hyprland` (the compositor)
-- `systemd` / `systemctl --user` (optional; env import + `basic.target`)
-- `busctl` (from `systemd`; used to detect an existing user bus)
-- `dbus-run-session` (from `dbus`; launches Hyprland in a fresh D‑Bus session)
-- `dbus-launch` (fallback; spawns a private bus if none exists)
-- `dbus-update-activation-environment` (propagates env to D‑Bus/systemd user services)
-- `id`, `seq`, `sleep`, `tty`, `sed` (coreutils / util-linux)
+- `Hyprland` — the compositor being launched
+- `systemd` / `systemctl --user` — imports environment + starts `basic.target` when a user bus exists
+- `busctl` — detects whether a systemd user D‑Bus is available
+- `dbus-run-session` — launches Hyprland in its own isolated D‑Bus session
+- `dbus-launch` — fallback to spawn a private session bus when no `$XDG_RUNTIME_DIR/bus` exists
+- `dbus-update-activation-environment` — propagates variables to D‑Bus/systemd activation
+- `coreutils` (`id`, `sleep`, `seq`) + POSIX shell (`/bin/sh`)
 
 ### Description
 
-This script is aimed at manual TTY workflows on Arch Linux: it prepares a minimal Wayland session environment, tries to synchronize that environment into an already-running `systemd --user` (common with lingering), ensures a user D‑Bus exists, and finally starts Hyprland under a dedicated D‑Bus session via `dbus-run-session`.
+This script is meant for “manual TTY users” on Arch: you log in on a TTY and want to start Hyprland without relying on a display manager. It focuses on *re-entrancy* and *not duplicating background services*.
 
 Key behaviors:
 
-- Exports standard Wayland/desktop variables (`XDG_SESSION_TYPE=wayland`, `XDG_CURRENT_DESKTOP=Hyprland`, etc.) and sets `XDG_RUNTIME_DIR` to `/run/user/UID`.
-- If a user bus is already reachable (`busctl --user --list`), it imports variables into `systemd --user` and updates D‑Bus activation env to reduce “wrong env” issues in services.
-- If no bus socket exists at `$XDG_RUNTIME_DIR/bus`, it falls back to `dbus-launch`.
-- Starts `Hyprland` in the background (`dbus-run-session Hyprland &`) and then waits.
-
-Note: there is commented-out logic for “per-TTY autostart flags”, but it is currently inactive.
+- **Environment sanitization**: sets Wayland/XDG session variables (`XDG_SESSION_TYPE`, `XDG_CURRENT_DESKTOP`, `XDG_RUNTIME_DIR`, etc.) so clients and portals behave correctly.
+- **systemd-user aware**: if a user bus is already present (`busctl --user --list` succeeds), it imports the environment into `systemd --user`, nudges `basic.target`, and updates D‑Bus activation variables.
+- **D‑Bus robustness**: if no user bus socket exists at `$XDG_RUNTIME_DIR/bus`, it spawns a private one via `dbus-launch`.
+- **Isolation**: starts Hyprland via `dbus-run-session` to reduce cross-talk between multiple sessions.
+- **Timing hook**: optional `-t <seconds>` injects `sleep` pauses between phases (useful for debugging race conditions).
 
 ### Usage
 
-Run from a TTY (e.g., after logging in on `tty1`):
+Run from a TTY after logging in:
 
     ~/.scripts/bin/hyprlaunch.sh
 
-If you intended a debug “step delay” mode (currently buggy), the script seems to aim for:
+Add debug delays (e.g., to observe env/bus startup):
 
     ~/.scripts/bin/hyprlaunch.sh -t 1
 
-Typical use is interactive from a TTY, not as a qtile keybinding.
+Typical workflow (manual TTY):
+
+1. `login`
+2. run `hyprlaunch.sh`
+3. Hyprland runs in foreground until you exit; script `wait`s for it.
 
 ---
 
-> [!CAUTION]
-> The `-t` parsing is currently broken: `[ ${1} -eq '-t' ]` does numeric comparison, `local` is not POSIX `sh`, and `local $duration=$2` is invalid syntax. Use `#!/bin/bash` (or remove `local`) and parse with `[ "$1" = "-t" ] ; duration="$2"`. Also, the compositor “ready” loop never sets `WAYLAND_DISPLAY`, so `READY` will likely never become `1`; consider detecting Hyprland’s socket (e.g., `HYPRLAND_INSTANCE_SIGNATURE`) or exporting `WAYLAND_DISPLAY` explicitly.
+> [!TIP]
+> The “wait for compositor socket” loop is currently ineffective: `WAYLAND_DISPLAY` is never set by the script (it’s typically set inside the Hyprland session), so `READY` is unlikely to flip. If you want readiness detection, query Hyprland’s socket/instance (e.g., `HYPRLAND_INSTANCE_SIGNATURE`) or use `hyprctl` once available. Also consider quoting `sleep "$duration"` and validating `-t` input to avoid accidental non-numeric sleeps.
