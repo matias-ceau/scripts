@@ -4,20 +4,22 @@
 
 <!-- llm_generated_output_start -->
 
-This repository is a personal “workflow toolkit” for Arch Linux centered around a keyboard-driven desktop (Qtile) and a terminal-first style. The scripts lean heavily on composable Unix pipelines and lightweight interactive pickers (mostly `fzf`, `dmenu`, and `rofi`) to turn common maintenance tasks into fast, repeatable actions you can bind to keys or run in scratchpad terminals.
+This repository is a personal “OS glue” toolkit built around an Arch Linux + qtile workflow: lots of small, composable scripts that turn everyday actions (launching apps, browsing docs, syncing data, managing media, inspecting system state) into fast, keyboard-driven commands you can bind to keys or chain in pipelines.
 
-A recurring theme is **consistent UX and theming across scripts**: there’s a shared environment loader (`env.sh`) that standardizes paths, Flexoki colors, and `fzf` defaults so menus/previews feel uniform. Many tools also adopt the same pattern of “pick → preview → act”, using `bat`/`eza` for readable previews and wrappers that spawn floating terminals with predictable window titles/classes for Qtile rules.
+A clear theme is **interactive pickers with rich previews**. Many tools are thin wrappers around `fzf`/`rofi`/`dmenu`, typically paired with `bat`, `eza`, `fd`, and `rg` to provide searchable lists, contextual previews, and quick actions (open/edit/run). The repo also includes terminal “menu wrappers” that preserve stdin/stdout across spawned floating terminals—very qtile-friendly for scratchpad-style UIs.
 
-The collection spans a few broad categories:
+Another pillar is **environment and repo hygiene**: a modular environment loader (`env.sh`) standardizes paths, colors (Flexoki), and fzf defaults; several utilities manage symlinks/inventories, track documentation coverage, and even generate docs/README sections via local or hosted LLMs. Git automation is heavily represented too, with multiple “sync this repo safely” variants and helpers for cloning, bulk-updating, and inventorying repos per host.
 
-- **Desktop & WM utilities (Qtile-centric):** small helpers to introspect windows, move/switch groups, launch floating terminals/editors, manage screenshots/wallpapers, and toggle services/compositors/performance profiles.
-- **Interactive launchers:** multiple “command palette” style scripts for your own tools, system executables, `.desktop` apps, PDFs, notes/vaults, and help pages—built around cached sources for speed and preview panes for confidence.
-- **Dotfiles & system bootstrap:** quick Chezmoi initialization, a curated dependency installer for new machines, and pick-and-edit flows for Chezmoi-managed files with optional apply/sync.
-- **Git automation:** several tiers of repo sync tools (from simple shell to richer Python) with stash/rebase workflows and conflict handling, plus helpers for cloning, bulk pulling, and inventorying repos per-host.
-- **Media & “daily life” automation:** cmus/beets launchers and playlist generators, audio cover-art generation, device sync scripts, and a few niche utilities (MIDI-to-command mapping, GRUB tune rendering, cinema schedule parsing).
-- **LLM/dev tooling:** scripts that generate documentation, summarize diffs into commit messages, count tokens, run lightweight chat TUIs, or spin up local services (e.g., Docker-backed Qdrant/Open WebUI) in a tmux-friendly way.
+You also have a strong set of **desktop/session helpers** geared to window-manager ergonomics: qtile IPC snippets (window/group helpers), floating terminal launchers, wallpaper management with history, screenshot tooling, compositor/performance toggles, and utilities that open specific apps in a predictable way (tmux sessions, browsers, Obsidian vault pickers, etc.).
 
-Overall, the repo is best read as an evolving set of **small, opinionated building blocks**—designed to be chained together, run non-interactively from Qtile bindings, and kept maintainable through shared environment conventions and auto-generated documentation.
+Finally, the repo branches into **personal workflows** (music control with cmus/beets playlists, audio/DAW session launching, PDF/citation pickers, locate DB profiles, small “reference” viewers, and a few GUI utilities like PyQt document viewers).
+
+Typical stack you rely on across scripts:
+- CLI plumbing: `bash`, `python`, `fd`, `rg`, `bat`, `eza`, `jq`, `curl`
+- UI: `fzf` (often via [improved-fzfmenu.sh](docs/scripts/improved-fzfmenu.sh.md)), `rofi`, `dmenu`, notifications
+- Arch/system integration: `systemd-run`, `pacman/paru`, `tmux`, qtile IPC
+
+Overall, it’s a cohesive “personal operator console”: fast menus, repeatable setup/bootstrap, and opinionated automation designed to feel native inside qtile.
 
 <!-- llm_generated_output_end -->
 
@@ -151,8 +153,8 @@ archived/   Deprecated scripts kept for reference
 | [old-ousse](docs/scripts/old-ousse.md) | Generate multiple `locate` databases for different filesystem scopes |
 | [ollama-list.sh](docs/scripts/ollama-list.sh.md) | Fetch and format Ollama library models with a 7-day local cache |
 | [open_url_in_instance.sh](docs/scripts/open_url_in_instance.sh.md) | Send a URL to qutebrowser via IPC, or start qutebrowser if needed |
-| [openwebui-launcher.sh](docs/scripts/openwebui-launcher.sh.md) | Start Open WebUI in tmux and open it in your minimal browser |
-| [openwebui_serve.sh](docs/scripts/openwebui_serve.sh.md) | Launch Open WebUI via uvx with data stored in XDG data directory |
+| [openwebui-launcher.sh](docs/scripts/openwebui-launcher.sh.md) | Start (or reuse) an Open WebUI server and open it in a browser |
+| [openwebui_serve.sh](docs/scripts/openwebui_serve.sh.md) | Launch Open WebUI via uvx with fixed port and data directory |
 | [ousse-locate.sh](docs/scripts/ousse-locate.sh.md) | Inspect `.local/share/ousse` DB files (size/age) and list entries |
 | [ousse-update.sh](docs/scripts/ousse-update.sh.md) | Build multiple `updatedb` databases for different filesystem scopes |
 | [pacman-fuzzy-search.sh](docs/scripts/pacman-fuzzy-search.sh.md) | Fuzzy-find Arch packages (repo/AUR) with previews and install on enter |
@@ -202,7 +204,7 @@ archived/   Deprecated scripts kept for reference
 | [update_birthdays.sh](docs/scripts/update_birthdays.sh.md) | Rebuilds `bdays.csv` with each script’s “birth date” from git history |
 | [update_env.xsh](docs/scripts/update_env.xsh.md) | Writes `*_API_KEY` environment vars into `~/.env` |
 | [utils_update_symlinks.sh](docs/scripts/utils_update_symlinks.sh.md) | Create symlinks in ~/.local/bin, clean broken ones, and refresh symlink CSV |
-| [utopia.py](docs/scripts/utopia.py.md) | Fetch Utopia Bordeaux weekly PDF schedules, parse to JSON, optionally enrich films |
+| [utopia.py](docs/scripts/utopia.py.md) | Fetch Utopia Bordeaux weekly program PDFs and export enriched JSON schedules |
 | [utopia.sh](docs/scripts/utopia.sh.md) | Download Utopia Bordeaux film pages for a fixed list of film IDs |
 | [vimwiki.sh](docs/scripts/vimwiki.sh.md) | Pick a Markdown note with fzf and open it in Neovim |
 | [vox.py](docs/scripts/vox.py.md) | Print and filter a Vox amp-model option table from the terminal |

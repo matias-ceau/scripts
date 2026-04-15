@@ -82,8 +82,8 @@
 - [old-ousse](scripts/old-ousse.md) -- *Generate multiple `locate` databases for different filesystem scopes*
 - [ollama-list.sh](scripts/ollama-list.sh.md) -- *Fetch and format Ollama library models with a 7-day local cache*
 - [open_url_in_instance.sh](scripts/open_url_in_instance.sh.md) -- *Send a URL to qutebrowser via IPC, or start qutebrowser if needed*
-- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *Start Open WebUI in tmux and open it in your minimal browser*
-- [openwebui_serve.sh](scripts/openwebui_serve.sh.md) -- *Launch Open WebUI via uvx with data stored in XDG data directory*
+- [openwebui-launcher.sh](scripts/openwebui-launcher.sh.md) -- *Start (or reuse) an Open WebUI server and open it in a browser*
+- [openwebui_serve.sh](scripts/openwebui_serve.sh.md) -- *Launch Open WebUI via uvx with fixed port and data directory*
 - [ousse-locate.sh](scripts/ousse-locate.sh.md) -- *Inspect `.local/share/ousse` DB files (size/age) and list entries*
 - [ousse-update.sh](scripts/ousse-update.sh.md) -- *Build multiple `updatedb` databases for different filesystem scopes*
 - [pacman-fuzzy-search.sh](scripts/pacman-fuzzy-search.sh.md) -- *Fuzzy-find Arch packages (repo/AUR) with previews and install on enter*
@@ -136,7 +136,7 @@
 - [update_birthdays.sh](scripts/update_birthdays.sh.md) -- *Rebuilds `bdays.csv` with each script’s “birth date” from git history*
 - [update_env.xsh](scripts/update_env.xsh.md) -- *Writes `*_API_KEY` environment vars into `~/.env`*
 - [utils_update_symlinks.sh](scripts/utils_update_symlinks.sh.md) -- *Create symlinks in ~/.local/bin, clean broken ones, and refresh symlink CSV*
-- [utopia.py](scripts/utopia.py.md) -- *Fetch Utopia Bordeaux weekly PDF schedules, parse to JSON, optionally enrich films*
+- [utopia.py](scripts/utopia.py.md) -- *Fetch Utopia Bordeaux weekly program PDFs and export enriched JSON schedules*
 - [utopia.sh](scripts/utopia.sh.md) -- *Download Utopia Bordeaux film pages for a fixed list of film IDs*
 - [vimwiki.sh](scripts/vimwiki.sh.md) -- *Pick a Markdown note with fzf and open it in Neovim*
 - [vox.py](scripts/vox.py.md) -- *Print and filter a Vox amp-model option table from the terminal*

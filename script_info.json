@@ -464,9 +464,9 @@
   "openwebui-launcher.sh": {
     "file": "openwebui-launcher.sh",
     "path": "bin/openwebui-launcher.sh",
-    "description": "Start Open WebUI in tmux and open it in your minimal browser",
+    "description": "Start (or reuse) an Open WebUI server and open it in a browser",
     "doc_path": "docs/scripts/openwebui-launcher.sh.md",
-    "hash": "0f40ef5bee201fadc4ffa66f2838f7d4e3b259e7728192d092bb9b8af863a0cf"
+    "hash": "85ce677454efe399416d4f545699130f6863818f53c8d55748b821d31fac9ab9"
   },
   "ousse-locate.sh": {
     "file": "ousse-locate.sh",
@@ -884,9 +884,9 @@
   "openwebui_serve.sh": {
     "file": "openwebui_serve.sh",
     "path": "bin/openwebui_serve.sh",
-    "description": "Launch Open WebUI via uvx with data stored in XDG data directory",
+    "description": "Launch Open WebUI via uvx with fixed port and data directory",
     "doc_path": "docs/scripts/openwebui_serve.sh.md",
-    "hash": "52574d683be04fd527da0a9e1a8d3cebe802272a24dcfac3b41b46a1ddb729c4"
+    "hash": "77187b6db31f738cfe1c49f527a252c0d90805f426d8ecf398621bf41d8fc6f0"
   },
   "qdrant_local.py": {
     "file": "qdrant_local.py",
@@ -939,9 +939,9 @@
   },
   "utopia.py": {
     "file": "utopia.py",
-    "path": "dev/utopia.py",
-    "description": "Fetch Utopia Bordeaux weekly PDF schedules, parse to JSON, optionally enrich films",
+    "path": "bin/utopia.py",
+    "description": "Fetch Utopia Bordeaux weekly program PDFs and export enriched JSON schedules",
     "doc_path": "docs/scripts/utopia.py.md",
-    "hash": "4e62ab0a03df4acdc33d3e0e4b4ada5876fbef73dccf9d6f9125a7eb13e881ce"
+    "hash": "9cf95a73a3ae5fd29d187a470d2ede52d388fc0f4c0e3cf66308629d4c8f1567"
   }
 }

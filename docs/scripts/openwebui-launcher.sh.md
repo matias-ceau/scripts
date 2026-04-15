@@ -2,54 +2,50 @@
 
 ---
 
-**openwebui-launcher.sh**: Start Open WebUI in tmux and open it in your minimal browser
+**openwebui-launcher.sh**: Start (or reuse) an Open WebUI server and open it in a browser
 
 ---
 
 ### Dependencies
 
-- `open-webui` (CLI): provides `open-webui serve`
-- `tmux`: runs the server in a detached background session (`OPENWEBUI`)
-- `ripgrep` (`rg`): checks whether a server is already running
-- `curl`: polls the HTTP endpoint until it becomes available
-- `notify-send` (libnotify): desktop notifications (nice for qtile workflows)
-- `minimal-browser.py`: your local browser wrapper resolved via `which` (must be on `$PATH`)
-- `bash`: script runtime (`/usr/bin/bash`)
+- `open-webui`: the backend/server being launched (`open-webui serve`)
+- `tmux`: runs the server detached in a dedicated session (`OPENWEBUI`)
+- `ripgrep` (`rg`): used to detect whether the server is already running
+- `curl`: polls the HTTP endpoint until the UI is reachable
+- `libnotify` (`notify-send`): desktop notifications (nice for qtile workflows)
+- `minimal-browser.py`: custom browser wrapper/script resolved via `which`  
+  - must exist in `PATH` (commonly a qutebrowser/firefox launcher)
+
+Optional:
+- `uvx` + Python `3.11`: only referenced in the `init` subcommand path
 
 ### Description
 
-This script is a small “service + opener” helper for Arch/qtile: it ensures an Open WebUI server is running, waits until it responds, then opens the Web UI in your preferred lightweight browser wrapper.
+This script is a small “service launcher” for Open WebUI on Arch/qtilte: it ensures an `open-webui serve` process is running in the background, waits for the HTTP endpoint to come up, then opens the UI in your minimal browser.
 
-Key behavior:
-
-- Defaults to `HOST=localhost` and `PORT=8080`, building `URL=http://HOST:PORT`.
-- If no existing process matches `open-webui serve` *and* `8080`, it starts the server in a detached tmux session:
-  - Session: `OPENWEBUI`
-  - Window: `openwebui`
-- It then sends a notification (“Opening…”) and polls the URL via `curl -I` until it responds, with a 30s timeout.
-- Finally, it notifies “Serving at …” and launches `minimal-browser.py URL`.
-
-There is also an `init` argument intended to initialize/run via `uvx` and Python 3.11, but note the current implementation has issues (see critique).
+Key behaviors:
+- Defaults to `HOST=localhost` and `PORT=8765`, producing `http://localhost:8765`.
+- If no matching server is found, it creates a detached tmux session named `OPENWEBUI` and starts `open-webui serve --host … --port …`.
+- Uses a simple readiness loop: `curl -I` is retried every 2s for up to 30s, otherwise it notifies and exits with code `1`.
+- Uses notifications for “Opening…” and “Serving at …” so you can trigger it from a qtile keybinding without a terminal.
 
 ### Usage
 
-Run from a terminal, a qtile keybinding, or a launcher menu.
+Run from a terminal or bind directly in qtile (no interaction required).
 
-- Launch (defaults to `localhost:8080`):
+tldr:
+
+- Launch (or focus existing server) and open browser:
   - `openwebui-launcher.sh`
 
 - Custom host/port:
-  - `openwebui-launcher.sh --host 0.0.0.0 --port 8081`
-  - `openwebui-launcher.sh -H localhost -p 3000`
+  - `openwebui-launcher.sh --host 0.0.0.0 --port 8765`
+  - `openwebui-launcher.sh -H localhost -p 9000`
 
-- qtile keybinding idea:
-  - Bind to: `~/.scripts/bin/openwebui-launcher.sh`
+- “init” mode (attempts to run via `uvx`):
+  - `openwebui-launcher.sh init`
 
 ---
 
-> [!TIP]
-> **Potential improvements / issues**
-> - The “already running” check is hardcoded to `8080` (`rg '8080'`), ignoring `--port`. Use `$PORT` in the match, or check the listening socket (`ss -lntp`).
-> - `init)` runs `DATA_DIR=$HOME... uvx ... serve` but doesn’t export `DATA_DIR`, and `shift 2` is wrong (only one arg consumed). Consider `export DATA_DIR=...; shift`.
-> - `BROWSER=$(which minimal-browser.py)` can fail silently; add a check and a fallback (e.g., `xdg-open`).
-> - `curl -I` may succeed on non-200 responses; consider `curl -fsS` or checking status codes for a cleaner “ready” signal.
+> [!WARNING]
+> The process detection is inconsistent: it greps for `open-webui serve` *and* hard-codes `8080`, while the default port is `8765`. This can spawn duplicate servers or fail to reuse an existing one. Consider matching on the chosen `$PORT` (or checking the tmux session) and fixing `init` (it sets `DATA_DIR=… uvx …` without exporting `DATA_DIR`). Also, quote/validate `$BROWSER` and consider a fallback if `minimal-browser.py` is missing.

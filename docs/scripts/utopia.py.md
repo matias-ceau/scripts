@@ -1,66 +1,66 @@
-# Utopia Bordeaux — PDF schedules to JSON (+ film descriptions)
+# Utopia Bordeaux — Weekly Schedule Scraper (PDF → JSON)
 
 ---
 
-**utopia.py**: Fetch Utopia Bordeaux weekly PDF schedules, parse to JSON, optionally enrich films
+**utopia.py**: Fetch Utopia Bordeaux weekly program PDFs and export enriched JSON schedules
 
 ---
 
 ### Dependencies
 
-- `uv` (shebang runs via `uv run --script`)
+- `uv` (script runner via shebang `uv run --script`)
 - `python>=3.12`
 - `pdfplumber` (PDF table extraction)
-- Network access to `https://www.cinemas-utopia.org/…`
-
----
+- Network access to:
+  - `https://www.cinemas-utopia.org/admin/grilles/bordeaux/` (weekly PDFs)
+  - `https://www.cinemas-utopia.org/bordeaux/index.php` (film listing + details)
+- Optional (for LLM title matching):
+  - `OPENROUTER_API_KEY` or `OPENAI_API_KEY` (enables one-shot batch matching)
 
 ### Description
 
-This script downloads Utopia Bordeaux’s weekly “grille” PDFs (one PDF per week, published on Tuesdays), extracts showtimes from the embedded tables, and writes a per-week JSON file under `~/.local/share/utopia/`.
+This script downloads Utopia Bordeaux’s weekly “grille” PDF (one per week, published for the Tuesday ending the week), parses showtimes from embedded tables, and saves a per-week JSON file to `~/.local/share/utopia/`.
 
-It also optionally enriches each parsed title by scraping the cinema’s film listing and detail pages:
-- Listing page: identifies film `id`, and flags `is_new` / `is_doc`.
-- Detail page: extracts `cast`, best-effort `director`, and a cleaned `description`.
-- Details are cached in `~/.local/share/utopia/films/{id}.json` to avoid re-fetching.
+Core flow:
 
-Parsing logic highlights:
-- Time detection via `_TIME_RE` matching `11H45`, `14H`, etc., with guards against PDF artifacts.
-- Each PDF page yields up to 7 tables (MER→MAR). Cells are interpreted as `TIME\nTITLE`, with extra flags:
-  - `discount: true` if the line contains `€`
-  - `discussion: true` if it contains `(D)`, `débat`, or `discussion`
-- Titles are matched to the website listing using accent/punctuation normalization and truncation-aware heuristics.
+- Compute the current week anchor (`current_wednesday()`), then process 4 consecutive weeks.
+- For each week:
+  - Download the Tuesday PDF (`{tue_date}.pdf`) and parse it with `pdfplumber`.
+  - Extract sessions by scanning each table cell as `TIME\nTITLE` pairs, detecting:
+    - discounted screenings (presence of `€`)
+    - debates/discussions (`(D)`, `débat`, `discussion`)
+  - Optionally enrich entries by scraping the website listing + film detail pages, caching each film in `~/.local/share/utopia/films/{id}.json`.
+  - For hard-to-match truncated PDF titles, it can optionally call an LLM once per run to resolve remaining titles.
 
----
+It also provides a local “agenda” view via `--query`, scanning cached week JSONs and printing upcoming sessions.
 
 ### Usage
 
-Run manually in a terminal (ideal for a qtile keybinding too):
+```sh
+# Default: fetch 4 weeks of PDFs and enrich with descriptions
+utopia.py
 
-    ~/.scripts/dev/utopia.py
+# Fetch only (no listing/detail scraping)
+utopia.py --no-enrich
 
-Common options:
+# Force re-download PDFs and re-enrich (also refreshes film cache)
+utopia.py --force
 
-    ~/.scripts/dev/utopia.py --no-enrich
-    ~/.scripts/dev/utopia.py --force
-    ~/.scripts/dev/utopia.py --debug
+# Debug: print extracted tables + JSON preview (does not write files)
+utopia.py --debug
 
-Re-enrich already saved weeks (no PDF downloads):
+# Re-enrich existing week JSONs (no PDF download)
+utopia.py --enrich
 
-    ~/.scripts/dev/utopia.py --enrich
-    ~/.scripts/dev/utopia.py --enrich --force
+# List upcoming sessions from cached JSONs (default: now)
+utopia.py --query
+utopia.py --query "2026-04-15 20:00"
+utopia.py --query "2026-04-15"
+```
 
-Query upcoming sessions from cached JSONs:
-
-    ~/.scripts/dev/utopia.py --query
-    ~/.scripts/dev/utopia.py --query 2026-04-09
-    ~/.scripts/dev/utopia.py --query "2026-04-09 18:30"
-
-Outputs:
-- Week JSON: `~/.local/share/utopia/{wed}_{tue}.json`
-- Film cache: `~/.local/share/utopia/films/{id}.json`
+Suggested qtile binding: run `utopia.py --query` in a terminal (or pipe to `rofi`/`fzf`) to quickly browse upcoming screenings.
 
 ---
 
 > [!TIP]
-> Consider switching from regex-based HTML scraping to a parser (e.g. `beautifulsoup4`) to reduce breakage if the site markup changes. Also, `page.extract_tables()` can be brittle across PDF layout changes; adding validation (expected table count/headers) and logging unmatched titles would make failures easier to diagnose.
+> The HTML parsing uses regexes and may break if Utopia changes markup; consider switching to `beautifulsoup4`. Also, LLM matching sends titles to a third-party API—add a `--no-llm` flag or make it opt-in to avoid surprises. Finally, `extract_tables()` can be brittle across PDF layout changes; keeping a small “fixture” PDF for regression testing would make updates safer.
