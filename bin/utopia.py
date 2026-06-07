@@ -471,6 +471,9 @@ def process_week(
         except urllib.error.HTTPError as e:
             print(f"  error   HTTP {e.code} — week not yet published?", file=sys.stderr)
             return
+        if not pdf_bytes.startswith(b"%PDF"):
+            print(f"  error   response is not a PDF — week not yet published?", file=sys.stderr)
+            return
         data = parse_pdf(pdf_bytes, wednesday, debug=debug)
         needs_pdf = True
 
