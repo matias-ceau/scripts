@@ -1,15 +1,17 @@
 #!/usr/bin/bash
 
-SUCCESSES="/tmp/git-successfull-updates.txt"
-ERRORS="/tmp/git-failed-updates.txt"
+export SUCCESSES="~/.cache/git-successfull-updates.txt"
+export ERRORS="~/.cache/git-failed-updates.txt"
 
-cat > SUCCESSES << EOF
+touch $ERRORS $SUCCESSES
+
+cat > $SUCCESSES << EOF
 ---------------------------------
        successfully updated:     
 ---------------------------------
 
 EOF
-cat > ERRORS << EOF
+cat > $ERRORS << EOF
 ---------------------------------
        failed to update:         
 ---------------------------------
