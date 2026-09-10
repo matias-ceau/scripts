@@ -1,0 +1,7 @@
+[Unit]
+Description=sysdoctor daily health check
+
+[Service]
+Type=oneshot
+ExecStart=%h/.scripts/sysdoctor/sysdoctor.sh --check
+ExecStopPost=/bin/bash -c 'if [ "$SERVICE_RESULT" != "success" ]; then notify-send -u critical "sysdoctor" "One or more checks failed — run: sysdoctor.sh --check"; fi'
